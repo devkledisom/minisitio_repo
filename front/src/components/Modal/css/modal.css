@@ -1,0 +1,9 @@
+.select-pfpj i {
+    display: block;
+    font-size: 26px
+}
+
+#bg-registro-usuario input,
+#bg-registro-usuario select {
+    margin-top: 10px;
+}

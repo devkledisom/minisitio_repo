@@ -1,0 +1,35 @@
+.p-bottom {
+    padding-bottom: 15px;
+}
+
+.cinza,
+.titulo-cinza {
+    background-color: #4f4f4f !important;
+    color: #ffffff !important;
+}
+
+.cinza .btn {
+    padding: 10px 40px;
+    font-size: 20px;
+}
+
+.h-60 {
+    height: 60px;
+}
+
+.font-14 {
+    font-size: 14px;
+}
+
+.font-20 {
+    font-size: 20px;
+}
+
+.bg-yellow {
+    background-color: #ffcc29;
+}
+
+.bg-cinza {
+    background-color: #edecec;
+    padding: 10px;
+}

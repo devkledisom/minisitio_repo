@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.c62f90a3.css",
+    "main.js": "/static/js/main.ac83c104.js",
+    "static/js/787.c761c556.chunk.js": "/static/js/787.c761c556.chunk.js",
+    "static/media/fontawesome-webfont.svg?v=4.7.0": "/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
+    "static/media/bg-home.jpg": "/static/media/bg-home.4989417f6247fe6cf27b.jpg",
+    "static/media/fontawesome-webfont.eot": "/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
+    "static/media/fontawesome-webfont.ttf?v=4.7.0": "/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
+    "static/media/fontawesome-webfont.woff?v=4.7.0": "/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
+    "static/media/fontawesome-webfont.woff2?v=4.7.0": "/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
+    "static/media/twitter.png": "/static/media/twitter.70919ee0b2f82a98fbd9.png",
+    "static/media/facebook.png": "/static/media/facebook.c1a1ccd1d322e1ad692a.png",
+    "static/media/glyphicons-halflings.png": "/static/media/glyphicons-halflings.e54998a8fe454b8c4370.png",
+    "index.html": "/index.html",
+    "main.c62f90a3.css.map": "/static/css/main.c62f90a3.css.map",
+    "main.ac83c104.js.map": "/static/js/main.ac83c104.js.map",
+    "787.c761c556.chunk.js.map": "/static/js/787.c761c556.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c62f90a3.css",
+    "static/js/main.ac83c104.js"
+  ]
+}

@@ -1,0 +1,78 @@
+.cartao {
+    background-color: #edecec;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border: 4px solid #4F4F4F;
+}
+
+.cartao:hover {
+    background-color: #c1c1c1;
+}
+
+#btn-detalhes {
+    background-color: #FAA21E;
+    border-radius: 5px;
+    color: #000;
+    padding: 10px;
+    font-size: 20px;
+}
+
+#btn-detalhes:hover {
+    transform: scale(1.1);
+}
+
+#dropdown {
+    display: flex;
+    border-radius: 50%;
+    height: 45px;
+    width: 45px;
+    align-items: center;
+    justify-content: center;
+}
+
+#dropdown i {
+    font-size: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown-toggle::after {
+    content: none;
+}
+
+#dropdown-redes {
+    width: 20px;
+}
+
+#dropdown-redes a:hover {
+    background-color: #FAA21E;
+    /* background-color: rgba(0, 0, 0, 1); */
+}
+
+.redes {
+    font-size: 1.5rem;
+}
+
+#area-icons-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px
+}
+
+.WebcardThumb p {
+    color: #5f6f7e;
+}
+
+.atividade-title {
+    width: 100%;
+    align-self: start;
+    break-inside: avoid;
+}
+
+.secao-anuncios {
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
+}

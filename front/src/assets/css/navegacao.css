@@ -1,0 +1,32 @@
+.style-navegacao {
+    background-color: #f7f7f7;
+
+}
+
+.cinza,
+.titulo-cinza {
+    background-color: #4f4f4f !important;
+    color: #ffffff !important;
+}
+
+.bar-navigator {
+    display: flex;
+    padding: 8px;
+    margin: 0;
+    list-style: none;
+}
+
+.bar-navigator li a {
+    text-decoration: none;
+    color: #888
+}
+
+.bar-navigator i {
+    font-size: 14px;
+}
+
+.page-bar {
+    display: inline-block;
+    float: right;
+    padding: 0;
+}

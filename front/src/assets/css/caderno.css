@@ -1,0 +1,117 @@
+#btn-prev {
+    background-color: #ffcc29;
+    color: #000;
+    padding: 10px 40px;
+    font-size: 20px;
+}
+
+#btn-next {
+    background-color: #4f4f4f;
+    color: #fff;
+    padding: 10px 40px;
+    font-size: 20px;
+}
+
+#title-caderno {
+    box-shadow: 0 6px 4px rgba(228, 228, 228, 0.95);
+}
+
+.titulo-cinza {
+    background-color: #4f4f4f !important;
+    color: #ffffff !important;
+    padding: 10px;
+}
+
+.border-cinza {
+    border: 2px solid #edecec;
+
+}
+
+/* .link-cinza,
+.link-cinza:hover {
+     filter: gray;
+    -webkit-filter: grayscale(1); 
+      filter: grayscale(1); 
+} */
+
+.btn-comprar {
+
+    padding: 10px 40px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.masonry-layout {
+    /*  column-gap: 1em; */
+}
+
+.masonry-item {
+    break-inside: avoid;
+    margin-bottom: 1em;
+    background-color: lightgray;
+    border: 1px solid lightblue;
+    border-radius: 20px;
+    /*  padding: 15px; */
+    box-sizing: border-box;
+    border: 1px solid lime
+}
+
+@media (min-width: 576px) {
+    .masonry-layout {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 992px) {
+    .masonry-layout {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1200px) {
+    .masonry-layout {
+        column-count: 2;
+    }
+}
+
+.my-masonry-grid {
+    /* display: -webkit-box; */
+    /* Not needed if autoprefixing */
+    /*  display: -ms-flexbox; */
+    /* Not needed if autoprefixing */
+    display: flex;
+    margin-left: -30px;
+    /* gutter size offset */
+    width: auto;
+}
+
+.my-masonry-grid_column {
+    padding-left: 30px;
+    /* gutter size */
+    background-clip: padding-box;
+}
+
+/* Style your items */
+.my-masonry-grid_column>div {
+    /* change div to reference your elements you put in <Masonry> */
+    background: grey;
+    margin-bottom: 30px;
+}
+
+@keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+    100% {
+      box-shadow: 0 0 0 8px rgba(255, 215, 0, 1);
+    }
+  }
+  
+  .pulsating-border {
+    animation: pulse 2s infinite; /* Define a animação "pulse" com duração de 2 segundos e repetição infinita */
+    border: 1px solid #ccc; /* Adicione uma borda inicial */
+    padding: 20px; /* Adicione algum preenchimento para separar o conteúdo */
+  }

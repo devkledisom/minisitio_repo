@@ -1,0 +1,294 @@
+.border-busca {
+    /* margin-top: 22px; */
+}
+
+.formulario {
+    position: relative;
+    height: auto;
+    padding: 50px;
+    z-index: 0;
+    background: #ffcc29 url(../img/bg-home.jpg) no-repeat fixed;
+}
+
+.proximo {
+    background: #ffcc29;
+    color: #000;
+    font-size: 20px !important;
+    font-weight:500;
+    /* height: 60px; */
+}
+
+.btnPromocao {
+    padding: 0;
+    background: transparent;
+}
+
+.btnBuscar {
+    font-size: 23px;
+}
+
+.btnBuscar i {
+    font-size: 19px !important;
+    margin: 0 6px 0 0;
+}
+.btnCaderno i {
+    font-size: 19px !important;
+    margin: 0 6px 0 0;
+}
+
+/* .btn {
+    padding: 7px 14px;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: 0;
+} */
+
+.btnGrupo {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+.btn-group {
+    width: 83%;
+} 
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 60px;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    appearance: none;
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.form-control {
+    opacity: 0.8;
+
+    padding-left: 40px;
+    font-weight: bold;
+
+}
+
+#buscar {
+    height: 100%;
+    font-size: 20px
+}
+
+/*icones componente busca*/
+.formulario-home i {
+    font-size: 30px;
+   /*  margin: 0 6px 0 0; */
+    /* color: #4f4f4f; */
+}
+
+.icone-form {
+    position: absolute;
+    margin-top: 10px;
+    z-index: 1;
+    padding-left: 21px;
+    color: #ffcc29 !important;
+}
+
+.input-icon {
+    position: relative;
+}
+
+i.fa.fa-tags {
+    font-size: 22px;
+    color: #ffcc20;
+}
+
+.input-icon>i {
+    color: #ccc;
+    display: block;
+    position: absolute;
+    margin: 11px 2px 4px 10px;
+    z-index: 3;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/*componente nav*/
+.Nav {
+    background-color: #FFCC29;
+    height: 135px
+}
+
+.menu a {
+    color: #000000;
+}
+
+.nav-link:hover {
+    background-color: #4f4f4f !important;
+    color: #ffffff !important;
+}
+
+/*component mosaico*/
+.header {
+    /* position: absolute; */
+    top: auto;
+    bottom: 0;
+    left: auto;
+    right: auto;
+    z-index: 9;
+    width: 100%;
+    min-height: 60px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 1px 4px rgba(228, 228, 228, 0.95);
+    z-index: 9999;
+}
+
+
+.header-navigation li {
+    float: left;
+    padding: 0;
+    margin: 0 0 0 25px;
+}
+
+.header-navigation {
+    float: right;
+    list-style: none;
+    padding: 19px 0 0;
+    margin: 0;
+    font: 400 18px "PT Sans Narrow", Arial, sans-serif;
+    text-transform: uppercase;
+}
+
+.header-navigation {
+    float: right;
+    list-style: none;
+    padding: 19px 0 0;
+    /* margin: 0; */
+    font: 400 18px "PT Sans Narrow", Arial, sans-serif;
+    text-transform: uppercase;
+}
+
+
+li.assine {
+    padding: 10px;
+    background-color: #ffcc29;
+    margin-top: -10px;
+}
+
+.header-navigation a {
+    color: #000000 !important;
+    text-decoration: none;
+}
+
+.logo {
+    display: block;
+    height: 100px;
+    margin-top: -40px;
+    margin-bottom: 10px;
+}
+
+/*component footer*/
+.Footer {
+    background: #edecec;
+    color: #4f4f4f;
+}
+
+.Footer a {
+    display: flex;
+    list-style: none;
+    font-size: 1.5rem;
+}
+
+.Footer a:hover {
+    color: #ffcc29;
+}
+
+.social-icons li:hover>a {
+    background-position: 0 -38px;
+}
+
+.footer a:hover {
+    text-decoration: none;
+}
+
+.social-icons li .facebook {
+    background: url(../img/social/facebook.png) no-repeat;
+}
+
+.social-icons li .twitter {
+    background: url(../img/social/twitter.png) no-repeat;
+}
+
+
+.social-icons li>a {
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
+    border-radius: 2px;
+    width: 28px;
+    height: 28px;
+    display: block;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+}
+
+.title-footer {
+    margin-right: 10px;
+    font-size: 0.8rem;
+}
+
+/*component pesquisa*/
+.pesquisa-lugar {
+    /* background-color: #e6e6e6; */
+    padding: 12px 10px;
+    text-align: center;
+    border: solid #4F4F4F;
+    color: #000
+}
+
+
+.pesquisa-item .btn {
+    margin-top: 0;
+    padding: 19px 17px;
+}
+
+.btn.amarelo {
+    background-color: #ffcc29;
+    padding: 17px;
+    color: black;
+    font-size: 18px;
+    font-weight: 700;
+    border: solid #4F4F4F;
+    border-left: none;
+}
+
+/*componente tooltips*/
+.tooltip-custom-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-custom {
+    position: absolute;
+    top: calc(-100% - 50%);
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    z-index: 1;
+    min-width: 100px;
+
+}

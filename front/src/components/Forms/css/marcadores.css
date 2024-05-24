@@ -1,0 +1,11 @@
+.marcadores-main div.tagsinput {
+    border: 1px solid #CCC;
+    background: #FFF;
+    padding: 6px 12px 6px 40px;
+    width: 100% !important;
+    height: 100px;
+    overflow-y: auto;
+    float: right;
+    margin: 0;
+    border: 1px solid #e5e5e5;
+}

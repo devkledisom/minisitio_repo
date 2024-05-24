@@ -1,0 +1,32 @@
+.anuncio-info {
+    background-color: #ffcc29;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.anuncio-info>div {
+    border-bottom: 1px solid #000;
+    padding: 10px;
+    display: flex;
+}
+
+.anuncio-info>div>i,
+.anuncio-info>div>img {
+    color: #0c0c0c;
+    font-size: 40px;
+    line-height: 40px;
+    float: left;
+    margin-right: 20px;
+    width: 40px;
+    height: 100% !important;
+}
+
+.anuncio-info h4 {
+    color: #000000;
+    font-weight: 500;
+    font-size: 17px;
+}
+
+.logo-pix {
+    width: 100px !important;
+}

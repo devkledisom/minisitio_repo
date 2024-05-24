@@ -1,0 +1,78 @@
+#st-1 {
+    font-family: "Helvetica Neue", Verdana, Helvetica, Arial, sans-serif;
+    direction: ltr;
+    display: block;
+    opacity: 1;
+    text-align: left;
+    z-index: 94034;
+}
+
+#st-1 .st-btn {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-transition: opacity 0.2s ease-in, top 0.2s ease-in;
+    -ms-transition: opacity 0.2s ease-in, top 0.2s ease-in;
+    -o-transition: opacity 0.2s ease-in, top 0.2s ease-in;
+    -webkit-transition: opacity 0.2s ease-in, top 0.2s ease-in;
+    transition: opacity 0.2s ease-in, top 0.2s ease-in;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 11px;
+    height: 32px;
+    line-height: 32px;
+    margin-right: 8px;
+    padding: 0 10px;
+    position: relative;
+    text-align: center;
+    top: 0;
+    vertical-align: top;
+    white-space: nowrap;
+    color: #fff
+}
+
+#st-1 .st-btn[data-network='facebook'] {
+    background-color: #4267B2;
+}
+
+#st-1 .st-btn[data-network='twitter'] {
+    background-color: #000000;
+}
+
+#st-1.st-has-labels .st-btn {
+    min-width: 120px;
+}
+
+#st-1 .st-btn[data-network='email'] {
+    background-color: #7d7d7d;
+}
+
+#st-1 .st-btn[data-network='whatsapp'] {
+    background-color: #25d366;
+}
+
+#st-1 .st-btn[data-network='sharethis'] {
+    background-color: #95D03A;
+}
+
+#st-1 .st-btn>img {
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    position: relative;
+    top: 8px;
+    vertical-align: top;
+}
+
+#st-1 .st-btn:hover {
+    opacity: .8;
+    top: -4px;
+}
+
+.st-label {
+    padding: 0 5px 0
+}

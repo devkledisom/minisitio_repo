@@ -1,0 +1,42 @@
+.buttonload {
+  background-color: #ffcc29;
+  border: none;
+  color: #000;
+  padding: 12px 24px;
+  font-size: 23px;
+  position: absolute;
+  top: 50%;
+  z-index: 999;
+  width: 40%;
+  left: 33%;
+}
+
+/* Add a right margin to each icon */
+ .fa {
+  margin-left: -12px;
+  margin-right: 8px;
+} 
+
+.btn-view-page i {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+.alertShow {
+  /* display: none; */
+  background-color: #ffcc29;
+  position: absolute;
+  left: 23%;
+  z-index: 999;
+  animation: moveelement 3s forwards;
+}
+
+@keyframes moveelement {
+  from {
+    top: 0
+  }
+
+  to {
+    top: 50%
+  }
+}

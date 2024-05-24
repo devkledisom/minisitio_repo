@@ -1,0 +1,16 @@
+.border-busca {
+    border: 1px solid red;
+}
+
+.formulario {
+    position: relative;
+    height: auto;
+    padding: 0 0 50px;
+    z-index: 0;
+    background: #ffcc29 url(../img/bg-home.jpg) no-repeat fixed;
+}
+
+.proximo {
+    background: #ffcc29;
+    color: #000;
+}

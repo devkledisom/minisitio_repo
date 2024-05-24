@@ -1,0 +1,133 @@
+#rotulos {
+    background-color: #222222;
+    color: #fff;
+    height: 40px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.line {
+    border-bottom: 1px solid black;
+    height: 50px;
+}
+
+tr:nth-child(even) {
+    background-color: lightgray;
+}
+
+#btn-edit {
+    height: 30px;
+    width: 30px;
+    border: none;
+}
+
+.icon-edit {
+    height: 18px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.card span {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+
+    /* background-color: #040447; */
+
+}
+
+#acao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 45px;
+    width: 100px;
+}
+
+.card {
+    display: flex;
+    justify-content: space-between;
+    /* gap: 180px; */
+    padding: 10px;
+
+    border: 1px solid #161616;
+    height: 150px;
+    width: 99%;
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card ul {
+    list-style: none;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+}
+
+#ul-col-1 {
+    margin-left: 5px;
+}
+
+.card li {
+    display: flex;
+    justify-content: flex-start;
+    gap: 5px;
+
+    height: 30px;
+    font-size: 0.8rem;
+}
+
+li#linkExterno {
+    display: flex;
+    text-align: left;
+    overflow: hidden;
+    flex-direction: row;
+    width: 500px;
+    height: auto;
+}
+
+/* .card:nth-child(even) {
+    background-color: #f2f4f6;
+}
+
+.card:nth-child(odd) {
+    background-color: #5555;
+} */
+
+.btn-red {
+    background-color: #010d1e !important;
+    /* Cor vermelha */
+    /* Outros estilos personalizados, se necessário */
+}
+
+.btn-view-page {
+    padding: 0;
+}
+
+.btn-view-page button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    height: 50px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: #ffcc29;
+}
+
+.pesquisa-nome {
+    color: #000;
+}
+
+.pesquisa-nome h4 {
+    display: flex;
+    gap: 5px;
+}
