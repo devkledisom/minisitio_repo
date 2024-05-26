@@ -193,6 +193,8 @@ const Espacos = () => {
                                                     <td>{item.desconto}</td>
                                                     <td>{item.descCPFCNPJ}</td>
                                                     <td>{item.descAnuncio}</td>
+                                                    <td>{item.descTipoPessoa}</td>
+                                                    <td>{item.codCaderno}</td>
                                                     <td>{item.dtCadastro}</td>
                                                     <td>{item.ativo ? "Ativado" : "Desativado"}</td>
                                                     <td>{item.utilizar_saldo}</td>

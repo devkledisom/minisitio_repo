@@ -429,15 +429,38 @@ module.exports = {
         const offset = (paginaAtual - 1) * porPagina;
 
         // Consulta para recuperar apenas os itens da página atual
-        const atividades = await Anuncio.findAndCountAll({
+        const anuncio = await Anuncio.findAndCountAll({
             limit: porPagina,
             offset: offset
         });
 
         // Número total de itens
-        const totalItens = atividades.count;
+        const totalItens = anuncio.count;
         // Número total de páginas
         const totalPaginas = Math.ceil(totalItens / porPagina);
+
+        const arr = [];
+
+        anuncio.rows.map(async (item, i) => {
+            const cadernos = await Cadernos.findAll({
+                where: {
+                    codCaderno: item.codCaderno
+                }
+            });
+
+
+
+            item.dataValues.codCaderno = cadernos[0].dataValues.nomeCaderno;
+            // anuncio.rows[1].dataValues.descAnuncio
+
+            if (anuncio.length == (i + 1)) {
+                console.log("ultima iteração");
+            };
+
+
+            console.log("teste", item.dataValues.codCaderno);
+        });
+
 
 
 
@@ -454,14 +477,16 @@ module.exports = {
         }
 
 
-        /*    atividades.rows.map(item => {
+        /*    anuncio.rows.map(item => {
                console.log(item.dataValues.atividade);
                item.dataValues.atividade = corrigirCaracteres(item.dataValues.atividade)
            })
     */
+
+        //console.log("teste", anuncio.rows[1].dataValues.descAnuncio)
         res.json({
             success: true, message: {
-                anuncios: atividades.rows, // Itens da página atual
+                anuncios: anuncio.rows, // Itens da página atual
                 paginaAtual: paginaAtual,
                 totalPaginas: totalPaginas
             }
