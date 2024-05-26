@@ -1,11 +1,11 @@
 //models
 const database = require('../config/db');
-const Caderno = require('../models/table_caderno');
 const Anuncio = require('../models/table_anuncio');
 const Atividade = require('../models/table_atividade');
 const Uf = require('../models/table_uf');
 const Usuarios = require('../models/table_usuarios');
 const Ufs = require('../models/table_uf');
+const Caderno = require('../models/table_caderno');
 const Cadernos = require('../models/table_caderno');
 const Descontos = require('../models/table_desconto');
 
@@ -423,6 +423,8 @@ module.exports = {
     //espacos
     listarEspacos: async (req, res) => {
 
+        await database.sync();
+
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
 
@@ -441,7 +443,7 @@ module.exports = {
 
         const arr = [];
 
-        anuncio.rows.map(async (item, i) => {
+       /*  anuncio.rows.map(async (item, i) => {
             const cadernos = await Cadernos.findAll({
                 where: {
                     codCaderno: item.codCaderno
@@ -458,9 +460,9 @@ module.exports = {
             };
 
 
-            console.log("teste", item.dataValues.codCaderno);
+            //console.log("teste", item.dataValues.codCaderno);
         });
-
+ */
 
 
 
@@ -476,6 +478,33 @@ module.exports = {
             return cadeiaCorrigida;
         }
 
+        anuncio.rows.map(async(anun, i) => {
+            const cader = await anun.getCaderno();
+            anun.codCaderno = cader.nomeCaderno;
+
+            const estado = await anun.getUf();
+            anun.codUf = estado.sigla_uf;
+            //console.log(cader.nomeCaderno);
+            //console.log(anun.dataValues);
+           
+
+            if(i === anuncio.rows.length - 1) {
+                res.json({
+                    success: true, message: {
+                        anuncios: anuncio.rows, // Itens da página atual
+                        paginaAtual: paginaAtual,
+                        totalPaginas: totalPaginas
+                    }
+                })
+            }
+    
+        })
+
+
+   /*      const anun = await Anuncio.findOne({where: {codCaderno: 1}});
+        const cader = await anun.getCaderno();
+        console.log(cader); */
+
 
         /*    anuncio.rows.map(item => {
                console.log(item.dataValues.atividade);
@@ -484,13 +513,7 @@ module.exports = {
     */
 
         //console.log("teste", anuncio.rows[1].dataValues.descAnuncio)
-        res.json({
-            success: true, message: {
-                anuncios: anuncio.rows, // Itens da página atual
-                paginaAtual: paginaAtual,
-                totalPaginas: totalPaginas
-            }
-        })
+       
 
 
 

@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('../config/db');
+const Caderno = require('./table_caderno');
+const Uf = require('./table_uf');
 
 const Anuncio = database.define('anuncio', {
     codAnuncio: {
@@ -85,6 +87,20 @@ const Anuncio = database.define('anuncio', {
             },
         }
     },
+/*     codCadernoId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: false,
+        validate: {
+            notEmpty: {
+                msg: "Esse campo não pode está vazio.."
+            },
+        },
+        references: {
+            model: Caderno,
+            key: 'codCaderno'
+        }
+    }, */
 
     codUf: {
         type: Sequelize.INTEGER,
@@ -618,5 +634,15 @@ const Anuncio = database.define('anuncio', {
         freezeTableName: true,
         timestamps: false,
     });
+
+Anuncio.belongsTo(Caderno, {
+    constraints: true,
+    foreignKey: 'codCaderno'
+});
+
+Anuncio.belongsTo(Uf, {
+    constraints: true,
+    foreignKey: 'codUf'
+});
 
 module.exports = Anuncio;

@@ -195,9 +195,11 @@ const Espacos = () => {
                                                     <td>{item.descAnuncio}</td>
                                                     <td>{item.descTipoPessoa}</td>
                                                     <td>{item.codCaderno}</td>
-                                                    <td>{item.dtCadastro}</td>
-                                                    <td>{item.ativo ? "Ativado" : "Desativado"}</td>
-                                                    <td>{item.utilizar_saldo}</td>
+                                                    <td>{item.codUf}</td>
+                                                    <td>{item.activate ? "Ativado" : "Desativado"}</td>
+                                                    <td>Isento</td>
+                                                    <td>{item.codDesconto}</td>
+                                                    <td>{item.dtCadastro2}</td>
                                                     <td>{item.saldo}</td>
                                                 </tr>
                                             )
