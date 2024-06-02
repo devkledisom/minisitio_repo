@@ -17,9 +17,10 @@ function Busca(props) {
     //const { tema, setTema } = useTema();
     const { result, setResult } = useBusca();
 
-    const executarSelecao = () => {
+    const executarSelecao = (e) => {
         let codigoUf = document.querySelectorAll('#codUf2')[0].value;
         setUf(codigoUf);
+        console.log("session: ", e.target.innerText)
     };
 
     useEffect(() => {
@@ -73,6 +74,10 @@ function Busca(props) {
         } catch (error) {
             console.error('Erro ao buscar usuários:', error);
         }
+    };
+
+    const setSessionSto = (param) => {
+
     };
 
 

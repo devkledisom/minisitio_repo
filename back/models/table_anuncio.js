@@ -472,18 +472,14 @@ const Anuncio = database.define('anuncio', {
     },
 
     dtCadastro: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        type: Sequelize.DATE,
+        allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        defaultValue: Sequelize.NOW // Define o valor padrão como a data/hora atual
     },
 
     dtCadastro2: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DATE,
         allowNull: false,
         unique: false,
         validate: {
@@ -494,14 +490,10 @@ const Anuncio = database.define('anuncio', {
     },
 
     dtAlteracao: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        type: Sequelize.DATE,
+        allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        defaultValue: Sequelize.NOW // Define o valor padrão como a data/hora atual
     },
 
     descLinkedin: {

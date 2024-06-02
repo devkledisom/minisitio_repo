@@ -36,7 +36,7 @@ function FullWebCard() {
                             {result.descAnuncio}
                         </h2>
                         <div>
-                            <WebcardThumb codImg={result.descImagem}/>
+                            <WebcardThumb codImg={result.descImagem} data={result} />
                         </div>
                         <div>
                             <Metadados data={result} />
