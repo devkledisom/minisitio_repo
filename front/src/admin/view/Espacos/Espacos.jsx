@@ -1,5 +1,6 @@
 // components/OutroComponente.js
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -122,6 +123,23 @@ const Espacos = () => {
 
     }
 
+    const formatData = (dataCompleta) => {
+        let dataTempo = dataCompleta.split('T');
+        let dataOriginal = dataTempo[0].split('-');
+
+        return `${dataOriginal[2]}/${dataOriginal[1]}/${dataOriginal[0]}`
+    };
+
+    const dataExpiracao = (dataCompleta) => {
+        let dataTempo = dataCompleta.split('T');
+        let dataOriginal = dataTempo[0];
+
+        const expirationDate = moment(dataOriginal).add(1, 'year').format('DD/MM/YYYY');
+        console.log("data", dataOriginal)
+
+        return expirationDate;
+    };
+
     return (
         <div className="users">
             <header style={style} className='w-100'>
@@ -136,8 +154,12 @@ const Espacos = () => {
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
                             <button type="button" className="btn custom-button" onClick={() => navigator('/desconto/cadastro')}>Adicionar</button>
-                            <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/desconto/editar?id=${selectId}`)}>Editar</button>
+                            <button type="button" className="btn custom-button mx-2" onClick={() => navigator('/desconto/cadastro')}>Duplicar</button>
+                            <button type="button" className="btn custom-button" onClick={() => navigator('/desconto/cadastro')}>Exportar</button>
+                            <button type="button" className="btn custom-button mx-2" onClick={() => navigator('/desconto/cadastro')}>Importar</button>
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarUser}>Apagar</button>
+                            <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarUser}>Apagar Todos</button>
+                            <button type="button" className="btn btn-info custom-button text-light" onClick={() => navigator(`/desconto/editar?id=${selectId}`)}>Editar</button>
                         </div>
                         <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
@@ -157,21 +179,21 @@ const Espacos = () => {
                                 <thead>
                                     <tr>
                                         {/* <th>Nome</th> */}
-                                        <th style={{ "width": "200px" }}>Código</th>
-                                        <th style={{ "width": "100px" }}>PA</th>
-                                        <th style={{ "width": "150px" }}>Duplicado</th>
-                                        <th style={{ "width": "250px" }}>CPF/CNPJ</th>
-                                        <th style={{ "width": "200px" }}>Anúncio</th>
-                                        <th style={{ "width": "100px" }}>Tipo</th>
-                                        <th style={{ "width": "150px" }}>Caderno</th>
-                                        <th style={{ "width": "100px" }}>UF</th>
-                                        <th style={{ "width": "100px" }}>Status</th>
-                                        <th style={{ "width": "100px" }}>Pagamento</th>
-                                        <th style={{ "width": "100px" }}>Valor</th>
-                                        <th style={{ "width": "100px" }}>Cadastrado em</th>
-                                        <th style={{ "width": "100px" }}>Data Fim</th>
-                                        <th style={{ "width": "100px" }}>ID Desconto</th>
-                                        <th style={{ "width": "100px" }}>Usuário</th>
+                                        <th style={{ "width": "auto" }}>Código</th>
+                                        {/* <th style={{ "width": "100px" }}>PA</th> */}
+                                        <th style={{ "width": "auto" }}>Duplicado</th>
+                                        <th style={{ "width": "auto" }}>CPF/CNPJ</th>
+                                        <th style={{ "width": "auto" }}>Anúncio</th>
+                                        <th style={{ "width": "auto" }}>Tipo</th>
+                                        <th style={{ "width": "auto" }}>Caderno</th>
+                                        <th style={{ "width": "auto" }}>UF</th>
+                                        <th style={{ "width": "auto" }}>Status</th>
+                                        <th style={{ "width": "auto" }}>Pagamento</th>
+                                        <th style={{ "width": "auto" }}>Valor</th>
+                                        <th style={{ "width": "auto" }}>Cadastrado em</th>
+                                        <th style={{ "width": "auto" }}>Data Fim</th>
+                                        <th style={{ "width": "auto" }}>ID Desconto</th>
+                                        <th style={{ "width": "auto" }}>Usuário</th>
 
                                     </tr>
                                 </thead>
@@ -185,11 +207,11 @@ const Espacos = () => {
 
                                             return (
                                                 <tr key={item.idDesconto} id={item.idDesconto} onClick={selecaoLinha}>
-                                                    <td>
-                                                        <input type="checkbox" className="chkChildren" value="570620" />
-                                                        570620
+                                                    <td className=''>
+                                                        <input type="checkbox" className="chkChildren" />
+                                                        <span className='mx-2'>{item.codAnuncio}</span>
                                                     </td>
-                                                    <td>{item.codPA || 0}</td>
+                                                    {/* <td>{item.codAnuncio || 0}</td> */}
                                                     <td>{item.desconto}</td>
                                                     <td>{item.descCPFCNPJ}</td>
                                                     <td>{item.descAnuncio}</td>
@@ -199,8 +221,10 @@ const Espacos = () => {
                                                     <td>{item.activate ? "Ativado" : "Desativado"}</td>
                                                     <td>Isento</td>
                                                     <td>{item.codDesconto}</td>
-                                                    <td>{item.dtCadastro2}</td>
-                                                    <td>{item.saldo}</td>
+                                                    <td>{formatData(item.dtCadastro)}</td>
+                                                    <td>{dataExpiracao(item.dtCadastro2)}</td>
+                                                    <td>{item.codPA}</td>
+                                                    <td>{item.codUsuario}</td>
                                                 </tr>
                                             )
                                         })

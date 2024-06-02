@@ -484,8 +484,14 @@ module.exports = {
 
             const estado = await anun.getUf();
             anun.codUf = estado.sigla_uf;
+
+            const user = await anun.getUsuario();
+            anun.codUsuario = user.descNome;
+
+            const desconto = await anun.getDesconto();
+            anun.codPA = desconto.hash;
             //console.log(cader.nomeCaderno);
-            //console.log(anun.dataValues);
+            //console.log(desconto);
            
 
             if(i === anuncio.rows.length - 1) {

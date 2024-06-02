@@ -2,6 +2,8 @@ const Sequelize = require('sequelize');
 const database = require('../config/db');
 const Caderno = require('./table_caderno');
 const Uf = require('./table_uf');
+const Usuario = require('./table_usuarios');
+const Desconto = require('./table_desconto');
 
 const Anuncio = database.define('anuncio', {
     codAnuncio: {
@@ -19,7 +21,11 @@ const Anuncio = database.define('anuncio', {
             notEmpty: {
                 msg: "Esse campo não pode está vazio.."
             },
-        }
+        },
+      /*   references: {
+            model: Desconto,
+            key: 'idUsuario'
+        } */
     },
 
     codTipoAnuncio: {
@@ -488,18 +494,14 @@ const Anuncio = database.define('anuncio', {
     },
 
     dtCadastro: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        type: Sequelize.DATE,
+        allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        defaultValue: Sequelize.NOW // Define o valor padrão como a data/hora atual
     },
 
     dtCadastro2: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DATE,
         allowNull: false,
         unique: false,
         validate: {
@@ -510,14 +512,10 @@ const Anuncio = database.define('anuncio', {
     },
 
     dtAlteracao: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        type: Sequelize.DATE,
+        allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        defaultValue: Sequelize.NOW // Define o valor padrão como a data/hora atual
     },
 
     descLinkedin: {
@@ -643,6 +641,17 @@ Anuncio.belongsTo(Caderno, {
 Anuncio.belongsTo(Uf, {
     constraints: true,
     foreignKey: 'codUf'
+});
+
+Anuncio.belongsTo(Usuario, {
+    constraints: true,
+    foreignKey: 'codUsuario'
+});
+
+Anuncio.belongsTo(Desconto, {
+    constraints: true,
+    foreignKey: 'codUsuario',
+    targetKey: 'idUsuario'
 });
 
 module.exports = Anuncio;
