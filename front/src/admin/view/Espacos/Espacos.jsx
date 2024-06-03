@@ -43,7 +43,7 @@ const Espacos = () => {
         ])
             .then(([resAnuncio]) => {
                 //console.log(resAnuncio.message.anuncios)
-                setAnucios(resAnuncio.message.anuncios);
+                setAnucios(resAnuncio);
                 setShowSpinner(false);
             })
             .catch(error => {
@@ -60,7 +60,7 @@ const Espacos = () => {
 
 
     function selecaoLinha(event) {
-        console.log(event.currentTarget)
+        //console.log(event.currentTarget)
 
         var linhas = document.querySelectorAll('tbody tr');
         // Remove a classe 'selecionada' de todas as linhas
@@ -94,20 +94,21 @@ const Espacos = () => {
             })
     };
 
-    function buscarUserId() {
+    function buscarAnuncioId() {
         setShowSpinner(true);
-        const campoPesquisa = document.getElementById('buscar');
+        const campoPesquisa = document.getElementById('buscar').value;
 
-        fetch(`${masterPath.url}/admin/desconto/buscar/${campoPesquisa.value}`)
+        fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}`)
             .then((x) => x.json())
             .then((res) => {
                 if (res.success) {
                     alert("encontrado");
-                    setIds(res);
+                    setAnucios(res);
                     setShowSpinner(false);
-                    console.log(res.usuarios);
+                    //console.log("usussss", res);
                 } else {
                     alert("Usuário não encontrado na base de dados");
+                    setShowSpinner(false);
                 }
 
             })
@@ -135,9 +136,22 @@ const Espacos = () => {
         let dataOriginal = dataTempo[0];
 
         const expirationDate = moment(dataOriginal).add(1, 'year').format('DD/MM/YYYY');
-        console.log("data", dataOriginal)
+        //console.log("data", dataOriginal)
 
         return expirationDate;
+    };
+
+    const definirTipoAnuncio = (tipo) => {
+        switch(tipo) {
+            case 1:
+                return "Básico";
+            case 2:
+                return "Simples";
+            case 3:
+                return "Completo";
+            default:
+                return "Tipo desconhecido";
+        }
     };
 
     return (
@@ -159,12 +173,12 @@ const Espacos = () => {
                             <button type="button" className="btn custom-button mx-2" onClick={() => navigator('/desconto/cadastro')}>Importar</button>
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarUser}>Apagar</button>
                             <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarUser}>Apagar Todos</button>
-                            <button type="button" className="btn btn-info custom-button text-light" onClick={() => navigator(`/desconto/editar?id=${selectId}`)}>Editar</button>
+                            <button type="button" className="btn btn-info custom-button text-light" onClick={() => navigator(`/anuncio/editar?id=${selectId}`)}>Editar</button>
                         </div>
                         <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
-                                <input id="buscar" type="text" placeholder="Buscar" />
-                                <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
+                                <input id="buscar" type="text" placeholder="Código ou CPF/CNPJ" />
+                                <button id="btnBuscar" className="" type="button" onClick={buscarAnuncioId}>
                                     <i className="icon-search"></i>
                                 </button>
                             </div>
@@ -201,12 +215,11 @@ const Espacos = () => {
                                     {
 
 
-                                        anuncios != '' && anuncios.map((item) => {
-                                            console.log("map", anuncios)
-                                            console.log("ids", ids)
+                                        anuncios != '' && anuncios.message.anuncios.map((item) => {
+                                            //console.log("map", anuncios)
 
                                             return (
-                                                <tr key={item.idDesconto} id={item.idDesconto} onClick={selecaoLinha}>
+                                                <tr key={item.codAnuncio} id={item.codAnuncio} onClick={selecaoLinha}>
                                                     <td className=''>
                                                         <input type="checkbox" className="chkChildren" />
                                                         <span className='mx-2'>{item.codAnuncio}</span>
@@ -215,7 +228,7 @@ const Espacos = () => {
                                                     <td>{item.desconto}</td>
                                                     <td>{item.descCPFCNPJ}</td>
                                                     <td>{item.descAnuncio}</td>
-                                                    <td>{item.descTipoPessoa}</td>
+                                                    <td>{definirTipoAnuncio(item.codTipoAnuncio)}</td>
                                                     <td>{item.codCaderno}</td>
                                                     <td>{item.codUf}</td>
                                                     <td>{item.activate ? "Ativado" : "Desativado"}</td>
@@ -234,7 +247,10 @@ const Espacos = () => {
                         </div>
 
                     </div>
-                    <Pagination totalPages={ids.totalPaginas} table={"desconto"} />
+                    {anuncios != '' &&
+                         <Pagination totalPages={anuncios.message.totalPaginas} table={"espacos"} />
+                    }
+                   
 
                 </article>
                 <p className='w-100 text-center'>© MINISITIO</p>

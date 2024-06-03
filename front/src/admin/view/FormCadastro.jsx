@@ -200,6 +200,7 @@ const FormCadastro = () => {
                             <label for="pwd" className="w-50 px-1">Endereço:</label>
                             <input type="text" className="form-control h-25 w-50" id="endereco" placeholder="" name="pwd" />
                         </div>
+                        
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">UF:</label>
                             <select name="codTipoPessoa" id="coduf" onChange={executarSelecao} className="w-50 py-1">
@@ -223,6 +224,7 @@ const FormCadastro = () => {
                                 }
                             </select>
                         </div>
+
                         <div className="text-center py-3">
                             <button type="button"
                                 className="btn btn-info custom-button mx-2 text-light"

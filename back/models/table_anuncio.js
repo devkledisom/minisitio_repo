@@ -4,6 +4,7 @@ const Caderno = require('./table_caderno');
 const Uf = require('./table_uf');
 const Usuario = require('./table_usuarios');
 const Desconto = require('./table_desconto');
+const Atividade = require('./table_atividade');
 
 const Anuncio = database.define('anuncio', {
     codAnuncio: {
@@ -652,6 +653,12 @@ Anuncio.belongsTo(Desconto, {
     constraints: true,
     foreignKey: 'codUsuario',
     targetKey: 'idUsuario'
+});
+
+Anuncio.belongsTo(Atividade, {
+    constraints: true,
+    foreignKey: 'codAtividade',
+    targetKey: 'id'
 });
 
 module.exports = Anuncio;

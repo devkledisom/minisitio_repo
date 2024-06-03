@@ -8,6 +8,7 @@ import { masterPath } from '../../../config/config';
 //componente
 import Header from "../Header";
 import Spinner from '../../../components/Spinner';
+import ChooseFile from "../../../components/ChooseFile";
 
 const FormEdit = () => {
 
@@ -16,7 +17,14 @@ const FormEdit = () => {
     const [usuarios, setUsuarios] = useState([]);
     const [atividadeValue, setAtividade] = useState(false);
     const [page, setPage] = useState(1);
+    const [uf, setUfs] = useState([]);
+    const [ufSelected, setUf] = useState(0);
+    const [caderno, setCaderno] = useState([]);
+
+
     const [showSpinner, setShowSpinner] = useState(false);
+
+    const [nm_usuario, setNmUsuario] = useState(false);
     const [descricaoId, setDescricaoId] = useState(false);
     const [descontoId, setDescontoId] = useState(false);
     const [hash, setHash] = useState(false);
@@ -37,29 +45,40 @@ const FormEdit = () => {
     }
 
     useEffect(() => {
-        setShowSpinner(true); 
-        fetch(`${masterPath.url}/admin/desconto/edit/${param}`)
-        .then((x) => x.json())
-        .then((res) => {
-            setIds(res);
-            setDescricaoId(res[0].descricao);
-            setDescontoId(res[0].desconto);
-            setHash(res[0].hash);
-          
-        }).catch((err) => {
-            console.log(err)
-        })
+        setShowSpinner(true);
+        fetch(`${masterPath.url}/admin/anuncio/edit/${param}`)
+            .then((x) => x.json())
+            .then((res) => {
+                setIds(res[0]);
+                setDescricaoId(res[0].descricao);
+                setDescontoId(res[0].desconto);
+                setHash(res[0].hash);
+
+            }).catch((err) => {
+                console.log(err)
+            })
         fetch(`${masterPath.url}/admin/usuario/buscar/all`)
-        .then((x) => x.json())
-        .then((res) => {
-            setUsuarios(res.usuarios);
-            setShowSpinner(false); 
-        }).catch((err) => {
-            console.log(err);
-            setShowSpinner(false); 
-        })
+            .then((x) => x.json())
+            .then((res) => {
+                setUsuarios(res.usuarios);
+                setShowSpinner(false);
+            }).catch((err) => {
+                console.log(err);
+                setShowSpinner(false);
+            })
+
+        fetch(`${masterPath.url}/cadernos`)
+            .then((x) => x.json())
+            .then((res) => {
+                setCaderno(res)
+            })
+        fetch(`${masterPath.url}/ufs`)
+            .then((x) => x.json())
+            .then((res) => {
+                setUfs(res);
+            })
     }, []);
-  
+
 
     function editID() {
 
@@ -132,120 +151,394 @@ const FormEdit = () => {
         })
     });
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-
-        switch (event.target.id) {
-            case "atividade":
-                atividadeValue.atividade = value;
-                break;
-            case "corTitulo":
-                atividadeValue.corTitulo = value;
-                break;
-            default:
-                console.log("não encontrou");
-                break;
-        }
-
-
-        setAtividade(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-
-
-    };
 
     function teste(meuParam) {
         let user = usuarios.find(user => user.codUsuario == meuParam);
 
-        if(user != undefined) {
+        if (user != undefined) {
             return user.descNome
         }
-        console.log("users",meuParam, user)
-       
+        console.log("users", meuParam, user)
+
     }
 
+    const executarSelecao = () => {
+        let codigoUf = document.querySelectorAll('#coduf')[0].value;
+        setUf(codigoUf);
+    };
+    
+    // Função para lidar com mudanças nos campos de entrada
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setIds({
+      ...ids,
+      [name]: value
+    });
+
+    
+  };
+
     return (
+        
         <div className="users">
+            {console.log(ids)}
             <header style={style} className='w-100'>
                 <Header />
             </header>
             <section className='py-5'>
-            {showSpinner && <Spinner />}
+                {showSpinner && <Spinner />}
 
                 <div className="container">
-                    <h2 className="pt-4 px-5 text-center">Editar ID</h2>
+                    <h2 className="pt-4 px-5 text-center">Editar Anúncio</h2>
                     {/* <h2>Vertical (basic) form</h2> */}
                     <form action="/action_page.php">
                         <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="nm_usuario" className="w-50 px-1">Usuário: (Digite o nome, e-mail ou CPF/CNPJ)</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="nm_usuario"
+                                name="nm_usuario"
+                                value={ids.codUsuario}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                        {hash && <span>Código: {hash}</span>} 
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="descAtividade" className="w-50 px-1">Atividade: (Digite o nome)</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="descAtividade"
+                                name="descAtividade"
+                                value={ids.codAtividade}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                            <label htmlFor="user" className="w-50 px-1">Usuário:</label>
-                            <select name="user" id="user" className="w-50 py-1">
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="descTipoAnuncio" className="w-50 px-1">Tipo de anúncio</label>
+                            <select name="descTipoAnuncio" id="descTipoAnuncio" className="w-50 py-1">
+                                <option selected="selected">- Selecione o tipo de anúncio -</option>
+                                <option value="1">Básico</option>
+                                <option value="2">Simples</option>
+                                <option value="3">Completo</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="coduf" className="w-50 px-1">UF:</label>
+                            <select name="coduf" id="coduf" onChange={executarSelecao} className="w-50 py-1">
+                                <option value="" selected="selected">- Selecione um estado -</option>
                                 {
-                                    ids.map((user) => (
-                                        <option value={user.descNome}>{teste(user.idUsuario)}</option>
+                                    uf.map((uf) => (
+                                        <option value={uf.id_uf}>{uf.sigla_uf}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="codCaderno" className="w-50 px-1">Caderno:</label>
+                            <select name="codCaderno" id="codCaderno" className="w-50 py-1">
+                                <option value="" selected="selected">- Selecione uma cidade -</option>
+                                {
+                                    caderno.map((cidades) => (
+                                        cidades.codUf == ufSelected &&
+                                        <option value={cidades.codCaderno}>{cidades.nomeCaderno}</option>
                                     ))
                                 }
                             </select>
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descID" className="w-50 px-1">Descrição do ID:</label>
+                            <label htmlFor="nm_empresa" className="w-50 px-1">Nome da empresa:</label>
                             <input type="text"
-                             className="form-control h-25 w-50"
-                              id="descID" 
-                               name="descID"
-                                value={descricaoId}
-                                onChange={(e) => setDescricaoId(e.target.value)}
-                                />
-                        </div>
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="valorDesconto" className="w-50 px-1">Valor do desconto:</label>
-                            <input type="text" 
-                            className="form-control h-25 w-50" 
-                            id="valorDesconto" 
-                             name="valorDesconto" 
-                             value={descontoId}
-                             onChange={(e) => setDescontoId(e.target.value)}
-                             />
-                            <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span>
+                                className="form-control h-25 w-50"
+                                id="nm_empresa"
+                                name="nm_empresa"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
                         </div>
 
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label className="w-50 px-1">Imagem:</label>
+                            <ChooseFile codigoUser={param} largura={"w-50"}/>
+                        </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="patrocinador" className="w-50 px-1">Habilitar Patrocinador ?</label>
-                            <select name="patrocinador" id="patrocinador" className="w-50 py-1">
-                                <option value="1">Sim</option>
-                                <option value="0">Não</option>
+                            <label className="w-50 px-1">Promoção:</label>
+                            <ChooseFile codigoUser={param} largura={"w-50"}/>
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label className="w-50 px-1">Validade:</label>
+                            <input type="date" name="validade" id="validade" className="form-control h-25 w-50" />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label className="w-50 px-1">Imagem da Parceria:</label>
+                            <ChooseFile codigoUser={param} largura={"w-50"}/>
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="urlParceria" className="w-50 px-1">Site da Parceria:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="urlParceria"
+                                name="urlParceria"
+                                value={descontoId}
+                                onChange={(e) => setDescontoId(e.target.value)}
+                            />
+                            <span>Inserir URL completa para acesso ao site da parceria</span>
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label className="w-50 px-1">Contrato:</label>
+                            <ChooseFile codigoUser={param} largura={"w-50"}/>
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="endereco" className="w-50 px-1">Endereço:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="endereco"
+                                name="endereco"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="cod_postal" className="w-50 px-1">CEP:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="cod_postal"
+                                name="cod_postal"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="nu_telefone" className="w-50 px-1">Telefone:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="nu_telefone"
+                                name="nu_telefone"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="nu_celular" className="w-50 px-1">Celular:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="nu_celular"
+                                name="nu_celular"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="descAnuncio" className="w-50 px-1">Descrição do anúncio:</label>
+                            <textarea type="text"
+                                className="form-control h-25 w-50"
+                                id="descAnuncio"
+                                name="descAnuncio"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            ></textarea>
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="urlSite" className="w-50 px-1">Site:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="urlSite"
+                                name="urlSite"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                                placeholder='Digite uma url válida'
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="urlSkype" className="w-50 px-1">Skype:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="urlSkype"
+                                name="urlSkype"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                                placeholder='Digite uma url válida'
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="urlYoutube" className="w-50 px-1">Youtube:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="urlYoutube"
+                                name="urlYoutube"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                                placeholder='Digite uma url válida'
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="emailComercial" className="w-50 px-1">E-mail comercial:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="emailComercial"
+                                name="emailComercial"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="emailAlternativo" className="w-50 px-1">E-mail alternativo:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="emailAlternativo"
+                                name="emailAlternativo"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
+                        </div>
+                            
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="urlFacebook" className="w-50 px-1">Facebook:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="urlFacebook"
+                                name="urlFacebook"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                                placeholder='Digite uma url válida'
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="urlInstagram" className="w-50 px-1">Instagram:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="urlInstagram"
+                                name="urlInstagram"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                                placeholder='Digite uma url válida'
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="urlTwitter" className="w-50 px-1">Twitter:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="urlTwitter"
+                                name="urlTwitter"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                                placeholder='Digite uma url válida'
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="nu_whatszap" className="w-50 px-1">WhatsApp:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="nu_whatszap"
+                                name="nu_whatszap"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="urlAndroid" className="w-50 px-1">Aplicativo Android:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="urlAndroid"
+                                name="urlAndroid"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                                placeholder='Digite uma url válida'
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="urlIos" className="w-50 px-1">Aplicativo iOS:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="urlIos"
+                                name="urlIos"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                                placeholder='Digite uma url válida'
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="descTipoPessoa" className="w-50 px-1">Tipo de pessoa:</label>
+                            <select name="descTipoPessoa" id="descTipoPessoa" className="w-50 py-1">
+                                <option selected="selected">- Selecione o tipo de pessoa -</option>
+                                <option value="1">Pessoa Física</option>
+                                <option value="2">Pessoa Jurídica</option>
                             </select>
                         </div>
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="utilizar-saldo" className="w-50 px-1">Utilizar Saldo ?</label>
-                            <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1">
-                                <option value="1">Sim</option>
-                                <option value="0">Não</option>
-                            </select>
-                        </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="add-saldo" className="w-50 px-1">Adicionar Saldo:</label>
+                            <label htmlFor="nu_documento" className="w-50 px-1">CPF/CNPJ:</label>
                             <input type="text"
-                             className="form-control h-25 w-50"
-                              id="add-saldo" 
-                               name="add-saldo"
-                                />
+                                className="form-control h-25 w-50"
+                                id="nu_documento"
+                                name="nu_documento"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
                         </div>
 
-                      
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="nm_autorizante" className="w-50 px-1">Nome autorizante:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="nm_autorizante"
+                                name="nm_autorizante"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="emailAutorizante" className="w-50 px-1">E-mail autorizante:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="emailAutorizante"
+                                name="emailAutorizante"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="chavePix" className="w-50 px-1">Chave Pix:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="chavePix"
+                                name="chavePix"
+                                value={nm_usuario}
+                                onChange={(e) => setNmUsuario(e.target.value)}
+                                placeholder='Digite a sua chave pix'
+                            />
+                        </div>
+
                         <div className="text-center py-3">
                             <button type="button"
                                 className="btn btn-info custom-button mx-2 text-light"
-                                onClick={editID}
-                            >Salvar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/desconto')}>Cancelar</button>
+                                onClick={editID} >Salvar</button>
+                            <button type="submit" className="btn custom-button" onClick={() => navigate('/espacos')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

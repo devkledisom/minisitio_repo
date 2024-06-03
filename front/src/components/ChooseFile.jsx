@@ -53,7 +53,7 @@ function UploadImage(props) {
   }
 
   return (
-    <div className="row webcard choose-main" >
+    <div className={"row webcard choose-main"+" "+props.largura} >
       <div className="col-md-8">
         <div className="input-icon margin-top-10">
           <i className="fa fa-paperclip"></i>

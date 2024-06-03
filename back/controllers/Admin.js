@@ -9,6 +9,9 @@ const Caderno = require('../models/table_caderno');
 const Cadernos = require('../models/table_caderno');
 const Descontos = require('../models/table_desconto');
 
+//Functions
+const verificarNudoc = require('./identificarNuDoc');
+
 //moduls
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
@@ -441,31 +444,6 @@ module.exports = {
         // Número total de páginas
         const totalPaginas = Math.ceil(totalItens / porPagina);
 
-        const arr = [];
-
-       /*  anuncio.rows.map(async (item, i) => {
-            const cadernos = await Cadernos.findAll({
-                where: {
-                    codCaderno: item.codCaderno
-                }
-            });
-
-
-
-            item.dataValues.codCaderno = cadernos[0].dataValues.nomeCaderno;
-            // anuncio.rows[1].dataValues.descAnuncio
-
-            if (anuncio.length == (i + 1)) {
-                console.log("ultima iteração");
-            };
-
-
-            //console.log("teste", item.dataValues.codCaderno);
-        });
- */
-
-
-
         // Importe a biblioteca 'iconv-lite'
         const iconv = require('iconv-lite');
 
@@ -478,9 +456,9 @@ module.exports = {
             return cadeiaCorrigida;
         }
 
-        anuncio.rows.map(async(anun, i) => {
+        anuncio.rows.map(async (anun, i) => {
             const cader = await anun.getCaderno();
-            anun.codCaderno = cader.nomeCaderno;
+            anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
 
             const estado = await anun.getUf();
             anun.codUf = estado.sigla_uf;
@@ -492,24 +470,25 @@ module.exports = {
             anun.codPA = desconto.hash;
             //console.log(cader.nomeCaderno);
             //console.log(desconto);
-           
 
-            if(i === anuncio.rows.length - 1) {
+
+            if (i === anuncio.rows.length - 1) {
                 res.json({
-                    success: true, message: {
+                    success: true,
+                    message: {
                         anuncios: anuncio.rows, // Itens da página atual
                         paginaAtual: paginaAtual,
                         totalPaginas: totalPaginas
                     }
                 })
             }
-    
+
         })
 
 
-   /*      const anun = await Anuncio.findOne({where: {codCaderno: 1}});
-        const cader = await anun.getCaderno();
-        console.log(cader); */
+        /*      const anun = await Anuncio.findOne({where: {codCaderno: 1}});
+             const cader = await anun.getCaderno();
+             console.log(cader); */
 
 
         /*    anuncio.rows.map(item => {
@@ -519,11 +498,68 @@ module.exports = {
     */
 
         //console.log("teste", anuncio.rows[1].dataValues.descAnuncio)
-       
 
 
 
-    }
+
+    },
+    buscarAnuncioId: async (req, res) => {
+        //const nu_hash = req.params.id;
+        const nu_hash = req.query.search;
+
+
+        //Descontos
+        const resultAnuncio = await Anuncio.findAll({
+            where: {
+                [Op.or]: [
+                    { codAnuncio: nu_hash },
+                    { descCPFCNPJ: nu_hash },
+                ]
+            }
+        });
+
+        if (resultAnuncio < 1) {
+            res.json({ success: false, message: "Usuario não encontrado" });
+            return;
+        }
+
+        res.json({
+            success: true,
+            message: {
+                anuncios: resultAnuncio
+            }
+        });
+
+    },
+    listarAnuncioId: async (req, res) => {
+
+        const uuid = req.params.id;
+
+        //Anuncios
+        const resultAnuncio = await Anuncio.findAll({
+            where: {
+                codAnuncio: uuid
+            }
+        });
+
+        // Verifica se o resultado está vazio
+        if (resultAnuncio.length === 0) {
+            return res.status(404).json({ message: 'Anúncio não encontrado' });
+        }
+
+        let obj = resultAnuncio[0];
+
+        const user = await obj.getUsuario();
+        obj.codUsuario = user.descNome;
+
+        const atividade = await obj.getAtividade();
+        obj.codAtividade = atividade.atividade;
+
+        console.log(atividade)
+
+
+        res.json(resultAnuncio);
+    },
 
 
 }
