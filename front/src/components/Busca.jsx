@@ -20,7 +20,13 @@ function Busca(props) {
     const executarSelecao = (e) => {
         let codigoUf = document.querySelectorAll('#codUf2')[0].value;
         setUf(codigoUf);
-        console.log("session: ", e.target.innerText)
+        const teste = uf.find(u => u.id_uf == codigoUf)
+        localStorage.setItem("uf: ", teste.sigla_uf)
+    };
+    const definirCaderno = (e) => {
+        let codigoUf = document.querySelectorAll('#codUf3')[0].value;
+        const teste = caderno.find(cad => cad.codCaderno == codigoUf)
+        localStorage.setItem("caderno: ", teste.nomeCaderno)
     };
 
     useEffect(() => {
@@ -98,7 +104,7 @@ function Busca(props) {
                                         <select name="codUf2" id="codUf2" className="form-control" onChange={executarSelecao}>
                                             <option value="">UF</option>
                                             {uf.map((item) => (
-                                                <option id={item.id_uf} key={item.id_uf} value={item.id_uf}>{item.sigla_uf}</option>
+                                                <option id={item.id_uf} key={item.id_uf} name={item.nome_uf} value={item.id_uf}>{item.sigla_uf}</option>
                                             ))}
                                         </select>
 
@@ -108,11 +114,11 @@ function Busca(props) {
                                     <i className="fa fa-map-marker icone-form"></i>
                                     <div className="form-group w-100">
 
-                                        <select name="codUf3" id="codUf3" className="form-control">
+                                        <select name="codUf3" id="codUf3" className="form-control" onChange={definirCaderno}>
                                             <option value="">Cidade</option>
                                             {caderno.map((item) => (
                                                 item.codUf == ufSelected &&
-                                                <option id={item.codCaderno} key={item.codCaderno} value={item.codCaderno}>{item.nomeCaderno}</option>
+                                                <option id={item.codCaderno} key={item.codCaderno} name={item.nomeCaderno} value={item.codCaderno}>{item.nomeCaderno}</option>
                                             ))}
                                         </select>
 

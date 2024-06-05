@@ -57,6 +57,7 @@ router.get('/admin/desconto/buscar/:id', Admin.buscarId);
 
 router.get('/admin/espacos/read', Admin.listarEspacos);
 router.get('/admin/anuncio/edit/:id', Admin.listarAnuncioId);
+router.post('/admin/anuncio/create', Admin.criarAnuncio);
 router.get('/admin/anuncio/buscar', Admin.buscarAnuncioId);
 
 

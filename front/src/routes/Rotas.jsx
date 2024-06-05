@@ -33,6 +33,7 @@ import GerenciarIdEditar from "../admin/view/gerenciar_id/FormEdit";
 
 import Espacos from "../admin/view/Espacos/Espacos";
 import AnuncioEditar from "../admin/view/Espacos/FormEdit";
+import AnuncioCadastro from "../admin/view/Espacos/FormCadastro";
 
 import { TemaProvider } from '../context/BuscaContext';
 
@@ -67,7 +68,9 @@ function Rotas() {
                     <Route path="desconto/editar" element={<GerenciarIdEditar />} />
 
                     <Route path="espacos" element={<Espacos />} />
+                    <Route path="anuncio/cadastro" element={<AnuncioCadastro />} />
                     <Route path="anuncio/editar" element={<AnuncioEditar />} />
+
 
                 </Routes>
             </TemaProvider>

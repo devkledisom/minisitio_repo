@@ -24,7 +24,7 @@ function WebCard() {
             </header>
             <main>
                 <Busca />
-                <h1 id="title-caderno" className='py-2'>Caderno SAO PAULO - ZONA CENTRAL - SP</h1>
+                <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
                 <Navegacao />
                 <FullWebCard />
             </main>

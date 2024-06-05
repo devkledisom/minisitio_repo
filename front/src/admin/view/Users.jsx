@@ -28,12 +28,12 @@ const Users = () => {
 
 
     useEffect(() => {
-        setShowSpinner(true); 
+        setShowSpinner(true);
         fetch(`${masterPath.url}/admin/usuario?page=${param}`)
             .then((x) => x.json())
             .then((res) => {
                 setUsuarios(res);
-                setShowSpinner(false); 
+                setShowSpinner(false);
             })
     }, [page, param]);
 
@@ -59,7 +59,7 @@ const Users = () => {
 
 
     function apagarUser() {
-        setShowSpinner(true); 
+        setShowSpinner(true);
         fetch(`${masterPath.url}/admin/usuario/delete/${selectId}`, {
             method: "DELETE"
         })
@@ -71,7 +71,7 @@ const Users = () => {
                         .then((x) => x.json())
                         .then((res) => {
                             setUsuarios(res);
-                            setShowSpinner(false); 
+                            setShowSpinner(false);
                         })
                 }
 
@@ -79,7 +79,7 @@ const Users = () => {
     };
 
     function buscarUserId() {
-        setShowSpinner(true); 
+        setShowSpinner(true);
         const campoPesquisa = document.getElementById('buscar');
 
         fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa.value}`)
@@ -87,13 +87,20 @@ const Users = () => {
             .then((res) => {
                 if (res.success) {
                     setUsuarios(res);
-                    setShowSpinner(false); 
+                    setShowSpinner(false);
                 } else {
                     alert("Usuário não encontrado na base de dados");
-                    setShowSpinner(false); 
+                    setShowSpinner(false);
                 }
 
             })
+    };
+
+    const formatData = (dataCompleta) => {
+        let dataTempo = dataCompleta.split('T');
+        let dataOriginal = dataTempo[0].split('-');
+
+        return `${dataOriginal[2]}/${dataOriginal[1]}/${dataOriginal[0]}`
     };
 
     const style = {
@@ -104,12 +111,12 @@ const Users = () => {
 
     return (
         <div className="users">
-                 <header style={style} className='w-100'>
+            <header style={style} className='w-100'>
                 <Header />
             </header>
             <section className="pt-5">
 
-            {showSpinner && <Spinner />}
+                {showSpinner && <Spinner />}
 
                 <h1 className="pt-4 px-4">Usuários</h1>
                 <div className="container-fluid py-4 px-4">
@@ -153,7 +160,7 @@ const Users = () => {
                                                 <td>{item.descEmail}</td>
                                                 <td>{item.descCPFCNPJ}</td>
                                                 <td>Anunciante</td>
-                                                <td>{item.dtCadastro}</td>
+                                                <td>{formatData(item.dtCadastro)}</td>
                                                 <td>{item.ativo ? "Ativado" : "Desativado"}</td>
                                             </tr>
                                         ))
@@ -163,12 +170,12 @@ const Users = () => {
                         </div>
 
                     </div>
-                    <Pagination totalPages={usuarios.totalPaginas} table={"users"}/>
+                    <Pagination totalPages={usuarios.totalPaginas} table={"users"} />
 
                 </article>
                 <p className='w-100 text-center'>© MINISITIO</p>
             </section>
-          {/*   <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
+            {/*   <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
                 <p className='w-100 text-center'>© MINISITIO</p>
             </footer> */}
         </div>

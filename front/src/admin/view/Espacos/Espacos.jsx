@@ -142,7 +142,7 @@ const Espacos = () => {
     };
 
     const definirTipoAnuncio = (tipo) => {
-        switch(tipo) {
+        switch (tipo) {
             case 1:
                 return "Básico";
             case 2:
@@ -167,12 +167,12 @@ const Espacos = () => {
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
-                            <button type="button" className="btn custom-button" onClick={() => navigator('/desconto/cadastro')}>Adicionar</button>
-                            <button type="button" className="btn custom-button mx-2" onClick={() => navigator('/desconto/cadastro')}>Duplicar</button>
-                            <button type="button" className="btn custom-button" onClick={() => navigator('/desconto/cadastro')}>Exportar</button>
-                            <button type="button" className="btn custom-button mx-2" onClick={() => navigator('/desconto/cadastro')}>Importar</button>
+                            <button type="button" className="btn custom-button" onClick={() => navigator('/anuncio/cadastro')}>Adicionar</button>
+                            <button type="button" className="btn custom-button mx-2" >Duplicar</button>
+                            <button type="button" className="btn custom-button" >Exportar</button>
+                            <button type="button" className="btn custom-button mx-2" >Importar</button>
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarUser}>Apagar</button>
-                            <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarUser}>Apagar Todos</button>
+                            <button type="button" className="btn btn-danger custom-button text-light mx-2" >Apagar Todos</button>
                             <button type="button" className="btn btn-info custom-button text-light" onClick={() => navigator(`/anuncio/editar?id=${selectId}`)}>Editar</button>
                         </div>
                         <div className="span6 col-md-6">
@@ -248,9 +248,9 @@ const Espacos = () => {
 
                     </div>
                     {anuncios != '' &&
-                         <Pagination totalPages={anuncios.message.totalPaginas} table={"espacos"} />
+                        <Pagination totalPages={anuncios.message.totalPaginas} table={"espacos"} />
                     }
-                   
+
 
                 </article>
                 <p className='w-100 text-center'>© MINISITIO</p>

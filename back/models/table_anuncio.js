@@ -23,10 +23,10 @@ const Anuncio = database.define('anuncio', {
                 msg: "Esse campo não pode está vazio.."
             },
         },
-      /*   references: {
-            model: Desconto,
-            key: 'idUsuario'
-        } */
+        /*   references: {
+              model: Desconto,
+              key: 'idUsuario'
+          } */
     },
 
     codTipoAnuncio: {
@@ -94,20 +94,20 @@ const Anuncio = database.define('anuncio', {
             },
         }
     },
-/*     codCadernoId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
+    /*     codCadernoId: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            unique: false,
+            validate: {
+                notEmpty: {
+                    msg: "Esse campo não pode está vazio.."
+                },
             },
-        },
-        references: {
-            model: Caderno,
-            key: 'codCaderno'
-        }
-    }, */
+            references: {
+                model: Caderno,
+                key: 'codCaderno'
+            }
+        }, */
 
     codUf: {
         type: Sequelize.INTEGER,
@@ -621,6 +621,17 @@ const Anuncio = database.define('anuncio', {
     cartao_digital: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        unique: false,
+        validate: {
+            notEmpty: {
+                msg: "Esse campo não pode está vazio.."
+            },
+        }
+    },
+
+    descChavePix: {
+        type: Sequelize.TEXT,
+        allowNull: true,
         unique: false,
         validate: {
             notEmpty: {

@@ -19,7 +19,8 @@ module.exports = {
             }
         });
 
-        if (!users) {
+
+        if (users.length < 1) {
             res.json({ success: false, message: "Usuario nao encontrado" })
             return;
         }

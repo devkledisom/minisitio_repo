@@ -560,6 +560,47 @@ module.exports = {
 
         res.json(resultAnuncio);
     },
+    criarAnuncio: async (req, res) => {
+
+
+
+        const usuario = await Usuarios.findAll({
+            where: {
+                codUsuario: req.body.usuario
+            }
+        });
+
+
+        try {
+            //Descontos
+            const descontoCriado = await Descontos.create({
+                idUsuario: req.body.usuario,
+                userType: usuario[0].codTipoPessoa,
+                desconto: req.body.valorDesconto,
+                descricao: req.body.descricao,
+                hash: req.body.hash,
+                borda: null,
+                descImagem: null,
+                descLink: "#",
+                borda2: null,
+                descPromocao: null,
+                descLink2: "#",
+                dtCadastro: "12/12/2012",
+                ativo: req.body.patrocinador,
+                utilizar_saldo: req.body.saldoUtilizado,
+                saldo: 0
+
+
+            });
+
+            console.log(req.body)
+
+            res.json({ success: true, message: "ID criado com sucesso!" });
+        } catch (err) {
+            res.json({ success: false, message: err });
+        }
+
+    },
 
 
 }

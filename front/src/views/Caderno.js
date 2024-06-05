@@ -42,9 +42,9 @@ function Caderno() {
         });
 
         const minisitio = await res.json();
-      
+
         console.log(minisitio.anuncios.length)
-       
+
         setMinisitio(minisitio);
 
         const codigosAtividades = minisitio.anuncios.map((item) => item.codAtividade);
@@ -54,7 +54,7 @@ function Caderno() {
         const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id));
 
         setNomeAtividade(atividadesEncontradas);
-        
+
         console.log("Final", atividadesEncontradas, nomeAtividade);
       } catch (error) {
         console.error('Erro ao buscar atividades:', error);
@@ -65,31 +65,31 @@ function Caderno() {
   }, [book]);
 
 
- const teste = useRef(null)
+  const teste = useRef(null)
 
-   useEffect(() => {
+  useEffect(() => {
     console.log("motre", teste.current)
     //console.log(document.querySelector(`#item_${id}`))
-    
- 
+
+
     const interID = setInterval(() => {
-      if(document.querySelector(`#item_${id}`)) {
+      if (document.querySelector(`#item_${id}`)) {
         console.log(document.querySelector(`#item_${id}`))
         document.querySelector(`#item_${id}`).classList = "pulsating-border"
-     
+
         document.querySelector(`#item_${id}`).scrollIntoView({ behavior: 'smooth' })
         clearInterval(interID);
       }
     }, 1000)
-      
-    
-    
-  }, []) 
 
-/*   if(smoot) {
-    alert()
-    
-  } */
+
+
+  }, [])
+
+  /*   if(smoot) {
+      alert()
+      
+    } */
 
   return (
     <div className="App">
@@ -99,8 +99,8 @@ function Caderno() {
       </header>
       <main>
         <Busca paginaAtual={"caderno"} />
-        <h1 id="title-caderno" className='py-2'>Caderno SAO PAULO - ZONA CENTRAL - SP</h1>
-        <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno SAO PAULO - ZONA CENTRAL - SP. Você está vendo a página {minisitio.paginaAtual}.</h2>
+        <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
+        <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
         <div className="container">
           <div className="row p-3">
             <div className="col-md-6 text-end">
@@ -136,36 +136,36 @@ function Caderno() {
                         {item.atividade}
                       </h2>
                       {
-                        
+
                         minisitio.anuncios.map((anuncio) => {
                           //console.log(anuncio)
 
-                          if(anuncio.codTipoAnuncio == 1) {
+                          if (anuncio.codTipoAnuncio == 1) {
                             return <MiniWebCardSimples />
                           } else {
                             if (anuncio.codAtividade == item.id) {
-                              return <MiniWebCard key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={minisitio} codImg={anuncio.descImagem} ref={teste}/>
+                              return <MiniWebCard key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={minisitio} codImg={anuncio.descImagem} ref={teste} />
                             } <MsgProgramada />
                             //return <MiniWebCard key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={minisitio} />
                           }
                           //console.log("compr", i)
-                      /*     if(i == 9){
-                            setSmoot(true)
-                          } */
-                         
+                          /*     if(i == 9){
+                                setSmoot(true)
+                              } */
 
-                          return null; 
+
+                          return null;
                         })
                       }
-                             {
-                    // Verifica se não é o último card e se não há anúncio associado à próxima atividade
-                    index !== nomeAtividade.length - 1 && minisitio.anuncios.every(anuncio => anuncio.codAtividade !== nomeAtividade[index + 1].id) && 
-                    <MsgProgramada />
-                }
+                      {
+                        // Verifica se não é o último card e se não há anúncio associado à próxima atividade
+                        index !== nomeAtividade.length - 1 && minisitio.anuncios.every(anuncio => anuncio.codAtividade !== nomeAtividade[index + 1].id) &&
+                        <MsgProgramada />
+                      }
                     </div>
                     :
-                    <h1>erro</h1>  
-                    ))}
+                    <h1>erro</h1>
+                ))}
               </div>
 
 

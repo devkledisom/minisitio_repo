@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { masterPath } from '../../config/config';
 
@@ -9,6 +9,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {
 
+    const loginValue = useRef(null);
+    const passValue = useRef(null);
     const navigate = useNavigate();
 
     function entrar() {
@@ -16,15 +18,17 @@ function Login() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                "descCPFCNPJ": 12345678900,
-                "senha": 123
+                "descCPFCNPJ": loginValue.current.value,
+                "senha": passValue.current.value
             })
         })
             .then((x) => x.json())
             .then((res) => {
                 if (res.success) {
                     navigate("/admin");
-                    console.log(res)
+                    //console.log(res)
+                } else {
+                    alert(res.message);
                 }
             })
     };
@@ -45,13 +49,13 @@ function Login() {
                                     <div className="col-md-12 py-3">
                                         <div className="input-icon margin-top-10">
                                             <i className="fa fa-user"></i>
-                                            <input type="text" className="form-control assinante" placeholder="Digite seu CPF ou CNPJ" id="descCPFCNPJ" />
+                                            <input type="text" className="form-control assinante" placeholder="Digite seu CPF ou CNPJ" id="descCPFCNPJ" ref={loginValue} />
                                         </div>
                                     </div>
                                     <div className="col-md-12">
                                         <div className="input-icon margin-top-10 py-3">
                                             <i className="fa fa-key"></i>
-                                            <input type="password" className="form-control assinante" placeholder="Digite sua senha" id="senha" />
+                                            <input type="password" className="form-control assinante" placeholder="Digite sua senha" id="senha" ref={passValue} />
                                         </div>
                                     </div>
                                     <div className="col-md-6 col-sm-5 senha">

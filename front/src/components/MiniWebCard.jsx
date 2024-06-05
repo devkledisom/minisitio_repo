@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { masterPath } from '../config/config';
 
@@ -37,7 +37,7 @@ function MiniWebCard(props) {
 
             <div className='container my-2'>
                 <div className='row p-2 cartao'>
-                    <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={200} />
+                    <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={300} />
                     <div className="row py-3 px-0">
                         <div id="area-icons-actions" className='col-md-6'>
                             <Tooltip text={"Mídias"}>
@@ -87,7 +87,7 @@ function MiniWebCard(props) {
                                     </ul>
                                 </div>
                             </Tooltip>
-                            
+
                         </div>
                         <div className='col-md-6 px-0 d-flex justify-content-end align-items-center'>
                             <button id="btn-detalhes" onClick={buscarAnuncio}>Ver Detalhes</button>

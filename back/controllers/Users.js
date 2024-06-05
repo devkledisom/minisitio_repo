@@ -259,7 +259,7 @@ module.exports = {
             certificado_link,
             cartao_digital } = req.body
 
-        console.log(req.body.descImagem)
+        console.log(req.body)
 
         const dadosAnuncio = {
             //"codAnuncio": 88888,
