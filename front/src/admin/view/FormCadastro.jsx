@@ -94,7 +94,7 @@ const FormCadastro = () => {
             "Endereco": document.getElementById('endereco').value,
             "Uf": document.getElementById('coduf').value,
             "Cidade": document.getElementById('codcidade').value,
-            "Cadastro": 31323,
+            "dtCadastro": new Date(),
             "usuarioCod": 0,
             "dtCadastro2": "",
             "dtAlteracao": "",
@@ -113,7 +113,8 @@ const FormCadastro = () => {
                     if (res.success) {
                         alert("Usuário Cadastrado!");
                     } else {
-                        alert(res.message);
+                        alert(res.message.errors[0].message);
+                        // console.log(res.message.errors[0].message);
                     }
                 })
         }
@@ -184,12 +185,14 @@ const FormCadastro = () => {
                             <label for="pwd" className="w-50 px-1">Tipo usuário:</label>
                             <select name="codTipoPessoa" id="codTipoPerfil" className="w-50 py-1">
                                 <option value="" selected="selected">- Selecione o tipo de perfil -</option>
-                                <option value="1">Administrador</option>
-                                <option value="2">Associado</option>
-                                <option value="3">Licenciado</option>
-                                <option value="4">Anunciante</option>
-                                <option value="5">Super Administrador</option>
-                                <option value="6">Master</option>
+                                {/* <option value="1">Administrador</option> */}
+                                {/* <option value="2">Associado</option>
+                                <option value="3">Licenciado</option> */}
+                                <option value="1">Super Administrador</option>
+                                <option value="2">Master</option>
+                                <option value="3">Anunciante</option>
+
+
                             </select>
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
@@ -200,7 +203,7 @@ const FormCadastro = () => {
                             <label for="pwd" className="w-50 px-1">Endereço:</label>
                             <input type="text" className="form-control h-25 w-50" id="endereco" placeholder="" name="pwd" />
                         </div>
-                        
+
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">UF:</label>
                             <select name="codTipoPessoa" id="coduf" onChange={executarSelecao} className="w-50 py-1">

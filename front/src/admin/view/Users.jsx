@@ -65,7 +65,7 @@ const Users = () => {
         })
             .then((x) => x.json())
             .then((res) => {
-                console.log(res)
+                //console.log(res)
                 if (res.success) {
                     fetch(`${masterPath.url}/admin/usuario?page=${param}`)
                         .then((x) => x.json())
@@ -144,11 +144,12 @@ const Users = () => {
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
-                                        <th style={{ "width": "300px" }}>E-mail</th>
-                                        <th style={{ "width": "300px" }}>CPF/CNPJ</th>
-                                        <th style={{ "width": "200px" }}>Tipo</th>
-                                        <th style={{ "width": "150px" }}>Cadastrado em</th>
-                                        <th style={{ "width": "100px" }}>Status</th>
+                                        <th>E-mail</th>
+                                        <th>CPF/CNPJ</th>
+                                        <th>SENHA</th>
+                                        <th>Tipo</th>
+                                        <th>Cadastrado em</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -159,7 +160,10 @@ const Users = () => {
                                                 <td>{item.descNome}</td>
                                                 <td>{item.descEmail}</td>
                                                 <td>{item.descCPFCNPJ}</td>
-                                                <td>Anunciante</td>
+                                                <td>{item.senha}</td>
+                                                {item.codTipoUsuario == 1 ? <td>SUPER ADMIN</td> : ''}
+                                                {item.codTipoUsuario == 2 ? <td>MASTER</td> : ''}
+                                                {item.codTipoUsuario == 3 ? <td>ANUNCIANTE</td> : ''}
                                                 <td>{formatData(item.dtCadastro)}</td>
                                                 <td>{item.ativo ? "Ativado" : "Desativado"}</td>
                                             </tr>

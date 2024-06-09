@@ -164,14 +164,10 @@ const Usuario = database.define('usuario', {
     },
 
     dtCadastro: {
-        type: Sequelize.TEXT,
-        allowNull: false,
+        type: Sequelize.DATE,
+        allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        defaultValue: Sequelize.NOW
     },
 
     usuarioCod: {

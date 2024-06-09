@@ -208,7 +208,7 @@ const FormCadastro = () => {
                         alert("Usuário Cadastrado!");
                     } else {
                         setShowSpinner(false);
-                        alert(res.message.errors[0].message);
+                        alert(res.message);
                         console.log(res.message);
                     }
                 }).catch((err) => {

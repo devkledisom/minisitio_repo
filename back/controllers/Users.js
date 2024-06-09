@@ -39,7 +39,7 @@ module.exports = {
             "descEndereco": Endereco,
             "codUf": Uf,
             "codCidade": Cidade,
-            "dtCadastro": Cadastro,
+            "dtCadastro": dataNow(),
             "usuarioCod": usuarioCod,
             "dtCadastro2": dataNow(),
             "dtAlteracao": dataNow(),
@@ -49,8 +49,11 @@ module.exports = {
         try {
             const listaUsers = await Users.create(dadosUsuario);
 
-
+            console.log(listaUsers)
             res.json({ success: true, message: listaUsers })
+
+
+
         } catch (err) {
             res.json({ success: false, message: err })
         }
@@ -68,7 +71,7 @@ module.exports = {
             var segundos = dataAtual.getSeconds();
 
             // Formatar a data e hora
-            var dataFormatada = dia + '/' + mes + '/' + ano;
+            var dataFormatada = ano + '-' + mes + '-' + dia;
             var horaFormatada = hora + ':' + minutos + ':' + segundos;
 
             // Exibir a data e hora atual
@@ -149,7 +152,7 @@ module.exports = {
             var segundos = dataAtual.getSeconds();
 
             // Formatar a data e hora
-            var dataFormatada = dia + '/' + mes + '/' + ano;
+            var dataFormatada = ano + '-' + mes + '-' + dia;
             var horaFormatada = hora + ':' + minutos + ':' + segundos;
 
             // Exibir a data e hora atual
@@ -173,7 +176,7 @@ module.exports = {
                 }
 
             });
-            res.json(resultAnuncio);
+            res.json({ success: true, message: resultAnuncio });
         } catch (err) {
             res.json(err);
         }
