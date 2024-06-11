@@ -120,7 +120,7 @@ module.exports = {
             "descEndereco": Endereco,
             "codUf": Uf,
             "codCidade": Cidade,
-            "dtCadastro": Cadastro,
+            "dtCadastro": dataNow(),
             "usuarioCod": usuarioCod,
             "dtAlteracao": dataNow(),
             "ativo": "1"
@@ -161,6 +161,7 @@ module.exports = {
 
             return dataFormatada + " " + horaFormatada;
         };
+
 
     },
     delete: async (req, res) => {

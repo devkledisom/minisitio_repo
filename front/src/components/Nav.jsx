@@ -9,9 +9,9 @@ function Nav(props) {
                     <li className="nav-item">
                         <a className="nav-link" href="/">INÍCIO</a>
                     </li>
-                    <li className="nav-item">
+                    {/*   <li className="nav-item">
                         <a className="nav-link" href="/login">ÁREA DO ASSINANTE</a>
-                    </li>
+                    </li> */}
                     <li className="nav-item">
                         <a className="nav-link" href="#">INSTITUCIONAL</a>
                     </li>

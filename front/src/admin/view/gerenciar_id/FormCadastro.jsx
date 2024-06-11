@@ -8,15 +8,19 @@ import { masterPath } from '../../../config/config';
 //componente
 import Header from "../Header";
 import Spinner from '../../../components/Spinner';
+import FieldsetPatrocinador from './FieldsetPatrocinador';
+import ChooseFile from "../../../components/ChooseFile";
 
 const FormCadastro = () => {
 
-  
+
     const [usuarios, setUsuarios] = useState([]);
     const [atividadeValue, setAtividade] = useState(false);
     const [page, setPage] = useState(1);
     const [showSpinner, setShowSpinner] = useState(false);
     const [hash, setHash] = useState(false);
+    const [patrocinio, setPatrocinio] = useState(0);
+    const [saldo, setSaldo] = useState(0);
 
 
     const location = useLocation();
@@ -34,35 +38,35 @@ const FormCadastro = () => {
 
 
     useEffect(() => {
-        setShowSpinner(true); 
+        setShowSpinner(true);
         fetch(`${masterPath.url}/admin/usuario/buscar/all`)
-        .then((x) => x.json())
-        .then((res) => {
-            setUsuarios(res.usuarios);
-            setShowSpinner(false); 
-        }).catch((err) => {
-            console.log(err);
-            setShowSpinner(false); 
-        })
+            .then((x) => x.json())
+            .then((res) => {
+                setUsuarios(res.usuarios);
+                setShowSpinner(false);
+            }).catch((err) => {
+                console.log(err);
+                setShowSpinner(false);
+            })
     }, []);
 
-    
+
     function gerarNumeroAleatorio() {
         // Gerar números aleatórios entre 0 e 999 para cada parte
         const parte1 = Math.floor(Math.random() * 1000);
         const parte2 = Math.floor(Math.random() * 1000);
         const parte3 = Math.floor(Math.random() * 1000);
-    
+
         // Formatando os números com zeros à esquerda para garantir três dígitos
         const numeroFormatado = [
             ('000' + parte1).slice(-2), // Adiciona zeros à esquerda e pega os últimos três dígitos
             ('000' + parte2).slice(-3),
             ('000' + parte3).slice(-3)
         ].join('.'); // Une as partes com o separador '.'
-    
+
         setHash(numeroFormatado);
-    }    
-  
+    }
+
 
     function criarID() {
 
@@ -147,17 +151,17 @@ const FormCadastro = () => {
                 <Header />
             </header>
             <section className='py-5'>
-            {showSpinner && <Spinner />}
+                {showSpinner && <Spinner />}
 
                 <div className="container">
                     <h2 className="pt-4 px-5 text-center">Adicionar ID</h2>
                     {/* <h2>Vertical (basic) form</h2> */}
                     <form action="/action_page.php">
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            {hash && <span>Código: {hash}</span>} 
+                            {hash && <span>Código: {hash}</span>}
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
                             <select name="user" id="user" className="w-50 py-1" onChange={gerarNumeroAleatorio}>
-                            {
+                                {
                                     usuarios.map((user) => (
                                         <option value={user.codUsuario}>{user.descNome}</option>
                                     ))
@@ -178,20 +182,44 @@ const FormCadastro = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="patrocinador" className="w-50 px-1">Habilitar Patrocinador ?</label>
-                            <select name="patrocinador" id="patrocinador" className="w-50 py-1">
-                                <option value="1">Sim</option>
+                            <select name="patrocinador" id="patrocinador" className="w-50 py-1" onChange={(e) => setPatrocinio(e.target.value)}>
                                 <option value="0">Não</option>
+                                <option value="1">Sim</option>
                             </select>
                         </div>
+                        {patrocinio == 1 &&
+                            <div className="form-group d-flex flex-column align-items-center py-3">
+                                <FieldsetPatrocinador numeroPatrocinador={1} />
+                                <FieldsetPatrocinador numeroPatrocinador={2} />
+                                <FieldsetPatrocinador numeroPatrocinador={3} />
+                                {/*  <label className="w-50 px-1">Imagem:</label> */}
+                                {/*  <ChooseFile codigoUser={param} largura={"w-50"} preview={true} /> */}
+                            </div>
+
+                        }
+
+
+
+
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="utilizar-saldo" className="w-50 px-1">Utilizar Saldo ?</label>
-                            <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1">
-                                <option value="1">Sim</option>
+                            <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1" onChange={(e) => setSaldo(e.target.value)}>
                                 <option value="0">Não</option>
+                                <option value="1">Sim</option>
                             </select>
                         </div>
+                        {saldo == 1 &&
+                            <div className="form-group d-flex flex-column align-items-center py-3">
+                                <div class="control-group w-50" style={{ display: "block" }}><label for="adicionar_saldo" class="control-label optional">Adicionar Saldo:</label>
+                                    <div class="controls">
+                                        <input type="text" name="adicionar_saldo" id="adicionar_saldo" className="w-100" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
-                      
+
+
                         <div className="text-center py-3">
                             <button type="button"
                                 className="btn btn-info custom-button mx-2 text-light"

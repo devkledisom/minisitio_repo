@@ -276,14 +276,16 @@ const FormCadastro = () => {
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">Tipo usuário:</label>
-                            <select name="codTipoPessoa" id="codTipoPerfil" className="w-50 py-1" value={usuarios.codTipoUsuario} onChange={handleChange}>
+                            <select name="codTipoPessoa" id="codTipoPerfil" className="w-50 py-1">
                                 <option value="" selected="selected">- Selecione o tipo de perfil -</option>
-                                <option value="1">Administrador</option>
-                                <option value="2">Associado</option>
-                                <option value="3">Licenciado</option>
-                                <option value="4">Anunciante</option>
-                                <option value="5">Super Administrador</option>
-                                <option value="6">Master</option>
+                                {/* <option value="1">Administrador</option> */}
+                                {/* <option value="2">Associado</option>
+                                <option value="3">Licenciado</option> */}
+                                <option value="1">Super Administrador</option>
+                                <option value="2">Master</option>
+                                <option value="3">Anunciante</option>
+
+
                             </select>
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">

@@ -81,7 +81,6 @@ function UploadImage(props) {
 
 
             {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : "Anexar imagem do cartão"}
-            {imagem ? "" : ""}
             {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
 
           </span>
