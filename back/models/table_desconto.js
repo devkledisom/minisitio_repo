@@ -81,6 +81,26 @@ const Desconto = database.define('desconto', {
             },
         }
     },
+    descImagem2: {
+        type: Sequelize.STRING(150),
+        allowNull: true,
+        unique: false,
+        validate: {
+            notEmpty: {
+                msg: "Esse campo não pode está vazio.."
+            },
+        }
+    },
+    descImagem3: {
+        type: Sequelize.STRING(150),
+        allowNull: true,
+        unique: false,
+        validate: {
+            notEmpty: {
+                msg: "Esse campo não pode está vazio.."
+            },
+        }
+    },
     descLink: {
         type: Sequelize.STRING(150),
         allowNull: false,
@@ -121,7 +141,7 @@ const Desconto = database.define('desconto', {
             },
         }
     },
-    dtCadastro: {
+    descLink3: {
         type: Sequelize.STRING(150),
         allowNull: false,
         unique: false,
@@ -130,6 +150,12 @@ const Desconto = database.define('desconto', {
                 msg: "Esse campo não pode está vazio.."
             },
         }
+    },
+    dtCadastro: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        unique: false,
+        defaultValue: Sequelize.NOW
     },
     ativo: {
         type: Sequelize.STRING(150),

@@ -360,16 +360,18 @@ module.exports = {
                 descricao: req.body.descricao,
                 hash: req.body.hash,
                 borda: null,
-                descImagem: null,
-                descLink: "#",
+                descImagem: req.body.descImagem,
+                descImagem2: req.body.descImagem2,
+                descImagem3: req.body.descImagem3,
+                descLink: req.body.descLink || "#",
                 borda2: null,
                 descPromocao: null,
-                descLink2: "#",
-                dtCadastro: "12/12/2012",
+                descLink2: req.body.descLink2 || "#",
+                descLink3: req.body.descLink3 || "#",
+                dtCadastro: dataNow(),
                 ativo: req.body.patrocinador,
-                utilizar_saldo: req.body.saldoUtilizado,
-                saldo: 0
-
+                utilizar_saldo: 0,
+                saldo: req.body.saldo
 
             });
 
@@ -604,3 +606,26 @@ module.exports = {
 
 
 }
+
+function dataNow() {
+    // Criar um novo objeto Date (representando a data e hora atuais)
+    var dataAtual = new Date();
+
+    // Extrair os componentes da data e hora
+    var ano = dataAtual.getFullYear();
+    var mes = dataAtual.getMonth() + 1; // Meses começam de 0, então adicionamos 1
+    var dia = dataAtual.getDate();
+    var hora = dataAtual.getHours();
+    var minutos = dataAtual.getMinutes();
+    var segundos = dataAtual.getSeconds();
+
+    // Formatar a data e hora
+    var dataFormatada = ano + '-' + mes + '-' + dia;
+    var horaFormatada = hora + ':' + minutos + ':' + segundos;
+
+    // Exibir a data e hora atual
+    console.log('Data atual:', dataFormatada);
+    console.log('Hora atual:', horaFormatada);
+
+    return dataFormatada + " " + horaFormatada;
+};

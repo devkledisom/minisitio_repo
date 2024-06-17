@@ -18,9 +18,15 @@ function UploadImage(props) {
     // Criar um objeto FormData para enviar a imagem para o servidor
     //setPreview(props.preview);
 
+    if (props.patrocinador > 1 && props.patrocinador < 4) {
+      localStorage.setItem("imgname" + props.patrocinador, acceptedFiles[0].name);
+    } else {
+      localStorage.setItem("imgname", acceptedFiles[0].name);
+    }
+
     console.log(acceptedFiles[0])
     setImagem(acceptedFiles[0]);
-    localStorage.setItem("imgname", acceptedFiles[0].name);
+    //localStorage.setItem("imgname", acceptedFiles[0].name);
 
     if (props.preview == false) {
       document.querySelector('.comImagem img').src = URL.createObjectURL(acceptedFiles[0]);
@@ -80,7 +86,8 @@ function UploadImage(props) {
 
 
 
-            {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : "Anexar imagem do cartão"}
+            {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""}
+            {imagem ? "Anexar imagem do cartão" : ""}
             {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
 
           </span>

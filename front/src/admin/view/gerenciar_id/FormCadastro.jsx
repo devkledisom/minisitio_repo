@@ -1,5 +1,5 @@
 // components/OutroComponente.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -21,6 +21,11 @@ const FormCadastro = () => {
     const [hash, setHash] = useState(false);
     const [patrocinio, setPatrocinio] = useState(0);
     const [saldo, setSaldo] = useState(0);
+    const [links, setLinks] = useState({
+        link_1: null,
+        link_2: null,
+        link_3: null
+    });
 
 
     const location = useLocation();
@@ -95,13 +100,22 @@ const FormCadastro = () => {
             };
         });
 
+
+
         const data = {
             "usuario": document.getElementById('user').value,
             "descricao": document.getElementById('descID').value,
             "valorDesconto": document.getElementById('valorDesconto').value,
             "patrocinador": document.getElementById('patrocinador').value,
             "saldoUtilizado": document.getElementById('utilizar-saldo').value,
-            "hash": hash
+            "hash": hash,
+            "descImagem": localStorage.getItem("imgname"),
+            "descImagem2": localStorage.getItem("imgname2"),
+            "descImagem3": localStorage.getItem("imgname3"),
+            "descLink": links.link_1,
+            "descLink2": links.link_2,
+            "descLink3": links.link_3,
+            "saldo": document.getElementById('adicionar_saldo').value
         };
 
         const config = {
@@ -143,7 +157,14 @@ const FormCadastro = () => {
         })
     });
 
-
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setLinks({
+            ...links,
+            [name]: value
+        });
+        //console.log("------------->", e.target.name, e.target.value);
+    };
 
     return (
         <div className="users">
@@ -189,9 +210,9 @@ const FormCadastro = () => {
                         </div>
                         {patrocinio == 1 &&
                             <div className="form-group d-flex flex-column align-items-center py-3">
-                                <FieldsetPatrocinador numeroPatrocinador={1} />
-                                <FieldsetPatrocinador numeroPatrocinador={2} />
-                                <FieldsetPatrocinador numeroPatrocinador={3} />
+                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} />
+                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} />
+                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} />
                                 {/*  <label className="w-50 px-1">Imagem:</label> */}
                                 {/*  <ChooseFile codigoUser={param} largura={"w-50"} preview={true} /> */}
                             </div>

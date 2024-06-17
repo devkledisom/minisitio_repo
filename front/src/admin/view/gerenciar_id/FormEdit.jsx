@@ -8,6 +8,7 @@ import { masterPath } from '../../../config/config';
 //componente
 import Header from "../Header";
 import Spinner from '../../../components/Spinner';
+import FieldsetPatrocinador from './FieldsetPatrocinador';
 
 const FormEdit = () => {
 
@@ -20,6 +21,10 @@ const FormEdit = () => {
     const [descricaoId, setDescricaoId] = useState(false);
     const [descontoId, setDescontoId] = useState(false);
     const [hash, setHash] = useState(false);
+    const [descImagem, setDescImg] = useState();
+
+    const [patrocinio, setPatrocinio] = useState(0);
+    const [saldo, setSaldo] = useState(0);
 
 
 
@@ -37,29 +42,36 @@ const FormEdit = () => {
     }
 
     useEffect(() => {
-        setShowSpinner(true); 
+        setShowSpinner(true);
         fetch(`${masterPath.url}/admin/desconto/edit/${param}`)
-        .then((x) => x.json())
-        .then((res) => {
-            setIds(res);
-            setDescricaoId(res[0].descricao);
-            setDescontoId(res[0].desconto);
-            setHash(res[0].hash);
-          
-        }).catch((err) => {
-            console.log(err)
-        })
+            .then((x) => x.json())
+            .then((res) => {
+                setIds(res);
+                setDescricaoId(res[0].descricao);
+                setDescontoId(res[0].desconto);
+                setHash(res[0].hash);
+
+                if (res[0].descImagem != null) {
+                    setDescImg(res[0]);
+                    console.log(res[0].descImagem);
+                    setPatrocinio(1)
+                }
+
+
+            }).catch((err) => {
+                console.log(err)
+            })
         fetch(`${masterPath.url}/admin/usuario/buscar/all`)
-        .then((x) => x.json())
-        .then((res) => {
-            setUsuarios(res.usuarios);
-            setShowSpinner(false); 
-        }).catch((err) => {
-            console.log(err);
-            setShowSpinner(false); 
-        })
+            .then((x) => x.json())
+            .then((res) => {
+                setUsuarios(res.usuarios);
+                setShowSpinner(false);
+            }).catch((err) => {
+                console.log(err);
+                setShowSpinner(false);
+            })
     }, []);
-  
+
 
     function editID() {
 
@@ -159,11 +171,11 @@ const FormEdit = () => {
     function teste(meuParam) {
         let user = usuarios.find(user => user.codUsuario == meuParam);
 
-        if(user != undefined) {
+        if (user != undefined) {
             return user.descNome
         }
-        console.log("users",meuParam, user)
-       
+        console.log("users", meuParam, user)
+
     }
 
     return (
@@ -172,7 +184,7 @@ const FormEdit = () => {
                 <Header />
             </header>
             <section className='py-5'>
-            {showSpinner && <Spinner />}
+                {showSpinner && <Spinner />}
 
                 <div className="container">
                     <h2 className="pt-4 px-5 text-center">Editar ID</h2>
@@ -180,13 +192,13 @@ const FormEdit = () => {
                     <form action="/action_page.php">
                         <div className="form-group d-flex flex-column align-items-center py-3">
 
-                        {hash && <span>Código: {hash}</span>} 
+                            {hash && <span>Código: {hash}</span>}
 
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
                             <select name="user" id="user" className="w-50 py-1">
                                 {
                                     ids.map((user) => (
-                                        <option value={user.descNome}>{teste(user.idUsuario)}</option>
+                                        <option key={user.idUsuario} value={user.descNome}>{teste(user.idUsuario)}</option>
                                     ))
                                 }
                             </select>
@@ -195,34 +207,47 @@ const FormEdit = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="descID" className="w-50 px-1">Descrição do ID:</label>
                             <input type="text"
-                             className="form-control h-25 w-50"
-                              id="descID" 
-                               name="descID"
+                                className="form-control h-25 w-50"
+                                id="descID"
+                                name="descID"
                                 value={descricaoId}
                                 onChange={(e) => setDescricaoId(e.target.value)}
-                                />
+                            />
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="valorDesconto" className="w-50 px-1">Valor do desconto:</label>
-                            <input type="text" 
-                            className="form-control h-25 w-50" 
-                            id="valorDesconto" 
-                             name="valorDesconto" 
-                             value={descontoId}
-                             onChange={(e) => setDescontoId(e.target.value)}
-                             />
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="valorDesconto"
+                                name="valorDesconto"
+                                value={descontoId}
+                                onChange={(e) => setDescontoId(e.target.value)}
+                            />
                             <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span>
                         </div>
 
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="patrocinador" className="w-50 px-1">Habilitar Patrocinador ?</label>
-                            <select name="patrocinador" id="patrocinador" className="w-50 py-1">
+                            <select name="patrocinador" id="patrocinador" className="w-50 py-1"
+                                value={descImagem}
+                                onChange={(e) => setPatrocinio(e.target.value)}>
                                 <option value="1">Sim</option>
                                 <option value="0">Não</option>
                             </select>
                         </div>
-                        <div className="form-group d-flex flex-column align-items-center py-3">
+
+                        {patrocinio == 1 &&
+                            <div className="form-group d-flex flex-column align-items-center py-3">
+                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink} codImg={descImagem.descImagem} />
+                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink2} codImg={descImagem.descImagem2} />
+                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink3} codImg={descImagem.descImagem3} />
+                            </div>
+
+                        }
+
+
+                        {/*          <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="utilizar-saldo" className="w-50 px-1">Utilizar Saldo ?</label>
                             <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1">
                                 <option value="1">Sim</option>
@@ -233,13 +258,31 @@ const FormEdit = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="add-saldo" className="w-50 px-1">Adicionar Saldo:</label>
                             <input type="text"
-                             className="form-control h-25 w-50"
-                              id="add-saldo" 
-                               name="add-saldo"
-                                />
+                                className="form-control h-25 w-50"
+                                id="add-saldo"
+                                name="add-saldo"
+                            />
                         </div>
+ */}
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="utilizar-saldo" className="w-50 px-1">Utilizar Saldo ?</label>
+                            <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1" onChange={(e) => setSaldo(e.target.value)}>
+                                <option value="0">Não</option>
+                                <option value="1">Sim</option>
+                            </select>
+                        </div>
+                        {saldo == 1 &&
+                            <div className="form-group d-flex flex-column align-items-center py-3">
+                                <div class="control-group w-50" style={{ display: "block" }}><label for="adicionar_saldo" class="control-label optional">Adicionar Saldo:</label>
+                                    <div class="controls">
+                                        <input type="text" name="adicionar_saldo" id="adicionar_saldo" className="w-100" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
-                      
+
+
                         <div className="text-center py-3">
                             <button type="button"
                                 className="btn btn-info custom-button mx-2 text-light"

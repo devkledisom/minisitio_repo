@@ -34,24 +34,24 @@ const GerenciarIds = () => {
 
 
     useEffect(() => {
-        setShowSpinner(true); 
-    
+        setShowSpinner(true);
+
         Promise.all([
             fetch(`${masterPath.url}/admin/desconto/read?page=${param}`).then((x) => x.json()),
             fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
         ])
-        .then(([resDesconto, resUsuarios]) => {
-            setIds(resDesconto.message);
-            setUsuarios(resUsuarios.usuarios);
-            setShowSpinner(false);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            setShowSpinner(false); 
-        });
-    
+            .then(([resDesconto, resUsuarios]) => {
+                setIds(resDesconto.message);
+                setUsuarios(resUsuarios.usuarios);
+                setShowSpinner(false);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                setShowSpinner(false);
+            });
+
     }, [param]);
-    
+
 
 
 
@@ -77,15 +77,15 @@ const GerenciarIds = () => {
 
 
     function apagarUser() {
-        setShowSpinner(true); 
+        setShowSpinner(true);
         fetch(`${masterPath.url}/admin/desconto/delete/${selectId}`, {
             method: "DELETE"
         })
             .then((x) => x.json())
             .then((res) => {
-                
+
                 if (res.success) {
-                    setShowSpinner(false); 
+                    setShowSpinner(false);
                     alert(res.message)
                     document.querySelector(".selecionada").remove();
                 }
@@ -94,7 +94,7 @@ const GerenciarIds = () => {
     };
 
     function buscarUserId() {
-        setShowSpinner(true); 
+        setShowSpinner(true);
         const campoPesquisa = document.getElementById('buscar');
 
         fetch(`${masterPath.url}/admin/desconto/buscar/${campoPesquisa.value}`)
@@ -115,21 +115,28 @@ const GerenciarIds = () => {
     function teste(meuParam) {
         let user = usuarios.find(user => user.codUsuario == meuParam);
 
-        if(user != undefined) {
+        if (user != undefined) {
             return user.descNome
         }
         //console.log("users",meuParam, user)
-       
+
     }
+
+    const formatData = (dataCompleta) => {
+        let dataTempo = dataCompleta.split('T');
+        let dataOriginal = dataTempo[0].split('-');
+
+        return `${dataOriginal[2]}/${dataOriginal[1]}/${dataOriginal[0]}`
+    };
 
     return (
         <div className="users">
-             <header style={style} className='w-100'>
+            <header style={style} className='w-100'>
                 <Header />
             </header>
             <section className="pt-5">
 
-            {showSpinner && <Spinner />}
+                {showSpinner && <Spinner />}
 
                 <h1 className="pt-4 px-4">Gerenciar IDs</h1>
                 <div className="container-fluid py-4 px-4">
@@ -171,9 +178,9 @@ const GerenciarIds = () => {
                                     {
                                         usuarios != '' &&
                                         ids != '' && ids.IdsValue.map((item) => {
-                                            console.log("map", usuarios)
-                                            console.log("ids", ids)
-                                          
+                                            //console.log("map", usuarios)
+                                            //console.log("ids", ids)
+
                                             return (
                                                 <tr key={item.idDesconto} id={item.idDesconto} onClick={selecaoLinha}>
 
@@ -181,7 +188,7 @@ const GerenciarIds = () => {
                                                     <td>{item.desconto}</td>
                                                     <td>{item.hash}</td>
                                                     <td>{item.descricao}</td>
-                                                    <td>{item.dtCadastro}</td>
+                                                    <td>{formatData(item.dtCadastro)}</td>
                                                     <td>{item.ativo ? "Ativado" : "Desativado"}</td>
                                                     <td>{item.utilizar_saldo}</td>
                                                     <td>{item.saldo}</td>

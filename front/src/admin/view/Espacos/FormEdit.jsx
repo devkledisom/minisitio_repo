@@ -175,7 +175,7 @@ const FormEdit = () => {
             [name]: value
         });
 
-        console.log("resressedsfasdfsf----------->", name, value)
+        //console.log("resressedsfasdfsf----------->", name, value)
 
 
     };

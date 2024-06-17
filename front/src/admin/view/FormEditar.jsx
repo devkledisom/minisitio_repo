@@ -7,6 +7,7 @@ import { masterPath } from '../../config/config';
 
 //componente
 import Header from "./Header";
+import Spinner from '../../components/Spinner';
 import Pagination from '../components/Pagination';
 
 const FormCadastro = () => {
@@ -16,6 +17,7 @@ const FormCadastro = () => {
     const [ufSelected, setUf] = useState(0);
     const [uf, setUfs] = useState([]);
     const [caderno, setCaderno] = useState([]);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const location = useLocation();
 
@@ -25,13 +27,14 @@ const FormCadastro = () => {
     const param = getParam.get('id') ? getParam.get('id') : 1;
 
     useEffect(() => {
-
+        setShowSpinner(true);
         fetch(`${masterPath.url}/admin/usuario/edit/${param}`)
             .then((x) => x.json())
             .then((res) => {
                 setUsuarios(res);
                 setUf(res.codUf);
                 console.log(res);
+                setShowSpinner(false);
             })
 
         fetch(`${masterPath.url}/cadernos`)
@@ -54,7 +57,8 @@ const FormCadastro = () => {
     const navigate = useNavigate();
 
     function cadastrarUsuario() {
-
+        setShowSpinner(true);
+        document.querySelector("#nu_doc").focus()
         var validation = false;
 
         document.querySelectorAll('[name="pwd"]').forEach((item) => {
@@ -109,9 +113,10 @@ const FormCadastro = () => {
             fetch(`${masterPath.url}/admin/usuario/update/${param}`, config)
                 .then((x) => x.json())
                 .then((res) => {
-                    console.log(res)
+                    setShowSpinner(false);
                     if (res.success) {
                         alert("Dados Atualizados!");
+
                     } else {
                         alert(res.message);
                         console.log(res.message)
@@ -216,6 +221,7 @@ const FormCadastro = () => {
             </header>
             <section className='py-5'>
 
+                {showSpinner && <Spinner />}
 
                 <div className="container">
                     <h2 className="pt-4 px-5 text-center">Editar Usuário</h2>

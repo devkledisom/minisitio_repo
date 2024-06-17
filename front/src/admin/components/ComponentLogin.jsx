@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { masterPath } from '../../config/config';
 
@@ -6,14 +6,19 @@ import '../../assets/css/main.css';
 import '../assets/css/login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+//Componentes
+import Spinner from '../../components/Spinner';
 
 function Login() {
+
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const loginValue = useRef(null);
     const passValue = useRef(null);
     const navigate = useNavigate();
 
     function entrar() {
+        setShowSpinner(true);
         fetch(`${masterPath.url}/entrar`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -24,6 +29,7 @@ function Login() {
         })
             .then((x) => x.json())
             .then((res) => {
+                setShowSpinner(false);
                 if (res.success) {
                     navigate("/admin");
                     //console.log(res)
@@ -38,6 +44,8 @@ function Login() {
             <div className="header hidden-print d-flex justify-content-center align-items-center">
                 <h2>Área do assinante</h2>
             </div>
+
+            {showSpinner && <Spinner />}
 
             <div className="container container-login d-flex align-items-center">
                 <div className="row">
