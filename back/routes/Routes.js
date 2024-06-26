@@ -41,6 +41,10 @@ router.delete('/admin/usuario/delete/:id', Users.delete);
 router.get('/admin/usuario/buscar/:id', Users.buscarUsuarioId);
 
 router.get('/admin/cadernos', Admin.listarCadernos);
+router.get('/admin/cadernos/buscar/', Admin.buscarRegistroCaderno);
+router.post('/admin/cadernos/create', Admin.criarCaderno);
+router.put('/admin/cadernos/update', Admin.atualizarCadernos);
+router.get('/admin/cadernos/edit/:id', Admin.listarCadernoId);
 
 router.get('/admin/atividades/read', Admin.listarAtividades);
 router.get('/admin/atividade', Admin.listarAtividadesId);
@@ -69,3 +73,15 @@ router.get('/list-image', Upload.listFiles);
 
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+

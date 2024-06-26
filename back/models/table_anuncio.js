@@ -655,15 +655,15 @@ Anuncio.belongsTo(Uf, {
     foreignKey: 'codUf'
 });
 
+Anuncio.belongsTo(Desconto, {
+    constraints: true,
+    foreignKey: 'codDesconto',
+    targetKey: 'idDesconto'
+});
+
 Anuncio.belongsTo(Usuario, {
     constraints: true,
     foreignKey: 'codUsuario'
-});
-
-Anuncio.belongsTo(Desconto, {
-    constraints: true,
-    foreignKey: 'codUsuario',
-    targetKey: 'idUsuario'
 });
 
 Anuncio.belongsTo(Atividade, {

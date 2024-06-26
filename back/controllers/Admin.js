@@ -17,6 +17,7 @@ const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 
 module.exports = {
+
     listarUsuarios: async (req, res) => {
         await database.sync();
 
@@ -55,6 +56,7 @@ module.exports = {
             totalPaginas: totalPaginas
         });
     },
+    //cadernos
     listarCadernos: async (req, res) => {
         const listaCadernos = await Cadernos.findAll();
         const listaUf = await Ufs.findAll();
@@ -62,13 +64,19 @@ module.exports = {
         console.log(req.query.page)
 
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
-        const porPagina = 10; // Número de itens por página
+        const porPagina = parseInt(req.query.rows) || 10; // Número de itens por página
         const codigoCaderno = req.params.codCaderno;
 
         const offset = (paginaAtual - 1) * porPagina;
 
         // Consulta para recuperar apenas os itens da página atual
         const anuncios = await Cadernos.findAndCountAll({
+            order: [
+                ['UF', 'ASC'], // Ordena pelo campo 'name' em ordem ascendente (alfabética)
+                [Sequelize.literal('isCapital ASC')],
+                ['nomeCaderno', 'ASC']
+
+            ],
             /*         where: {
                         codCaderno: 2,
                     }, */
@@ -101,6 +109,110 @@ module.exports = {
                totalPaginas: totalPaginas
            }); */
 
+    },
+    criarCaderno: async (req, res) => {
+
+        let ufSigla = await Ufs.findAll({
+            where: {
+                id_uf: req.body.codUf
+            }
+        });
+
+
+        // Verificação e ajuste dos valores recebidos
+
+        const mosaico = req.body.descImagem || 0;
+        const cepInicial = req.body.cepInicial || 0;
+        const cepFinal = req.body.cepFinal || 0;
+        const capital = req.body.isCapital || 1;
+        console.log(req.body)
+        try {
+            //Atividades
+            const CadernoCriado = await Cadernos.create({
+                codUf: req.body.codUf,
+                UF: ufSigla[0].sigla_uf,
+                nomeCaderno: req.body.nomeCaderno,
+                nomeCadernoFriendly: req.body.nomeCadernoFriendly,
+                descImagem: mosaico,
+                cep_inicial: cepInicial,
+                cep_final: cepFinal,
+                isCapital: capital
+
+            });
+            res.json({ success: true, message: CadernoCriado });
+        } catch (err) {
+            res.json({ success: false, message: err });
+            console.log(err)
+        }
+
+    },
+    buscarRegistroCaderno: async (req, res) => {
+        //const nu_hash = req.params.id;
+        const nu_hash = req.query.search;
+
+
+        //Descontos
+        const resultAnuncio = await Cadernos.findAll({
+            where: {
+                [Op.or]: [
+                    { UF: nu_hash },
+                    { nomeCaderno: nu_hash },
+                ]
+            }
+        });
+
+        if (resultAnuncio < 1) {
+            res.json({ success: false, message: "Registro não encontrado" });
+            return;
+        }
+
+        res.json({
+            success: true,
+            message: {
+                registros: resultAnuncio
+            }
+        });
+
+    },
+    atualizarCadernos: async (req, res) => {
+
+        // Consulta para recuperar apenas os itens da página atual
+        const cadernos = await Cadernos.update({
+            codUf: req.body.codUf,
+            UF: req.body.UF,
+            nomeCaderno: req.body.nomeCaderno,
+            nomeCadernoFriendly: req.body.nomeCaderno,
+            descImagem: req.body.descImagem,
+            cep_inicial: req.body.cep_inicial,
+            cep_final: req.body.cep_final,
+            isCapital: req.body.isCapital
+        }, {
+            where: {
+                codCaderno: req.query.id
+            },
+
+        });
+
+
+        res.json({
+            success: true, message: cadernos
+        })
+
+
+    },
+    listarCadernoId: async (req, res) => {
+        await database.sync();
+
+        const uuid = req.params.id;
+
+        //Atividades
+        const resultCaderno = await Cadernos.findAll({
+            where: {
+                codCaderno: uuid
+            }
+        });
+
+        res.json(resultCaderno);
     },
     //atividades
     listarAtividades: async (req, res) => {
@@ -465,11 +577,14 @@ module.exports = {
             const estado = await anun.getUf();
             anun.codUf = estado.sigla_uf;
 
+            const desconto = await anun.getDesconto();
+            anun.codPA = desconto.hash;
+            console.log("-----------------------------------> ", desconto);
+
             const user = await anun.getUsuario();
             anun.codUsuario = user.descNome;
 
-            const desconto = await anun.getDesconto();
-            anun.codPA = desconto.hash;
+
             //console.log(cader.nomeCaderno);
             //console.log(desconto);
 

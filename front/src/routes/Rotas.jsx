@@ -17,13 +17,14 @@ import ComprarAnuncio from '../views/Comprar-anuncio';
 import Administrator from '../admin/Administrator';
 import OutroComponente from "../admin/view/OutroComponente";
 import Users from "../admin/view/Users";
-import Cadernos from "../admin/view/Cadernos";
+import Cadernos from "../admin/view/cadernos/Cadernos";
+import CadernosEdit from "../admin/view/cadernos/FormEdit";
 import InfoCadernos from "../admin/view/InfoCadernos";
 
 import Atividades from "../admin/view/Atividades";
 import FormCadastro from "../admin/view/FormCadastro";
 import FormEditar from "../admin/view/FormEditar";
-import FormCadernos from "../admin/components/FormCadastroCadernos";
+import FormCadernos from "../admin/view/cadernos/FormCadastroCadernos";
 import FormCadastroAtividade from "../admin/view/FormCadastroAtividade";
 import FormEditAtividade from "../admin/view/FormEditAtividade";
 
@@ -70,6 +71,9 @@ function Rotas() {
                     <Route path="espacos" element={<Espacos />} />
                     <Route path="anuncio/cadastro" element={<AnuncioCadastro />} />
                     <Route path="anuncio/editar" element={<AnuncioEditar />} />
+
+
+                    <Route path="cadernos/editar" element={<CadernosEdit />} />
 
 
                 </Routes>

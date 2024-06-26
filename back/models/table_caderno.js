@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const database = require('../config/db');
+const Uf = require('./table_uf');
 
 const Caderno = database.define('caderno', {
     codCaderno: {
@@ -11,6 +12,16 @@ const Caderno = database.define('caderno', {
 
     codUf: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: false,
+        validate: {
+            notEmpty: {
+                msg: "Esse campo não pode está vazio.."
+            },
+        }
+    },
+    UF: {
+        type: Sequelize.TEXT(255),
         allowNull: false,
         unique: false,
         validate: {
@@ -90,5 +101,9 @@ const Caderno = database.define('caderno', {
         freezeTableName: true,
         timestamps: false,
     });
+Caderno.belongsTo(Uf, {
+    constraints: true,
+    foreignKey: 'codUf'
+});
 
 module.exports = Caderno;

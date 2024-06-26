@@ -205,7 +205,7 @@ const FormCadastro = () => {
                 .then((res) => {
                     if (res.success) {
                         setShowSpinner(false);
-                        alert("Usuário Cadastrado!");
+                        alert("Anúncio Cadastrado!");
                     } else {
                         setShowSpinner(false);
                         alert(res.message);

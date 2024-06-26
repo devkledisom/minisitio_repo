@@ -38,9 +38,9 @@ const Pagination = ({ totalPages, table }) => {
         <div className='container-fluid'>
             <div className="row px-4">
                 <ul className="pagination p-0 d-flex justify-content-end">
-                    <li className="page-item"><a className="page-link" href="#" onClick={() => handlePageChange(Math.max(1, currentPage - 1))}>Previous</a></li>
+                    <li className="page-item"><a className="page-link" href="#" onClick={() => handlePageChange(Math.max(1, currentPage - 1))}>Anterior</a></li>
                     {renderPaginationNumbers()}
-                    <li className="page-item"><a className="page-link" href="#" onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}>Next</a></li>
+                    <li className="page-item"><a className="page-link" href="#" onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}>Próxima</a></li>
                 </ul>
             </div>
         </div>
