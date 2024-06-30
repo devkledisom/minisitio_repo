@@ -44,6 +44,7 @@ router.get('/admin/cadernos', Admin.listarCadernos);
 router.get('/admin/cadernos/buscar/', Admin.buscarRegistroCaderno);
 router.post('/admin/cadernos/create', Admin.criarCaderno);
 router.put('/admin/cadernos/update', Admin.atualizarCadernos);
+router.delete('/admin/cadernos/delete/:id', Admin.deleteCadernos);
 router.get('/admin/cadernos/edit/:id', Admin.listarCadernoId);
 
 router.get('/admin/atividades/read', Admin.listarAtividades);

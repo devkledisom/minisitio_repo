@@ -31,7 +31,7 @@ const FormCadastro = () => {
 
 
     useEffect(() => {
-
+        setShowSpinner(true);
         fetch(`${masterPath.url}/admin/usuario?page=${param}`)
             .then((x) => x.json())
             .then((res) => {
@@ -48,6 +48,7 @@ const FormCadastro = () => {
             .then((x) => x.json())
             .then((res) => {
                 setUfs(res);
+                setShowSpinner(false);
             })
     }, [page, param]);
 
@@ -89,7 +90,7 @@ const FormCadastro = () => {
             codUf: document.querySelector('#coduf').value,
             nomeCaderno: document.querySelector('#nomeCaderno').value,
             nomeCadernoFriendly: document.querySelector('#nomeCaderno').value,
-            descImagem: descImg,
+            descImagem: localStorage.getItem("imgname"),
             cep_inicial: document.querySelector('#cepInicial').value,
             cep_final: document.querySelector('#cepFinal').value,
             isCapital: document.querySelector('#isCapital').value
@@ -126,6 +127,7 @@ const FormCadastro = () => {
     };
 
     const handleChange = (e) => {
+        console.log("dabjjskdfnsladnfsjkafnjklsdfn: ", e.target)
         const { name, value } = e.target;
         setDescImg(value);
     };
@@ -184,7 +186,8 @@ const FormCadastro = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label className="w-50 px-1">Mosaico:</label>
-                            <ChooseFile codigoUser={param} largura={"w-50"} preview={true} teste={handleChange} />
+                            <ChooseFile codigoUser={param} largura={"w-50"} preview={false} miniPreview={true} />
+
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">

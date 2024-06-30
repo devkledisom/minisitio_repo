@@ -55,7 +55,7 @@ const FormCadastro = () => {
 
 
     function editCaderno() {
-
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         var validation = true;
         setShowSpinner(true);
 
@@ -71,9 +71,11 @@ const FormCadastro = () => {
                 .then((res) => {
                     if (res.success) {
                         setShowSpinner(false);
-                        alert("Caderno Atualizado!");
+                        setTimeout(() => { alert("Caderno Atualizado!") }, 1000)
+
                     } else {
-                        alert(res.message);
+                        setShowSpinner(false);
+                        setTimeout(() => { alert(res.message) }, 1000)
                     }
                 })
         }
@@ -85,12 +87,22 @@ const FormCadastro = () => {
         setUf(codigoUf);
     };
 
-    function handleChange(event) {
+    const handleChange = (event) => {
         const { name, value } = event.target;
         setCaderno(prevState => ({
             ...prevState,
             [name]: value
         }));
+
+    }
+
+    const handleChange2 = (data) => {
+        //console.log("taklsfkjlksdfjlfg: ", data.name)
+        setCaderno(prevState => ({
+            ...prevState,
+            ["descImagem"]: data.name
+        }));
+
     }
 
     //liberar campo select
@@ -152,7 +164,13 @@ const FormCadastro = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             {/*    <label htmlFor="pwd" className="w-50 px-1">Imagem:</label>
                             <input type="file" className="form-control h-25 w-50" id="endereco" placeholder="" name="pwd" /> */}
-                            <ChooseFile codigoUser={param} largura={"w-50"}/*  codImg={ }  */ preview={false} />
+                            {caderno.descImagem == 0 && <ChooseFile codigoUser={param} largura={"w-50"} preview={false} teste={handleChange2} miniPreview={true} />}
+                            {caderno.descImagem != 0 && <ChooseFile codigoUser={param} largura={"w-50"}
+                                codImg={caderno.descImagem}
+                                preview={false}
+                                teste={handleChange2}
+                                miniPreview={false} />}
+
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">

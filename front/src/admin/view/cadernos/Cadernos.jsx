@@ -96,6 +96,23 @@ const Cadernos = () => {
             })
     };
 
+    function apagarCaderno() {
+        setShowSpinner(true);
+        fetch(`${masterPath.url}/admin/cadernos/delete/${selectId}`, {
+            method: "DELETE"
+        })
+            .then((x) => x.json())
+            .then((res) => {
+
+                if (res.success) {
+                    setShowSpinner(false);
+                    alert(res.message)
+                    document.querySelector(".selecionada").remove();
+                }
+
+            })
+    };
+
 
     const style = {
         position: "fixed",
@@ -118,7 +135,7 @@ const Cadernos = () => {
                         <div className="span6 col-md-6">
                             <button type="button" className="btn custom-button" onClick={() => navigator('/cadernos/cadastro')}>Adicionar</button>
                             <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/cadernos/editar?id=${selectId}`)}>Editar</button>
-                            <button type="button" className="btn btn-danger custom-button text-light">Apagar</button>
+                            <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarCaderno}>Apagar</button>
                             <select title="selecionarLinhas" name="selecionarLinhas" id="selecionarLinhas"
                                 className="btn btn-success custom-button text-light mx-2"
                                 onChange={slecionarQuantidadeLinhas}>

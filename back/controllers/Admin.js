@@ -125,7 +125,6 @@ module.exports = {
         const cepInicial = req.body.cepInicial || 0;
         const cepFinal = req.body.cepFinal || 0;
         const capital = req.body.isCapital || 1;
-        console.log(req.body)
         try {
             //Atividades
             const CadernoCriado = await Cadernos.create({
@@ -153,6 +152,12 @@ module.exports = {
 
         //Descontos
         const resultAnuncio = await Cadernos.findAll({
+            order: [
+                ['UF', 'ASC'], // Ordena pelo campo 'name' em ordem ascendente (alfabética)
+                [Sequelize.literal('isCapital ASC')],
+                ['nomeCaderno', 'ASC']
+
+            ],
             where: {
                 [Op.or]: [
                     { UF: nu_hash },
@@ -198,6 +203,24 @@ module.exports = {
             success: true, message: cadernos
         })
 
+
+    },
+    deleteCadernos: async (req, res) => {
+
+        const uuid = req.params.id;
+
+        try {
+            //Atividades
+            const resultCaderno = await Cadernos.destroy({
+                where: {
+                    codCaderno: uuid
+                }
+
+            });
+            res.json({ success: true, message: `Usuário ${uuid} apagado da base!` });
+        } catch (err) {
+            res.json(err);
+        }
 
     },
     listarCadernoId: async (req, res) => {
