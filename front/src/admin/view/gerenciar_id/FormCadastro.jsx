@@ -49,11 +49,30 @@ const FormCadastro = () => {
             .then((res) => {
                 setUsuarios(res.usuarios);
                 setShowSpinner(false);
+                console.log(res.usuarios)
             }).catch((err) => {
                 console.log(err);
                 setShowSpinner(false);
             })
     }, []);
+
+    function gerarIdMaster(e) {
+        setShowSpinner(true);
+        let codigoDoMaster = e.target.value;
+        usuarios.find((item) => {
+            if (item.codUsuario == codigoDoMaster) {
+                fetch(`http://localhost:3032/admin/desconto/ddd/${item.codUf}`)
+                .then((x) => x.json())
+                .then((res) => {
+                    //console.log(res.data.ddd, String(item.codUsuario).padStart(3, "0"), String(res.qtdeIds).padStart(4, "0"))
+                    setHash(`${res.data.ddd}.${String(item.codUsuario).padStart(3, "0")}.${String(res.qtdeIds).padStart(4, "0")}`);
+                    setShowSpinner(false);
+                })
+            }
+        }
+
+        )
+    };
 
 
     function gerarNumeroAleatorio() {
@@ -179,9 +198,9 @@ const FormCadastro = () => {
                     {/* <h2>Vertical (basic) form</h2> */}
                     <form action="/action_page.php">
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            {hash && <span>Código: {hash}</span>}
+                            {hash && <span className='codigoId'>Código: {hash}</span>}
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
-                            <select name="user" id="user" className="w-50 py-1" onChange={gerarNumeroAleatorio}>
+                            <select name="user" id="user" className="w-50 py-1" onChange={gerarIdMaster}>
                                 {
                                     usuarios.map((user) => (
                                         <option value={user.codUsuario}>{user.descNome}</option>

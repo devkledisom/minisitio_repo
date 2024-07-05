@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const database = require('../config/db');
+//const DDD = require('./table_ddd');
 
 const Usuario = database.define('usuario', {
     codUsuario: {
@@ -98,17 +99,6 @@ const Usuario = database.define('usuario', {
     },
 
     descTelefone: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
-    },
-
-    hashCode: {
         type: Sequelize.TEXT,
         allowNull: false,
         unique: false,
@@ -219,4 +209,9 @@ const Usuario = database.define('usuario', {
         timestamps: false,
     });
 
+/* Usuario.belongsTo(DDD, {
+    constraints: true,
+    foreignKey: "id_ddd"
+});
+ */
 module.exports = Usuario;

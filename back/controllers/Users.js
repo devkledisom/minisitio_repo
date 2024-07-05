@@ -1,5 +1,6 @@
 const database = require('../config/db');
 const Users = require('../models/table_user_login');
+const DDD = require('../models/table_ddd');
 const Anuncio = require('../models/table_anuncio');
 
 module.exports = {

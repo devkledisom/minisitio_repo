@@ -59,6 +59,7 @@ router.put('/admin/desconto/update', Admin.atualizarIds);
 router.post('/admin/desconto/create', Admin.criarIds);
 router.delete('/admin/desconto/delete/:id', Admin.deleteIds);
 router.get('/admin/desconto/buscar/:id', Admin.buscarId);
+router.get('/admin/desconto/ddd/:id', Admin.buscarDDD);
 
 router.get('/admin/espacos/read', Admin.listarEspacos);
 router.get('/admin/anuncio/edit/:id', Admin.listarAnuncioId);

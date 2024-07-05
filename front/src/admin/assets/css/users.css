@@ -73,3 +73,10 @@
 tr {
     cursor: pointer
 }
+
+.codigoId {
+    font-size: 1.5rem;
+    background-color: gainsboro;
+    border-radius: 3px;
+    padding: 0px 5px 0px 5px;
+}
