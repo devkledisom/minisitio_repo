@@ -49,11 +49,23 @@ const FormCadastro = () => {
             .then((res) => {
                 setUsuarios(res.usuarios);
                 setShowSpinner(false);
+                console.log(res.usuarios)
             }).catch((err) => {
                 console.log(err);
                 setShowSpinner(false);
             })
     }, []);
+
+    function gerarIdMaster(e) {
+        let codigoDoMaster = e.target.value;
+        usuarios.find((item) => {
+            if (item.codUsuario == codigoDoMaster) {
+                console.log(item.codUf)
+            }
+        }
+
+        )
+    };
 
 
     function gerarNumeroAleatorio() {
@@ -181,7 +193,7 @@ const FormCadastro = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             {hash && <span>Código: {hash}</span>}
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
-                            <select name="user" id="user" className="w-50 py-1" onChange={gerarNumeroAleatorio}>
+                            <select name="user" id="user" className="w-50 py-1" onChange={gerarIdMaster}>
                                 {
                                     usuarios.map((user) => (
                                         <option value={user.codUsuario}>{user.descNome}</option>

@@ -8,6 +8,8 @@ const Ufs = require('../models/table_uf');
 const Caderno = require('../models/table_caderno');
 const Cadernos = require('../models/table_caderno');
 const Descontos = require('../models/table_desconto');
+const DDD = require('../models/table_ddd');
+
 
 //Functions
 const verificarNudoc = require('./identificarNuDoc');
@@ -556,6 +558,41 @@ module.exports = {
         console.log(resultAnuncio)
 
         res.json({ success: true, IdsValue: resultAnuncio });
+
+
+
+    },
+    buscarDDD: async (req, res) => {
+        await database.sync();
+
+        const codUf = req.params.id;
+
+        const dddBusca = await DDD.findAll({
+            where: {
+                id_uf: codUf
+            }
+        });
+
+        if (dddBusca < 1) {
+            res.json({ success: false, message: "ddd não encontrado" });
+            return;
+        }
+
+        res.json({ success: true, data: dddBusca });
+        //Descontos
+        /*  const resultAnuncio = await Descontos.findAll({
+             where: {
+                 hash: nu_hash
+             }
+         });
+ 
+         if (resultAnuncio < 1) {
+             res.json({ success: false, message: "Usuario não encontrado" });
+             return;
+         }
+         console.log(resultAnuncio)
+ 
+         res.json({ success: true, IdsValue: resultAnuncio }); */
 
 
 
