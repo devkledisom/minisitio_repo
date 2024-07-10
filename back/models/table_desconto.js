@@ -75,31 +75,16 @@ const Desconto = database.define('desconto', {
         type: Sequelize.STRING(150),
         allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
     },
     descImagem2: {
         type: Sequelize.STRING(150),
         allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
     },
     descImagem3: {
         type: Sequelize.STRING(150),
         allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
     },
     descLink: {
         type: Sequelize.STRING(150),

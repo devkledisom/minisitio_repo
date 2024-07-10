@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { masterPath } from '../../../config/config';
+import Swal from 'sweetalert2';
 
 //componente
 import Header from "../Header";
@@ -94,10 +95,10 @@ const FormCadastro = () => {
 
     function criarID() {
 
-        var validation = false;
+        var validation = true;
         setShowSpinner(true);
 
-        document.querySelectorAll('[name="pwd"]').forEach((item) => {
+       /*  document.querySelectorAll('[name="pwd"]').forEach((item) => {
             if (item.value == "") {
                 item.style.border = "1px solid red";
                 validation = false;
@@ -117,7 +118,7 @@ const FormCadastro = () => {
                 item.style.border = "1px solid gray";
                 validation = true;
             };
-        });
+        }); */
 
 
 
@@ -134,7 +135,7 @@ const FormCadastro = () => {
             "descLink": links.link_1,
             "descLink2": links.link_2,
             "descLink3": links.link_3,
-            "saldo": document.getElementById('adicionar_saldo').value
+            "saldo": document.getElementById('adicionar_saldo') ? document.getElementById('adicionar_saldo').value : 0
         };
 
         const config = {
@@ -149,7 +150,14 @@ const FormCadastro = () => {
                 .then((res) => {
                     if (res.success) {
                         setShowSpinner(false);
-                        alert("Usuário Cadastrado!");
+                        //alert("Usuário Cadastrado!");
+
+                        Swal.fire({
+                            title: 'sucesso!',
+                            text: 'ID cadastrado!',
+                            icon: 'success',
+                            confirmButtonText: 'Confirmar'
+                          })
                     } else {
                         setShowSpinner(false);
                         console.log(res.message);

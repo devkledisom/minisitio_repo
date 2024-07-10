@@ -2,6 +2,8 @@ const database = require('../config/db');
 const Users = require('../models/table_user_login');
 const DDD = require('../models/table_ddd');
 const Anuncio = require('../models/table_anuncio');
+const Descontos = require('../models/table_desconto');
+
 
 module.exports = {
     create: async (req, res) => {
@@ -264,7 +266,12 @@ module.exports = {
             certificado_link,
             cartao_digital } = req.body
 
-        console.log(req.body)
+        //console.log("tajsdnfkjfbdsjkbfsd;;;;;;", req.body)
+        let codigoDeDesconto = await Descontos.findAll({
+            where: {
+                hash: codDesconto
+            }
+        });
 
         const dadosAnuncio = {
             //"codAnuncio": 88888,
@@ -286,7 +293,7 @@ module.exports = {
             "descDescricao": "teste",
             "descSite": "www.oficinadetortas.com.br",
             "descSkype": 0,
-            "descPromocao": "teste",
+            "descPromocao": codigoDeDesconto[0].desconto,
             "descEmailComercial": descEmailComercial,
             "descEmailRetorno": descEmailRetorno,
             "descFacebook": "teste",
@@ -297,7 +304,7 @@ module.exports = {
             "descCPFCNPJ": descCPFCNPJ,
             "descNomeAutorizante": descNomeAutorizante,
             "descEmailAutorizante": descEmailAutorizante,
-            "codDesconto": codDesconto,
+            "codDesconto": codigoDeDesconto[0].idDesconto,
             "descLat": 0,
             "descLng": 0,
             "formaPagamento": 0,
@@ -403,3 +410,9 @@ module.exports = {
     }
 
 }
+
+
+
+
+
+

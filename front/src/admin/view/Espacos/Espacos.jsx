@@ -233,7 +233,7 @@ const Espacos = () => {
                                                     <td>{item.codUf}</td>
                                                     <td>{item.activate ? "Ativado" : "Desativado"}</td>
                                                     <td>Isento</td>
-                                                    <td>{item.codDesconto}</td>
+                                                    <td>{item.descPromocao}</td>
                                                     <td>{formatData(item.dtCadastro)}</td>
                                                     <td>{dataExpiracao(item.dtCadastro2)}</td>
                                                     <td>{item.codPA}</td>

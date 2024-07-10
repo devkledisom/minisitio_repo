@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import '../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { masterPath } from '../../config/config';
+import Swal from 'sweetalert2';
 
 //componente
 import Header from "./Header";
@@ -111,9 +112,21 @@ const FormCadastro = () => {
                 .then((x) => x.json())
                 .then((res) => {
                     if (res.success) {
-                        alert("Usuário Cadastrado!");
+                        Swal.fire({
+                            title: 'sucesso!',
+                            text: 'Usuário Cadastrado!',
+                            icon: 'success',
+                            confirmButtonText: 'Confirmar'
+                          })
+                        //let msg = alert("Usuário Cadastrado! \n você deseja voltar para a listagem de usuários?");
                     } else {
-                        alert(res.message.errors[0].message);
+                        Swal.fire({
+                            title: 'erro!',
+                            text: res.message.errors[0].message,
+                            icon: 'success',
+                            confirmButtonText: 'Entendi'
+                          })
+                        //alert(res.message.errors[0].message);
                         // console.log(res.message.errors[0].message);
                     }
                 })

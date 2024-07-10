@@ -506,7 +506,7 @@ const { Op } = Sequelize;
                 descLink2: req.body.descLink2 || "#",
                 descLink3: req.body.descLink3 || "#",
                 dtCadastro: dataNow(),
-                ativo: req.body.patrocinador,
+                ativo: 1,
                 utilizar_saldo: 0,
                 saldo: req.body.saldo
 
