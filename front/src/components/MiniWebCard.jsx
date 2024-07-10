@@ -21,6 +21,7 @@ function MiniWebCard(props) {
     const [imgPath, setImg] = useState();
 
     async function buscarAnuncio() {
+        qntVisualizacoes()
         const request = await fetch(`${masterPath.url}/anuncio/${props.id}`).then((x) => x.json());
         setResult(request[0]);
         navigate("/local");
@@ -28,8 +29,17 @@ function MiniWebCard(props) {
 
     useEffect(() => {
         props.data.anuncios.map(item => setImg(item.descImagem))
-        console.log(imgPath)
+        console.log(imgPath);
+        console.log(props.id);
     }, []);
+
+    function qntVisualizacoes() {
+        fetch(`${masterPath.url}/admin/anuncio/visualizacoes?id=${props.id}`)
+        .then((x) => x.json())
+        .then((res) => {
+          console.log(res)
+        })
+    };
 
 
     return (

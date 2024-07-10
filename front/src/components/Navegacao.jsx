@@ -12,13 +12,13 @@ function Navegacao() {
                     <ul className="bar-navigator col-md-6">
                         <li>
                             <a href="/local/sao-paulo-zona-central_35">
-                                <span className="uppercase">SAO PAULO - ZONA CENTRAL - SP</span>
+                               {/*  <span className="uppercase">SAO PAULO - ZONA CENTRAL - SP</span> */}
                             </a>
                             <i className="fa fa-angle-right px-2"></i>
                         </li>
                         <li>
                             <a href="/local/sao-paulo-zona-central/chaveiro-sniper_504183">
-                                Chaveiro Sniper
+                                {/* Chaveiro Sniper */}
                             </a>
                         </li>
                     </ul>

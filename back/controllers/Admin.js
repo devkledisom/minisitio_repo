@@ -780,6 +780,35 @@ const { Op } = Sequelize;
         }
 
     },
+    visualizacoes: async (req, res) => {
+
+
+
+       const visualizacoesAtivas = await Anuncio.findAll({
+            where: {
+                codAnuncio: req.query.id
+            }
+        });
+ 
+
+        try {
+            //Descontos
+            const aumentarVisualizacao = await Anuncio.update({
+                qntVisualizacoes: visualizacoesAtivas[0].qntVisualizacoes + 1
+            }, {
+                where: {
+                    codAnuncio: req.query.id
+                }
+            });
+
+            console.log(req.body)
+
+            res.json({ success: true, message: "Nova visualizção!" });
+        } catch (err) {
+            res.json({ success: false, message: err });
+        }
+
+    },
 
 
 }

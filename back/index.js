@@ -13,7 +13,7 @@ app.use(cors());
 //rota principal
 app.use(route);
 
-app.use('/files', express.static(path.resolve(__dirname, "public", "upload", "img")));
+app.use('/api/files', express.static(path.resolve(__dirname, "public", "upload", "img")));
 
 app.listen(port, () => {
     console.log("rodando na porta: ", port);

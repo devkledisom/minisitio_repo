@@ -45,6 +45,7 @@ function ComprarAnuncio() {
   const [personType, setPersonType] = useState("pf");
   const [cep, setCep] = useState();
   const [showMap, setShowMap] = useState("none");
+  const [precoFixo, setPrecoFixo] = useState(28);
 
 
   useEffect(() => {
@@ -184,6 +185,25 @@ function ComprarAnuncio() {
     }
   };
 
+  function aplicarCupom(e) {
+    let codId = e.target.value;
+
+    if(codId.length == 11) {
+      fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
+      .then((x) => x.json())
+      .then((res) => {
+        let valorDesconto = res.IdsValue[0].desconto;
+        let precoComDesconto = precoFixo - valorDesconto;
+        setPrecoFixo(precoComDesconto);
+        //console.log(precoComDesconto)
+      })
+    }
+
+    
+
+    //console.log(codId);
+  };
+
   return (
     <div className="App">
       <header>
@@ -256,7 +276,6 @@ function ComprarAnuncio() {
               <h4 className="text-start">Código Promocional (ID):</h4>
               <div className="input-icon margin-top-10" id="codigoPromocional">
                 <i className="fa fa-credit-card"></i>
-
                 <input
                   type="text"
                   name="discountHash"
@@ -264,6 +283,7 @@ function ComprarAnuncio() {
                   className="form-control"
                   placeholder="Digite seu código"
                   style={{ backgroundColor: "#96d18b" }}
+                  onChange={aplicarCupom}
                 />
                 <input
                   type="hidden"
@@ -782,7 +802,7 @@ function ComprarAnuncio() {
                 <div className="assinatura margin-top-20">
 
                   {radioCheck != 1 && <h2 className="webcard">
-                    <span className="preco">R$ 5,00</span>/mês
+                    <span className="preco">R$ {precoFixo},00</span>/mês
                   </h2>}
                   {radioCheck == 1 && <h2 className="simples uppercase">
                     Grátis
