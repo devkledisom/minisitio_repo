@@ -3,6 +3,11 @@ const Users = require('../models/table_user_login');
 const DDD = require('../models/table_ddd');
 const Anuncio = require('../models/table_anuncio');
 const Descontos = require('../models/table_desconto');
+const Cadernos = require('../models/table_caderno');
+
+//moduls
+const Sequelize = require('sequelize');
+const { Op } = Sequelize;
 
 
 module.exports = {
@@ -123,7 +128,7 @@ module.exports = {
             "descEndereco": Endereco,
             "codUf": Uf,
             "codCidade": Cidade,
-            "dtCadastro": dataNow(),
+            //"dtCadastro": dataNow(),
             "usuarioCod": usuarioCod,
             "dtAlteracao": dataNow(),
             "ativo": "1"
@@ -131,6 +136,53 @@ module.exports = {
 
         try {
             const listaUsers = await Users.update(dadosUsuario, {
+                where: {
+                    codUsuario: uuid
+                }
+            });
+
+
+            res.json({ success: true, message: listaUsers })
+        } catch (err) {
+            res.json({ success: false, message: err })
+        }
+
+        function dataNow() {
+            // Criar um novo objeto Date (representando a data e hora atuais)
+            var dataAtual = new Date();
+
+            // Extrair os componentes da data e hora
+            var ano = dataAtual.getFullYear();
+            var mes = dataAtual.getMonth() + 1; // Meses começam de 0, então adicionamos 1
+            var dia = dataAtual.getDate();
+            var hora = dataAtual.getHours();
+            var minutos = dataAtual.getMinutes();
+            var segundos = dataAtual.getSeconds();
+
+            // Formatar a data e hora
+            var dataFormatada = ano + '-' + mes + '-' + dia;
+            var horaFormatada = hora + ':' + minutos + ':' + segundos;
+
+            // Exibir a data e hora atual
+            console.log('Data atual:', dataFormatada);
+            console.log('Hora atual:', horaFormatada);
+
+            return dataFormatada + " " + horaFormatada;
+        };
+
+
+    },
+    updateStatus: async (req, res) => {
+        await database.sync();
+
+        const uuid = req.params.id;
+
+        const ativo = req.body.ativo;
+
+        try {
+            const listaUsers = await Users.update({
+                "ativo": ativo == "Ativado" ? 0 : 1
+            }, {
                 where: {
                     codUsuario: uuid
                 }
@@ -367,8 +419,8 @@ module.exports = {
     },
     qtdaAnuncio: async (req, res) => {
         try {
-            const listaAnuncios = await Users.count();
-            console.log(listaAnuncios)
+            const listaAnuncios = await Anuncio.count();
+            //console.log(listaAnuncios)
 
             res.json({ success: true, message: listaAnuncios })
         } catch (err) {
@@ -384,11 +436,54 @@ module.exports = {
             //Atividades
             const resultAnuncio = await Users.findAll({
                 where: {
-                    descCPFCNPJ: nu_doc
-                }
+                    [Op.or]: [
+                        { descNome: { [Op.like]: `%${nu_doc}%` } },
+                        { descEmail: nu_doc },
+                        { descCPFCNPJ: nu_doc }
+                    ]
+
+                },
+                order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
             });
 
             if (resultAnuncio < 1) {
+                const resultAnuncio = await Cadernos.findAll({
+                    where: {
+                        [Op.or]: [
+                            { UF: nu_doc },
+                            { nomeCaderno: nu_doc }
+                        ]
+
+                    }
+                });
+
+                console.log(resultAnuncio[0].dataValues.codUf);
+
+
+                const resultAnuncio2 = await Users.findAll({
+                    where: {
+                        [Op.or]: [
+                            { codUf: { [Op.like]: `%${resultAnuncio[0].dataValues.codUf}%` } },
+                            { codCidade: { [Op.like]: `%${resultAnuncio[0].dataValues.codCaderno}%` } },
+                        ]
+
+                    },
+                    order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+                });
+                const paginaAtual = req.query.page ? parseInt(req.query.page) : 1;
+
+                // Número total de itens
+                const totalItens = resultAnuncio2.length;
+                console.log("dasdads", totalItens)
+                // Número total de páginas
+                const totalPaginas = Math.ceil(totalItens / 10);
+
+                res.json({
+                    success: true, usuarios: resultAnuncio2, paginaAtual: paginaAtual,
+                    totalPaginas: totalPaginas, totalItem: totalItens
+                });
+                return;
+            } else {
                 res.json({ success: false, message: "Usuario não encontrado" });
                 return;
             }

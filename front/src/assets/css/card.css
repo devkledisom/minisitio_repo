@@ -53,14 +53,17 @@ tr:nth-child(even) {
     display: flex;
     justify-content: space-between;
     /* gap: 180px; */
-    padding: 10px;
-
+    /* padding: 10px; */
     border: 1px solid #161616;
     background-color: #edecec;
-    height: 150px;
+    /* height: 150px; */
     width: 99%;
     border-radius: 5px;
     transition: transform 0.3s ease-in-out;
+}
+
+.card>.card-list {
+    padding-right: 10px;
 }
 
 .card ul {

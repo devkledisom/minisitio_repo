@@ -1,0 +1,315 @@
+#btn-prev {
+    background-color: #ffcc29;
+    color: #000;
+    padding: 10px 40px;
+    font-size: 20px;
+}
+
+#btn-next {
+    background-color: #4f4f4f;
+    color: #fff;
+    padding: 10px 40px;
+    font-size: 20px;
+}
+
+#title-caderno {
+    box-shadow: 0 6px 4px rgba(228, 228, 228, 0.95);
+}
+
+.titulo-cinza {
+    background-color: #4f4f4f !important;
+    color: #ffffff !important;
+    padding: 10px;
+}
+
+.border-cinza {
+    border: 2px solid #edecec;
+
+}
+
+.btn-comprar {
+
+    padding: 10px 40px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.masonry-item {
+    /* break-inside: avoid; */
+    margin-bottom: 1em;
+    background-color: lightgray;
+    border: 1px solid lightblue;
+    border-radius: 20px;
+    /*  padding: 15px; */
+    box-sizing: border-box;
+    border: 1px solid lime
+}
+
+@media (min-width: 576px) {
+    .masonry-layout {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 992px) {
+    .masonry-layout {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1200px) {
+    .masonry-layout {
+        column-count: 2;
+    }
+}
+
+.my-masonry-grid {
+    /* display: -webkit-box; */
+    /* Not needed if autoprefixing */
+    /*  display: -ms-flexbox; */
+    /* Not needed if autoprefixing */
+    display: flex;
+    margin-left: -30px;
+    /* gutter size offset */
+    width: auto;
+}
+
+.my-masonry-grid_column {
+    padding-left: 30px;
+    /* gutter size */
+    background-clip: padding-box;
+}
+
+/* Style your items */
+.my-masonry-grid_column>div {
+    /* change div to reference your elements you put in <Masonry> */
+    background: grey;
+    margin-bottom: 30px;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+
+    100% {
+        box-shadow: 0 0 0 8px rgba(255, 215, 0, 1);
+    }
+}
+
+.pulsating-border {
+    animation: pulse 2s infinite;
+    /* Define a animação "pulse" com duração de 2 segundos e repetição infinita */
+    /* border: 1px solid #ccc;  */
+    /* Adicione uma borda inicial */
+    /* padding: 20px; */
+    /* Adicione algum preenchimento para separar o conteúdo */
+}
+
+
+.caderno .lista {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.caderno .titulo {
+    background-color: #ffcc29;
+    padding: 10px 0;
+    min-height: 52px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.titulo {
+    width: 100%;
+    min-height: 60px;
+    box-shadow: 0 1px 4px rgba(228, 228, 228, 0.95);
+    z-index: 9999;
+    /* margin-bottom: 50px; */
+    text-align: center;
+}
+
+.classificado {
+    height: 732px;
+    overflow-y: scroll;
+    background-color: #edecec;
+    margin-bottom: 20px;
+}
+
+.cinza,
+.titulo-cinza {
+    background-color: #4f4f4f !important;
+    color: #ffffff !important;
+}
+
+/* .list-unstyled {
+    padding-left: 0;
+    list-style: none;
+} */
+
+.classificado ul li {
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    text-align: left;
+}
+
+.classificado a {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    padding: 10px;
+}
+
+.classificado span {
+    float: right;
+    background: #4f4f4f;
+    color: #fff;
+    padding: 10px;
+    min-width: 122px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.classificado ul li:hover {
+    background-color: #d9d9d9;
+}
+
+.classificado ul li {
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+
+.caderno .cartao>.conteudo img {
+    width: 100%;
+    height: 245px;
+}
+
+.cartao {
+    min-height: 320px;
+    /* width: 100%; */
+    border: solid;
+    border-top-color: currentcolor;
+    border-right-color: currentcolor;
+    border-bottom-color: currentcolor;
+    border-left-color: currentcolor;
+    border-color: #4F4F4F;
+    border-top-color: rgb(79, 79, 79);
+    border-right-color: rgb(79, 79, 79);
+    border-bottom-color: rgb(79, 79, 79);
+    border-left-color: rgb(79, 79, 79);
+}
+
+.cartao {
+    background-color: #edecec;
+    margin-bottom: 20px;
+}
+
+.cartao>div {
+    overflow: hidden;
+    padding: 17px;
+}
+
+.caderno .cartao>.links img {
+    width: 35px;
+    height: 35px;
+}
+
+.caderno .btn {
+    padding: 10px 40px;
+}
+
+.proximo:hover {
+    background-color: #ffcc29;
+}
+
+/* 3 */
+.btn-3 {
+   /*  background: rgb(0, 172, 238);
+    background: linear-gradient(0deg, rgba(0, 172, 238, 1) 0%, rgba(2, 126, 251, 1) 100%);
+    width: 130px;
+    height: 40px;
+    line-height: 42px;
+    padding: 0;
+    border: none; */
+
+}
+
+.btn-3 span {
+/*     position: relative;
+    display: block;
+    width: 100%;
+    height: 100%; */
+}
+
+.btn-3:before,
+.btn-3:after {
+    position: absolute;
+    content: "";
+    right: 0;
+    top: 0;
+    background: rgb(0, 0, 0);
+    transition: all 0.3s ease;
+}
+
+.btn-3:before {
+    height: 0%;
+    width: 2px;
+}
+
+.btn-3:after {
+    width: 0%;
+    height: 2px;
+}
+
+.btn-3:hover {
+    /* background: transparent; */
+    box-shadow: none;
+}
+
+.btn-3:hover:before {
+    height: 100%;
+}
+
+.btn-3:hover:after {
+    width: 100%;
+}
+
+.btn-3 span:hover {
+   /*  color: rgba(2, 126, 251, 1); */
+   background-color: #ffcc29;
+}
+
+ .btn-3 span:before,
+.btn-3 span:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    transition: all 0.3s ease;
+} 
+
+.btn-3 span:before {
+    width: 2px;
+    height: 0%;
+}
+
+.btn-3 span:after {
+    width: 0%;
+    height: 2px;
+}
+
+.btn-3 span:hover:before {
+    height: 100%;
+}
+
+.btn-3 span:hover:after {
+    width: 100%;
+} 
+
+
+/*0-==================================================================*/

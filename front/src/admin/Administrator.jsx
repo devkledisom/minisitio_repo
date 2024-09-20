@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react';
 import { Link } from 'react-router-dom';
+import { masterPath, version } from '../config/config';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -15,7 +16,7 @@ function Administrator() {
                 <a href="/"><img src="../assets/img/logo.png" className="" /></a>
             </div>
             <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
-                <p className='w-100 text-center'>© MINISITIO</p>
+            <p className='w-100 text-center'>© MINISITIO - {version.version}</p>
             </footer>
         </div>
 

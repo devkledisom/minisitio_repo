@@ -23,6 +23,7 @@ function Caderno() {
   const [nomeAtividade, setNomeAtividade] = useState([]);
   const [minisitio, setMinisitio] = useState([]);
   const [smoot, setSmoot] = useState(false);
+  const [listaIds, setListaIds] = useState([]);
 
   const location = useLocation();
 
@@ -30,6 +31,8 @@ function Caderno() {
 
   const book = pegarParam.get('book');
   const id = pegarParam.get('id');
+  const caderno = pegarParam.get('caderno');
+  const estado = pegarParam.get('estado');
 
   useEffect(() => {
     async function buscarAtividade() {
@@ -43,9 +46,11 @@ function Caderno() {
 
         const minisitio = await res.json();
 
-        console.log(minisitio.anuncios.length)
+        console.log('dasdads', minisitio)
 
         setMinisitio(minisitio);
+
+        //console.log("minsindias", minisitio)
 
         const codigosAtividades = minisitio.anuncios.map((item) => item.codAtividade);
         const valores = [...new Set(codigosAtividades)];
@@ -55,22 +60,67 @@ function Caderno() {
 
         setNomeAtividade(atividadesEncontradas);
 
-        console.log("Final", atividadesEncontradas, nomeAtividade);
+        //console.log("Final", atividadesEncontradas, nomeAtividade);
       } catch (error) {
         console.error('Erro ao buscar atividades:', error);
       }
     }
 
-    buscarAtividade();
+    function buscarTodosClassificado() {
+      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
+        .then(x => x.json())
+        .then(async res => {
+          if (res.success) {
+            /*  setClassificados(res.data);
+             setPathImg(res.teste.rows);
+             setMosaicoImg(res.mosaico); */
+            setMinisitio({ anuncios: res.teste.rows });
+
+            const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
+            const valores = [...new Set(codigosAtividades)];
+
+            const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
+            const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id));
+
+            setNomeAtividade(atividadesEncontradas);
+            //console.log(res.teste)
+          } else {
+
+          }
+
+        })
+    };
+
+    if (book != undefined && id != undefined) {
+      buscarAtividade();
+    } else {
+      buscarTodosClassificado();
+    }
+
+    function buscarId() {
+      fetch(`${masterPath.url}/admin/desconto/read/all`)
+        .then((x) => x.json())
+        .then((res) => {
+          if (res.success) {
+            setListaIds(res.data);
+   
+          } else {
+            console.error("encontrado na base de dados");
+          }
+
+        })
+      return;
+    };
+
+    buscarId();
+
+
   }, [book]);
 
 
-  const teste = useRef(null)
+  const teste = useRef(null)//observar
 
   useEffect(() => {
-    console.log("motre", teste.current)
-    //console.log(document.querySelector(`#item_${id}`))
-
 
     const interID = setInterval(() => {
       if (document.querySelector(`#item_${id}`)) {
@@ -82,14 +132,12 @@ function Caderno() {
       }
     }, 1000)
 
+  }, [id])
 
-
-  }, [])
-
-  /*   if(smoot) {
-      alert()
-      
-    } */
+  function buscarId(id) {
+    const idEncontrado = listaIds.find(item => item.idDesconto == id);
+    return idEncontrado;
+  };
 
   return (
     <div className="App">
@@ -132,19 +180,30 @@ function Caderno() {
                   (item != undefined || item.length > 0)
                     ?
                     <div id={item.id} key={item.id} className="atividade-title px-2" >
-                      <h2 className='bg-yellow'>
+                      <h2 className='bg-yellow py-2'>
                         {item.atividade}
                       </h2>
                       {
 
                         minisitio.anuncios.map((anuncio) => {
-                          //console.log(anuncio)
+                          /*  console.log("teste", anuncio) */
 
-                          if (anuncio.codTipoAnuncio == 1) {
-                            return <MiniWebCardSimples />
+                          if (anuncio.codTipoAnuncio == 1 && anuncio.codAtividade == item.id) {
+                            return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
                           } else {
                             if (anuncio.codAtividade == item.id) {
-                              return <MiniWebCard key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={minisitio} codImg={anuncio.descImagem} ref={teste} />
+                              return <MiniWebCard key={anuncio.codAnuncio}
+                                id={anuncio.codAnuncio}
+                                data={minisitio}
+                                codImg={anuncio.descImagem}
+                                ref={teste}
+                                empresa={anuncio.descAnuncio}
+                                endereco={anuncio.descEndereco}
+                                telefone={anuncio.descTelefone}
+                                celular={anuncio.descCelular}
+                                codDesconto={anuncio.codDesconto}
+                                ids={buscarId(90)}
+                              />
                             } <MsgProgramada />
                             //return <MiniWebCard key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={minisitio} />
                           }

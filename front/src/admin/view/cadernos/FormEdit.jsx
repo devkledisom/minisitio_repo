@@ -189,7 +189,7 @@ const FormCadastro = () => {
                                 className="btn btn-info custom-button mx-2 text-light"
                                 onClick={editCaderno}
                             >Atualizar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/cadernos')}>Cancelar</button>
+                            <button type="submit" className="btn custom-button" onClick={() => navigate('/admin/cadernos')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

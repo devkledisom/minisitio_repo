@@ -19,6 +19,7 @@ function MiniWebCard(props) {
     const { result, setResult } = useBusca();
     const navigate = useNavigate();
     const [imgPath, setImg] = useState();
+    const [imgDefault, setImgDefault] = useState(null);
 
     async function buscarAnuncio() {
         qntVisualizacoes()
@@ -29,26 +30,79 @@ function MiniWebCard(props) {
 
     useEffect(() => {
         props.data.anuncios.map(item => setImg(item.descImagem))
-        console.log(imgPath);
-        console.log(props.id);
+
+        if (props.codImg == 0 || props.codImg == "teste") {
+            setImgDefault(false);
+        } else {
+            setImgDefault(`files/${props.codImg}`);
+        }
+
     }, []);
+
 
     function qntVisualizacoes() {
         fetch(`${masterPath.url}/admin/anuncio/visualizacoes?id=${props.id}`)
-        .then((x) => x.json())
-        .then((res) => {
-          console.log(res)
-        })
+            .then((x) => x.json())
+            .then((res) => {
+                console.log(res)
+            })
     };
+
+
 
 
     return (
         <div className="MiniWebCard" key={props.key} id={`item_${props.id}`}>
 
-            <div className='container my-2'>
-                <div className='row p-2 cartao'>
-                    <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={300} />
-                    <div className="row py-3 px-0">
+            <div className='container cartao my-2 p-0' key={props.key}>
+
+                <div className="apoio">
+                    <div>
+                        <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
+                            <img src={`${masterPath.url}/files/${props.ids.descImagem}`} alt="" />
+                        </a>
+                        <a href={props.ids.descLink2} target="_blank" rel="noopener noreferrer">
+                            <img src={`${masterPath.url}/files/${props.ids.descImagem2}`} alt="" />
+                        </a>
+                        <a href={props.ids.descLink3} target="_blank" rel="noopener noreferrer">
+                            <img src={`${masterPath.url}/files/${props.ids.descImagem3}`} alt="" />
+                        </a>
+                    </div>
+                </div>
+
+                <div className='row display-flex justify-content-center' key={props.key}>
+
+                    {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
+
+                    {imgDefault == false &&
+                        <div className="conteudo semImagem">
+                            <h2 className="nome-empresa text-start">{props.empresa}</h2>
+                            <h4
+                                className="slogan webcard text-start"
+                                style={{ display: "block" }}
+                            >
+                                Frase/slogan da empresa
+                            </h4>
+                            <p className="text-start">
+                                <i className="fa fa-map-marker"></i>
+                                <span className="sim-end">{props.endereco !== "atualizar" ? props.endereco : "Endereço da empresa"}</span>
+                            </p>
+                            <p className="text-start">
+                                <i className="fa fa-phone"></i>
+                                <span className="sim-tel">{props.telefone !== "0" ? props.telefone : "(xx) xxxx-xxxx"}</span>
+                            </p>
+                            <p
+                                className="webcard text-start"
+                                style={{ display: "block" }}
+                            >
+                                <i className="fa fa-phone"></i>
+                                <span className="cel">{props.celular !== "0" ? props.celular : "(xx) xxxxx-xxxx"}</span>
+                            </p>
+                        </div>
+                    }
+
+
+                    <div className="row py-3">
                         <div id="area-icons-actions" className='col-md-6'>
                             <Tooltip text={"Mídias"}>
                                 <div className="dropdown">
@@ -99,7 +153,7 @@ function MiniWebCard(props) {
                             </Tooltip>
 
                         </div>
-                        <div className='col-md-6 px-0 d-flex justify-content-end align-items-center'>
+                        <div className='col-md-6 px-2 d-flex justify-content-end align-items-center'>
                             <button id="btn-detalhes" onClick={buscarAnuncio}>Ver Detalhes</button>
                         </div>
 

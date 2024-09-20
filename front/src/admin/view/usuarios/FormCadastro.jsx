@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 
 //componente
 import Header from "../Header";
+import Spinner from '../../../components/Spinner';
 
 const FormCadastro = () => {
 
@@ -16,6 +17,7 @@ const FormCadastro = () => {
     const [ufSelected, setUf] = useState(0);
     const [uf, setUfs] = useState([]);
     const [caderno, setCaderno] = useState([]);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const location = useLocation();
 
@@ -55,7 +57,7 @@ const FormCadastro = () => {
     const navigate = useNavigate();
 
     function cadastrarUsuario() {
-
+        setShowSpinner(true);
         var validation = false;
 
         document.querySelectorAll('[name="pwd"]').forEach((item) => {
@@ -107,10 +109,12 @@ const FormCadastro = () => {
         };
 
         if (validation) {
+            
             fetch(`${masterPath.url}/admin/usuario/create`, config)
                 .then((x) => x.json())
                 .then((res) => {
                     if (res.success) {
+                        setShowSpinner(false);
                         Swal.fire({
                             title: 'sucesso!',
                             text: 'Usuário Cadastrado!',
@@ -119,16 +123,19 @@ const FormCadastro = () => {
                           })
                         //let msg = alert("Usuário Cadastrado! \n você deseja voltar para a listagem de usuários?");
                     } else {
+                        setShowSpinner(false);
                         Swal.fire({
                             title: 'erro!',
                             text: res.message.errors[0].message,
-                            icon: 'success',
+                            icon: 'error',
                             confirmButtonText: 'Entendi'
                           })
                         //alert(res.message.errors[0].message);
                         // console.log(res.message.errors[0].message);
                     }
                 })
+        } else {
+            setShowSpinner(false);
         }
 
     };
@@ -245,7 +252,7 @@ const FormCadastro = () => {
                                 className="btn btn-info custom-button mx-2 text-light"
                                 onClick={cadastrarUsuario}
                             >Salvar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/users')}>Cancelar</button>
+                            <button type="submit" className="btn custom-button" onClick={() => navigate('/admin/users')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

@@ -67,24 +67,14 @@ const Usuario = database.define('usuario', {
 
     hashCode: {
         type: Sequelize.TEXT,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        allowNull: true,
+        unique: false
     },
 
     descValue: {
         type: Sequelize.TEXT,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        allowNull: true,
+        unique: false
     },
 
     codTipoUsuario: {
@@ -111,24 +101,14 @@ const Usuario = database.define('usuario', {
 
     descRepresentanteConvenio: {
         type: Sequelize.TEXT,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        allowNull: true,
+        unique: false
     },
 
     descEndereco: {
         type: Sequelize.TEXT,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        allowNull: true,
+        unique: false
     },
 
     codUf: {
@@ -157,7 +137,7 @@ const Usuario = database.define('usuario', {
         type: Sequelize.DATE,
         allowNull: true,
         unique: false,
-        defaultValue: Sequelize.NOW
+        //defaultValue: Sequelize.NOW
     },
 
     usuarioCod: {

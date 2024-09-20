@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
-import { masterPath } from '../../../config/config';
+import { masterPath, version } from '../../../config/config';
 
 
 //componente
 import Header from "../Header";
 import Pagination from '../../components/Pagination';
 import Spinner from '../../../components/Spinner';
+import BtnActivate from '../../components/BntActivate';
 
 const GerenciarIds = () => {
 
@@ -129,6 +130,24 @@ const GerenciarIds = () => {
         return `${dataOriginal[2]}/${dataOriginal[1]}/${dataOriginal[0]}`
     };
 
+    
+    function exportExcell() {
+        fetch(`${masterPath.url}/admin/desconto/export?limit=5000`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(ids.IdsValue)
+        })
+        .then(x => x.json())
+        .then(res => {
+            if(res.success) {
+                //console.log(res);
+                window.location.href = res.downloadUrl;
+            }
+        })
+    };
+
     return (
         <div className="users">
             <header style={style} className='w-100'>
@@ -142,9 +161,10 @@ const GerenciarIds = () => {
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
-                            <button type="button" className="btn custom-button" onClick={() => navigator('/desconto/cadastro')}>Adicionar</button>
-                            <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/desconto/editar?id=${selectId}`)}>Editar</button>
-                            <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarUser}>Apagar</button>
+                            <button type="button" className="btn custom-button" onClick={() => navigator('/admin/desconto/cadastro')}>Adicionar</button>
+                            <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/desconto/editar?id=${selectId}`)}>Editar</button>
+                            <button type="button" className="btn custom-button" onClick={exportExcell}>Exportar</button>
+                            <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarUser}>Apagar</button>
                         </div>
                         <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
@@ -169,9 +189,10 @@ const GerenciarIds = () => {
                                         <th style={{ "width": "150px" }}>Código</th>
                                         <th style={{ "width": "250px" }}>Descrição</th>
                                         <th style={{ "width": "200px" }}>Cadastrado em</th>
-                                        <th style={{ "width": "100px" }}>Status</th>
+                                        
                                         <th style={{ "width": "150px" }}>Qtde Espaços</th>
                                         <th style={{ "width": "100px" }}>Saldo</th>
+                                        <th style={{ "width": "100px" }}>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -185,13 +206,15 @@ const GerenciarIds = () => {
                                                 <tr key={item.idDesconto} id={item.idDesconto} onClick={selecaoLinha}>
 
                                                     <td>{teste(item.idUsuario)}</td>
-                                                    <td>{parseFloat(item.desconto).toFixed(2)}</td>
+                                                    <td>{String(parseFloat(item.desconto).toFixed(2)).replace('.', ',')}</td>
+                                                    {/* <td>{parseFloat(item.desconto).toFixed(2)}</td> */}
                                                     <td>{item.hash}</td>
                                                     <td>{item.descricao}</td>
-                                                    <td>{formatData(item.dtCadastro)}</td>
-                                                    <td>{item.ativo ? "Ativado" : "Desativado"}</td>
+                                                    <td>{formatData(item.dtCadastro)}</td>                                              
+                                                   {/*  <td>{item.ativo ? "Ativado" : "Desativado"}</td> */}
                                                     <td>{item.utilizar_saldo}</td>
                                                     <td>{item.saldo}</td>
+                                                    <td><BtnActivate data={item.ativo} idd={item.idDesconto} modulo={"desconto"}/></td>
                                                 </tr>
                                             )
                                         })
@@ -201,10 +224,10 @@ const GerenciarIds = () => {
                         </div>
 
                     </div>
-                    <Pagination totalPages={ids.totalPaginas} table={"desconto"} />
+                    <Pagination totalPages={ids.totalPaginas} paginaAtual={ids.paginaAtual} totalItem={ids.totalItem} table={"desconto"} />
 
                 </article>
-                <p className='w-100 text-center'>© MINISITIO</p>
+                <p className='w-100 text-center'>© MINISITIO - {version.version}</p>
             </section>
             {/*  <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
                 <p className='w-100 text-center'>© MINISITIO</p>

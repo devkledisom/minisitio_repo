@@ -1,13 +1,17 @@
 import React from 'react';
+import { masterPath } from '../config/config';
 
 function Mosaico(props) {
 
     const style = {
         boxShadow: props.borda,
-        backgroundImage: "url(../assets/img/teste/saopaulo_saopaulo.jpg)",
+        /* backgroundImage: "url(/assets/img/miniwebcard/Alagoas_Maceio.jpg)", */
+        backgroundImage: `${masterPath.url}/files/${props.mosaicoImg}`,
         backgroundSize: "100% 100%",
-        backgroundRepeat: "no-repeat"
+        backgroundRepeat: "no-repeat",
+        //backgroundColor: "red"
     }
+    //console.log(props.mosaicoImg)
 
     return (
         <div>
@@ -22,20 +26,20 @@ function Mosaico(props) {
                                 <li className="assine"><a href="/comprar-anuncio">Assine Agora</a></li>
                                 <li className="dropdown dropdown-bandeira">
                                     <a className="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
-                                        <img src="../assets/img/bandeiras/br.png" style={{ border: "1px solid #edecec" }} />
+                                        <img src="/assets/img/bandeiras/br.png" style={{ border: "1px solid #edecec" }} />
                                         <span className="caret"></span>
                                     </a>
                                     <ul className="dropdown-menu pull-right">
                                         <li>
                                             <a href="https://cl.minisitio.net">
-                                                <img src="../assets/img/bandeiras/cl.png" style={{ border: "1px solid #edecec" }} />
+                                                <img src="/assets/img/bandeiras/cl.png" style={{ border: "1px solid #edecec" }} />
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
-                        {props.logoTop ? <a href="/"><img src="../assets/img/logo.png" className="logo" /></a> : ''}
+                        {props.logoTop ? <a href="/"><img src="/assets/img/logo.png" className="logo" /></a> : ''}
                     </div>
                 </div>
             </div>

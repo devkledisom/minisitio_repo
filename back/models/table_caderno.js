@@ -55,13 +55,8 @@ const Caderno = database.define('caderno', {
 
     descImagem: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
     },
 
     cep_inicial: {

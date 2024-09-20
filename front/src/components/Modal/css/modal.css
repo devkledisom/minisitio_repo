@@ -7,3 +7,10 @@
 #bg-registro-usuario select {
     margin-top: 10px;
 }
+
+.subtitulo {
+    text-align: center;
+    color: #000000;
+    font-weight: 700;
+    padding-bottom: 30px;
+}

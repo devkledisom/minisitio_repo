@@ -17,6 +17,12 @@ function Login() {
     const passValue = useRef(null);
     const navigate = useNavigate();
 
+    function teclaLogin(e) {
+        if (e.key === "Enter") {
+            entrar();
+        }
+    };
+
     function entrar() {
         setShowSpinner(true);
         fetch(`${masterPath.url}/entrar`, {
@@ -30,14 +36,26 @@ function Login() {
             .then((x) => x.json())
             .then((res) => {
                 setShowSpinner(false);
-                if (res.success) {
+                if (res.success && res.type == 1) {
                     sessionStorage.setItem('authTokenMN', true);
+                    sessionStorage.setItem('userLogged', res.data);
 
                     navigate("/admin");
-                    //console.log(res)
-                } else {
-                    alert(res.message);
+                    console.log(res);
                 }
+                /* console.log(res);
+                console.log(res.data);
+                console.log(res.data.codTipoUsuario == 1); */
+                
+                let tipoUsuario = res.data.codTipoUsuario;
+                let nuDocumento = res.data.descCPFCNPJ;
+
+                if (tipoUsuario == 3) {
+                    sessionStorage.setItem('authTokenMN', true);
+                    sessionStorage.setItem('userLogged', res.data);
+                    navigate(`/ver-anuncios/${nuDocumento.replace(/[.-]/g, '')}`);
+                }
+
             })
     };
 
@@ -59,13 +77,13 @@ function Login() {
                                     <div className="col-md-12 py-3">
                                         <div className="input-icon margin-top-10">
                                             <i className="fa fa-user"></i>
-                                            <input type="text" className="form-control assinante" placeholder="Digite seu CPF ou CNPJ" id="descCPFCNPJ" ref={loginValue} />
+                                            <input type="text" className="form-control assinante" placeholder="Digite seu CPF ou CNPJ" id="descCPFCNPJ" ref={loginValue} onKeyDown={teclaLogin} />
                                         </div>
                                     </div>
                                     <div className="col-md-12">
                                         <div className="input-icon margin-top-10 py-3">
                                             <i className="fa fa-key"></i>
-                                            <input type="password" className="form-control assinante" placeholder="Digite sua senha" id="senha" ref={passValue} />
+                                            <input type="password" className="form-control assinante" placeholder="Digite sua senha" id="senha" ref={passValue} onKeyDown={teclaLogin} />
                                         </div>
                                     </div>
                                     <div className="col-md-6 col-sm-5 senha">
@@ -100,7 +118,7 @@ function Login() {
                                         </div>
                                     </div>
                                     <div className="col-md-12 continuar">
-                                        <button type="button" className="btn cinza btn-step-one"><i className="fa fa-arrow-right"></i>criar cadastro</button>
+                                        <button type="button" className="btn cinza btn-step-one" onClick={() => navigate('/criar-cadastro')}><i className="fa fa-arrow-right"></i>criar cadastro</button>
                                     </div>
                                 </div>
                             </form>

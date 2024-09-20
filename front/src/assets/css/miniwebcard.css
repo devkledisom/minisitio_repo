@@ -61,8 +61,9 @@
     gap: 5px
 }
 
-.WebcardThumb p {
+.WebcardThumb p, .MiniWebCard p {
     color: #5f6f7e;
+    padding-left: 10px;
 }
 
 .atividade-title {
@@ -75,4 +76,20 @@
     display: flex;
     justify-content: center;
     flex-flow: row wrap;
+}
+
+.apoio {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.apoio div {
+    display: flex;
+    gap: 10px
+}
+
+.apoio img {
+    width: 149px;
 }

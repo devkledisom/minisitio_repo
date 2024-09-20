@@ -29,11 +29,14 @@ const Atividade = database.define('atividade', {
                 msg: "Esse campo não pode está vazio.."
             },
         }
-    }
+    }/* ,
+    createdAt: {
+        type: Sequelize.DATE
+    } */
 },
     {
         freezeTableName: true,
-        timestamps: false,
+        timestamps: true,
     });
 
 module.exports = Atividade;

@@ -81,7 +81,7 @@ function UploadImage(props) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const limparInputImg = () => {
-    console.log(props.preview)
+    //console.log(props.codigoUser)
     if (props.preview == true) {
       document.querySelector('.semImagem').style.display = 'block';
       document.querySelector('.comImagem').style.display = 'none';

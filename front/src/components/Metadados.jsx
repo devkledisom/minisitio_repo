@@ -24,11 +24,14 @@ function Metadados(props) {
                     </div>
                     <div className="col-md-12">
                         <i className="fa fa-map-marker"></i>
-                        <h4>{props.data.descEndereco}, 211 - {props.data.descCEP}</h4>
+                        <h4>
+                            {props.data.descEndereco !== "atualizar" ? props.data.descEndereco : "Endereço da empresa"}, S/N
+                            {props.data.descCEP !== "0" ? props.data.descCEP : ""}
+                        </h4>
                     </div>
                     <div className="col-md-12">
                         <i className="fa fa-phone"></i>
-                        <h4>{props.data.descTelefone} / (11) 96762-4930</h4>
+                        <h4>{props.data.descTelefone !== "atualizar" ? props.data.descTelefone : "(xx) xxxx-xxxx"} / {props.data.descCelular !== "0" ? props.data.descCelular : "(xx) xxxxx-xxxx"}</h4>
                     </div>
                     <div className="col-md-12">
                         <i className="fa fa-globe"></i>
@@ -74,8 +77,9 @@ function Metadados(props) {
                     <div className="col-md-12 ">
                         <img src="../assets/img/teste/whatsapp.png" />
                         <h4>
-                            <a href="https://api.whatsapp.com/send?1=pt_BR&amp;phone=5511967624930" target="_blank" data-toggle="tooltip" title="WhatsApp">
-                                (11) 96762-4930                                    </a>
+                            <a href={`https://api.whatsapp.com/send?1=pt_BR&amp;phone=55${props.data.descCelular}`} target="_blank" data-toggle="tooltip" title="WhatsApp">
+                                {props.data.descCelular !== "0" ? props.data.descCelular : "(xx) xxxxx-xxxx"}
+                            </a>
                         </h4>
                     </div>
                     <div className="col-md-12 link-cinza">

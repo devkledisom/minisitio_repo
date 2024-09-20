@@ -21,6 +21,7 @@ li {
 
 .apoio {
     background-color: #c1c1c1;
+    height: 70px;
 }
 
 .bgbt {
@@ -104,6 +105,7 @@ li {
 
 .WebcardThumb p {
     color: #5f6f7e;
+    padding-left: 10px;
 }
 
 .atividade-title {

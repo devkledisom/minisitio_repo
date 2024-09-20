@@ -1,11 +1,11 @@
 import React from "react";
 
-const AlertMsg = () => {
+const AlertMsg = ({message}) => {
     return (
         <div className="msg">
-            <div class="alert alert-success alert-dismissible fade show alertShow">
+            <div class="alert alert-success alert-dismissible fade show alertShow" style={{ "width": "676px" }}>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                <strong>Success!</strong> This alert box could indicate a successful or positive action.
+                <strong>Success!</strong> {message}
             </div>
         </div>
     )

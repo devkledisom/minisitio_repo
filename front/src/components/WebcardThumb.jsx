@@ -16,39 +16,131 @@ import { BsShareFill, BsFillSendFill, BsFacebook, BsInstagram, BsTwitter, BsYout
 
 function WebcardThumb(props) {
     const [imgPath, setImg] = useState();
-    console.log(props.codImg)
+    const [imgDefault, setImgDefault] = useState(null);
+    const [listaIds, setListaIds] = useState([]);
+    //const [dataCriacao, setDataCriacao] = useState(null);
+
+    //console.log(props.codImg)
 
     useEffect(() => {
-        //props.data.anuncios.map(item => setImg(item.descImagem))
-        console.log(props.data)
+        if (props.codImg == 0 || props.codImg == "teste") {
+            setImgDefault(false);
+        } else {
+            setImgDefault(`files/${props.codImg}`);
+        };
+
+        function buscarUserId() {
+            fetch(`${masterPath.url}/admin/desconto/buscar/${90}`)
+                .then((x) => x.json())
+                .then((res) => {
+                    if (res.success) {
+                        setListaIds(res.IdsValue[0]);
+                    } else {
+                        console.error("encontrado na base de dados");
+                    }
+
+                })
+        };
+
+        buscarUserId();
+
+    }, [props]);
+
+    useEffect(() => {
+
+        function buscarUserId() {
+            fetch(`${masterPath.url}/admin/desconto/buscar/${90}`)
+                .then((x) => x.json())
+                .then((res) => {
+                    if (res.success) {
+                        setListaIds(res.IdsValue[0]);
+                        console.log(res);
+                    } else {
+                        console.error("encontrado na base de dados");
+                    }
+
+                })
+        };
+
+        buscarUserId();
+
     }, []);
 
     const formatData = (dataCompleta) => {
-        let dataTempo = dataCompleta.split('T');
-        let dataOriginal = dataTempo[0].split('-');
+        if (dataCompleta != undefined) {
+            let dataTempo = dataCompleta.split('T');
+            let dataOriginal = dataTempo[0].split('-');
 
-        return `${dataOriginal[2]}/${dataOriginal[1]}/${dataOriginal[0]}`
+            return `${dataOriginal[2]}/${dataOriginal[1]}/${dataOriginal[0]}`;
+        }
     };
 
     const dataExpiracao = (dataCompleta) => {
-        let dataTempo = dataCompleta.split('T');
-        let dataOriginal = dataTempo[0];
-
-        const expirationDate = moment(dataOriginal).add(1, 'year').format('DD/MM/YYYY');
-        console.log("data", dataOriginal)
-
-        return expirationDate;
+        /*  let dataTempo = dataCompleta.split('T');
+         let dataOriginal = dataTempo[0];
+ 
+         const expirationDate = moment(dataOriginal).add(1, 'year').format('DD/MM/YYYY');
+         console.log("data", dataOriginal)
+ 
+         return expirationDate; */
     };
+
+
 
     return (
         <div className="WebcardThumb">
 
             <div className='container my-2 p-0' >
+
                 <div className='cartao'>
-                    <div className='row p-2'>
-                        <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={200} />
+
+                <div className="apoio">
+                    <div>
+                        <a href={listaIds.descLink} target="_blank" rel="noopener noreferrer">
+                            <img src={`${masterPath.url}/files/${listaIds.descImagem}`} alt="" />
+                        </a>
+                        <a href={listaIds.descLink2} target="_blank" rel="noopener noreferrer">
+                            <img src={`${masterPath.url}/files/${listaIds.descImagem2}`} alt="" />
+                        </a>
+                        <a href={listaIds.descLink3} target="_blank" rel="noopener noreferrer">
+                            <img src={`${masterPath.url}/files/${listaIds.descImagem3}`} alt="" />
+                        </a>
                     </div>
-                    <div className="row py-3 px-2">
+                </div>
+
+                    <div className='row p-2'>
+                        {/*  <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={200} /> */}
+                        {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
+                    </div>
+
+                    {imgDefault == false &&
+                        <div className="conteudo semImagem">
+                            <h2 className="nome-empresa text-start">{props.data.descAnuncio}</h2>
+                            <h4
+                                className="slogan webcard text-start"
+                                style={{ display: "block" }}
+                            >
+                                Frase/slogan da empresa
+                            </h4>
+                            <p className="text-start">
+                                <i className="fa fa-map-marker"></i>{" "}
+                                <span className="sim-end">{props.data.descEndereco !== "atualizar" ? props.data.descEndereco : "Endereço da empresa"}</span>
+                            </p>
+                            <p className="text-start">
+                                <i className="fa fa-phone"></i>{" "}
+                                <span className="sim-tel">{props.data.descTelefone !== "atualizar" ? props.data.descTelefone : "(xx) xxxx-xxxx"}</span>
+                            </p>
+                            <p
+                                className="webcard text-start"
+                                style={{ display: "block" }}
+                            >
+                                <i className="fa fa-phone"></i>{" "}
+                                <span className="cel">{props.data.descCelular !== "0" ? props.data.descCelular : "(xx) xxxxx-xxxx"}</span>
+                            </p>
+                        </div>
+                    }
+
+                    <div className="row py-0 px-2">
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-6">
@@ -61,8 +153,8 @@ function WebcardThumb(props) {
                                 <div className="col-md-6">
                                     <p className='text-end'>
                                         Desde: {formatData(props.data.dtCadastro)}<br />
-                                        Renovado em: {formatData(props.data.dtCadastro2)}<br />
-                                        Até: {dataExpiracao(props.data.dtCadastro2)}
+                                        Renovado em: {formatData(props.data.updatedAt)}<br />
+                                        Até: {formatData(props.data.dueDate)}
                                     </p>
                                 </div>
                             </div>

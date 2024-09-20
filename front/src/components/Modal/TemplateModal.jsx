@@ -31,6 +31,7 @@ const TemplateModal = () => {
 
      {/*  <!-- Modal body --> */}
       <div className="modal-body">
+
       {elemento ? <ContentChildForm onContinue={mostrarElemento} /> : <ContentChildLogin onContinue={mostrarElemento}/>}
        
       </div>

@@ -1,18 +1,52 @@
-// components/OutroComponente.js
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import '../../assets/css/users.css';
-import 'font-awesome/css/font-awesome.min.css';
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { masterPath } from '../../../config/config';
+import he from 'he';
+
+
+
+//lib
+import {
+    BsShareFill,
+    BsFillSendFill,
+    BsFacebook,
+    BsInstagram,
+    BsTwitter,
+    BsYoutube,
+    BsWhatsapp,
+    BsSkype,
+    BsHeadset,
+} from "react-icons/bs";
 
 //componente
 import Header from "../Header";
+import "../../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "../../assets/css/formEspacos.css";
+import "../../assets/css/comprar-anuncio.css";
+import ChooseFile from "../../components/ChooseFile";
+import TemplateModal from "../../../components/Modal/TemplateModal";
+
+import Mosaico from "../../../components/Mosaico";
+import Busca from "../../../components/Busca";
+import Nav from "../../../components/Nav";
+import Footer from "../../../components/Footer";
+import Tooltip from "../../../components/Tooltip";
+import Localidade from "../../../components/Localidade";
+import Marcadores from "../../../components/Forms/Marcadores";
+import Map from '../../../components/Maps/Map';
+import MapContainer from "../../../components/MapContainer";
+import TagsInput from "../../components/TagsInput";
 import Spinner from '../../../components/Spinner';
-import ChooseFile from "../../../components/ChooseFile";
-
-const FormCadastro = () => {
 
 
+//FUNCTIONS
+import moveToTop from '../../functions/moverParaTop';
+
+//LIBS
+import InputMask from 'react-input-mask';
+
+function ComprarAnuncio() {
+    //States
     const [ids, setIds] = useState(
         {
             "codAnuncio": 35,
@@ -25,7 +59,7 @@ const FormCadastro = () => {
             "codCaderno": 5592,
             "codUf": 53,
             "codCidade": 0,
-            "descAnuncio": "1",
+            "descAnuncio": "",
             "descAnuncioFriendly": "",
             "descImagem": "teste",
             "descEndereco": "",
@@ -74,62 +108,47 @@ const FormCadastro = () => {
             "descChavePix": ""
         }
     );
-    const [usuarios, setUsuarios] = useState([]);
-    const [atividadeValue, setAtividade] = useState(false);
-    const [atividades, setAtividades] = useState();
-    const [page, setPage] = useState(1);
-    const [showSpinner, setShowSpinner] = useState(false);
-    const [hash, setHash] = useState(false);
-    const [uf, setUfs] = useState([]);
     const [ufSelected, setUf] = useState(0);
+    const [uf, setUfs] = useState([]);
     const [caderno, setCaderno] = useState([]);
+    const [codUser, setCodUser] = useState([]);
+    const [atividades, setAtividades] = useState();
+    const [radioCheck, setRadioCheck] = useState(1);
+    const [personType, setPersonType] = useState("pf");
+    const [cep, setCep] = useState();
+    const [showMap, setShowMap] = useState("none");
+    const [precoFixo, setPrecoFixo] = useState(5);
+    const [tagValue, setTagValue] = useState();
+    const [showSpinner, setShowSpinner] = useState(false);
+    const [usuarios, setUsuarios] = useState({});
+    const [cpfCnpjValue, setcpfCnpjValue] = useState({});
 
 
-    const location = useLocation();
 
-    const navigate = useNavigate();
-
-    const getParam = new URLSearchParams(location.search);
-
-    const param = getParam.get('page') ? getParam.get('page') : 1;
-
-    const style = {
-        position: "fixed",
-        zIndex: "999"
-    }
-
+    const executarSelecao = () => {
+        let codigoUf = document.querySelectorAll("#codUf4")[0].value;
+        setUf(codigoUf);
+    };
 
     useEffect(() => {
-        //setShowSpinner(true);
-        fetch(`${masterPath.url}/admin/usuario/buscar/all`)
-            .then((x) => x.json())
-            .then((res) => {
-                setUsuarios(res.usuarios);
-                setShowSpinner(false);
-            }).catch((err) => {
-                console.log(err);
-                setShowSpinner(false);
-            })
-        /*  fetch(`${masterPath.url}/admin/anuncio/edit/${9999}`)
-             .then((x) => x.json())
-             .then((res) => {
-                 //setIds(res[0]);
-                 //setHash(res[0].hash);
- 
-             }).catch((err) => {
-                 console.log(err)
-             }) */
-
         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
             .then((res) => {
-                setCaderno(res)
-            })
+                setCaderno(res);
+                //console.log(res)
+            });
         fetch(`${masterPath.url}/ufs`)
             .then((x) => x.json())
             .then((res) => {
                 setUfs(res);
-            })
+                //console.log(res)
+            });
+        fetch(`${masterPath.url}/pa`)
+            .then((x) => x.json())
+            .then((res) => {
+                setCodUser(res.message + 1);
+                //console.log(res)
+            });
         fetch(`${masterPath.url}/atividade/:codAtividade`)
             .then((x) => x.json())
             .then((res) => {
@@ -140,29 +159,78 @@ const FormCadastro = () => {
     }, []);
 
 
-    function gerarNumeroAleatorio() {
-        // Gerar números aleatórios entre 0 e 999 para cada parte
-        const parte1 = Math.floor(Math.random() * 1000);
-        const parte2 = Math.floor(Math.random() * 1000);
-        const parte3 = Math.floor(Math.random() * 1000);
 
-        // Formatando os números com zeros à esquerda para garantir três dígitos
-        const numeroFormatado = [
-            ('000' + parte1).slice(-2), // Adiciona zeros à esquerda e pega os últimos três dígitos
-            ('000' + parte2).slice(-3),
-            ('000' + parte3).slice(-3)
-        ].join('.'); // Une as partes com o separador '.'
+    const [descAnuncio, setDescAnuncio] = useState(false);
+    const [descEndereco, setDescEndereco] = useState(false);
+    const [descTelefone, setDescTelefone] = useState(false);
+    const [descCelular, setDescCelular] = useState(false);
 
-        setHash(numeroFormatado);
+    const changePreview = (event) => {
+
+        switch (event.target.name) {
+            case "descAnuncio":
+                setDescAnuncio(event.target.value);
+                break;
+            case "descEndereco":
+                setDescEndereco(event.target.value);
+                break;
+            case "descTelefone":
+                const novoValorTel = event.target.value.replace(/\D/g, '');
+
+                if (novoValorTel.length > 0) {
+                    const valorComMascara = `(${novoValorTel.substring(0, 2)}) ${novoValorTel.substring(2, 6)}-${novoValorTel.substring(6, 10)}`;
+                    setDescTelefone(valorComMascara);
+                } else {
+                    setDescTelefone(false);
+                }
+                break;
+            case "descCelular":
+                const novoValor = event.target.value.replace(/\D/g, '');
+
+                if (novoValor.length > 0) {
+                    const valorComMascara = `(${novoValor.substring(0, 2)}) ${novoValor.substring(2, 7)}-${novoValor.substring(7, 11)}`;
+                    setDescCelular(valorComMascara);
+                } else {
+                    setDescCelular(false);
+                }
+                break;
+
+        }
+    };
+
+    function aplicarCupom(e) {
+        let codId = e.target.value;
+
+        if (codId.length == 11) {
+            fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
+                .then((x) => x.json())
+                .then((res) => {
+                    let valorDesconto = res.IdsValue[0].desconto;
+                    let precoComDesconto = precoFixo - valorDesconto;
+                    setPrecoFixo(precoComDesconto);
+                    //console.log(precoComDesconto)
+                })
+        }
+
+
+
+        //console.log(codId);
+    };
+
+    const style = {
+        position: "fixed",
+        zIndex: "999"
     }
 
-
-    function criarAnuncio() {
-
-        var validation = false;
+    function cadastrarAnuncio(e) {
+        e.preventDefault();
         setShowSpinner(true);
+        moveToTop();
 
-        /* document.querySelectorAll('[name="pwd"]').forEach((item) => {
+        var validation = true;
+
+
+        document.querySelectorAll('[required]').forEach((item) => {
             if (item.value == "") {
                 item.style.border = "1px solid red";
                 validation = false;
@@ -170,37 +238,37 @@ const FormCadastro = () => {
             } else {
                 item.style.border = "1px solid gray";
                 validation = true;
+
             };
         });
 
-        document.querySelectorAll('select').forEach((item) => {
-            if (item.value == "") {
-                item.style.border = "1px solid red";
-                validation = false;
-                return;
-            } else {
-                item.style.border = "1px solid gray";
-                validation = true;
+        const formData = new FormData(e.target);
+        const formValues = Object.fromEntries(formData.entries());
+
+        console.log(formValues);
+
+        setIds((prevIds) => {
+            console.log('Estado Anterior:', prevIds);
+            return {
+                ...prevIds,
+                ...formValues
             };
-        }); */
+        });
 
-        /*        const data = {
-                   "usuario": document.getElementById('user').value,
-                   "descricao": document.getElementById('descID').value,
-                   "valorDesconto": document.getElementById('valorDesconto').value,
-                   "patrocinador": document.getElementById('patrocinador').value,
-                   "saldoUtilizado": document.getElementById('utilizar-saldo').value,
-                   "hash": hash
-               }; */
+        if (validation) {
+            const config = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(ids)
+            };
 
-        const config = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(ids)
-        };
 
-        if (!validation) {
-            fetch(`${masterPath.url}/admin/usuario/criar-anuncio`, config)
+
+            console.log(usuarios.codUsuario);
+
+            e.preventDefault();
+
+            fetch(`${masterPath.url}/admin/anuncio/create`, config)
                 .then((x) => x.json())
                 .then((res) => {
                     if (res.success) {
@@ -215,28 +283,17 @@ const FormCadastro = () => {
                     console.log(err);
                     setShowSpinner(false);
                 })
+        } else {
+            setShowSpinner(false);
         }
-
     };
-
 
     //liberar campo select
-    document.querySelectorAll('select').forEach((item) => {
+    document.querySelectorAll('[required]').forEach((item) => {
         item.addEventListener("change", (event) => {
-            event.target.style.border = "1px solid gray";
+            event.target.style.border = "none";
         })
     });
-    //liberar campo input
-    document.querySelectorAll('[name="pwd"]').forEach((item) => {
-        item.addEventListener("change", (event) => {
-            event.target.style.border = "1px solid gray";
-        })
-    });
-
-    const executarSelecao = () => {
-        let codigoUf = document.querySelectorAll('#coduf')[0].value;
-        setUf(codigoUf);
-    };
 
     // Função para lidar com mudanças nos campos de entrada
     const handleChange = (e) => {
@@ -245,455 +302,705 @@ const FormCadastro = () => {
             ...ids,
             [name]: value
         });
-
-        console.log("resressedsfasdfsf----------->", name, value)
+        //console.log(e.target)
 
 
     };
 
-    const handleSelectChange = (e) => {
-        executarSelecao(e);
-        handleChange(e);
+    const handleCpfCnpjChange = (event) => {
+        // Obter apenas os números da entrada de dados
+        let data = event.target.value.replace(/\D/g, "");
+
+        // Verificar o comprimento dos dados para definir se é CPF ou CNPJ
+        if (data.length > 11) {
+            // É CNPJ
+            data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}-${data.substr(12, 2)}`;
+        } else {
+            // É CPF
+            if (data.length > 9) {
+                data = `${data.substr(0, 3)}.${data.substr(3, 3)}.${data.substr(6, 3)}-${data.substr(9, 2)}`;
+            } else if (data.length > 6) {
+                data = `${data.substr(0, 3)}.${data.substr(3, 3)}.${data.substr(6)}`;
+            } else if (data.length > 3) {
+                data = `${data.substr(0, 3)}.${data.substr(3)}`;
+            }
+        }
+
+        // Atualizar o estado
+        setcpfCnpjValue(data);
     };
 
 
     return (
-        <div className="users">
+        <div className="App">
             <header style={style} className='w-100'>
                 <Header />
             </header>
-            <section className='py-5'>
-                {showSpinner && <Spinner />}
+            {showSpinner && <Spinner />}
+            <main>
+                <h1 id="title-caderno">
+                    Cadastro da Assinatura/Anúncio
+                </h1>
+                <h2 className="py-4">
+                    Preencha os campos abaixo para simular e incluir sua
+                    Assinatura/Anúncio.
+                </h2>
+                <form className="container d-flex flex-row" onSubmit={cadastrarAnuncio}>
+                    {/*inicio da row form */}
+                    <div className="row col-md-6 p-3 interna" id="form-cadastro-data">
+                        <div className="formulario-de-cadastro-titulo">
+                            <h2>Formulário de Cadastro</h2>
+                        </div>
+                        <div className="anuncio">
+                            <div className="form-group">
+                                <label className="col-md-5 control-label tipo-de-anuncio">
+                                    Tipo de anúncio:
+                                </label>
+                                <div className="col-md-12 anuncio-options">
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="codTipoAnuncio"
+                                            id="codTipoAnuncio-1"
+                                            value="1"
+                                            onClick={(e) => { setRadioCheck(e.target.value); setShowMap("none") }}
+                                            checked={radioCheck == 1}
+                                        />
+                                        Básico
+                                    </label>
+                                    {/*  <label className="px-3">
+                                        <input
+                                            type="radio"
+                                            name="codTipoAnuncio"
+                                            id="codTipoAnuncio-2"
+                                            value="2"
+                                            onClick={(e) => { setRadioCheck(e.target.value); setShowMap("block") }}
+                                            checked={radioCheck == 2}
+                                        />
+                                        Simples
+                                    </label> */}
+                                    <label className="mx-2">
+                                        <input
+                                            type="radio"
+                                            name="codTipoAnuncio"
+                                            id="codTipoAnuncio-3"
+                                            value="3"
+                                            onClick={(e) => setRadioCheck(e.target.value)}
+                                            checked={radioCheck == 3}
+                                        />
+                                        Completo
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {/*dados para codigo promocional*/}
+                        {radioCheck != 1 && <div
+                            className="codigo-promocional webcard"
+                            style={{ display: "block" }}
+                        >
+                            <h4 className="text-start">Código Promocional (ID):</h4>
+                            <div className="input-icon margin-top-10" id="codigoPromocional">
+                                <i className="fa fa-credit-card"></i>
+                                <input
+                                    type="text"
+                                    name="codDesconto"
+                                    id="codDesconto"
+                                    className="form-control"
+                                    placeholder="Digite seu código"
+                                    style={{ backgroundColor: "#96d18b" }}
+                                    onChange={aplicarCupom}
+                                />
+                                <input
+                                    type="hidden"
+                                    name="discountValue"
+                                    value=""
+                                    id="discountValue"
+                                />
+                            </div>
+                            <h5 className="text-start">
+                                Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)
+                            </h5>
+                        </div>}
 
-                <div className="container">
-                    <h2 className="pt-4 px-5 text-center">Adicionar Anúncio</h2>
-
-
-                    <form action="/action_page.php">
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="codUsuario" className="w-50 px-1">Usuário: (Digite o nome, e-mail ou CPF/CNPJ)</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="nm_usuario"
-                                name="codUsuario"
-                                value={ids.codUsuario}
-                                onChange={handleChange}
-                            />
+                        {/*dados para publicação*/}
+                        <div className="assinatura">
+                            <h2>Dados para Publicação</h2>
                         </div>
 
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="codAtividade" className="w-50 px-1">Atividade: (Digite o nome)</label>
-                            {/*          <input type="text"
-                                className="form-control h-25 w-50"
-                                id="descAtividade"
-                                name="codAtividade"
-                                value={ids.codAtividade}
-                                onChange={handleChange}
-                            /> */}
-                            <select
-                                name="codAtividade"
-                                id="codAtividade"
-                                className="form-control h-25 w-50"
-                                onChange={handleChange} value={ids.codAtividade}
-                            >
-                                <option value="">Selecione a atividade principal</option>
-                                {atividades &&
+                        <div className="codigo-promocional">
+                            <h4 style={{ margin: "10px 0 25px 2px" }}>
+                                Código PA: <strong>{codUser}</strong>
+                            </h4>
 
-                                    atividades.map(
-                                        (item) =>
 
-                                            <option
-                                                key={item.id}
-                                                value={item.id}
+
+                            <div className="input-icon margin-top-10">
+                                <i className="fa fa-user"></i>
+
+                                <input
+                                    type="text"
+                                    name="codUsuario"
+                                    id="codUsuario"
+                                    className="form-control"
+                                    placeholder="Digite o nome, e-mail ou CPF/CNPJ do usuario"
+                                    maxlength="40"
+                                    onChange={changePreview}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <div className="input-icon margin-top-10">
+                                    <i className="fa fa-briefcase icone-form p-0"></i>
+                                    <select
+                                        name="codAtividade"
+                                        id="codAtividade"
+                                        className="form-control"
+                                        required
+                                    >
+                                        <option value="">Selecione a atividade principal</option>
+                                        {atividades &&
+
+                                            atividades.map(
+                                                (item) =>
+
+                                                    <option
+                                                        key={item.id}
+                                                        value={item.id}
+                                                    >
+                                                        {item.atividade}
+                                                    </option>
+
+                                            )}
+                                    </select>
+                                </div>
+
+                                {/* <Marcadores /> */}
+                                <TagsInput tagValue={setTagValue} />
+
+                                <div className="row">
+                                    <div class="col-md-4 col-xs-12">
+                                        <div class="form-group input-icon margin-top-10">
+                                            <i class="fa fa-compass icone-form p-0"></i>
+                                            <select
+                                                name="codUf"
+                                                id="codUf4"
+                                                class="form-control"
+                                                onChange={executarSelecao}
+                                                required
                                             >
-                                                {item.atividade}
-                                            </option>
+                                                <option value="" selected="selected">
+                                                    - UF -
+                                                </option>
+                                                {uf.map((item) => (
+                                                    <option
+                                                        id={item.id_uf}
+                                                        key={item.id_uf}
+                                                        value={item.id_uf}
+                                                    >
+                                                        {item.sigla_uf}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
 
-                                    )}
-                            </select>
-                        </div>
+                                    <div class="col-md-8 col-xs-12">
+                                        <div class="form-group selectCaderno form-group input-icon margin-top-10">
+                                            <i class="fa fa-map-marker icone-form p-0"></i>
+                                            <select
+                                                name="codCaderno"
+                                                id="codUf5"
+                                                class="form-control"
+                                                required
+                                            >
+                                                <option value="">- TODO -</option>
+                                                {caderno.map(
+                                                    (item) =>
+                                                        item.codUf == ufSelected && (
+                                                            <option
+                                                                id={item.codCaderno}
+                                                                key={item.codCaderno}
+                                                                value={item.codCaderno}
+                                                            >
+                                                                {item.nomeCaderno}
+                                                            </option>
+                                                        )
+                                                )}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="input-icon margin-top-10">
+                                    <i className="fa fa-building"></i>
 
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="codTipoAnuncio" className="w-50 px-1">Tipo de anúncio</label>
-                            <select name="codTipoAnuncio" id="descTipoAnuncio" className="w-50 py-1" onChange={handleChange} value={ids.codTipoAnuncio} >
-                                <option selected="selected">- Selecione o tipo de anúncio -</option>
-                                <option value="1">Básico</option>
-                                <option value="2">Simples</option>
-                                <option value="3">Completo</option>
-                            </select>
-                        </div>
+                                    <input
+                                        type="text"
+                                        name="descAnuncio"
+                                        id="descAnuncio"
+                                        className="form-control"
+                                        placeholder="Digite o nome"
+                                        maxlength="40"
+                                        onChange={changePreview}
+                                        required
+                                    />
+                                </div>
 
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="codUf" className="w-50 px-1">UF:</label>
-                            <select name="codUf" id="coduf" onChange={handleSelectChange} className="w-50 py-1">
-                                <option value="" selected="selected">- Selecione um estado -</option>
-                                {
-                                    uf.map((uf, i) => (
-                                        <option key={i} value={uf.id_uf}>{uf.sigla_uf}</option>
-                                    ))
-                                }
-                            </select>
-                        </div>
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="codCaderno" className="w-50 px-1">Caderno:</label>
-                            <select name="codCaderno" id="codCaderno" className="w-50 py-1" onChange={handleChange} value={ids.codCaderno}>
-                                <option value="" selected="selected">- Selecione uma cidade -</option>
-                                {
-                                    caderno.map((cidades) => (
-                                        cidades.codUf == ufSelected && (
-                                            <option value={cidades.codCaderno}>{cidades.nomeCaderno}</option>
-                                        )
-                                    ))
-                                }
-                            </select>
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="nm_empresa" className="w-50 px-1">Nome da empresa:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="nm_empresa"
-                                name="nm_empresa"
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label className="w-50 px-1">Imagem:</label>
-                            <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descImagem} preview={true} teste={handleChange} />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label className="w-50 px-1">Promoção:</label>
-                            <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descPromocao} preview={false} />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label className="w-50 px-1">Validade:</label>
-                            <input type="date" name="validade" id="validade" className="form-control h-25 w-50" />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label className="w-50 px-1">Imagem da Parceria:</label>
-                            <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descPromocao} preview={false} />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="urlParceria" className="w-50 px-1">Site da Parceria:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="urlParceria"
-                                name="urlParceria"
-                            />
-                            <span>Inserir URL completa para acesso ao site da parceria</span>
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label className="w-50 px-1">Contrato:</label>
-                            <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descPromocao} preview={false} onChange={handleChange} />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descEndereco" className="w-50 px-1">Endereço:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="endereco"
-                                name="descEndereco"
-                                value={ids.descEndereco}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descCEP" className="w-50 px-1">CEP:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="cod_postal"
-                                name="descCEP"
-                                value={ids.descCEP}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descTelefone" className="w-50 px-1">Telefone:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="nu_telefone"
-                                name="descTelefone"
-                                value={ids.descTelefone}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descCelular" className="w-50 px-1">Celular:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="nu_celular"
-                                name="descCelular"
-                                value={ids.descCelular}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descDescricao" className="w-50 px-1">Descrição do anúncio:</label>
-                            <textarea type="text"
-                                className="form-control h-25 w-50"
-                                id="descAnuncio"
-                                name="descDescricao"
-                                value={ids.descDescricao}
-                                onChange={handleChange}
-                            ></textarea>
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descSite" className="w-50 px-1">Site:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="urlSite"
-                                name="descSite"
-                                value={ids.descSite}
-                                onChange={handleChange}
-                                placeholder='Digite uma url válida'
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descSkype" className="w-50 px-1">Skype:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="urlSkype"
-                                name="descSkype"
-                                value={ids.descSkype || ''}
-                                onChange={handleChange}
-                                placeholder='Digite uma url válida'
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descVideo" className="w-50 px-1">Youtube:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="urlYoutube"
-                                name="descVideo"
-                                value={ids.descVideo}
-                                onChange={handleChange}
-                                placeholder='Digite uma url válida'
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descEmailComercial" className="w-50 px-1">E-mail comercial:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="emailComercial"
-                                name="descEmailComercial"
-                                value={ids.descEmailComercial}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descEmailRetorno" className="w-50 px-1">E-mail alternativo:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="emailAlternativo"
-                                name="descEmailRetorno"
-                                value={ids.descEmailRetorno}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descFacebook" className="w-50 px-1">Facebook:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="urlFacebook"
-                                name="descFacebook"
-                                value={ids.descFacebook}
-                                onChange={handleChange}
-                                placeholder='Digite uma url válida'
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descInsta" className="w-50 px-1">Instagram:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="urlInstagram"
-                                name="descInsta"
-                                value={ids.descInsta}
-                                onChange={handleChange}
-                                placeholder='Digite uma url válida'
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descTweeter" className="w-50 px-1">Twitter:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="urlTwitter"
-                                name="descTweeter"
-                                value={ids.descTweeter}
-                                onChange={handleChange}
-                                placeholder='Digite uma url válida'
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descWhatsApp" className="w-50 px-1">WhatsApp:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="nu_whatszap"
-                                name="descWhatsApp"
-                                value={ids.descWhatsApp}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descAndroid" className="w-50 px-1">Aplicativo Android:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="urlAndroid"
-                                name="descAndroid"
-                                value={ids.descAndroid}
-                                onChange={handleChange}
-                                placeholder='Digite uma url válida'
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descApple" className="w-50 px-1">Aplicativo iOS:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="urlIos"
-                                name="descApple"
-                                value={ids.descApple}
-                                onChange={handleChange}
-                                placeholder='Digite uma url válida'
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descTipoPessoa" className="w-50 px-1">Tipo de pessoa:</label>
-                            <select name="descTipoPessoa" id="descTipoPessoa" className="w-50 py-1" value={ids.descTipoPessoa} onChange={handleChange}>
-                                <option selected="selected">- Selecione o tipo de pessoa -</option>
-                                <option value="pf">Pessoa Física</option>
-                                <option value="pj">Pessoa Jurídica</option>
-                            </select>
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descCPFCNPJ" className="w-50 px-1">CPF/CNPJ:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="nu_documento"
-                                name="descCPFCNPJ"
-                                value={ids.descCPFCNPJ}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descNomeAutorizante" className="w-50 px-1">Nome autorizante:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="nm_autorizante"
-                                name="descNomeAutorizante"
-                                value={ids.descNomeAutorizante}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descEmailAutorizante" className="w-50 px-1">E-mail autorizante:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="emailAutorizante"
-                                name="descEmailAutorizante"
-                                value={ids.descEmailAutorizante}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="chavePix" className="w-50 px-1">Chave Pix:</label>
-                            <input type="text"
-                                className="form-control h-25 w-50"
-                                id="chavePix"
-                                name="chavePix"
-                                value={ids.descChavePix}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="text-center py-3">
-                            <button type="button"
-                                className="btn btn-info custom-button mx-2 text-light"
-                                onClick={criarAnuncio} >Salvar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/espacos')}>Cancelar</button>
-                        </div>
-                    </form>
-
-                    {/* <h2>Vertical (basic) form</h2> */}
-                    {/*  <form action="/action_page.php">
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            {hash && <span>Código: {hash}</span>} 
-                            <label htmlFor="user" className="w-50 px-1">Usuário:</label>
-                            <select name="user" id="user" className="w-50 py-1" onChange={gerarNumeroAleatorio}>
-                            {
-                                    usuarios.map((user) => (
-                                        <option value={user.codUsuario}>{user.descNome}</option>
-                                    ))
-                                }
-                            </select>
-                        </div>
-
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="descID" className="w-50 px-1">Descrição do ID:</label>
-                            <input type="text" className="form-control h-25 w-50" id="descID" placeholder="" name="descID" />
-                        </div>
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="valorDesconto" className="w-50 px-1">Valor do desconto:</label>
-                            <input type="text" className="form-control h-25 w-50" id="valorDesconto" placeholder="" name="valorDesconto" />
-                            <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span>
-                        </div>
+                                {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+                                {/*      {radioCheck != 1 && 
+                                
+                                <ChooseFile codigoUser={codUser} largura={"w-100"} codImg={ids.descImagem} preview={false} patrocinador={handleChange} miniPreview={true} />
 
 
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="patrocinador" className="w-50 px-1">Habilitar Patrocinador ?</label>
-                            <select name="patrocinador" id="patrocinador" className="w-50 py-1">
-                                <option value="1">Sim</option>
-                                <option value="0">Não</option>
-                            </select>
-                        </div>
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="utilizar-saldo" className="w-50 px-1">Utilizar Saldo ?</label>
-                            <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1">
-                                <option value="1">Sim</option>
-                                <option value="0">Não</option>
-                            </select>
-                        </div>
+                                } */}
 
-                      
-                        <div className="text-center py-3">
-                            <button type="button"
-                                className="btn btn-info custom-button mx-2 text-light"
-                                onClick={criarID}
-                            >Salvar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/desconto')}>Cancelar</button>
+                                <div className="input-icon margin-top-10">
+                                    <i className="fa fa-map-marker"></i>
+                                    <input
+                                        type="text"
+                                        name="descEndereco"
+                                        id="descEndereco"
+                                        className="form-control"
+                                        placeholder="Digite o endereço"
+                                        onChange={changePreview}
+                                        required
+                                    />
+                                </div>
+                                {radioCheck != 1 && <div
+                                    className="input-icon margin-top-10 webcard"
+                                    style={{ display: "block" }}
+                                >
+                                    <i className="fa fa-location-arrow"></i>
+                                    <input
+                                        type="text"
+                                        name="descCEP"
+                                        id="descCEP"
+                                        className="form-control"
+                                        placeholder="Digite o CEP"
+                                        onChange={(e) => setCep(e.target.value)}
+                                        required
+                                    />
+                                </div>}
+
+                                {/* {radioCheck != 1 && <MapContainer cep={cep} />} */}
+                                <MapContainer cep={cep} showMap={showMap} />
+
+
+                                <div className="row webcard" style={{ display: "block" }}>
+                                    <div className="col-md-12"></div>
+                                </div>
+                                <div className="input-icon margin-top-10">
+                                    <i className="fa fa-phone"></i>
+                                    <InputMask
+                                        type="text"
+                                        name="descTelefone"
+                                        id="descTelefone"
+                                        className="form-control"
+                                        placeholder="(99) 99999-9999"
+                                        onChange={changePreview}
+                                        required
+                                        mask={'(99) 9999-9999'}></InputMask>
+
+                                </div>
+                                {radioCheck != 1 && <div
+                                    className="input-icon margin-top-10 webcard"
+                                    style={{ display: "block" }}
+                                >
+                                    <i className="fa fa-mobile"></i>
+                                    <InputMask
+                                        type="text"
+                                        name="descCelular"
+                                        id="descCelular"
+                                        className="form-control"
+                                        placeholder="(99) 99999-9999"
+                                        onChange={changePreview}
+                                        required
+                                        mask={'(99) 99999-9999'}></InputMask>
+                                    {/*  <input
+                                        type="text"
+                                        name="descCelular"
+                                        id="descCelular"
+                                        className="form-control"
+                                        placeholder="Digite o seu celular"
+                                        maxLength={11}
+                                        onChange={changePreview}
+                                        required
+                                    /> */}
+                                </div>}
+                            </div>
                         </div>
-                    </form> */}
-                </div>
-            </section >
+                        {/*dados para publicação*/}
+
+                        {/* Detalhes do anuncio */}
+
+                        {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
+                            <h2>Detalhes do Anúncio</h2>
+                        </div>}
+                        {radioCheck != 1 && <div
+                            className="codigo-promocional webcard"
+                            style={{ display: "block" }}
+                        >
+                            <div className="input-icon margin-top-10">
+                                <i className="fa fa-youtube"></i>
+                                <input
+                                    type="text"
+                                    name="descVideo"
+                                    id="descVideo"
+                                    className="form-control"
+                                    placeholder="Digite o vídeo"
+                                />
+                            </div>
+                            <div className="input-icon margin-top-10">
+                                <i className="fa fa-envelope"></i>
+                                <input
+                                    type="text"
+                                    name="descEmailComercial"
+                                    id="descEmailComercial"
+                                    className="form-control"
+                                    placeholder="Digite o e-mail (comercial)"
+                                    required
+                                />
+                            </div>
+                            <div className="input-icon margin-top-10">
+                                <i className="fa fa-envelope-o"></i>
+                                <input
+                                    type="text"
+                                    name="descEmailRetorno"
+                                    id="descEmailRetorno"
+                                    className="form-control"
+                                    placeholder="Digite o e-mail (alternativo)"
+                                />
+                            </div>
+                            <div className="input-icon margin-top-10">
+                                <i className="fa fa-mobile"></i>
+                                <InputMask
+                                    type="text"
+                                    name="descWhatsApp"
+                                    id="descWhatsApp"
+                                    className="form-control"
+                                    placeholder="(99) 99999-9999"
+                                    onChange={changePreview}
+                                    required
+                                    mask={'(99) 99999-9999'}></InputMask>
+                            </div>
+                        </div>}
+                        {/* Detalhes do anuncio */}
+
+                        {/* Autorizante */}
+
+                        <div className="assinatura">
+                            <h2>Autorizante</h2>
+                        </div>
+                        <div className="codigo-promocional">
+                            <div className="row">
+                                <div className="form-group row">
+                                    <label className="col-md-4 control-label tipo-de-anuncio">
+                                        Tipo:
+                                    </label>
+                                    <div className="col-md-8 anuncio-options">
+                                        <label className="px-3">
+                                            <input
+                                                type="radio"
+                                                name="descTipoPessoa"
+                                                id="descTipoPessoa-pf"
+                                                value="pf"
+                                                onChange={(e) => setPersonType(e.target.value)}
+                                                checked={personType == "pf"}
+                                            />
+                                            Pessoa física
+                                        </label>
+                                        <span className="radio-saparator"></span>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="descTipoPessoa"
+                                                id="descTipoPessoa-pj"
+                                                value="pj"
+                                                onChange={(e) => setPersonType(e.target.value)}
+                                                checked={personType == "pj"}
+                                            />
+                                            Pessoa jurídica
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="input-icon margin-top-10">
+                                <i className="fa fa-credit-card"></i>
+                                <input
+                                    type="text"
+                                    name="descCPFCNPJ"
+                                    id="descCPFCNPJ"
+                                    className="form-control"
+                                    placeholder="Digite o seu CPF ou CNPJ"
+                                    onChange={handleCpfCnpjChange}
+                                    value={cpfCnpjValue}
+                                    required
+                                />
+                            </div>
+                            <div className="input-icon margin-top-10  py-2">
+                                <i className="fa fa-user"></i>
+                                <input
+                                    type="text"
+                                    name="descNomeAutorizante"
+                                    id="descNomeAutorizante"
+                                    className="form-control"
+                                    placeholder="Digite o seu nome"
+                                    required
+                                />
+                            </div>
+                            <div className="input-icon margin-top-10">
+                                <i className="fa fa-envelope"></i>
+                                <input
+                                    type="text"
+                                    name="descEmailAutorizante"
+                                    id="descEmailAutorizante"
+                                    className="form-control"
+                                    placeholder="Digite o seu e-mail"
+                                    required
+                                />
+                            </div>
+                            {/* {radioCheck != 1 && */} <div class="input-icon margin-top-10">
+                                <h4 className="text-start pt-2">Responsável (ID) (opcional):</h4>
+                                <div class="input-icon margin-top-10" id="codigoPromocional">
+                                    <i class="fa fa-credit-card"></i>
+
+                                    <input type="text" name="discountHash" id="discountHash" value="" class="form-control" placeholder="Digite seu código" />
+                                    <input type="hidden" name="discountValue" value="" id="discountValue" />
+                                </div>
+                                <h5 className="text-start">Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)</h5>
+                            </div>{/* } */}
+                        </div>
+                        {/* Autorizante */}
+
+                        {/* Forma de Pagamento */}
+
+                        {radioCheck != 1 && <div
+                            className="assinatura webcard formaPagamento"
+                            style={{ display: "block" }}
+                        >
+                            <h2>Forma de Pagamento</h2>
+                        </div>}
+                        {radioCheck != 1 && <div
+                            className="codigo-promocional webcard formaPagamento"
+                            style={{ display: "block" }}
+                        >
+                            <div className="row">
+                                <div className="form-group">
+                                    <div className="hidden">
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="formaPagamento"
+                                                id="formaPagamento-pagseguro"
+                                                value="pagseguro"
+                                                checked="checked"
+                                            />
+                                            <i
+                                                className="wid pagseguro"
+                                                data-toggle="tooltip"
+                                                title="PAGSEGURO"
+                                            ></i>
+                                        </label>
+                                    </div>
+                                    <div className="col-md-12 observacao">
+                                        <h5>
+                                            Você será redirecionado para o ambiente do PagSeguro
+                                        </h5>
+                                        <img src="../../assets/img/cartoes.gif" alt="Cartões" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>}
+                        {/* Forma de Pagamento */}
+
+                    </div>
+                    {/*fina da row*/}
+
+                    {/* simulacao preview row */}
+                    <div className="row col-md-7 p-4 interna">
+                        <div
+                            className="simulacao"
+                            style={{ position: "sticky" }}
+                        /* style={(elementoProximoTopo) ? {position: "fixed", top: "0px", marginTop: "20px"} : { position: "relative" }} */
+                        >
+
+
+                            {/* preview */}
+
+                            <div className="posicao-preview">
+
+                                <div className="simulacao-do-anuncio">
+                                    <h2 className="assinatura">Simulação do Anúncio</h2>
+                                </div>
+
+                                <div className="codigo-promocional posicao-preview">
+                                    <div className="cartao p-3">
+                                        <div className="conteudo semImagem">
+                                            <h2 className="nome-empresa text-start">{(descAnuncio) ? descAnuncio : "Nome da empresa"}</h2>
+                                            {radioCheck != 1 && <h4
+                                                className="slogan webcard text-start"
+                                                style={{ display: "block" }}
+                                            >
+                                                Frase/slogan da empresa
+                                            </h4>}
+                                            <p className="text-start">
+                                                <i className="fa fa-map-marker"></i>
+                                                <span className="sim-end">{(descEndereco) ? descEndereco : "Endereço da empresa"}</span>
+                                            </p>
+                                            <p className="text-start">
+                                                <i className="fa fa-phone"></i>
+                                                <span className="sim-tel">{(descTelefone) ? descTelefone : "(xx) xxxx-xxxx"}</span>
+                                            </p>
+                                            {radioCheck != 1 && <p
+                                                className="webcard text-start"
+                                                style={{ display: "block" }}
+                                            >
+                                                <i className="fa fa-phone"></i>
+                                                <span className="cel">{(descCelular) ? descCelular : "(xx) xxxxx-xxxx"}</span>
+                                            </p>}
+                                        </div>
+                                        <div class="conteudo comImagem" style={{ display: "none" }}>
+                                            <img src="/resources/upload/istockphoto_1442417585_612x612_20240428_215703.jpg" height={191} />
+                                        </div>
+                                        {radioCheck != 1 && <div id="area-icons-actions" className="col-md-6">
+                                            <Tooltip text={"Mídias"}>
+                                                <div className="dropdown">
+                                                    <button
+                                                        id="dropdown"
+                                                        className="btn btn-primary dropdown-toggle"
+                                                        data-bs-toggle="dropdown"
+                                                    >
+                                                        <i>
+                                                            <BsShareFill />
+                                                        </i>
+                                                    </button>
+                                                    <ul id="dropdown-redes" className="dropdown-menu">
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsFacebook /> Facebook
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsInstagram /> Instagram
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsTwitter /> Tweet
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsYoutube className="redes" /> Youtube
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsWhatsapp /> Whatsapp
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsSkype /> Skype
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsHeadset /> Sac-Fale Comigo
+                                                        </a>
+                                                    </ul>
+                                                </div>
+                                            </Tooltip>
+                                            <Tooltip text={"Mapa"}>
+                                                <i>
+                                                    <img
+                                                        src="../assets/img/link_mapa.png"
+                                                        alt=""
+                                                        height={40}
+                                                    />
+                                                </i>
+                                            </Tooltip>
+
+                                            <Tooltip text={"Site"}>
+                                                <i>
+                                                    <img
+                                                        src="../assets/img/link_site.png"
+                                                        alt=""
+                                                        height={40}
+                                                    />
+                                                </i>
+                                            </Tooltip>
+                                            <Tooltip text={"Promoção"}>
+                                                <i>
+                                                    <img
+                                                        src="../assets/img/link_promocao.png"
+                                                        alt=""
+                                                        height={40}
+                                                    />
+                                                </i>
+                                            </Tooltip>
+
+                                            <Tooltip text={"Compartilhar"}>
+                                                <div className="dropdown">
+                                                    <button
+                                                        id="dropdown"
+                                                        className="btn btn-primary dropdown-toggle"
+                                                        data-bs-toggle="dropdown"
+                                                    >
+                                                        <i>
+                                                            <BsFillSendFill />
+                                                        </i>
+                                                    </button>
+                                                    <ul id="dropdown-redes" className="dropdown-menu">
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsFacebook /> Facebook
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsInstagram /> Instagram
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsTwitter /> Tweet
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsYoutube /> Youtube
+                                                        </a>
+                                                        <a href="#" className="dropdown-item">
+                                                            <BsWhatsapp /> Whatsapp
+                                                        </a>
+                                                    </ul>
+                                                </div>
+                                            </Tooltip>
+                                        </div>}
+
+                                    </div>
+                                    <div className="assinatura margin-top-20">
+
+                                        {radioCheck != 1 && <h2 className="webcard">
+                                            <span className="preco">R$ {precoFixo},00</span>/mês
+                                        </h2>}
+                                        {radioCheck == 1 && <h2 className="simples uppercase">
+                                            Grátis
+                                        </h2>}
+                                    </div>
+                                    <div className="margin-top-20">
+                                        {radioCheck != 1 && <p className="webcard" style={{ display: "block" }}>
+                                            *A duração da assinatura é de 12 meses, portanto válido até
+                                            14/04/2025.
+                                        </p>}
+                                        <button
+                                            type="submit"
+                                            className="btn-block formulario-de-cadastro btn btn-primary"
+                                            id="anunciar"
+                                        /* onClick={cadastrarAnuncio} */
+                                        >
+                                            Confirmar
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        {/* preview */}
+                    </div>
+                    {/* simulacao row */}
+                </form>
+            </main>
+
             <footer className='w-100' style={{ position: "relative", bottom: "0px" }}>
                 <p className='w-100 text-center'>© MINISITIO</p>
             </footer>
-        </div >
+        </div>
     );
 }
 
-export default FormCadastro;
+export default ComprarAnuncio;

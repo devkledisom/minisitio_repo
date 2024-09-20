@@ -45,7 +45,7 @@ function ComprarAnuncio() {
   const [personType, setPersonType] = useState("pf");
   const [cep, setCep] = useState();
   const [showMap, setShowMap] = useState("none");
-  const [precoFixo, setPrecoFixo] = useState(5);
+  const [precoFixo, setPrecoFixo] = useState(28);
 
 
   useEffect(() => {

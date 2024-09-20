@@ -13,7 +13,15 @@ app.use(cors());
 //rota principal
 app.use(route);
 
+app.use('/api', express.static('public'));
+app.use('/imgdefault', express.static('public'));
+
 app.use('/api/files', express.static(path.resolve(__dirname, "public", "upload", "img")));
+
+app.get('/outapi', (req, res) => {
+    console.log(req)
+    res.json({})
+});
 
 app.listen(port, () => {
     console.log("rodando na porta: ", port);

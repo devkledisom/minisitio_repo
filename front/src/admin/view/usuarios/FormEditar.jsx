@@ -335,7 +335,7 @@ const FormCadastro = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">Cidade:</label>
                             <select name="cidade" id="codcidade" className="w-50 py-1" value={usuarios.codCidade} onChange={handleChange}>
-                                <option value="" selected="selected">- Selecione uma cidade -</option>
+                              {/*   <option value="" selected="selected">- Selecione uma cidade -</option> */}
                                 {
                                     caderno.map((cidades) => (
                                         cidades.codUf == ufSelected &&
@@ -349,7 +349,7 @@ const FormCadastro = () => {
                                 className="btn btn-info custom-button mx-2 text-light"
                                 onClick={cadastrarUsuario}
                             >Atualizar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/users')}>Cancelar</button>
+                            <button type="submit" className="btn custom-button" onClick={() => navigate('/admin/users')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

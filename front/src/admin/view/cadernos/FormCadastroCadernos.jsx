@@ -5,6 +5,9 @@ import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { masterPath } from '../../../config/config';
 
+//LIBS
+import Swal from 'sweetalert2';
+
 //componente
 import Header from "../Header";
 import Spinner from '../../../components/Spinner';
@@ -109,8 +112,12 @@ const FormCadastro = () => {
                 .then((res) => {
                     if (res.success) {
                         setShowSpinner(false);
-
-                        alert("Caderno Cadastrado!");
+                        Swal.fire({
+                            title: 'sucesso!',
+                            text: 'Caderno Cadastrado!',
+                            icon: 'success',
+                            confirmButtonText: 'Confirmar'
+                          })
                     } else {
                         setShowSpinner(false);
 
@@ -206,7 +213,7 @@ const FormCadastro = () => {
                                 className="btn btn-info custom-button mx-2 text-light"
                                 onClick={cadastrarUsuario}
                             >Salvar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/cadernos')}>Cancelar</button>
+                            <button type="submit" className="btn custom-button" onClick={() => navigate('/admin/cadernos')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

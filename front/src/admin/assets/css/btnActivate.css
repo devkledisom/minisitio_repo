@@ -1,0 +1,31 @@
+.BtnActive {
+    
+
+}
+
+.ativo {
+    border: 1px solid gray;
+    background-color: #5BB75B;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 13px;
+   /*  padding: 4px 10px; */
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: inset 0px -13px 8px rgba(0, 0, 0, 0.1);
+}
+
+.desativo {
+    border: 1px solid gray;
+    background-color: #DA4F49;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 13px;
+   /*  padding: 4px 10px; */
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: inset 0px -13px 8px rgba(0, 0, 0, 0.1);
+}
+
+.swal2-popup {
+    font-size: 0.7rem !important;
+   /*  font-family: Georgia, serif; */
+  }

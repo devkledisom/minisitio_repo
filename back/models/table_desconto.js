@@ -54,7 +54,7 @@ const Desconto = database.define('desconto', {
     hash: {
         type: Sequelize.STRING(150),
         allowNull: false,
-        unique: false,
+        unique: true,
         validate: {
             notEmpty: {
                 msg: "Esse campo não pode está vazio.."
@@ -156,11 +156,11 @@ const Desconto = database.define('desconto', {
         type: Sequelize.STRING(150),
         allowNull: false,
         unique: false,
-        validate: {
+        /* validate: {
             notEmpty: {
                 msg: "Esse campo não pode está vazio.."
             },
-        }
+        } */
     }
 },
     {

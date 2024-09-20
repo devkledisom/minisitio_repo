@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useHistory, useNavigate } from 'react-router-dom';
 
-const Pagination = ({ totalPages, table }) => {
+const Pagination = ({ totalPages, paginaAtual, totalItem, table }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate();
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        navigate(`/${table}?page=${page}`);
+        navigate(`/admin/${table}?page=${page}`);
     };
 
     const renderPaginationNumbers = () => {
@@ -37,6 +37,9 @@ const Pagination = ({ totalPages, table }) => {
     return (
         <div className='container-fluid'>
             <div className="row px-4">
+                <div className="pagination w-50 p-0 d-flex justify-content-start">
+                    <div>Página {paginaAtual}/{totalPages} (Total: {totalItem})</div>
+                </div>
                 <ul className="pagination p-0 d-flex justify-content-end">
                     <li className="page-item"><a className="page-link" href="#" onClick={() => handlePageChange(Math.max(1, currentPage - 1))}>Anterior</a></li>
                     {renderPaginationNumbers()}

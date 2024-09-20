@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Localidade from "../../components/Localidade";
 import { masterPath } from "../../config/config";
 
@@ -16,9 +17,10 @@ const ContentChildForm = (props) => {
   const [caderno, setCaderno] = useState([]);
   const [atividades, setAtividades] = useState();
   const [cpf, setCPF] = useState('');
-  const [liberado, setLiberado] = useState(false);
   const [alert, setAlert] = useState(false);
-  
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const navigate = useNavigate();
 
   //ref
   const loadingButton = useRef();
@@ -54,9 +56,43 @@ const ContentChildForm = (props) => {
         //console.log(res)
         //decodificar()
       });
+
+
+    const doc = searchParams.get('doc');
+    setCPF(doc);
+
   }, []);
 
+  function verificarCampos() {
+    let flag = false;
+
+    document.querySelectorAll(".modal-content input").forEach((item, i) => {
+      if (item.value.trim() == '' && item.name != 'codUsuario') {
+        item.style.border = "1px solid red";
+        flag = false;
+      } else {
+        item.style.border = "none";
+        flag = true;
+      }
+
+      if (document.querySelectorAll(".modal-content input").length == i + 1 && flag) {
+        console.log("ok");
+
+        loadingButton.current.style.display = "block";
+
+        sendObj();
+
+      }
+
+
+
+
+    })
+
+  };
+
   function sendObj() {
+    console.log("clicou");
     const obj = {
       "TipoPessoa": pegarElemento('#descTipoPessoa-pf').checked ? "pf" : "pj",
       "CPFCNPJ": pegarElemento('#descCPFCNPJ').replace(/[.-]/g, ''),
@@ -79,24 +115,10 @@ const ContentChildForm = (props) => {
 
     };
 
-    document.querySelectorAll(".modal-content input").forEach((item, i) => {
-      if (item.value.trim() == '') {
-        item.style.border = "1px solid red";
-        setLiberado(false)
-      } else {
-        item.style.border = "none";
-        setLiberado(true)
-      }
-    })
-
-    if (!liberado) {
-      return;
-    } else {
-      loadingButton.current.style.display = "block";
-    }
 
 
-    console.log(obj)
+
+    //console.log(obj)
 
     fetch(`${masterPath.url}/admin/usuario/create`, {
       method: "POST",
@@ -132,34 +154,34 @@ const ContentChildForm = (props) => {
       codAnuncio: 37,
       codUsuario: codUser,
       codTipoAnuncio: 2,
-      codAtividade: buscarElemento("codAtividade").value,
+      codAtividade: buscarElemento("codAtividade"),
       codPA: null,
       codDuplicado: null,
       tags: "torteria,bolos,tortas,salgados,festas",
-      codCaderno: buscarElemento("codUf5").value,
-      codUf: buscarElemento("codUf4").value,
-      codCidade: buscarElemento("codUf5").value,
-      descAnuncio: buscarElemento("descAnuncio").value,
+      codCaderno: buscarElemento("codUf5"),
+      codUf: buscarElemento("codUf4"),
+      codCidade: buscarElemento("codUf5"),
+      descAnuncio: buscarElemento("descAnuncio"),
       descAnuncioFriendly: "oficina-de-tortas",
       descImagem: localStorage.getItem("imgname"),
-      descEndereco: buscarElemento("descEndereco").value,
-      descTelefone: buscarElemento("descTelefone").value,
-      descCelular: buscarElemento("descCelular").value,
+      descEndereco: buscarElemento("descEndereco"),
+      descTelefone: buscarElemento("descTelefone"),
+      descCelular: buscarElemento("descCelular"),
       descDescricao: "",
       descSite: "www.oficinadetortas.com.br",
       descSkype: null,
       descPromocao: "",
-      descEmailComercial: buscarElemento("descEmailComercial").value,
-      descEmailRetorno: buscarElemento("descEmailRetorno").value,
+      descEmailComercial: buscarElemento("descEmailComercial"),
+      descEmailRetorno: buscarElemento("descEmailRetorno"),
       descFacebook: "",
       descTweeter: "",
-      descWhatsApp: buscarElemento("descWhatsApp").value,
-      descCEP: buscarElemento("descCEP").value,
+      descWhatsApp: buscarElemento("descWhatsApp"),
+      descCEP: buscarElemento("descCEP"),
       descTipoPessoa: buscarElemento("descTipoPessoa-pf").checked ? "pf" : "pj",
-      descCPFCNPJ: buscarElemento("descCPFCNPJ").value,
-      descNomeAutorizante: buscarElemento("descNomeAutorizante").value,
-      descEmailAutorizante: buscarElemento("descEmailAutorizante").value,
-      codDesconto: buscarElemento("discountHash").value,
+      descCPFCNPJ: buscarElemento("descCPFCNPJ"),
+      descNomeAutorizante: buscarElemento("descNomeAutorizante"),
+      descEmailAutorizante: buscarElemento("descEmailAutorizante"),
+      codDesconto: buscarElemento("discountHash"),
       descLat: null,
       descLng: null,
       formaPagamento: null,
@@ -189,9 +211,16 @@ const ContentChildForm = (props) => {
 
     //console.log(obj)
 
+
     function buscarElemento(param) {
       let elementoSelecionado = document.querySelector(`#${param}`);
-      return elementoSelecionado;
+
+      if (elementoSelecionado != undefined) {
+        return elementoSelecionado.value;
+      } else {
+        return null;
+      }
+
     }
 
     if (obj.descCPFCNPJ == "") {
@@ -199,8 +228,8 @@ const ContentChildForm = (props) => {
       return;
     }
 
-    //console.log(obj);
-    fetch(`${masterPath.url}/admin/usuario/criar-anuncio`, {
+    //console.log(obj);  /admin/usuario/criar-anuncio
+    fetch(`${masterPath.url}/admin/anuncio/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(obj),
@@ -211,8 +240,18 @@ const ContentChildForm = (props) => {
         localStorage.removeItem("imgname");
 
         console.log(res);
+        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+        //navigate(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`);
       });
   }
+
+
+
+
+  function limparCPFouCNPJ(cpfOuCnpj) {
+    return cpfOuCnpj.replace(/[.-]/g, '');
+  }
+
 
 
   return (
@@ -221,7 +260,7 @@ const ContentChildForm = (props) => {
         <h1>Cadastro de Usuário</h1>
       </div>
 
-      {alert && <AlertMsg />}
+      {alert && <AlertMsg message={"Cadastro Realizado"}/>}
 
       <button class="buttonload" style={{ display: "none" }} ref={loadingButton}>
         <i class="fa fa-spinner fa-spin"></i>Carregando
@@ -232,7 +271,7 @@ const ContentChildForm = (props) => {
         <div className="row">
           <div className="col-md-12">
             <div className="bg-cinza text-start">
-              <h2 className=" py-3">
+              <h2 className=" p-3">
                 <i className="fa fa-envelope"></i> Preencha o formulário
               </h2>
               <div className="formularioCadastro">
@@ -312,7 +351,7 @@ const ContentChildForm = (props) => {
                           <option value="">
                             - Selecione o tipo de perfil -
                           </option>
-                          <option value="4" selected="selected">
+                          <option value="3" selected="selected">
                             Anúnciante
                           </option>
                         </select>{" "}
@@ -404,7 +443,7 @@ const ContentChildForm = (props) => {
                         type="button"
                         className="btn cinza pull-right"
                         id="btn-save"
-                        onClick={sendObj}
+                        onClick={verificarCampos}
                       >
                         <i className="fa fa-check"></i> confirmar
                       </button>

@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
-import { masterPath } from '../../../config/config';
+import { masterPath, version } from '../../../config/config';
+
+//LIBS
+import Swal from 'sweetalert2';
 
 
 //componente
@@ -14,10 +17,13 @@ import Spinner from '../../../components/Spinner';
 const Cadernos = () => {
     const [estados, setEstado] = useState([]);
     const [cidade, setCidade] = useState([]);
+    const [cidadeBusca, setCidadeBusca] = useState({});
     const [paginasTotal, setPaginas] = useState();
+    const [paginaAtual, setPaginaAtual] = useState();
     const [selectId, setSelectId] = useState();
     const [showSpinner, setShowSpinner] = useState(false);
     const [totalRegistro, setTotalRegistro] = useState();
+    const [exportTodos, setExpotTodos] = useState(false);
 
     const location = useLocation();
     const navigator = useNavigate();
@@ -35,9 +41,10 @@ const Cadernos = () => {
             .then((res) => {
                 setEstado(res.data.estados);
                 setCidade(res.message.anuncios);
-                setPaginas(res.message.totalPaginas)
+                setPaginas(res.message.totalPaginas);
+                setPaginaAtual(res.message.paginaAtual);
                 setShowSpinner(false);
-                setTotalRegistro(res.message.anuncios.length);
+                setTotalRegistro(res.message.totalItem);
                 //console.log(res.message);
             })
     }, [param]);
@@ -83,11 +90,15 @@ const Cadernos = () => {
         fetch(`${masterPath.url}/admin/cadernos/buscar/?search=${campoPesquisa}`)
             .then((x) => x.json())
             .then((res) => {
+                //console.log("fsdfsdfasd", )
                 if (res.success) {
                     setShowSpinner(false);
                     alert("Encontrado " + res.message.registros.length + " registros");
                     setCidade(res.message.registros);
-                    setPaginas(res.message.totalPaginas);
+                    setPaginas(1);
+                    setCidadeBusca(res.message.registros);
+                    setTotalRegistro(res.message.registros.length);
+                    setExpotTodos(true);
                 } else {
                     setShowSpinner(false);
                     alert("registro não encontrado na base de dados");
@@ -106,7 +117,12 @@ const Cadernos = () => {
 
                 if (res.success) {
                     setShowSpinner(false);
-                    alert(res.message)
+                    Swal.fire({
+                        title: 'sucesso!',
+                        text: 'Registro apagado!',
+                        icon: 'success',
+                        confirmButtonText: 'Confirmar'
+                      })
                     document.querySelector(".selecionada").remove();
                 }
 
@@ -118,6 +134,24 @@ const Cadernos = () => {
         position: "fixed",
         zIndex: "999"
     }
+
+    function exportExcell() {
+
+        fetch(`${masterPath.url}/admin/export/cadernos?exportAll=${exportTodos}&limit=5000`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(cidadeBusca)
+        })
+        .then(x => x.json())
+        .then(res => {
+            if(res.success) {
+                console.log(res);
+                window.location.href = res.downloadUrl;
+            }
+        })
+    };
 
 
     return (
@@ -133,8 +167,8 @@ const Cadernos = () => {
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
-                            <button type="button" className="btn custom-button" onClick={() => navigator('/cadernos/cadastro')}>Adicionar</button>
-                            <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/cadernos/editar?id=${selectId}`)}>Editar</button>
+                            <button type="button" className="btn custom-button" onClick={() => navigator('/admin/cadernos/cadastro')}>Adicionar</button>
+                            <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/cadernos/editar?id=${selectId}`)}>Editar</button>
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarCaderno}>Apagar</button>
                             <select title="selecionarLinhas" name="selecionarLinhas" id="selecionarLinhas"
                                 className="btn btn-success custom-button text-light mx-2"
@@ -144,6 +178,7 @@ const Cadernos = () => {
                                 <option value="100">Ver 100 registros</option>
                                 <option value="5630">Ver todos registros</option>
                             </select>
+                            <button type="button" className="btn custom-button" onClick={exportExcell}>Exportar</button>
                         </div>
                         <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
@@ -164,7 +199,7 @@ const Cadernos = () => {
                                     <tr>
                                         <th>UF</th>
                                         <th>CADERNO</th>
-
+                                        <th>MOSAICO</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -174,6 +209,8 @@ const Cadernos = () => {
                                         <tr onClick={selecaoLinha} key={item.id_uf} id={item.codCaderno}>
                                             <td key={item.id_uf}>{item.UF}</td>
                                             <td key={item.id_uf}>{item.nomeCaderno}</td>
+                                            {item.descImagem != '' ? <td key={item.id_uf}>SIM</td> : <td key={item.id_uf}>NÃO</td>}
+                                            
                                         </tr>
                                     ))}
 
@@ -183,11 +220,11 @@ const Cadernos = () => {
                         </div>
 
                     </div>
-                    <Pagination totalPages={paginasTotal} table={"cadernos"} />
+                    <Pagination totalPages={paginasTotal} paginaAtual={paginaAtual} totalItem={totalRegistro} table={"cadernos"} />
 
 
                 </article>
-                <p className='w-100 text-center'>© MINISITIO</p>
+                <p className='w-100 text-center'>© MINISITIO - {version.version}</p>
             </section>
         </div>
     );

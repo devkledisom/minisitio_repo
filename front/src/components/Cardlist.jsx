@@ -34,17 +34,27 @@ function Cardlist(props) {
   }, []);
 
   return (
-    <div className="Cardlist">
+    <div className="Cardlist" key={props.key}>
       <div className="container card my-2">
-        <div className="row px-2">
+        <div className="row card-list">
           <div className="col-md-2 p-0">
+           {props.codImg != "teste" &&
             <img
-              src={`${masterPath.url}/files/${props.codImg}`}
-              alt="Foto"
-              className="h-100 w-100"
-            />
+            src={`${masterPath.url}/files/${props.codImg}`}
+            alt="Foto"
+            className="h-100 w-100"
+          />
+           } 
+           {props.codImg == "teste" &&
+                        <img
+                        src="../assets/img/logo.png"
+                        alt="Foto"
+                        className="h-100 w-100"
+                      />
+           }
+
           </div>
-          <div className="col-md-10">
+          <div className="col-md-10 py-1">
             <div className="container w-100 p-0">
               {/* row */}
               <div className="row text-start">

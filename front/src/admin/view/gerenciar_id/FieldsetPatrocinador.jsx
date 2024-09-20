@@ -8,7 +8,6 @@ import ChooseFile from "../../../components/ChooseFile";
 const FieldsetPatrocinador = (props) => {
 
 
-console.log(props.valueLink)
 
     return (
         <div className="app-patrocinador w-50">

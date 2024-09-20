@@ -12,6 +12,8 @@ function Busca(props) {
     const [ufSelected, setUf] = useState(0);
     const [uf, setUfs] = useState([]);
     const [caderno, setCaderno] = useState([]);
+    const [cadernoUf, setCadernoUf] = useState(null);
+    const [cadernoCidade, setCadernoCidade] = useState(null);
 
     //contexto
     //const { tema, setTema } = useTema();
@@ -20,28 +22,53 @@ function Busca(props) {
     const executarSelecao = (e) => {
         let codigoUf = document.querySelectorAll('#codUf2')[0].value;
         setUf(codigoUf);
-        const teste = uf.find(u => u.id_uf == codigoUf)
-        localStorage.setItem("uf: ", teste.sigla_uf)
+        const teste = uf.find(u => u.id_uf == codigoUf);
+        localStorage.setItem("uf: ", teste.sigla_uf);
+        sessionStorage.setItem("uf: ", codigoUf);
+        setCadernoUf(teste.id_uf);
+        
     };
     const definirCaderno = (e) => {
-        let codigoUf = document.querySelectorAll('#codUf3')[0].value;
-        const teste = caderno.find(cad => cad.codCaderno == codigoUf)
-        localStorage.setItem("caderno: ", teste.nomeCaderno)
+        let codigoCidade = document.querySelectorAll('#codUf3')[0].value;
+        const teste = caderno.find(cad => cad.codCaderno == codigoCidade);
+        localStorage.setItem("caderno: ", teste.nomeCaderno);
+        sessionStorage.setItem("caderno: ", codigoCidade);
+        
+        setCadernoUf(teste.codUf);
+        setCadernoCidade(teste.nomeCaderno);
     };
 
     useEffect(() => {
-        fetch(`${masterPath.url}/cadernos`)
-            .then((x) => x.json())
-            .then((res) => {
-                setCaderno(res)
-                //console.log(res)
-            })
+        let ufSalva = sessionStorage.getItem("uf: ");
+        let cadSalvo = sessionStorage.getItem("caderno: ");
+
         fetch(`${masterPath.url}/ufs`)
-            .then((x) => x.json())
-            .then((res) => {
-                setUfs(res);
-                //console.log(res)
-            })
+        .then((x) => x.json())
+        .then((res) => {
+            setUfs(res);
+            setUf(ufSalva);
+            //console.log(res)
+            if(ufSalva != undefined) {
+                document.querySelectorAll('#codUf2')[0].value = ufSalva;
+            } 
+        })
+
+        fetch(`${masterPath.url}/cadernos`)
+        .then((x) => x.json())
+        .then((res) => {
+            setCaderno(res)
+            //console.log(res)
+            if(cadSalvo != undefined) {
+                document.querySelectorAll('#codUf3')[0].value = cadSalvo;
+            } 
+        })
+
+
+
+       
+
+        
+            console.log("testando", ufSalva, cadSalvo)
 
     }, []);
 
@@ -69,7 +96,8 @@ function Busca(props) {
 
             const request = await fetch(`${masterPath.url}/buscar`, options).then((x) => x.json())
             //setAnuncio(request)
-            setResult(request)
+            setResult(request);
+            console.log(request)
 
             if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
                 navigate("/buscar");
@@ -82,8 +110,25 @@ function Busca(props) {
         }
     };
 
-    const setSessionSto = (param) => {
-
+    const verClassificado = () => {
+        if(cadernoUf == null) {
+            alert("escolha um estado");
+        } else if (cadernoCidade == null) {
+            alert("escolha uma cidade");
+        } else {
+            fetch(`${masterPath.url}/admin/anuncio/classificado/${cadernoCidade}/${cadernoUf}`)
+            .then(x => x.json())
+            .then(res => {
+                console.log(res)
+              if (res.success) {
+                window.location = `/caderno-geral/${cadernoCidade}/${cadernoUf}`;
+              } else {
+                alert("caderno não localizado")
+              }
+      
+            })
+            
+        }
     };
 
 
@@ -101,7 +146,7 @@ function Busca(props) {
                                     <i className="fa fa-compass icone-form"></i>
                                     <div className="form-group w-100">
 
-                                        <select name="codUf2" id="codUf2" className="form-control" onChange={executarSelecao}>
+                                        <select name="codUf2" id="codUf2" className="form-control form-select" onChange={executarSelecao}>
                                             <option value="">UF</option>
                                             {uf.map((item) => (
                                                 <option id={item.id_uf} key={item.id_uf} name={item.nome_uf} value={item.id_uf}>{item.sigla_uf}</option>
@@ -114,8 +159,8 @@ function Busca(props) {
                                     <i className="fa fa-map-marker icone-form"></i>
                                     <div className="form-group w-100">
 
-                                        <select name="codUf3" id="codUf3" className="form-control" onChange={definirCaderno}>
-                                            <option value="">Cidade</option>
+                                        <select name="codUf3" id="codUf3" className="form-control form-select" onChange={definirCaderno}>
+                                            <option value="">TODO</option>
                                             {caderno.map((item) => (
                                                 item.codUf == ufSelected &&
                                                 <option id={item.codCaderno} key={item.codCaderno} name={item.nomeCaderno} value={item.codCaderno}>{item.nomeCaderno}</option>
@@ -126,9 +171,12 @@ function Busca(props) {
                                 </div>
                                 <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs">
                                     <div className="btn-group" role="group">
-                                        <button type="button" className="btn proximo btnCaderno" title=" Ver Caderno"><i className="fa fa-file-text"></i> Ver Caderno</button>
+                                        <button type="button" 
+                                        className="btn proximo btnCaderno btn-3"
+                                        onClick={verClassificado}
+                                         title=" Ver Caderno"><i className="fa fa-file-text"></i> <span>Ver Caderno</span></button>
                                         <button type="button" className="btn proximo btnGrupo btnPromocao" data-promocao="1" title="Promoção">
-                                            <img src="../assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
+                                            <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
                                         </button>
                                     </div>
                                 </div>

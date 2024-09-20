@@ -31,25 +31,29 @@ function MiniWebCardSimples(props) {
           console.log(imgPath)
       }, []); */
 
+    useEffect(() => {
+        /* props.data.anuncios.map(item => setImg(item.descImagem)) */
+        console.log("simples", props.data)
+    }, []);
+
 
     return (
-        <div className="MiniWebCardSimples">
+        <div className="MiniWebCardSimples" key={props.key} id={`item_${props.id}`}>
 
             <div className='container my-2' >
                 <div className='row p-0 cartao'>
-                <div class="apoio">
-                            <div style={{ float: "right" }}>
-
-                                <a href="/comprar-anuncio?type=2">
-                                    <button type="button" class="btn2 bgbt" data-toggle="modal" data-target="#05562970000102">
-                                        INCLUIR <br />IMAGEM CARTÃO
-                                    </button>
-                                </a>
-                            </div>
+                    <div class="apoio">
+                        <div style={{ float: "right" }}>
+                            <a href="/comprar-anuncio?type=2">
+                                <button type="button" class="btn2 bgbt" data-toggle="modal" data-target="#05562970000102">
+                                    INCLUIR <br />IMAGEM CARTÃO
+                                </button>
+                            </a>
                         </div>
-                    <div className="row py-3 px-0">
+                    </div>
+                    <div className="row p-0">
 
-      
+
 
 
 
@@ -82,14 +86,14 @@ function MiniWebCardSimples(props) {
                             <a href="/local/porto-velho/hotel avenida ii_327591">
 
 
-                                <h2>HOTEL AVENIDA II</h2>
-                                <p><i class="fa fa-map-marker"></i> R JOAQUIM NABUCO - 1981 - CENTRO</p>
-                                <p><i class="fa fa-phone"></i> (69) 3222-4366</p>
+                                <h2>{props.data.descAnuncio}</h2>
+                                <p><i class="fa fa-map-marker"></i>{props.data.descEndereco}</p>
+                                <p><i class="fa fa-phone"></i>{props.data.descTelefone}</p>
                             </a>
 
                         </div>
 
-                        <div className='col-md-12 px-0 d-flex justify-content-end align-items-center'>
+                        <div className='col-md-12 px-2 d-flex justify-content-end align-items-center'>
                             <button id="btn-detalhes" onClick={buscarAnuncio}>Ver Detalhes</button>
                         </div>
 

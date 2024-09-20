@@ -2,20 +2,28 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
+import '../../assets/css/helptip.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { masterPath } from '../../../config/config';
+
+//LIBS
+import InputMask from 'react-input-mask';
 
 //componente
 import Header from "../Header";
 import Spinner from '../../../components/Spinner';
 import ChooseFile from "../../../components/ChooseFile";
+import Tooltip from "../../../components/Tooltip";
+import HelpTip from '../../components/HelpTip';
+//import { Tooltip } from 'bootstrap/dist/js/bootstrap.bundle.min';
 
 const FormEdit = () => {
 
 
-    const [ids, setIds] = useState([]);
+    /* const [ids, setIds] = useState([]); */
     const [usuarios, setUsuarios] = useState([]);
     const [atividadeValue, setAtividade] = useState(false);
+    const [atividades, setAtividades] = useState();
     const [page, setPage] = useState(1);
     const [uf, setUfs] = useState([]);
     const [ufSelected, setUf] = useState(0);
@@ -28,6 +36,68 @@ const FormEdit = () => {
     const [descricaoId, setDescricaoId] = useState(false);
     const [descontoId, setDescontoId] = useState(false);
     const [hash, setHash] = useState(false);
+
+    const [ids, setIds] = useState(
+        {
+            "activate": 1,
+            "cashback_link": null,
+            "cashback_logo": null,
+            "cartao_digital": null,
+            "certificado_imagem": null,
+            "certificado_link": null,
+            "certificado_logo": null,
+            "certificado_texto": null,
+            "codAnuncio": 35,
+            "codAtividade": "",
+            "codCaderno": 5592,
+            "codCidade": 0,
+            "codDesconto": 28,
+            "codDuplicado": null,
+            "codPA": null,
+            "codTipoAnuncio": 2,
+            "codUf": 53,
+            "codUsuario": "",
+            "descAndroid": "",
+            "descAnuncio": "1",
+            "descAnuncioFriendly": "",
+            "descApple": "",
+            "descAutorizante": "",
+            "descCEP": "",
+            "descCPFCNPJ": "",
+            "descCelular": "",
+            "descChavePix": "",
+            "descContrato": null,
+            "descDescricao": "",
+            "descEmailAutorizante": "",
+            "descEmailComercial": "",
+            "descEmailRetorno": "",
+            "descEndereco": "",
+            "descFacebook": "",
+            "descImagem": "teste",
+            "descInsta": null,
+            "descLat": null,
+            "descLinkedin": null,
+            "descLng": null,
+            "descNomeAutorizante": "",
+            "descPatrocinador": null,
+            "descPatrocinadorLink": null,
+            "descPromocao": "",
+            "descSite": "",
+            "descSkype": null,
+            "descTelefone": "",
+            "descTweeter": "",
+            "descWhatsApp": null,
+            "dtAlteracao": "2020-11-30T23:59:59.000Z",
+            "dtCadastro": "2024-06-03T09:14:03.000Z",
+            "dtCadastro2": "2012-12-27T15:14:57.000Z",
+            "formaPagamento": null,
+            "link_comprar": null,
+            "promocaoData": null,
+            "qntVisualizacoes": 73,
+            "tags": "atacado,som,musica"
+        }
+        
+    );
 
 
 
@@ -77,10 +147,20 @@ const FormEdit = () => {
             .then((res) => {
                 setUfs(res);
             })
+        fetch(`${masterPath.url}/atividade/:codAtividade`)
+            .then((x) => x.json())
+            .then((res) => {
+                setAtividades(res);
+                //console.log(res)
+                //decodificar()
+            });
     }, []);
 
 
     function editID() {
+
+        ids.descImagem = localStorage.getItem("imgname");
+        console.log(ids)
 
         var validation = false;
         setShowSpinner(true);
@@ -107,28 +187,22 @@ const FormEdit = () => {
             };
         });
 
-        const data = {
-            "usuario": usuarios,
-            "descricao": document.getElementById('descID').value,
-            "valorDesconto": document.getElementById('valorDesconto').value,
-            "patrocinador": document.getElementById('patrocinador').value,
-            "saldoUtilizado": document.getElementById('utilizar-saldo').value,
-            "addSaldo": document.getElementById('add-saldo').value || 0
-        };
+
 
         const config = {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
+            body: JSON.stringify(ids)
         };
 
         if (validation) {
-            fetch(`${masterPath.url}/admin/desconto/update?id=${param}`, config)
+            fetch(`${masterPath.url}/admin/anuncio/update?id=${param}`, config)
                 .then((x) => x.json())
                 .then((res) => {
+                    console.log(res)
                     if (res.success) {
                         setShowSpinner(false);
-                        alert("Usuário Atualizado!");
+                        alert("anuncio Atualizado!");
                     } else {
                         alert(res.message);
                     }
@@ -172,11 +246,13 @@ const FormEdit = () => {
         const { name, value } = e.target;
         setIds({
             ...ids,
-            [name]: value
+            [name]: value,
+            
         });
 
-        //console.log("resressedsfasdfsf----------->", name, value)
-
+        console.log("resressedsfasdfsf----------->", name, value)
+        console.log(ids.descCPFCNPJ.replace(/\D/g, '').length)
+        console.log(ids.descCPFCNPJ.replace(/\D/g, ''))
 
     };
 
@@ -185,10 +261,18 @@ const FormEdit = () => {
         handleChange(e);
     };
 
+    // Determina a máscara com base no tamanho do valor inserido
+    //const mask = ids.descCPFCNPJ.length <= 14 ? '999.999.999-99' : '99.999.999/9999-99';
+    const unmaskedValue = ids.descCPFCNPJ.replace(/\D/g, ''); // Remove tudo que não é número
+    const mask = unmaskedValue.length == 14
+        ? '99.999.999/9999-99' // CNPJ
+        : '999.999.999-99';    // CPF
+    
+
     return (
 
         <div className="users">
-            {console.log(ids)}
+            {/* console.log(ids) */}
             <header style={style} className='w-100'>
                 <Header />
             </header>
@@ -212,13 +296,39 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="codAtividade" className="w-50 px-1">Atividade: (Digite o nome)</label>
-                            <input type="text"
+                            {/*     <input type="text"
                                 className="form-control h-25 w-50"
                                 id="descAtividade"
                                 name="codAtividade"
                                 value={ids.codAtividade}
                                 onChange={handleChange}
-                            />
+                            /> */}
+
+                            {console.log(ids)}
+                            <select
+                                name="codAtividade"
+                                id="codAtividade"
+                                className="form-control h-25 w-50"
+                                onChange={handleChange} 
+                                value={ids.codAtividade}
+                                required
+                            >
+                                
+                                {/* <option value="">Selecione a atividade principal</option> */}
+                                {atividades &&
+
+                                    atividades.map(
+                                        (item) =>
+
+                                            <option
+                                                key={item.id}
+                                                value={item.id}
+                                            >
+                                                {item.atividade}
+                                            </option>
+
+                                    )}
+                            </select>
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
@@ -233,55 +343,70 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="codUf" className="w-50 px-1">UF:</label>
-                            <select name="codUf" id="coduf" onChange={handleSelectChange} className="w-50 py-1" value={ids.codUf || ''}>
+                            <select name="codUf" id="coduf" onChange={handleSelectChange} className="w-50 py-1" value={ids.codUf || ''} >
                                 <option value="" selected="selected">- Selecione um estado -</option>
                                 {
                                     uf.map((uf) => (
-                                        <option value={uf.id_uf}>{uf.sigla_uf}</option>
+                                        <option key={uf.id_uf} value={uf.id_uf}>{uf.sigla_uf}</option>
                                     ))
                                 }
                             </select>
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="codCaderno" className="w-50 px-1">Caderno:</label>
-                            <select name="codCaderno" id="codCaderno" className="w-50 py-1" value={ids.codCaderno || ''}>
-                                <option value="" selected="selected">- Selecione uma cidade -</option>
+                            <select name="codCaderno" id="codCaderno" className="w-50 py-1" value={ids.codCaderno} onChange={handleChange}>
+                                {/*  <option value="" selected="selected">- Selecione uma cidade -</option> */}
                                 {
-                                    /* caderno.map((cidades) => (
+                                    caderno.map((cidades) => (
+                                        cidades.codUf == ids.codUf &&
                                         <option value={cidades.codCaderno}>{cidades.nomeCaderno}</option>
-                                    )) */
+                                    ))
+                                    /*   caderno.map((cidades) => (
+                                         <option value={cidades.codCaderno}>{cidades.nomeCaderno}</option>
+                                     ))  */
                                 }
                             </select>
                         </div>
 
+
+
+
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label htmlFor="nm_empresa" className="w-50 px-1">Nome da empresa:</label>
+                            <label htmlFor="descAnuncio" className="w-50 px-1">Nome da empresa:</label>
                             <input type="text"
                                 className="form-control h-25 w-50"
                                 id="nm_empresa"
-                                name="nm_empresa"
-                                value={ids.descAnuncio || ''}
+                                name="descAnuncio"
+                                value={ids.descAnuncio}
                                 onChange={handleChange}
                             />
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label className="w-50 px-1">Imagem:</label>
-                            <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descImagem} preview={false} />
+                            <label className="w-50 px-1">Imagem:
+                            <Tooltip text={"Insira o cartão de visita que irá aparecer no card do anúncio"}><span className="help-span">?</span></Tooltip>
+
+                            </label>
+                            <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descImagem} preview={false} patrocinador={handleChange} miniPreview={true}/>
                         </div>
 
+                        
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label className="w-50 px-1">Promoção:</label>
+                            <label className="w-50 px-1">Promoção:
+                            </label>
                             <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descPromocao} preview={false} />
                         </div>
+                        
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label className="w-50 px-1">Validade:</label>
+                            <label className="w-50 px-1">Validade da promoção de desconto:</label>
                             <input type="date" name="validade" id="validade" className="form-control h-25 w-50" />
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label className="w-50 px-1">Imagem da Parceria:</label>
+                            <label className="w-50 px-1">Imagem da Parceria:
+                            <Tooltip text={"Insira a logotipo do parceiro"}><span className="help-span">?</span></Tooltip>
+                            </label>
                             <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descPromocao} preview={false} />
                         </div>
 
@@ -326,24 +451,41 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="descTelefone" className="w-50 px-1">Telefone:</label>
-                            <input type="text"
+                            <InputMask mask={'+55\\ (99) 9999-9999'}
+                            className="form-control h-25 w-50"
+                            id="nu_telefone"
+                            name="descTelefone"
+                            value={ids.descTelefone}
+                            onChange={handleChange}
+                            ></InputMask>
+                    {/*         <input type="text"
                                 className="form-control h-25 w-50"
                                 id="nu_telefone"
                                 name="descTelefone"
                                 value={ids.descTelefone}
                                 onChange={handleChange}
-                            />
+                                
+                            /> */}
+                            
+                          
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="descCelular" className="w-50 px-1">Celular:</label>
-                            <input type="text"
+                            <InputMask mask={'+55\\ (99) 9999-9999'}
+                           className="form-control h-25 w-50"
+                           id="nu_celular"
+                           name="descCelular"
+                           value={ids.descCelular}
+                           onChange={handleChange}
+                            ></InputMask>
+                       {/*      <input type="text"
                                 className="form-control h-25 w-50"
                                 id="nu_celular"
                                 name="descCelular"
                                 value={ids.descCelular}
                                 onChange={handleChange}
-                            />
+                            /> */}
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
@@ -453,13 +595,19 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="descWhatsApp" className="w-50 px-1">WhatsApp:</label>
-                            <input type="text"
+                            <InputMask mask={'+55\\ (99) 9999-9999'}
+                            className="form-control h-25 w-50"
+                            id="nu_whatszap"
+                            name="descWhatsApp"
+                            value={ids.descWhatsApp}
+                            onChange={handleChange}></InputMask>
+               {/*              <input type="text"
                                 className="form-control h-25 w-50"
                                 id="nu_whatszap"
                                 name="descWhatsApp"
                                 value={ids.descWhatsApp}
                                 onChange={handleChange}
-                            />
+                            /> */}
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
@@ -497,13 +645,20 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="descCPFCNPJ" className="w-50 px-1">CPF/CNPJ:</label>
+                        {/*     <InputMask
+                            className="form-control h-25 w-50"
+                            id="nu_documento"
+                            name="descCPFCNPJ"
+                            value={ids.descCPFCNPJ}
+                            onChange={handleChange}
+                            mask={mask}></InputMask> */}
                             <input type="text"
                                 className="form-control h-25 w-50"
                                 id="nu_documento"
                                 name="descCPFCNPJ"
                                 value={ids.descCPFCNPJ}
                                 onChange={handleChange}
-                            />
+                            /> 
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
@@ -543,7 +698,7 @@ const FormEdit = () => {
                             <button type="button"
                                 className="btn btn-info custom-button mx-2 text-light"
                                 onClick={editID} >Salvar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/espacos')}>Cancelar</button>
+                            <button type="submit" className="btn custom-button" onClick={() => navigate('/admin/espacos')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

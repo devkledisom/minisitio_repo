@@ -164,10 +164,22 @@ const FormCadastro = () => {
                             text: 'ID cadastrado!',
                             icon: 'success',
                             confirmButtonText: 'Confirmar'
+                          }).then((result) => {
+                            if(result.isConfirmed) {
+                                window.location.reload();
+                            }
                           })
                     } else {
                         setShowSpinner(false);
-                        console.log(res.message);
+                        if(res.message.original.code == 'ER_DUP_ENTRY') {
+                            Swal.fire({
+                                title: 'falha!',
+                                text: 'erro: duplicação de ID!',
+                                icon: 'error',
+                                confirmButtonText: 'Entendi'
+                              })
+                        }
+                        console.log(res.message.original.code);
                     }
                 }).catch((err) => {
                     console.log(err);
@@ -297,7 +309,7 @@ const FormCadastro = () => {
                                 className="btn btn-info custom-button mx-2 text-light"
                                 onClick={criarID}
                             >Salvar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/desconto')}>Cancelar</button>
+                            <button type="submit" className="btn custom-button" onClick={() => navigate('/admin/desconto')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

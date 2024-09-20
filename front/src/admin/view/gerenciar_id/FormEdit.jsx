@@ -28,7 +28,8 @@ const FormEdit = () => {
     const [descImagem, setDescImg] = useState();
 
     const [patrocinio, setPatrocinio] = useState(0);
-    const [saldo, setSaldo] = useState(0);
+    const [saldo, setSaldo] = useState();
+    const [saldoValue, setSaldoValue] = useState();
     const [links, setLinks] = useState({
         link_1: null,
         link_2: null,
@@ -65,10 +66,12 @@ const FormEdit = () => {
                     link_3: res[0].descLink3
                 });
                 setPatrocinio(res[0].patrocinador_ativo);
+                setSaldoValue(res[0].saldo);
+                setSaldo(res[0].utilizar_saldo);
 
                 if (res[0].descImagem != null) {
                     setDescImg(res[0]);
-                    console.log(res[0].descImagem);
+                    //console.log(res[0].descImagem);
                     //setPatrocinio(1)
                 }
 
@@ -114,7 +117,7 @@ const FormEdit = () => {
                 validation = true;
             };
         });
-
+console.log(saldo)
         const data = {
             "usuario": usuarios,
             "descricao": document.getElementById('descID').value,
@@ -127,7 +130,8 @@ const FormEdit = () => {
             "descLink": links.link_1,
             "descLink2": links.link_2,
             "descLink3": links.link_3,
-            "addSaldo": document.getElementById('add-saldo') ? document.getElementById('add-saldo').value : 0
+            "utilizarSaldo": saldo,
+            "addSaldo": saldoValue//document.getElementById('add-saldo') ? document.getElementById('add-saldo').value : 0
         };
 
         const config = {
@@ -192,7 +196,7 @@ const FormEdit = () => {
         if (user != undefined) {
             return user.descNome
         }
-        console.log("users", meuParam, user)
+        //console.log("users", meuParam, user)
 
     }
 
@@ -238,14 +242,14 @@ const FormEdit = () => {
                                 className="form-control h-25 w-50"
                                 id="valorDesconto"
                                 name="valorDesconto"
-                                value={parseFloat(descontoId).toFixed(2)}
+                                value={String(parseFloat(descontoId).toFixed(2)).replace('.', ',')}
                                 onChange={(e) => setDescontoId(String(e.target.value))}
                                 placeholder="0,00"
                             />
                             <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span>
                         </div>
                                 
-{console.log("tesate", patrocinio)}
+
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="patrocinador" className="w-50 px-1">Habilitar Patrocinador ?</label>
                             <select name="patrocinador" id="patrocinador" className="w-50 py-1"
@@ -285,7 +289,7 @@ const FormEdit = () => {
  */}
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="utilizar-saldo" className="w-50 px-1">Utilizar Saldo ?</label>
-                            <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1" onChange={(e) => setSaldo(e.target.value)}>
+                            <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1" value={saldo} onChange={(e) => setSaldo(e.target.value)}>
                                 <option value="0">Não</option>
                                 <option value="1">Sim</option>
                             </select>
@@ -294,7 +298,7 @@ const FormEdit = () => {
                             <div className="form-group d-flex flex-column align-items-center py-3">
                                 <div class="control-group w-50" style={{ display: "block" }}><label for="adicionar_saldo" class="control-label optional">Adicionar Saldo:</label>
                                     <div class="controls">
-                                        <input type="text" name="adicionar_saldo" id="adicionar_saldo" className="w-100" />
+                                        <input type="text" name="adicionar_saldo" id="adicionar_saldo" className="w-100" value={saldoValue} onChange={(e) => setSaldoValue(e.target.value)} />
                                     </div>
                                 </div>
                             </div>
@@ -307,7 +311,7 @@ const FormEdit = () => {
                                 className="btn btn-info custom-button mx-2 text-light"
                                 onClick={editID}
                             >Salvar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/desconto')}>Cancelar</button>
+                            <button type="submit" className="btn custom-button" onClick={() => navigate('/admin/desconto')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

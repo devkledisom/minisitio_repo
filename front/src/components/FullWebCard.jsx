@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import '../assets/css/main.css';
 import '../assets/css/default.css';
@@ -22,13 +22,19 @@ import UserActions from './UserActions';
 function FullWebCard() {
     const { result, setResult } = useBusca();
 
+    useEffect(() => {
+        if(result[0] != undefined && result[0] === "teste") {
+            let resultSalvo = sessionStorage.getItem("stateBusca");
+            setResult(JSON.parse(resultSalvo));
 
-    //console.log(result)
+        } else {
+            sessionStorage.setItem("stateBusca", JSON.stringify(result));
+        }
+    }, []);
 
     return (
         <div className="FullWebCard">
             <div className="container">
-
                 {/* teste row */}
                 <div className="row p-3">
                     <section className="col-md-6">

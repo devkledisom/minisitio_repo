@@ -8,7 +8,7 @@ const Atividade = require('./table_atividade');
 
 const Anuncio = database.define('anuncio', {
     codAnuncio: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER(11),
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
@@ -41,7 +41,7 @@ const Anuncio = database.define('anuncio', {
     },
 
     codAtividade: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.INTEGER,
         allowNull: false,
         unique: false,
         validate: {
@@ -62,8 +62,14 @@ const Anuncio = database.define('anuncio', {
         }
     },
 
+    codOrigem: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+        unique: false
+    },
+
     codDuplicado: {
-        type: Sequelize.TEXT,
+        type: Sequelize.FLOAT,
         allowNull: false,
         unique: false,
         validate: {
@@ -75,13 +81,8 @@ const Anuncio = database.define('anuncio', {
 
     tags: {
         type: Sequelize.TEXT,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        allowNull: true,
+        unique: false
     },
 
     codCaderno: {
@@ -132,7 +133,7 @@ const Anuncio = database.define('anuncio', {
     },
 
     descAnuncio: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         allowNull: false,
         unique: false,
         validate: {
@@ -143,29 +144,19 @@ const Anuncio = database.define('anuncio', {
     },
 
     descAnuncioFriendly: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descImagem: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descEndereco: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         allowNull: false,
         unique: false,
         validate: {
@@ -176,7 +167,7 @@ const Anuncio = database.define('anuncio', {
     },
 
     descTelefone: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         allowNull: false,
         unique: false,
         validate: {
@@ -187,128 +178,73 @@ const Anuncio = database.define('anuncio', {
     },
 
     descCelular: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descDescricao: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descSite: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descSkype: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descPromocao: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descEmailComercial: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descEmailRetorno: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descFacebook: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descTweeter: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descWhatsApp: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descCEP: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descTipoPessoa: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         allowNull: false,
         unique: false,
         validate: {
@@ -319,7 +255,7 @@ const Anuncio = database.define('anuncio', {
     },
 
     descCPFCNPJ: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         allowNull: false,
         unique: false,
         validate: {
@@ -330,7 +266,7 @@ const Anuncio = database.define('anuncio', {
     },
 
     descNomeAutorizante: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         allowNull: false,
         unique: false,
         validate: {
@@ -341,7 +277,7 @@ const Anuncio = database.define('anuncio', {
     },
 
     descEmailAutorizante: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         allowNull: false,
         unique: false,
         validate: {
@@ -352,7 +288,7 @@ const Anuncio = database.define('anuncio', {
     },
 
     codDesconto: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(255),
         allowNull: false,
         unique: false,
         validate: {
@@ -363,117 +299,72 @@ const Anuncio = database.define('anuncio', {
     },
 
     descLat: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descLng: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     formaPagamento: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        type: Sequelize.TEXT,
+        allowNull: true,
         unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        /*  validate: {
+             notEmpty: {
+                 msg: "Esse campo não pode está vazio.."
+             },
+         } */
     },
 
     promocaoData: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descContrato: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descAndroid: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descApple: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descInsta: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descPatrocinador: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descPatrocinadorLink: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     qntVisualizacoes: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         allowNull: false,
         unique: false,
         validate: {
@@ -503,13 +394,8 @@ const Anuncio = database.define('anuncio', {
 
     dtCadastro2: {
         type: Sequelize.DATE,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        allowNull: true,
+        unique: false
     },
 
     dtAlteracao: {
@@ -520,130 +406,91 @@ const Anuncio = database.define('anuncio', {
     },
 
     descLinkedin: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descTelegram: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     certificado_logo: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     certificado_texto: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     certificado_imagem: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     link_comprar: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     cashback_logo: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     cashback_link: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     certificado_link: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     cartao_digital: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
     },
 
     descChavePix: {
         type: Sequelize.TEXT,
         allowNull: true,
         unique: false,
-        validate: {
+        /* validate: {
             notEmpty: {
                 msg: "Esse campo não pode está vazio.."
             },
-        }
-    }
+        } */
+    },
+
+    dueDate: {
+        type: Sequelize.DATE,
+        allowNull: true
+    },
 },
     {
         freezeTableName: true,
-        timestamps: false,
+        timestamps: true,
     });
+
+Anuncio.beforeCreate((instance, options) => {
+    const dueDate = new Date(instance.createdAt);
+    dueDate.setDate(dueDate.getDate() + 365); // Exemplo: adiciona 30 dias
+    instance.dueDate = dueDate;
+});
 
 Anuncio.belongsTo(Caderno, {
     constraints: true,
