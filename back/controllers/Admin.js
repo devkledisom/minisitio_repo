@@ -834,14 +834,21 @@ module.exports = {
             }
         });
 
+<<<<<<< HEAD
         const descontoBusca = await Descontos.count();
 
+=======
+>>>>>>> df008fdbf9e109404e2935e0dea287976642a27b
         if (dddBusca < 1) {
             res.json({ success: false, message: "ddd não encontrado" });
             return;
         }
 
+<<<<<<< HEAD
         res.json({ success: true, data: dddBusca[0], qtdeIds: descontoBusca });
+=======
+        res.json({ success: true, data: dddBusca });
+>>>>>>> df008fdbf9e109404e2935e0dea287976642a27b
         //Descontos
         /*  const resultAnuncio = await Descontos.findAll({
              where: {

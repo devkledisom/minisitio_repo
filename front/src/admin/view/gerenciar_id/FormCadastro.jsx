@@ -59,6 +59,7 @@ const FormCadastro = () => {
     }, []);
 
     function gerarIdMaster(e) {
+<<<<<<< HEAD
         setShowSpinner(true);
         let codigoDoMaster = e.target.value;
         usuarios.find((item) => {
@@ -70,6 +71,12 @@ const FormCadastro = () => {
                     setHash(`${res.data.ddd}.${String(item.codUsuario).padStart(3, "0")}.${String(res.qtdeIds).padStart(4, "0")}`);
                     setShowSpinner(false);
                 })
+=======
+        let codigoDoMaster = e.target.value;
+        usuarios.find((item) => {
+            if (item.codUsuario == codigoDoMaster) {
+                console.log(item.codUf)
+>>>>>>> df008fdbf9e109404e2935e0dea287976642a27b
             }
         }
 
