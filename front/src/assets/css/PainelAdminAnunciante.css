@@ -1,0 +1,21 @@
+.list-inline>li {
+    display: inline-block;
+    padding: 20px 5px 0px 5px;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.btn-xs {
+    padding: 7px !important;
+    color: #fff !important;
+    font-size: 10px;
+    margin-right: 5px;
+}
+
+.painel-admin .lista {
+    padding: 0 0 20px 0;
+}

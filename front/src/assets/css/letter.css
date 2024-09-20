@@ -1,0 +1,42 @@
+.letter {
+    /* border: 1px solid red; */
+    padding: 20px 0px;
+}
+
+.letter > .letter-div {
+    padding: 20px;
+    background-color: #4F4F4F;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.letter > .letter-div > span {
+   /*  border: 1px solid orangered; */
+    width: 100%;
+    color: #fff;
+    font-size: 1.5rem;
+    padding-right: 100%;
+}
+
+.letter > .letter-div > .div-marquee > span {
+   /*  border: 1px solid orangered; */
+    width: 100%;
+    color: #fff;
+    font-size: 1.5rem;
+    padding-right: 100%;
+}
+
+.marquee {
+    display: flex;
+    /* padding-left: 100%; */ /* Começa fora da div */
+    animation: scrolling 15s linear infinite; /* Duração da animação e repetição infinita */
+}
+
+@keyframes scrolling {
+    from {
+        transform: translateX(0); /* Ponto inicial (direita fora da div) */
+    }
+    to {
+        transform: translateX(-100%); /* Ponto final (esquerda fora da div) */
+    }
+}

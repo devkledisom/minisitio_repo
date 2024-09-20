@@ -1,0 +1,13 @@
+.area-promocao {
+    border: 1px dashed gray;
+    border-radius: 4px;
+
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    padding: 10px 0 10px 10px;
+}
+
+.campo-val {
+    width: 97%;
+}
