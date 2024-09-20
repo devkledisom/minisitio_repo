@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
+import PrivateRoute from "./PrivateRoute";
 
 
 import Home from '../views/Home';
@@ -16,14 +17,14 @@ import ComprarAnuncio from '../views/Comprar-anuncio';
 //admin
 import Administrator from '../admin/Administrator';
 import OutroComponente from "../admin/view/OutroComponente";
-import Users from "../admin/view/Users";
+import Users from "../admin/view/usuarios/Users";
 import Cadernos from "../admin/view/cadernos/Cadernos";
 import CadernosEdit from "../admin/view/cadernos/FormEdit";
 import InfoCadernos from "../admin/view/InfoCadernos";
 
 import Atividades from "../admin/view/Atividades";
-import FormCadastro from "../admin/view/FormCadastro";
-import FormEditar from "../admin/view/FormEditar";
+import FormCadastro from "../admin/view/usuarios/FormCadastro";
+import FormEditar from "../admin/view/usuarios/FormEditar";
 import FormCadernos from "../admin/view/cadernos/FormCadastroCadernos";
 import FormCadastroAtividade from "../admin/view/FormCadastroAtividade";
 import FormEditAtividade from "../admin/view/FormEditAtividade";
@@ -51,7 +52,11 @@ function Rotas() {
                         <Route path="login" element={<Login />} />
                         <Route path="sobre/:id" element={<OutroComponente />} />
                     </Route>
-                    <Route path="admin" element={<Administrator />} />
+                    <Route path="admin" element={
+                        <PrivateRoute>
+                            <Administrator />
+                        </PrivateRoute>} 
+                    />
                     <Route path="users" element={<Users />} />
                     <Route path="Cadernos" element={<Cadernos />} />
                     <Route path="info/Cadernos" element={<InfoCadernos />} />

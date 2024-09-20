@@ -8,7 +8,7 @@ const Buscador = require('../controllers/Buscador');
 const Admin = require('../controllers/Admin');
 const Login = require('../controllers/Login');
 const Users = require('../controllers/Users');
-const Upload = require('../controllers/upload');
+const Upload = require('../controllers/Upload');
 
 //middleware
 router.use(function timelog(req, res, next) {

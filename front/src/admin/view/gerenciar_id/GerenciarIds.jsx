@@ -185,7 +185,7 @@ const GerenciarIds = () => {
                                                 <tr key={item.idDesconto} id={item.idDesconto} onClick={selecaoLinha}>
 
                                                     <td>{teste(item.idUsuario)}</td>
-                                                    <td>{item.desconto}</td>
+                                                    <td>{parseFloat(item.desconto).toFixed(2)}</td>
                                                     <td>{item.hash}</td>
                                                     <td>{item.descricao}</td>
                                                     <td>{formatData(item.dtCadastro)}</td>

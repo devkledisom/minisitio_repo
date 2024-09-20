@@ -8,6 +8,8 @@ function UploadImage(props) {
   //state
   const [imagem, setImagem] = useState(false);
   const [mostrarLabel, setMostrarLabel] = useState(true);
+  const [textLabel, setTextLabel] = useState("Anexar imagem");
+
   const [mostrarMiniPreview, setMostrarMiniPreview] = useState(props.miniPreview);
   const [ativarPreview, setPreview] = useState(props.preview);
 
@@ -38,9 +40,14 @@ function UploadImage(props) {
 
     console.log(acceptedFiles[0])
     setImagem(acceptedFiles[0]);
+    setMostrarLabel(false);
+    //setTextLabel(acceptedFiles[0].name);
     //localStorage.setItem("imgname", acceptedFiles[0].name);
 
-    props.teste(acceptedFiles[0], true)
+    if(props.teste != undefined) {
+      props.teste(acceptedFiles[0], true)
+    };
+    
 
     if (props.preview == true) {
       document.querySelector('.comImagem img').src = URL.createObjectURL(acceptedFiles[0]);
@@ -113,9 +120,10 @@ function UploadImage(props) {
             {!props.preview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {!props.preview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
  */}
-            {console.log(mostrarLabel)}
+            {/* console.log(mostrarLabel) */}
             {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""}
-            {mostrarLabel && "Anexar imagem"}
+            {imagem ? <a href={`${masterPath.url}/files/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {mostrarLabel && textLabel}
             {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
 
           </span>

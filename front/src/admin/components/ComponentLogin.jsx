@@ -31,6 +31,8 @@ function Login() {
             .then((res) => {
                 setShowSpinner(false);
                 if (res.success) {
+                    sessionStorage.setItem('authTokenMN', true);
+
                     navigate("/admin");
                     //console.log(res)
                 } else {

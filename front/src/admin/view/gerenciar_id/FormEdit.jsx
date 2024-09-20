@@ -5,6 +5,10 @@ import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { masterPath } from '../../../config/config';
 
+//LIBS
+import InputMask from 'react-input-mask';
+import Swal from 'sweetalert2';
+
 //componente
 import Header from "../Header";
 import Spinner from '../../../components/Spinner';
@@ -25,6 +29,11 @@ const FormEdit = () => {
 
     const [patrocinio, setPatrocinio] = useState(0);
     const [saldo, setSaldo] = useState(0);
+    const [links, setLinks] = useState({
+        link_1: null,
+        link_2: null,
+        link_3: null
+    });
 
 
 
@@ -50,11 +59,17 @@ const FormEdit = () => {
                 setDescricaoId(res[0].descricao);
                 setDescontoId(res[0].desconto);
                 setHash(res[0].hash);
+                setLinks({
+                    link_1: res[0].descLink,
+                    link_2: res[0].descLink2,
+                    link_3: res[0].descLink3
+                });
+                setPatrocinio(res[0].patrocinador_ativo);
 
                 if (res[0].descImagem != null) {
                     setDescImg(res[0]);
                     console.log(res[0].descImagem);
-                    setPatrocinio(1)
+                    //setPatrocinio(1)
                 }
 
 
@@ -106,7 +121,13 @@ const FormEdit = () => {
             "valorDesconto": document.getElementById('valorDesconto').value,
             "patrocinador": document.getElementById('patrocinador').value,
             "saldoUtilizado": document.getElementById('utilizar-saldo').value,
-            "addSaldo": document.getElementById('add-saldo').value || 0
+            "descImagem": localStorage.getItem("imgname"),
+            "descImagem2": localStorage.getItem("imgname2"),
+            "descImagem3": localStorage.getItem("imgname3"),
+            "descLink": links.link_1,
+            "descLink2": links.link_2,
+            "descLink3": links.link_3,
+            "addSaldo": document.getElementById('add-saldo') ? document.getElementById('add-saldo').value : 0
         };
 
         const config = {
@@ -121,9 +142,20 @@ const FormEdit = () => {
                 .then((res) => {
                     if (res.success) {
                         setShowSpinner(false);
-                        alert("Usuário Atualizado!");
+
+                        localStorage.setItem("imgname", '');
+                        localStorage.setItem("imgname2", '');
+                        localStorage.setItem("imgname3", '');
+
+                        Swal.fire({
+                            title: 'sucesso!',
+                            text: 'ID Atualizado!',
+                            icon: 'success',
+                            confirmButtonText: 'Confirmar'
+                          })
                     } else {
-                        alert(res.message);
+                        //alert(res.message);
+                        console.log(res.message);
                     }
                 })
         }
@@ -144,29 +176,15 @@ const FormEdit = () => {
         })
     });
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-
-        switch (event.target.id) {
-            case "atividade":
-                atividadeValue.atividade = value;
-                break;
-            case "corTitulo":
-                atividadeValue.corTitulo = value;
-                break;
-            default:
-                console.log("não encontrou");
-                break;
-        }
-
-
-        setAtividade(prevState => ({
-            ...prevState,
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setLinks({
+            ...links,
             [name]: value
-        }));
-
-
+        });
+        //console.log("------------->", e.target.name, e.target.value);
     };
+
 
     function teste(meuParam) {
         let user = usuarios.find(user => user.codUsuario == meuParam);
@@ -220,17 +238,18 @@ const FormEdit = () => {
                                 className="form-control h-25 w-50"
                                 id="valorDesconto"
                                 name="valorDesconto"
-                                value={descontoId}
-                                onChange={(e) => setDescontoId(e.target.value)}
+                                value={parseFloat(descontoId).toFixed(2)}
+                                onChange={(e) => setDescontoId(String(e.target.value))}
+                                placeholder="0,00"
                             />
                             <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span>
                         </div>
-
-
+                                
+{console.log("tesate", patrocinio)}
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="patrocinador" className="w-50 px-1">Habilitar Patrocinador ?</label>
                             <select name="patrocinador" id="patrocinador" className="w-50 py-1"
-                                value={descImagem}
+                                value={patrocinio}
                                 onChange={(e) => setPatrocinio(e.target.value)}>
                                 <option value="1">Sim</option>
                                 <option value="0">Não</option>
@@ -239,9 +258,9 @@ const FormEdit = () => {
 
                         {patrocinio == 1 &&
                             <div className="form-group d-flex flex-column align-items-center py-3">
-                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink} codImg={descImagem.descImagem} />
-                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink2} codImg={descImagem.descImagem2} />
-                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink3} codImg={descImagem.descImagem3} />
+                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink} codImg={descImagem.descImagem} miniPreview={false} valueLink={links.link_1}/>
+                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink2} codImg={descImagem.descImagem2} miniPreview={false} valueLink={links.link_2}/>
+                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink3} codImg={descImagem.descImagem3} miniPreview={false} valueLink={links.link_3}/>
                             </div>
 
                         }

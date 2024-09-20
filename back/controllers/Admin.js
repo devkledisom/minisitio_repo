@@ -398,6 +398,7 @@ const { Op } = Sequelize;
 
         // Consulta para recuperar apenas os itens da página atual
         const Ids = await Descontos.findAndCountAll({
+            order: [['dtCadastro', 'DESC']],
             /*         where: {
                         codCaderno: 2,
                     }, */
@@ -463,6 +464,13 @@ const { Op } = Sequelize;
         const atividades = await Descontos.update({
             descricao: req.body.descricao,
             desconto: req.body.valorDesconto,
+            patrocinador_ativo: req.body.patrocinador,
+            descImagem: req.body.descImagem,
+            descImagem2: req.body.descImagem2,
+            descImagem3: req.body.descImagem3,
+            descLink: req.body.descLink,
+            descLink2: req.body.descLink2,
+            descLink3: req.body.descLink3
         }, {
             where: {
                 idDesconto: req.query.id,
@@ -507,6 +515,7 @@ const { Op } = Sequelize;
                 descLink3: req.body.descLink3 || "#",
                 dtCadastro: dataNow(),
                 ativo: 1,
+                patrocinador_ativo: req.body.patrocinador,
                 utilizar_saldo: 0,
                 saldo: req.body.saldo
 

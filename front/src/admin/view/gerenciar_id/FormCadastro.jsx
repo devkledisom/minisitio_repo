@@ -27,6 +27,7 @@ const FormCadastro = () => {
         link_2: null,
         link_3: null
     });
+    const [value, setValue] = useState('');
 
 
     const location = useLocation();
@@ -62,7 +63,7 @@ const FormCadastro = () => {
         let codigoDoMaster = e.target.value;
         usuarios.find((item) => {
             if (item.codUsuario == codigoDoMaster) {
-                fetch(`http://localhost:3032/admin/desconto/ddd/${item.codUf}`)
+                fetch(`${masterPath.url}/admin/desconto/ddd/${item.codUf}`)
                 .then((x) => x.json())
                 .then((res) => {
                     //console.log(res.data.ddd, String(item.codUsuario).padStart(3, "0"), String(res.qtdeIds).padStart(4, "0"))
@@ -120,12 +121,14 @@ const FormCadastro = () => {
             };
         }); */
 
-
+        let valorDescontoString = value.replace(",", ".");
+        let valorDescontoNumber = parseFloat(valorDescontoString).toFixed(2);
+        console.log(valorDescontoNumber);
 
         const data = {
             "usuario": document.getElementById('user').value,
             "descricao": document.getElementById('descID').value,
-            "valorDesconto": document.getElementById('valorDesconto').value,
+            "valorDesconto": parseFloat(valorDescontoString).toFixed(2),//valorDescontoNumber, //document.getElementById('valorDesconto').value,
             "patrocinador": document.getElementById('patrocinador').value,
             "saldoUtilizado": document.getElementById('utilizar-saldo').value,
             "hash": hash,
@@ -150,7 +153,11 @@ const FormCadastro = () => {
                 .then((res) => {
                     if (res.success) {
                         setShowSpinner(false);
-                        //alert("Usuário Cadastrado!");
+                        //alert("Usuário Cadastrado!"); 
+
+                        localStorage.setItem("imgname", '');
+                        localStorage.setItem("imgname2", '');
+                        localStorage.setItem("imgname3", '');
 
                         Swal.fire({
                             title: 'sucesso!',
@@ -193,6 +200,19 @@ const FormCadastro = () => {
         //console.log("------------->", e.target.name, e.target.value);
     };
 
+    const handleInputChange = (e) => {
+        let inputValue = e.target.value;
+       /*  inputValue = inputValue.replace(/\D/g, ''); // Remove tudo que não é dígito
+        if (inputValue.length > 2) {
+          inputValue = inputValue.replace(/(\d)(\d{2})$/, '$1.$2'); // Adiciona a vírgula antes dos dois últimos dígitos
+          
+        } else {
+            setValue('');
+        } */
+        setValue(inputValue);
+      
+      };
+
     return (
         <div className="users">
             <header style={style} className='w-100'>
@@ -223,7 +243,11 @@ const FormCadastro = () => {
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="valorDesconto" className="w-50 px-1">Valor do desconto:</label>
-                            <input type="text" className="form-control h-25 w-50" id="valorDesconto" placeholder="" name="valorDesconto" />
+                            <input type="text" className="form-control h-25 w-50" id="valorDesconto" name="valorDesconto" 
+                             value={value}
+                             onChange={handleInputChange}
+                             placeholder="0,00"
+                              />
                             <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span>
                         </div>
 
@@ -237,9 +261,9 @@ const FormCadastro = () => {
                         </div>
                         {patrocinio == 1 &&
                             <div className="form-group d-flex flex-column align-items-center py-3">
-                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} />
-                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} />
-                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} />
+                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} miniPreview={true}/>
+                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} miniPreview={true}/>
+                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} miniPreview={true}/>
                                 {/*  <label className="w-50 px-1">Imagem:</label> */}
                                 {/*  <ChooseFile codigoUser={param} largura={"w-50"} preview={true} /> */}
                             </div>
