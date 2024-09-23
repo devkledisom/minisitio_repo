@@ -59,7 +59,6 @@ router.put('/api/admin/atividade/update', Admin.atualizarAtividades);
 router.delete('/api/admin/atividade/delete/:id', Admin.deleteAtividade);
 router.post('/api/admin/atividade/create', Admin.criarAtividade);
 
-<<<<<<< HEAD
 router.get('/api/admin/desconto/read', Admin.listarIds);
 router.get('/api/admin/desconto/edit/:id', Admin.listarUserId);
 router.put('/api/admin/desconto/update', Admin.atualizarIds);
@@ -69,10 +68,8 @@ router.delete('/api/admin/desconto/delete/:id', Admin.deleteIds);
 router.get('/api/admin/desconto/buscar/:id', Admin.buscarId);
 router.get('/api/admin/desconto/read/all', Admin.buscarAllId);
 router.get('/api/admin/desconto/ddd/:id', Admin.buscarDDD);
-<<<<<<< HEAD
 router.post('/api/admin/desconto/export', Admin.exportID);
-=======
-=======
+
 router.get('/admin/desconto/read', Admin.listarIds);
 router.get('/admin/desconto/edit/:id', Admin.listarUserId);
 router.put('/admin/desconto/update', Admin.atualizarIds);
@@ -80,8 +77,6 @@ router.post('/admin/desconto/create', Admin.criarIds);
 router.delete('/admin/desconto/delete/:id', Admin.deleteIds);
 router.get('/admin/desconto/buscar/:id', Admin.buscarId);
 router.get('/admin/desconto/ddd/:id', Admin.buscarDDD);
->>>>>>> df008fdbf9e109404e2935e0dea287976642a27b
->>>>>>> 94280a637b420b87d5d6b7d65bc31277855008f2
 
 //ANUNCIOS
 router.get('/api/admin/espacos/read', Admin.listarEspacos);
