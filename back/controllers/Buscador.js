@@ -5,6 +5,9 @@ const Anuncio = require('../models/table_anuncio');
 const Atividade = require('../models/table_atividade');
 const Uf = require('../models/table_uf');
 
+const Sequelize = require('sequelize');
+const { Op } = Sequelize;
+
 module.exports = {
     busca: async (req, res) => {
         await database.sync();
@@ -60,25 +63,11 @@ module.exports = {
 
         res.json(ufs);
     },
-    buscaGeralCaderno: async (req, res) => {
-        /*        await database.sync();
-       
-               const codigoCaderno = req.params.codCaderno;
-       
-               //anuncio
-               const anuncios = await Anuncio.findAll({
-                   where: {
-                       codCaderno: codigoCaderno,
-                   }
-               }); */
-
-
-        //console.log(atividade, atividades[0].id)
-
+    buscaGeralCadernoold: async (req, res) => {
+  
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
         const codigoCaderno = req.params.codCaderno;
-        console.log('dasdasdas', codigoCaderno)
         const offset = (paginaAtual - 1) * porPagina;
 
         // Consulta para recuperar apenas os itens da página atual
@@ -102,10 +91,64 @@ module.exports = {
         })
 
         res.json({
+         anuncios: anuncios.rows, // Itens da página atual
+            paginaAtual: paginaAtual,
+            totalPaginas: totalPaginas
+        });  
+    },
+    buscaGeralCaderno: async (req, res) => {
+  
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+        const codigoCaderno = req.params.codCaderno;
+        //const offset = (paginaAtual - 1) * porPagina;
+
+
+        const todosRegistros = await Anuncio.findAll({
+            order: [
+                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                ['createdAt', 'DESC'],
+                ['codDuplicado', 'ASC'],
+            ],
+            where: {
+                [Op.and]: [
+                    { codUf: 27 },
+                    { codCaderno: 26 }
+                ]
+            },
+        });
+        
+        const indexDoItem = todosRegistros.findIndex(item => item.codAnuncio == 1134);
+
+        const paginaDoItem = Math.floor(2003 / porPagina) + 1;
+        const offset = (paginaDoItem - 1) * porPagina;
+        console.log("------------------->", paginaDoItem, indexDoItem);
+
+        // Consulta para recuperar apenas os itens da página atual
+        const anuncios = await Anuncio.findAndCountAll({
+            where: {
+                codCaderno: codigoCaderno,
+            },
+            limit: porPagina,
+            offset: offset
+        });
+
+        // Número total de itens
+        const totalItens = anuncios.count;
+        // Número total de páginas
+        const totalPaginas = Math.ceil(totalItens / porPagina);
+
+        console.log({
             anuncios: anuncios.rows, // Itens da página atual
             paginaAtual: paginaAtual,
             totalPaginas: totalPaginas
-        });
+        })
+
+        res.json({
+         anuncios: anuncios.rows, // Itens da página atual
+            paginaAtual: paginaAtual,
+            totalPaginas: totalPaginas
+        });   
     },
     buscaAtividade: async (req, res) => {
         await database.sync();

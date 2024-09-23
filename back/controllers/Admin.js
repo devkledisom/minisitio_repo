@@ -1194,7 +1194,9 @@ module.exports = {
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
 
-        console.log(req.params)
+        const offset = (paginaAtual - 1) * porPagina;
+
+        console.log("offsewt: ", offset)
 
         // Consulta para recuperar apenas os itens da página atual
         const codCaderno = await Caderno.findAll({
@@ -1215,7 +1217,9 @@ module.exports = {
                     { codUf: codCaderno[0].dataValues.codUf },
                     { codCaderno: codCaderno[0].dataValues.codCaderno }
                 ]
-            }
+            },
+            limit: porPagina,
+            offset: offset
         });
 
         if (anuncio.count < 1) {
@@ -1251,19 +1255,26 @@ module.exports = {
                 caderno: anun.codCaderno
             });
 
-            console.log(anun.dataValues)
+            //console.log(anun.dataValues)
             console.log(x, /* atividades[0].dataValues */)
         }
 
         //console.log(count);
 
         const anuncioTeste = await Anuncio.findAndCountAll({
+            order: [
+                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                ['createdAt', 'DESC'],
+                ['codDuplicado', 'ASC'],
+            ],
             where: {
                 [Op.and]: [
                     { codUf: codCaderno[0].dataValues.codUf },
                     { codCaderno: codCaderno[0].dataValues.codCaderno }
                 ]
-            }
+            },
+            limit: porPagina,
+            offset: offset
         });
 
         res.json({
@@ -1273,48 +1284,98 @@ module.exports = {
             mosaico: codCaderno[0].dataValues.descImagem
         });
 
-        /*         // Número total de itens
-                const totalItens = anuncio.count;
-                // Número total de páginas
-                const totalPaginas = Math.ceil(totalItens / porPagina);
-        
-                try {
-                    await Promise.all(anuncio.rows.map(async (anun, i) => {
-                        const cader = await anun.getCaderno();
-                        anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
-        
-                        const estado = await anun.getUf();
-                        anun.codUf = estado.sigla_uf;
-        
-                        const desconto = await anun.getDesconto();
-                        anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
-        
-                        const user = await anun.getUsuario();
-                        anun.codUsuario = user.descNome;
-                        anun.dataValues.loginUser = user.descCPFCNPJ;
-                        anun.dataValues.loginPass = user.senha;
-                        anun.dataValues.loginEmail = user.descEmail;
-                        anun.dataValues.loginContato = user.descTelefone;
-        
-                        const atividades = await anun.getAtividade();
-                        anun.dataValues.mainAtividade = atividades.atividade
-        
-                        //console.log(anuncio.rows[i])
-                    }));
-        
-                    res.json({
-                        success: true,
-                        message: {
-                            anuncios: anuncio.rows, // Itens da página atual
-                            paginaAtual: paginaAtual,
-                            totalPaginas: totalPaginas,
-                            totalItem: totalItens
-                        }
-                    });
-                } catch (err) {
-                    console.error("Erro ao processar os anúncios:", err);
-                    res.status(500).json({ success: false, message: "Erro interno ao processar os dados." });
-                } */
+    },
+    listarClassificadoEspecifico: async (req, res) => {
+
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+
+        const offset = (paginaAtual - 1) * porPagina;
+
+        console.log("offsewt: ", offset)
+
+        // Consulta para recuperar apenas os itens da página atual
+        const codCaderno = await Caderno.findAll({
+            where: {
+                [Op.and]: [
+                    { codUf: req.params.uf },
+                    { nomeCaderno: req.params.caderno }
+                ]
+            }
+        });
+
+        //console.log(codCaderno)
+
+
+        const anuncio = await Anuncio.findAndCountAll({
+            where: {
+                [Op.and]: [
+                    { codUf: codCaderno[0].dataValues.codUf },
+                    { codCaderno: codCaderno[0].dataValues.codCaderno }
+                ]
+            },
+            limit: porPagina,
+            offset: offset
+        });
+
+        if (anuncio.count < 1) {
+            res.json({
+                success: false,
+                message: "caderno não localizado"
+            });
+
+            return;
+        };
+
+        const count = anuncio.rows.reduce((acc, item) => {
+            // Incrementa o contador do codAtividade no acumulador
+            acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+            return acc;
+        }, {});
+
+        const atividades = await Atividade.findAll();
+
+        const arrayClassificado = [];
+
+        for (let x in count) {
+            const anun = anuncio.rows.find(item => item.codAtividade == x);
+            const atividade = atividades.find(item => item.id == x);
+
+            arrayClassificado.push({
+                id: atividade.dataValues.id,
+                nomeAtividade: atividade.dataValues.atividade,
+                qtdAtividade: count[x],
+                codigoAnuncio: anun.codAnuncio,
+                nomeAnuncio: anun.descAnuncio,
+                estado: anun.codUf,
+                caderno: anun.codCaderno
+            });
+
+            //console.log(anun.dataValues)
+            console.log(x, /* atividades[0].dataValues */)
+        }
+
+        //console.log(count);
+
+        const anuncioTeste = await Anuncio.findAndCountAll({
+            order: [
+                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                ['createdAt', 'DESC'],
+                ['codDuplicado', 'ASC'],
+            ],
+            where: {
+                codAnuncio: 1134
+            },
+            limit: porPagina,
+            offset: offset
+        });
+
+        res.json({
+            success: true,
+            data: arrayClassificado,
+            teste: anuncioTeste,
+            mosaico: codCaderno[0].dataValues.descImagem
+        });
 
     },
     buscarAnuncioId: async (req, res) => {
@@ -2213,6 +2274,16 @@ module.exports = {
 
 
     },
+    import4excellolrotateste: async (req, res) => {
+        const atividades = await Atividade.findAll({
+            where: {
+                atividade: { [Op.like]: `%${tipoAtividade}%` }
+            },
+
+        });
+
+        res.json(atividades)
+    },
     import4excell: async (req, res) => {
         // req.file é o arquivo 'uploadedfile'
         // req.body conterá os campos de texto, se houver
@@ -2264,6 +2335,8 @@ module.exports = {
                 const chavePix = result['PIX ( chave)'];
                 const login = result['CNPJ/CPF'];
                 const senha = 12345;
+
+             
 
 
                 const verificarUserExists = await Usuarios.findAll({
@@ -2350,7 +2423,7 @@ module.exports = {
 
                     });
 
-                    if (atividades.length > 1) {
+                    if (atividades.length > 0) {
                         return atividades[0].dataValues.id;
                     } else {
                         return 3845;

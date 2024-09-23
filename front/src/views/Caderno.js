@@ -29,6 +29,7 @@ function Caderno() {
 
   const pegarParam = new URLSearchParams(location.search);
 
+  const page = pegarParam.get('page');
   const book = pegarParam.get('book');
   const id = pegarParam.get('id');
   const caderno = pegarParam.get('caderno');
@@ -37,7 +38,7 @@ function Caderno() {
   useEffect(() => {
     async function buscarAtividade() {
       try {
-        const res = await fetch(`${masterPath.url}/anuncios/${book}`, {
+        const res = await fetch(`${masterPath.url}/anuncios/${book}?page=${page}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -83,7 +84,7 @@ function Caderno() {
             const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id));
 
             setNomeAtividade(atividadesEncontradas);
-            //console.log(res.teste)
+            console.log(res)
           } else {
 
           }
@@ -115,7 +116,7 @@ function Caderno() {
     buscarId();
 
 
-  }, [book]);
+  }, [book, page]);
 
 
   const teste = useRef(null)//observar
