@@ -82,7 +82,7 @@ function Caderno() {
   const teste = useRef(null)
 
   useEffect(() => {
-    console.log("motre", teste.current)
+    //console.log("motre", teste.current)
 
     fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
       .then(x => x.json())
@@ -91,7 +91,7 @@ function Caderno() {
           setClassificados(res.data);
           setPathImg(res.teste.rows);
           setMosaicoImg(res.mosaico);
-          console.log(res)
+          console.log("caderno geral", res);
         } else {
 
         }

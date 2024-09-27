@@ -24,6 +24,7 @@ function Caderno() {
   const [minisitio, setMinisitio] = useState([]);
   const [smoot, setSmoot] = useState(false);
   const [listaIds, setListaIds] = useState([]);
+  const [numberPage, setNumberPage] = useState(1);
 
   const location = useLocation();
 
@@ -72,10 +73,6 @@ function Caderno() {
         .then(x => x.json())
         .then(async res => {
           if (res.success) {
-            /*  setClassificados(res.data);
-             setPathImg(res.teste.rows);
-             setMosaicoImg(res.mosaico); */
-            setMinisitio({ anuncios: res.teste.rows });
 
             const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
             const valores = [...new Set(codigosAtividades)];
@@ -83,8 +80,37 @@ function Caderno() {
             const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
             const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id));
 
-            setNomeAtividade(atividadesEncontradas);
-            console.log(res)
+            const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
+
+            let result = res.teste.rows.filter(category =>
+              res.data.some(anuncio => category.id === anuncio.codAtividade)
+            );
+   
+
+            let result1 = res.data.map((category) => {
+              // Filtra os anúncios que correspondem à categoria atual
+              let teste = res.teste.rows.filter(anuncio => category.id === anuncio.codAtividade);
+            
+              // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+              category.kledisom = teste;
+            
+              // Retorna o objeto category modificado
+              return category;
+            });
+            
+            
+
+          
+            setMinisitio({ anuncios: result });
+            setNomeAtividade(result1);
+        
+
+
+            result.sort((a, b) => a.codAtividade - b.codAtividade);
+
+
+            //setMinisitio({ anuncios: dividido[0] });
+            paginator(result1); 
           } else {
 
           }
@@ -92,8 +118,9 @@ function Caderno() {
         })
     };
 
+
     if (book != undefined && id != undefined) {
-      buscarAtividade();
+      //buscarAtividade();
     } else {
       buscarTodosClassificado();
     }
@@ -104,7 +131,7 @@ function Caderno() {
         .then((res) => {
           if (res.success) {
             setListaIds(res.data);
-   
+
           } else {
             console.error("encontrado na base de dados");
           }
@@ -115,8 +142,38 @@ function Caderno() {
 
     buscarId();
 
+    function paginator(param) {
+      // Array com 3000 registros (exemplo)
+      let records = param;
 
-  }, [book, page]);
+      // Função para paginar o array
+      function paginate(array, pageNumber, pageSize) {
+        // Calcula o índice inicial e final da página
+        const startIndex = (pageNumber - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+
+        // Retorna os itens da página correspondente
+        return array.slice(startIndex, endIndex);
+      }
+
+      // Exemplo de uso
+      let pageNumber = numberPage; // Número da página que você quer
+      let pageSize = 5;  // Tamanho da página (10 registros por página)
+
+      let currentPageData = paginate(records, pageNumber, pageSize);
+
+      //setMinisitio({ anuncios: currentPageData });
+      setNomeAtividade(currentPageData)
+      
+      setMinisitio({
+        anuncios: currentPageData,
+        totalPaginas: Math.ceil(param.length / pageSize),
+        paginaAtual: numberPage
+      });
+
+    }
+
+  }, [book, page, numberPage]);
 
 
   const teste = useRef(null)//observar
@@ -153,13 +210,13 @@ function Caderno() {
         <div className="container">
           <div className="row p-3">
             <div className="col-md-6 text-end">
-              <button id="btn-prev">
+              <button id="btn-prev" onClick={() =>  setNumberPage(numberPage-1)}>
                 <i className="fa fa-arrow-left mx-2"></i>
                 Anterior
               </button>
             </div>
             <div className="col-md-6 text-start">
-              <button id="btn-next">
+              <button id="btn-next" onClick={() =>  setNumberPage(numberPage+1)}>
                 Próximo
                 <i className="fa fa-arrow-right mx-2"></i>
               </button>
@@ -185,11 +242,10 @@ function Caderno() {
                         {item.atividade}
                       </h2>
                       {
+//minisitio.anuncios
+                        item.kledisom.map((anuncio) => {
 
-                        minisitio.anuncios.map((anuncio) => {
-                          /*  console.log("teste", anuncio) */
-
-                          if (anuncio.codTipoAnuncio == 1 && anuncio.codAtividade == item.id) {
+                          if (anuncio.codTipoAnuncio == 1) {
                             return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
                           } else {
                             if (anuncio.codAtividade == item.id) {
@@ -208,19 +264,14 @@ function Caderno() {
                             } <MsgProgramada />
                             //return <MiniWebCard key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={minisitio} />
                           }
-                          //console.log("compr", i)
-                          /*     if(i == 9){
-                                setSmoot(true)
-                              } */
-
 
                           return null;
                         })
                       }
                       {
                         // Verifica se não é o último card e se não há anúncio associado à próxima atividade
-                        index !== nomeAtividade.length - 1 && minisitio.anuncios.every(anuncio => anuncio.codAtividade !== nomeAtividade[index + 1].id) &&
-                        <MsgProgramada />
+                        /*       index !== nomeAtividade.length - 1 && minisitio.anuncios.every(anuncio => anuncio.codAtividade !== nomeAtividade[index + 1].id) &&
+                              <MsgProgramada /> */
                       }
                     </div>
                     :

@@ -1145,48 +1145,80 @@ module.exports = {
             mosaico: codCaderno[0].dataValues.descImagem
         });
 
-        /*         // Número total de itens
-                const totalItens = anuncio.count;
-                // Número total de páginas
-                const totalPaginas = Math.ceil(totalItens / porPagina);
+
+    },
+    listarClassificadoGeralould: async (req, res) => {
+
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+
+        const offset = (paginaAtual - 1) * porPagina;
+
+        console.log("offsewt: ", offset)
+
+        try {
+            // Passo 1: Buscar anúncios da tabela "anuncio" (res.teste.rows)
+            let anuncios = await Anuncio.findAll({
+              where: {
+                codCaderno: 26,  // ou outros filtros relevantes
+                codUf: 27
+              }
+            });
         
-                try {
-                    await Promise.all(anuncio.rows.map(async (anun, i) => {
-                        const cader = await anun.getCaderno();
-                        anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+            // Obter os codAtividade de todos os anúncios
+            let codigosAtividades = anuncios.map(anuncio => anuncio.codAtividade);
+            
+            // Remover duplicatas usando Set
+            let valoresUnicos = [...new Set(codigosAtividades)];
         
-                        const estado = await anun.getUf();
-                        anun.codUf = estado.sigla_uf;
+            // Passo 2: Buscar atividades com esses codAtividades
+            let atividadesEncontradas = await Atividade.findAll({
+              where: {
+                id: {
+                  [Op.in]: valoresUnicos  // Encontrar atividades cujos IDs estão no array de atividades
+                }
+              }
+            });
         
-                        const desconto = await anun.getDesconto();
-                        anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+            // Passo 3: Filtrar os anúncios que possuem um codAtividade correspondente
+            let anunciosFiltrados = anuncios.filter(anuncio => 
+              atividadesEncontradas.some(atividade => atividade.id === anuncio.codAtividade)
+            );
         
-                        const user = await anun.getUsuario();
-                        anun.codUsuario = user.descNome;
-                        anun.dataValues.loginUser = user.descCPFCNPJ;
-                        anun.dataValues.loginPass = user.senha;
-                        anun.dataValues.loginEmail = user.descEmail;
-                        anun.dataValues.loginContato = user.descTelefone;
+            // Passo 4: Paginação usando Sequelize
+            let pageNumber = 1; // Número da página que você quer
+            let pageSize = 100;  // Tamanho da página (100 registros por página)
         
-                        const atividades = await anun.getAtividade();
-                        anun.dataValues.mainAtividade = atividades.atividade
+            // Sequelize também pode fazer a paginação diretamente na consulta com offset e limit
+            let paginatedAnuncios = await Anuncio.findAll({
+              where: {
+                codAtividade: {
+                  [Op.in]: valoresUnicos
+                }
+              },
+              offset: (pageNumber - 1) * pageSize,  // Índice de onde começa a página
+              limit: pageSize                      // Quantos registros por página
+            });
         
-                        //console.log(anuncio.rows[i])
-                    }));
+            // Definir o estado com os resultados
+            /* setMinisitio({ anuncios: paginatedAnuncios });
+            setNomeAtividade(atividadesEncontradas); */
         
-                    res.json({
-                        success: true,
-                        message: {
-                            anuncios: anuncio.rows, // Itens da página atual
-                            paginaAtual: paginaAtual,
-                            totalPaginas: totalPaginas,
-                            totalItem: totalItens
-                        }
-                    });
-                } catch (err) {
-                    console.error("Erro ao processar os anúncios:", err);
-                    res.status(500).json({ success: false, message: "Erro interno ao processar os dados." });
-                } */
+            res.json({
+                success: true,
+                teste: paginatedAnuncios
+             /*    data: arrayClassificado,
+                teste: anuncioTeste,
+                mosaico: codCaderno[0].dataValues.descImagem */
+            });
+
+            console.log("Paginated anuncios:", paginatedAnuncios);
+            
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+
+       
 
     },
     listarClassificadoGeral: async (req, res) => {
@@ -1217,9 +1249,9 @@ module.exports = {
                     { codUf: codCaderno[0].dataValues.codUf },
                     { codCaderno: codCaderno[0].dataValues.codCaderno }
                 ]
-            },
+            }/* ,
             limit: porPagina,
-            offset: offset
+            offset: offset */
         });
 
         if (anuncio.count < 1) {
@@ -1237,17 +1269,24 @@ module.exports = {
             return acc;
         }, {});
 
-        const atividades = await Atividade.findAll();
+        const atividades = await Atividade.findAll(/* {order: [
+            ['atividade', 'ASC']
+        ],
+            limit: porPagina,
+            offset: offset
+        } */);
+
+        //console.log("--------------====> ", atividades[0].dataValues)
 
         const arrayClassificado = [];
-
+ 
         for (let x in count) {
             const anun = anuncio.rows.find(item => item.codAtividade == x);
             const atividade = atividades.find(item => item.id == x);
 
             arrayClassificado.push({
                 id: atividade.dataValues.id,
-                nomeAtividade: atividade.dataValues.atividade,
+                atividade: atividade.dataValues.atividade,
                 qtdAtividade: count[x],
                 codigoAnuncio: anun.codAnuncio,
                 nomeAnuncio: anun.descAnuncio,
@@ -1256,25 +1295,128 @@ module.exports = {
             });
 
             //console.log(anun.dataValues)
-            console.log(x, /* atividades[0].dataValues */)
-        }
+            //console.log()
+        }  
 
         //console.log(count);
 
         const anuncioTeste = await Anuncio.findAndCountAll({
-            order: [
+/*             order: [
                 [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
                 ['createdAt', 'DESC'],
                 ['codDuplicado', 'ASC'],
-            ],
+            ], */
             where: {
                 [Op.and]: [
                     { codUf: codCaderno[0].dataValues.codUf },
                     { codCaderno: codCaderno[0].dataValues.codCaderno }
                 ]
-            },
+            }/* ,
+            limit: porPagina,
+            offset: offset */
+        });
+
+        res.json({
+            success: true,
+            data: arrayClassificado,
+            teste: anuncioTeste,
+            mosaico: codCaderno[0].dataValues.descImagem
+        });
+
+    },
+    listarClassificadoGeralold: async (req, res) => {
+
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+
+        const offset = (paginaAtual - 1) * porPagina;
+
+        console.log("offsewt: ", offset)
+
+        // Consulta para recuperar apenas os itens da página atual
+        const codCaderno = await Caderno.findAll({
+            where: {
+                [Op.and]: [
+                    { codUf: req.params.uf },
+                    { nomeCaderno: req.params.caderno }
+                ]
+            }
+        });
+
+        //console.log(codCaderno)
+
+
+        const anuncio = await Anuncio.findAndCountAll({
+            where: {
+                [Op.and]: [
+                    { codUf: codCaderno[0].dataValues.codUf },
+                    { codCaderno: codCaderno[0].dataValues.codCaderno }
+                ]
+            }/* ,
+            limit: porPagina,
+            offset: offset */
+        });
+
+        if (anuncio.count < 1) {
+            res.json({
+                success: false,
+                message: "caderno não localizado"
+            });
+
+            return;
+        };
+
+        const count = anuncio.rows.reduce((acc, item) => {
+            // Incrementa o contador do codAtividade no acumulador
+            acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+            return acc;
+        }, {});
+
+        const atividades = await Atividade.findAll(/* {order: [
+            ['atividade', 'ASC']
+        ],
             limit: porPagina,
             offset: offset
+        } */);
+
+        //console.log("--------------====> ", atividades[0].dataValues)
+
+        const arrayClassificado = [];
+ 
+        for (let x in count) {
+            const anun = anuncio.rows.find(item => item.codAtividade == x);
+            const atividade = atividades.find(item => item.id == x);
+
+            arrayClassificado.push({
+                id: atividade.dataValues.id,
+                atividade: atividade.dataValues.atividade,
+                qtdAtividade: count[x],
+                codigoAnuncio: anun.codAnuncio,
+                nomeAnuncio: anun.descAnuncio,
+                estado: anun.codUf,
+                caderno: anun.codCaderno
+            });
+
+            //console.log(anun.dataValues)
+            //console.log()
+        }  
+
+        //console.log(count);
+
+        const anuncioTeste = await Anuncio.findAndCountAll({
+/*             order: [
+                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                ['createdAt', 'DESC'],
+                ['codDuplicado', 'ASC'],
+            ], */
+            where: {
+                [Op.and]: [
+                    { codUf: codCaderno[0].dataValues.codUf },
+                    { codCaderno: codCaderno[0].dataValues.codCaderno }
+                ]
+            }/* ,
+            limit: porPagina,
+            offset: offset */
         });
 
         res.json({
