@@ -62,12 +62,130 @@ function Caderno() {
 
         setNomeAtividade(atividadesEncontradas);
 
-        //console.log("Final", atividadesEncontradas, nomeAtividade);
+        console.log("Final", atividadesEncontradas, nomeAtividade);
       } catch (error) {
         console.error('Erro ao buscar atividades:', error);
       }
     }
 
+    function buscarTodosClassificadoold() {
+      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
+        .then(x => x.json())
+        .then(async res => {
+          if (res.success) {
+
+            const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
+            const valores = [...new Set(codigosAtividades)];
+
+            const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
+            const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id));
+
+            const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
+
+            let result = res.teste.rows.filter(category =>
+              res.data.some(anuncio => category.id === anuncio.codAtividade)
+            );
+
+
+            /*    let result1 = res.data.map((category) => {
+                 // Filtra os anúncios que correspondem à categoria atual
+                 let teste = res.teste.rows.filter(anuncio => category.id === anuncio.codAtividade);
+               
+                 // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+                 console.log(teste)
+                 category.kledisom = teste;
+               
+                 // Retorna o objeto category modificado
+                 return category;
+               }); */
+
+            /*  let result1 = res.data.map((category) => {
+               // Inicializa o contador para limitar a 10 anúncios por categoria
+               let contador = 0;
+ 
+               // Filtra os anúncios que correspondem à categoria atual e conta os primeiros 10
+               let teste = res.teste.rows.filter(anuncio => {
+                 if (category.id === anuncio.codAtividade && contador < 10) {
+                   contador++;
+                   return true;
+                 }
+                 return false;
+               });
+ 
+               // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+               category.kledisom = teste;
+               //console.log(teste)
+ 
+               // Retorna o objeto category modificado
+               return category;
+             }); */
+
+
+            let result1 = res.data.map((category) => {
+              // Filtra os anúncios que correspondem à categoria atual
+              let totalAnuncios = res.teste.rows.filter(anuncio => {
+                return category.id === anuncio.codAtividade;
+              });
+
+              // Página atual (você pode controlar isso pelo frontend)
+              let currentPage = 1; // Exemplo de página atual
+              let limitPerPage = 10;
+
+              // Paginação
+              let startIndex = (currentPage - 1) * limitPerPage;
+              let endIndex = startIndex + limitPerPage;
+              let paginatedAnuncios = totalAnuncios.slice(startIndex, endIndex);
+
+              // Adiciona a nova propriedade 'kledisom' com os anúncios paginados
+              category.kledisom = paginatedAnuncios;
+
+              // Retorna o objeto category modificado
+              return category;
+            });
+
+
+            console.log(result1);
+
+
+
+            setMinisitio({ anuncios: result });
+            setNomeAtividade(result1);
+
+
+
+            result.sort((a, b) => a.codAtividade - b.codAtividade);
+
+
+            //setMinisitio({ anuncios: dividido[0] });
+            paginator(result1);
+            function pagi() {
+              const limitPerPage = 10;
+
+              result1.map((category) => {
+                // Para cada categoria, calcule o número de páginas
+                let totalPages = Math.ceil(category.kledisom.length / limitPerPage);
+
+                // Página atual
+                let currentPage = 1; // Exemplo: Pode ser controlado por um parâmetro de frontend
+
+                // Cálculo do índice inicial e final dos anúncios
+                let startIndex = (currentPage - 1) * limitPerPage;
+                let endIndex = startIndex + limitPerPage;
+
+                // Pegue os anúncios para a página atual
+                let paginatedAnuncios = category.kledisom.slice(startIndex, endIndex);
+
+                console.log(paginatedAnuncios)
+              })
+
+            }
+            pagi()
+          } else {
+
+          }
+
+        })
+    };
     function buscarTodosClassificado() {
       fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
         .then(x => x.json())
@@ -85,32 +203,91 @@ function Caderno() {
             let result = res.teste.rows.filter(category =>
               res.data.some(anuncio => category.id === anuncio.codAtividade)
             );
-   
+
+            const arr = [];
 
             let result1 = res.data.map((category) => {
               // Filtra os anúncios que correspondem à categoria atual
               let teste = res.teste.rows.filter(anuncio => category.id === anuncio.codAtividade);
-            
+
               // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+              //console.log(category)
               category.kledisom = teste;
-            
+              teste.forEach((item) => {
+                item.codAtividade = category.atividade; //adiciona as categorias
+                arr.push(item); //salva so os anuncios
+              });
+
+              //console.log(arr)
+
               // Retorna o objeto category modificado
               return category;
             });
-            
-            
 
-          
-            setMinisitio({ anuncios: result });
+            /*  let result1 = res.data.map((category) => {
+               // Inicializa o contador para limitar a 10 anúncios por categoria
+               let contador = 0;
+ 
+               // Filtra os anúncios que correspondem à categoria atual e conta os primeiros 10
+               let teste = res.teste.rows.filter(anuncio => {
+                 if (category.id === anuncio.codAtividade && contador < 10) {
+                   contador++;
+                   return true;
+                 }
+                 return false;
+               });
+ 
+               // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+               category.kledisom = teste;
+               //console.log(teste)
+ 
+               // Retorna o objeto category modificado
+               return category;
+             }); */
+
+
+
+            //console.log(result1);
+
+            // Atualiza o estado com os dados paginados
+            setMinisitio({ anuncios: result1 });
             setNomeAtividade(result1);
-        
 
+            // Função de Paginação para mudar de página dinamicamente
+            function paginator1(categories, currentPage = 1) {
+              const limitPerPage = 10;
 
-            result.sort((a, b) => a.codAtividade - b.codAtividade);
+              return categories.map((category) => {
+                // Total de anúncios para a categoria atual
+                let totalAnuncios = category.kledisom;
 
+                // Calcula o número de páginas
+                let totalPages = Math.ceil(totalAnuncios.length / limitPerPage);
 
-            //setMinisitio({ anuncios: dividido[0] });
-            paginator(result1); 
+                // Garantir que a página atual não ultrapasse o número total de páginas
+                if (currentPage > totalPages) currentPage = totalPages;
+                if (currentPage < 1) currentPage = 1;
+
+                // Paginação
+                let startIndex = (currentPage - 1) * limitPerPage;
+                let endIndex = startIndex + limitPerPage;
+
+                // Pegue os anúncios paginados
+                let paginatedAnuncios = totalAnuncios.slice(startIndex, endIndex);
+                console.log(paginatedAnuncios)
+                // Retorna os dados paginados para a categoria
+                return {
+                  ...category,
+                  currentPage,
+                  totalPages,
+                  paginatedAnuncios,
+                };
+              });
+            }
+
+            //pagi();
+            paginator(arr);
+
           } else {
 
           }
@@ -120,10 +297,58 @@ function Caderno() {
 
 
     if (book != undefined && id != undefined) {
-      //buscarAtividade();
+      buscarAtividade();
     } else {
       buscarTodosClassificado();
     }
+
+
+
+    function paginator(param) {
+      // Array de 3000 objetos (exemplo)
+      let arrayDeObjetos = Array.from({ length: 3000 }, (_, i) => ({ id: i + 1 }));
+
+      // Função para paginar o array
+      function paginate(array, pageNumber, limitPerPage) {
+        const totalPages = Math.ceil(array.length / limitPerPage);
+
+        // Garantir que a página esteja dentro do limite
+        if (pageNumber > totalPages) pageNumber = totalPages;
+        if (pageNumber < 1) pageNumber = 1;
+
+        // Índices de início e fim dos objetos a serem exibidos na página atual
+        const startIndex = (pageNumber - 1) * limitPerPage;
+        const endIndex = startIndex + limitPerPage;
+
+        // Retornar o array paginado e o total de páginas
+        return {
+          currentPage: pageNumber,
+          totalPages: totalPages,
+          data: array.slice(startIndex, endIndex)
+        };
+      }
+
+      // Usando a função para obter a página 1 com 10 objetos por página
+      const pageNumber = 1; // Página que você quer exibir
+      const limitPerPage = 10; // Número de objetos por página
+      const paginatedResult = paginate(param, pageNumber, limitPerPage);
+
+      console.log(paginatedResult);
+
+
+      //setMinisitio({ anuncios: currentPageData });
+      //setNomeAtividade(currentPageData)
+      setNomeAtividade(paginatedResult.data)
+
+      //console.log(currentPageData)
+
+      setMinisitio({
+        anuncios: paginatedResult.data,
+        totalPaginas: Math.ceil(param.length / 3000),
+        paginaAtual: pageNumber
+      });
+
+    };
 
     function buscarId() {
       fetch(`${masterPath.url}/admin/desconto/read/all`)
@@ -141,37 +366,6 @@ function Caderno() {
     };
 
     buscarId();
-
-    function paginator(param) {
-      // Array com 3000 registros (exemplo)
-      let records = param;
-
-      // Função para paginar o array
-      function paginate(array, pageNumber, pageSize) {
-        // Calcula o índice inicial e final da página
-        const startIndex = (pageNumber - 1) * pageSize;
-        const endIndex = startIndex + pageSize;
-
-        // Retorna os itens da página correspondente
-        return array.slice(startIndex, endIndex);
-      }
-
-      // Exemplo de uso
-      let pageNumber = numberPage; // Número da página que você quer
-      let pageSize = 5;  // Tamanho da página (10 registros por página)
-
-      let currentPageData = paginate(records, pageNumber, pageSize);
-
-      //setMinisitio({ anuncios: currentPageData });
-      setNomeAtividade(currentPageData)
-      
-      setMinisitio({
-        anuncios: currentPageData,
-        totalPaginas: Math.ceil(param.length / pageSize),
-        paginaAtual: numberPage
-      });
-
-    }
 
   }, [book, page, numberPage]);
 
@@ -210,13 +404,13 @@ function Caderno() {
         <div className="container">
           <div className="row p-3">
             <div className="col-md-6 text-end">
-              <button id="btn-prev" onClick={() =>  setNumberPage(numberPage-1)}>
+              <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}>
                 <i className="fa fa-arrow-left mx-2"></i>
                 Anterior
               </button>
             </div>
             <div className="col-md-6 text-start">
-              <button id="btn-next" onClick={() =>  setNumberPage(numberPage+1)}>
+              <button id="btn-next" onClick={() => setNumberPage(numberPage + 1)}>
                 Próximo
                 <i className="fa fa-arrow-right mx-2"></i>
               </button>
@@ -230,9 +424,64 @@ function Caderno() {
               <div
                 className="masonry-layout"
               >
-                {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
+                {/*      {
+                  nomeAtividade.map((item) => {
+                    console.log(item)
+                  })
+                
+                } */}
+                {nomeAtividade.length > 0 && nomeAtividade.map((anuncio, index) => {
 
-                  /* ((index + 1) % 5 === 0) ? <MsgProgramada /> : "" */
+                  if (anuncio.codTipoAnuncio == 1) {
+                    return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
+                  } else {
+                    //if (anuncio.codAtividade == item.id) {
+                      return <MiniWebCard key={anuncio.codAnuncio}
+                        id={anuncio.codAnuncio}
+                        data={minisitio}
+                        codImg={anuncio.descImagem}
+                        ref={teste}
+                        empresa={anuncio.descAnuncio}
+                        endereco={anuncio.descEndereco}
+                        telefone={anuncio.descTelefone}
+                        celular={anuncio.descCelular}
+                        codDesconto={anuncio.codDesconto}
+                        ids={buscarId(90)}
+                      />
+                   // } <MsgProgramada />
+                    //return <MiniWebCard key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={minisitio} />
+                  }
+
+                  //((index + 1) % 5 === 0) ? <MsgProgramada /> : "" 
+
+                 /*  (item != undefined || item.length > 0)
+                    ?
+                    <div  id={item.id} key={item.id} className="atividade-title px-2" >
+                        <h2 className='bg-yellow py-2'>
+                        {item.atividade}
+                      </h2> 
+
+                      {
+                        //minisitio.anuncios
+                        item.map((anuncio) => {
+
+
+
+                          return null;
+                        })
+                      }
+                      {
+                        // Verifica se não é o último card e se não há anúncio associado à próxima atividade
+                        //      index !== nomeAtividade.length - 1 && minisitio.anuncios.every(anuncio => anuncio.codAtividade !== nomeAtividade[index + 1].id) &&
+                        //    <MsgProgramada /> 
+                      }
+                    </div>
+                    :
+                    <h1>erro</h1> */
+                })}
+                {/* {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
+
+                  // ((index + 1) % 5 === 0) ? <MsgProgramada /> : "" 
 
 
                   (item != undefined || item.length > 0)
@@ -241,8 +490,9 @@ function Caderno() {
                       <h2 className='bg-yellow py-2'>
                         {item.atividade}
                       </h2>
+                      {console.log(item)}
                       {
-//minisitio.anuncios
+                        //minisitio.anuncios
                         item.kledisom.map((anuncio) => {
 
                           if (anuncio.codTipoAnuncio == 1) {
@@ -270,13 +520,13 @@ function Caderno() {
                       }
                       {
                         // Verifica se não é o último card e se não há anúncio associado à próxima atividade
-                        /*       index !== nomeAtividade.length - 1 && minisitio.anuncios.every(anuncio => anuncio.codAtividade !== nomeAtividade[index + 1].id) &&
-                              <MsgProgramada /> */
+                        //      index !== nomeAtividade.length - 1 && minisitio.anuncios.every(anuncio => anuncio.codAtividade !== nomeAtividade[index + 1].id) &&
+                          //    <MsgProgramada /> 
                       }
                     </div>
                     :
                     <h1>erro</h1>
-                ))}
+                ))} */}
               </div>
 
 

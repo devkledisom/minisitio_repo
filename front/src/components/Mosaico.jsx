@@ -15,7 +15,6 @@ function Mosaico(props) {
 
     return (
         <div>
-            {console.log(`${masterPath.url}/files/${props.mosaicoImg}`)}
             <div className="header hidden-print" style={
                 props.mosaicoImg ? style : { boxShadow: props.borda }
             }>
