@@ -25,6 +25,7 @@ function Caderno() {
   const [smoot, setSmoot] = useState(false);
   const [listaIds, setListaIds] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
 
@@ -37,6 +38,7 @@ function Caderno() {
   const estado = pegarParam.get('estado');
 
   useEffect(() => {
+    setLoading(true);
     async function buscarAtividade() {
       try {
         const res = await fetch(`${masterPath.url}/anuncios/${book}?page=${page}`, {
@@ -211,7 +213,6 @@ function Caderno() {
               let teste = res.teste.rows.filter(anuncio => category.id === anuncio.codAtividade);
 
               // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
-              //console.log(category)
               category.kledisom = teste;
               teste.forEach((item) => {
                 item.codAtividade = category.atividade; //adiciona as categorias
@@ -329,24 +330,29 @@ function Caderno() {
       }
 
       // Usando a função para obter a página 1 com 10 objetos por página
-      const pageNumber = 1; // Página que você quer exibir
+      const pageNumber = numberPage; // Página que você quer exibir
       const limitPerPage = 10; // Número de objetos por página
       const paginatedResult = paginate(param, pageNumber, limitPerPage);
 
-      console.log(paginatedResult);
+      //console.log(paginatedResult);
 
+      let categoriasFiltradas = [...new Map(paginatedResult.data.map(item => [item.codAtividade, item])).values()];
+
+      console.log(categoriasFiltradas);
 
       //setMinisitio({ anuncios: currentPageData });
-      //setNomeAtividade(currentPageData)
-      setNomeAtividade(paginatedResult.data)
+      setNomeAtividade(categoriasFiltradas);
+      //setNomeAtividade(paginatedResult.data);
 
       //console.log(currentPageData)
 
       setMinisitio({
         anuncios: paginatedResult.data,
-        totalPaginas: Math.ceil(param.length / 3000),
+        totalPaginas: Math.ceil(param.length / limitPerPage),
         paginaAtual: pageNumber
       });
+
+      setLoading(false);
 
     };
 
@@ -398,6 +404,14 @@ function Caderno() {
         <Mosaico logoTop={true} borda="none" />
       </header>
       <main>
+
+        {loading &&
+          <button class="buttonload" style={{ display: "block" }}>
+            <i class="fa fa-spinner fa-spin"></i>Carregando
+          </button>
+        }
+
+
         <Busca paginaAtual={"caderno"} />
         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
@@ -424,48 +438,40 @@ function Caderno() {
               <div
                 className="masonry-layout"
               >
-                {/*      {
-                  nomeAtividade.map((item) => {
-                    console.log(item)
-                  })
-                
-                } */}
-                {nomeAtividade.length > 0 && nomeAtividade.map((anuncio, index) => {
-
-                  if (anuncio.codTipoAnuncio == 1) {
-                    return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
-                  } else {
-                    //if (anuncio.codAtividade == item.id) {
-                      return <MiniWebCard key={anuncio.codAnuncio}
-                        id={anuncio.codAnuncio}
-                        data={minisitio}
-                        codImg={anuncio.descImagem}
-                        ref={teste}
-                        empresa={anuncio.descAnuncio}
-                        endereco={anuncio.descEndereco}
-                        telefone={anuncio.descTelefone}
-                        celular={anuncio.descCelular}
-                        codDesconto={anuncio.codDesconto}
-                        ids={buscarId(90)}
-                      />
-                   // } <MsgProgramada />
-                    //return <MiniWebCard key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={minisitio} />
-                  }
+                {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
                   //((index + 1) % 5 === 0) ? <MsgProgramada /> : "" 
 
-                 /*  (item != undefined || item.length > 0)
+                  (item != undefined || item.length > 0)
                     ?
-                    <div  id={item.id} key={item.id} className="atividade-title px-2" >
-                        <h2 className='bg-yellow py-2'>
-                        {item.atividade}
-                      </h2> 
+                    <div id={item.id} key={item.id} className="atividade-title px-2" >
+                      <h2 className='bg-yellow py-2'>
+                        {item.codAtividade}
+                      </h2>
 
                       {
                         //minisitio.anuncios
-                        item.map((anuncio) => {
+                        minisitio.anuncios.map((anuncio) => {
 
-
+                          if (anuncio.codTipoAnuncio == 1) {
+                            return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
+                          } else {
+                            if (anuncio.codAtividade == item.codAtividade) {
+                              return <MiniWebCard key={anuncio.codAnuncio}
+                                id={anuncio.codAnuncio}
+                                data={minisitio}
+                                codImg={anuncio.descImagem}
+                                ref={teste}
+                                empresa={anuncio.descAnuncio}
+                                endereco={anuncio.descEndereco}
+                                telefone={anuncio.descTelefone}
+                                celular={anuncio.descCelular}
+                                codDesconto={anuncio.codDesconto}
+                                ids={buscarId(90)}
+                              />
+                            } <MsgProgramada />
+                            //return <MiniWebCard key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={minisitio} />
+                          }
 
                           return null;
                         })
@@ -477,8 +483,8 @@ function Caderno() {
                       }
                     </div>
                     :
-                    <h1>erro</h1> */
-                })}
+                    <h1>erro</h1>
+                ))}
                 {/* {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
                   // ((index + 1) % 5 === 0) ? <MsgProgramada /> : "" 
