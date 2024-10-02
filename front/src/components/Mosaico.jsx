@@ -6,7 +6,7 @@ function Mosaico(props) {
     const style = {
         boxShadow: props.borda,
         /* backgroundImage: "url(/assets/img/miniwebcard/Alagoas_Maceio.jpg)", */
-        backgroundImage: `${masterPath.url}/files/${props.mosaicoImg}`,
+        backgroundImage: `url(${masterPath.url}/files/${props.mosaicoImg})`,
         backgroundSize: "100% 100%",
         backgroundRepeat: "no-repeat",
         //backgroundColor: "red"
@@ -15,6 +15,7 @@ function Mosaico(props) {
 
     return (
         <div>
+            {console.log(`${masterPath.url}/files/${props.mosaicoImg}`)}
             <div className="header hidden-print" style={
                 props.mosaicoImg ? style : { boxShadow: props.borda }
             }>

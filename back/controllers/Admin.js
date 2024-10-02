@@ -777,26 +777,26 @@ module.exports = {
 
     },
     buscarId: async (req, res) => {
- 
-     /*    if(pages === "all") {
-            const allIds = await Descontos.findAll();
 
-            res.json({success: true, data: allIds});
+        /*    if(pages === "all") {
+               const allIds = await Descontos.findAll();
+   
+               res.json({success: true, data: allIds});
+   
+               return;
+           }; */
 
-            return;
-        }; */
-
-       const nu_hash = req.params.id;
+        const nu_hash = req.params.id;
 
 
         //Descontos
         const resultAnuncio = await Descontos.findAll({
             where: {
                 [Op.or]: [
-                    {hash: nu_hash},
-                    {idDesconto: nu_hash}
+                    { hash: nu_hash },
+                    { idDesconto: nu_hash }
                 ]
-                
+
             }
         });
 
@@ -806,7 +806,7 @@ module.exports = {
         }
         console.log(resultAnuncio)
 
-        res.json({ success: true, IdsValue: resultAnuncio }); 
+        res.json({ success: true, IdsValue: resultAnuncio });
 
 
 
@@ -820,7 +820,7 @@ module.exports = {
             return;
         }
 
-        res.json({ success: true, data: todosIds }); 
+        res.json({ success: true, data: todosIds });
 
     },
     buscarDDD: async (req, res) => {
@@ -1061,10 +1061,12 @@ module.exports = {
         // Consulta para recuperar apenas os itens da página atual
         const codCaderno = await Caderno.findAll({
             where: {
-                [Op.and]: [
-                    { codUf: req.params.uf },
-                    { nomeCaderno: req.params.caderno }
+                codUf: req.params.uf,
+                [Op.or]: [
+                    { nomeCaderno: req.params.caderno },
+                    { codCaderno: req.params.caderno }
                 ]
+
             }
         });
 
@@ -1159,66 +1161,66 @@ module.exports = {
         try {
             // Passo 1: Buscar anúncios da tabela "anuncio" (res.teste.rows)
             let anuncios = await Anuncio.findAll({
-              where: {
-                codCaderno: 26,  // ou outros filtros relevantes
-                codUf: 27
-              }
+                where: {
+                    codCaderno: 26,  // ou outros filtros relevantes
+                    codUf: 27
+                }
             });
-        
+
             // Obter os codAtividade de todos os anúncios
             let codigosAtividades = anuncios.map(anuncio => anuncio.codAtividade);
-            
+
             // Remover duplicatas usando Set
             let valoresUnicos = [...new Set(codigosAtividades)];
-        
+
             // Passo 2: Buscar atividades com esses codAtividades
             let atividadesEncontradas = await Atividade.findAll({
-              where: {
-                id: {
-                  [Op.in]: valoresUnicos  // Encontrar atividades cujos IDs estão no array de atividades
+                where: {
+                    id: {
+                        [Op.in]: valoresUnicos  // Encontrar atividades cujos IDs estão no array de atividades
+                    }
                 }
-              }
             });
-        
+
             // Passo 3: Filtrar os anúncios que possuem um codAtividade correspondente
-            let anunciosFiltrados = anuncios.filter(anuncio => 
-              atividadesEncontradas.some(atividade => atividade.id === anuncio.codAtividade)
+            let anunciosFiltrados = anuncios.filter(anuncio =>
+                atividadesEncontradas.some(atividade => atividade.id === anuncio.codAtividade)
             );
-        
+
             // Passo 4: Paginação usando Sequelize
             let pageNumber = 1; // Número da página que você quer
             let pageSize = 100;  // Tamanho da página (100 registros por página)
-        
+
             // Sequelize também pode fazer a paginação diretamente na consulta com offset e limit
             let paginatedAnuncios = await Anuncio.findAll({
-              where: {
-                codAtividade: {
-                  [Op.in]: valoresUnicos
-                }
-              },
-              offset: (pageNumber - 1) * pageSize,  // Índice de onde começa a página
-              limit: pageSize                      // Quantos registros por página
+                where: {
+                    codAtividade: {
+                        [Op.in]: valoresUnicos
+                    }
+                },
+                offset: (pageNumber - 1) * pageSize,  // Índice de onde começa a página
+                limit: pageSize                      // Quantos registros por página
             });
-        
+
             // Definir o estado com os resultados
             /* setMinisitio({ anuncios: paginatedAnuncios });
             setNomeAtividade(atividadesEncontradas); */
-        
+
             res.json({
                 success: true,
                 teste: paginatedAnuncios
-             /*    data: arrayClassificado,
-                teste: anuncioTeste,
-                mosaico: codCaderno[0].dataValues.descImagem */
+                /*    data: arrayClassificado,
+                   teste: anuncioTeste,
+                   mosaico: codCaderno[0].dataValues.descImagem */
             });
 
             console.log("Paginated anuncios:", paginatedAnuncios);
-            
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
 
-       
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+
+
 
     },
     listarClassificadoGeral: async (req, res) => {
@@ -1233,9 +1235,10 @@ module.exports = {
         // Consulta para recuperar apenas os itens da página atual
         const codCaderno = await Caderno.findAll({
             where: {
-                [Op.and]: [
-                    { codUf: req.params.uf },
-                    { nomeCaderno: req.params.caderno }
+                codUf: req.params.uf,
+                [Op.or]: [
+                    { nomeCaderno: req.params.caderno },
+                    { codCaderno: req.params.caderno }
                 ]
             }
         });
@@ -1279,7 +1282,7 @@ module.exports = {
         //console.log("--------------====> ", atividades[0].dataValues)
 
         const arrayClassificado = [];
- 
+
         for (let x in count) {
             const anun = anuncio.rows.find(item => item.codAtividade == x);
             const atividade = atividades.find(item => item.id == x);
@@ -1296,16 +1299,16 @@ module.exports = {
 
             //console.log(anun.dataValues)
             //console.log()
-        }  
+        }
 
         //console.log(count);
 
         const anuncioTeste = await Anuncio.findAndCountAll({
-/*             order: [
-                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
-                ['createdAt', 'DESC'],
-                ['codDuplicado', 'ASC'],
-            ], */
+            /*             order: [
+                            [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                            ['createdAt', 'DESC'],
+                            ['codDuplicado', 'ASC'],
+                        ], */
             where: {
                 [Op.and]: [
                     { codUf: codCaderno[0].dataValues.codUf },
@@ -1382,7 +1385,7 @@ module.exports = {
         //console.log("--------------====> ", atividades[0].dataValues)
 
         const arrayClassificado = [];
- 
+
         for (let x in count) {
             const anun = anuncio.rows.find(item => item.codAtividade == x);
             const atividade = atividades.find(item => item.id == x);
@@ -1399,16 +1402,16 @@ module.exports = {
 
             //console.log(anun.dataValues)
             //console.log()
-        }  
+        }
 
         //console.log(count);
 
         const anuncioTeste = await Anuncio.findAndCountAll({
-/*             order: [
-                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
-                ['createdAt', 'DESC'],
-                ['codDuplicado', 'ASC'],
-            ], */
+            /*             order: [
+                            [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                            ['createdAt', 'DESC'],
+                            ['codDuplicado', 'ASC'],
+                        ], */
             where: {
                 [Op.and]: [
                     { codUf: codCaderno[0].dataValues.codUf },
@@ -1735,7 +1738,7 @@ module.exports = {
         const user = await obj.getUsuario();
         obj.codUsuario = user.descNome;
 
-        
+
 
         const atividade = await obj.getAtividade();
         //obj.codAtividade = atividade != null ? atividade.id : '';
@@ -1990,7 +1993,7 @@ module.exports = {
             certificado_link,
             cartao_digital } = req.body;
 
-            console.log(descImagem)
+        console.log(descImagem)
 
         const dadosAnuncio = {
             //"codAnuncio": 88888,
@@ -2478,7 +2481,7 @@ module.exports = {
                 const login = result['CNPJ/CPF'];
                 const senha = 12345;
 
-             
+
 
 
                 const verificarUserExists = await Usuarios.findAll({

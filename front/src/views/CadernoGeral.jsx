@@ -141,12 +141,12 @@ function Caderno() {
       <main>
         <Busca paginaAtual={"caderno"} />
         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
-        <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
-
+{/*         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
+ */}
         <div className='container caderno'>
           <div className='col-md-12'>
 
-            <div className='row'>
+            <div className='row py-3'>
               <div className="col-md-12 col-xs-12 text-center">
                 {/* <button onClick={buscarTodosClassificado}>Ver caderno classificado</button> */}
                 <a href={`/caderno/${caderno}_${estado}?caderno=${caderno}&estado=${estado}`} className="btn proximo" onClick={buscarTodosClassificado}><i className="fa fa-file-text"></i> Ver caderno classificado</a>

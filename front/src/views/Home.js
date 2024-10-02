@@ -1,4 +1,4 @@
-
+import React, {useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 /* import 'font-awesome/css/font-awesome.min.css'; */
 
@@ -8,6 +8,12 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 
 function Home() {
+
+  useEffect(() => {
+    sessionStorage.removeItem("uf: ");
+    sessionStorage.removeItem("caderno: ");
+  });
+
   return (
     <div className="App">
       <Mosaico logoTop={false} />

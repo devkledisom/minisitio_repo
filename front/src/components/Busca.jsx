@@ -14,9 +14,10 @@ function Busca(props) {
     const [caderno, setCaderno] = useState([]);
     const [cadernoUf, setCadernoUf] = useState(null);
     const [cadernoCidade, setCadernoCidade] = useState(null);
+    const [codUf, setCodUf] = useState(null);
+    const [codCaderno, setCodCaderno] = useState(null);
 
     //contexto
-    //const { tema, setTema } = useTema();
     const { result, setResult } = useBusca();
 
     const executarSelecao = (e) => {
@@ -26,6 +27,7 @@ function Busca(props) {
         localStorage.setItem("uf: ", teste.sigla_uf);
         sessionStorage.setItem("uf: ", codigoUf);
         setCadernoUf(teste.id_uf);
+        setCodUf(codigoUf)
         
     };
     const definirCaderno = (e) => {
@@ -35,21 +37,24 @@ function Busca(props) {
         sessionStorage.setItem("caderno: ", codigoCidade);
         
         setCadernoUf(teste.codUf);
-        setCadernoCidade(teste.nomeCaderno);
+        //setCadernoCidade(teste.nomeCaderno);
+        setCodCaderno(codigoCidade);
     };
 
     useEffect(() => {
         let ufSalva = sessionStorage.getItem("uf: ");
         let cadSalvo = sessionStorage.getItem("caderno: ");
 
+        setCodUf(ufSalva);
+        setCodCaderno(cadSalvo);
+
         fetch(`${masterPath.url}/ufs`)
         .then((x) => x.json())
         .then((res) => {
             setUfs(res);
             setUf(ufSalva);
-            //console.log(res)
             if(ufSalva != undefined) {
-                document.querySelectorAll('#codUf2')[0].value = ufSalva;
+                //document.querySelectorAll('#codUf2')[0].value = ufSalva;
             } 
         })
 
@@ -57,18 +62,11 @@ function Busca(props) {
         .then((x) => x.json())
         .then((res) => {
             setCaderno(res)
-            //console.log(res)
             if(cadSalvo != undefined) {
-                document.querySelectorAll('#codUf3')[0].value = cadSalvo;
+                //document.querySelectorAll('#codUf3')[0].value = cadSalvo;
             } 
         })
-
-
-
-       
-
-        
-            console.log("testando", ufSalva, cadSalvo)
+  
 
     }, []);
 
@@ -111,17 +109,23 @@ function Busca(props) {
     };
 
     const verClassificado = () => {
-        if(cadernoUf == null) {
+        let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
+        let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;
+
+        console.table([cadernoUf, cadernoCidade, codCaderno, codUf, cadernoCidade])
+
+        if(cadernoUf === "UF") {
             alert("escolha um estado");
-        } else if (cadernoCidade == null) {
+        } else if (cadernoCidade === "TODO") {
             alert("escolha uma cidade");
         } else {
-            fetch(`${masterPath.url}/admin/anuncio/classificado/${cadernoCidade}/${cadernoUf}`)
+            fetch(`${masterPath.url}/admin/anuncio/classificado/${codCaderno}/${codUf}`)
+            /* fetch(`${masterPath.url}/admin/anuncio/classificado/${cadernoCidade}/${cadernoUf}`) */
             .then(x => x.json())
             .then(res => {
                 console.log(res)
               if (res.success) {
-                window.location = `/caderno-geral/${cadernoCidade}/${cadernoUf}`;
+                window.location = `/caderno-geral/${codCaderno}/${codUf}`;
               } else {
                 alert("caderno não localizado")
               }
@@ -145,9 +149,9 @@ function Busca(props) {
                                 <div className="col-md-3 d-flex">
                                     <i className="fa fa-compass icone-form"></i>
                                     <div className="form-group w-100">
-
-                                        <select name="codUf2" id="codUf2" className="form-control form-select" onChange={executarSelecao}>
-                                            <option value="">UF</option>
+        
+                                        <select name="codUf2" id="codUf2" className="form-control form-select" onChange={executarSelecao} value={codUf}>
+                                            <option value="UF">UF</option>
                                             {uf.map((item) => (
                                                 <option id={item.id_uf} key={item.id_uf} name={item.nome_uf} value={item.id_uf}>{item.sigla_uf}</option>
                                             ))}
@@ -159,8 +163,8 @@ function Busca(props) {
                                     <i className="fa fa-map-marker icone-form"></i>
                                     <div className="form-group w-100">
 
-                                        <select name="codUf3" id="codUf3" className="form-control form-select" onChange={definirCaderno}>
-                                            <option value="">TODO</option>
+                                        <select name="codUf3" id="codUf3" className="form-control form-select" onChange={definirCaderno} value={codCaderno}>
+                                            <option value="TODO">TODO</option>
                                             {caderno.map((item) => (
                                                 item.codUf == ufSelected &&
                                                 <option id={item.codCaderno} key={item.codCaderno} name={item.nomeCaderno} value={item.codCaderno}>{item.nomeCaderno}</option>
