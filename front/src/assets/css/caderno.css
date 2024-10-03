@@ -103,15 +103,24 @@
 
 @keyframes pulse {
     0% {
-      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
     }
+
     100% {
-      box-shadow: 0 0 0 8px rgba(255, 215, 0, 1);
+        box-shadow: 0 0 0 8px rgba(255, 215, 0, 1);
     }
-  }
-  
-  .pulsating-border {
-    animation: pulse 2s infinite; /* Define a animação "pulse" com duração de 2 segundos e repetição infinita */
-    /* border: 1px solid #ccc;  *//* Adicione uma borda inicial */
-    /* padding: 20px; */ /* Adicione algum preenchimento para separar o conteúdo */
-  }
+}
+
+.pulsating-border {
+    animation: pulse 2s infinite;
+    /* Define a animação "pulse" com duração de 2 segundos e repetição infinita */
+    /* border: 1px solid #ccc;  */
+    /* Adicione uma borda inicial */
+    /* padding: 20px; */
+    /* Adicione algum preenchimento para separar o conteúdo */
+}
+
+/* .msg-programada {
+    background-color: red;
+    height: 11%;
+} */

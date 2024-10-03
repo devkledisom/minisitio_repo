@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { masterPath } from '../config/config';
 
@@ -305,6 +306,7 @@ function Caderno() {
 
 
 
+
     function paginator(param) {
       // Array de 3000 objetos (exemplo)
       let arrayDeObjetos = Array.from({ length: 3000 }, (_, i) => ({ id: i + 1 }));
@@ -338,7 +340,7 @@ function Caderno() {
 
       let categoriasFiltradas = [...new Map(paginatedResult.data.map(item => [item.codAtividade, item])).values()];
 
-      console.log(categoriasFiltradas);
+      //console.log(categoriasFiltradas);
 
       //setMinisitio({ anuncios: currentPageData });
       setNomeAtividade(categoriasFiltradas);
@@ -397,6 +399,128 @@ function Caderno() {
     return idEncontrado;
   };
 
+
+
+
+
+ useEffect(() => {
+  function mensagemProgramada() {
+
+
+    let quatro = document.querySelectorAll('.MiniWebCard')[4];
+let cinco = document.querySelectorAll('.MiniWebCard')[5];
+
+// Verifica se os elementos existem antes de acessar suas propriedades
+if (quatro && cinco) {
+    let rectQuatro = quatro.getBoundingClientRect();
+    let rectCinco = cinco.getBoundingClientRect();
+
+    const distance = rectCinco.top - rectQuatro.bottom; // Distância vertical
+
+    console.log(`Distância vertical entre ${4} e ${5}: ${distance}px`);
+
+    if (distance > 0) {
+       // Remove todas as mensagens programadas
+       document.querySelectorAll('.msg-programada').forEach(item => item.remove());
+
+       // Cria a nova div temporária
+       const tempDiv = document.createElement("div");
+       tempDiv.style.backgroundColor = 'red';
+       tempDiv.innerHTML = "dfahfdjkfh";
+       tempDiv.classList.add("msg-programada");
+
+       // Insere a div antes do terceiro item
+       document.querySelectorAll('.MiniWebCard')[2].insertAdjacentElement("afterend", tempDiv);
+
+       // Renderiza o componente React dentro da div
+       ReactDOM.render(<MsgProgramada type={1} />, tempDiv);
+    } else if (distance < 0) {
+        // Remove todas as mensagens programadas
+        document.querySelectorAll('.msg-programada').forEach(item => item.remove());
+
+        // Cria a nova div temporária
+        const tempDiv = document.createElement("div");
+        tempDiv.style.backgroundColor = 'red';
+        tempDiv.innerHTML = "dfahfdjkfh";
+        tempDiv.classList.add("msg-programada");
+
+        // Insere a div antes do terceiro item
+        //document.querySelectorAll('.MiniWebCard')[9].insertAdjacentElement("beforebegin", tempDiv);
+        document.querySelector('.masonry-layout').appendChild(tempDiv);
+
+        // Renderiza o componente React dentro da div
+        ReactDOM.render(<MsgProgramada type={2} />, tempDiv);
+    }
+}
+
+
+
+    let start = 0;
+    let next = 1;
+
+    const atividadeTitles = document.querySelectorAll('.atividade-title');
+
+    atividadeTitles.forEach((item, i, currentArr) => {
+      // Certifique-se de que não estamos no último item
+      if (i < atividadeTitles.length - 1) {
+        let teste1 = item.getBoundingClientRect(); // Usando o item diretamente
+        let teste2 = atividadeTitles[i + 1].getBoundingClientRect();
+
+        const distance = teste2.top - teste1.bottom; // Distância vertical
+
+        console.log(`Distância vertical entre ${i} e ${i + 1}: ${distance}px`);
+        console.log(distance < 7, i)
+        if (distance < 7 && i < 4) {
+          console.log("é maior")
+        }
+
+        if (distance <= -1) {
+
+          /*     const tempDiv = document.createElement("div");
+              tempDiv.style.backgroundColor = 'red';
+              tempDiv.innerHTML = "dfahfdjkfh"
+
+              item.insertAdjacentElement("afterend", tempDiv);
+               
+              return; */
+        }
+
+        /* if (distance <= -2000 && distance >= -2500 && start == 0) {
+
+          document.querySelectorAll('.msg-programada').forEach(item => item.remove())
+
+          console.log(currentArr)
+          const tempDiv = document.createElement("div");
+          tempDiv.style.backgroundColor = 'red';
+          tempDiv.innerHTML = "dfahfdjkfh";
+          tempDiv.classList.add("msg-programada")
+
+
+          //document.querySelectorAll('.atividade-title')[currentArr.length - 1].insertAdjacentElement("afterend", tempDiv);
+          start = 1;
+
+          document.querySelector('.masonry-layout').appendChild(tempDiv);
+
+
+          // Renderiza o componente React dentro da div
+          ReactDOM.render(<MsgProgramada />, tempDiv);
+
+          return;
+        } */
+
+      } else {
+        console.log(`Não há próximo elemento para o índice ${i}`);
+      }
+    });
+
+
+
+
+  }
+
+  mensagemProgramada()
+ })
+
   return (
     <div className="App">
 
@@ -436,7 +560,7 @@ function Caderno() {
             <div className="col-md-6 w-100 secao-anuncios">
 
               <div
-                className="masonry-layout"
+                className="masonry-layout position-relative"
               >
                 {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
@@ -479,7 +603,7 @@ function Caderno() {
                       {
                         // Verifica se não é o último card e se não há anúncio associado à próxima atividade
                         //      index !== nomeAtividade.length - 1 && minisitio.anuncios.every(anuncio => anuncio.codAtividade !== nomeAtividade[index + 1].id) &&
-                        //    <MsgProgramada /> 
+
                       }
                     </div>
                     :
@@ -533,6 +657,7 @@ function Caderno() {
                     :
                     <h1>erro</h1>
                 ))} */}
+                {/* {<MsgProgramada />} */}
               </div>
 
 
