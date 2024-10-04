@@ -20,8 +20,10 @@ function MiniWebCard(props) {
     const navigate = useNavigate();
     const [imgPath, setImg] = useState();
     const [imgDefault, setImgDefault] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     async function buscarAnuncio() {
+        setLoading(true);
         qntVisualizacoes()
         const request = await fetch(`${masterPath.url}/anuncio/${props.id}`).then((x) => x.json());
         setResult(request[0]);
@@ -54,6 +56,12 @@ function MiniWebCard(props) {
     return (
         <div className="MiniWebCard" key={props.key} id={`item_${props.id}`}>
 
+            {loading &&
+                <button class="buttonload" style={{ display: "block" }}>
+                    <i class="fa fa-spinner fa-spin"></i>Carregando
+                </button>
+            }
+
             <div className='container cartao my-2 p-0' key={props.key}>
 
                 <div className="apoio">
@@ -70,7 +78,7 @@ function MiniWebCard(props) {
                     </div>
                 </div>
 
-                <div className='row display-flex justify-content-center' key={props.key}>
+                <div className='row display-flex justify-content-center' key={props.key} onClick={buscarAnuncio}>
 
                     {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
 

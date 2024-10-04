@@ -102,11 +102,6 @@
 
 .pulsating-border {
     animation: pulse 2s infinite;
-    /* Define a animação "pulse" com duração de 2 segundos e repetição infinita */
-    /* border: 1px solid #ccc;  */
-    /* Adicione uma borda inicial */
-    /* padding: 20px; */
-    /* Adicione algum preenchimento para separar o conteúdo */
 }
 
 
@@ -220,6 +215,7 @@
 
 .caderno .btn {
     padding: 10px 40px;
+    filter: drop-shadow(2px 4px 6px black);
 }
 
 .proximo:hover {

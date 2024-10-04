@@ -34,6 +34,7 @@ function Caderno() {
   const [pathImg, setPathImg] = useState([]);
   const [mosaicoImg, setMosaicoImg] = useState([]);
   const [smoot, setSmoot] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
 
@@ -82,7 +83,8 @@ function Caderno() {
   const teste = useRef(null)
 
   useEffect(() => {
-    //console.log("motre", teste.current)
+    setLoading(true);
+    document.querySelector('.caderno').style.filter = "blur(3px)";
 
     fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
       .then(x => x.json())
@@ -91,7 +93,9 @@ function Caderno() {
           setClassificados(res.data);
           setPathImg(res.teste.rows);
           setMosaicoImg(res.mosaico);
-          console.log("caderno geral", res);
+          //console.log("caderno geral", res);
+          setLoading(false);
+          document.querySelector('.caderno').style.filter = "none";
         } else {
 
         }
@@ -131,9 +135,26 @@ function Caderno() {
     console.log("very")
   };
 
+  function definePage(param) {
+    const itemIndex = param;
+    const itemsPerPage = 10;
+
+    const pageNumber = Math.ceil(itemIndex / itemsPerPage);
+
+    //console.log(pageNumber);
+    return pageNumber;
+  }
+
 
   return (
     <div className="App">
+
+      {loading &&
+        <button class="buttonload" style={{ display: "block" }}>
+          <i class="fa fa-spinner fa-spin"></i>Carregando
+        </button>
+      }
+
 
       <header>
         <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} />
@@ -141,7 +162,7 @@ function Caderno() {
       <main>
         <Busca paginaAtual={"caderno"} />
         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
-{/*         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
+        {/*         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
         <div className='container caderno'>
           <div className='col-md-12'>
@@ -165,7 +186,7 @@ function Caderno() {
                     {classificados.map(item => (
                       /* "/caderno/maceio/ziiz_569885_27" */
                       <li key={item.id}>
-                        <a href={`/caderno/${item.nomeAnuncio}_${item.codigoAnuncio}_${item.estado}?page=1&book=${item.caderno}&id=${item.codigoAnuncio}`}>
+                        <a href={`/caderno/${item.nomeAnuncio}_${item.codigoAnuncio}_${item.estado}?page=1&book=${item.caderno}&id=${item.codigoAnuncio}&caderno=${caderno}&estado=${estado}`} onClick={definePage}>
 
                           {item.nomeAtividade} <span>{item.qtdAtividade} resultado</span>
                         </a>

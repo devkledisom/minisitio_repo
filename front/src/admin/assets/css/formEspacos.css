@@ -113,7 +113,7 @@
   
   .pulsating-border {
     padding: 0px;
-    animation: pulse 2s infinite; /* Define a animação "pulse" com duração de 2 segundos e repetição infinita */
+    animation: pulse 1s infinite; /* Define a animação "pulse" com duração de 2 segundos e repetição infinita */
     /* border: 1px solid #ccc;  *//* Adicione uma borda inicial */
     /* padding: 20px; */ /* Adicione algum preenchimento para separar o conteúdo */
   }

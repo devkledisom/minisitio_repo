@@ -1140,10 +1140,20 @@ module.exports = {
             }
         });
 
+        const anuncio2 = await Anuncio.findAndCountAll({
+            where: {
+                [Op.and]: [
+                    { codUf: codCaderno[0].dataValues.codUf },
+                    { codCaderno: codCaderno[0].dataValues.codCaderno }
+                ]
+            }
+        });
+
         res.json({
             success: true,
             data: arrayClassificado,
             teste: anuncioTeste,
+            anuncio2: anuncio2,
             mosaico: codCaderno[0].dataValues.descImagem
         });
 
@@ -1230,7 +1240,7 @@ module.exports = {
 
         const offset = (paginaAtual - 1) * porPagina;
 
-        console.log("offsewt: ", offset)
+        //console.log("offsewt: ", offset)
 
         // Consulta para recuperar apenas os itens da página atual
         const codCaderno = await Caderno.findAll({
@@ -1301,7 +1311,10 @@ module.exports = {
             //console.log()
         }
 
-        //console.log(count);
+        console.log("debug------------------>",  [
+            { codUf: codCaderno[0].dataValues.codUf },
+            { codCaderno: codCaderno[0].dataValues.codCaderno }
+        ]);
 
         const anuncioTeste = await Anuncio.findAndCountAll({
             /*             order: [

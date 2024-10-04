@@ -25,7 +25,8 @@ function Caderno() {
   const [minisitio, setMinisitio] = useState([]);
   const [smoot, setSmoot] = useState(false);
   const [listaIds, setListaIds] = useState([]);
-  const [numberPage, setNumberPage] = useState(1);
+  const [btnNav, setbtnNav] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   const location = useLocation();
@@ -38,9 +39,12 @@ function Caderno() {
   const caderno = pegarParam.get('caderno');
   const estado = pegarParam.get('estado');
 
+  const [numberPage, setNumberPage] = useState(1);
+
   useEffect(() => {
+
     setLoading(true);
-    async function buscarAtividade() {
+    async function buscarAtividadeold() {
       try {
         const res = await fetch(`${masterPath.url}/anuncios/${book}?page=${page}`, {
           method: "POST",
@@ -69,6 +73,65 @@ function Caderno() {
       } catch (error) {
         console.error('Erro ao buscar atividades:', error);
       }
+    }
+    async function buscarAtividade() {
+      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
+        .then(x => x.json())
+        .then(async res => {
+          if (res.success) {
+
+            const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
+            const valores = [...new Set(codigosAtividades)];
+
+            const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
+            const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id));
+
+            const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
+
+            let result = res.teste.rows.filter(category =>
+              res.data.some(anuncio => category.id === anuncio.codAtividade)
+            );
+
+            const arr = [];
+
+            let result1 = res.data.map((category) => {
+              // Filtra os anúncios que correspondem à categoria atual
+              let teste = res.teste.rows.filter(anuncio => category.id === anuncio.codAtividade);
+
+              // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+              category.kledisom = teste;
+              teste.forEach((item) => {
+                item.codAtividade = category.atividade; //adiciona as categorias
+                arr.push(item); //salva so os anuncios
+              });
+
+              //console.log(arr)
+
+              // Retorna o objeto category modificado
+              return category;
+            });
+
+            //console.log(result1);
+
+            // Atualiza o estado com os dados paginados
+            setMinisitio({ anuncios: result1 });
+            setNomeAtividade(result1);
+
+            const itemIndex = arr.findIndex(item => item.codAnuncio == id) + 1;
+
+            const pageNumberClass = Math.ceil(itemIndex / 10);
+
+            console.log(`pagina ${pageNumberClass}`);
+
+            setNumberPage(pageNumberClass);
+
+            paginator(arr, pageNumberClass);
+
+          } else {
+
+          }
+
+        })
     }
 
     function buscarTodosClassificadoold() {
@@ -305,9 +368,7 @@ function Caderno() {
     }
 
 
-
-
-    function paginator(param) {
+    function paginator(param, pageNumberClass) {
       // Array de 3000 objetos (exemplo)
       let arrayDeObjetos = Array.from({ length: 3000 }, (_, i) => ({ id: i + 1 }));
 
@@ -332,7 +393,7 @@ function Caderno() {
       }
 
       // Usando a função para obter a página 1 com 10 objetos por página
-      const pageNumber = numberPage; // Página que você quer exibir
+      const pageNumber = pageNumberClass || numberPage; // Página que você quer exibir
       const limitPerPage = 10; // Número de objetos por página
       const paginatedResult = paginate(param, pageNumber, limitPerPage);
 
@@ -355,6 +416,7 @@ function Caderno() {
       });
 
       setLoading(false);
+      setbtnNav(true);
 
     };
 
@@ -385,7 +447,8 @@ function Caderno() {
     const interID = setInterval(() => {
       if (document.querySelector(`#item_${id}`)) {
         console.log(document.querySelector(`#item_${id}`))
-        document.querySelector(`#item_${id}`).classList = "pulsating-border"
+        document.querySelector(`#item_${id}`).children[0].style.border = "none";
+        document.querySelector(`#item_${id}`).classList = "pulsating-border";
 
         document.querySelector(`#item_${id}`).scrollIntoView({ behavior: 'smooth' })
         clearInterval(interID);
@@ -403,123 +466,254 @@ function Caderno() {
 
 
 
- useEffect(() => {
-  function mensagemProgramada() {
+  useEffect(() => {
+    function mensagemProgramada() {
+      document.querySelectorAll('.msg-programada').forEach(item => item.remove());
 
+      const ads = document.querySelectorAll('.MiniWebCard');
 
-    let quatro = document.querySelectorAll('.MiniWebCard')[4];
-let cinco = document.querySelectorAll('.MiniWebCard')[5];
+      if (ads.length > 0) {
+        let rectUm = ads[0].getBoundingClientRect();
+        let rectDois = ads[1].getBoundingClientRect();
+        let rectTres = ads[2].getBoundingClientRect();
+        let rectQuatro = ads[3].getBoundingClientRect();
+        let rectCinco = ads[4].getBoundingClientRect();
+        let rectSeis = ads[5].getBoundingClientRect();
+        let rectSete = ads[6].getBoundingClientRect();
+        let rectOito = ads[7].getBoundingClientRect();
+        let rectNove = ads[8].getBoundingClientRect();
 
-// Verifica se os elementos existem antes de acessar suas propriedades
-if (quatro && cinco) {
-    let rectQuatro = quatro.getBoundingClientRect();
-    let rectCinco = cinco.getBoundingClientRect();
-
-    const distance = rectCinco.top - rectQuatro.bottom; // Distância vertical
-
-    console.log(`Distância vertical entre ${4} e ${5}: ${distance}px`);
-
-    if (distance > 0) {
-       // Remove todas as mensagens programadas
-       document.querySelectorAll('.msg-programada').forEach(item => item.remove());
-
-       // Cria a nova div temporária
-       const tempDiv = document.createElement("div");
-       tempDiv.style.backgroundColor = 'red';
-       tempDiv.innerHTML = "dfahfdjkfh";
-       tempDiv.classList.add("msg-programada");
-
-       // Insere a div antes do terceiro item
-       document.querySelectorAll('.MiniWebCard')[2].insertAdjacentElement("afterend", tempDiv);
-
-       // Renderiza o componente React dentro da div
-       ReactDOM.render(<MsgProgramada type={1} />, tempDiv);
-    } else if (distance < 0) {
-        // Remove todas as mensagens programadas
-        document.querySelectorAll('.msg-programada').forEach(item => item.remove());
-
-        // Cria a nova div temporária
-        const tempDiv = document.createElement("div");
-        tempDiv.style.backgroundColor = 'red';
-        tempDiv.innerHTML = "dfahfdjkfh";
-        tempDiv.classList.add("msg-programada");
-
-        // Insere a div antes do terceiro item
-        //document.querySelectorAll('.MiniWebCard')[9].insertAdjacentElement("beforebegin", tempDiv);
-        document.querySelector('.masonry-layout').appendChild(tempDiv);
-
-        // Renderiza o componente React dentro da div
-        ReactDOM.render(<MsgProgramada type={2} />, tempDiv);
-    }
-}
+        const distance1 = rectDois.top - rectUm.bottom; // Distância vertical
+        const distance2 = rectTres.top - rectDois.bottom; // Distância vertical
+        const distance3 = rectQuatro.top - rectTres.bottom; // Distância vertical
+        const distance4 = rectCinco.top - rectQuatro.bottom; // Distância vertical
+        const distance5 = rectSeis.top - rectCinco.bottom; // Distância vertical
+        const distance6 = rectSete.top - rectSeis.bottom; // Distância vertical
+        const distance7 = rectOito.top - rectSete.bottom; // Distância vertical
+        const distance8 = rectNove.top - rectOito.bottom; // Distância vertical
+        //const distance9 = rectCinco.top - rectNove.bottom; // Distância vertical
 
 
 
-    let start = 0;
-    let next = 1;
 
-    const atividadeTitles = document.querySelectorAll('.atividade-title');
 
-    atividadeTitles.forEach((item, i, currentArr) => {
-      // Certifique-se de que não estamos no último item
-      if (i < atividadeTitles.length - 1) {
-        let teste1 = item.getBoundingClientRect(); // Usando o item diretamente
-        let teste2 = atividadeTitles[i + 1].getBoundingClientRect();
 
-        const distance = teste2.top - teste1.bottom; // Distância vertical
+        /* console.log(`Distância vertical entre ${5} e ${6}: ${distance6}px`);  
+        console.log(`Distância vertical entre ${6} e ${7}: ${distance7}px`);  
+        console.log(`Distância vertical entre ${7} e ${8}: ${distance8}px`);   */
 
-        console.log(`Distância vertical entre ${i} e ${i + 1}: ${distance}px`);
-        console.log(distance < 7, i)
-        if (distance < 7 && i < 4) {
-          console.log("é maior")
-        }
-
-        if (distance <= -1) {
-
-          /*     const tempDiv = document.createElement("div");
-              tempDiv.style.backgroundColor = 'red';
-              tempDiv.innerHTML = "dfahfdjkfh"
-
-              item.insertAdjacentElement("afterend", tempDiv);
-               
-              return; */
-        }
-
-        /* if (distance <= -2000 && distance >= -2500 && start == 0) {
-
-          document.querySelectorAll('.msg-programada').forEach(item => item.remove())
-
-          console.log(currentArr)
+        if (distance1 < 0) {
           const tempDiv = document.createElement("div");
           tempDiv.style.backgroundColor = 'red';
           tempDiv.innerHTML = "dfahfdjkfh";
-          tempDiv.classList.add("msg-programada")
+          tempDiv.classList.add("msg-programada");
 
+          console.log(`Distância vertical entre ${0} e ${1}: ${distance1}px`);
 
-          //document.querySelectorAll('.atividade-title')[currentArr.length - 1].insertAdjacentElement("afterend", tempDiv);
-          start = 1;
+          // Insere a div antes do terceiro item
+          ads[0].insertAdjacentElement("afterend", tempDiv);
+        } else if (distance2 < 0) {
+          const tempDiv = document.createElement("div");
+          tempDiv.style.backgroundColor = 'red';
+          tempDiv.innerHTML = "dfahfdjkfh";
+          tempDiv.classList.add("msg-programada");
 
+          console.log(`Distância vertical entre ${1} e ${2}: ${distance2}px`);
+
+          // Insere a div antes do terceiro item
+          ads[1].insertAdjacentElement("afterend", tempDiv);
+        } else if (distance3 < 0) {
+          const tempDiv = document.createElement("div");
+          tempDiv.style.backgroundColor = 'red';
+          tempDiv.innerHTML = "dfahfdjkfh";
+          tempDiv.classList.add("msg-programada");
+
+          console.log(`Distância vertical entre ${2} e ${3}: ${distance3}px`);
+
+          // Insere a div antes do terceiro item
+          ads[2].insertAdjacentElement("afterend", tempDiv);
+        } else if (distance4 < 0) {
+          const tempDiv = document.createElement("div");
+          tempDiv.style.backgroundColor = 'red';
+          tempDiv.innerHTML = "dfahfdjkfh";
+          tempDiv.classList.add("msg-programada");
+
+          console.log(`Distância vertical entre ${3} e ${4}: ${distance4}px`);
+
+          // Insere a div antes do terceiro item
+          ads[4].insertAdjacentElement("afterend", tempDiv);
+        } else if (distance5 < 0) {
+          const tempDiv = document.createElement("div");
+          tempDiv.style.backgroundColor = 'red';
+          tempDiv.innerHTML = "dfahfdjkfh";
+          tempDiv.classList.add("msg-programada");
+
+          console.log(`Distância vertical entre ${4} e ${5}: ${distance5}px`);
+
+          // Insere a div antes do terceiro item
           document.querySelector('.masonry-layout').appendChild(tempDiv);
+        }
 
-
-          // Renderiza o componente React dentro da div
-          ReactDOM.render(<MsgProgramada />, tempDiv);
-
-          return;
-        } */
-
-      } else {
-        console.log(`Não há próximo elemento para o índice ${i}`);
       }
-    });
 
 
 
 
-  }
 
-  mensagemProgramada()
- })
+      /*   ads.forEach((item, i) => {
+          if (i < ads.length - 1) { // Garante que não tentamos acessar ads[i+1] no último item
+            let rectQuatro = item.getBoundingClientRect();
+            let rectCinco = ads[i + 1].getBoundingClientRect();
+            
+            const distance = rectCinco.top - rectQuatro.bottom; // Distância vertical
+            
+            console.log(`Distância vertical entre ${i} e ${i + 1}: ${distance}px`);  
+            console.log(item, ads[i + 1])
+    
+            if(i == 4) {
+              if(distance < 0) {
+                const tempDiv = document.createElement("div");
+                tempDiv.style.backgroundColor = 'red';
+                tempDiv.innerHTML = "dfahfdjkfh";
+                tempDiv.classList.add("msg-programada");
+         
+                // Insere a div antes do terceiro item
+                document.querySelector('.masonry-layout').appendChild(tempDiv);
+              }
+              console.log("5 elemento")
+            } else {
+              if(distance < 0) {
+                const tempDiv = document.createElement("div");
+                tempDiv.style.backgroundColor = 'red';
+                tempDiv.innerHTML = "dfahfdjkfh";
+                tempDiv.classList.add("msg-programada");
+         
+                // Insere a div antes do terceiro item
+                item.insertAdjacentElement("afterend", tempDiv);
+              }
+            }
+    
+          }
+        }); */
+
+
+
+
+
+
+      let quatro = document.querySelectorAll('.MiniWebCard')[4];
+      let cinco = document.querySelectorAll('.MiniWebCard')[5];
+
+      // Verifica se os elementos existem antes de acessar suas propriedades
+      /* if (quatro && cinco) {
+          let rectQuatro = quatro.getBoundingClientRect();
+          let rectCinco = cinco.getBoundingClientRect();
+      
+          const distance = rectCinco.top - rectQuatro.bottom; // Distância vertical
+      
+          //console.log(`Distância vertical entre ${4} e ${5}: ${distance}px`);
+      
+          if (distance > 1000) {
+             // Remove todas as mensagens programadas
+             document.querySelectorAll('.msg-programada').forEach(item => item.remove());
+      
+             // Cria a nova div temporária
+             const tempDiv = document.createElement("div");
+             tempDiv.style.backgroundColor = 'red';
+             tempDiv.innerHTML = "dfahfdjkfh";
+             tempDiv.classList.add("msg-programada");
+      
+             // Insere a div antes do terceiro item
+             document.querySelectorAll('.MiniWebCard')[2].insertAdjacentElement("afterend", tempDiv);
+      
+             // Renderiza o componente React dentro da div
+             //ReactDOM.render(<MsgProgramada type={1} />, tempDiv);
+          } else if (distance < 0) {
+              // Remove todas as mensagens programadas
+              document.querySelectorAll('.msg-programada').forEach(item => item.remove());
+      
+              // Cria a nova div temporária
+              const tempDiv = document.createElement("div");
+              tempDiv.style.backgroundColor = 'red';
+              tempDiv.innerHTML = "dfahfdjkfh";
+              tempDiv.classList.add("msg-programada");
+      
+              // Insere a div antes do terceiro item
+              //document.querySelectorAll('.MiniWebCard')[9].insertAdjacentElement("beforebegin", tempDiv);
+              document.querySelector('.masonry-layout').appendChild(tempDiv);
+      
+              // Renderiza o componente React dentro da div
+              //ReactDOM.render(<MsgProgramada type={2} />, tempDiv);
+          }
+      } */
+
+
+
+      let start = 0;
+      let next = 1;
+
+      const atividadeTitles = document.querySelectorAll('.atividade-title');
+
+      atividadeTitles.forEach((item, i, currentArr) => {
+        // Certifique-se de que não estamos no último item
+        if (i < atividadeTitles.length - 1) {
+          let teste1 = item.getBoundingClientRect(); // Usando o item diretamente
+          let teste2 = atividadeTitles[i + 1].getBoundingClientRect();
+
+          const distance = teste2.top - teste1.bottom; // Distância vertical
+
+          //console.log(`Distância vertical entre ${i} e ${i + 1}: ${distance}px`);
+          //console.log(distance < 7, i)
+          if (distance < 7 && i < 4) {
+            //console.log("é maior")
+          }
+
+          if (distance <= -1) {
+
+            /*     const tempDiv = document.createElement("div");
+                tempDiv.style.backgroundColor = 'red';
+                tempDiv.innerHTML = "dfahfdjkfh"
+  
+                item.insertAdjacentElement("afterend", tempDiv);
+                 
+                return; */
+          }
+
+          /* if (distance <= -2000 && distance >= -2500 && start == 0) {
+  
+            document.querySelectorAll('.msg-programada').forEach(item => item.remove())
+  
+            console.log(currentArr)
+            const tempDiv = document.createElement("div");
+            tempDiv.style.backgroundColor = 'red';
+            tempDiv.innerHTML = "dfahfdjkfh";
+            tempDiv.classList.add("msg-programada")
+  
+  
+            //document.querySelectorAll('.atividade-title')[currentArr.length - 1].insertAdjacentElement("afterend", tempDiv);
+            start = 1;
+  
+            document.querySelector('.masonry-layout').appendChild(tempDiv);
+  
+  
+            // Renderiza o componente React dentro da div
+            ReactDOM.render(<MsgProgramada />, tempDiv);
+  
+            return;
+          } */
+
+        } else {
+          //console.log(`Não há próximo elemento para o índice ${i}`);
+        }
+      });
+
+
+
+
+    }
+
+    mensagemProgramada()
+  })
 
   return (
     <div className="App">
@@ -540,20 +734,23 @@ if (quatro && cinco) {
         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
         <div className="container">
-          <div className="row p-3">
-            <div className="col-md-6 text-end">
-              <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}>
-                <i className="fa fa-arrow-left mx-2"></i>
-                Anterior
-              </button>
+          {btnNav &&
+            <div className="row p-3">
+              <div className="col-md-6 text-end">
+                <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}>
+                  <i className="fa fa-arrow-left mx-2"></i>
+                  Anterior
+                </button>
+              </div>
+              <div className="col-md-6 text-start">
+                <button id="btn-next" onClick={() => setNumberPage(numberPage + 1)}>
+                  Próximo
+                  <i className="fa fa-arrow-right mx-2"></i>
+                </button>
+              </div>
             </div>
-            <div className="col-md-6 text-start">
-              <button id="btn-next" onClick={() => setNumberPage(numberPage + 1)}>
-                Próximo
-                <i className="fa fa-arrow-right mx-2"></i>
-              </button>
-            </div>
-          </div>
+          }
+
           {/* teste row */}
           <div className="row p-3">
 
@@ -664,6 +861,23 @@ if (quatro && cinco) {
             </div>
           </div>
         </div>
+
+        {btnNav &&
+          <div className="row p-3">
+            <div className="col-md-6 text-end">
+              <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}>
+                <i className="fa fa-arrow-left mx-2"></i>
+                Anterior
+              </button>
+            </div>
+            <div className="col-md-6 text-start">
+              <button id="btn-next" onClick={() => setNumberPage(numberPage + 1)}>
+                Próximo
+                <i className="fa fa-arrow-right mx-2"></i>
+              </button>
+            </div>
+          </div>
+        }
       </main>
 
       <footer>
