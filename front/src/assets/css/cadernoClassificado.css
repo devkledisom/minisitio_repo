@@ -48,7 +48,7 @@
     border: 1px solid lime
 }
 
-@media (min-width: 576px) {
+/* @media (min-width: 576px) {
     .masonry-layout {
         column-count: 2;
     }
@@ -64,7 +64,7 @@
     .masonry-layout {
         column-count: 2;
     }
-}
+} */
 
 .my-masonry-grid {
     /* display: -webkit-box; */

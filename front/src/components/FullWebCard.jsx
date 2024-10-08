@@ -18,6 +18,7 @@ import Metadados from './Metadados';
 import ContactForm from './ContactForm';
 import MapContainer from './MapContainer';
 import UserActions from './UserActions';
+import Socialmidia from './Socialmidia';
 
 function FullWebCard() {
     const { result, setResult } = useBusca();
@@ -115,8 +116,9 @@ function FullWebCard() {
                 </div>
 
                 <div className="row">
-                    <UserActions />
+                    <Socialmidia />
                 </div>
+                <UserActions />
             </div>
         </div>
     );

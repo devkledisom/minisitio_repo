@@ -45,22 +45,17 @@
 
 }
 
-.masonry-layout {
-    /*  column-gap: 1em; */
-}
-
 .masonry-item {
     break-inside: avoid;
     margin-bottom: 1em;
     background-color: lightgray;
     border: 1px solid lightblue;
     border-radius: 20px;
-    /*  padding: 15px; */
     box-sizing: border-box;
     border: 1px solid lime
 }
 
-@media (min-width: 576px) {
+/* @media (min-width: 576px) {
     .masonry-layout {
         column-count: 2;
     }
@@ -76,7 +71,7 @@
     .masonry-layout {
         column-count: 2;
     }
-}
+} */
 
 .my-masonry-grid {
     /* display: -webkit-box; */

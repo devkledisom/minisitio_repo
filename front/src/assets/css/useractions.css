@@ -76,3 +76,66 @@
 .st-label {
     padding: 0 5px 0
 }
+
+.user-actions>div {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.user-actions .master-icone {
+    display: flex;
+    float: left;
+    flex-direction: column;
+}
+
+.user-actions>.master-icone>span{
+    font-size: 10px;
+    float: left;
+}
+
+.user-actions .master-icone>img{
+    width: 22px;
+}
+
+.user-actions .master-descricao {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.user-actions .btn {
+    padding: 7px 14px;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: 0;
+}
+
+.user-actions .btn-default:hover, .btn-default:focus, .btn-default:active {
+    border: 1px solid #A8AEB3;
+    color: #fff;
+    background: #A8AEB3;
+    padding: 6px 13px;
+}
+
+.linksUteis img {
+    width: 40px;
+}
+.linksUteis .btn {
+    padding: 6px 13px;
+    border: 1px solid #4f4f4f;
+    border-radius: 5px;
+}
+
+.btn-default {
+    border: 1px solid #EDEDED;
+    color: #A8AEB3;
+    background: transparent;
+    padding: 6px 13px;
+}
+
+.area-master {
+    display: flex;
+    gap: 10px;
+}

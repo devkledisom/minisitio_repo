@@ -1,48 +1,49 @@
-import React from 'react';
-
-import '../assets/css/main.css';
-import '../assets/css/default.css';
-import '../assets/css/useractions.css';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-/* import 'font-awesome/css/font-awesome.min.css'; */
-
-import Tooltip from './Tooltip';
-
-import { BsShareFill, BsFillSendFill, BsFacebook, BsInstagram, BsTwitter, BsYoutube, BsWhatsapp, BsSkype, BsHeadset } from "react-icons/bs";
-
+import React from "react";
 
 function UserActions() {
     return (
-        <div className="UserActions p-4">
-            <h4 className='text-start'>
-                Compartilhar:
-            </h4>
-            <div className="sharethis-inline-share-buttons st-left st-has-labels  st-inline-share-buttons st-animated" id="st-1">
-                <div className="st-btn st-first" data-network="facebook" >
-                    <img alt="facebook sharing button" src="https://platform-cdn.sharethis.com/img/facebook.svg" />
-                    <span className="st-label">Share</span>
-                </div>
-                <div className="st-btn" data-network="twitter" >
-                    <img alt="twitter sharing button" src="https://platform-cdn.sharethis.com/img/twitter.svg" />
-                    <span className="st-label">Tweet</span>
-                </div>
-                <div className="st-btn" data-network="email" >
-                    <img alt="email sharing button" src="https://platform-cdn.sharethis.com/img/email.svg" />
-                    <span className="st-label">Email</span>
-                </div>
-                <div className="st-btn" data-network="whatsapp" >
-                    <img alt="whatsapp sharing button" src="https://platform-cdn.sharethis.com/img/whatsapp.svg" />
-                    <span className="st-label">Whatsapp</span>
-                </div>
-                <div className="st-btn st-last" data-network="sharethis" >
-                    <img alt="sharethis sharing button" src="https://platform-cdn.sharethis.com/img/sharethis.svg" />
-                    <span className="st-label">Share</span>
-                </div>
+        <div class="user-actions row linksUteis margin-top-20 hidden-print my-5">
+            <div class="col-md-12">
+                <a href="/area-assinante" class="btn btn-default margin-bottom-10">
+                    <img src="/assets/img/logo.png" />
+                    Atualizar
+                </a>
+                <a href="/area-assinante" class="btn btn-default margin-bottom-10">
+                    <img src="/assets/img/logo.png" />
+                    Renovar
+                </a>
+                <a href="/qrcode.php?image=qrcode_beirute_115858.png" class="btn btn-default margin-bottom-10" target="_blank">
+                    <img src="/assets/img/logo.png" />
+                    QR CODE
+                </a>
+                <a href="/adesivo.php?image=qrcode_beirute_115858.png" class="btn btn-default margin-bottom-10" target="_blank">
+                    <img src="/assets/img/logo.png" />
+                    Adesivo
+                </a>
+                <a href="https://br.minisitio.net/resources/upload/beirute_115858.pdf" class="btn btn-danger margin-bottom-10 hidden-xs" target="_blank">
+                    <img src="/assets/img/logo.png" />
+                    Cartão Digital
+                </a>
+           {/*      <a href="https://api.whatsapp.com/send?text=https://br.minisitio.net/resources/upload/beirute_115858.pdf" class="btn btn-danger margin-bottom-10 visible-xs" target="_blank">
+                    <img src="/assets/img/logo.png" />
+                    Cartão Digital
+                </a> */}
+                <a href="/contato" class="btn btn-default margin-bottom-10">
+                    <img src="/assets/img/logo.png" />
+                    Denúncia
+                </a>
+                <a href="javascript:;" class="btn btn-default area-master" title="MARCOS QUIMAS">
+                    <div class="master-icone">
+                        <span>Master:</span>
+                        <img src="/assets/img/logo.png" />
+                    </div>
+                    <div class="master-descricao">
+                        MARCOS QUIMAS        
+                    </div>
+                </a>
             </div>
         </div>
-    );
-}
+    )
+};
 
 export default UserActions;

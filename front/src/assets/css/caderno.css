@@ -74,6 +74,7 @@
 @media (min-width: 1200px) {
     .masonry-layout {
         column-count: 2;
+
     }
 }
 
@@ -124,3 +125,69 @@
     background-color: red;
     height: 11%;
 } */
+
+
+/*layout das colunas----------------------->*/
+/* CSS para as colunas */
+.secao-anuncios-caderno {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+}
+
+.column1 {
+    width: 50%;
+    /* Cada coluna ocupa metade do contêiner */
+    max-height: 2356px;
+    /* Altura fixa */
+    /* overflow-y: auto; */
+    /* Ativa rolagem se o conteúdo ultrapassar a altura */
+    border: 1px solid black;
+    /* Apenas para visualização */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.column2 {
+    width: 50%;
+    /* Cada coluna ocupa metade do contêiner */
+    max-height: 2356px;
+    /* Altura fixa */
+    /* overflow-y: auto; */
+    /* Ativa rolagem se o conteúdo ultrapassar a altura */
+    border: 1px solid red;
+    /* Apenas para visualização */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.grid-container {
+    display: grid;
+    align-items: flex-start;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+}
+
+.grid-container quadrados {
+    grid-column: span 1;
+    grid-rows: span 4;
+}
+
+.grid-container #col1, .grid-container #col2{
+    grid-column: span 1;
+    grid-rows: span 12;
+    border: 1px solid red;
+    max-height: 2352px;
+}
+
+
+.box {
+    height: 50px;
+    /* Altura das divs que serão adicionadas */
+    background-color: lightblue;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
