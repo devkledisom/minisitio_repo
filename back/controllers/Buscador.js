@@ -13,7 +13,7 @@ module.exports = {
         await database.sync();
 
         const { uf, cidade, atividade, name, telefone, nu_documento, codigoCaderno } = req.body;
-
+        console.table([name, atividade, telefone, nu_documento]);
         /*        const result = await Caderno.findAll({
                    where: {
                        codUf: uf,
@@ -21,20 +21,33 @@ module.exports = {
                    }
                }); */
 
+        
+        //Atividades
+        const atividades = await Atividade.findAll({
+            where: {
+                atividade: {[Op.like]: `%${atividade}%`}
+            }
+        });
+
         //anuncio
         const anuncios = await Anuncio.findAll({
             where: {
                 codCaderno: codigoCaderno,
+                [Op.or]: [
+                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                    {codAtividade: atividades[0].id},
+                    {descTelefone: atividade},
+                    {descCPFCNPJ: atividade}
+                ]
                 //codAtividade: 6
             }
         });
 
-        //Atividades
-        const atividades = await Atividade.findAll({
-            where: {
-                atividade: atividade
-            }
-        });
+        console.log(anuncios)
+
+        if(atividades.length > 0) {
+            console.log(atividades[0].id)
+        };
 
         const anuncio = anuncios.filter((item) => {
             var verificarCodAtividade = (atividades.length == 0) ? null : atividades[0].id;
@@ -47,7 +60,7 @@ module.exports = {
 
         //console.log(atividade, atividades[0].id)
 
-        res.json(anuncio);
+        res.json(anuncios);
     },
     buscarCaderno: async (req, res) => {
         await database.sync();
@@ -171,6 +184,20 @@ module.exports = {
                 codAnuncio: codigoAnuncio
             }
         });
+
+        try {
+            const cader = await resultAnuncio[0].getCaderno();
+            const atividades = await resultAnuncio[0].getAtividade();
+
+            resultAnuncio[0].setDataValue('nomeCaderno', cader.dataValues.nomeCaderno);
+            resultAnuncio[0].setDataValue('nomeAtividade', atividades.dataValues.atividade);
+        } catch(err) {
+            //console.log(err)
+        }
+ 
+        //anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+        //resultAnuncio[0].setDataValue('nomeCaderno', cader[0].nomeCaderno);
 
         res.json(resultAnuncio);
     }

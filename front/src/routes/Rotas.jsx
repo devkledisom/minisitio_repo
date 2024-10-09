@@ -51,9 +51,12 @@ import PainelAdmin from "../views/painelAnuciante/PainelAdmin";
 
 //AREA DO ASSINANTE
 import AssinanteCadastro from "../views/area-assinante/AssinanteCadastro";
+import Qrcode from "../plugins/Qrcode";
+import Adesivo from "../plugins/Adesivo";
 
 
 import { TemaProvider } from '../context/BuscaContext';
+
 
 function Rotas() {
     return (
@@ -65,7 +68,7 @@ function Rotas() {
                         <Route path="buscar" element={<Pesquisa />} />
                         <Route path="caderno/:atividade" element={<Caderno />} />
                         <Route path="caderno-geral/:caderno/:estado" element={<CadernoGeral />} />
-                        <Route path="local" element={<WebCard />} />
+                        <Route path="local/:nomeAnuncio" element={<WebCard />} />
                         <Route path="login" element={<Login />} />
                         <Route path="sobre/:id" element={<OutroComponente />} />
                     </Route>
@@ -108,6 +111,9 @@ function Rotas() {
 
                     {/* ROTAS AREA DO ASSINANTE */}
                     <Route path="criar-cadastro" element={<AssinanteCadastro />} />
+                    <Route path="qrcode" element={<Qrcode />} />
+                    <Route path="adesivo" element={<Adesivo />} />
+
 
 
                 </Routes>

@@ -17,6 +17,7 @@ function Cardlist(props) {
 
   const [uf, setUfs] = useState([]);
   const [caderno, setCaderno] = useState([]);
+  const [cadUf, setCadUf] = useState([]);
 
   useEffect(() => {
     fetch(`${masterPath.url}/cadernos`)
@@ -31,6 +32,9 @@ function Cardlist(props) {
         setUfs(res);
         //console.log(res)
       });
+      let cadernoUf = sessionStorage.getItem("uf: ");
+      let cadernoCidade = sessionStorage.getItem("caderno: ");
+      setCadUf([cadernoUf, cadernoCidade]);
   }, []);
 
   return (
@@ -38,16 +42,25 @@ function Cardlist(props) {
       <div className="container card my-2">
         <div className="row card-list">
           <div className="col-md-2 p-0">
-           {props.codImg != "teste" &&
+           {props.codImg != "teste" || props.codImg != "0" &&
             <img
             src={`${masterPath.url}/files/${props.codImg}`}
             alt="Foto"
             className="h-100 w-100"
+            loading="lazy"
           />
+          
            } 
            {props.codImg == "teste" &&
                         <img
                         src="../assets/img/logo.png"
+                        alt="Foto"
+                        className="h-100 w-100"
+                      />
+           }
+           {props.codImg == "0" &&
+                        <img
+                        src="../assets/img/placeholder.png"
                         alt="Foto"
                         className="h-100 w-100"
                       />
@@ -88,7 +101,8 @@ function Cardlist(props) {
                   <button>
                     <i className="fa fa-star"></i>
                     <Link
-                      to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}`}
+                      to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&caderno=${cadUf[1]}&estado=${cadUf[0]}
+`}
                     >
                       VER MINISITIO
                     </Link>

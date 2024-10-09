@@ -1,6 +1,6 @@
 import React from "react";
 
-function UserActions() {
+function UserActions(props) {
     return (
         <div class="user-actions row linksUteis margin-top-20 hidden-print my-5">
             <div class="col-md-12">
@@ -12,11 +12,11 @@ function UserActions() {
                     <img src="/assets/img/logo.png" />
                     Renovar
                 </a>
-                <a href="/qrcode.php?image=qrcode_beirute_115858.png" class="btn btn-default margin-bottom-10" target="_blank">
+                <a href={`/qrcode?image=${props.path}&id=${props.id}`} class="btn btn-default margin-bottom-10" target="_blank">
                     <img src="/assets/img/logo.png" />
                     QR CODE
                 </a>
-                <a href="/adesivo.php?image=qrcode_beirute_115858.png" class="btn btn-default margin-bottom-10" target="_blank">
+                <a href="/adesivo?image=qrcode_beirute_115858.png" class="btn btn-default margin-bottom-10" target="_blank">
                     <img src="/assets/img/logo.png" />
                     Adesivo
                 </a>

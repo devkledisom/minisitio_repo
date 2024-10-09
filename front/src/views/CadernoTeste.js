@@ -37,6 +37,9 @@ function Caderno() {
   const col2Ref = useRef(null); // Referência da segunda coluna
   const [counter, setCounter] = useState(1); // Contador para rotular as divs
   const maxHeight = 2347;
+  const [limit, setLimit] = useState(null);
+  const [base1, setBase1] = useState([]);
+  const [base2, setBase2] = useState([]);
 
   const location = useLocation();
 
@@ -769,33 +772,77 @@ function Caderno() {
       // Adiciona as próximas divs na segunda coluna quando a primeira estiver cheia
     }
 
-    let a = 0;
-document.querySelectorAll('#col1 .atividade-title').forEach((item, i, array) => {
-    
-    a += item.clientHeight;
+/*     let a = 0;
+    document.querySelectorAll('#col1 .atividade-title').forEach((item, i, array) => {
 
-    if(a <= 2352) {
-      //document.querySelectorAll('#col1 .atividade-title')[array.length-1].remove();
-        console.log(document.querySelectorAll('#col1 .atividade-title')[array.length-1]);
- 
-    }
+      a += item.clientHeight;
 
-   /*  if(i == array.length-1 && document.querySelector('#col1').scrollHeight >= 2340) {
-      if(document.querySelectorAll('#col1 .atividade-title')[array.length-1] != undefined) {
-        document.querySelectorAll('#col1 .atividade-title')[array.length-1].remove();
+      if (a <= 2352) {
+        //document.querySelectorAll('#col1 .atividade-title')[array.length-1].remove();
+        console.log(document.querySelectorAll('#col1 .atividade-title')[array.length - 1]);
+
       }
-      console.log("dfkashfagfbiasdg", item.scrollHeight);
-    } */
 
 
-    
-    
-})
+
+
+
+    }) */
   }, [page, numberPage]); // Monitora as divs criadas
 
-   
+  useEffect(() => {
+    const observador = setInterval(() => {
+      const colElement = document.querySelector('#col1'); // Armazena o elemento uma vez
+
+      if (colElement && colElement.children.length > 0) {
+        var a = 0;
+        const arr = [];
+        const children = Array.from(colElement.children); // Armazena os filhos inicialmente
+
+        children.forEach((item, index) => {
+          a += item.clientHeight;
+
+          if (a <= 2352) {
+            arr.push(a); // Adiciona o valor de `a` ao array se o total estiver dentro do limite
+            setBase1(a);
+          } else {
+            setBase2(a);
+            setLimit(index); // Chama a função `setLimit` com o índice
+
+            // Verifique novamente se o elemento ainda está no DOM antes de removê-lo
+            const elementToRemove = document.querySelector(`#col1 > :nth-child(${index + 1})`);
+            console.log(children[index + 1], index);
+
+      
+             if(index == children.length-1) {
+              console.log("ultimo")
+              if (elementToRemove != undefined) {
+                elementToRemove.remove(); // Remove o elemento que ultrapassou o limite
+                clearInterval(observador);
+               } 
+              clearInterval(observador);
+            }
+          }
+
+
+
+
+        });
+
+        // Limpa o intervalo após o trabalho estar concluído
+        //clearInterval(observador);
+      }
+    }, 1000);
+
+    // Limpa o intervalo ao desmontar o componente
+    return () => clearInterval(observador);
+  }, [numberPage]);
+
+
+
   const testin = () => {
-    if(col1Ref.current) {
+    let col1Count = document.querySelectorAll('#col1 .atividade-title').length;
+    if (col1Ref.current) {
       //console.log(col1Ref.current.scrollHeight, col1Ref.current.clientHeight)
       let a = 0;
       let arr = [];
@@ -803,115 +850,116 @@ document.querySelectorAll('#col1 .atividade-title').forEach((item, i, array) => 
       return (
         nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
-          
-          
+
+
           (item != undefined || item.length > 0)
+            /* (index <= document.querySelector('#col1').children.length-1) */
             ? (
               <div id={item.id} key={item.id} className="atividade-title px-2" >
                 <h2 className='bg-yellow py-2'>
                   {item.codAtividade}
                 </h2>
-    
+
                 {minisitio.anuncios.map((anuncio, i) => {
 
 
 
-                    if(i == 4) {
-                      //console.log("quartoec", i)
-                    }
+                  if (i == 4) {
+                    //console.log("quartoec", i)
+                  }
 
-                    if (anuncio.codTipoAnuncio == 1) {
-                      // Renderiza o componente MiniWebCardSimples
-                      
-                      return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
-                    } else if (anuncio.codAtividade == item.codAtividade) {
-                      // Renderiza o componente MiniWebCard se o codAtividade coincidir
-                      return (
-                        <MiniWebCard
-                          key={anuncio.codAnuncio}
-                          id={anuncio.codAnuncio}
-                          data={minisitio}
-                          codImg={anuncio.descImagem}
-                          ref={teste}
-                          empresa={anuncio.descAnuncio}
-                          endereco={anuncio.descEndereco}
-                          telefone={anuncio.descTelefone}
-                          celular={anuncio.descCelular}
-                          codDesconto={anuncio.codDesconto}
-                          ids={buscarId(90)}
-                        />
-                      )
-                    }
-                  
-                  
-                 
-    
+                  if (anuncio.codTipoAnuncio == 1) {
+                    // Renderiza o componente MiniWebCardSimples
+
+                    return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
+                  } else if (anuncio.codAtividade == item.codAtividade) {
+                    // Renderiza o componente MiniWebCard se o codAtividade coincidir
+                    return (
+                      <MiniWebCard
+                        key={anuncio.codAnuncio}
+                        id={anuncio.codAnuncio}
+                        data={minisitio}
+                        codImg={anuncio.descImagem}
+                        ref={teste}
+                        empresa={anuncio.descAnuncio}
+                        endereco={anuncio.descEndereco}
+                        telefone={anuncio.descTelefone}
+                        celular={anuncio.descCelular}
+                        codDesconto={anuncio.codDesconto}
+                        ids={buscarId(90)}
+                      />
+                    )
+                  }
+
+
+
+
                   return null; // Retorna null se nenhuma condição for atendida
                 })}
-    
+
                 {/* Mensagem programada pode ser incluída aqui, caso necessário */}
                 {/* <MsgProgramada /> */}
               </div>
             )
-            : <h1>erro</h1>
+            : null
         ))
       );
 
     }
-    
-   
+
+
   }
-  
+
   const testin2 = () => {
 
     let col1Count = document.querySelectorAll('#col1 .atividade-title').length;
-  /*   if(document.querySelectorAll('#col1 .atividade-title')[col1Count - 1]) {
-      document.querySelectorAll('#col1 .atividade-title')[col1Count - 1].remove();
-    } */
-    
+    /*   if(document.querySelectorAll('#col1 .atividade-title')[col1Count - 1]) {
+        document.querySelectorAll('#col1 .atividade-title')[col1Count - 1].remove();
+      } */
+
 
     return (
-    nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
-          
-      (index >= col1Count-1)
-        ? (
-          <div id={item.id} key={item.id} className="atividade-title px-2" >
-            <h2 className='bg-yellow py-2'>
-              {item.codAtividade}
-            </h2>
+      nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
-            {minisitio.anuncios.map((anuncio) => {
-              if (anuncio.codTipoAnuncio == 1) {
-                // Renderiza o componente MiniWebCardSimples
-                return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
-              } else if (anuncio.codAtividade == item.codAtividade) {
-                // Renderiza o componente MiniWebCard se o codAtividade coincidir
-                return (
-                  <MiniWebCard
-                    key={anuncio.codAnuncio}
-                    id={anuncio.codAnuncio}
-                    data={minisitio}
-                    codImg={anuncio.descImagem}
-                    ref={teste}
-                    empresa={anuncio.descAnuncio}
-                    endereco={anuncio.descEndereco}
-                    telefone={anuncio.descTelefone}
-                    celular={anuncio.descCelular}
-                    codDesconto={anuncio.codDesconto}
-                    ids={buscarId(90)}
-                  />
-                )
-              }
+        (index >= limit)
+          ? (
+            <div id={item.id} key={item.id} className="atividade-title px-2" >
+              <h2 className='bg-yellow py-2'>
+                {item.codAtividade}
+              </h2>
 
-              return null; // Retorna null se nenhuma condição for atendida
-            })}
+              {minisitio.anuncios.map((anuncio) => {
+                if (anuncio.codTipoAnuncio == 1) {
+                  // Renderiza o componente MiniWebCardSimples
+                  return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
+                } else if (anuncio.codAtividade == item.codAtividade) {
+                  // Renderiza o componente MiniWebCard se o codAtividade coincidir
+                  return (
+                    <MiniWebCard
+                      key={anuncio.codAnuncio}
+                      id={anuncio.codAnuncio}
+                      data={minisitio}
+                      codImg={anuncio.descImagem}
+                      ref={teste}
+                      empresa={anuncio.descAnuncio}
+                      endereco={anuncio.descEndereco}
+                      telefone={anuncio.descTelefone}
+                      celular={anuncio.descCelular}
+                      codDesconto={anuncio.codDesconto}
+                      ids={buscarId(90)}
+                    />
+                  )
+                }
 
-            {/* Mensagem programada pode ser incluída aqui, caso necessário */}
-            {/* <MsgProgramada /> */}
-          </div>
-        )
-        : null
-    )))
+                return null; // Retorna null se nenhuma condição for atendida
+              })}
+
+              {/* Mensagem programada pode ser incluída aqui, caso necessário */}
+              {/* <MsgProgramada /> */}
+            </div>
+          )
+          : null
+      )))
   }
 
 
@@ -955,19 +1003,19 @@ document.querySelectorAll('#col1 .atividade-title').forEach((item, i, array) => 
           <div className="row p-3">
 
             <div className="col-md-6 w-100 secao-anuncios-caderno">
-              {/*  <div class="grid-container">
-                
+              <div class="grid-container">
+
                 <div class="column" id="col1" ref={col1Ref}>
-                 
-                  {testin()} 
+
+                  {testin()}
 
                 </div>
                 <div class="column" id="col2">
                   {
-                   testin2()
+                    testin2()
                   }
                 </div>
-              </div>  */}
+              </div>
 
               {/* <DistribuirAnuncios nomeAtividade={nomeAtividade} minisitio={minisitio}/> */}
 
@@ -976,7 +1024,7 @@ document.querySelectorAll('#col1 .atividade-title').forEach((item, i, array) => 
               <div
                 className="masonry-layout position-relative"
               >
-                    {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
+                {/*         {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
                   //((index + 1) % 5 === 0) ? <MsgProgramada /> : "" 
 
@@ -1022,7 +1070,7 @@ document.querySelectorAll('#col1 .atividade-title').forEach((item, i, array) => 
                     </div>
                     :
                     <h1>erro</h1>
-                ))} 
+                ))}  */}
                 {/* {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
                   // ((index + 1) % 5 === 0) ? <MsgProgramada /> : "" 

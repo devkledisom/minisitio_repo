@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useSearchParams, useParams} from 'react-router-dom';
 
 import '../assets/css/main.css';
 import '../assets/css/default.css';
@@ -6,7 +7,7 @@ import '../assets/css/caderno.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-/* import 'font-awesome/css/font-awesome.min.css'; */
+import { masterPath } from '../config/config';
 
 import { useBusca } from '../context/BuscaContext';
 
@@ -23,14 +24,30 @@ import Socialmidia from './Socialmidia';
 function FullWebCard() {
     const { result, setResult } = useBusca();
 
+    //params
+    const [searchParams] = useSearchParams();
+    const idParam = searchParams.get('id');
+    const {nomeAnuncio} = useParams();
+
     useEffect(() => {
-        if(result[0] != undefined && result[0] === "teste") {
+  /*       if(result[0] != undefined && result[0] === "teste") {
             let resultSalvo = sessionStorage.getItem("stateBusca");
             setResult(JSON.parse(resultSalvo));
-
+            console.log(resultSalvo)
         } else {
             sessionStorage.setItem("stateBusca", JSON.stringify(result));
+        } */
+
+
+        async function buscarAnuncio() {
+           const request = await fetch(`${masterPath.url}/anuncio/${idParam}`).then((x) => x.json());
+            console.log(request[0]);
+            console.log(result);
+            setResult(request[0]);
         }
+
+        buscarAnuncio()
+
     }, []);
 
     return (
@@ -118,7 +135,7 @@ function FullWebCard() {
                 <div className="row">
                     <Socialmidia />
                 </div>
-                <UserActions />
+                <UserActions path={nomeAnuncio} id={idParam}/>
             </div>
         </div>
     );

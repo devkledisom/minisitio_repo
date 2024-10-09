@@ -27,7 +27,7 @@ function MiniWebCard(props) {
         qntVisualizacoes()
         const request = await fetch(`${masterPath.url}/anuncio/${props.id}`).then((x) => x.json());
         setResult(request[0]);
-        navigate("/local");
+        navigate(`/local/${props.empresa}?id=${props.id}`);
     }
 
     useEffect(() => {

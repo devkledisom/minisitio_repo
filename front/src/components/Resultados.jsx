@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 import '../assets/css/main.css';
@@ -15,8 +16,16 @@ function Resultados() {
     const [anuncio, setAnuncio] = useState([]);
     const { result, setResult } = useBusca();
 
+    const navigate = useNavigate();
 
     useEffect(() => {
+        console.log(result)
+        let cadernoUf = sessionStorage.getItem("uf: ");
+        let cadernoCidade = sessionStorage.getItem("caderno: ");
+        if(result.length == 1) {
+            navigate(`/caderno/${result[0].descAnuncio}?page=1&book=${result[0].codCaderno}&id=${result[0].codAnuncio}&caderno=${cadernoCidade}&estado=${cadernoUf}
+`);
+        }
 
     }, [])
 

@@ -712,7 +712,7 @@ function Caderno() {
 
     }
 
-    mensagemProgramada()
+    //mensagemProgramada()
   })
 
   return (
