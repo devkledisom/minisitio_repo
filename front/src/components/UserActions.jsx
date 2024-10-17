@@ -1,10 +1,14 @@
 import React from "react";
 
+//GLOBAL FUNCTIONS
+import { limparCPFouCNPJ } from "../globalFunctions/functions";
+
 function UserActions(props) {
+   
     return (
         <div class="user-actions row linksUteis margin-top-20 hidden-print my-5">
             <div class="col-md-12">
-                <a href="/area-assinante" class="btn btn-default margin-bottom-10">
+                <a href={`/ver-anuncios/${limparCPFouCNPJ(props.doc)}`} class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Atualizar
                 </a>

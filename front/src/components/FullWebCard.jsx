@@ -126,8 +126,6 @@ function FullWebCard() {
                         <div>
 
                         </div>
-
-
                     </section>
 
                 </div>
@@ -135,7 +133,7 @@ function FullWebCard() {
                 <div className="row">
                     <Socialmidia />
                 </div>
-                <UserActions path={nomeAnuncio} id={idParam}/>
+                <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ}/>
             </div>
         </div>
     );

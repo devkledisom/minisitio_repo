@@ -18,7 +18,6 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import MsgProgramada from '../components/MsgProgramada';
 import MiniWebCardSimples from '../components/MiniWebCardSimples';
-import DistribuirAnuncios from './classificados/DistribuirAnuncios';
 
 function Caderno() {
 
@@ -27,19 +26,8 @@ function Caderno() {
   const [smoot, setSmoot] = useState(false);
   const [listaIds, setListaIds] = useState([]);
   const [btnNav, setbtnNav] = useState(false);
-  const [contadorAds, setContadorAds] = useState(false);
 
   const [loading, setLoading] = useState(false);
-
-  /*----------layout colums--------------->*/
-  const [divs, setDivs] = useState([]); // Estado para armazenar as divs criadas
-  const col1Ref = useRef(null); // Referência da primeira coluna
-  const col2Ref = useRef(null); // Referência da segunda coluna
-  const [counter, setCounter] = useState(1); // Contador para rotular as divs
-  const maxHeight = 2347;
-  const [limit, setLimit] = useState(null);
-  const [base1, setBase1] = useState([]);
-  const [base2, setBase2] = useState([]);
 
   const location = useLocation();
 
@@ -724,244 +712,8 @@ function Caderno() {
 
     }
 
-    //mensagemProgramada();
-    /* 
-        let column1 = document.getElementById("col1");
-        let column2 = document.getElementById("col2");
-        let counter = 1; // Contador para rotular as divs
-    
-        setColumn1(column1.scrollHeight);
-        setColumn2(column1.clientHeight);
-     */
-
-
-
-
-
-
+    //mensagemProgramada()
   })
-
-  const addDiv = () => {
-    // Cria uma nova div e atualiza o estado
-    const newDiv = { id: counter, label: `Div ${counter}` };
-    setDivs((prevDivs) => [...prevDivs, newDiv]);
-    setCounter(counter + 1); // Incrementa o contador
-  };
-
-  // Função para verificar se a primeira coluna está cheia
-  const isColumnFullold = (columnRef) => {
-    if (columnRef.current) {
-      console.log(columnRef.current.scrollHeight, columnRef.current.clientHeight)
-      return columnRef.current.scrollHeight > columnRef.current.clientHeight;
-    }
-    return false;
-  };
-
-  const isColumnFull = (columnRef) => {
-    if (columnRef.current) {
-      console.log(columnRef.current.scrollHeight, columnRef.current.clientHeight)
-      return columnRef.current.scrollHeight > columnRef.current.clientHeight;
-    }
-    return false;
-  };
-
-
-  useEffect(() => {
-    // Verifica quando a primeira coluna está cheia e muda o estado
-    if (isColumnFull(col1Ref)) {
-      // Adiciona as próximas divs na segunda coluna quando a primeira estiver cheia
-    }
-
-/*     let a = 0;
-    document.querySelectorAll('#col1 .atividade-title').forEach((item, i, array) => {
-
-      a += item.clientHeight;
-
-      if (a <= 2352) {
-        //document.querySelectorAll('#col1 .atividade-title')[array.length-1].remove();
-        console.log(document.querySelectorAll('#col1 .atividade-title')[array.length - 1]);
-
-      }
-
-
-
-
-
-    }) */
-  }, [page, numberPage]); // Monitora as divs criadas
-
-  useEffect(() => {
-    const observador = setInterval(() => {
-      const colElement = document.querySelector('#col1'); // Armazena o elemento uma vez
-
-      if (colElement && colElement.children.length > 0) {
-        var a = 0;
-        const arr = [];
-        const children = Array.from(colElement.children); // Armazena os filhos inicialmente
-
-        children.forEach((item, index) => {
-          a += item.clientHeight;
-
-          if (a <= 2352) {
-            arr.push(a); // Adiciona o valor de `a` ao array se o total estiver dentro do limite
-            setBase1(a);
-          } else {
-            setBase2(a);
-            setLimit(index); // Chama a função `setLimit` com o índice
-
-            // Verifique novamente se o elemento ainda está no DOM antes de removê-lo
-            const elementToRemove = document.querySelector(`#col1 > :nth-child(${index + 1})`);
-            console.log(children[index + 1], index);
-
-      
-             if(index == children.length-1) {
-              console.log("ultimo")
-              if (elementToRemove != undefined) {
-                elementToRemove.remove(); // Remove o elemento que ultrapassou o limite
-                clearInterval(observador);
-               } 
-              clearInterval(observador);
-            }
-          }
-
-
-
-
-        });
-
-        // Limpa o intervalo após o trabalho estar concluído
-        //clearInterval(observador);
-      }
-    }, 1000);
-
-    // Limpa o intervalo ao desmontar o componente
-    return () => clearInterval(observador);
-  }, [numberPage]);
-
-
-
-  const testin = () => {
-    let col1Count = document.querySelectorAll('#col1 .atividade-title').length;
-    if (col1Ref.current) {
-      //console.log(col1Ref.current.scrollHeight, col1Ref.current.clientHeight)
-      let a = 0;
-      let arr = [];
-
-      return (
-        nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
-
-
-
-          (item != undefined || item.length > 0)
-            /* (index <= document.querySelector('#col1').children.length-1) */
-            ? (
-              <div id={item.id} key={item.id} className="atividade-title px-2" >
-                <h2 className='bg-yellow py-2'>
-                  {item.codAtividade}
-                </h2>
-
-                {minisitio.anuncios.map((anuncio, i) => {
-
-
-
-                  if (i == 4) {
-                    //console.log("quartoec", i)
-                  }
-
-                  if (anuncio.codTipoAnuncio == 1) {
-                    // Renderiza o componente MiniWebCardSimples
-
-                    return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
-                  } else if (anuncio.codAtividade == item.codAtividade) {
-                    // Renderiza o componente MiniWebCard se o codAtividade coincidir
-                    return (
-                      <MiniWebCard
-                        key={anuncio.codAnuncio}
-                        id={anuncio.codAnuncio}
-                        data={minisitio}
-                        codImg={anuncio.descImagem}
-                        ref={teste}
-                        empresa={anuncio.descAnuncio}
-                        endereco={anuncio.descEndereco}
-                        telefone={anuncio.descTelefone}
-                        celular={anuncio.descCelular}
-                        codDesconto={anuncio.codDesconto}
-                        ids={buscarId(90)}
-                      />
-                    )
-                  }
-
-
-
-
-                  return null; // Retorna null se nenhuma condição for atendida
-                })}
-
-                {/* Mensagem programada pode ser incluída aqui, caso necessário */}
-                {/* <MsgProgramada /> */}
-              </div>
-            )
-            : null
-        ))
-      );
-
-    }
-
-
-  }
-
-  const testin2 = () => {
-
-    let col1Count = document.querySelectorAll('#col1 .atividade-title').length;
-    /*   if(document.querySelectorAll('#col1 .atividade-title')[col1Count - 1]) {
-        document.querySelectorAll('#col1 .atividade-title')[col1Count - 1].remove();
-      } */
-
-
-    return (
-      nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
-
-        (index >= limit)
-          ? (
-            <div id={item.id} key={item.id} className="atividade-title px-2" >
-              <h2 className='bg-yellow py-2'>
-                {item.codAtividade}
-              </h2>
-
-              {minisitio.anuncios.map((anuncio) => {
-                if (anuncio.codTipoAnuncio == 1) {
-                  // Renderiza o componente MiniWebCardSimples
-                  return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
-                } else if (anuncio.codAtividade == item.codAtividade) {
-                  // Renderiza o componente MiniWebCard se o codAtividade coincidir
-                  return (
-                    <MiniWebCard
-                      key={anuncio.codAnuncio}
-                      id={anuncio.codAnuncio}
-                      data={minisitio}
-                      codImg={anuncio.descImagem}
-                      ref={teste}
-                      empresa={anuncio.descAnuncio}
-                      endereco={anuncio.descEndereco}
-                      telefone={anuncio.descTelefone}
-                      celular={anuncio.descCelular}
-                      codDesconto={anuncio.codDesconto}
-                      ids={buscarId(90)}
-                    />
-                  )
-                }
-
-                return null; // Retorna null se nenhuma condição for atendida
-              })}
-
-              {/* Mensagem programada pode ser incluída aqui, caso necessário */}
-              {/* <MsgProgramada /> */}
-            </div>
-          )
-          : null
-      )))
-  }
-
 
   return (
     <div className="App">
@@ -1002,29 +754,12 @@ function Caderno() {
           {/* teste row */}
           <div className="row p-3">
 
-            <div className="col-md-6 w-100 secao-anuncios-caderno">
-              <div class="grid-container">
-
-                <div class="column" id="col1" ref={col1Ref}>
-
-                  {testin()}
-
-                </div>
-                <div class="column" id="col2">
-                  {
-                    testin2()
-                  }
-                </div>
-              </div>
-
-              {/* <DistribuirAnuncios nomeAtividade={nomeAtividade} minisitio={minisitio}/> */}
-
-
+            <div className="col-md-6 w-100 secao-anuncios">
 
               <div
                 className="masonry-layout position-relative"
               >
-                {/*         {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
+                {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
                   //((index + 1) % 5 === 0) ? <MsgProgramada /> : "" 
 
@@ -1070,7 +805,7 @@ function Caderno() {
                     </div>
                     :
                     <h1>erro</h1>
-                ))}  */}
+                ))}
                 {/* {nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
                   // ((index + 1) % 5 === 0) ? <MsgProgramada /> : "" 

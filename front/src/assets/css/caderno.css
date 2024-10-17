@@ -177,7 +177,7 @@
 .grid-container #col1, .grid-container #col2{
     grid-column: span 1;
     grid-rows: span 12;
-    border: 1px solid red;
+   /*  border: 1px solid red; */
     max-height: 2352px;
 }
 
