@@ -58,7 +58,7 @@ module.exports = {
                       } */
                 }).toFile("../back/public/cartaoDigital/teste.pdf", (err, result) => {
                     if (err) {
-                        console.log("um erro aconteceu", err)
+                        console.log("um erro aconteceu", err);
                     } else {
                         console.log(result)
                         res.json({success: true, url:`${masterPath.url}/cartaoDigital/teste.pdf`})
