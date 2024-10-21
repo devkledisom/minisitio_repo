@@ -50,63 +50,6 @@ function ComprarAnuncio() {
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
 
 
-  /*   useEffect(() => {
-  
-      function verificarPosicaoElemento() {
-        const elemento = document.getElementById("form-cadastro-data");
-        const posicao = elemento.getBoundingClientRect().top;
-  
-        // Defina o limite de proximidade do topo da página, por exemplo, 100px
-        const limite = 24;
-  
-        //console.log(posicao);
-  
-        if(radioCheck != 1) {
-          if (posicao <= limite && posicao >= -1875) {
-            document.querySelector(".simulacao").style.cssText =
-              "position: fixed; top: 0px; margin-top: 20px; width: 47%";
-          } else if (posicao <= -1875 && radioCheck != 1) {
-            document.querySelector(".simulacao").style.position = "relative";
-            document.querySelector(".simulacao").style.top = "73.5%"; //1810PX
-            document.querySelector(".simulacao").style.marginTop = "0px";
-            document.querySelector(".simulacao").style.width = "100%";
-          } else {
-            document.querySelector(".simulacao").style.position = "relative";
-            document.querySelector(".simulacao").style.marginTop = "0px";
-            document.querySelector(".simulacao").style.width = "100%";
-          }
-        }
-  
-        if(radioCheck == 1) {
-          console.log(radioCheck)
-          if (posicao <= limite && posicao >= -600 && radioCheck == 1) {
-            document.querySelector(".simulacao").style.cssText =
-              "position: fixed; top: 0px; margin-top: 20px; width: 47%";
-          } else if (posicao <= -600 && radioCheck == 1) {
-            document.querySelector(".simulacao").style.position = "relative";
-            document.querySelector(".simulacao").style.top = "56.5%"; //"633px"
-            document.querySelector(".simulacao").style.marginTop = "0px";
-            document.querySelector(".simulacao").style.width = "100%";
-          } else {
-            document.querySelector(".simulacao").style.position = "relative";
-            document.querySelector(".simulacao").style.marginTop = "0px";
-            document.querySelector(".simulacao").style.width = "100%";
-          }
-        }
-           
-      }
-  
-      // Adicione o listener de scroll quando o componente montar
-      window.addEventListener("scroll", verificarPosicaoElemento);
-  
-      // Remove o listener quando o componente desmontar
-      return () => {
-        window.removeEventListener("scroll", verificarPosicaoElemento);
-      };
-  
-  
-    }, [radioCheck]); */ // Executar apenas uma vez na montagem do componente
-
   const executarSelecao = () => {
     let codigoUf = document.querySelectorAll("#codUf4")[0].value;
     setUf(codigoUf);

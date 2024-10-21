@@ -11,10 +11,11 @@ const ejs = require('ejs');
 module.exports = {
     cartaoDigital: async (req, res) => {
         const espaco = req.query.espaco;
+        const id = req.query.id;
 
         const anuncio = await Anuncio.findOne({
             where: {
-                codAnuncio: 1
+                codAnuncio: id
             }
         });
 

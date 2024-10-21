@@ -17,11 +17,11 @@ function UserActions(props) {
 
     function gerarCartaoDigital(event) {
         event.preventDefault()
-        fetch(`${masterPath.url}/cartao-digital?espaco=props.url`)
+        fetch(`${masterPath.url}/cartao-digital?espaco=${props.url}&id=${props.id}`)
             .then(x => x.json())
             .then(res => {
                 if(res.success) {
-                    window.open(res.url);
+                    window.open(res.url, '_blank');
                     console.log("resultado",res)
                 }
                 
