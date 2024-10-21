@@ -49,7 +49,13 @@ module.exports = {
 
                 pdf.create(html, {
                     "height": "20in",        // allowed units: mm, cm, in, px
-                    "width": "11in",
+                    "width": "5in",
+                   /*  "border": {
+                        "top": "0",            // default is 0, units: mm, cm, in, px
+                        "right": "0",
+                        "bottom": "0",
+                        "left": "1.5in"
+                      } */
                 }).toFile("../back/public/cartaoDigital/teste.pdf", (err, result) => {
                     if (err) {
                         console.log("um erro aconteceu", err)
