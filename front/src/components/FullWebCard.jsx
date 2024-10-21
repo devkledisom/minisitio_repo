@@ -50,6 +50,8 @@ function FullWebCard() {
 
     }, []);
 
+    const fullUrl = window.location.href;
+
     return (
         <div className="FullWebCard">
             <div className="container">
@@ -133,7 +135,7 @@ function FullWebCard() {
                 <div className="row">
                     <Socialmidia />
                 </div>
-                <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ}/>
+                <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ} url={fullUrl}/>
             </div>
         </div>
     );

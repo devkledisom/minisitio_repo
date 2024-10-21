@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
+const masterPath = require('../config/config');
 
 //MODELS
 const Anuncio = require('../models/table_anuncio');
@@ -20,9 +21,9 @@ module.exports = {
 
         const objAnuncio = {
             nmAnuncio: anuncio.descAnuncio,
-            endereco: anuncio.descEndereco,
+            endereco: anuncio.descEndereco == "atualizar" ? "" : anuncio.descEndereco,
             telefone: anuncio.descTelefone,
-            infos: anuncio.tags, 
+            infos: anuncio.tags,
             site: anuncio.descSite,
             minisitio: espaco
         };
@@ -31,30 +32,38 @@ module.exports = {
 
         var nomeUser = "kledisom";
 
-    ejs.renderFile("./ejs/cartaoDigital.ejs", {
-        nmAnuncio: anuncio.descAnuncio,
-        endereco: anuncio.descEndereco,
-        telefone: anuncio.descTelefone,
-        infos: anuncio.tags, 
-        site: anuncio.descSite,
-        minisitio: espaco
-    }, (err, html) => {
+        ejs.renderFile("./ejs/cartaoDigital.ejs", {
+            anuncio: anuncio.descAnuncio,
+            endereco: anuncio.descEndereco == "atualizar" ? "Endereço da empresa" : anuncio.descEndereco,
+            telefone: anuncio.descTelefone == 0 ? "(xx) xxxx-xxxx" : anuncio.descTelefone,
+            celular: anuncio.descCelular == 0 ? "(xx) xxxxx-xxxx" : anuncio.descCelular,
+            infos: anuncio.tags == null ? "Informações adicionais" : anuncio.tags,
+            site: anuncio.descSite == null ? "Site da empresa" : anuncio.descSite,
+            minisitio: espaco
+        }, (err, html) => {
             if (err) {
                 console.log("erro!", err)
             } else {
                 console.log(html)
 
                 pdf.create(html, {
-                  "height": "20in",        // allowed units: mm, cm, in, px
-                    "width": "11in",                     
+                    "height": "20in",        // allowed units: mm, cm, in, px
+                    "width": "11in",
                 }).toFile("../back/public/cartaoDigital/teste.pdf", (err, result) => {
                     if (err) {
                         console.log("um erro aconteceu", err)
                     } else {
-                        //console.log(result)
-                        res.render('cartaoDigital', {
-                            nome: nomeUser
-                        });
+                        console.log(result)
+                        res.json({success: true, url:`${masterPath.url}/cartaoDigital/teste.pdf`})
+                     /*    res.render('cartaoDigital', {
+                            anuncio: anuncio.descAnuncio,
+                            endereco: anuncio.descEndereco == "atualizar" ? "Endereço da empresa" : anuncio.descEndereco,
+                            telefone: anuncio.descTelefone == 0 ? "(xx) xxxx-xxxx" : anuncio.descTelefone,
+                            celular: anuncio.descCelular == 0 ? "(xx) xxxxx-xxxx" : anuncio.descCelular,
+                            infos: anuncio.tags == null ? "Informações adicionais" : anuncio.tags,
+                            site: anuncio.descSite == null ? "Site da empresa" : anuncio.descSite,
+                            minisitio: espaco
+                        }); */
                     }
 
 
@@ -62,6 +71,6 @@ module.exports = {
 
 
             }
-        }); 
+        });
     }
 }

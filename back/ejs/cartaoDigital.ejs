@@ -29,7 +29,6 @@
             z-index: 0;
             height: 70vh;
             width: 100%;
-            border: 1px solid red;
         }
 
         .pdf-generator>.container-fluid {
@@ -58,6 +57,7 @@
             font-size: 80px;
             color: #FFFFFF;
             text-align: center;
+            white-space: nowrap;
         }
 
         .pdf-generator>.container-fluid>.cartao>.pdf-content {
@@ -267,14 +267,12 @@
             <div class="row p-0 cartao">
                 <div class="apoio">
                     <!-- <h2>Nome da empresa</h2> -->
-                    <h2>
-                        <%= nmAnuncio %>
-                    </h2>
+                    <h2><%= anuncio %></h2>        
                 </div>
                 <div class="row pdf-content">
                     <div class="conteudo text-start webcardsimples px-5">
-                        <a href="/local/porto-velho/hotel avenida ii_327591">
-                           <h2><%= nmAnuncio %></h2>
+                        <a href="<%= minisitio %>">
+                           <h2><%= anuncio %></h2>
                             <p><i class="fa fa-map-marker"></i> <%= endereco %></p>
                             <p><i class="fa fa-phone"></i> <%= telefone %></p>
                         </a>
@@ -291,7 +289,7 @@
                     </div>
                     <div class="col-md-12">
                         <i class="fa fa-phone"></i>
-                        <h4><%= telefone %></h4>
+                        <h4><%= celular %></h4>
                         <!-- <h4>(xx) xxxx-xxxx</h4> -->
                     </div>
                     <div class="col-md-12">

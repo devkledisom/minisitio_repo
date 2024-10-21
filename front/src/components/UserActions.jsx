@@ -3,21 +3,35 @@ import React, { useRef } from "react";
 //GLOBAL FUNCTIONS
 import { limparCPFouCNPJ, generatePdf } from "../globalFunctions/functions";
 import PdfGenerator from "../plugins/PdfGenerator";
+import { masterPath } from '../config/config';
 
 function UserActions(props) {
-   
-       // Cria uma referência para o componente filho
-       const pdfGeneratorRef = useRef();
 
-       // Função para chamar o generatePdf no filho
-       const handleGeneratePdf = () => {
-           pdfGeneratorRef.current.generatePdf();
-       };
+    // Cria uma referência para o componente filho
+    const pdfGeneratorRef = useRef();
+
+    // Função para chamar o generatePdf no filho
+    const handleGeneratePdf = () => {
+        pdfGeneratorRef.current.generatePdf();
+    };
+
+    function gerarCartaoDigital(event) {
+        event.preventDefault()
+        fetch(`${masterPath.url}/cartao-digital?espaco=props.url`)
+            .then(x => x.json())
+            .then(res => {
+                if(res.success) {
+                    window.open(res.url);
+                    console.log("resultado",res)
+                }
+                
+            })
+    };
 
     return (
         <div class="user-actions row linksUteis margin-top-20 hidden-print my-5">
             <div class="col-md-12">
-         {/*        <a href={`/ver-anuncios/${limparCPFouCNPJ(props.doc)}`} class="btn btn-default margin-bottom-10">
+                {/*        <a href={`/ver-anuncios/${limparCPFouCNPJ(props.doc)}`} class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Atualizar
                 </a> */}
@@ -33,15 +47,10 @@ function UserActions(props) {
                     <img src="/assets/img/logo.png" />
                     Adesivo
                 </a>
-                <a href="#" class="btn btn-danger margin-bottom-10 hidden-xs" target="_blank">
+                <a href="#" class="btn btn-danger margin-bottom-10 hidden-xs" target="_blank" onClick={gerarCartaoDigital}>
                     <img src="/assets/img/logo.png" />
                     Cartão Digital
                 </a>
-                <button onClick={generatePdf}>teste</button>
-           {/*      <a href="https://api.whatsapp.com/send?text=https://br.minisitio.net/resources/upload/beirute_115858.pdf" class="btn btn-danger margin-bottom-10 visible-xs" target="_blank">
-                    <img src="/assets/img/logo.png" />
-                    Cartão Digital
-                </a> */}
                 <a href="/contato" class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Denúncia
@@ -52,17 +61,10 @@ function UserActions(props) {
                         <img src="/assets/img/logo.png" />
                     </div>
                     <div class="master-descricao">
-                        MARCOS QUIMAS        
+                        MARCOS QUIMAS
                     </div>
                 </a>
             </div>
-
-          {/*  <PdfGenerator />  */}
-          <button onClick={handleGeneratePdf}>Gerar PDF no Filho</button>
-
-{/* Passa a referência para o componente filho */}
-<PdfGenerator ref={pdfGeneratorRef} />
-           
         </div>
     )
 };

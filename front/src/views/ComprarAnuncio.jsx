@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { masterPath } from "../config/config";
 import he from 'he';
 
+import InputMask from 'react-input-mask';
 
 
 //lib
@@ -46,64 +47,65 @@ function ComprarAnuncio() {
   const [cep, setCep] = useState();
   const [showMap, setShowMap] = useState("none");
   const [precoFixo, setPrecoFixo] = useState(5);
+  const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
 
 
-/*   useEffect(() => {
-
-    function verificarPosicaoElemento() {
-      const elemento = document.getElementById("form-cadastro-data");
-      const posicao = elemento.getBoundingClientRect().top;
-
-      // Defina o limite de proximidade do topo da página, por exemplo, 100px
-      const limite = 24;
-
-      //console.log(posicao);
-
-      if(radioCheck != 1) {
-        if (posicao <= limite && posicao >= -1875) {
-          document.querySelector(".simulacao").style.cssText =
-            "position: fixed; top: 0px; margin-top: 20px; width: 47%";
-        } else if (posicao <= -1875 && radioCheck != 1) {
-          document.querySelector(".simulacao").style.position = "relative";
-          document.querySelector(".simulacao").style.top = "73.5%"; //1810PX
-          document.querySelector(".simulacao").style.marginTop = "0px";
-          document.querySelector(".simulacao").style.width = "100%";
-        } else {
-          document.querySelector(".simulacao").style.position = "relative";
-          document.querySelector(".simulacao").style.marginTop = "0px";
-          document.querySelector(".simulacao").style.width = "100%";
+  /*   useEffect(() => {
+  
+      function verificarPosicaoElemento() {
+        const elemento = document.getElementById("form-cadastro-data");
+        const posicao = elemento.getBoundingClientRect().top;
+  
+        // Defina o limite de proximidade do topo da página, por exemplo, 100px
+        const limite = 24;
+  
+        //console.log(posicao);
+  
+        if(radioCheck != 1) {
+          if (posicao <= limite && posicao >= -1875) {
+            document.querySelector(".simulacao").style.cssText =
+              "position: fixed; top: 0px; margin-top: 20px; width: 47%";
+          } else if (posicao <= -1875 && radioCheck != 1) {
+            document.querySelector(".simulacao").style.position = "relative";
+            document.querySelector(".simulacao").style.top = "73.5%"; //1810PX
+            document.querySelector(".simulacao").style.marginTop = "0px";
+            document.querySelector(".simulacao").style.width = "100%";
+          } else {
+            document.querySelector(".simulacao").style.position = "relative";
+            document.querySelector(".simulacao").style.marginTop = "0px";
+            document.querySelector(".simulacao").style.width = "100%";
+          }
         }
-      }
-
-      if(radioCheck == 1) {
-        console.log(radioCheck)
-        if (posicao <= limite && posicao >= -600 && radioCheck == 1) {
-          document.querySelector(".simulacao").style.cssText =
-            "position: fixed; top: 0px; margin-top: 20px; width: 47%";
-        } else if (posicao <= -600 && radioCheck == 1) {
-          document.querySelector(".simulacao").style.position = "relative";
-          document.querySelector(".simulacao").style.top = "56.5%"; //"633px"
-          document.querySelector(".simulacao").style.marginTop = "0px";
-          document.querySelector(".simulacao").style.width = "100%";
-        } else {
-          document.querySelector(".simulacao").style.position = "relative";
-          document.querySelector(".simulacao").style.marginTop = "0px";
-          document.querySelector(".simulacao").style.width = "100%";
+  
+        if(radioCheck == 1) {
+          console.log(radioCheck)
+          if (posicao <= limite && posicao >= -600 && radioCheck == 1) {
+            document.querySelector(".simulacao").style.cssText =
+              "position: fixed; top: 0px; margin-top: 20px; width: 47%";
+          } else if (posicao <= -600 && radioCheck == 1) {
+            document.querySelector(".simulacao").style.position = "relative";
+            document.querySelector(".simulacao").style.top = "56.5%"; //"633px"
+            document.querySelector(".simulacao").style.marginTop = "0px";
+            document.querySelector(".simulacao").style.width = "100%";
+          } else {
+            document.querySelector(".simulacao").style.position = "relative";
+            document.querySelector(".simulacao").style.marginTop = "0px";
+            document.querySelector(".simulacao").style.width = "100%";
+          }
         }
+           
       }
-         
-    }
-
-    // Adicione o listener de scroll quando o componente montar
-    window.addEventListener("scroll", verificarPosicaoElemento);
-
-    // Remove o listener quando o componente desmontar
-    return () => {
-      window.removeEventListener("scroll", verificarPosicaoElemento);
-    };
-
-
-  }, [radioCheck]); */ // Executar apenas uma vez na montagem do componente
+  
+      // Adicione o listener de scroll quando o componente montar
+      window.addEventListener("scroll", verificarPosicaoElemento);
+  
+      // Remove o listener quando o componente desmontar
+      return () => {
+        window.removeEventListener("scroll", verificarPosicaoElemento);
+      };
+  
+  
+    }, [radioCheck]); */ // Executar apenas uma vez na montagem do componente
 
   const executarSelecao = () => {
     let codigoUf = document.querySelectorAll("#codUf4")[0].value;
@@ -188,20 +190,43 @@ function ComprarAnuncio() {
   function aplicarCupom(e) {
     let codId = e.target.value;
 
-    if(codId.length == 11) {
+    if (codId.length == 11) {
       fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
-      .then((x) => x.json())
-      .then((res) => {
-        let valorDesconto = res.IdsValue[0].desconto;
-        let precoComDesconto = precoFixo - valorDesconto;
-        setPrecoFixo(precoComDesconto);
-        //console.log(precoComDesconto)
-      })
+        .then((x) => x.json())
+        .then((res) => {
+          let valorDesconto = res.IdsValue[0].desconto;
+          let precoComDesconto = precoFixo - valorDesconto;
+          setPrecoFixo(precoComDesconto);
+          //console.log(precoComDesconto)
+        })
     }
 
-    
+
 
     //console.log(codId);
+  };
+
+  const handleCpfCnpjChange = (event) => {
+    // Obter apenas os números da entrada de dados
+    let data = event.target.value.replace(/\D/g, "");
+
+    // Verificar o comprimento dos dados para definir se é CPF ou CNPJ
+    if (data.length > 11) {
+      // É CNPJ
+      data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}-${data.substr(12, 2)}`;
+    } else {
+      // É CPF
+      if (data.length > 9) {
+        data = `${data.substr(0, 3)}.${data.substr(3, 3)}.${data.substr(6, 3)}-${data.substr(9, 2)}`;
+      } else if (data.length > 6) {
+        data = `${data.substr(0, 3)}.${data.substr(3, 3)}.${data.substr(6)}`;
+      } else if (data.length > 3) {
+        data = `${data.substr(0, 3)}.${data.substr(3)}`;
+      }
+    }
+
+    // Atualizar o estado
+    setcpfCnpjValue(data);
   };
 
   return (
@@ -238,12 +263,12 @@ function ComprarAnuncio() {
                       name="codTipoAnuncio"
                       id="codTipoAnuncio-1"
                       value="1"
-                      onClick={(e) => {setRadioCheck(e.target.value); setShowMap("none")}}
+                      onClick={(e) => { setRadioCheck(e.target.value); setShowMap("none") }}
                       checked={radioCheck == 1}
                     />
                     Básico
                   </label>
-           {/*        <label className="px-3">
+                  {/*        <label className="px-3">
                     <input
                       type="radio"
                       name="codTipoAnuncio"
@@ -400,7 +425,7 @@ function ComprarAnuncio() {
                 </div>
 
                 {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
-                
+
                 <div className="input-icon margin-top-10">
                   <i className="fa fa-map-marker"></i>
                   <input
@@ -428,7 +453,7 @@ function ComprarAnuncio() {
                 </div>}
 
                 {/* {radioCheck != 1 && <MapContainer cep={cep} />} */}
-                <MapContainer cep={cep} showMap={showMap}/>
+                <MapContainer cep={cep} showMap={showMap} />
 
 
                 <div className="row webcard" style={{ display: "block" }}>
@@ -436,30 +461,31 @@ function ComprarAnuncio() {
                 </div>
                 <div className="input-icon margin-top-10">
                   <i className="fa fa-phone"></i>
-                  <input
+
+                  <InputMask
                     type="text"
                     name="descTelefone"
                     id="descTelefone"
                     className="form-control"
-                    placeholder="Digite o seu telefone"
-                    maxLength={10}
+                    placeholder="(99) 99999-9999"
                     onChange={changePreview}
-                  />
+                    required
+                    mask={'(99) 9999-9999'}></InputMask>
                 </div>
                 {radioCheck != 1 && <div
                   className="input-icon margin-top-10 webcard"
                   style={{ display: "block" }}
                 >
                   <i className="fa fa-mobile"></i>
-                  <input
+                  <InputMask
                     type="text"
                     name="descCelular"
                     id="descCelular"
                     className="form-control"
-                    placeholder="Digite o seu celular"
-                    maxLength={11}
+                    placeholder="(99) 99999-9999"
                     onChange={changePreview}
-                  />
+                    required
+                    mask={'(99) 99999-9999'}></InputMask>
                 </div>}
               </div>
             </div>
@@ -563,6 +589,8 @@ function ComprarAnuncio() {
                   id="descCPFCNPJ"
                   className="form-control"
                   placeholder="Digite o seu CPF ou CNPJ"
+                  onChange={handleCpfCnpjChange}
+                  value={cpfCnpjValue}
                 />{" "}
               </div>
               <div className="input-icon margin-top-10  py-2">
@@ -585,13 +613,13 @@ function ComprarAnuncio() {
                   placeholder="Digite o seu e-mail"
                 />{" "}
               </div>
-             {radioCheck != 1 && <div class="input-icon margin-top-10">
+              {radioCheck != 1 && <div class="input-icon margin-top-10">
                 <h4 className="text-start pt-2">Responsável (ID) (opcional):</h4>
                 <div class="input-icon margin-top-10" id="codigoPromocional">
                   <i class="fa fa-credit-card"></i>
 
                   <input type="text" name="discountHash" id="discountHash" value="" class="form-control" placeholder="Digite seu código" />
-                  <input type="hidden" name="discountValue" value="" id="discountValue" />    
+                  <input type="hidden" name="discountValue" value="" id="discountValue" />
                 </div>
                 <h5 className="text-start">Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)</h5>
               </div>}
@@ -662,169 +690,169 @@ function ComprarAnuncio() {
           <div className="row col-md-7 p-3 interna">
             <div
               className="simulacao"
-              /* style={{ position: "sticky" }} */
+            /* style={{ position: "sticky" }} */
             /* style={(elementoProximoTopo) ? {position: "fixed", top: "0px", marginTop: "20px"} : { position: "relative" }} */
             >
               <div className="posicao-preview">
-              <div className="simulacao-do-anuncio">
-                <h2 className="assinatura">Simulação do Anúncio</h2>
-              </div>
+                <div className="simulacao-do-anuncio">
+                  <h2 className="assinatura">Simulação do Anúncio</h2>
+                </div>
 
-              {/* preview */}
+                {/* preview */}
 
-              <div className="codigo-promocional">
-                <div className="cartao p-4">
-                  <div className="conteudo semImagem">
-                    <h2 className="nome-empresa text-start">{(descAnuncio) ? descAnuncio : "Nome da empresa"}</h2>
-                    {radioCheck != 1 && <h4
-                      className="slogan webcard text-start"
-                      style={{ display: "block" }}
-                    >
-                      Frase/slogan da empresa
-                    </h4>}
-                    <p className="text-start">
-                      <i className="fa fa-map-marker"></i>{" "}
-                      <span className="sim-end">{(descEndereco) ? descEndereco : "Endereço da empresa"}</span>
-                    </p>
-                    <p className="text-start">
-                      <i className="fa fa-phone"></i>{" "}
-                      <span className="sim-tel">{(descTelefone) ? descTelefone : "(xx) xxxx-xxxx"}</span>
-                    </p>
-                    {radioCheck != 1 && <p
-                      className="webcard text-start"
-                      style={{ display: "block" }}
-                    >
-                      <i className="fa fa-phone"></i>{" "}
-                      <span className="cel">{(descCelular) ? descCelular : "(xx) xxxxx-xxxx"}</span>
+                <div className="codigo-promocional">
+                  <div className="cartao p-4">
+                    <div className="conteudo semImagem">
+                      <h2 className="nome-empresa text-start">{(descAnuncio) ? descAnuncio : "Nome da empresa"}</h2>
+                      {radioCheck != 1 && <h4
+                        className="slogan webcard text-start"
+                        style={{ display: "block" }}
+                      >
+                        Frase/slogan da empresa
+                      </h4>}
+                      <p className="text-start">
+                        <i className="fa fa-map-marker"></i>{" "}
+                        <span className="sim-end">{(descEndereco) ? descEndereco : "Endereço da empresa"}</span>
+                      </p>
+                      <p className="text-start">
+                        <i className="fa fa-phone"></i>{" "}
+                        <span className="sim-tel">{(descTelefone) ? descTelefone : "(xx) xxxx-xxxx"}</span>
+                      </p>
+                      {radioCheck != 1 && <p
+                        className="webcard text-start"
+                        style={{ display: "block" }}
+                      >
+                        <i className="fa fa-phone"></i>{" "}
+                        <span className="cel">{(descCelular) ? descCelular : "(xx) xxxxx-xxxx"}</span>
+                      </p>}
+                    </div>
+                    <div class="conteudo comImagem" style={{ display: "none" }}>
+                      <img src="/resources/upload/istockphoto_1442417585_612x612_20240428_215703.jpg" height={191} />
+                    </div>
+                    {radioCheck != 1 && <div id="area-icons-actions" className="col-md-6">
+                      <Tooltip text={"Mídias"}>
+                        <div className="dropdown">
+                          <button
+                            id="dropdown"
+                            className="btn btn-primary dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                          >
+                            <i>
+                              <BsShareFill />
+                            </i>
+                          </button>
+                          <ul id="dropdown-redes" className="dropdown-menu">
+                            <a href="#" className="dropdown-item">
+                              <BsFacebook /> Facebook
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsInstagram /> Instagram
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsTwitter /> Tweet
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsYoutube className="redes" /> Youtube
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsWhatsapp /> Whatsapp
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsSkype /> Skype
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsHeadset /> Sac-Fale Comigo
+                            </a>
+                          </ul>
+                        </div>
+                      </Tooltip>
+                      <Tooltip text={"Mapa"}>
+                        <i>
+                          <img
+                            src="../assets/img/link_mapa.png"
+                            alt=""
+                            height={40}
+                          />
+                        </i>
+                      </Tooltip>
+
+                      <Tooltip text={"Site"}>
+                        <i>
+                          <img
+                            src="../assets/img/link_site.png"
+                            alt=""
+                            height={40}
+                          />
+                        </i>
+                      </Tooltip>
+                      <Tooltip text={"Promoção"}>
+                        <i>
+                          <img
+                            src="../assets/img/link_promocao.png"
+                            alt=""
+                            height={40}
+                          />
+                        </i>
+                      </Tooltip>
+
+                      <Tooltip text={"Compartilhar"}>
+                        <div className="dropdown">
+                          <button
+                            id="dropdown"
+                            className="btn btn-primary dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                          >
+                            <i>
+                              <BsFillSendFill />
+                            </i>
+                          </button>
+                          <ul id="dropdown-redes" className="dropdown-menu">
+                            <a href="#" className="dropdown-item">
+                              <BsFacebook /> Facebook
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsInstagram /> Instagram
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsTwitter /> Tweet
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsYoutube /> Youtube
+                            </a>
+                            <a href="#" className="dropdown-item">
+                              <BsWhatsapp /> Whatsapp
+                            </a>
+                          </ul>
+                        </div>
+                      </Tooltip>
+                    </div>}
+
+                  </div>
+                  <div className="assinatura margin-top-20">
+
+                    {radioCheck != 1 && <h2 className="webcard">
+                      <span className="preco">R$ {precoFixo},00</span>/mês
+                    </h2>}
+                    {radioCheck == 1 && <h2 className="simples uppercase">
+                      Grátis
+                    </h2>}
+                  </div>
+                  <div className="margin-top-20">
+                    {radioCheck != 1 && <p className="webcard" style={{ display: "block" }}>
+                      *A duração da assinatura é de 12 meses, portanto válido até
+                      14/04/2025.
                     </p>}
+                    <button
+                      type="button"
+                      className="btn-block formulario-de-cadastro btn btn-primary"
+                      id="anunciar"
+                      data-bs-toggle="modal" data-bs-target="#myModal"
+                    /*  onClick={cadastrarAnuncio} */
+                    >
+                      Confirmar
+                    </button>
                   </div>
-                  <div class="conteudo comImagem" style={{ display: "none" }}>
-                    <img src="/resources/upload/istockphoto_1442417585_612x612_20240428_215703.jpg" height={191}/>
-                  </div>
-                  {radioCheck != 1 && <div id="area-icons-actions" className="col-md-6">
-                    <Tooltip text={"Mídias"}>
-                      <div className="dropdown">
-                        <button
-                          id="dropdown"
-                          className="btn btn-primary dropdown-toggle"
-                          data-bs-toggle="dropdown"
-                        >
-                          <i>
-                            <BsShareFill />
-                          </i>
-                        </button>
-                        <ul id="dropdown-redes" className="dropdown-menu">
-                          <a href="#" className="dropdown-item">
-                            <BsFacebook /> Facebook
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsInstagram /> Instagram
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsTwitter /> Tweet
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsYoutube className="redes" /> Youtube
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsWhatsapp /> Whatsapp
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsSkype /> Skype
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsHeadset /> Sac-Fale Comigo
-                          </a>
-                        </ul>
-                      </div>
-                    </Tooltip>
-                    <Tooltip text={"Mapa"}>
-                      <i>
-                        <img
-                          src="../assets/img/link_mapa.png"
-                          alt=""
-                          height={40}
-                        />
-                      </i>
-                    </Tooltip>
-
-                    <Tooltip text={"Site"}>
-                      <i>
-                        <img
-                          src="../assets/img/link_site.png"
-                          alt=""
-                          height={40}
-                        />
-                      </i>
-                    </Tooltip>
-                    <Tooltip text={"Promoção"}>
-                      <i>
-                        <img
-                          src="../assets/img/link_promocao.png"
-                          alt=""
-                          height={40}
-                        />
-                      </i>
-                    </Tooltip>
-
-                    <Tooltip text={"Compartilhar"}>
-                      <div className="dropdown">
-                        <button
-                          id="dropdown"
-                          className="btn btn-primary dropdown-toggle"
-                          data-bs-toggle="dropdown"
-                        >
-                          <i>
-                            <BsFillSendFill />
-                          </i>
-                        </button>
-                        <ul id="dropdown-redes" className="dropdown-menu">
-                          <a href="#" className="dropdown-item">
-                            <BsFacebook /> Facebook
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsInstagram /> Instagram
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsTwitter /> Tweet
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsYoutube /> Youtube
-                          </a>
-                          <a href="#" className="dropdown-item">
-                            <BsWhatsapp /> Whatsapp
-                          </a>
-                        </ul>
-                      </div>
-                    </Tooltip>
-                  </div>}
-
                 </div>
-                <div className="assinatura margin-top-20">
-
-                  {radioCheck != 1 && <h2 className="webcard">
-                    <span className="preco">R$ {precoFixo},00</span>/mês
-                  </h2>}
-                  {radioCheck == 1 && <h2 className="simples uppercase">
-                    Grátis
-                  </h2>}
-                </div>
-                <div className="margin-top-20">
-                {radioCheck != 1 && <p className="webcard" style={{ display: "block" }}>
-                    *A duração da assinatura é de 12 meses, portanto válido até
-                    14/04/2025.
-                  </p>}
-                  <button
-                    type="button"
-                    className="btn-block formulario-de-cadastro btn btn-primary"
-                    id="anunciar"
-                    data-bs-toggle="modal" data-bs-target="#myModal"
-                  /*  onClick={cadastrarAnuncio} */
-                  >
-                    Confirmar
-                  </button>
-                </div>
-              </div>
               </div>
             </div>
             {/* preview */}

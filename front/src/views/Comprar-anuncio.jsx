@@ -368,7 +368,7 @@ function ComprarAnuncio() {
                         id="codUf5"
                         class="form-control"
                       >
-                        <option value="">- TODO -</option>
+                        <option value="">- CIDADE -</option>
                         {caderno.map(
                           (item) =>
                             item.codUf == ufSelected && (
