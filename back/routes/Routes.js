@@ -9,6 +9,7 @@ const Admin = require('../controllers/Admin');
 const Login = require('../controllers/Login');
 const Users = require('../controllers/Users');
 const Upload = require('../controllers/Upload');
+const UserActions = require('../controllers/UserActions');
 
 //FUNCTIONS
 const saveImport = require('../functions/serverImport');
@@ -109,6 +110,9 @@ router.post('/api/admin/usuario/criar-anuncio', Users.criarAnuncio);
 router.get('/api/pa', Users.qtdaAnuncio);
 router.post('/api/upload-image', uploadUser.single('image'), Upload.uploadImg);
 router.get('/api/list-image', Upload.listFiles);
+
+//ACÕES DO USUARIO
+router.get('/api/cartao-digital', UserActions.cartaoDigital);
 
 
 module.exports = router;

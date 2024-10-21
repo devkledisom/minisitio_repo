@@ -10,6 +10,13 @@ app.use(express.json());
 
 app.use(cors());
 
+// Configurar EJS como motor de template
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'ejs'));
+
+// Servir arquivos estáticos (CSS, imagens, etc.)
+app.use(express.static(path.join(__dirname, 'ejs')));
+
 //rota principal
 app.use(route);
 
@@ -17,6 +24,7 @@ app.use('/api', express.static('public'));
 app.use('/imgdefault', express.static('public'));
 
 app.use('/api/files', express.static(path.resolve(__dirname, "public", "upload", "img")));
+
 
 app.get('/outapi', (req, res) => {
     console.log(req)
