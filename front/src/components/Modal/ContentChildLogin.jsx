@@ -93,7 +93,7 @@ const ContentChildLogin = (props) => {
       codCidade: buscarElemento("codUf5"),
       descAnuncio: buscarElemento("descAnuncio"),
       descAnuncioFriendly: "oficina-de-tortas",
-      descImagem: localStorage.getItem("imgname"),
+      descImagem: localStorage.getItem("imgname") || 0,
       descEndereco: buscarElemento("descEndereco"),
       descTelefone: buscarElemento("descTelefone"),
       descCelular: buscarElemento("descCelular"),

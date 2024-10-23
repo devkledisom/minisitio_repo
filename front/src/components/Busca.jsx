@@ -16,6 +16,7 @@ function Busca(props) {
     const [cadernoCidade, setCadernoCidade] = useState(null);
     const [codUf, setCodUf] = useState(null);
     const [codCaderno, setCodCaderno] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     //contexto
     const { result, setResult } = useBusca();
@@ -28,14 +29,14 @@ function Busca(props) {
         sessionStorage.setItem("uf: ", codigoUf);
         setCadernoUf(teste.id_uf);
         setCodUf(codigoUf)
-        
+
     };
     const definirCaderno = (e) => {
         let codigoCidade = document.querySelectorAll('#codUf3')[0].value;
         const teste = caderno.find(cad => cad.codCaderno == codigoCidade);
         localStorage.setItem("caderno: ", teste.nomeCaderno);
         sessionStorage.setItem("caderno: ", codigoCidade);
-        
+
         setCadernoUf(teste.codUf);
         //setCadernoCidade(teste.nomeCaderno);
         setCodCaderno(codigoCidade);
@@ -49,28 +50,29 @@ function Busca(props) {
         setCodCaderno(cadSalvo);
 
         fetch(`${masterPath.url}/ufs`)
-        .then((x) => x.json())
-        .then((res) => {
-            setUfs(res);
-            setUf(ufSalva);
-            if(ufSalva != undefined) {
-                //document.querySelectorAll('#codUf2')[0].value = ufSalva;
-            } 
-        })
+            .then((x) => x.json())
+            .then((res) => {
+                setUfs(res);
+                setUf(ufSalva);
+                if (ufSalva != undefined) {
+                    //document.querySelectorAll('#codUf2')[0].value = ufSalva;
+                }
+            })
 
         fetch(`${masterPath.url}/cadernos`)
-        .then((x) => x.json())
-        .then((res) => {
-            setCaderno(res)
-            if(cadSalvo != undefined) {
-                //document.querySelectorAll('#codUf3')[0].value = cadSalvo;
-            } 
-        })
-  
+            .then((x) => x.json())
+            .then((res) => {
+                setCaderno(res)
+                if (cadSalvo != undefined) {
+                    //document.querySelectorAll('#codUf3')[0].value = cadSalvo;
+                }
+            })
+
 
     }, []);
 
     const fetchAnuncios = async () => {
+        setLoading(true);
         try {
             const uf = document.querySelector('#codUf2').value;
             const codigoCaderno = document.querySelector('#codUf3').value;
@@ -95,7 +97,8 @@ function Busca(props) {
             const request = await fetch(`${masterPath.url}/buscar`, options).then((x) => x.json())
             //setAnuncio(request)
             setResult(request);
-            console.log(request)
+            console.log(request);
+            setLoading(true);
 
             if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
                 navigate("/buscar");
@@ -114,24 +117,24 @@ function Busca(props) {
 
         console.table([cadernoUf, cadernoCidade, codCaderno, codUf, cadernoCidade])
 
-        if(cadernoUf === "UF") {
+        if (cadernoUf === "UF") {
             alert("escolha um estado");
         } else if (cadernoCidade === "TODO") {
             alert("escolha uma cidade");
         } else {
             fetch(`${masterPath.url}/admin/anuncio/classificado/${codCaderno}/${codUf}`)
-            /* fetch(`${masterPath.url}/admin/anuncio/classificado/${cadernoCidade}/${cadernoUf}`) */
-            .then(x => x.json())
-            .then(res => {
-                console.log(res)
-              if (res.success) {
-                window.location = `/caderno-geral/${codCaderno}/${codUf}`;
-              } else {
-                alert("caderno não localizado")
-              }
-      
-            })
-            
+                /* fetch(`${masterPath.url}/admin/anuncio/classificado/${cadernoCidade}/${cadernoUf}`) */
+                .then(x => x.json())
+                .then(res => {
+                    console.log(res)
+                    if (res.success) {
+                        window.location = `/caderno-geral/${codCaderno}/${codUf}`;
+                    } else {
+                        alert("caderno não localizado")
+                    }
+
+                })
+
         }
     };
 
@@ -141,6 +144,11 @@ function Busca(props) {
 
     return (
         <div className='border-busca container-fluid formulario formulario-home'>
+            {loading &&
+                <button class="buttonload" style={{ display: "block" }}>
+                    <i class="fa fa-spinner fa-spin"></i>Carregando
+                </button>
+            }
             <div className='container'>
                 <div className="row">
                     <div className='col-md-offset-1 col-md-12'>
@@ -149,7 +157,7 @@ function Busca(props) {
                                 <div className="col-md-3 d-flex">
                                     <i className="fa fa-compass icone-form"></i>
                                     <div className="form-group w-100">
-        
+
                                         <select name="codUf2" id="codUf2" className="form-control form-select" onChange={executarSelecao} value={codUf}>
                                             <option value="UF">UF</option>
                                             {uf.map((item) => (
@@ -175,10 +183,10 @@ function Busca(props) {
                                 </div>
                                 <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs">
                                     <div className="btn-group" role="group">
-                                        <button type="button" 
-                                        className="btn proximo btnCaderno btn-3"
-                                        onClick={verClassificado}
-                                         title=" Ver Caderno"><i className="fa fa-file-text"></i> <span>Ver Caderno</span></button>
+                                        <button type="button"
+                                            className="btn proximo btnCaderno btn-3"
+                                            onClick={verClassificado}
+                                            title=" Ver Caderno"><i className="fa fa-file-text"></i> <span>Ver Caderno</span></button>
                                         <button type="button" className="btn proximo btnGrupo btnPromocao" data-promocao="1" title="Promoção">
                                             <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
                                         </button>

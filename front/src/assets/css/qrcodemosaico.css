@@ -1,3 +1,7 @@
+.qrcode-container-mosaico>div>div>canvas {
+  border: 3px solid #ffffff;
+}
+
 .qrcode-container-mosaico>div {
     display: flex;
     flex-direction: column;

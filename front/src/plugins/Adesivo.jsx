@@ -68,17 +68,17 @@ function Adesivo() {
 
                 {/* Renderizar o QR Code com referência ao elemento */}
                 <div className="qr-code" ref={qrRef}>
-                    <QRCodeCanvas value={`https://minisitio.online/local/${encodeURIComponent(imgParam)}?id=${idParam}`} size={260} />
-                    <img src="/assets/img/adesivo.jpg" alt="" />
+                    <QRCodeCanvas value={`https://minisitio.online/local/${encodeURIComponent(imgParam)}?id=${idParam}`} size={200} />
+                    <img src="/assets/img/adesivo.jpg" width="650" alt="adesivo" />
                 </div>
 
                 {/* Botões de ação */}
                 <div className='no-print' style={{ marginTop: '20px' }}>
                     <button onClick={window.print} style={{ marginRight: '10px' }}>
-                        Imprimir QR Code
+                        Imprimir Adesivo
                     </button>
                     <button onClick={handleDownload}>
-                        Baixar QR Code
+                        Baixar Adesivo
                     </button>
                 </div>
             </div>

@@ -464,7 +464,9 @@ function Caderno() {
         document.querySelector(`#item_${id}`).children[0].style.border = "none";
         document.querySelector(`#item_${id}`).classList = "pulsating-border";
 
-        document.querySelector(`#item_${id}`).scrollIntoView({ behavior: 'smooth' })
+        document.querySelector(`#item_${id}`).scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'center' })
         clearInterval(interID);
       }
     }, 1000)

@@ -46,7 +46,7 @@ function QRCodeGenerator() {
     return (
         <div className='qrcode-container'>
             <div>
-                <h1 className='no-print'>Gerar QR Code</h1>
+                <h1 className='no-print'>QR Code do Minisitio</h1>
 
                 {/* Renderizar o QR Code com referência ao elemento */}
                 <div ref={qrRef}>

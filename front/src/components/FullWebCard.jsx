@@ -51,7 +51,9 @@ function FullWebCard(props) {
             setResult(request[0]);
         }
 
-        buscarAnuncio()
+        buscarAnuncio();
+
+        window.scrollTo(0, 0);
 
     }, []);
 
