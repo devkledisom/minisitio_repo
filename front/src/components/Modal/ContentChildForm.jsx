@@ -239,7 +239,6 @@ const ContentChildForm = (props) => {
         // Remover um item do localStorage
         localStorage.removeItem("imgname");
 
-        console.log(res);
         window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
         //navigate(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`);
       });

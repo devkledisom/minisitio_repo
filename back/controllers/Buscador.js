@@ -29,13 +29,15 @@ module.exports = {
             }
         });
 
+        console.log("debug: ", atividades);
+
         //anuncio
         const anuncios = await Anuncio.findAll({
             where: {
                 codCaderno: codigoCaderno,
                 [Op.or]: [
                     Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                    {codAtividade: atividades[0].id},
+                    {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
                     {descTelefone: atividade},
                     {descCPFCNPJ: atividade}
                 ]
