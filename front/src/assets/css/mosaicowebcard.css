@@ -1,0 +1,12 @@
+.mosaico-webcard>.header>.container>.container-mosaico {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 200px;
+}
+
+.mosaico-webcard>.header>.container>.container-mosaico>a>.logo {
+    height: 100px;
+    margin-top: 0;
+    margin-bottom: 0;
+}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { masterPath } from '../config/config';
 
+import QrcodeMosaico from '../plugins/QrcodeMosaico';
+
 function Mosaico(props) {
 
     const style = {
@@ -20,7 +22,7 @@ function Mosaico(props) {
             }>
                 <div className="container">
                     <div className="row">
-
+                    <QrcodeMosaico />
                         <div className="col-md-12 col-sm-12 pull-right faixa-header">
                             <ul className="header-navigation">
                                 <li className="assine"><a href="/comprar-anuncio">Assine Agora</a></li>

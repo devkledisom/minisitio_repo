@@ -21,7 +21,9 @@ import MapContainer from './MapContainer';
 import UserActions from './UserActions';
 import Socialmidia from './Socialmidia';
 
-function FullWebCard() {
+
+
+function FullWebCard(props) {
     const { result, setResult } = useBusca();
 
     //params
@@ -42,7 +44,10 @@ function FullWebCard() {
         async function buscarAnuncio() {
            const request = await fetch(`${masterPath.url}/anuncio/${idParam}`).then((x) => x.json());
             console.log(request[0]);
-            console.log(result);
+            //console.log(result);
+            props.setCodCaderno(request[0].codCaderno);
+            props.setCodUf(request[0].codUf);
+            props.setNmAnuncio(nomeAnuncio);
             setResult(request[0]);
         }
 

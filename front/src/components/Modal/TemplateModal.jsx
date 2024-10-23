@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import ContentChildLogin from './ContentChildLogin';
 import ContentChildForm from './ContentChildForm';
 
-const TemplateModal = () => {
+const TemplateModal = (props) => {
 
   const [elemento, setValue] = useState(false);
 
@@ -32,7 +32,7 @@ const TemplateModal = () => {
      {/*  <!-- Modal body --> */}
       <div className="modal-body">
 
-      {elemento ? <ContentChildForm onContinue={mostrarElemento} /> : <ContentChildLogin onContinue={mostrarElemento}/>}
+      {elemento ? <ContentChildForm onContinue={mostrarElemento} descontoAtivado={props.descontoAtivado} radioCheck={props.radioCheck} /> : <ContentChildLogin onContinue={mostrarElemento} descontoAtivado={props.descontoAtivado} radioCheck={props.radioCheck} />}
        
       </div>
 

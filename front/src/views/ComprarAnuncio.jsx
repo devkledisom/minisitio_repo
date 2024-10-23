@@ -48,6 +48,7 @@ function ComprarAnuncio() {
   const [showMap, setShowMap] = useState("none");
   const [precoFixo, setPrecoFixo] = useState(5);
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
+  const [descontoAtivado, setDescontoAtivado] = useState(false);
 
 
   const executarSelecao = () => {
@@ -140,7 +141,8 @@ function ComprarAnuncio() {
           let valorDesconto = res.IdsValue[0].desconto;
           let precoComDesconto = precoFixo - valorDesconto;
           setPrecoFixo(precoComDesconto);
-          //console.log(precoComDesconto)
+          setDescontoAtivado(res.success);
+          console.log("desconto ",res)
         })
     }
 
@@ -178,7 +180,10 @@ function ComprarAnuncio() {
         <Mosaico logoTop={true} borda="none" />
       </header>
       <main>
-        <TemplateModal />
+        <TemplateModal 
+        descontoAtivado={descontoAtivado}
+        radioCheck={radioCheck}
+        />
 
         <Busca paginaAtual={"caderno"} />
         <h1 id="title-caderno" className="py-2">

@@ -152,7 +152,7 @@ function WebcardThumb(props) {
                                 </div>
                                 <div className="col-md-6">
                                     <p className='text-end'>
-                                        Desde: {formatData(props.data.dtCadastro)}<br />
+                                        Desde: {formatData(props.data.createdAt)}<br />
                                         Renovado em: {formatData(props.data.updatedAt)}<br />
                                         Até: {formatData(props.data.dueDate)}
                                     </p>

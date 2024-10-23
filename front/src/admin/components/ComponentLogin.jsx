@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 //Componentes
 import Spinner from '../../components/Spinner';
+import { limparCPFouCNPJ } from '../../globalFunctions/functions';
 
 function Login() {
 
@@ -29,32 +30,37 @@ function Login() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                "descCPFCNPJ": loginValue.current.value,
+                "descCPFCNPJ": limparCPFouCNPJ(loginValue.current.value),
                 "senha": passValue.current.value
             })
         })
             .then((x) => x.json())
             .then((res) => {
                 setShowSpinner(false);
-                if (res.success && res.type == 1) {
-                    sessionStorage.setItem('authTokenMN', true);
-                    sessionStorage.setItem('userLogged', res.data);
-
-                    navigate("/admin");
-                    console.log(res);
+                if (res.success) {
+                    if (res.type == 1) {
+                        sessionStorage.setItem('authTokenMN', true);
+                        sessionStorage.setItem('userLogged', res.data);
+    
+                        navigate("/admin");
+                        console.log(res);
+                    }
+                    /* console.log(res);
+                    console.log(res.data);
+                    console.log(res.data.codTipoUsuario == 1); */
+                    
+                    let tipoUsuario = res.data.codTipoUsuario;
+                    let nuDocumento = res.data.descCPFCNPJ;
+    
+                    if (tipoUsuario == 3) {
+                        sessionStorage.setItem('authTokenMN', true);
+                        sessionStorage.setItem('userLogged', res.data);
+                        navigate(`/ver-anuncios/${nuDocumento.replace(/[.-]/g, '')}`);
+                    }
+                } else {console.log(res);
+                    alert(res.message);
                 }
-                /* console.log(res);
-                console.log(res.data);
-                console.log(res.data.codTipoUsuario == 1); */
-                
-                let tipoUsuario = res.data.codTipoUsuario;
-                let nuDocumento = res.data.descCPFCNPJ;
-
-                if (tipoUsuario == 3) {
-                    sessionStorage.setItem('authTokenMN', true);
-                    sessionStorage.setItem('userLogged', res.data);
-                    navigate(`/ver-anuncios/${nuDocumento.replace(/[.-]/g, '')}`);
-                }
+              
 
             })
     };

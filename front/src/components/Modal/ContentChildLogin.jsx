@@ -54,7 +54,7 @@ const ContentChildLogin = (props) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        "descCPFCNPJ": loginValue.current.value,
+        "descCPFCNPJ": limparCPFouCNPJ(loginValue.current.value),
         "senha": passValue.current.value
       })
     })
@@ -170,8 +170,20 @@ const ContentChildLogin = (props) => {
         localStorage.removeItem("imgname");
 
         console.log(res);
-        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+        //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
         //navigate(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`);
+
+        if(props.descontoAtivado && props.radioCheck == 3) {
+          window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+          console.log("1");
+        } else if(props.radioCheck == 1) {
+          window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+          console.log("2");
+        } else {
+          window.location.href = `https://mpago.la/1pWzL7A`;
+          console.log("3");
+        }
+
       });
   }
 

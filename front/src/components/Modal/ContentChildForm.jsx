@@ -133,6 +133,7 @@ const ContentChildForm = (props) => {
           setAlert(true);
         } else {
           loadingButton.current.style.display = "none";
+          alert("Esse usuário já está cadastrado!");
         }
         console.log(res);
       });
@@ -239,7 +240,18 @@ const ContentChildForm = (props) => {
         // Remover um item do localStorage
         localStorage.removeItem("imgname");
 
-        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+        if(props.descontoAtivado && props.radioCheck == 3) {
+          window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+          console.log("1");
+        } else if(props.radioCheck == 1) {
+          window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+          console.log("2");
+        } else {
+          window.location.href = `https://mpago.la/1pWzL7A`;
+          console.log("3");
+        }
+
+        //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
         //navigate(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`);
       });
   }

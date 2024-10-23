@@ -22,7 +22,7 @@ import Letter from './classificados/Letter';
 import { useBusca } from '../context/BuscaContext';
 
 
-function Caderno() {
+function Caderno(props) {
 
   //contexto
   //const { tema, setTema } = useTema();
@@ -93,7 +93,7 @@ function Caderno() {
           setClassificados(res.data);
           setPathImg(res.teste.rows);
           setMosaicoImg(res.mosaico);
-          //console.log("caderno geral", res);
+          console.log("caderno geral", res);
           setLoading(false);
           document.querySelector('.caderno').style.filter = "none";
         } else {
