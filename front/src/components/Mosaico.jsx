@@ -22,7 +22,7 @@ function Mosaico(props) {
             }>
                 <div className="container">
                     <div className="row">
-                    <QrcodeMosaico />
+                    {/* <QrcodeMosaico /> */}
                         <div className="col-md-12 col-sm-12 pull-right faixa-header">
                             <ul className="header-navigation">
                                 <li className="assine"><a href="/comprar-anuncio">Assine Agora</a></li>
