@@ -15,7 +15,8 @@ import InputMask from 'react-input-mask';
 const ContentChildLogin = (props) => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [cpfCnpjValue, setcpfCnpjValue] = useState({});
+  const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
+  const [cpfCnpjValue1, setcpfCnpjValue1] = useState(null);
 
   const loginValue = useRef(null);
   const passValue = useRef(null);
@@ -195,7 +196,15 @@ const ContentChildLogin = (props) => {
     // Verificar o comprimento dos dados para definir se é CPF ou CNPJ
     if (data.length > 11) {
       // É CNPJ
-      data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}-${data.substr(12, 2)}`;
+      if(data.length > 12) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}-${data.substr(12, 2)}`;
+      } else if(data.length > 8) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}`;
+      } else if(data.length > 5) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}`;
+      } else if(data.length > 2) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}`;
+      }
     } else {
       // É CPF
       if (data.length > 9) {
@@ -209,6 +218,36 @@ const ContentChildLogin = (props) => {
 
     // Atualizar o estado
     setcpfCnpjValue(data);
+  };
+  const handleCpfCnpjChange1 = (event) => {
+    // Obter apenas os números da entrada de dados
+    let data = event.target.value.replace(/\D/g, "");
+
+    // Verificar o comprimento dos dados para definir se é CPF ou CNPJ
+    if (data.length > 11) {
+      // É CNPJ
+      if(data.length > 12) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}-${data.substr(12, 2)}`;
+      } else if(data.length > 8) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}`;
+      } else if(data.length > 5) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}`;
+      } else if(data.length > 2) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}`;
+      }
+    } else {
+      // É CPF
+      if (data.length > 9) {
+        data = `${data.substr(0, 3)}.${data.substr(3, 3)}.${data.substr(6, 3)}-${data.substr(9, 2)}`;
+      } else if (data.length > 6) {
+        data = `${data.substr(0, 3)}.${data.substr(3, 3)}.${data.substr(6)}`;
+      } else if (data.length > 3) {
+        data = `${data.substr(0, 3)}.${data.substr(3)}`;
+      }
+    }
+
+    // Atualizar o estado
+    setcpfCnpjValue1(data);
   };
 
   function limparCPFouCNPJ(cpfOuCnpj) {
@@ -297,6 +336,8 @@ const ContentChildLogin = (props) => {
                         name="rdescCPFCNPJ"
                         id="rdescCPFCNPJ"
                         ref={nuDocumento}
+                        value={cpfCnpjValue1}
+                        onChange={handleCpfCnpjChange1}
                       />
                     </div>
                   </div>

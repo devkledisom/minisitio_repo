@@ -52,6 +52,7 @@ function Caderno() {
   const estado = pegarParam.get('estado');
 
   const [numberPage, setNumberPage] = useState(1);
+  const [pageNumberUnique, setPageNumberUnique] = useState(true);
 
   useEffect(() => {
 
@@ -129,15 +130,27 @@ function Caderno() {
             setMinisitio({ anuncios: result1 });
             setNomeAtividade(result1);
 
-            const itemIndex = arr.findIndex(item => item.codAnuncio == id) + 1;
 
-            const pageNumberClass = Math.ceil(itemIndex / 10);
 
-            console.log(`pagina ${pageNumberClass}`);
+            if (pageNumberUnique) {
+              
+              arr.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
 
-            setNumberPage(pageNumberClass);
+              const itemIndex = arr.findIndex(item => item.codAnuncio == id) + 1;
 
-            paginator(arr, pageNumberClass);
+              const pageNumberClass = Math.ceil(itemIndex / 10);
+
+              console.log(`pagina ${pageNumberClass}`, itemIndex);
+              setNumberPage(pageNumberClass);
+              paginator(arr, pageNumberClass);/*  */
+              
+            } else {
+              paginator(arr);/*  */
+            }
+
+
+
+
 
           } else {
 
@@ -384,6 +397,8 @@ function Caderno() {
       // Array de 3000 objetos (exemplo)
       let arrayDeObjetos = Array.from({ length: 3000 }, (_, i) => ({ id: i + 1 }));
 
+      param.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
+
       // Função para paginar o array
       function paginate(array, pageNumber, limitPerPage) {
         const totalPages = Math.ceil(array.length / limitPerPage);
@@ -395,6 +410,8 @@ function Caderno() {
         // Índices de início e fim dos objetos a serem exibidos na página atual
         const startIndex = (pageNumber - 1) * limitPerPage;
         const endIndex = startIndex + limitPerPage;
+
+       
 
         // Retornar o array paginado e o total de páginas
         return {
@@ -420,12 +437,14 @@ function Caderno() {
       //setNomeAtividade(paginatedResult.data);
 
       //console.log(currentPageData)
-
+      console.log(pageNumber)
       setMinisitio({
         anuncios: paginatedResult.data,
         totalPaginas: Math.ceil(param.length / limitPerPage),
         paginaAtual: pageNumber
       });
+
+
 
       setLoading(false);
       setbtnNav(true);
@@ -464,9 +483,10 @@ function Caderno() {
         document.querySelector(`#item_${id}`).children[0].style.border = "none";
         document.querySelector(`#item_${id}`).classList = "pulsating-border";
 
-        document.querySelector(`#item_${id}`).scrollIntoView({ 
+        document.querySelector(`#item_${id}`).scrollIntoView({
           behavior: 'smooth',
-          block: 'center' })
+          block: 'center'
+        })
         clearInterval(interID);
       }
     }, 1000)
@@ -619,50 +639,6 @@ function Caderno() {
 
       let quatro = document.querySelectorAll('.MiniWebCard')[4];
       let cinco = document.querySelectorAll('.MiniWebCard')[5];
-
-      // Verifica se os elementos existem antes de acessar suas propriedades
-      /* if (quatro && cinco) {
-          let rectQuatro = quatro.getBoundingClientRect();
-          let rectCinco = cinco.getBoundingClientRect();
-      
-          const distance = rectCinco.top - rectQuatro.bottom; // Distância vertical
-      
-          //console.log(`Distância vertical entre ${4} e ${5}: ${distance}px`);
-      
-          if (distance > 1000) {
-             // Remove todas as mensagens programadas
-             document.querySelectorAll('.msg-programada').forEach(item => item.remove());
-      
-             // Cria a nova div temporária
-             const tempDiv = document.createElement("div");
-             tempDiv.style.backgroundColor = 'red';
-             tempDiv.innerHTML = "dfahfdjkfh";
-             tempDiv.classList.add("msg-programada");
-      
-             // Insere a div antes do terceiro item
-             document.querySelectorAll('.MiniWebCard')[2].insertAdjacentElement("afterend", tempDiv);
-      
-             // Renderiza o componente React dentro da div
-             //ReactDOM.render(<MsgProgramada type={1} />, tempDiv);
-          } else if (distance < 0) {
-              // Remove todas as mensagens programadas
-              document.querySelectorAll('.msg-programada').forEach(item => item.remove());
-      
-              // Cria a nova div temporária
-              const tempDiv = document.createElement("div");
-              tempDiv.style.backgroundColor = 'red';
-              tempDiv.innerHTML = "dfahfdjkfh";
-              tempDiv.classList.add("msg-programada");
-      
-              // Insere a div antes do terceiro item
-              //document.querySelectorAll('.MiniWebCard')[9].insertAdjacentElement("beforebegin", tempDiv);
-              document.querySelector('.masonry-layout').appendChild(tempDiv);
-      
-              // Renderiza o componente React dentro da div
-              //ReactDOM.render(<MsgProgramada type={2} />, tempDiv);
-          }
-      } */
-
 
 
       let start = 0;
@@ -914,134 +890,11 @@ function Caderno() {
             //console.log(anuncio)
           }
         })
-
-
-
-
-
-        /*   const colElement = document.querySelector('#col1'); // Armazena o elemento uma vez
-  
-          if (colElement) { // Verifica se colElement não é nulo ou indefinido
-    
-    
-            if (colElement.scrollHeight != null && colElement.scrollHeight > 2326) {
-              console.log("1", colElement.scrollHeight);
-    
-              const children = Array.from(colElement.children); // Converte para um array de filhos
-    
-              if(children[children.length - 1] != null || children[children.length - 1] != undefined) {
-                children[children.length - 1].remove();
-              }
-              
-    
-            }
-          } */
-
-
       }
 
+    });
 
-      {/*       {minisitio.anuncios.map((anuncio, i) => {
-
-
-
-                  if (i == 4) {
-                    //console.log("quartoec", i)
-                  }
-
-                  if (anuncio.codTipoAnuncio == 1) {
-                    // Renderiza o componente MiniWebCardSimples
-
-                    return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
-                  } else if (anuncio.codAtividade == item.codAtividade) {
-                    // Renderiza o componente MiniWebCard se o codAtividade coincidir
-                    return (
-                      <MiniWebCard
-                        key={anuncio.codAnuncio}
-                        id={anuncio.codAnuncio}
-                        data={minisitio}
-                        codImg={anuncio.descImagem}
-                        ref={teste}
-                        empresa={anuncio.descAnuncio}
-                        endereco={anuncio.descEndereco}
-                        telefone={anuncio.descTelefone}
-                        celular={anuncio.descCelular}
-                        codDesconto={anuncio.codDesconto}
-                        ids={buscarId(90)}
-                      />
-                    )
-                  }
-
-
-
-
-                  return null; // Retorna null se nenhuma condição for atendida
-                })}
- */}
-
-
-    })
-    /*   return (
-        nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
- 
-          console.log(col1Ref.current.scrollHeight)
- 
-          //(item != undefined || item.length > 0)
-            (col1Ref.current.scrollHeight <= 2140)
-            ? (
-              <div id={item.id} key={item.id} className="atividade-title px-2" >
-                <h2 className='bg-yellow py-2'>
-                  {item.codAtividade}
-                </h2>
- 
-                {minisitio.anuncios.map((anuncio, i) => {
- 
- 
- 
-                  if (i == 4) {
-                    //console.log("quartoec", i)
-                  }
- 
-                  if (anuncio.codTipoAnuncio == 1) {
-                    // Renderiza o componente MiniWebCardSimples
- 
-                    return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
-                  } else if (anuncio.codAtividade == item.codAtividade) {
-                    // Renderiza o componente MiniWebCard se o codAtividade coincidir
-                    return (
-                      <MiniWebCard
-                        key={anuncio.codAnuncio}
-                        id={anuncio.codAnuncio}
-                        data={minisitio}
-                        codImg={anuncio.descImagem}
-                        ref={teste}
-                        empresa={anuncio.descAnuncio}
-                        endereco={anuncio.descEndereco}
-                        telefone={anuncio.descTelefone}
-                        celular={anuncio.descCelular}
-                        codDesconto={anuncio.codDesconto}
-                        ids={buscarId(90)}
-                      />
-                    )
-                  }
- 
- 
- 
- 
-                  return null; // Retorna null se nenhuma condição for atendida
-                })}
- 
-    
-              </div>
-            )
-            : null
-        ))
-      );
- */
-    //}
-
-
-  }
+  };
 
 
 
@@ -1269,6 +1122,12 @@ function Caderno() {
 
   function nextPage() {
     setNumberPage(numberPage + 1);
+    console.log(numberPage + 1);
+    
+
+    if (book != undefined && id != undefined) {
+      setPageNumberUnique(false);
+    }
     //setNomeAtividade([]);
   }
 
@@ -1412,7 +1271,7 @@ function Caderno() {
 
                 </div>
                 <div class="column" id="col2">
-                {
+                  {
                     //minisitio.anuncios
                     base2.map((anuncio, i) => {
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Localidade from "../../components/Localidade";
 import { masterPath } from "../../config/config";
+import InputMask from 'react-input-mask';
 
 //css
 import './css/formChild.css';
@@ -133,7 +134,7 @@ const ContentChildForm = (props) => {
           setAlert(true);
         } else {
           loadingButton.current.style.display = "none";
-          alert("Esse usuário já está cadastrado!");
+          console.log("Esse usuário já está cadastrado!");
         }
         console.log(res);
       });
@@ -331,7 +332,7 @@ const ContentChildForm = (props) => {
                       <div className="input-icon margin-top-10">
                         <i className="fa fa-envelope"></i>
                         <input
-                          type="text"
+                          type="email"
                           name="descEmail"
                           id="descEmail"
                           className="form-control"
@@ -371,13 +372,21 @@ const ContentChildForm = (props) => {
                     <div className="col-md-6 col-sm-6">
                       <div className="input-icon margin-top-10">
                         <i className="fa fa-phone"></i>
-                        <input
+                     {/*    <input
                           type="text"
                           name="descTelefone"
                           id="descTelefone"
                           className="form-control"
                           placeholder="Digite seu telefone"
-                        />{" "}
+                        /> */}
+                        <InputMask
+                    type="text"
+                    name="descTelefone"
+                    id="descTelefone"
+                    className="form-control"
+                    placeholder="(99) 99999-9999"
+                    required
+                    mask={'(99) 9999-9999'}></InputMask>
                       </div>
                     </div>
                     <div className="col-md-6 col-sm-6">

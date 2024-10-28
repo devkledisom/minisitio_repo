@@ -90,7 +90,7 @@ function Metadados(props) {
                         </h4>
                     </div>
                     <div className="col-md-12 link-cinza">
-                        <img src="../assets/img/teste/skype.png" />
+                        <img src="../assets/img/teste/icons8-meu-negócio-48.png" />
                         <h4>
                             <a href="" target="_blank" data-toggle="tooltip" title="Skype">
                             </a>

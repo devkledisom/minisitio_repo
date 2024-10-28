@@ -1097,7 +1097,11 @@ module.exports = {
             return acc;
         }, {});
 
-        const atividades = await Atividade.findAll();
+        const atividades = await Atividade.findAll({
+            order: [
+                ['atividade', 'ASC']
+            ]
+        });
 
         const arrayClassificado = [];
 
@@ -1118,6 +1122,8 @@ module.exports = {
             console.log(anun.dataValues)
             console.log(x, /* atividades[0].dataValues */)
         }
+
+        arrayClassificado.sort((a, b) => a.nomeAtividade.localeCompare(b.nomeAtividade));
 
         //console.log(count);
 
@@ -1146,7 +1152,10 @@ module.exports = {
                     { codUf: codCaderno[0].dataValues.codUf },
                     { codCaderno: codCaderno[0].dataValues.codCaderno }
                 ]
-            }
+            }/* ,
+            order: [
+                ['nomeAtividade', 'ASC'],
+            ] */
         });
 
         res.json({
@@ -1154,7 +1163,8 @@ module.exports = {
             data: arrayClassificado,
             teste: anuncioTeste,
             anuncio2: anuncio2,
-            mosaico: codCaderno[0].dataValues.descImagem
+            mosaico: codCaderno[0].dataValues.descImagem,
+            kledisom: 123
         });
 
 
@@ -1311,7 +1321,7 @@ module.exports = {
             //console.log()
         }
 
-        console.log("debug------------------>",  [
+        console.log("debug------------------>", [
             { codUf: codCaderno[0].dataValues.codUf },
             { codCaderno: codCaderno[0].dataValues.codCaderno }
         ]);

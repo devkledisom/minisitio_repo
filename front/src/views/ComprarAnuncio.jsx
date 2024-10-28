@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { masterPath } from "../config/config";
 import he from 'he';
@@ -142,7 +142,7 @@ function ComprarAnuncio() {
           let precoComDesconto = precoFixo - valorDesconto;
           setPrecoFixo(precoComDesconto);
           setDescontoAtivado(res.success);
-          console.log("desconto ",res)
+          console.log("desconto ", res)
         })
     }
 
@@ -151,14 +151,25 @@ function ComprarAnuncio() {
     //console.log(codId);
   };
 
+  //const [tipoPessoa, setTipoPessoa] = useState(null);
+
   const handleCpfCnpjChange = (event) => {
     // Obter apenas os números da entrada de dados
     let data = event.target.value.replace(/\D/g, "");
 
     // Verificar o comprimento dos dados para definir se é CPF ou CNPJ
-    if (data.length > 11) {
+    if (personType == 'pj') {
       // É CNPJ
-      data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}-${data.substr(12, 2)}`;
+      if (data.length > 12) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}-${data.substr(12, 2)}`;
+      } else if (data.length > 8) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}/${data.substr(8, 4)}`;
+      } else if (data.length > 5) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(5, 3)}`;
+      } else if (data.length > 2) {
+        data = `${data.substr(0, 2)}.${data.substr(2, 3)}`;
+      }
+
     } else {
       // É CPF
       if (data.length > 9) {
@@ -174,15 +185,33 @@ function ComprarAnuncio() {
     setcpfCnpjValue(data);
   };
 
+  const [validation, setValidation] = useState();
+
+  function cadastrarAnuncio() {
+    var validation = true;
+    document.querySelectorAll('[required]').forEach((item) => {
+      if (item.value == "") {
+        item.style.border = "1px solid red";
+        validation = false;
+        setValidation(false);
+        return;
+      } else {
+        item.style.border = "1px solid gray";
+        validation = true;
+        setValidation(true);
+      };
+    });
+  }
+
   return (
     <div className="App">
       <header>
         <Mosaico logoTop={true} borda="none" />
       </header>
       <main>
-        <TemplateModal 
-        descontoAtivado={descontoAtivado}
-        radioCheck={radioCheck}
+        <TemplateModal
+          descontoAtivado={descontoAtivado}
+          radioCheck={radioCheck}
         />
 
         <Busca paginaAtual={"caderno"} />
@@ -213,6 +242,7 @@ function ComprarAnuncio() {
                       value="1"
                       onClick={(e) => { setRadioCheck(e.target.value); setShowMap("none") }}
                       checked={radioCheck == 1}
+                      className="mx-1"
                     />
                     Básico
                   </label>
@@ -235,6 +265,7 @@ function ComprarAnuncio() {
                       value="3"
                       onClick={(e) => setRadioCheck(e.target.value)}
                       checked={radioCheck == 3}
+                      className="mx-1"
                     />
                     Completo
                   </label>
@@ -511,6 +542,7 @@ function ComprarAnuncio() {
                         value="pf"
                         onChange={(e) => setPersonType(e.target.value)}
                         checked={personType == "pf"}
+                        className="mx-1"
                       />
                       Pessoa física
                     </label>
@@ -523,6 +555,7 @@ function ComprarAnuncio() {
                         value="pj"
                         onChange={(e) => setPersonType(e.target.value)}
                         checked={personType == "pj"}
+                        className="mx-1"
                       />
                       Pessoa jurídica
                     </label>{" "}
@@ -616,7 +649,7 @@ function ComprarAnuncio() {
             {/* Forma de Pagamento */}
 
             {/* Area de Download do formulario */}
-
+            {/* 
             <div className="codigo-promocional margin-top-20 hidden-sm hidden-xs">
               <div className="row forma-de-pagamento">
                 <div className="col-md-1">
@@ -628,7 +661,7 @@ function ComprarAnuncio() {
                   </a>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Area de Download do formulario */}
           </div>
@@ -790,15 +823,28 @@ function ComprarAnuncio() {
                       *A duração da assinatura é de 12 meses, portanto válido até
                       14/04/2025.
                     </p>}
-                    <button
-                      type="button"
-                      className="btn-block formulario-de-cadastro btn btn-primary"
-                      id="anunciar"
-                      data-bs-toggle="modal" data-bs-target="#myModal"
-                    /*  onClick={cadastrarAnuncio} */
-                    >
-                      Confirmar
-                    </button>
+                    {!validation &&
+                      <button
+                        type="button"
+                        className="btn-block formulario-de-cadastro btn btn-primary"
+                        id="anunciar"
+                        /* data-bs-toggle="modal" data-bs-target="#myModal"*/
+                        onClick={cadastrarAnuncio} 
+                      >
+                        Confirmar1
+                      </button>
+                    }
+                    {validation &&
+                      <button
+                        type="button"
+                        className="btn-block formulario-de-cadastro btn btn-primary"
+                        id="anunciar"
+                        data-bs-toggle="modal" data-bs-target="#myModal"
+                        onClick={cadastrarAnuncio}
+                      >
+                        Confirmar2
+                      </button>
+                    }
                   </div>
                 </div>
               </div>
