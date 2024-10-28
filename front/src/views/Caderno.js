@@ -1434,7 +1434,7 @@ function Caderno() {
               </button>
             </div>
             <div className="col-md-6 text-start">
-              <button id="btn-next" onClick={() => setNumberPage(numberPage + 1)}>
+              <button id="btn-next" onClick={nextPage}>
                 Próximo
                 <i className="fa fa-arrow-right mx-2"></i>
               </button>
