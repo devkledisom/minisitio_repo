@@ -446,7 +446,9 @@ module.exports = {
                 order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
             });
 
-            if (resultAnuncio < 1) {
+            console.log("debug: ", resultAnuncio.length);
+
+            if (resultAnuncio.length < 1) {
                 const resultAnuncio = await Cadernos.findAll({
                     where: {
                         [Op.or]: [
@@ -484,8 +486,8 @@ module.exports = {
                 });
                 return;
             } else {
-                res.json({ success: false, message: "Usuario não encontrado" });
-                return;
+                //res.json({ success: false, message: "Usuario não encontrado1" });
+                //return;
             }
 
             res.json({ success: true, usuarios: resultAnuncio });

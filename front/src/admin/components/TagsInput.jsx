@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function TagsInput() {
+function TagsInput(props) {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
@@ -10,6 +10,7 @@ function TagsInput() {
 
   const handleInputKeyDown = (e) => {
     console.log(tags)
+    props.tagValue(tags)
     if (e.key === 'Enter' && inputValue.trim() !== '') {
       e.preventDefault();
       if (tags.length < 10 && !tags.includes(inputValue.trim())) {

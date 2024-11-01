@@ -32,7 +32,7 @@ const TemplateModal = (props) => {
      {/*  <!-- Modal body --> */}
       <div className="modal-body">
 
-      {elemento ? <ContentChildForm onContinue={mostrarElemento} descontoAtivado={props.descontoAtivado} radioCheck={props.radioCheck} /> : <ContentChildLogin onContinue={mostrarElemento} descontoAtivado={props.descontoAtivado} radioCheck={props.radioCheck} />}
+      {elemento ? <ContentChildForm onContinue={mostrarElemento} descontoAtivado={props.descontoAtivado} radioCheck={props.radioCheck} tagValue={props.tagValue} /> : <ContentChildLogin onContinue={mostrarElemento} descontoAtivado={props.descontoAtivado} radioCheck={props.radioCheck} tagValue={props.tagValue} />}
        
       </div>
 

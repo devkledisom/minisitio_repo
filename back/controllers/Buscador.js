@@ -39,7 +39,10 @@ module.exports = {
                     Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
                     {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
                     {descTelefone: atividade},
-                    {descCPFCNPJ: atividade}
+                    {descCPFCNPJ: atividade},
+                    {tags: {
+                        [Op.like]: `%${atividade}%`
+                    }}
                 ]
                 //codAtividade: 6
             }

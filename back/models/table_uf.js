@@ -10,7 +10,7 @@ const Uf = database.define('uf', {
     },
 
     sigla_uf: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(2),
         allowNull: false,
         unique: false,
         validate: {

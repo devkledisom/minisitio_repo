@@ -34,6 +34,7 @@ import Localidade from "../components/Localidade";
 import Marcadores from "../components/Forms/Marcadores";
 import Map from '../components/Maps/Map';
 import MapContainer from "../components/MapContainer";
+import TagsInput from "../admin/components/TagsInput";
 
 function ComprarAnuncio() {
   //States
@@ -49,6 +50,7 @@ function ComprarAnuncio() {
   const [precoFixo, setPrecoFixo] = useState(5);
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
   const [descontoAtivado, setDescontoAtivado] = useState(false);
+  const [tagValue, setTagValue] = useState();
 
 
   const executarSelecao = () => {
@@ -212,7 +214,9 @@ function ComprarAnuncio() {
         <TemplateModal
           descontoAtivado={descontoAtivado}
           radioCheck={radioCheck}
+          tagValue={tagValue}
         />
+
 
         <Busca paginaAtual={"caderno"} />
         <h1 id="title-caderno" className="py-2">
@@ -337,6 +341,8 @@ function ComprarAnuncio() {
                 </div>
 
                 {/* <Marcadores /> */}
+                <TagsInput tagValue={setTagValue} />
+                <input type="hidden" name="tags" className="tags" value={tagValue} />
 
                 <div className="row">
                   <div class="col-md-4 col-xs-12">

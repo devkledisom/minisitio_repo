@@ -16,6 +16,12 @@ import MiniWebCardSimples from '../../components/MiniWebCardSimples';
 //CONTEXT
 import { useBusca } from '../../context/BuscaContext';
 
+//COMPONENTS
+import Listar from './Listar';
+import Editar from './Editar';
+import UserNav from './UserNav';
+import DadosPessoais from './DadosPessoais';
+
 
 function PainelAdmin() {
 
@@ -31,6 +37,8 @@ function PainelAdmin() {
     const [smoot, setSmoot] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false);
     const [anuncios, setAnuncios] = useState([]);
+    const [action, setAction] = useState(1);
+    const [espacoId, setEspacoId] = useState(null);
 
     const location = useLocation();
 
@@ -162,6 +170,12 @@ function PainelAdmin() {
 
     };
 
+    function selectPage(e, page) {
+        e.preventDefault();
+        setAction(page);
+        setEspacoId(e.target.parentNode.parentNode.id);
+    };
+
 
     return (
         <div className="painel-admin">
@@ -179,22 +193,22 @@ function PainelAdmin() {
 
                 <div className='container'>
                     <div className='col-md-12'>
-
-                        <div className='row'>
+                
+                         <div className='row'>
                             <div className="col-md-12 col-xs-12 text-center">
                                 <div class="col-md-12">
                                     <ul class="list-inline pull-right">
-                                        <li><a href="/12178481426/cadastro" class="btn cinza btnMenu">Dados pessoais</a></li>
+                                        <li><a href="#" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 3)}>Dados pessoais</a></li>
                                         <li><a href="/12178481426/criar-anuncio" class="btn cinza btnMenu">Criar anúncio</a></li>
-                                        <li><a href="/12178481426/ver-anuncios" class="btn cinza btnMenu">Listar Espaços</a></li>
+                                        <li><a href="/12178481426/ver-anuncios" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 1)}>Listar Espaços</a></li>
                                         <li><a href="/resources/img/galeria-area-do-assinante.zip" class="btn cinza btnMenu">Galeria de imagens</a></li>
                                         <li><a href="/login" class="btn cinza btnMenu" onClick={sair}>Sair</a></li>
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
 
-
+{/* 
                         <div className="row lista">
                             <div class="col-md-12">
                                 <div class="bg-cinza" style={{ "padding-top": "10px" }}>
@@ -255,46 +269,25 @@ function PainelAdmin() {
                                                     <div class="col-md-6">
                                                         <p>Página 1/1 (Total: 1)</p>
                                                     </div>
-                                                    {/*  <div class="col-md-6">
-                                                        <nav aria-label="Page navigation" class="pull-right">
-                                                            <ul class="pagination">
-                                                                <li class="disabled">
-                                                                    <a href="javascript:;" onclick="return false;">Primeira</a>
-                                                                </li>
-                                                                <li class="disabled">
-                                                                    <a href="javascript:;" onclick="return false;">Anterior</a>
-                                                                </li>
-                                                                <li class="disabled">
-                                                                    <a href="javascript:;" onclick="return false;">Próxima</a>
-                                                                </li>
-                                                                <li class="disabled">
-                                                                    <a href="javascript:;" onclick="return false;">Última</a>
-                                                                </li>
-                                                            </ul>
-                                                        </nav>
-                                                    </div> */}
+                                        
                                                 </div>
-
-                                                {/*                 <style>
-                                                    .pagination {
-                                                        margin: 0;
-    }
-                                                </style>
-                                                <script>
-                                                    function apagar(url) {
-        if (!confirm("Você tem certeza que deseja apagar esse registro?")) {
-            return false;
-        }
-
-                                                    window.location = url;
-    }
-                                                </script> */}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
+                        {action === 1 && 
+                            <Listar btnEdit={selectPage}/>
+                        }
+                        {action === 2 && 
+                            <Editar espacoId={espacoId}/>
+                        }
+                        {action === 3 && 
+                            <DadosPessoais espacoId={espacoId} selectPage={selectPage}/>
+                        }
+                        
+                        
                     </div>
                 </div>
 

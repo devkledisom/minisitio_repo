@@ -63,13 +63,8 @@ const UserLogin = database.define('usuario', {
     },
     hashCode: {
         type: Sequelize.STRING(30),
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        allowNull: true,
+        unique: false
     },
     descValue: {
         type: Sequelize.STRING(30),

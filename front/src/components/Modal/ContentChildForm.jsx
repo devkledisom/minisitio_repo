@@ -62,6 +62,8 @@ const ContentChildForm = (props) => {
     const doc = searchParams.get('doc');
     setCPF(doc);
 
+    console.log("asjkhfdswkjfhsdj", props.tagValue)
+
   }, []);
 
   function verificarCampos() {
@@ -159,7 +161,7 @@ const ContentChildForm = (props) => {
       codAtividade: buscarElemento("codAtividade"),
       codPA: null,
       codDuplicado: null,
-      tags: "torteria,bolos,tortas,salgados,festas",
+      tags: props.tagValue,
       codCaderno: buscarElemento("codUf5"),
       codUf: buscarElemento("codUf4"),
       codCidade: buscarElemento("codUf5"),

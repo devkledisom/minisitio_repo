@@ -933,7 +933,7 @@ module.exports = {
     //ESPACOS
     listarEspacos: async (req, res) => {
 
-        //await database.sync();
+        await database.sync();
 
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
@@ -1547,6 +1547,7 @@ module.exports = {
 
     },
     buscarAnuncioId: async (req, res) => {
+        await database.sync();
         //const nu_hash = req.params.id;
         const nu_hash = req.query.search;
 
@@ -1872,7 +1873,7 @@ module.exports = {
             "codAtividade": codAtividade,
             "codPA": 0,
             "codDuplicado": 0,
-            "tags": "torteria,bolos,tortas,salgados,festas",
+            "tags": tags,
             "codCaderno": codCaderno,
             "codUf": codUf,
             "codCidade": codCidade,
