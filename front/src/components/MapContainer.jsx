@@ -13,8 +13,7 @@ export default function MapContainer(props) {
     const [centerGet, setCenter] = useState({ lat: -34.397, lng: 150.644 });
 
     useEffect(() => {
-        console.log(props.cep)
-
+        //console.log(props.cep)
         // Função para buscar coordenadas a partir do CEP usando a API de Geocoding do Google
         const fetchCoordinates = async () => {
             try {
@@ -26,9 +25,9 @@ export default function MapContainer(props) {
                     setCenter({ lat: location.lat, lng: location.lng });
                     console.log({ lat: location.lat, lng: location.lng })
                 } else {
-                    console.error("Não foi possível encontrar as coordenadas para o CEP fornecido.");
+                    //console.error("Não foi possível encontrar as coordenadas para o CEP fornecido.");
                     setCenter({ lat: -34.397, lng: 150.644 });
-                    console.log(centerGet)
+                    //console.log(centerGet)
                 }
             } catch (error) {
                 console.error("Ocorreu um erro ao buscar as coordenadas:", error);

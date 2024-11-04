@@ -140,7 +140,7 @@ function Caderno() {
 
               const pageNumberClass = Math.ceil(itemIndex / 10);
 
-              console.log(`pagina ${pageNumberClass}`, itemIndex);
+              //console.log(`pagina ${pageNumberClass}`, itemIndex);
               setNumberPage(pageNumberClass);
               paginator(arr, pageNumberClass);/*  */
               
@@ -437,7 +437,7 @@ function Caderno() {
       //setNomeAtividade(paginatedResult.data);
 
       //console.log(currentPageData)
-      console.log(pageNumber)
+      //console.log(pageNumber)
       setMinisitio({
         anuncios: paginatedResult.data,
         totalPaginas: Math.ceil(param.length / limitPerPage),
@@ -479,7 +479,7 @@ function Caderno() {
 
     const interID = setInterval(() => {
       if (document.querySelector(`#item_${id}`)) {
-        console.log(document.querySelector(`#item_${id}`))
+        //console.log(document.querySelector(`#item_${id}`))
         document.querySelector(`#item_${id}`).children[0].style.border = "none";
         document.querySelector(`#item_${id}`).classList = "pulsating-border";
 
@@ -1121,8 +1121,28 @@ function Caderno() {
 
 
   function nextPage() {
+    if(numberPage >= minisitio.totalPaginas) {
+      alert("Você está na última página!");
+      return;
+    }
+
     setNumberPage(numberPage + 1);
     console.log(numberPage + 1);
+    
+
+    if (book != undefined && id != undefined) {
+      setPageNumberUnique(false);
+    }
+    //setNomeAtividade([]);
+  }
+  function prevPage() {
+    if(numberPage <= minisitio.totalPaginas) {
+      alert("Você está na primeira página!");
+      return;
+    }
+
+    setNumberPage(numberPage - 1);
+    console.log(numberPage - 1);
     
 
     if (book != undefined && id != undefined) {
@@ -1154,7 +1174,8 @@ function Caderno() {
           {btnNav &&
             <div className="row p-3">
               <div className="col-md-6 text-end">
-                <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}>
+                <button id="btn-prev" onClick={prevPage}>
+                {/* <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}> */}
                   <i className="fa fa-arrow-left mx-2"></i>
                   Anterior
                 </button>

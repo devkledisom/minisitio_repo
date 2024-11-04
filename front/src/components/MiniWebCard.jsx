@@ -46,7 +46,7 @@ function MiniWebCard(props) {
         fetch(`${masterPath.url}/admin/anuncio/visualizacoes?id=${props.id}`)
             .then((x) => x.json())
             .then((res) => {
-                console.log(res)
+                //console.log(res)
             })
     };
 

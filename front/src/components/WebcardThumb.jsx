@@ -54,7 +54,7 @@ function WebcardThumb(props) {
                 .then((res) => {
                     if (res.success) {
                         setListaIds(res.IdsValue[0]);
-                        console.log(res);
+                        //console.log(res);
                     } else {
                         console.error("encontrado na base de dados");
                     }

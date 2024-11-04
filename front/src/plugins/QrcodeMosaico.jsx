@@ -41,7 +41,7 @@ function QrcodeMosaico(props) {
     };
 
     useEffect(() => {
-        console.log(`local/${encodeURIComponent(nomeAnuncio)}?id=${idParam}`, nomeAnuncio)
+        //console.log(`local/${encodeURIComponent(nomeAnuncio)}?id=${idParam}`, nomeAnuncio)
     }, [])
 
     return (

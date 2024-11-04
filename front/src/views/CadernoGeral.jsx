@@ -93,7 +93,7 @@ function Caderno(props) {
           setClassificados(res.data);
           setPathImg(res.teste.rows);
           setMosaicoImg(res.mosaico);
-          console.log("caderno geral", res);
+          //console.log("caderno geral", res);
           setLoading(false);
           document.querySelector('.caderno').style.filter = "none";
         } else {

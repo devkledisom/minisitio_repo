@@ -33,7 +33,7 @@ function WebCard() {
               if (res.success) {
    
                 setMosaicoImg(res.mosaico);
-                console.log("caderno geral", res);
+                //console.log("caderno geral", res);
     
               } else {
       

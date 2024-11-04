@@ -43,7 +43,7 @@ function FullWebCard(props) {
 
         async function buscarAnuncio() {
            const request = await fetch(`${masterPath.url}/anuncio/${idParam}`).then((x) => x.json());
-            console.log(request[0]);
+            //console.log(request[0]);
             //console.log(result);
             props.setCodCaderno(request[0].codCaderno);
             props.setCodUf(request[0].codUf);
