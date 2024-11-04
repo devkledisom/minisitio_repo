@@ -136,15 +136,16 @@ function ComprarAnuncio() {
   function aplicarCupom(e) {
     let codId = e.target.value;
 
-    if (codId.length == 11) {
+    if (codId.length == 11 || codId.length == 12) {
       fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
         .then((x) => x.json())
         .then((res) => {
+          console.log("desconto ", res)
           let valorDesconto = res.IdsValue[0].desconto;
           let precoComDesconto = precoFixo - valorDesconto;
           setPrecoFixo(precoComDesconto);
           setDescontoAtivado(res.success);
-          console.log("desconto ", res)
+          
         })
     }
 

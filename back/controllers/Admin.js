@@ -799,9 +799,9 @@ module.exports = {
 
             }
         });
-
+            console.log(resultAnuncio)
         if (resultAnuncio < 1) {
-            res.json({ success: false, message: "Usuario não encontrado" });
+            res.json({ success: false, message: "ID não encontrado" });
             return;
         }
         console.log(resultAnuncio)
