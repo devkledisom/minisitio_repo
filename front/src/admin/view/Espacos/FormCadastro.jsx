@@ -201,7 +201,7 @@ function ComprarAnuncio() {
     function aplicarCupom(e) {
         let codId = e.target.value;
 
-        if (codId.length == 11) {
+        if (codId.length == 11 || codId.length == 12) {
             fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
                 .then((x) => x.json())
                 .then((res) => {
