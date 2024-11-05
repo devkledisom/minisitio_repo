@@ -456,7 +456,7 @@ function ComprarAnuncio() {
                     placeholder="(99) 99999-9999"
                     onChange={changePreview}
                     required
-                    mask={'(99) 9999-9999'}></InputMask>
+                    mask={'(99) 99999-9999'}></InputMask>
                 </div>
                 {radioCheck != 1 && <div
                   className="input-icon margin-top-10 webcard"
@@ -704,7 +704,7 @@ function ComprarAnuncio() {
                       </p>
                       <p className="text-start">
                         <i className="fa fa-phone"></i>{" "}
-                        <span className="sim-tel">{(descTelefone) ? descTelefone : "(xx) xxxx-xxxx"}</span>
+                        <span className="sim-tel">{(descTelefone) ? descTelefone : "(xx) xxxxx-xxxx"}</span>
                       </p>
                       {radioCheck != 1 && <p
                         className="webcard text-start"

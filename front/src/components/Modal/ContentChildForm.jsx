@@ -95,10 +95,9 @@ const ContentChildForm = (props) => {
   };
 
   function sendObj() {
-    console.log("clicou");
     const obj = {
       "TipoPessoa": pegarElemento('#descTipoPessoa-pf').checked ? "pf" : "pj",
-      "CPFCNPJ": pegarElemento('#descCPFCNPJ').replace(/[.-]/g, ''),
+      "CPFCNPJ": pegarElemento('#descCPFCNPJ').replace(/[.\-\/]/g, ''),
       "Nome": pegarElemento('#descNome'),
       "Email": pegarElemento('#descEmail'),
       "senha": pegarElemento('#senha'),
