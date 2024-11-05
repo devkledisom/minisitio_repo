@@ -17,7 +17,7 @@ const ContentChildForm = (props) => {
   const [uf, setUfs] = useState([]);
   const [caderno, setCaderno] = useState([]);
   const [atividades, setAtividades] = useState();
-  const [cpf, setCPF] = useState('');
+  const [cpf, setCPF] = useState(null);
   const [alert, setAlert] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -62,7 +62,7 @@ const ContentChildForm = (props) => {
     const doc = searchParams.get('doc');
     setCPF(doc);
 
-    console.log("asjkhfdswkjfhsdj", props.tagValue)
+    //console.log("asjkhfdswkjfhsdj", props.tagValue)
 
   }, []);
 
@@ -161,7 +161,7 @@ const ContentChildForm = (props) => {
       codAtividade: buscarElemento("codAtividade"),
       codPA: null,
       codDuplicado: null,
-      tags: props.tagValue,
+      tags: JSON.stringify(props.tagValue),
       codCaderno: buscarElemento("codUf5"),
       codUf: buscarElemento("codUf4"),
       codCidade: buscarElemento("codUf5"),
@@ -242,8 +242,9 @@ const ContentChildForm = (props) => {
       .then((res) => {
         // Remover um item do localStorage
         localStorage.removeItem("imgname");
+        //console.log(res)
 
-        if(props.descontoAtivado && props.radioCheck == 3) {
+       if(props.descontoAtivado && props.radioCheck == 3) {
           window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
           console.log("1");
         } else if(props.radioCheck == 1) {
@@ -252,7 +253,7 @@ const ContentChildForm = (props) => {
         } else {
           window.location.href = `https://mpago.la/1pWzL7A`;
           console.log("3");
-        }
+        } 
 
         //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
         //navigate(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`);
@@ -311,11 +312,33 @@ const ContentChildForm = (props) => {
                     <div className="col-md-12">
                       <div className="input-icon margin-top-10">
                         <i className="fa fa-credit-card"></i>
-                        <InputCpf
-                          /*      id="descCPFCNPJ" */
+                    {/*     <InputCpf
                           value={cpf}
                           onChange={(event) => setCPF(event.target.value)}
-                        />
+                        /> */}
+
+{cpf != null && cpf.length <= 14 && 
+    <InputMask 
+    mask="999.999.999-99" 
+    value={cpf} 
+    onChange={(e) => setCPF(e.target.value)}
+    name="descCPFCNPJ"
+    id="descCPFCNPJ"
+    className="form-control"
+    placeholder="Digite um CPF ou CNPJ" />
+
+}
+{cpf != null && cpf.length > 14 && 
+   <InputMask 
+    mask="99.999.999/9999-99" 
+    value={cpf} 
+    onChange={(e) => setCPF(e.target.value)}
+    name="descCPFCNPJ"
+    id="descCPFCNPJ"
+    className="form-control"
+    placeholder="Digite um CPF ou CNPJ" />
+}
+
                       </div>
                     </div>
                     <div className="col-md-6 col-sm-6">

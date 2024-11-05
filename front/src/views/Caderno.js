@@ -1075,6 +1075,7 @@ function Caderno() {
 
 
     return (
+      
       nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
         (index >= limit)
@@ -1083,6 +1084,7 @@ function Caderno() {
               <h2 className='bg-yellow py-2'>
                 {item.codAtividade}
               </h2>
+             
 
               {minisitio.anuncios.map((anuncio) => {
                 if (anuncio.codTipoAnuncio == 1) {
@@ -1104,6 +1106,7 @@ function Caderno() {
                       codDesconto={anuncio.codDesconto}
                       ids={buscarId(90)}
                     />
+                    
                   )
                 }
 
@@ -1222,7 +1225,7 @@ function Caderno() {
                           telefone={anuncio.descTelefone}
                           celular={anuncio.descCelular}
                           codDesconto={anuncio.codDesconto}
-                          ids={buscarId(90)}
+                          ids={buscarId(anuncio.codDesconto)}
                         />
                         /* } <MsgProgramada />
                           if(i >= minisitio.anuncios.length-1) {

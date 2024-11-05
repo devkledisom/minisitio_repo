@@ -429,7 +429,7 @@ function ComprarAnuncio() {
 
                         <div className="codigo-promocional">
                             <h4 style={{ margin: "10px 0 25px 2px" }}>
-                                Código PA: <strong>{codUser}</strong>
+                               {/*  Código PA: <strong>{codUser}</strong> */}
                             </h4>
 
 
@@ -731,7 +731,7 @@ function ComprarAnuncio() {
                                     name="descCPFCNPJ"
                                     id="descCPFCNPJ"
                                     className="form-control"
-                                    placeholder="Digite o seu CPF ou CNPJ"
+                                    placeholder="Digite um CPF ou CNPJ"
                                     onChange={handleCpfCnpjChange}
                                     value={cpfCnpjValue}
                                     required

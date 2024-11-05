@@ -38,7 +38,7 @@ const TemplateModal = (props) => {
 
       {/* <!-- Modal footer --> */}
       <div className="modal-footer">
-        <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="button" className="btn btn-danger" data-bs-dismiss="modal">fechar</button>
       </div>
 
     </div>

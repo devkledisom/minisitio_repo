@@ -63,10 +63,22 @@ function MiniWebCard(props) {
             }
 
             <div className='container cartao my-2 p-0' key={props.key}>
-
                 <div className="apoio">
-                    <div>
-                        <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
+                    {props.ids != null && 
+                            <div>
+                              <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
+                                 <img src={`${masterPath.url}/files/${props.ids.descImagem}`} alt="" />
+                             </a>
+                             <a href={props.ids.descLink2} target="_blank" rel="noopener noreferrer">
+                                 <img src={`${masterPath.url}/files/${props.ids.descImagem2}`} alt="" />
+                             </a>
+                             <a href={props.ids.descLink3} target="_blank" rel="noopener noreferrer">
+                                 <img src={`${masterPath.url}/files/${props.ids.descImagem3}`} alt="" />
+                             </a> 
+                         </div>
+                    }
+                   {/* <div>
+                         <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
                             <img src={`${masterPath.url}/files/${props.ids.descImagem}`} alt="" />
                         </a>
                         <a href={props.ids.descLink2} target="_blank" rel="noopener noreferrer">
@@ -74,8 +86,8 @@ function MiniWebCard(props) {
                         </a>
                         <a href={props.ids.descLink3} target="_blank" rel="noopener noreferrer">
                             <img src={`${masterPath.url}/files/${props.ids.descImagem3}`} alt="" />
-                        </a>
-                    </div>
+                        </a> 
+                    </div>*/}
                 </div>
 
                 <div className='row display-flex justify-content-center' key={props.key} onClick={buscarAnuncio}>

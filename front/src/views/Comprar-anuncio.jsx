@@ -304,7 +304,7 @@ function ComprarAnuncio() {
 
             <div className="codigo-promocional">
               <h4 style={{ margin: "10px 0 25px 2px" }}>
-                Código PA: <strong>569882</strong>
+                {/* Código PA: <strong>569882</strong> */}
               </h4>
 
               <div className="form-group">
@@ -562,7 +562,7 @@ function ComprarAnuncio() {
                   name="descCPFCNPJ"
                   id="descCPFCNPJ"
                   className="form-control"
-                  placeholder="Digite o seu CPF ou CNPJ"
+                  placeholder="Digite um CPF ou CNPJ"
                 />{" "}
               </div>
               <div className="input-icon margin-top-10  py-2">

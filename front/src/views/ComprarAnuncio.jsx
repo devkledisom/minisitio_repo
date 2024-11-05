@@ -313,7 +313,7 @@ function ComprarAnuncio() {
 
             <div className="codigo-promocional">
               <h4 style={{ margin: "10px 0 25px 2px" }}>
-                Código PA: <strong>569882</strong>
+               {/*  Código PA: <strong>569882</strong> */}
               </h4>
 
               <div className="form-group">
@@ -576,7 +576,7 @@ function ComprarAnuncio() {
                   name="descCPFCNPJ"
                   id="descCPFCNPJ"
                   className="form-control"
-                  placeholder="Digite o seu CPF ou CNPJ"
+                  placeholder="Digite um CPF ou CNPJ"
                   onChange={handleCpfCnpjChange}
                   value={cpfCnpjValue}
                 />{" "}
@@ -830,17 +830,16 @@ function ComprarAnuncio() {
                       *A duração da assinatura é de 12 meses, portanto válido até
                       14/04/2025.
                     </p>}
-                    {!validation &&
+              {/*       {!validation &&
                       <button
                         type="button"
                         className="btn-block formulario-de-cadastro btn btn-primary"
                         id="anunciar"
-                        /* data-bs-toggle="modal" data-bs-target="#myModal"*/
                         onClick={cadastrarAnuncio} 
                       >
                         Confirmar1
                       </button>
-                    }
+                    } 
                     {validation &&
                       <button
                         type="button"
@@ -851,7 +850,16 @@ function ComprarAnuncio() {
                       >
                         Confirmar2
                       </button>
-                    }
+                    }*/}
+                     <button
+                        type="button"
+                        className="btn-block formulario-de-cadastro btn btn-primary"
+                        id="anunciar"
+                        data-bs-toggle="modal" data-bs-target="#myModal"
+                        onClick={cadastrarAnuncio}
+                      >
+                        Confirmar
+                      </button>
                   </div>
                 </div>
               </div>

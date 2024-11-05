@@ -174,7 +174,7 @@ const ContentChildLogin = (props) => {
         //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
         //navigate(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`);
 
-    /*      if(props.descontoAtivado && props.radioCheck == 3) {
+        if(props.descontoAtivado && props.radioCheck == 3) {
           window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
           console.log("1");
         } else if(props.radioCheck == 1) {
@@ -183,7 +183,7 @@ const ContentChildLogin = (props) => {
         } else {
           window.location.href = `https://mpago.la/1pWzL7A`;
           console.log("3");
-        } */
+        } 
  
       });
   }
