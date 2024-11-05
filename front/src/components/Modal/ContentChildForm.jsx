@@ -263,7 +263,7 @@ const ContentChildForm = (props) => {
 
 
   function limparCPFouCNPJ(cpfOuCnpj) {
-    return cpfOuCnpj.replace(/[.-]/g, '');
+    return cpfOuCnpj.replace(/[.\-\/]/g, '');
   }
 
 
@@ -410,7 +410,7 @@ const ContentChildForm = (props) => {
                     className="form-control"
                     placeholder="(99) 99999-9999"
                     required
-                    mask={'(99) 9999-9999'}></InputMask>
+                    mask={'(99) 99999-9999'}></InputMask>
                       </div>
                     </div>
                     <div className="col-md-6 col-sm-6">
