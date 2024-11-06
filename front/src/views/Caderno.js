@@ -147,13 +147,6 @@ function Caderno() {
             } else {
               paginator(arr);/*  */
             }
-
-
-
-
-
-          } else {
-
           }
 
         })
@@ -459,7 +452,7 @@ function Caderno() {
             setListaIds(res.data);
 
           } else {
-            console.error("encontrado na base de dados");
+            console.error("encontrado na base de dados")
           }
 
         })
@@ -748,70 +741,8 @@ function Caderno() {
   const debug = "mensagem debug: ";
   useEffect(() => {
 
-    //console.log(debug, numberPage, col1Ref)
-
     testin();
   }, [nomeAtividade])
-
-  /* useEffect(() => {
-    const anuncios = minisitio.anuncios;
-    console.log(anuncios)
-    if (anuncios == undefined) {
-      return;
-    }
-
-    const contagemAnunciosPorCategoria = anuncios.reduce((contador, anuncio) => {
-      // Verifica se a categoria do anúncio já existe no contador
-      if (contador[anuncio.codAtividade]) {
-        contador[anuncio.codAtividade] += 1;
-      } else {
-        // Caso a codAtividade ainda não exista, inicializa com 1
-        contador[anuncio.codAtividade] = 1;
-      }
-      return contador;
-    }, {});
-
-    console.log(contagemAnunciosPorCategoria);
-
-    let a = {
-      "Aluguel de equipamentos científicos, médicos e hospitalares, sem operador ": 2,
-      "Aluguel de equipamentos recreativos e esportivos ": 3,
-      "Aluguel de imóveis próprios ": 3,
-      "Aluguel de máquinas e equipamentos agrícolas sem operador ": 2
-    }
-
-    const arr = [];
-    let count = 0;
-    const maxCount = 5;  // Limite de 5 adições
-
-    for (let x in contagemAnunciosPorCategoria) {
-      let limit = a[x];  // Pega o valor associado à chave
-
-      for (let i = 0; i < limit; i++) {
-        if (count >= maxCount) {
-          console.log("interrompido")
-          break;  // Interrompe se o limite for atingido
-        }
-        arr.push(x);  // Adiciona o item ao array
-        count += 1;
-      }
-
-      if (count >= maxCount) {
-        break;  // Sai do loop externo se o limite for atingido
-      }
-    }
-
-    console.log("Array original: ", arr);
-
-    // Removendo duplicatas usando Set
-    const uniqueArr = [...new Set(arr)];
-
-    setBase1(uniqueArr);
-    console.log("Array sem duplicatas: ", uniqueArr);
-    console.log(nomeAtividade)
-
-  }, [minisitio]) */
-
 
 
   let arr = [];
@@ -845,11 +776,11 @@ function Caderno() {
 
       var list = (list % 2 == 0) ? list : list + 1;
 
-
+console.log("debug: ", list)
       let division = list / 2;
 
-      const arrayParte1 = removeDuplicate.slice(0, division);
-      const arrayParte2 = removeDuplicate.slice(division);
+      const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
+      const arrayParte2 = removeDuplicate.slice(list);
 
 
       // Remover duplicados comparando objetos

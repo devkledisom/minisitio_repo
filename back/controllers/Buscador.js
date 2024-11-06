@@ -29,12 +29,16 @@ module.exports = {
             }
         });
 
-        console.log("debug: ", atividades);
+        //console.log("debug: ", atividades);
+        //console.log("debug: ", codigoCaderno, uf);
 
         //anuncio
         const anuncios = await Anuncio.findAll({
             where: {
-                codCaderno: codigoCaderno,
+                [Op.or]: [
+                    {codCaderno: codigoCaderno},
+                    {codUf: uf},
+                ],
                 [Op.or]: [
                     Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
                     {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
@@ -48,7 +52,7 @@ module.exports = {
             }
         });
 
-        console.log(anuncios)
+        //console.log(anuncios)
 
         if(atividades.length > 0) {
             console.log(atividades[0].id)

@@ -19,7 +19,7 @@ function Resultados() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(result)
+        //console.log(result)
         let cadernoUf = sessionStorage.getItem("uf: ");
         let cadernoCidade = sessionStorage.getItem("caderno: ");
         if(result.length == 1) {

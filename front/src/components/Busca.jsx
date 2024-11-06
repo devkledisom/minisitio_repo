@@ -84,7 +84,7 @@ function Busca(props) {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "uf": "11",
+                    "uf": uf,
                     "cidade": "ALTA FLORESTA D'OESTE",
                     "atividade": valor_da_busca,
                     "name": "mycardcity",
@@ -97,14 +97,14 @@ function Busca(props) {
             const request = await fetch(`${masterPath.url}/buscar`, options).then((x) => x.json())
             //setAnuncio(request)
             setResult(request);
-            console.log(request);
-            setLoading(true);
+            //console.log(request);
+            setLoading(false);
 
             if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
                 navigate("/buscar");
             }
 
-            console.log(result)
+            //console.log(result)
 
         } catch (error) {
             console.error('Erro ao buscar usuários:', error);

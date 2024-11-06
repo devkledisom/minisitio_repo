@@ -1119,8 +1119,8 @@ module.exports = {
                 caderno: anun.codCaderno
             });
 
-            console.log(anun.dataValues)
-            console.log(x, /* atividades[0].dataValues */)
+            //console.log(anun.dataValues)
+            //console.log(x, /* atividades[0].dataValues */)
         }
 
         arrayClassificado.sort((a, b) => a.nomeAtividade.localeCompare(b.nomeAtividade));
@@ -1255,15 +1255,16 @@ module.exports = {
         // Consulta para recuperar apenas os itens da página atual
         const codCaderno = await Caderno.findAll({
             where: {
-                codUf: req.params.uf,
+                //codUf: req.params.uf,
                 [Op.or]: [
                     { nomeCaderno: req.params.caderno },
-                    { codCaderno: req.params.caderno }
+                    { codCaderno: req.params.caderno },
+                    {codUf: req.params.uf}
                 ]
             }
         });
 
-        //console.log(codCaderno)
+        console.log(codCaderno)
 
 
         const anuncio = await Anuncio.findAndCountAll({
