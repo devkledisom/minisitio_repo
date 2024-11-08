@@ -1101,8 +1101,8 @@ function Caderno() {
 
 
         <Busca paginaAtual={"caderno"} />
-        <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
-        <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
+        <h1 id="title-caderno" className='py-2'>Caderno {sessionStorage.getItem("caderno: ")} - {sessionStorage.getItem("uf: ")}</h1>
+        <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {sessionStorage.getItem("caderno: ")} - {sessionStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
         <div className="container">
           {btnNav &&
             <div className="row p-3">
