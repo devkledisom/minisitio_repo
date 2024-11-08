@@ -316,7 +316,7 @@ const ContentChildForm = (props) => {
                           onChange={(event) => setCPF(event.target.value)}
                         /> */}
 
-{cpf != null && cpf.length <= 14 && 
+{/* {cpf != null && cpf.length <= 14 && 
     <InputMask 
     mask="999.999.999-99" 
     value={cpf} 
@@ -326,7 +326,7 @@ const ContentChildForm = (props) => {
     className="form-control"
     placeholder="Digite um CPF ou CNPJ" />
 
-}
+} */}
 {cpf != null && cpf.length > 14 && 
    <InputMask 
     mask="99.999.999/9999-99" 

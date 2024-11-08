@@ -459,8 +459,13 @@ module.exports = {
                     }
                 });
 
-                console.log(resultAnuncio[0].dataValues.codUf);
+                if(resultAnuncio < 1) {
+                    res.json({ success: false, usuarios: resultAnuncio });
+                    return;
+                }
 
+/*                 console.log(resultAnuncio[0].dataValues.codUf);
+ */
 
                 const resultAnuncio2 = await Users.findAll({
                     where: {

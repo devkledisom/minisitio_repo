@@ -35,6 +35,10 @@ import Marcadores from "../components/Forms/Marcadores";
 import Map from '../components/Maps/Map';
 import MapContainer from "../components/MapContainer";
 import TagsInput from "../admin/components/TagsInput";
+import AlertMsg from "../components/Alerts/AlertMsg";
+
+//FUNCTION EXTERNA
+import { criarAnuncio } from "./comprar-anuncio/criarAnuncio";
 
 function ComprarAnuncio() {
   //States
@@ -51,19 +55,14 @@ function ComprarAnuncio() {
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
   const [descontoAtivado, setDescontoAtivado] = useState(false);
   const [tagValue, setTagValue] = useState();
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [alert, setAlert] = useState(false);
 
 
   const executarSelecao = () => {
     let codigoUf = document.querySelectorAll("#codUf4")[0].value;
     setUf(codigoUf);
   };
-
-  function decodificar(palavra) {
-    const palavraCodificada = "FarmÃ¡cias";
-    //const palavraCorrigida = decodeURIComponent(escape(palavra));
-
-    //console.log(typeof(palavra))
-  }
 
   useEffect(() => {
     fetch(`${masterPath.url}/cadernos`)
@@ -91,6 +90,8 @@ function ComprarAnuncio() {
         //console.log(res)
         //decodificar()
       });
+
+
   }, []);
 
 
@@ -145,7 +146,7 @@ function ComprarAnuncio() {
           let precoComDesconto = precoFixo - valorDesconto;
           setPrecoFixo(precoComDesconto);
           setDescontoAtivado(res.success);
-          
+
         })
     }
 
@@ -212,11 +213,17 @@ function ComprarAnuncio() {
         <Mosaico logoTop={true} borda="none" />
       </header>
       <main>
-        <TemplateModal
+        {/*      <TemplateModal
           descontoAtivado={descontoAtivado}
           radioCheck={radioCheck}
           tagValue={tagValue}
-        />
+        /> */}
+
+        {showSpinner && <button class="buttonload">
+          <i class="fa fa-spinner fa-spin"></i>Carregando
+        </button>}
+
+        {alert && <AlertMsg message={"Cadastro Realizado"}/>}
 
 
         <Busca paginaAtual={"caderno"} />
@@ -313,7 +320,7 @@ function ComprarAnuncio() {
 
             <div className="codigo-promocional">
               <h4 style={{ margin: "10px 0 25px 2px" }}>
-               {/*  Código PA: <strong>569882</strong> */}
+                {/*  Código PA: <strong>569882</strong> */}
               </h4>
 
               <div className="form-group">
@@ -342,7 +349,10 @@ function ComprarAnuncio() {
                 </div>
 
                 {/* <Marcadores /> */}
-                <TagsInput tagValue={setTagValue} />
+                {radioCheck != 1 && <TagsInput tagValue={setTagValue} />}
+
+
+
                 <input type="hidden" name="tags" className="tags" value={tagValue} />
 
                 <div className="row">
@@ -354,6 +364,7 @@ function ComprarAnuncio() {
                         id="codUf4"
                         class="form-control"
                         onChange={executarSelecao}
+                        required
                       >
                         <option value="" selected="selected">
                           - UF -
@@ -378,6 +389,7 @@ function ComprarAnuncio() {
                         name="codCaderno"
                         id="codUf5"
                         class="form-control"
+                        required
                       >
                         <option value="">- CIDADE -</option>
                         {caderno.map(
@@ -579,6 +591,7 @@ function ComprarAnuncio() {
                   placeholder="Digite um CPF ou CNPJ"
                   onChange={handleCpfCnpjChange}
                   value={cpfCnpjValue}
+                  required
                 />{" "}
               </div>
               <div className="input-icon margin-top-10  py-2">
@@ -589,6 +602,7 @@ function ComprarAnuncio() {
                   id="descNomeAutorizante"
                   className="form-control"
                   placeholder="Digite o seu nome"
+                  required
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
@@ -599,6 +613,7 @@ function ComprarAnuncio() {
                   id="descEmailAutorizante"
                   className="form-control"
                   placeholder="Digite o seu e-mail"
+                  required
                 />{" "}
               </div>
               {radioCheck != 1 && <div class="input-icon margin-top-10">
@@ -630,13 +645,13 @@ function ComprarAnuncio() {
                 <div className="form-group">
                   <div className="hidden">
                     <label>
-                      <input
+                      {/*  <input
                         type="radio"
                         name="formaPagamento"
                         id="formaPagamento-pagseguro"
                         value="pagseguro"
                         checked="checked"
-                      />
+                      /> */}
                       <i
                         className="wid pagseguro"
                         data-toggle="tooltip"
@@ -646,7 +661,7 @@ function ComprarAnuncio() {
                   </div>
                   <div className="col-md-12 observacao">
                     <h5>
-                      Você será redirecionado para o ambiente do PagSeguro
+                      Você será redirecionado para o ambiente do Mercado pago
                     </h5>
                     <img src="../assets/cartoes.gif" alt="Cartões" />
                   </div>
@@ -830,7 +845,7 @@ function ComprarAnuncio() {
                       *A duração da assinatura é de 12 meses, portanto válido até
                       14/04/2025.
                     </p>}
-              {/*       {!validation &&
+                    {/*       {!validation &&
                       <button
                         type="button"
                         className="btn-block formulario-de-cadastro btn btn-primary"
@@ -851,15 +866,15 @@ function ComprarAnuncio() {
                         Confirmar2
                       </button>
                     }*/}
-                     <button
-                        type="button"
-                        className="btn-block formulario-de-cadastro btn btn-primary"
-                        id="anunciar"
-                        data-bs-toggle="modal" data-bs-target="#myModal"
-                        onClick={cadastrarAnuncio}
-                      >
-                        Confirmar
-                      </button>
+                    <button
+                      type="button"
+                      className="btn-block formulario-de-cadastro btn btn-primary"
+                      id="anunciar"
+                      /* data-bs-toggle="modal" data-bs-target="#myModal" */
+                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert)}
+                    >
+                      Confirmar
+                    </button>
                   </div>
                 </div>
               </div>

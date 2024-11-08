@@ -43,6 +43,8 @@ function Busca(props) {
     };
 
     useEffect(() => {
+  
+
         let ufSalva = sessionStorage.getItem("uf: ");
         let cadSalvo = sessionStorage.getItem("caderno: ");
 
@@ -77,6 +79,12 @@ function Busca(props) {
             const uf = document.querySelector('#codUf2').value;
             const codigoCaderno = document.querySelector('#codUf3').value;
             const valor_da_busca = document.querySelector('#inputBusca').value;
+
+            if(valor_da_busca.length < 1) {
+                alert("por favor preencha o campo de pesquisa");
+                setLoading(false);
+                return;
+            }
 
             const options = {
                 method: "POST",

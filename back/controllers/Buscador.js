@@ -30,16 +30,44 @@ module.exports = {
         });
 
         //console.log("debug: ", atividades);
-        //console.log("debug: ", codigoCaderno, uf);
+        //console.log("debug: ", codigoCaderno, uf, atividades[0].id);
 
         //anuncio
         const anuncios = await Anuncio.findAll({
             where: {
                 [Op.or]: [
-                    {codCaderno: codigoCaderno},
-                    {codUf: uf},
+                    {[Op.and]: [
+                        {codCaderno: codigoCaderno},
+                        {codUf: uf},
+                        {
+                            [Op.or]: [
+                                Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
+                                {descTelefone: atividade},
+                                {descCPFCNPJ: atividade},
+                                {tags: {
+                                    [Op.like]: `%${atividade}%`
+                                }}
+                            ]
+                        }
+                    ]},
+                    {[Op.and]: [
+                        {codUf: uf},
+                        {
+                            [Op.or]: [
+                                Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
+                                {descTelefone: atividade},
+                                {descCPFCNPJ: atividade},
+                                {tags: {
+                                    [Op.like]: `%${atividade}%`
+                                }}
+                            ]
+                        }
+                    ]}
+                    
                 ],
-                [Op.or]: [
+                /* [Op.or]: [
                     Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
                     {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
                     {descTelefone: atividade},
@@ -47,12 +75,12 @@ module.exports = {
                     {tags: {
                         [Op.like]: `%${atividade}%`
                     }}
-                ]
+                ] */
                 //codAtividade: 6
             }
         });
 
-        //console.log(anuncios)
+        console.log(anuncios)
 
         if(atividades.length > 0) {
             console.log(atividades[0].id)

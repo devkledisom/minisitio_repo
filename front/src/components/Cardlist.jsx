@@ -39,6 +39,7 @@ function Cardlist(props) {
 
   return (
     <div className="Cardlist" key={props.key}>
+       {/* {console.log(props.descImagem)} */}
       <div className="container card my-2">
         <div className="row card-list">
           <div className="col-md-2 p-0">

@@ -223,7 +223,7 @@ const handleSelectChange = (e) => {
   executarSelecao();
 };
 
-function editID() {
+function editID(e) {
 
   minisitio.descImagem = localStorage.getItem("imgname");
   console.log(minisitio)
@@ -269,6 +269,7 @@ function editID() {
               if (res.success) {
                   //setShowSpinner(false);
                   alert("anuncio Atualizado!");
+                  props.selectPage(e, 4);
               } else {
                   alert(res.message);
               }
@@ -510,8 +511,8 @@ function editID() {
                   />
                 </div>}
 
-                {/* {radioCheck != 1 && <MapContainer cep={cep} />} */}
-                <MapContainer cep={cep} showMap={"block"} />
+                {radioCheck != 1 && <MapContainer cep={cep} />} 
+                {/* <MapContainer cep={cep} showMap={"block"} /> */}
 
 
                 <div className="row webcard" style={{ display: "block" }}>
@@ -867,7 +868,7 @@ function editID() {
 
             {/* Autorizante */}
 
-            <div className="assinatura">
+{/*             <div className="assinatura">
               <h2>Autorizante</h2>
             </div>
             <div className="codigo-promocional">
@@ -941,27 +942,17 @@ function editID() {
                   onChange={handleSelectChange}
                 />{" "}
               </div>
-              {/* {radioCheck != 1 && <div class="input-icon margin-top-10">
-                <h4 className="text-start pt-2">Responsável (ID) (opcional):</h4>
-                <div class="input-icon margin-top-10" id="codigoPromocional">
-                  <i class="fa fa-credit-card"></i>
-
-                  <input type="text" name="discountHash" id="discountHash" value="" class="form-control" placeholder="Digite seu código" />
-                  <input type="hidden" name="discountValue" value="" id="discountValue" />
-                </div>
-                <h5 className="text-start">Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)</h5>
-              </div>} */}
-            </div>
+            </div> */}
             {/* Autorizante */}
 
             {/* Forma de Pagamento */}
 
-            {radioCheck != 1 && <div
+           {/*  {radioCheck != 1 && <div
               className="assinatura webcard formaPagamento"
               style={{ display: "block" }}
             >
               <h2>Forma de Pagamento</h2>
-            </div>}
+            </div>} 
             {radioCheck != 1 && <div
               className="codigo-promocional webcard formaPagamento"
               style={{ display: "block" }}
@@ -970,13 +961,7 @@ function editID() {
                 <div className="form-group">
                   <div className="hidden">
                     <label>
-                {/*       <input
-                        type="radio"
-                        name="formaPagamento"
-                        id="formaPagamento-pagseguro"
-                        value="pagseguro"
-                        checked="checked"
-                      /> */}
+      
                       <i
                         className="wid pagseguro"
                         data-toggle="tooltip"
@@ -993,6 +978,7 @@ function editID() {
                 </div>
               </div>
             </div>}
+            */}
             {/* Forma de Pagamento */}
 
             {/* Area de Download do formulario */}
@@ -1156,7 +1142,7 @@ function editID() {
                     </div>}
 
                   </div>
-                  <div className="assinatura margin-top-20">
+                 {/*  <div className="assinatura margin-top-20">
 
                     {radioCheck != 1 && <h2 className="webcard">
                       <span className="preco">R$ {precoFixo},00</span>/mês
@@ -1164,12 +1150,12 @@ function editID() {
                     {radioCheck == 1 && <h2 className="simples uppercase">
                       Grátis
                     </h2>}
-                  </div>
+                  </div> */}
                   <div className="margin-top-20">
-                    {radioCheck != 1 && <p className="webcard" style={{ display: "block" }}>
+                   {/*  {radioCheck != 1 && <p className="webcard" style={{ display: "block" }}>
                       *A duração da assinatura é de 12 meses, portanto válido até
                       14/04/2025.
-                    </p>}
+                    </p>} */}
                     {!validation &&
                       <button
                         type="button"

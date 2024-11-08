@@ -1777,9 +1777,6 @@ module.exports = {
     },
     criarAnuncio: async (req, res) => {
         await database.sync();
-
-        console.log("dasdasda", req.body.codDesconto)
-
         const { codAnuncio,
             codUsuario,
             codTipoAnuncio,

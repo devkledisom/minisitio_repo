@@ -776,7 +776,6 @@ function Caderno() {
 
       var list = (list % 2 == 0) ? list : list + 1;
 
-console.log("debug: ", list)
       let division = list / 2;
 
       const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);

@@ -208,7 +208,7 @@ function Listar(props) {
                                                         <th>Forma Pagamento</th>
                                                         <th>Data Pagamento</th>
                                                         <th>Cidade/UF</th>
-                                                        <th>ID Desconto</th>
+                                                        {/* <th>ID Desconto</th> */}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -234,7 +234,7 @@ function Listar(props) {
                                                             <td>isento</td>
                                                             <td>06/09/2024</td>
                                                             <td>{`${item.codCaderno}/${item.codUf}`}</td>
-                                                            <td></td>
+                                                            {/* <td></td> */}
                                                         </tr>
                                                     ))}
                                                 </tbody>

@@ -273,14 +273,14 @@ const ContentChildLogin = (props) => {
               <form name="frm-login" id="frm-login" method="post" enctype="application/x-www-form-urlencoded">
                 <div className="row">
                   <div className="col-md-12 py-3">
-                    <div className="input-icon margin-top-10">
+                   {/*  <div className="input-icon margin-top-10">
                       <i className="fa fa-user"></i>
                       <input type="text" className="form-control assinante" placeholder="Digite seu CPF ou CNPJ" id="descCPFCNPJ"
                         ref={loginValue}
                         onKeyDown={teclaLogin}
                         value={cpfCnpjValue}
                         onChange={handleCpfCnpjChange} />
-                    </div>
+                    </div> */}
                   </div>
                   <div className="col-md-12">
                     <div className="input-icon margin-top-10 py-3">
