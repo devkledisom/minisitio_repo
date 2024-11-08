@@ -27,7 +27,9 @@
   /* display: none; */
   background-color: #ffcc29;
   position: absolute;
-  left: 23%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 999;
   animation: moveelement 3s forwards;
 }
