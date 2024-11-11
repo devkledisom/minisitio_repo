@@ -80,7 +80,7 @@ module.exports = {
             }
         });
 
-        console.log(anuncios)
+        //console.log(anuncios)
 
         if(atividades.length > 0) {
             console.log(atividades[0].id)
@@ -94,8 +94,6 @@ module.exports = {
                 item.codAtividade == verificarCodAtividade;
         })
 
-
-        //console.log(atividade, atividades[0].id)
 
         res.json(anuncios);
     },

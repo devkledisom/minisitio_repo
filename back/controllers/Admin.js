@@ -1259,7 +1259,7 @@ module.exports = {
                 [Op.or]: [
                     { nomeCaderno: req.params.caderno },
                     { codCaderno: req.params.caderno },
-                    {codUf: req.params.uf}
+                    { codUf: req.params.uf }
                 ]
             }
         });

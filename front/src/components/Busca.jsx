@@ -34,12 +34,21 @@ function Busca(props) {
     const definirCaderno = (e) => {
         let codigoCidade = document.querySelectorAll('#codUf3')[0].value;
         const teste = caderno.find(cad => cad.codCaderno == codigoCidade);
-        localStorage.setItem("caderno: ", teste.nomeCaderno);
-        sessionStorage.setItem("caderno: ", codigoCidade);
 
-        setCadernoUf(teste.codUf);
-        //setCadernoCidade(teste.nomeCaderno);
-        setCodCaderno(codigoCidade);
+        if(codigoCidade != "TODO") {
+            localStorage.setItem("caderno: ", teste.nomeCaderno);
+            sessionStorage.setItem("caderno: ", codigoCidade);
+    
+            setCadernoUf(teste.codUf);
+            //setCadernoCidade(teste.nomeCaderno);
+            setCodCaderno(codigoCidade);
+        } else {
+            localStorage.setItem("caderno: ", "TODO");
+            sessionStorage.setItem("caderno: ", codigoCidade);
+
+            setCodCaderno(codigoCidade);
+        }
+
     };
 
     useEffect(() => {

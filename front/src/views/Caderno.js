@@ -381,8 +381,10 @@ function Caderno() {
 
     if (book != undefined && id != undefined) {
       buscarAtividade();
+      console.log("primeiro")
     } else {
       buscarTodosClassificado();
+      console.log("segundo")
     }
 
 
