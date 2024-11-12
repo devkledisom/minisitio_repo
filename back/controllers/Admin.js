@@ -1243,6 +1243,113 @@ module.exports = {
 
 
     },
+    listarClassificadoGeral2: async (req, res) => {
+
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+
+        const offset = (paginaAtual - 1) * porPagina;
+
+        //console.log("offsewt: ", offset)
+
+        // Consulta para recuperar apenas os itens da página atual
+        const codCaderno = await Caderno.findAll({
+            where: {
+                //codUf: req.query.uf,
+                [Op.or]: [
+                    { nomeCaderno: req.query.caderno },
+                    { codCaderno: req.query.caderno },
+                    //{ codUf: req.params.uf }
+                ]
+            }
+        });
+
+        console.log(codCaderno);
+
+        const anuncio = await Anuncio.findAndCountAll({
+            where: {
+                [Op.and]: [
+                    { codUf: codCaderno[0].dataValues.codUf },
+                    { codCaderno: codCaderno[0].dataValues.codCaderno }
+                ]
+            }/* ,
+            limit: porPagina,
+            offset: offset */
+        });
+
+        if (anuncio.count < 1) {
+            res.json({
+                success: false,
+                message: "caderno não localizado"
+            });
+
+            return;
+        };
+
+        const count = anuncio.rows.reduce((acc, item) => {
+            // Incrementa o contador do codAtividade no acumulador
+            acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+            return acc;
+        }, {});
+
+        const atividades = await Atividade.findAll(/* {order: [
+            ['atividade', 'ASC']
+        ],
+            limit: porPagina,
+            offset: offset
+        } */);
+
+        //console.log("--------------====> ", atividades[0].dataValues)
+
+        const arrayClassificado = [];
+
+        for (let x in count) {
+            const anun = anuncio.rows.find(item => item.codAtividade == x);
+            const atividade = atividades.find(item => item.id == x);
+
+            arrayClassificado.push({
+                id: atividade.dataValues.id,
+                atividade: atividade.dataValues.atividade,
+                qtdAtividade: count[x],
+                codigoAnuncio: anun.codAnuncio,
+                nomeAnuncio: anun.descAnuncio,
+                estado: anun.codUf,
+                caderno: anun.codCaderno
+            });
+
+            //console.log(anun.dataValues)
+            //console.log()
+        }
+
+        console.log("debug------------------>", [
+            { codUf: codCaderno[0].dataValues.codUf },
+            { codCaderno: codCaderno[0].dataValues.codCaderno }
+        ]);
+
+        const anuncioTeste = await Anuncio.findAndCountAll({
+            /*             order: [
+                            [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                            ['createdAt', 'DESC'],
+                            ['codDuplicado', 'ASC'],
+                        ], */
+            where: {
+                [Op.and]: [
+                    { codUf: codCaderno[0].dataValues.codUf },
+                    { codCaderno: codCaderno[0].dataValues.codCaderno }
+                ]
+            }/* ,
+            limit: porPagina,
+            offset: offset */
+        });
+
+        res.json({
+            success: true,
+            data: arrayClassificado,
+            teste: anuncioTeste,
+            mosaico: codCaderno[0].dataValues.descImagem
+        });
+
+    },
     listarClassificadoGeral: async (req, res) => {
 
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
@@ -1255,17 +1362,16 @@ module.exports = {
         // Consulta para recuperar apenas os itens da página atual
         const codCaderno = await Caderno.findAll({
             where: {
-                //codUf: req.params.uf,
+                codUf: req.params.uf,
                 [Op.or]: [
                     { nomeCaderno: req.params.caderno },
                     { codCaderno: req.params.caderno },
-                    { codUf: req.params.uf }
+                    //{ codUf: req.params.uf }
                 ]
             }
         });
 
-        console.log(codCaderno)
-
+        console.log(codCaderno);
 
         const anuncio = await Anuncio.findAndCountAll({
             where: {

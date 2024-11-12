@@ -3,7 +3,10 @@ import html2canvas from "html2canvas";
 import '../assets/css/PdfGenerator.css';
 
 export function limparCPFouCNPJ(cpfOuCnpj) {
-    return cpfOuCnpj.replace(/[.\-\/]/g, '');
+    if(cpfOuCnpj) {
+        return cpfOuCnpj.replace(/[.\-\/]/g, '');
+    }
+   
 }
 
 export const generatePdf = () => {

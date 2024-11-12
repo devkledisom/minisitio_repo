@@ -5,5 +5,5 @@ export const masterPath = {
 };
 
 export const version = {
-    version: "v2.0.14"
+    version: "v2.0.15"
 }

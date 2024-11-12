@@ -100,9 +100,9 @@ function Cardlist(props) {
               <div className="row">
                 <div className="col-md-12 d-flex justify-content-end btn-view-page">
                   <button>
-                    <i className="fa fa-star"></i>
+                    <i className="fa fa-star"></i>{/*cadUf[1]*/}
                     <Link
-                      to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&caderno=${cadUf[1]}&estado=${cadUf[0]}
+                      to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&caderno=${props.anuncio.codCaderno}&estado=${cadUf[0]}
 `}
                     >
                       VER MINISITIO

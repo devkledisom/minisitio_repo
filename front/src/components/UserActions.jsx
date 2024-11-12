@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 //GLOBAL FUNCTIONS
 import { limparCPFouCNPJ, generatePdf } from "../globalFunctions/functions";
@@ -6,6 +6,11 @@ import PdfGenerator from "../plugins/PdfGenerator";
 import { masterPath } from '../config/config';
 
 function UserActions(props) {
+    const [docState, setDocState] = useState(props.doc);
+
+    useEffect(() => {
+        setDocState(props.doc)
+    })
 
     // Cria uma referência para o componente filho
     const pdfGeneratorRef = useRef();
@@ -28,13 +33,15 @@ function UserActions(props) {
             })
     };
 
+
     return (
         <div class="user-actions row linksUteis margin-top-20 hidden-print my-5">
             <div class="col-md-12">
-                <a href={`/ver-anuncios/${limparCPFouCNPJ(props.doc)}`} class="btn btn-default margin-bottom-10">
+                {console.log(props.doc)}
+                 <a href={`/ver-anuncios/${limparCPFouCNPJ(docState)}`} class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Atualizar
-                </a>
+                </a> 
                 <a href="/area-assinante" class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Renovar

@@ -23,7 +23,7 @@ function MiniWebCardSimples(props) {
     async function buscarAnuncio() {
         const request = await fetch(`${masterPath.url}/anuncio/${props.id}`).then((x) => x.json());
         setResult(request[0]);
-        navigate(`/local/${props.empresa}?id=${props.id}`);
+        navigate(`/local/${props.data.descAnuncio}?id=${props.id}`);
         //navigate("/local");
     }
 
@@ -45,22 +45,16 @@ function MiniWebCardSimples(props) {
                 <div className='row p-0 cartao'>
                     <div class="apoio">
                         <div style={{ float: "right" }}>
-                            <a href="/comprar-anuncio?type=2">
+                            <a href="/login">
                                 <button type="button" class="btn2 bgbt" data-toggle="modal" data-target="#05562970000102">
                                     INCLUIR <br />IMAGEM CARTÃO
                                 </button>
                             </a>
                         </div>
                     </div>
-                    <div className="row p-0">
-
-
-
-
-
+                    <div className="row">
                         <div id="05562970000102" class="modal fade" role="dialog">
                             <div class="modal-dialog">
-
                                 Modal content
                                 <div class="modal-content">
                                     <div class="modal-header">

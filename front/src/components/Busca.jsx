@@ -116,10 +116,12 @@ function Busca(props) {
             setResult(request);
             //console.log(request);
             setLoading(false);
-
-            if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
+console.log(props.paginaAtual)
                 navigate("/buscar");
-            }
+           
+           /*  if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
+                navigate("/buscar");
+            } */
 
             //console.log(result)
 
