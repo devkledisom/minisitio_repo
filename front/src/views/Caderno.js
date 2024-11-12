@@ -91,6 +91,7 @@ function Caderno() {
       fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
         .then(x => x.json())
         .then(async res => {
+          console.log(res)
           if (res.success) {
 
             const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);

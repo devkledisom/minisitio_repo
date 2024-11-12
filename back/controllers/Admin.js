@@ -1360,101 +1360,211 @@ module.exports = {
         //console.log("offsewt: ", offset)
 
         // Consulta para recuperar apenas os itens da página atual
-        const codCaderno = await Caderno.findAll({
+        /* var codCaderno = await Caderno.findAll({
             where: {
-                codUf: req.params.uf,
+                //codUf: req.params.uf,
                 [Op.or]: [
                     { nomeCaderno: req.params.caderno },
                     { codCaderno: req.params.caderno },
                     //{ codUf: req.params.uf }
                 ]
             }
-        });
+        }); */
 
-        console.log(codCaderno);
+        let codCaderno;
 
-        const anuncio = await Anuncio.findAndCountAll({
-            where: {
-                [Op.and]: [
-                    { codUf: codCaderno[0].dataValues.codUf },
-                    { codCaderno: codCaderno[0].dataValues.codCaderno }
-                ]
-            }/* ,
-            limit: porPagina,
-            offset: offset */
-        });
-
-        if (anuncio.count < 1) {
-            res.json({
-                success: false,
-                message: "caderno não localizado"
-            });
-
-            return;
-        };
-
-        const count = anuncio.rows.reduce((acc, item) => {
-            // Incrementa o contador do codAtividade no acumulador
-            acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
-            return acc;
-        }, {});
-
-        const atividades = await Atividade.findAll(/* {order: [
-            ['atividade', 'ASC']
-        ],
-            limit: porPagina,
-            offset: offset
-        } */);
-
-        //console.log("--------------====> ", atividades[0].dataValues)
-
-        const arrayClassificado = [];
-
-        for (let x in count) {
-            const anun = anuncio.rows.find(item => item.codAtividade == x);
-            const atividade = atividades.find(item => item.id == x);
-
-            arrayClassificado.push({
-                id: atividade.dataValues.id,
-                atividade: atividade.dataValues.atividade,
-                qtdAtividade: count[x],
-                codigoAnuncio: anun.codAnuncio,
-                nomeAnuncio: anun.descAnuncio,
-                estado: anun.codUf,
-                caderno: anun.codCaderno
-            });
-
-            //console.log(anun.dataValues)
-            //console.log()
+if (req.params.caderno == "null" || req.params.caderno == "TODO") {
+    let codCaderno = await Caderno.findAll({
+        where: {
+            //codUf: req.params.uf,
+            [Op.or]: [
+                { nomeCaderno: req.params.caderno },
+                { codCaderno: req.params.caderno },
+                { codUf: req.params.uf }
+            ]
         }
+    });
 
-        console.log("debug------------------>", [
-            { codUf: codCaderno[0].dataValues.codUf },
-            { codCaderno: codCaderno[0].dataValues.codCaderno }
-        ]);
+    console.log(codCaderno, req.params.uf);
 
-        const anuncioTeste = await Anuncio.findAndCountAll({
-            /*             order: [
-                            [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
-                            ['createdAt', 'DESC'],
-                            ['codDuplicado', 'ASC'],
-                        ], */
-            where: {
-                [Op.and]: [
-                    { codUf: codCaderno[0].dataValues.codUf },
-                    { codCaderno: codCaderno[0].dataValues.codCaderno }
-                ]
-            }/* ,
-            limit: porPagina,
-            offset: offset */
-        });
+    const anuncio = await Anuncio.findAndCountAll({
+        where: {
+            [Op.and]: [
+                { codUf: codCaderno[0].dataValues.codUf },
+                { codCaderno: codCaderno[0].dataValues.codCaderno }
+            ]
+        }/* ,
+        limit: porPagina,
+        offset: offset */
+    });
 
+    console.log("estreesse: ", anuncio.count)
+
+    if (anuncio.count < 1) {
         res.json({
-            success: true,
-            data: arrayClassificado,
-            teste: anuncioTeste,
-            mosaico: codCaderno[0].dataValues.descImagem
+            success: false,
+            message: "caderno não localizado"
         });
+
+        return;
+    };
+
+    const count = anuncio.rows.reduce((acc, item) => {
+        // Incrementa o contador do codAtividade no acumulador
+        acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+        return acc;
+    }, {});
+
+    const atividades = await Atividade.findAll(/* {order: [
+        ['atividade', 'ASC']
+    ],
+        limit: porPagina,
+        offset: offset
+    } */);
+
+    //console.log("--------------====> ", atividades[0].dataValues)
+
+    const arrayClassificado = [];
+
+    for (let x in count) {
+        const anun = anuncio.rows.find(item => item.codAtividade == x);
+        const atividade = atividades.find(item => item.id == x);
+
+        arrayClassificado.push({
+            id: atividade.dataValues.id,
+            atividade: atividade.dataValues.atividade,
+            qtdAtividade: count[x],
+            codigoAnuncio: anun.codAnuncio,
+            nomeAnuncio: anun.descAnuncio,
+            estado: anun.codUf,
+            caderno: anun.codCaderno
+        });
+
+        //console.log(anun.dataValues)
+        //console.log()
+    }
+
+    console.log("debug------------------>", [
+        { codUf: codCaderno[0].dataValues.codUf },
+        { codCaderno: codCaderno[0].dataValues.codCaderno }
+    ]);
+
+    const anuncioTeste = await Anuncio.findAndCountAll({
+        /*             order: [
+                        [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                        ['createdAt', 'DESC'],
+                        ['codDuplicado', 'ASC'],
+                    ], */
+        where: {
+            [Op.and]: [
+                { codUf: codCaderno[0].dataValues.codUf },
+                { codCaderno: codCaderno[0].dataValues.codCaderno }
+            ]
+        }/* ,
+        limit: porPagina,
+        offset: offset */
+    });
+
+    res.json({
+        success: true,
+        data: arrayClassificado,
+        teste: anuncioTeste,
+        mosaico: codCaderno[0].dataValues.descImagem
+    });
+
+} else {
+    let codCaderno = await Caderno.findAll({
+        where: {
+            //codUf: req.params.uf,
+            [Op.or]: [
+                { nomeCaderno: req.params.caderno },
+                { codCaderno: req.params.caderno },
+                //{ codUf: req.params.uf }
+            ]
+        }
+    });
+
+    console.log(codCaderno, req.params.uf);
+    console.log("estreesse: ", req.params.caderno)
+
+    const anuncio = await Anuncio.findAndCountAll({
+        where: {
+            [Op.and]: [
+                { codUf: codCaderno[0].dataValues.codUf },
+                { codCaderno: codCaderno[0].dataValues.codCaderno }
+            ]
+        }/* ,
+        limit: porPagina,
+        offset: offset */
+    });
+
+    console.log("estreesse: ", anuncio.count)
+    console.log("estreesse: ", req.params.uf)
+
+     if (anuncio.count < 1) {
+        res.json({
+            success: false,
+            message: "caderno não localizado"
+        });
+
+        return;
+    };
+
+    const count = anuncio.rows.reduce((acc, item) => {
+        // Incrementa o contador do codAtividade no acumulador
+        acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+        return acc;
+    }, {});
+
+    const atividades = await Atividade.findAll();
+
+    //console.log("--------------====> ", atividades[0].dataValues)
+
+    const arrayClassificado = [];
+
+    for (let x in count) {
+        const anun = anuncio.rows.find(item => item.codAtividade == x);
+        const atividade = atividades.find(item => item.id == x);
+
+        arrayClassificado.push({
+            id: atividade.dataValues.id,
+            atividade: atividade.dataValues.atividade,
+            qtdAtividade: count[x],
+            codigoAnuncio: anun.codAnuncio,
+            nomeAnuncio: anun.descAnuncio,
+            estado: anun.codUf,
+            caderno: anun.codCaderno
+        });
+
+        //console.log(anun.dataValues)
+        //console.log()
+    }
+
+    console.log("debug------------------>", [
+        { codUf: codCaderno[0].dataValues.codUf },
+        { codCaderno: codCaderno[0].dataValues.codCaderno }
+    ]);
+
+    const anuncioTeste = await Anuncio.findAndCountAll({
+        where: {
+            [Op.and]: [
+                { codUf: codCaderno[0].dataValues.codUf },
+                { codCaderno: codCaderno[0].dataValues.codCaderno }
+            ]
+        }
+    });
+
+    res.json({
+        success: true,
+        data: arrayClassificado,
+        teste: anuncioTeste,
+        mosaico: codCaderno[0].dataValues.descImagem
+    }); 
+}
+
+ 
+
+      
 
     },
     listarClassificadoGeralold: async (req, res) => {

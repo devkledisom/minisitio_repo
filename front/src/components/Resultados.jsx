@@ -22,6 +22,7 @@ function Resultados() {
         //console.log(result)
         let cadernoUf = sessionStorage.getItem("uf: ");
         let cadernoCidade = sessionStorage.getItem("caderno: ");
+        console.log(result.length)
         if(result.length == 1) {
             navigate(`/caderno/${result[0].descAnuncio}?page=1&book=${result[0].codCaderno}&id=${result[0].codAnuncio}&caderno=${cadernoCidade}&estado=${cadernoUf}
 `);
