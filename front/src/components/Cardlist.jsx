@@ -32,40 +32,48 @@ function Cardlist(props) {
         setUfs(res);
         //console.log(res)
       });
-      let cadernoUf = sessionStorage.getItem("uf: ");
-      let cadernoCidade = sessionStorage.getItem("caderno: ");
-      setCadUf([cadernoUf, cadernoCidade]);
+    let cadernoUf = sessionStorage.getItem("uf: ");
+    let cadernoCidade = sessionStorage.getItem("caderno: ");
+    setCadUf([cadernoUf, cadernoCidade]);
   }, []);
+
+  function urlTransform(url) {
+    //const url = "http://localhost:3032/api/files/sefer7_logo_full (1).jpg";
+    const encodedUrl = encodeURI(url); // Codifica a URL corretamente
+    console.log(encodedUrl);
+    return encodedUrl;
+  }
 
   return (
     <div className="Cardlist" key={props.key}>
-       {/* {console.log(props.descImagem)} */}
+      {/* {console.log(props.descImagem)} */}
       <div className="container card my-2">
         <div className="row card-list">
           <div className="col-md-2 p-0">
-           {props.codImg != "teste" || props.codImg != "0" &&
-            <img
-            src={`${masterPath.url}/files/${props.codImg}`}
-            alt="Foto"
-            className="h-100 w-100"
-            loading="lazy"
-          />
-          
-           } 
-           {props.codImg == "teste" &&
-                        <img
-                        src="../assets/img/logo.png"
-                        alt="Foto"
-                        className="h-100 w-100"
-                      />
-           }
-           {props.codImg == "0" &&
-                        <img
-                        src="../assets/img/placeholder.png"
-                        alt="Foto"
-                        className="h-100 w-100"
-                      />
-           }
+            
+            {props.codImg !== "teste" && props.codImg !== "0" &&
+              <img
+                src={urlTransform(`${masterPath.url}/files/${props.codImg}`)}
+                alt="Foto"
+                className="h-100 w-100"
+                loading="lazy"
+              />
+
+            }
+            {props.codImg == "teste" &&
+              <img
+                src="../assets/img/logo.png"
+                alt="Foto"
+                className="h-100 w-100"
+              />
+            }
+            {props.codImg == "0" &&
+              <img
+                src="../assets/img/placeholder.png"
+                alt="Foto"
+                className="h-100 w-100"
+              />
+            }
 
           </div>
           <div className="col-md-10 py-1">
@@ -86,12 +94,12 @@ function Cardlist(props) {
                     <i className="fa fa-map-marker"></i>
                     <span>{props.anuncio.descEndereco}</span> /{" "}
                     {caderno.map((item) => {
-                        if(item.codCaderno == props.codCity) {
-                            //console.log(uf)
-                            const estado = uf.find(estado => estado.id_uf == 27)
-                            return <span>{item.nomeCaderno} - {estado.sigla_uf} </span>
-                        }
-                     
+                      if (item.codCaderno == props.codCity) {
+                        //console.log(uf)
+                        const estado = uf.find(estado => estado.id_uf == 27)
+                        return <span>{item.nomeCaderno} - {estado.sigla_uf} </span>
+                      }
+
                     })}
                   </h4>
                 </div>

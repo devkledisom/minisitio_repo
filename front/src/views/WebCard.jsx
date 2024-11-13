@@ -55,7 +55,7 @@ function WebCard() {
             .then((x) => x.json())
             .then((res) => {
                 setCadernos(res)
-                console.log(res)
+                /* console.log(res) */
                 
             })
 
@@ -91,7 +91,6 @@ function WebCard() {
                {/*  <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1> */}
                 <Navegacao />
                 <FullWebCard setCodCaderno={setCodCaderno} setCodUf={setCodUf} setNmAnuncio={setNmAnuncio} />
-                {console.log(codUf, codCaderno, nmAnuncio)}
             </main>
 
             <footer>
