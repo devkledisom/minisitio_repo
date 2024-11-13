@@ -96,7 +96,7 @@ function Cardlist(props) {
                     {caderno.map((item) => {
                       if (item.codCaderno == props.codCity) {
                         //console.log(uf)
-                        const estado = uf.find(estado => estado.id_uf == 27)
+                        const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)
                         return <span>{item.nomeCaderno} - {estado.sigla_uf} </span>
                       }
 
