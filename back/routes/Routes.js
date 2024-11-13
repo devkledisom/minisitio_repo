@@ -13,6 +13,7 @@ const UserActions = require('../controllers/UserActions');
 
 //FUNCTIONS
 const saveImport = require('../functions/serverImport');
+const { faleComDono } = require('../functions/sendMailer');
 
 //middleware
 router.use(function timelog(req, res, next) {
@@ -114,6 +115,17 @@ router.get('/api/list-image', Upload.listFiles);
 
 //ACÕES DO USUARIO
 router.get('/api/cartao-digital', UserActions.cartaoDigital);
+
+//EMAIL FALE COM O DONO
+router.post('/api/fale-com-dono', async(req, res) => {
+    console.log(req.body)
+    const emailReturn = await faleComDono();
+    if(emailReturn) {
+        res.json({success: true, message: "email enviado"});
+    } else {
+        res.json({success: false, message: "email não enviado"});
+    }
+});
 
 
 module.exports = router;

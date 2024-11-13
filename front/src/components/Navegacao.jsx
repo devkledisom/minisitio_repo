@@ -38,7 +38,8 @@ function Navegacao() {
     const navigate = useNavigate();
 
     const goBack = () => {
-        navigate(-1);
+        window.history.back();
+        //navigate(-1);
     }
 
     return (

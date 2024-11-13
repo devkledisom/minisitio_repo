@@ -1,4 +1,5 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
 
 import '../assets/css/main.css';
 import '../assets/css/default.css';
@@ -14,25 +15,31 @@ import { BsShareFill, BsFillSendFill, BsFacebook, BsInstagram, BsTwitter, BsYout
 
 
 function ContactForm() {
+    const { register, handleSubmit } = useForm();
+
+    const onSubmit = (data) => {
+        console.log(data)
+    }
+
     return (
         <div className="ContactForm bg-cinza">
-            <form action="/action_page.php">
+            <form onSubmit={handleSubmit(onSubmit)} >
                 <div className="d-flex p-3">
                     <img id="contact-logo" src="../assets/img/teste/falecomodono.png" alt="" />
                     <span className='w-100 p-2'>
 
                         <div className="contact-radios">
                             <h6 className='text-start px-4'><strong>Assunto</strong></h6>
-                            <input type="radio" id="visita" name="opcao" value="visita" />
+                            <input type="radio" {...register('option')} id="visita" value="visita" />
                             <label htmlFor="visita">Visita</label>
 
-                            <input type="radio" id="orcamento" name="opcao" value="orcamento" />
+                            <input type="radio" {...register('option')} id="orcamento" value="orcamento" />
                             <label htmlFor="orcamento">Orçamento</label>
 
-                            <input type="radio" id="reserva" name="opcao" value="reserva" />
+                            <input type="radio" {...register('option')} id="reserva" value="reserva" />
                             <label htmlFor="reserva">Reserva</label>
 
-                            <input type="radio" id="contato" name="opcao" value="contato" />
+                            <input type="radio" {...register('option')} id="contato" value="contato" />
                             <label htmlFor="contato">Contato</label>
                         </div>
 

@@ -116,7 +116,6 @@ function Busca(props) {
             setResult(request);
             //console.log(request);
             setLoading(false);
-console.log(props.paginaAtual)
                 navigate("/buscar");
            
            /*  if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {

@@ -37,7 +37,6 @@ function UserActions(props) {
     return (
         <div class="user-actions row linksUteis margin-top-20 hidden-print my-5">
             <div class="col-md-12">
-                {console.log(props.doc)}
                  <a href={`/ver-anuncios/${limparCPFouCNPJ(docState)}`} class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Atualizar
