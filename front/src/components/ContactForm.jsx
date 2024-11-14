@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { masterPath } from '../config/config';
@@ -15,8 +15,12 @@ import Tooltip from './Tooltip';
 
 import { BsShareFill, BsFillSendFill, BsFacebook, BsInstagram, BsTwitter, BsYoutube, BsWhatsapp, BsSkype, BsHeadset } from "react-icons/bs";
 
+//COMPONENTS
+import AlertMsg from "./Alerts/AlertMsg";
+
 
 function ContactForm() {
+    const [alert, setAlert] = useState(false);
     const location = useLocation();
 
     const pegarParam = new URLSearchParams(location.search);
@@ -66,7 +70,12 @@ function ContactForm() {
         })
         .then(response => response.json())
         .then(res => {
-            console.log(res);
+            if(res.success) {
+                setAlert(true);
+                window.scrollTo(0, 0);
+                setTimeout(() => {setAlert(false)}, 3000)
+            }
+
         })
         .catch(error => console.error("Erro:", error));
     }
@@ -75,6 +84,7 @@ function ContactForm() {
 
     return (
         <div className="ContactForm bg-cinza">
+            {alert && <AlertMsg message={"Email Enviado"}/>}
             <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data' >
                 <div className="d-flex p-3">
                     <img id="contact-logo" src="../assets/img/teste/falecomodono.png" alt="" />

@@ -137,7 +137,6 @@ const upload = multer({ storage });
 
 router.post('/api/fale-com-dono', upload.single('anexo'), async(req, res) => {
     console.log(req.body);
-    console.log(req.file.filename);
 
     if(req.body.email == '') {
         res.json({success: false, message: "email não enviado"});
@@ -150,7 +149,9 @@ router.post('/api/fale-com-dono', upload.single('anexo'), async(req, res) => {
         }
     });
 
-   const emailReturn = await faleComDono(req.body, anuncio.descEmailAutorizante, req.file.filename);
+    const filename = req.file ? req.file.filename : false
+
+   const emailReturn = await faleComDono(req.body, anuncio.descEmailAutorizante, filename);
    faleComDonoCliente(req.body);
     if(emailReturn) {
         res.json({success: true, message: "email enviado"});

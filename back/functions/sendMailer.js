@@ -47,43 +47,77 @@ async function sendMailError(data, msg, msgErro, nu_painel, status) {
 
 async function faleComDono(data, emailAutorizante, filename) {
 
-    //variaveis do corpo de envio do email com variação de idiomas para o novo aluno
+    //variaveis do corpo de envio do email com variação de idiomas para o novo aluno      
 
-    const mailSentPT = await transporter.sendMail({
-        //from: `${data.nome} <${data.email}>`,
-        from: `kledisom <dev@ziiz.com.br>`,
-        to: ['dev@ziiz.com.br', emailAutorizante],
-        subject: `${data.option}`,
-        text: `${data.option}`,
-        html: `
-        <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedido Recebido!</title>
-</head>
-<body>
-    <p>De: <strong>${data.nome}</strong> &lt;${data.email}&gt;</p>
-    <p>Assunto: <strong>${data.option}</strong></p>
+    if(filename) {
+        const mailSentPT = await transporter.sendMail({
+            //from: `${data.nome} <${data.email}>`,
+            from: `kledisom <dev@ziiz.com.br>`,
+            to: ['dev@ziiz.com.br', emailAutorizante],
+            subject: `${data.option}`,
+            text: `${data.option}`,
+            html: `
+            <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pedido Recebido!</title>
+    </head>
+    <body>
+        <p>De: <strong>${data.nome}</strong> &lt;${data.email}&gt;</p>
+        <p>Assunto: <strong>${data.option}</strong></p>
+        
+        <p>Obrigado por entrar em contato!</p>
     
-    <p>Obrigado por entrar em contato!</p>
+            <p>${data.mensagem}</p>
+    
+        <p>Nossa equipe de suporte está pronta para ajudar caso você precise de alguma assistência. Entre em contato conosco pelo e-mail: <a href="mailto:${data.email}">${data.email}</a>.</p>
+    
+        <hr>
+        <p>--</p>
+    </body>
+            `,
+                  attachments: [
+                      {
+                            filename: filename,
+                          path: path.join(__dirname, `../public/upload/anexoEmail/${filename}`)
+                      }
+                  ]
+        });
+        return true;
+    } else {
+        const mailSentPT = await transporter.sendMail({
+            //from: `${data.nome} <${data.email}>`,
+            from: `kledisom <dev@ziiz.com.br>`,
+            to: ['dev@ziiz.com.br', emailAutorizante],
+            subject: `${data.option}`,
+            text: `${data.option}`,
+            html: `
+            <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pedido Recebido!</title>
+    </head>
+    <body>
+        <p>De: <strong>${data.nome}</strong> &lt;${data.email}&gt;</p>
+        <p>Assunto: <strong>${data.option}</strong></p>
+        
+        <p>Obrigado por entrar em contato!</p>
+    
+            <p>${data.mensagem}</p>
+    
+        <p>Nossa equipe de suporte está pronta para ajudar caso você precise de alguma assistência. Entre em contato conosco pelo e-mail: <a href="mailto:${data.email}">${data.email}</a>.</p>
+    
+        <hr>
+        <p>--</p>
+    </body>
+            `
+        });
+        return true;
+    }
 
-        <p>${data.mensagem}</p>
 
-    <p>Nossa equipe de suporte está pronta para ajudar caso você precise de alguma assistência. Entre em contato conosco pelo e-mail: <a href="mailto:${data.email}">${data.email}</a>.</p>
-
-    <hr>
-    <p>--</p>
-</body>
-        `,
-              attachments: [
-                  {
-                        filename: filename,
-                      path: path.join(__dirname, `../public/upload/anexoEmail/${filename}`)
-                  }
-              ]
-    });
-    return true;
     //---------------------------------------------------------------------------------->
 
 };
