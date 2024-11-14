@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const path = require('path');
 
 const SMTP_CONFIG = require('../config/smtp');
 
@@ -44,17 +45,17 @@ async function sendMailError(data, msg, msgErro, nu_painel, status) {
 
 };
 
-async function faleComDono(data, emaildestino) {
+async function faleComDono(data, emailAutorizante, filename) {
 
     //variaveis do corpo de envio do email com variação de idiomas para o novo aluno
 
     const mailSentPT = await transporter.sendMail({
         //from: `${data.nome} <${data.email}>`,
         from: `kledisom <dev@ziiz.com.br>`,
-        to: ['dev@ziiz.com.br', emaildestino],
-        subject: `INFORMA!`,
-        text: `INFORMA!`,
-        html: "<h1>bem vindo</h1>"/* `
+        to: ['dev@ziiz.com.br', emailAutorizante],
+        subject: `${data.option}`,
+        text: `${data.option}`,
+        html: `
         <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -63,42 +64,58 @@ async function faleComDono(data, emaildestino) {
 </head>
 <body>
     <p>De: <strong>${data.nome}</strong> &lt;${data.email}&gt;</p>
-    <p>Assunto: <strong>Pedido Recebido!</strong></p>
+    <p>Assunto: <strong>${data.option}</strong></p>
     
-    <p>Obrigado por fazer o pedido!</p>
+    <p>Obrigado por entrar em contato!</p>
 
-    <p>Recebemos seu pedido com sucesso e assim que o pagamento for confirmado, você estará pronto para aproveitar todos os benefícios do melhor plano de saúde online, ${data.nome}!</p>
-
-    <h3>Aqui estão os detalhes para acessar sua conta:</h3>
-
-    <p><strong>Website:</strong> <a href="${data.site_venda}teleconsulta">${data.site_venda}teleconsulta</a></p>
-
-    <p>Também estamos disponíveis nas lojas de aplicativos:</p>
-
-    <ul>
-        <li><strong>Google Play Store:</strong> <a href="${data.linkAndroid}">${data.linkAndroid}</a></li>
-        <li><strong>Apple App Store:</strong> <a href="${data.linkApple}">${data.linkApple}</a></li>
-    </ul>
-
-    <h3>Para acessar sua conta:</h3>
-    <ul>
-        <li>Pelo link web, o acesso é imediato.</li>
-        <li>Nos aplicativos, o cadastro pode levar até 24 horas para ser ativado.</li>
-    </ul>
-
-    <h3>Dados de acesso:</h3>
-    <p><strong>CPF:</strong> [Insira seu CPF]</p>
-    <p><strong>Senha:</strong> Os 4 primeiros dígitos do seu CPF</p>
+        <p>${data.mensagem}</p>
 
     <p>Nossa equipe de suporte está pronta para ajudar caso você precise de alguma assistência. Entre em contato conosco pelo e-mail: <a href="mailto:${data.email}">${data.email}</a>.</p>
 
-    <p>Seja bem-vindo(a) à ${data.nome} e aproveite os benefícios do nosso plano de saúde online!</p>
+    <hr>
+    <p>--</p>
+</body>
+        `,
+              attachments: [
+                  {
+                        filename: filename,
+                      path: path.join(__dirname, `../public/upload/anexoEmail/${filename}`)
+                  }
+              ]
+    });
+    return true;
+    //---------------------------------------------------------------------------------->
+
+};
+async function faleComDonoCliente(data) {
+
+    //variaveis do corpo de envio do email com variação de idiomas para o novo aluno
+
+    const mailSentPT = await transporter.sendMail({
+        //from: `${data.nome} <${data.email}>`,
+        from: `kledisom <dev@ziiz.com.br>`,
+        to: ['dev@ziiz.com.br', data.email, data.email_copia],
+        subject: `${data.option}`,
+        text: `${data.option}`,
+        html: `
+        <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido Recebido!</title>
+</head>
+<body>
+    
+    <p>Obrigado por entrar em contato!</p>
+
+    <p>Recebemos seu pedido com sucesso, entraremos em contato em breve!</p>
+
+    <p>Nossa equipe de suporte está pronta para ajudar caso você precise de alguma assistência. Entre em contato conosco pelo e-mail: <a href="mailto:${data.email}">${data.email}</a>.</p>
 
     <hr>
     <p>--</p>
-    <p>Este e-mail foi enviado de um formulário de contato em <strong>${data.nome}</strong> (<a href="${data.site_venda}">${data.site_venda}</a>)</p>
 </body>
-        ` */
+        `
         /*       attachments: [
                   {
                       path: path
@@ -112,7 +129,8 @@ async function faleComDono(data, emaildestino) {
 
 module.exports = {
     sendMailError,
-    faleComDono
+    faleComDono,
+    faleComDonoCliente
 };
 
 

@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 
 
 //Controllers
@@ -13,7 +15,10 @@ const UserActions = require('../controllers/UserActions');
 
 //FUNCTIONS
 const saveImport = require('../functions/serverImport');
-const { faleComDono } = require('../functions/sendMailer');
+const { faleComDono, faleComDonoCliente } = require('../functions/sendMailer');
+
+//MODELS
+const Anuncio = require('../models/table_anuncio');
 
 //middleware
 router.use(function timelog(req, res, next) {
@@ -117,9 +122,36 @@ router.get('/api/list-image', Upload.listFiles);
 router.get('/api/cartao-digital', UserActions.cartaoDigital);
 
 //EMAIL FALE COM O DONO
-router.post('/api/fale-com-dono', async(req, res) => {
-    console.log(req.body)
-    const emailReturn = await faleComDono();
+
+// Configuração do multer para armazenar o arquivo em uma pasta local
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../public/upload/anexoEmail/')); // Pasta onde os arquivos serão salvos
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Nome único para cada arquivo
+    }
+});
+
+const upload = multer({ storage });
+
+router.post('/api/fale-com-dono', upload.single('anexo'), async(req, res) => {
+    console.log(req.body);
+    console.log(req.file.filename);
+
+    if(req.body.email == '') {
+        res.json({success: false, message: "email não enviado"});
+        return;
+    }
+
+    const anuncio = await Anuncio.findAll({
+        where: {
+            codAnuncio: req.body.id
+        }
+    });
+
+   const emailReturn = await faleComDono(req.body, anuncio.descEmailAutorizante, req.file.filename);
+   faleComDonoCliente(req.body);
     if(emailReturn) {
         res.json({success: true, message: "email enviado"});
     } else {
