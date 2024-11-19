@@ -1,0 +1,23 @@
+.institucional p {
+    font-size: 14px;
+}
+
+.institucional .area-parceiros>div>div>h2 {
+    padding-left: 15px;
+}
+
+.institucional .area-parceiros>div>.bg-cinza {
+    padding: 20px 10px;
+    border-radius: 10px;
+}
+
+.institucional>.parceiros>div {
+    border: 1px solid red;
+}
+
+.institucional .parceiros > div > a > img {
+    width: 100%;
+    display: block;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px #00000033;
+}

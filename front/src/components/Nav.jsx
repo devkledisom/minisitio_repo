@@ -13,7 +13,7 @@ function Nav(props) {
                         <a className="nav-link" href="/login">ÁREA DO ASSINANTE</a>
                     </li> */}
                     <li className="nav-item">
-                        <a className="nav-link" href="#">INSTITUCIONAL</a>
+                        <a className="nav-link" href="/institucional">INSTITUCIONAL</a>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" href="https://minisitio.online/">TRABALHE CONOSCO</a>

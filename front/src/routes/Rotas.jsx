@@ -54,8 +54,12 @@ import AssinanteCadastro from "../views/area-assinante/AssinanteCadastro";
 import Qrcode from "../plugins/Qrcode";
 import Adesivo from "../plugins/Adesivo";
 
+//INFOS PAGES
+import Institucional from "../views/infoPages/Institucional";
+
 
 import { TemaProvider } from '../context/BuscaContext';
+
 
 
 function Rotas() {
@@ -114,6 +118,8 @@ function Rotas() {
                     <Route path="qrcode" element={<Qrcode />} />
                     <Route path="adesivo" element={<Adesivo />} />
 
+                    {/* INFO PAGES */}
+                    <Route path="institucional" element={<Institucional />} />
 
 
                 </Routes>
