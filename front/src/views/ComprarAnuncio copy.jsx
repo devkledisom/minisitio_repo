@@ -607,7 +607,7 @@ function ComprarAnuncio() {
                 />{" "}
               </div>
               {radioCheck != 1 && <div class="input-icon margin-top-10">
-                <h4 className="text-start pt-2">Responsável (ID) (opcional):</h4>
+                <h4 className="text-start pt-2">Responsável pela Indicação (opcional)</h4>
                 <div class="input-icon margin-top-10" id="codigoPromocional">
                   <i class="fa fa-credit-card"></i>
 

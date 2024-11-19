@@ -88,7 +88,7 @@ function Rotas() {
                     <Route path="admin/atividades/cadastro" element={<PrivateRoute><FormCadastroAtividade /></PrivateRoute>} />
                     <Route path="admin/atividades/editar" element={<PrivateRoute><FormEditAtividade /></PrivateRoute>} />
 
-                    <Route path="/comprar-anuncio" element={<ComprarAnuncio />} />
+                    <Route path="/comprar-espaco-minisitio" element={<ComprarAnuncio />} />
                     <Route path="admin/desconto" element={<PrivateRoute><GerenciarIds /></PrivateRoute>} />
                     <Route path="admin/desconto/cadastro" element={<PrivateRoute><GerenciarIdCadastro /></PrivateRoute>} />
                     <Route path="admin/desconto/editar" element={<PrivateRoute><GerenciarIdEditar /></PrivateRoute>} />

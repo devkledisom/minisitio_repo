@@ -203,3 +203,11 @@ a:hover {
     font-size: 22px;
     padding: 5px;
 }
+
+.card-preview p {
+    padding-left: 20px;
+}
+
+#area-icons-actions i {
+    display: flex;
+}

@@ -760,14 +760,14 @@ function ComprarAnuncio() {
                                 />
                             </div>
                             {/* {radioCheck != 1 && */} <div class="input-icon margin-top-10">
-                                <h4 className="text-start pt-2">Responsável (ID) (opcional):</h4>
+                                <h4 className="text-start pt-2">Responsável pela Indicação (opcional)</h4>
                                 <div class="input-icon margin-top-10" id="codigoPromocional">
                                     <i class="fa fa-credit-card"></i>
 
                                     <input type="text" name="discountHash" id="discountHash" value="" class="form-control" placeholder="Digite seu código" />
                                     <input type="hidden" name="discountValue" value="" id="discountValue" />
                                 </div>
-                                <h5 className="text-start">Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)</h5>
+                                {/* <h5 className="text-start">Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)</h5> */}
                             </div>{/* } */}
                         </div>
                         {/* Autorizante */}

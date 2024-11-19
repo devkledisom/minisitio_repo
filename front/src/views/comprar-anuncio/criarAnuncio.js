@@ -177,6 +177,8 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                 // Remover um item do localStorage
                 localStorage.removeItem("imgname");
                 //console.log(res)
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
 
                 setAlert(true);
 
