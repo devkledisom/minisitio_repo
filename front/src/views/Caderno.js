@@ -477,7 +477,7 @@ function Caderno() {
       if (document.querySelector(`#item_${id}`)) {
         //console.log(document.querySelector(`#item_${id}`))
         document.querySelector(`#item_${id}`).children[0].style.border = "none";
-        document.querySelector(`#item_${id}`).classList = "pulsating-border";
+        document.querySelector(`#item_${id}`).classList.add("pulsating-border");
 
         document.querySelector(`#item_${id}`).scrollIntoView({
           behavior: 'smooth',

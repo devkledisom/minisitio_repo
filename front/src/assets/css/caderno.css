@@ -131,9 +131,14 @@
 /* CSS para as colunas */
 .secao-anuncios-caderno {
     display: flex;
-    align-items: flex-start;
+    /* align-items: flex-start; */
     gap: 10px;
+    justify-content: center;
 
+}
+
+.column {
+    width: 435px;
 }
 
 .column1 {

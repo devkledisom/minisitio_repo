@@ -21,7 +21,7 @@ li {
 
 .apoio {
     background-color: #c1c1c1;
-    height: 70px;
+    height: 50px;
 }
 
 .bgbt {
@@ -36,8 +36,27 @@ li {
     font-size: 13px;
 }
 
+.MiniWebCardSimples {
+    display: flex;
+    justify-content: center;
+}
+
 .MiniWebCardSimples .webcardsimples {
-    padding-left:35px 
+    /* padding-left:35px  */
+}
+
+.MiniWebCardSimples .cartao {
+    width: 435px;
+    display: flex;
+    justify-content: center;
+    min-height: 205px;
+    margin-bottom: 0px !important;
+}
+
+.MiniWebCardSimples .cartao>div {
+    overflow: hidden;
+    padding: 10px;
+    gap: 10px;
 }
 
 .cartao {
@@ -51,29 +70,29 @@ li {
     background-color: #c1c1c1;
 }
 
-#btn-detalhes {
+.MiniWebCardSimples #btn-detalhes {
     background-color: #FAA21E;
     border-radius: 5px;
     color: #000;
-    padding: 10px;
-    font-size: 20px;
+    padding: 5px;
+    font-size: 15px;
 }
 
 #btn-detalhes:hover {
     transform: scale(1.1);
 }
 
-#dropdown {
+/* #dropdown {
     display: flex;
     border-radius: 50%;
     height: 45px;
     width: 45px;
     align-items: center;
     justify-content: center;
-}
+} */
 
 #dropdown i {
-    font-size: 19px;
+    font-size: 15px;
     display: flex;
     align-items: center;
     justify-content: center;

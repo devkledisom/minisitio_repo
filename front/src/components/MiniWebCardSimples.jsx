@@ -21,9 +21,11 @@ function MiniWebCardSimples(props) {
     const [imgPath, setImg] = useState();
 
     async function buscarAnuncio() {
+        qntVisualizacoes();
         const request = await fetch(`${masterPath.url}/anuncio/${props.id}`).then((x) => x.json());
         setResult(request[0]);
         navigate(`/local/${props.data.descAnuncio}?id=${props.id}`);
+
         //navigate("/local");
     }
 
@@ -37,13 +39,21 @@ function MiniWebCardSimples(props) {
         console.log("simples", props.data)
     }, []);
 
+    function qntVisualizacoes() {
+        fetch(`${masterPath.url}/admin/anuncio/visualizacoes?id=${props.id}`)
+            .then((x) => x.json())
+            .then((res) => {
+                //console.log(res)
+            })
+    };
+
 
     return (
         <div className="MiniWebCardSimples" key={props.key} id={`item_${props.id}`}>
 
-            <div className='container my-2' >
+            {/* <div className='container my-2' > */}
                 <div className='row p-0 cartao'>
-                    <div class="apoio">
+                    <div className="apoio">
                         <div style={{ float: "right" }}>
                             <a href="/login">
                                 <button type="button" class="btn2 bgbt" data-toggle="modal" data-target="#05562970000102">
@@ -56,18 +66,18 @@ function MiniWebCardSimples(props) {
                         <div id="05562970000102" class="modal fade" role="dialog">
                             <div class="modal-dialog">
                                 Modal content
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">×</button>
-                                        <h3 class="modal-title">Incluir imagem do cartão</h3>
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <button type="button" className="close" data-dismiss="modal">×</button>
+                                        <h3 className="modal-title">Incluir imagem do cartão</h3>
                                     </div>
-                                    <div class="modal-body">
-                                        <p class="text-center danger"></p><h2>Você é o proprietário?</h2><p></p>
+                                    <div className="modal-body">
+                                        <p className="text-center danger"></p><h2>Você é o proprietário?</h2><p></p>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn proximo" data-dismiss="modal">Não</button>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn proximo" data-dismiss="modal">Não</button>
                                         <a href="/wslogin?descCPFCNPJ=05562970000102&amp;senha=7c4a8d09ca3762af61e59520943dc26494f8941b&amp;codAnuncio=327591">
-                                            <button type="submit" class="btn cinza">Sim</button>
+                                            <button type="submit" className="btn cinza">Sim</button>
                                         </a>
 
                                     </div>
@@ -77,13 +87,13 @@ function MiniWebCardSimples(props) {
                         </div>
 
 
-                        <div class="conteudo text-start webcardsimples">
+                        <div className="conteudo text-start webcardsimples">
                             <a href="/local/porto-velho/hotel avenida ii_327591">
 
 
                                 <h2>{props.data.descAnuncio}</h2>
-                                <p><i class="fa fa-map-marker"></i>{props.data.descEndereco}</p>
-                                <p><i class="fa fa-phone"></i>{props.data.descTelefone}</p>
+                                <p><i className="fa fa-map-marker"></i>{props.data.descEndereco}</p>
+                                <p><i className="fa fa-phone"></i>{props.data.descTelefone}</p>
                             </a>
 
                         </div>
@@ -96,7 +106,7 @@ function MiniWebCardSimples(props) {
                 </div>
 
 
-            </div>
+           {/*  </div> */}
 
 
             {/* 

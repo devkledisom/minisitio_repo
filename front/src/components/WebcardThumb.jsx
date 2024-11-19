@@ -30,7 +30,7 @@ function WebcardThumb(props) {
         };
 
         function buscarUserId() {
-            fetch(`${masterPath.url}/admin/desconto/buscar/${90}`)
+            fetch(`${masterPath.url}/admin/desconto/buscar/${props.data.codDesconto}`)
                 .then((x) => x.json())
                 .then((res) => {
                     if (res.success) {
@@ -49,7 +49,7 @@ function WebcardThumb(props) {
     useEffect(() => {
 
         function buscarUserId() {
-            fetch(`${masterPath.url}/admin/desconto/buscar/${90}`)
+            fetch(`${masterPath.url}/admin/desconto/buscar/${props.data.codDesconto}`)
                 .then((x) => x.json())
                 .then((res) => {
                     if (res.success) {
@@ -91,23 +91,50 @@ function WebcardThumb(props) {
         <div className="WebcardThumb">
 
             <div className='container my-2 p-0' >
-
                 <div className='cartao'>
-
-                <div className="apoio">
-                    <div>
-                        <a href={listaIds.descLink} target="_blank" rel="noopener noreferrer">
-                            <img src={`${masterPath.url}/files/${listaIds.descImagem}`} alt="" />
-                        </a>
-                        <a href={listaIds.descLink2} target="_blank" rel="noopener noreferrer">
-                            <img src={`${masterPath.url}/files/${listaIds.descImagem2}`} alt="" />
-                        </a>
-                        <a href={listaIds.descLink3} target="_blank" rel="noopener noreferrer">
-                            <img src={`${masterPath.url}/files/${listaIds.descImagem3}`} alt="" />
-                        </a>
+                {listaIds.descricao != "valor padrao" && listaIds.descImagem != "" &&
+                    <div className="apoio">
+                        <div>
+                            {listaIds.descImagem != "" &&
+                                <a href={listaIds.descLink} target="_blank" rel="noopener noreferrer">
+                                    <img src={`${masterPath.url}/files/${listaIds.descImagem}`} alt="" />
+                                </a>
+                            }
+                            {listaIds.descImagem2 != "" &&
+                                <a href={listaIds.descLink2} target="_blank" rel="noopener noreferrer">
+                                    <img src={`${masterPath.url}/files/${listaIds.descImagem2}`} alt="" />
+                                </a>
+                            }
+                            {listaIds.descImagem3 != "" &&
+                                <a href={listaIds.descLink3} target="_blank" rel="noopener noreferrer">
+                                    <img src={`${masterPath.url}/files/${listaIds.descImagem3}`} alt="" />
+                                </a>
+                            }
+                        </div>
                     </div>
-                </div>
+}
+                
 
+                    {/* {( listaIds.descImagem != "" && listaIds.length > 0 || listaIds.descImagem2 != "" && listaIds.length > 0 || listaIds.descImagem3 != "" && listaIds.length > 0) &&
+                    <div className="apoio kledisom">
+                        <div>
+                            <a href={listaIds.descLink} target="_blank" rel="noopener noreferrer">
+                                <img src={`${masterPath.url}/files/${listaIds.descImagem}`} alt="" />
+                            </a>
+                            {listaIds.descImagem2 != "" &&
+                                <a href={listaIds.descLink2} target="_blank" rel="noopener noreferrer">
+                                    <img src={`${masterPath.url}/files/${listaIds.descImagem2}`} alt="" />
+                                </a>
+                            }
+                            {listaIds.descImagem3 != "" &&
+                                <a href={listaIds.descLink3} target="_blank" rel="noopener noreferrer">
+                                    <img src={`${masterPath.url}/files/${listaIds.descImagem3}`} alt="" />
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                } */}
                     <div className='row p-2'>
                         {/*  <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={200} /> */}
                         {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}

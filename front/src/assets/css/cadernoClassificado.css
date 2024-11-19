@@ -205,7 +205,8 @@
 
 .cartao>div {
     overflow: hidden;
-    padding: 17px;
+    padding: 5px 5px;
+    gap: 10px;
 }
 
 .caderno .cartao>.links img {

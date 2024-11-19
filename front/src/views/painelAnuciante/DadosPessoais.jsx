@@ -35,6 +35,7 @@ const DadosPessoais = (props) => {
   };
 
   useEffect(() => {
+    loadingButton.current.style.display = "block";
     fetch(`${masterPath.url}/cadernos`)
       .then((x) => x.json())
       .then((res) => {
@@ -68,6 +69,7 @@ const DadosPessoais = (props) => {
     fetch(`${masterPath.url}/admin/usuario/buscar/${cpf}`)
       .then((x) => x.json())
       .then((res) => {
+        loadingButton.current.style.display = "none";
         setUser(res.usuarios[0]);
         setUf(res.usuarios[0].codUf);
       });
@@ -106,7 +108,7 @@ const DadosPessoais = (props) => {
   };
 
   function sendObj() {
-    console.log("clicou");
+    console.log("clicou", pegarElemento('#descNome'));
     const obj = {
       "TipoPessoa": pegarElemento('#descTipoPessoa-pf').checked ? "pf" : "pj",
       "CPFCNPJ": pegarElemento('#descCPFCNPJ').replace(/[.-]/g, ''),
@@ -176,9 +178,11 @@ const DadosPessoais = (props) => {
     });
   }
 
-  function atualizarUsuario() {
+  function atualizarUsuario(e) {
     loadingButton.current.style.display = "block";
     var validation = true;
+
+    console.log("clicou", user);
 
     const config = {
         method: "POST",
@@ -194,7 +198,10 @@ const DadosPessoais = (props) => {
                 loadingButton.current.style.display = "none";
                 if (res.success) {
                   setAlert(true);
-                  console.log(res)
+
+                    setTimeout(() => {
+                    props.selectPage(e, 1);
+                    }, 5000)
                     //alert("Dados Atualizados!");
 
                 } else {
@@ -417,7 +424,7 @@ const DadosPessoais = (props) => {
                         type="button"
                         className="btn cinza pull-right"
                         id="btn-save"
-                        onClick={atualizarUsuario}
+                        onClick={(e) => atualizarUsuario(e)}
                       >
                         <i className="fa fa-check"></i> confirmar
                       </button>

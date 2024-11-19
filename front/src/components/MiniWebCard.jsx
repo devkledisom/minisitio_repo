@@ -63,21 +63,27 @@ function MiniWebCard(props) {
             }
 
             <div className='container cartao my-2 p-0' key={props.key}>
-                <div className="apoio">
-                    {props.ids != null && 
-                            <div>
-                              <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
-                                 <img src={`${masterPath.url}/files/${props.ids.descImagem}`} alt="" />
-                             </a>
-                             <a href={props.ids.descLink2} target="_blank" rel="noopener noreferrer">
-                                 <img src={`${masterPath.url}/files/${props.ids.descImagem2}`} alt="" />
-                             </a>
-                             <a href={props.ids.descLink3} target="_blank" rel="noopener noreferrer">
-                                 <img src={`${masterPath.url}/files/${props.ids.descImagem3}`} alt="" />
-                             </a> 
-                         </div>
-                    }
-                   {/* <div>
+                {(props.ids.descImagem != "" || props.ids.descImagem2 != "" || props.ids.descImagem3 != "") &&
+                    <div className="apoio kledisom">
+                        <div>
+                            <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
+                                <img src={`${masterPath.url}/files/${props.ids.descImagem}`} alt="" />
+                            </a>
+                            {props.ids.descImagem2 != "" &&
+                                <a href={props.ids.descLink2} target="_blank" rel="noopener noreferrer">
+                                    <img src={`${masterPath.url}/files/${props.ids.descImagem2}`} alt="" />
+                                </a>
+                            }
+                            {props.ids.descImagem3 != "" &&
+                                <a href={props.ids.descLink3} target="_blank" rel="noopener noreferrer">
+                                    <img src={`${masterPath.url}/files/${props.ids.descImagem3}`} alt="" />
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                }
+                {/* <div>
                          <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
                             <img src={`${masterPath.url}/files/${props.ids.descImagem}`} alt="" />
                         </a>
@@ -88,14 +94,14 @@ function MiniWebCard(props) {
                             <img src={`${masterPath.url}/files/${props.ids.descImagem3}`} alt="" />
                         </a> 
                     </div>*/}
-                </div>
+
 
                 <div className='row display-flex justify-content-center' key={props.key} onClick={buscarAnuncio}>
 
-                    {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
+                    {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={435} height={205} />}
 
                     {imgDefault == false &&
-                        <div className="conteudo semImagem">
+                        <div className="conteudo semImagem" style={{width: "415px"}}>
                             <h2 className="nome-empresa text-start">{props.empresa}</h2>
                             <h4
                                 className="slogan webcard text-start"
@@ -122,7 +128,7 @@ function MiniWebCard(props) {
                     }
 
 
-                    <div className="row py-3">
+                    <div className="row">
                         <div id="area-icons-actions" className='col-md-6'>
                             <Tooltip text={"Mídias"}>
                                 <div className="dropdown">
@@ -142,18 +148,18 @@ function MiniWebCard(props) {
                             </Tooltip>
                             <Tooltip text={"Mapa"}>
                                 <i>
-                                    <img src="../assets/img/link_mapa.png" alt="" height={40} />
+                                    <img src="../assets/img/link_mapa.png" alt="" height={30} />
                                 </i>
                             </Tooltip>
 
                             <Tooltip text={"Site"}>
                                 <i>
-                                    <img src="../assets/img/link_site.png" alt="" height={40} />
+                                    <img src="../assets/img/link_site.png" alt="" height={30} />
                                 </i>
                             </Tooltip>
                             <Tooltip text={"Promoção"}>
                                 <i>
-                                    <img src="../assets/img/link_promocao.png" alt="" height={40} />
+                                    <img src="../assets/img/link_promocao.png" alt="" height={30} />
                                 </i>
                             </Tooltip>
 

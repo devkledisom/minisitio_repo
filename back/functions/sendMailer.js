@@ -53,7 +53,7 @@ async function faleComDono(data, emailAutorizante, filename) {
         const mailSentPT = await transporter.sendMail({
             //from: `${data.nome} <${data.email}>`,
             from: `kledisom <dev@ziiz.com.br>`,
-            to: ['dev@ziiz.com.br', emailAutorizante],
+            to: ['dev@ziiz.com.br', emailAutorizante, 'contatobr@mycardcity.net'],
             subject: `${data.option}`,
             text: `${data.option}`,
             html: `

@@ -788,7 +788,6 @@ module.exports = {
 
         const nu_hash = req.params.id;
 
-
         //Descontos
         const resultAnuncio = await Descontos.findAll({
             where: {
@@ -2231,7 +2230,7 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             certificado_link,
             cartao_digital } = req.body;
 
-        console.log(descImagem)
+        console.log("22h4323kl4h23423jk4h23: ", req.body)
 
         const dadosAnuncio = {
             //"codAnuncio": 88888,

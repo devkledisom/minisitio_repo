@@ -58,15 +58,15 @@ function Editar(props) {
 
   useEffect(() => {
     fetch(`${masterPath.url}/admin/anuncio/edit/${props.espacoId}`)
-    .then((x) => x.json())
-    .then((res) => {
+      .then((x) => x.json())
+      .then((res) => {
         setMinisitio(res[0]);
         setUf(res[0].codUf);
         setPersonType(res[0].descTipoPessoa);
         setRadioCheck(res[0].codTipoAnuncio);
-    }).catch((err) => {
+      }).catch((err) => {
         console.log(err)
-    })
+      })
 
     fetch(`${masterPath.url}/cadernos`)
       .then((x) => x.json())
@@ -137,22 +137,35 @@ function Editar(props) {
 
   function aplicarCupom(e) {
     let codId = e.target.value;
+    const formatoValido = /^\d{2}\.\d{4}\.\d{4}$/;
+    console.log(formatoValido.test(codId))
 
-    if (codId.length == 11) {
+    if (!formatoValido.test(codId)) {
+      console.log("invalido");
+      return;
+    }
+
+    if (codId.length == 12) {
       fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
         .then((x) => x.json())
         .then((res) => {
-          let valorDesconto = res.IdsValue[0].desconto;
-          let precoComDesconto = precoFixo - valorDesconto;
-          setPrecoFixo(precoComDesconto);
-          setDescontoAtivado(res.success);
-          console.log("desconto ", res)
+          if (res.success) {
+            console.log("desconto ", res)
+            let valorDesconto = res.IdsValue[0].desconto;
+            let precoComDesconto = precoFixo - valorDesconto;
+            setPrecoFixo(precoComDesconto);
+            setDescontoAtivado(res.success);
+          } else {
+            setDescontoAtivado(res.success);
+          }
+
+
         })
     }
 
 
 
-    //console.log(codId);
+    console.log(codId);
   };
 
   //const [tipoPessoa, setTipoPessoa] = useState(null);
@@ -210,73 +223,82 @@ function Editar(props) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setMinisitio({
-        ...minisitio,
-        [name]: value,
-        
+      ...minisitio,
+      [name]: value,
+
     });
     setUf(minisitio.codUf);
-};
+  };
 
-const handleSelectChange = (e) => {
-  changePreview(e);
-  handleChange(e);
-  executarSelecao();
-};
+  const handleSelectChange = (e) => {
+    changePreview(e);
+    handleChange(e);
+    executarSelecao();
+  };
 
-function editID(e) {
+  function editID(e) {
+    if (minisitio.codTipoAnuncio == 3 && descontoAtivado == false && e.target.value.length) {
+      console.log(descontoAtivado, minisitio.codTipoAnuncio);
+      alert("Código promocional inválido.");
+      return;
+    }
 
-  minisitio.descImagem = localStorage.getItem("imgname");
-  console.log(minisitio)
+    minisitio.descImagem = localStorage.getItem("imgname");
+    console.log(minisitio)
 
-  var validation = false;
-  //setShowSpinner(true);
+    var validation = false;
+    //setShowSpinner(true);
 
-  document.querySelectorAll('[name="pwd"]').forEach((item) => {
+    document.querySelectorAll('[name="pwd"]').forEach((item) => {
       if (item.value == "") {
-          item.style.border = "1px solid red";
-          validation = false;
-          return;
+        item.style.border = "1px solid red";
+        validation = false;
+        return;
       } else {
-          item.style.border = "1px solid gray";
-          validation = true;
+        item.style.border = "1px solid gray";
+        validation = true;
       };
-  });
+    });
 
-  document.querySelectorAll('select').forEach((item) => {
+    document.querySelectorAll('select').forEach((item) => {
       if (item.value == "") {
-          item.style.border = "1px solid red";
-          validation = false;
-          return;
+        item.style.border = "1px solid red";
+        validation = false;
+        return;
       } else {
-          item.style.border = "1px solid gray";
-          validation = true;
+        item.style.border = "1px solid gray";
+        validation = true;
       };
-  });
+    });
 
 
 
-  const config = {
+    const config = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(minisitio)
-  };
+    };
 
-  if (validation) {
+    if (validation) {
       fetch(`${masterPath.url}/admin/anuncio/update?id=${props.espacoId}`, config)
-          .then((x) => x.json())
-          .then((res) => {
-              console.log(res)
-              if (res.success) {
-                  //setShowSpinner(false);
-                  alert("anuncio Atualizado!");
-                  props.selectPage(e, 4);
-              } else {
-                  alert(res.message);
-              }
-          })
-  }
+        .then((x) => x.json())
+        .then((res) => {
+          console.log(res)
+          if (res.success) {
+            //setShowSpinner(false);
+            alert("anuncio Atualizado!");
+            if (descontoAtivado == false && minisitio.codTipoAnuncio == 3) {
+              window.open(`https://mpago.la/1pWzL7A`, '_blank', 'noopener');
+            }
+            props.selectPage(e, 1);
 
-};
+          } else {
+            alert(res.message);
+          }
+        })
+    }
+
+  };
 
   return (
     <div className="App">
@@ -285,7 +307,7 @@ function editID(e) {
           descontoAtivado={descontoAtivado}
           radioCheck={radioCheck}
         />
-      {/*   <h1 id="title-caderno" className="py-2">
+        {/*   <h1 id="title-caderno" className="py-2">
           Cadastro da Assinatura/Anúncio
         </h1> */}
         {/* <UserNav /> */}
@@ -311,7 +333,7 @@ function editID(e) {
                       name="codTipoAnuncio"
                       id="codTipoAnuncio-1"
                       value="1"
-                      onClick={(e) => { setRadioCheck(e.target.value); setShowMap("none") }}
+                      onClick={(e) => { setRadioCheck(e.target.value); setShowMap("none"); handleSelectChange(e) }}
                       checked={radioCheck == 1}
                       className="mx-1"
                     />
@@ -334,7 +356,7 @@ function editID(e) {
                       name="codTipoAnuncio"
                       id="codTipoAnuncio-3"
                       value="3"
-                      onClick={(e) => setRadioCheck(e.target.value)}
+                      onClick={(e) => { setRadioCheck(e.target.value); handleSelectChange(e) }}
                       checked={radioCheck == 3}
                       className="mx-1"
                     />
@@ -359,6 +381,7 @@ function editID(e) {
                   placeholder="Digite seu código"
                   style={{ backgroundColor: "#96d18b" }}
                   onChange={aplicarCupom}
+                  maxLength={12}
                 />
                 <input
                   type="hidden"
@@ -378,9 +401,9 @@ function editID(e) {
             </div>
 
             <div className="codigo-promocional">
-              <h4 style={{ margin: "10px 0 25px 2px" }}>
+              {/*   <h4 style={{ margin: "10px 0 25px 2px" }}>
                 Código PA: <strong>569882</strong>
-              </h4>
+              </h4> */}
 
               <div className="form-group">
                 <div className="input-icon margin-top-10">
@@ -506,12 +529,12 @@ function editID(e) {
                     id="descCEP"
                     className="form-control"
                     placeholder="Digite o CEP"
-                    onChange={(e) => {setCep(e.target.value);handleSelectChange(e)}}
+                    onChange={(e) => { setCep(e.target.value); handleSelectChange(e) }}
                     value={minisitio.descCEP}
                   />
                 </div>}
 
-                {radioCheck != 1 && <MapContainer cep={cep} />} 
+                {radioCheck != 1 && <MapContainer cep={cep} />}
                 {/* <MapContainer cep={cep} showMap={"block"} /> */}
 
 
@@ -531,7 +554,7 @@ function editID(e) {
                     mask={'(99) 9999-9999'}
                     value={minisitio.descTelefone}
                     onChange={handleSelectChange}
-                    ></InputMask>
+                  ></InputMask>
                 </div>
                 {radioCheck != 1 && <div
                   className="input-icon margin-top-10 webcard"
@@ -584,7 +607,7 @@ function editID(e) {
               style={{ display: "block" }}
             >
               {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
-              
+
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
               <h2>Parceria</h2>
@@ -868,7 +891,7 @@ function editID(e) {
 
             {/* Autorizante */}
 
-{/*             <div className="assinatura">
+            {/*             <div className="assinatura">
               <h2>Autorizante</h2>
             </div>
             <div className="codigo-promocional">
@@ -947,7 +970,7 @@ function editID(e) {
 
             {/* Forma de Pagamento */}
 
-           {/*  {radioCheck != 1 && <div
+            {/*  {radioCheck != 1 && <div
               className="assinatura webcard formaPagamento"
               style={{ display: "block" }}
             >
@@ -1017,7 +1040,7 @@ function editID(e) {
                 <div className="codigo-promocional">
                   <div className="cartao p-4">
                     <div className="conteudo semImagem">
-                      <h2 className="nome-empresa text-start">{(descAnuncio) ? descAnuncio : "Nome da empresa"}</h2>
+                      <h2 className="nome-empresa text-start">{(minisitio.descAnuncio) ? minisitio.descAnuncio : "Nome da empresa"}</h2>
                       {radioCheck != 1 && <h4
                         className="slogan webcard text-start"
                         style={{ display: "block" }}
@@ -1026,18 +1049,18 @@ function editID(e) {
                       </h4>}
                       <p className="text-start">
                         <i className="fa fa-map-marker"></i>{" "}
-                        <span className="sim-end">{(descEndereco) ? descEndereco : "Endereço da empresa"}</span>
+                        <span className="sim-end">{(minisitio.descEndereco) ? minisitio.descEndereco : "Endereço da empresa"}</span>
                       </p>
                       <p className="text-start">
                         <i className="fa fa-phone"></i>{" "}
-                        <span className="sim-tel">{(descTelefone) ? descTelefone : "(xx) xxxx-xxxx"}</span>
+                        <span className="sim-tel">{(minisitio.descTelefone) ? minisitio.descTelefone : "(xx) xxxx-xxxx"}</span>
                       </p>
                       {radioCheck != 1 && <p
                         className="webcard text-start"
                         style={{ display: "block" }}
                       >
                         <i className="fa fa-phone"></i>{" "}
-                        <span className="cel">{(descCelular) ? descCelular : "(xx) xxxxx-xxxx"}</span>
+                        <span className="cel">{(minisitio.descCelular) ? minisitio.descCelular : "(xx) xxxxx-xxxx"}</span>
                       </p>}
                     </div>
                     <div class="conteudo comImagem" style={{ display: "none" }}>
@@ -1142,7 +1165,7 @@ function editID(e) {
                     </div>}
 
                   </div>
-                 {/*  <div className="assinatura margin-top-20">
+                  {/*  <div className="assinatura margin-top-20">
 
                     {radioCheck != 1 && <h2 className="webcard">
                       <span className="preco">R$ {precoFixo},00</span>/mês
@@ -1152,7 +1175,7 @@ function editID(e) {
                     </h2>}
                   </div> */}
                   <div className="margin-top-20">
-                   {/*  {radioCheck != 1 && <p className="webcard" style={{ display: "block" }}>
+                    {/*  {radioCheck != 1 && <p className="webcard" style={{ display: "block" }}>
                       *A duração da assinatura é de 12 meses, portanto válido até
                       14/04/2025.
                     </p>} */}
@@ -1162,7 +1185,7 @@ function editID(e) {
                         className="btn-block formulario-de-cadastro btn btn-primary"
                         id="anunciar"
                         /* data-bs-toggle="modal" data-bs-target="#myModal"*/
-                        onClick={editID} 
+                        onClick={editID}
                       >
                         Confirmar
                       </button>
