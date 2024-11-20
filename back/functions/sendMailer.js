@@ -161,10 +161,53 @@ async function faleComDonoCliente(data) {
 
 };
 
+async function contato(data) {
+
+    //variaveis do corpo de envio do email com variação de idiomas para o novo aluno
+
+    const mailSentPT = await transporter.sendMail({
+        //from: `${data.nome} <${data.email}>`,
+        from: `kledisom <dev@ziiz.com.br>`,
+        to: ['dev@ziiz.com.br', 'contatobr@mycardcity.net'],
+        subject: "contato de cliente",
+        text: "contato de cliente",
+        html: `
+        <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido Recebido!</title>
+</head>
+<body>
+    
+<p>o cliente <strong>${data.nome}</strong> entrou em contato</p>
+    <p>Email do cliente: <strong>${data.email}</strong></p>
+    <p>Telefone do cliente: <strong>${data.telefone}</strong></p>
+
+    <hr>
+
+    <p>
+        ${data.mensagem}
+    </p>
+
+
+    <hr>
+    <p>--</p>
+</body>
+        `
+    });
+    return true;
+    //---------------------------------------------------------------------------------->
+
+};
+
+
+
 module.exports = {
     sendMailError,
     faleComDono,
-    faleComDonoCliente
+    faleComDonoCliente,
+    contato
 };
 
 

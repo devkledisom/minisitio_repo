@@ -56,9 +56,11 @@ import Adesivo from "../plugins/Adesivo";
 
 //INFOS PAGES
 import Institucional from "../views/infoPages/Institucional";
+import Contato from "../views/infoPages/Contato";
 
 
 import { TemaProvider } from '../context/BuscaContext';
+
 
 
 
@@ -120,6 +122,7 @@ function Rotas() {
 
                     {/* INFO PAGES */}
                     <Route path="institucional" element={<Institucional />} />
+                    <Route path="contato" element={<Contato />} />
 
 
                 </Routes>

@@ -19,7 +19,7 @@ function Nav(props) {
                         <a className="nav-link" href="https://minisitio.online/">TRABALHE CONOSCO</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="#">CONTATO</a>
+                        <a className="nav-link" href="/contato">CONTATO</a>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link disabled" href="#">MYCARDCITY PIN:</a>

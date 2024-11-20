@@ -1,0 +1,86 @@
+.institucional p {
+    font-size: 14px;
+}
+
+.institucional .area-parceiros>div>div>h2 {
+    padding-left: 15px;
+}
+
+.institucional .area-parceiros>div>.bg-cinza {
+    padding: 20px 10px;
+    border-radius: 10px;
+}
+
+.institucional>.parceiros>div {
+    border: 1px solid red;
+}
+
+.institucional .parceiros > div > a > img {
+    width: 100%;
+    display: block;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px #00000033;
+}
+
+.area-contato .contato {
+    display: flex;
+    align-items: center;
+    padding-top: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #000;
+}
+
+.area-contato h2 {
+    padding-left: 20px;
+}
+
+.area-contato .form-envelope {
+    border-radius: 10px;
+    box-shadow: 0 10px 20px #0003;
+}
+
+.area-contato .contato-bg {
+    background-color: #ffcc29;
+    padding: 10px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    box-shadow: 0 10px 20px #0003;
+}
+
+.area-contato .contato-bg > h2 {
+    margin-top: 20px;
+    padding-left: 20px;
+}
+
+.area-contato .contato i {
+    color: #0c0c0c;
+    font-size: 40px;
+    float: left;
+    padding-right: 20px;
+}
+
+.area-contato .interna h4, .interna h5 {
+    color: #000000;
+    font-weight: 500;
+}
+.area-contato .contato h4 {
+    /* padding-left: 15px; */
+    margin-top: -15px;
+}
+.area-contato h4 {
+    font-size: 17px;
+}
+
+.area-contato .vantagens{
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    box-shadow: 0 10px 20px #0003;
+}
+
+.area-contato textarea {
+   height: 121px;
+}
+
+.area-contato .continuar>button {
+  width: 178px;
+}

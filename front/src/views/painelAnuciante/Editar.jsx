@@ -308,12 +308,12 @@ function Editar(props) {
           radioCheck={radioCheck}
         />
         {/*   <h1 id="title-caderno" className="py-2">
-          Cadastro da Assinatura/Anúncio
+          Cadastro da Assinatura/Espaço Minisitio
         </h1> */}
         {/* <UserNav /> */}
         <h2 className="py-4">
           Preencha os campos abaixo para simular e incluir sua
-          Assinatura/Anúncio.
+          Assinatura/Espaço Minisitio.
         </h2>
         <div className="container d-flex flex-row">
           {/*inicio da row form */}
@@ -324,7 +324,7 @@ function Editar(props) {
             <div className="anuncio">
               <div className="form-group">
                 <label className="col-md-5 control-label tipo-de-anuncio">
-                  Tipo de anúncio:
+                Tipo de perfil no minisitio:
                 </label>
                 <div className="col-md-12 anuncio-options">
                   <label>
@@ -687,7 +687,7 @@ function Editar(props) {
 
 
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
-              <h2>Detalhes do Anúncio</h2>
+              <h2>Detalhes do Perfil Minisitio</h2>
             </div>}
             {radioCheck != 1 && <div
               className="codigo-promocional webcard"
@@ -1032,12 +1032,12 @@ function Editar(props) {
             >
               <div className="posicao-preview">
                 <div className="simulacao-do-anuncio">
-                  <h2 className="assinatura">Simulação do Anúncio</h2>
+                  <h2 className="assinatura">Simulação do Espaço Minisitio</h2>
                 </div>
 
                 {/* preview */}
 
-                <div className="codigo-promocional">
+                <div className="codigo-promocional card-preview">
                   <div className="cartao p-4">
                     <div className="conteudo semImagem">
                       <h2 className="nome-empresa text-start">{(minisitio.descAnuncio) ? minisitio.descAnuncio : "Nome da empresa"}</h2>
@@ -1108,7 +1108,7 @@ function Editar(props) {
                           <img
                             src="../assets/img/link_mapa.png"
                             alt=""
-                            height={40}
+                            height={30}
                           />
                         </i>
                       </Tooltip>
@@ -1118,7 +1118,7 @@ function Editar(props) {
                           <img
                             src="../assets/img/link_site.png"
                             alt=""
-                            height={40}
+                            height={30}
                           />
                         </i>
                       </Tooltip>
@@ -1127,7 +1127,7 @@ function Editar(props) {
                           <img
                             src="../assets/img/link_promocao.png"
                             alt=""
-                            height={40}
+                            height={30}
                           />
                         </i>
                       </Tooltip>
@@ -1187,7 +1187,7 @@ function Editar(props) {
                         /* data-bs-toggle="modal" data-bs-target="#myModal"*/
                         onClick={editID}
                       >
-                        Confirmar
+                        ATUALIZAR
                       </button>
                     }
                   </div>

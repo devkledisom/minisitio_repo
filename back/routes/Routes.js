@@ -12,6 +12,7 @@ const Login = require('../controllers/Login');
 const Users = require('../controllers/Users');
 const Upload = require('../controllers/Upload');
 const UserActions = require('../controllers/UserActions');
+const Email = require('../controllers/Email');
 
 //FUNCTIONS
 const saveImport = require('../functions/serverImport');
@@ -122,6 +123,7 @@ router.get('/api/list-image', Upload.listFiles);
 router.get('/api/cartao-digital', UserActions.cartaoDigital);
 
 //EMAIL FALE COM O DONO
+router.post('/api/contato', Email.contato);
 
 // Configuração do multer para armazenar o arquivo em uma pasta local
 const storage = multer.diskStorage({
