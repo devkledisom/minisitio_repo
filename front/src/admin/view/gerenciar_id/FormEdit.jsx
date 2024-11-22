@@ -25,7 +25,7 @@ const FormEdit = () => {
     const [descricaoId, setDescricaoId] = useState(false);
     const [descontoId, setDescontoId] = useState(false);
     const [hash, setHash] = useState(false);
-    const [descImagem, setDescImg] = useState();
+    const [descImagem, setDescImg] = useState([]);
 
     const [patrocinio, setPatrocinio] = useState(0);
     const [saldo, setSaldo] = useState();
@@ -34,6 +34,11 @@ const FormEdit = () => {
         link_1: null,
         link_2: null,
         link_3: null
+    });
+    const [imgs, setImgs] = useState({
+        img_1: null,
+        img_2: null,
+        img_3: null
     });
 
 
@@ -65,9 +70,18 @@ const FormEdit = () => {
                     link_2: res[0].descLink2,
                     link_3: res[0].descLink3
                 });
+                setImgs({
+                    img_1: res[0].descImagem,
+                    img_2: res[0].descImagem2,
+                    img_3: res[0].descImagem3
+                });
                 setPatrocinio(res[0].patrocinador_ativo);
                 setSaldoValue(res[0].saldo);
                 setSaldo(res[0].utilizar_saldo);
+
+                localStorage.setItem("imgname", res[0].descImagem);
+                localStorage.setItem("imgname2", res[0].descImagem2);
+                localStorage.setItem("imgname3", res[0].descImagem3);
 
                 if (res[0].descImagem != null) {
                     setDescImg(res[0]);
@@ -117,7 +131,7 @@ const FormEdit = () => {
                 validation = true;
             };
         });
-console.log(saldo)
+
         const data = {
             "usuario": usuarios,
             "descricao": document.getElementById('descID').value,
@@ -133,6 +147,8 @@ console.log(saldo)
             "utilizarSaldo": saldo,
             "addSaldo": saldoValue//document.getElementById('add-saldo') ? document.getElementById('add-saldo').value : 0
         };
+
+        console.log(data)
 
         const config = {
             method: "PUT",
@@ -265,7 +281,7 @@ console.log(saldo)
                                 <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink} codImg={descImagem.descImagem} miniPreview={false} valueLink={links.link_1}/>
                                 <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink2} codImg={descImagem.descImagem2} miniPreview={false} valueLink={links.link_2}/>
                                 <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink3} codImg={descImagem.descImagem3} miniPreview={false} valueLink={links.link_3}/>
-                            </div>
+                           </div>
 
                         }
 

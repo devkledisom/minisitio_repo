@@ -122,9 +122,12 @@ router.get('/api/list-image', Upload.listFiles);
 //ACÕES DO USUARIO
 router.get('/api/cartao-digital', UserActions.cartaoDigital);
 
-//EMAIL FALE COM O DONO
+//EMAILS
 router.post('/api/contato', Email.contato);
+router.post('/api/novo-usuario', Email.novoUsuario);
 
+
+//EMAIL FALE COM O DONO
 // Configuração do multer para armazenar o arquivo em uma pasta local
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

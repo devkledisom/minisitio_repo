@@ -8,6 +8,7 @@ const Cadernos = require('../models/table_caderno');
 //moduls
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
+const { novoUsuario } = require('../functions/sendMailer');
 
 
 module.exports = {
@@ -56,8 +57,11 @@ module.exports = {
 
         try {
             const listaUsers = await Users.create(dadosUsuario);
+            if(listaUsers) {
+                novoUsuario(Email, Nome, CPFCNPJ);
+                console.log("sjhajklhdsajlkfsafd", listaUsers.length)
+            }
 
-            console.log(listaUsers)
             res.json({ success: true, message: listaUsers })
 
 

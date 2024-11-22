@@ -53,8 +53,25 @@ function Caderno() {
 
   const [numberPage, setNumberPage] = useState(1);
   const [pageNumberUnique, setPageNumberUnique] = useState(true);
+  const [ufs, setUfs] = useState([]);
+  const [cadernos, setCadernos] = useState([]);
 
   useEffect(() => {
+
+    fetch(`${masterPath.url}/cadernos`)
+    .then((x) => x.json())
+    .then((res) => {
+      
+      let nome = res.find((item) => item.codCaderno == caderno)
+      setCadernos(nome.nomeCaderno);
+    });
+  fetch(`${masterPath.url}/ufs`)
+    .then((x) => x.json())
+    .then((res) => {
+      let nome = res.find((item) => item.id_uf == estado)
+      setUfs(nome.sigla_uf);
+    });
+
 
     setLoading(true);
     async function buscarAtividadeold() {
@@ -67,8 +84,6 @@ function Caderno() {
         });
 
         const minisitio = await res.json();
-
-        console.log('dasdads', minisitio)
 
         setMinisitio(minisitio);
 
@@ -782,7 +797,7 @@ function Caderno() {
       let division = list / 2;
 
       const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
-      const arrayParte2 = removeDuplicate.slice(list);
+      const arrayParte2 = division > 5 ? removeDuplicate.slice(division) : [];
 
 
       // Remover duplicados comparando objetos
@@ -829,48 +844,6 @@ function Caderno() {
 
   };
 
-
-
-
-
-  /*   useEffect(() => {
-      
-        const intervalId = setInterval(() => {
-          console.log("exec: ", col1Ref.current)
-          if(base1.length < 1) {
-            console.log("ver1", base1)
-            return;
-          } 
-          const colElement = document.querySelector('#col1'); // Tenta encontrar o elemento
-    
-          if (!col1Ref.current) {
-            console.log("Elemento ainda não existe, aguardando...");
-            return; // Sai do intervalo se o elemento não existir
-          }
-    
-          // Verifica se o scrollHeight excede o limite
-          if (col1Ref.current.scrollHeight > 2326) {
-            console.log("Altura do scroll:", col1Ref.current.scrollHeight);
-            const children = Array.from(col1Ref.current.children); // Converte para um array de filhos
-            console.log(children)
-            if (children.length > 0) {
-              console.log("Removendo o último filho...");
-             // children[children.length - 1].remove();
-              clearInterval(intervalId);
-            }
-          } else {
-             // Para o intervalo se a condição não for mais atendida
-            console.log("Observador finalizado. Altura suficiente.");
-          }
-    
-        }, 10000); // Intervalo de 1 segundo
-     
-     
-  
-      // Limpa o intervalo ao desmontar o componente
-      //return () => clearInterval(intervalId);
-    }, []);
-   */
 
   // editorial1();
   function editorial12() {
@@ -1104,7 +1077,7 @@ function Caderno() {
 
 
         <Busca paginaAtual={"caderno"} />
-        <h1 id="title-caderno" className='py-2'></h1>
+        <h1 id="title-caderno" className='py-2'>Caderno {cadernos} - {ufs}</h1>
         <h2 className='py-4'></h2>
 {/*         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>

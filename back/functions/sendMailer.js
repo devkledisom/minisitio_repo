@@ -201,13 +201,48 @@ async function contato(data) {
 
 };
 
+async function novoUsuario(email, nome, doc) {
+
+    //variaveis do corpo de envio do email com variação de idiomas para o novo aluno
+
+    const mailSentPT = await transporter.sendMail({
+        //from: `${data.nome} <${data.email}>`,
+        from: `kledisom <dev@ziiz.com.br>`,
+        to: ['dev@ziiz.com.br', 'contatobr@mycardcity.net', email],
+        subject: "Minisitio",
+        text: "Minisitio",
+        html: `
+        <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro!</title>
+</head>
+<body>
+    
+<p>Seja bem Vindo(a) <strong>${nome}</strong></p>
+<p>segue abaixo o seu acesso para gerenciar o seu perfil Minisitio</p>
+    <p>Login: <strong>${doc}</strong></p>
+    <p>Senha: <strong>12345</strong></p>
+
+    <hr>
+    <p>-A nossa equipe está feliz por ter você na nossa plataforma-</p>
+</body>
+        `
+    });
+    return true;
+    //---------------------------------------------------------------------------------->
+
+};
+
 
 
 module.exports = {
     sendMailError,
     faleComDono,
     faleComDonoCliente,
-    contato
+    contato,
+    novoUsuario
 };
 
 

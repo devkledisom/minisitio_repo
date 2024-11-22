@@ -351,6 +351,12 @@ const Anuncio = database.define('anuncio', {
         unique: false
     },
 
+    descYouTube: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
+    },
+
     descPatrocinador: {
         type: Sequelize.TEXT,
         allowNull: true,

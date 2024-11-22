@@ -651,10 +651,37 @@ module.exports = {
         }
 
 
-        Ids.rows.map(item => {
+/*         Ids.rows.map(async item => {
             console.log(item.dataValues.descricao);
             item.dataValues.atividade = corrigirCaracteres(item.dataValues.descricao)
+            item.dataValues.qtdaGeral = await Anuncio.findAndCountAll({
+                where: {
+                    codDesconto: item.dataValues.idDesconto
+                }
+            });
         })
+
+        console.log(Ids.rows) */
+
+        await Promise.all(
+            Ids.rows.map(async (item) => {
+                console.log(item.dataValues.descricao);
+        
+                // Corrigir caracteres na descrição
+                item.dataValues.atividade = corrigirCaracteres(item.dataValues.descricao);
+        
+                // Buscar a quantidade geral e adicionar como um novo dado
+                const result = await Anuncio.findAndCountAll({
+                    where: {
+                        codDesconto: item.dataValues.idDesconto
+                    }
+                });
+        
+                // Adicionar o dado temporário
+                item.dataValues.qtdaGeral = result.count;
+            })
+        );
+        
 
         res.json({
             success: true, message: {
@@ -1981,9 +2008,11 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
 
 
         const atividade = await obj.getAtividade();
+        const descontoHash = await obj.getDesconto();
         //obj.codAtividade = atividade != null ? atividade.id : '';
 
         obj.setDataValue('nomeAtividade', atividade.atividade);
+        obj.setDataValue('hash', descontoHash.hash);
         //obj.kledisom = atividade != null ? atividade.id : null; 
 
 
@@ -2141,6 +2170,16 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
         try {
             const listaAnuncios = await Anuncio.create(dadosAnuncio);
 
+            
+            const idUtilizado = await Desconto.update({
+                //utilizar_saldo: codigoDeDesconto[0].utilizar_saldo + 1,
+                saldo: codigoDeDesconto[0].saldo - 1
+
+            },{
+                where: {
+                    hash: codDesconto
+                }
+            })
 
             res.json({ success: true, message: listaAnuncios })
         } catch (err) {
@@ -2228,9 +2267,9 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             cashback_logo,
             cashback_link,
             certificado_link,
-            cartao_digital } = req.body;
+            cartao_digital,
+            descVideo } = req.body;
 
-        console.log("22h4323kl4h23423jk4h23: ", req.body)
 
         const dadosAnuncio = {
             //"codAnuncio": 88888,
@@ -2284,6 +2323,7 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             "certificado_logo": 0,
             "certificado_texto": 0,
             "certificado_imagem": 0,
+            "descYouTube": descVideo,
             "link_comprar": 0,
             "cashback_logo": 0,
             "cashback_link": 0,
@@ -2312,7 +2352,21 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
 
         const uuid = req.params.id;
 
-        console.log(req.body)
+        let registro = await Anuncio.findAll({
+            where: {
+                codAnuncio: uuid
+            }
+        });
+
+        
+
+        let codigoDeDesconto = await Descontos.findAll({
+            where: {
+                idDesconto: registro[0].codDesconto
+            }
+        });
+
+        console.log("dasfjdsfshdljh", codigoDeDesconto[0].hash)
 
         try {
             //Atividades
@@ -2321,7 +2375,19 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
                     codAnuncio: uuid
                 }
 
-            });
+            }); 
+/* 
+            const idUtilizado = await Desconto.update({
+                utilizar_saldo: codigoDeDesconto[0].utilizar_saldo - 1,
+                //saldo: codigoDeDesconto[0].saldo - 1
+
+            },{
+                where: {
+                    hash: codigoDeDesconto[0].hash
+                }
+            }) */
+
+
             res.json({ success: true, message: deleteAnuncio });
         } catch (err) {
             res.json({ success: false, message: "não foi possivel apagar o anuncio selecionado" });

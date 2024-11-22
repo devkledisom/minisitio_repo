@@ -53,8 +53,43 @@ function Editar(props) {
   };
 
   useEffect(() => {
-    console.log("child", props.espacoId)
-  });
+    //console.log("child", props.espacoId)
+    
+      let codId = minisitio.hash;
+      const formatoValido = /^\d{2}\.\d{4}\.\d{4}$/;
+      console.log(formatoValido.test(codId))
+  
+      if (!formatoValido.test(codId)) {
+        console.log("invalido");
+        return;
+      }
+  
+      if (codId.length == 12) {
+        fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
+          .then((x) => x.json())
+          .then((res) => {
+            console.log(res)
+            if (res.success) {
+              console.log("desconto ", res)
+              let valorDesconto = res.IdsValue[0].desconto;
+              let precoComDesconto = precoFixo - valorDesconto;
+              setPrecoFixo(precoComDesconto);
+              setDescontoAtivado(res.success);
+            } else {
+              setDescontoAtivado(res.success);
+            }
+  
+  
+          })
+      } else {
+        setDescontoAtivado(false);
+      }
+  
+  
+  
+      console.log(codId);
+  
+  }, []);
 
   useEffect(() => {
     fetch(`${masterPath.url}/admin/anuncio/edit/${props.espacoId}`)
@@ -149,6 +184,7 @@ function Editar(props) {
       fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
         .then((x) => x.json())
         .then((res) => {
+          console.log(res)
           if (res.success) {
             console.log("desconto ", res)
             let valorDesconto = res.IdsValue[0].desconto;
@@ -161,6 +197,8 @@ function Editar(props) {
 
 
         })
+    } else {
+      setDescontoAtivado(false);
     }
 
 
@@ -237,6 +275,9 @@ function Editar(props) {
   };
 
   function editID(e) {
+
+    aplicarCupom(e);
+
     if (minisitio.codTipoAnuncio == 3 && descontoAtivado == false && e.target.value.length) {
       console.log(descontoAtivado, minisitio.codTipoAnuncio);
       alert("Código promocional inválido.");
@@ -288,7 +329,7 @@ function Editar(props) {
             //setShowSpinner(false);
             alert("anuncio Atualizado!");
             if (descontoAtivado == false && minisitio.codTipoAnuncio == 3) {
-              window.open(`https://mpago.la/1pWzL7A`, '_blank', 'noopener');
+              //window.open(`https://mpago.la/1pWzL7A`, '_blank', 'noopener');
             }
             props.selectPage(e, 1);
 
@@ -380,6 +421,7 @@ function Editar(props) {
                   className="form-control"
                   placeholder="Digite seu código"
                   style={{ backgroundColor: "#96d18b" }}
+                  value={minisitio.hash}
                   onChange={aplicarCupom}
                   maxLength={12}
                 />
@@ -390,9 +432,9 @@ function Editar(props) {
                   id="discountValue"
                 />
               </div>
-              <h5 className="text-start">
+           {/*    <h5 className="text-start">
                 Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)
-              </h5>
+              </h5> */}
             </div>}
 
             {/*dados para publicação*/}
@@ -701,8 +743,8 @@ function Editar(props) {
                   id="descVideo"
                   className="form-control"
                   placeholder="Texto livre"
-                  value={minisitio.descVideo}
-                  onChange={handleSelectChange}
+                 /*  value={minisitio.descVideo}
+                  onChange={handleSelectChange} */
                 ></textarea>
               </div>
               <div className="input-icon margin-top-10">
@@ -713,8 +755,8 @@ function Editar(props) {
                   id="descVideo"
                   className="form-control"
                   placeholder="Digite o site"
-                  value={minisitio.descVideo}
-                  onChange={handleSelectChange}
+               /*    value={minisitio.descVideo}
+                  onChange={handleSelectChange} */
                 />
               </div>
               <div className="input-icon margin-top-10">

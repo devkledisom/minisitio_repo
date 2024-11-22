@@ -15,12 +15,14 @@ import { useBusca } from '../context/BuscaContext';
 
 import { BsShareFill, BsFillSendFill, BsFacebook, BsInstagram, BsTwitter, BsYoutube, BsWhatsapp, BsSkype, BsHeadset } from "react-icons/bs";
 
+
 function MiniWebCard(props) {
     const { result, setResult } = useBusca();
     const navigate = useNavigate();
     const [imgPath, setImg] = useState();
     const [imgDefault, setImgDefault] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [parceiros, setParceiros] = useState(null);
 
     async function buscarAnuncio() {
         setLoading(true);
@@ -31,6 +33,7 @@ function MiniWebCard(props) {
     }
 
     useEffect(() => {
+        setParceiros(props.ids)
         props.data.anuncios.map(item => setImg(item.descImagem))
 
         if (props.codImg == 0 || props.codImg == "teste") {
@@ -39,7 +42,7 @@ function MiniWebCard(props) {
             setImgDefault(`files/${props.codImg}`);
         }
 
-    }, []);
+    }, [props]);
 
 
     function qntVisualizacoes() {
@@ -61,9 +64,33 @@ function MiniWebCard(props) {
                     <i class="fa fa-spinner fa-spin"></i>Carregando
                 </button>
             }
-
             <div className='container cartao my-2 p-0' key={props.key}>
-                {(props.ids.descImagem != "" || props.ids.descImagem2 != "" || props.ids.descImagem3 != "") &&
+
+                {parceiros &&
+                    ((props.ids.descImagem || props.ids.descImagem2 || props.ids.descImagem3) && (
+                        <div className="apoio kledisom">
+                            <div>
+                                {[{ img: props.ids.descImagem, link: props.ids.descLink },
+                                { img: props.ids.descImagem2, link: props.ids.descLink2 },
+                                { img: props.ids.descImagem3, link: props.ids.descLink3 }]
+                                    .filter(item => item.img) // Filtra itens com imagem válida
+                                    .map((item, index) => (
+                                        <a
+                                            key={index}
+                                            href={item.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            <img src={`${masterPath.url}/files/${item.img}`} alt={`Parceiro ${index + 1}`} />
+                                        </a>
+                                    ))}
+                            </div>
+                        </div>
+                    ))
+                }
+
+
+                {/*   {(props.ids.descImagem != "" || props.ids.descImagem2 != "" || props.ids.descImagem3 != "") &&
                     <div className="apoio kledisom">
                         <div>
                             <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
@@ -81,8 +108,8 @@ function MiniWebCard(props) {
                             }
 
                         </div>
-                    </div>
-                }
+                    </div> 
+                } */}
                 {/* <div>
                          <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
                             <img src={`${masterPath.url}/files/${props.ids.descImagem}`} alt="" />
@@ -101,7 +128,7 @@ function MiniWebCard(props) {
                     {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={435} height={205} />}
 
                     {imgDefault == false &&
-                        <div className="conteudo semImagem" style={{width: "415px"}}>
+                        <div className="conteudo semImagem" style={{ width: "415px" }}>
                             <h2 className="nome-empresa text-start">{props.empresa}</h2>
                             <h4
                                 className="slogan webcard text-start"

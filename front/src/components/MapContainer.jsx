@@ -39,7 +39,7 @@ export default function MapContainer(props) {
 
     const containerStyle = {
         width: '100%',
-        height: '400px',
+        height: '560px',
         display: props.showMap
     };
 

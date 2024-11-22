@@ -57,6 +57,7 @@ function ComprarAnuncio() {
   const [tagValue, setTagValue] = useState();
   const [showSpinner, setShowSpinner] = useState(false);
   const [alert, setAlert] = useState(false);
+  const [texto, setTexto] = useState(null);
 
 
   const executarSelecao = () => {
@@ -146,8 +147,12 @@ function ComprarAnuncio() {
           let precoComDesconto = precoFixo - valorDesconto;
           setPrecoFixo(precoComDesconto);
           setDescontoAtivado(res.success);
-
+          setTexto(res.IdsValue[0].descricao);
         })
+    } else {
+      setPrecoFixo(5);
+      setDescontoAtivado(false);
+      setTexto(null);
     }
 
 
@@ -223,7 +228,7 @@ function ComprarAnuncio() {
           <i class="fa fa-spinner fa-spin"></i>Carregando
         </button>}
 
-        {alert && <AlertMsg message={"Cadastro Realizado"}/>}
+        {alert && <AlertMsg message={"Cadastro Realizado, verifique a sua caixa de email para obter o acesso a plataforma"} />}
 
 
         <Busca paginaAtual={"caderno"} />
@@ -308,9 +313,19 @@ function ComprarAnuncio() {
                   id="discountValue"
                 />
               </div>
-              <h5 className="text-start">
-                Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)
-              </h5>
+              {texto == null &&
+                <h5 className="text-start py-2">
+                  Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)
+                </h5>
+              }
+
+              {texto &&
+                <h5 className="text-start py-2">
+                  {texto}
+                </h5>
+              }
+
+
             </div>}
 
             {/*dados para publicação*/}
@@ -630,13 +645,13 @@ function ComprarAnuncio() {
 
             {/* Forma de Pagamento */}
 
-            {radioCheck != 1 && <div
+            {( radioCheck != 1 && descontoAtivado == false) && <div
               className="assinatura webcard formaPagamento"
               style={{ display: "block" }}
             >
               <h2>Forma de Pagamento</h2>
             </div>}
-            {radioCheck != 1 && <div
+            {( radioCheck != 1 && descontoAtivado == false) && <div
               className="codigo-promocional webcard formaPagamento"
               style={{ display: "block" }}
             >

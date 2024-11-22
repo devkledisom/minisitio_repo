@@ -14,6 +14,9 @@ import { useBusca } from '../context/BuscaContext';
 import Tooltip from './Tooltip';
 
 import { BsShareFill, BsFillSendFill, BsFacebook, BsInstagram, BsTwitter, BsYoutube, BsWhatsapp, BsSkype, BsHeadset } from "react-icons/bs";
+
+//COMPONENTS
+import Video from '../components/Video';
 import WebcardThumb from './WebcardThumb';
 import Metadados from './Metadados';
 import ContactForm from './ContactForm';
@@ -131,6 +134,7 @@ function FullWebCard(props) {
                                 Fale com o dono
                             </h2>
                             <ContactForm />
+                            <Video link={result.descYouTube}/>
                         </div>
                         <div>
 
