@@ -2076,7 +2076,8 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             cashback_logo,
             cashback_link,
             certificado_link,
-            cartao_digital } = req.body;
+            cartao_digital,
+            descYouTube } = req.body;
 
         console.log(req.body)
 
@@ -2164,7 +2165,8 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             "cashback_logo": 0,
             "cashback_link": 0,
             "certificado_link": 0,
-            "cartao_digital": 0
+            "cartao_digital": 0,
+            "descYouTube": descYouTube,
         };
 
         try {

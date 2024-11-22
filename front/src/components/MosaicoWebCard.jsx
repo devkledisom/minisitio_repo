@@ -27,7 +27,7 @@ function MosaicoWebCard(props) {
                         {props.logoTop ? <a href="/"><img src="/assets/img/logo.png" className="logo" /></a> : ''}
                         <div className="pull-right faixa-header">
                             <ul className="header-navigation">
-                                <li className="assine"><a href="/comprar-anuncio">Assine Agora</a></li>
+                                <li className="assine"><a href="/comprar-espaco-minisitio">Assine Agora</a></li>
                                 <li className="dropdown dropdown-bandeira">
                                     <a className="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
                                         <img src="/assets/img/bandeiras/br.png" style={{ border: "1px solid #edecec" }} />

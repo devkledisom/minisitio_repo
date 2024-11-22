@@ -144,9 +144,10 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
             cashback_link: null,
             certificado_link: null,
             cartao_digital: null,
+            descYouTube: buscarElemento("descYouTube")
         };
 
-        //console.log(obj)
+        console.log(obj)
 
 
         function buscarElemento(param) {
@@ -166,7 +167,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         }
 
         //console.log(obj);  /admin/usuario/criar-anuncio
-        fetch(`${masterPath.url}/admin/anuncio/create`, {
+         fetch(`${masterPath.url}/admin/anuncio/create`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(obj),
@@ -195,7 +196,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                     }
                 }, 5000);
 
-            });
+            }); 
     }
 
 
