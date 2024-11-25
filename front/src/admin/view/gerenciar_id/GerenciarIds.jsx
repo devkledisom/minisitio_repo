@@ -60,7 +60,6 @@ const GerenciarIds = () => {
 
 
     function selecaoLinha(event) {
-        console.log(event.currentTarget)
 
         var linhas = document.querySelectorAll('tbody tr');
         // Remove a classe 'selecionada' de todas as linhas
@@ -84,7 +83,7 @@ const GerenciarIds = () => {
         })
             .then((x) => x.json())
             .then((res) => {
-
+console.log(res)
                 if (res.success) {
                     setShowSpinner(false);
                     alert(res.message)

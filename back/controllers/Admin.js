@@ -651,37 +651,37 @@ module.exports = {
         }
 
 
-/*         Ids.rows.map(async item => {
-            console.log(item.dataValues.descricao);
-            item.dataValues.atividade = corrigirCaracteres(item.dataValues.descricao)
-            item.dataValues.qtdaGeral = await Anuncio.findAndCountAll({
-                where: {
-                    codDesconto: item.dataValues.idDesconto
-                }
-            });
-        })
-
-        console.log(Ids.rows) */
+        /*         Ids.rows.map(async item => {
+                    console.log(item.dataValues.descricao);
+                    item.dataValues.atividade = corrigirCaracteres(item.dataValues.descricao)
+                    item.dataValues.qtdaGeral = await Anuncio.findAndCountAll({
+                        where: {
+                            codDesconto: item.dataValues.idDesconto
+                        }
+                    });
+                })
+        
+                console.log(Ids.rows) */
 
         await Promise.all(
             Ids.rows.map(async (item) => {
                 console.log(item.dataValues.descricao);
-        
+
                 // Corrigir caracteres na descrição
                 item.dataValues.atividade = corrigirCaracteres(item.dataValues.descricao);
-        
+
                 // Buscar a quantidade geral e adicionar como um novo dado
                 const result = await Anuncio.findAndCountAll({
                     where: {
                         codDesconto: item.dataValues.idDesconto
                     }
                 });
-        
+
                 // Adicionar o dado temporário
                 item.dataValues.qtdaGeral = result.count;
             })
         );
-        
+
 
         res.json({
             success: true, message: {
@@ -790,17 +790,20 @@ module.exports = {
         const uuid = req.params.id;
 
         try {
-            //Atividades
-            const resultAnuncio = await Descontos.destroy({
-                where: {
-                    idDesconto: uuid
-                }
+            const resultDesconto = await Descontos.findAll({ where: { idDesconto: uuid } });
 
-            });
-            res.json({ success: true, message: `Usuário ${uuid} apagado da base!` });
+            const apagarUsuario = await Usuarios.destroy({ where: { codUsuario: resultDesconto[0].idUsuario } });
+
+            const apagarEspaco = await Anuncio.destroy({ where: { codUsuario: resultDesconto[0].idUsuario } });
+
+            const resultAnuncio = await Descontos.destroy({ where: { idDesconto: uuid } });
+
+
+            res.json({ success: true, message: `Registro ${uuid} apagado da base!` });
         } catch (err) {
             res.json(err);
         }
+        //res.json({ success: true, message: `Usuário ${uuid} apagado da base!`, teste: resultDesconto[0].idUsuario });
 
     },
     buscarId: async (req, res) => {
@@ -825,7 +828,7 @@ module.exports = {
 
             }
         });
-            console.log(resultAnuncio)
+        console.log(resultAnuncio)
         if (resultAnuncio < 1) {
             res.json({ success: false, message: "ID não encontrado" });
             return;
@@ -1399,198 +1402,198 @@ module.exports = {
 
         let codCaderno;
 
-if (req.params.caderno == "null" || req.params.caderno == "TODO") {
-    let codCaderno = await Caderno.findAll({
-        where: {
-            //codUf: req.params.uf,
-            [Op.or]: [
-                { nomeCaderno: req.params.caderno },
-                { codCaderno: req.params.caderno },
-                { codUf: req.params.uf }
-            ]
-        }
-    });
+        if (req.params.caderno == "null" || req.params.caderno == "TODO") {
+            let codCaderno = await Caderno.findAll({
+                where: {
+                    //codUf: req.params.uf,
+                    [Op.or]: [
+                        { nomeCaderno: req.params.caderno },
+                        { codCaderno: req.params.caderno },
+                        { codUf: req.params.uf }
+                    ]
+                }
+            });
 
-    console.log(codCaderno, req.params.uf);
+            console.log(codCaderno, req.params.uf);
 
-    const anuncio = await Anuncio.findAndCountAll({
-        where: {
-            [Op.and]: [
-                { codUf: codCaderno[0].dataValues.codUf },
-                { codCaderno: codCaderno[0].dataValues.codCaderno }
-            ]
-        }/* ,
+            const anuncio = await Anuncio.findAndCountAll({
+                where: {
+                    [Op.and]: [
+                        { codUf: codCaderno[0].dataValues.codUf },
+                        { codCaderno: codCaderno[0].dataValues.codCaderno }
+                    ]
+                }/* ,
         limit: porPagina,
         offset: offset */
-    });
+            });
 
-    console.log("estreesse: ", anuncio.count)
+            console.log("estreesse: ", anuncio.count)
 
-    if (anuncio.count < 1) {
-        res.json({
-            success: false,
-            message: "caderno não localizado"
-        });
+            if (anuncio.count < 1) {
+                res.json({
+                    success: false,
+                    message: "caderno não localizado"
+                });
 
-        return;
-    };
+                return;
+            };
 
-    const count = anuncio.rows.reduce((acc, item) => {
-        // Incrementa o contador do codAtividade no acumulador
-        acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
-        return acc;
-    }, {});
+            const count = anuncio.rows.reduce((acc, item) => {
+                // Incrementa o contador do codAtividade no acumulador
+                acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+                return acc;
+            }, {});
 
-    const atividades = await Atividade.findAll(/* {order: [
+            const atividades = await Atividade.findAll(/* {order: [
         ['atividade', 'ASC']
     ],
         limit: porPagina,
         offset: offset
     } */);
 
-    //console.log("--------------====> ", atividades[0].dataValues)
+            //console.log("--------------====> ", atividades[0].dataValues)
 
-    const arrayClassificado = [];
+            const arrayClassificado = [];
 
-    for (let x in count) {
-        const anun = anuncio.rows.find(item => item.codAtividade == x);
-        const atividade = atividades.find(item => item.id == x);
+            for (let x in count) {
+                const anun = anuncio.rows.find(item => item.codAtividade == x);
+                const atividade = atividades.find(item => item.id == x);
 
-        arrayClassificado.push({
-            id: atividade.dataValues.id,
-            atividade: atividade.dataValues.atividade,
-            qtdAtividade: count[x],
-            codigoAnuncio: anun.codAnuncio,
-            nomeAnuncio: anun.descAnuncio,
-            estado: anun.codUf,
-            caderno: anun.codCaderno
-        });
+                arrayClassificado.push({
+                    id: atividade.dataValues.id,
+                    atividade: atividade.dataValues.atividade,
+                    qtdAtividade: count[x],
+                    codigoAnuncio: anun.codAnuncio,
+                    nomeAnuncio: anun.descAnuncio,
+                    estado: anun.codUf,
+                    caderno: anun.codCaderno
+                });
 
-        //console.log(anun.dataValues)
-        //console.log()
-    }
+                //console.log(anun.dataValues)
+                //console.log()
+            }
 
-    console.log("debug------------------>", [
-        { codUf: codCaderno[0].dataValues.codUf },
-        { codCaderno: codCaderno[0].dataValues.codCaderno }
-    ]);
-
-    const anuncioTeste = await Anuncio.findAndCountAll({
-        /*             order: [
-                        [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
-                        ['createdAt', 'DESC'],
-                        ['codDuplicado', 'ASC'],
-                    ], */
-        where: {
-            [Op.and]: [
+            console.log("debug------------------>", [
                 { codUf: codCaderno[0].dataValues.codUf },
                 { codCaderno: codCaderno[0].dataValues.codCaderno }
-            ]
-        }/* ,
+            ]);
+
+            const anuncioTeste = await Anuncio.findAndCountAll({
+                /*             order: [
+                                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                                ['createdAt', 'DESC'],
+                                ['codDuplicado', 'ASC'],
+                            ], */
+                where: {
+                    [Op.and]: [
+                        { codUf: codCaderno[0].dataValues.codUf },
+                        { codCaderno: codCaderno[0].dataValues.codCaderno }
+                    ]
+                }/* ,
         limit: porPagina,
         offset: offset */
-    });
+            });
 
-    res.json({
-        success: true,
-        data: arrayClassificado,
-        teste: anuncioTeste,
-        mosaico: codCaderno[0].dataValues.descImagem
-    });
+            res.json({
+                success: true,
+                data: arrayClassificado,
+                teste: anuncioTeste,
+                mosaico: codCaderno[0].dataValues.descImagem
+            });
 
-} else {
-    let codCaderno = await Caderno.findAll({
-        where: {
-            //codUf: req.params.uf,
-            [Op.or]: [
-                { nomeCaderno: req.params.caderno },
-                { codCaderno: req.params.caderno },
-                //{ codUf: req.params.uf }
-            ]
-        }
-    });
+        } else {
+            let codCaderno = await Caderno.findAll({
+                where: {
+                    //codUf: req.params.uf,
+                    [Op.or]: [
+                        { nomeCaderno: req.params.caderno },
+                        { codCaderno: req.params.caderno },
+                        //{ codUf: req.params.uf }
+                    ]
+                }
+            });
 
-    console.log(codCaderno, req.params.uf);
-    console.log("estreesse: ", req.params.caderno)
+            console.log(codCaderno, req.params.uf);
+            console.log("estreesse: ", req.params.caderno)
 
-    const anuncio = await Anuncio.findAndCountAll({
-        where: {
-            [Op.and]: [
-                { codUf: codCaderno[0].dataValues.codUf },
-                { codCaderno: codCaderno[0].dataValues.codCaderno }
-            ]
-        }/* ,
+            const anuncio = await Anuncio.findAndCountAll({
+                where: {
+                    [Op.and]: [
+                        { codUf: codCaderno[0].dataValues.codUf },
+                        { codCaderno: codCaderno[0].dataValues.codCaderno }
+                    ]
+                }/* ,
         limit: porPagina,
         offset: offset */
-    });
+            });
 
-    console.log("estreesse: ", anuncio.count)
-    console.log("estreesse: ", req.params.uf)
+            console.log("estreesse: ", anuncio.count)
+            console.log("estreesse: ", req.params.uf)
 
-     if (anuncio.count < 1) {
-        res.json({
-            success: false,
-            message: "caderno não localizado"
-        });
+            if (anuncio.count < 1) {
+                res.json({
+                    success: false,
+                    message: "caderno não localizado"
+                });
 
-        return;
-    };
+                return;
+            };
 
-    const count = anuncio.rows.reduce((acc, item) => {
-        // Incrementa o contador do codAtividade no acumulador
-        acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
-        return acc;
-    }, {});
+            const count = anuncio.rows.reduce((acc, item) => {
+                // Incrementa o contador do codAtividade no acumulador
+                acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+                return acc;
+            }, {});
 
-    const atividades = await Atividade.findAll();
+            const atividades = await Atividade.findAll();
 
-    //console.log("--------------====> ", atividades[0].dataValues)
+            //console.log("--------------====> ", atividades[0].dataValues)
 
-    const arrayClassificado = [];
+            const arrayClassificado = [];
 
-    for (let x in count) {
-        const anun = anuncio.rows.find(item => item.codAtividade == x);
-        const atividade = atividades.find(item => item.id == x);
+            for (let x in count) {
+                const anun = anuncio.rows.find(item => item.codAtividade == x);
+                const atividade = atividades.find(item => item.id == x);
 
-        arrayClassificado.push({
-            id: atividade.dataValues.id,
-            atividade: atividade.dataValues.atividade,
-            qtdAtividade: count[x],
-            codigoAnuncio: anun.codAnuncio,
-            nomeAnuncio: anun.descAnuncio,
-            estado: anun.codUf,
-            caderno: anun.codCaderno
-        });
+                arrayClassificado.push({
+                    id: atividade.dataValues.id,
+                    atividade: atividade.dataValues.atividade,
+                    qtdAtividade: count[x],
+                    codigoAnuncio: anun.codAnuncio,
+                    nomeAnuncio: anun.descAnuncio,
+                    estado: anun.codUf,
+                    caderno: anun.codCaderno
+                });
 
-        //console.log(anun.dataValues)
-        //console.log()
-    }
+                //console.log(anun.dataValues)
+                //console.log()
+            }
 
-    console.log("debug------------------>", [
-        { codUf: codCaderno[0].dataValues.codUf },
-        { codCaderno: codCaderno[0].dataValues.codCaderno }
-    ]);
-
-    const anuncioTeste = await Anuncio.findAndCountAll({
-        where: {
-            [Op.and]: [
+            console.log("debug------------------>", [
                 { codUf: codCaderno[0].dataValues.codUf },
                 { codCaderno: codCaderno[0].dataValues.codCaderno }
-            ]
+            ]);
+
+            const anuncioTeste = await Anuncio.findAndCountAll({
+                where: {
+                    [Op.and]: [
+                        { codUf: codCaderno[0].dataValues.codUf },
+                        { codCaderno: codCaderno[0].dataValues.codCaderno }
+                    ]
+                }
+            });
+
+            res.json({
+                success: true,
+                data: arrayClassificado,
+                teste: anuncioTeste,
+                mosaico: codCaderno[0].dataValues.descImagem
+            });
         }
-    });
 
-    res.json({
-        success: true,
-        data: arrayClassificado,
-        teste: anuncioTeste,
-        mosaico: codCaderno[0].dataValues.descImagem
-    }); 
-}
 
- 
 
-      
+
 
     },
     listarClassificadoGeralold: async (req, res) => {
@@ -2079,7 +2082,6 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             cartao_digital,
             descYouTube } = req.body;
 
-        console.log(req.body)
 
         const codigoUsuario = await Usuarios.findAll({
             where: {
@@ -2127,7 +2129,7 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             "descTelefone": descTelefone,
             "descCelular": descCelular,
             "descDescricao": "teste",
-            "descSite": "www.oficinadetortas.com.br",
+            "descSite": descSite,
             "descSkype": 0,
             "descPromocao": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].desconto : '0',
             "descEmailComercial": descEmailComercial,
@@ -2172,20 +2174,21 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
         try {
             const listaAnuncios = await Anuncio.create(dadosAnuncio);
 
-            
-            const idUtilizado = await Desconto.update({
-                //utilizar_saldo: codigoDeDesconto[0].utilizar_saldo + 1,
-                saldo: codigoDeDesconto[0].saldo - 1
+            if (codTipoAnuncio == 3) {
+                const idUtilizado = await Desconto.update({
+                    //utilizar_saldo: codigoDeDesconto[0].utilizar_saldo + 1,
+                    saldo: codigoDeDesconto[0].saldo - 1
 
-            },{
-                where: {
-                    hash: codDesconto
-                }
-            })
+                }, {
+                    where: {
+                        hash: codDesconto
+                    }
+                })
+            }
 
             res.json({ success: true, message: listaAnuncios })
         } catch (err) {
-            res.json({ success: false, message: err })
+            res.json({ success: false, message: err, ter: codTipoAnuncio })
         }
 
         function dataNow() {
@@ -2272,7 +2275,6 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             cartao_digital,
             descVideo } = req.body;
 
-
         const dadosAnuncio = {
             //"codAnuncio": 88888,
             //"codUsuario": codigoUsuario[0].codUsuario,
@@ -2280,18 +2282,18 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             "codAtividade": codAtividade,
             "codPA": 0,
             "codDuplicado": 0,
-            "tags": "torteria,bolos,tortas,salgados,festas",
+            "tags": tags,
             "codCaderno": codCaderno,
             "codUf": codUf,
             "codCidade": codCidade,
             "descAnuncio": descAnuncio,
             "descAnuncioFriendly": "oficina-de-tortas",
-            "descImagem": descImagem,
+            "descImagem": descImagem || 0,
             "descEndereco": descEndereco,
             "descTelefone": descTelefone,
             "descCelular": descCelular,
             "descDescricao": "teste",
-            "descSite": "www.oficinadetortas.com.br",
+            "descSite": descSite,
             "descSkype": 0,
             //"descPromocao": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].desconto : '0',
             "descEmailComercial": descEmailComercial,
@@ -2345,7 +2347,6 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
 
             res.json({ success: true, message: codAtividade })
         } catch (err) {
-            console.log(codAtividade)
             res.json({ success: false, message: err })
         }
     },
@@ -2360,7 +2361,7 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             }
         });
 
-        
+
 
         let codigoDeDesconto = await Descontos.findAll({
             where: {
@@ -2377,17 +2378,17 @@ if (req.params.caderno == "null" || req.params.caderno == "TODO") {
                     codAnuncio: uuid
                 }
 
-            }); 
-/* 
-            const idUtilizado = await Desconto.update({
-                utilizar_saldo: codigoDeDesconto[0].utilizar_saldo - 1,
-                //saldo: codigoDeDesconto[0].saldo - 1
-
-            },{
-                where: {
-                    hash: codigoDeDesconto[0].hash
-                }
-            }) */
+            });
+            /* 
+                        const idUtilizado = await Desconto.update({
+                            utilizar_saldo: codigoDeDesconto[0].utilizar_saldo - 1,
+                            //saldo: codigoDeDesconto[0].saldo - 1
+            
+                        },{
+                            where: {
+                                hash: codigoDeDesconto[0].hash
+                            }
+                        }) */
 
 
             res.json({ success: true, message: deleteAnuncio });

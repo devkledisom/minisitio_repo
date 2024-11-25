@@ -84,7 +84,7 @@ const Users = () => {
         })
             .then((x) => x.json())
             .then((res) => {
-                //console.log(res)
+                console.log(res)
                 if (res.success) {
                     fetch(`${masterPath.url}/admin/usuario?page=${param}`)
                         .then((x) => x.json())
@@ -169,9 +169,11 @@ const Users = () => {
 
 
                 {showMsgBox && <MsgConfirm
-                    msg={"Apagar permanentemente esse usúario?"}
+                    title={"Atenção!"}
+                    msg={"Ao apagar esse usuário todos o espaços ligados a ele serão deletados."}
                     btnTitle={"Apagar"}
-                    funAction={apagarUser} />}
+                    funAction={apagarUser}
+                    setShowMsgBox={setShowMsgBox} />}
 
                 <h1 className="pt-4 px-4">Usuários</h1>
                 <div className="container-fluid py-4 px-4">
@@ -211,7 +213,6 @@ const Users = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {console.log(usuarios)}
                                     {
                                         
                                         usuarios != '' && usuarios.usuarios.map((item) => (

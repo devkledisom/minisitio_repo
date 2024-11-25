@@ -174,7 +174,7 @@ function PainelAdmin() {
         e.preventDefault();
         setAction(page);
         setEspacoId(e.target.parentNode.parentNode.id);
-        console.log("event", e.target, page)
+        //console.log("event", e.target, page)
     };
 
 

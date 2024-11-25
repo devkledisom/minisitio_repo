@@ -22,13 +22,15 @@ import {
 import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../../assets/css/caderno.css";
 import "../../assets/css/comprar-anuncio.css";
-import ChooseFile from "../../admin/components/ChooseFile";
+import ChooseFile from "./ChooseFile";
+import ChooseFile1 from "./ChooseFile1";
 import TemplateModal from "../../components/Modal/TemplateModal";
 
 //COMPONENTS
 import Tooltip from "../../components/Tooltip";
 import MapContainer from "../../components/MapContainer";
 import UserNav from './UserNav';
+import TagsInput from "../../admin/components/TagsInput";
 
 function Editar(props) {
   //States
@@ -45,6 +47,7 @@ function Editar(props) {
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
   const [descontoAtivado, setDescontoAtivado] = useState(false);
   const [minisitio, setMinisitio] = useState({});
+  const [tagValue, setTagValue] = useState([]);
 
 
   const executarSelecao = () => {
@@ -53,42 +56,35 @@ function Editar(props) {
   };
 
   useEffect(() => {
-    //console.log("child", props.espacoId)
-    
-      let codId = minisitio.hash;
-      const formatoValido = /^\d{2}\.\d{4}\.\d{4}$/;
-      console.log(formatoValido.test(codId))
-  
-      if (!formatoValido.test(codId)) {
-        console.log("invalido");
-        return;
-      }
-  
-      if (codId.length == 12) {
-        fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
-          .then((x) => x.json())
-          .then((res) => {
-            console.log(res)
-            if (res.success) {
-              console.log("desconto ", res)
-              let valorDesconto = res.IdsValue[0].desconto;
-              let precoComDesconto = precoFixo - valorDesconto;
-              setPrecoFixo(precoComDesconto);
-              setDescontoAtivado(res.success);
-            } else {
-              setDescontoAtivado(res.success);
-            }
-  
-  
-          })
-      } else {
-        setDescontoAtivado(false);
-      }
-  
-  
-  
-      console.log(codId);
-  
+
+    let codId = minisitio.hash;
+    const formatoValido = /^\d{2}\.\d{4}\.\d{4}$/;
+    //console.log(formatoValido.test(codId))
+
+    if (!formatoValido.test(codId)) {
+      return;
+    }
+
+    if (codId.length == 12) {
+      fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
+        .then((x) => x.json())
+        .then((res) => {
+          if (res.success) {
+            let valorDesconto = res.IdsValue[0].desconto;
+            let precoComDesconto = precoFixo - valorDesconto;
+            setPrecoFixo(precoComDesconto);
+            setDescontoAtivado(res.success);
+          } else {
+            setDescontoAtivado(res.success);
+          }
+
+
+        })
+    } else {
+      setDescontoAtivado(false);
+    }
+
+
   }, []);
 
   useEffect(() => {
@@ -99,6 +95,7 @@ function Editar(props) {
         setUf(res[0].codUf);
         setPersonType(res[0].descTipoPessoa);
         setRadioCheck(res[0].codTipoAnuncio);
+        setTagValue(JSON.parse(res[0].tags));
       }).catch((err) => {
         console.log(err)
       })
@@ -173,10 +170,9 @@ function Editar(props) {
   function aplicarCupom(e) {
     let codId = e.target.value;
     const formatoValido = /^\d{2}\.\d{4}\.\d{4}$/;
-    console.log(formatoValido.test(codId))
+    //console.log(formatoValido.test(codId))
 
     if (!formatoValido.test(codId)) {
-      console.log("invalido");
       return;
     }
 
@@ -285,7 +281,7 @@ function Editar(props) {
     }
 
     minisitio.descImagem = localStorage.getItem("imgname");
-    console.log(minisitio)
+    minisitio.tags = JSON.stringify(tagValue);
 
     var validation = false;
     //setShowSpinner(true);
@@ -324,7 +320,6 @@ function Editar(props) {
       fetch(`${masterPath.url}/admin/anuncio/update?id=${props.espacoId}`, config)
         .then((x) => x.json())
         .then((res) => {
-          console.log(res)
           if (res.success) {
             //setShowSpinner(false);
             alert("anuncio Atualizado!");
@@ -365,7 +360,7 @@ function Editar(props) {
             <div className="anuncio">
               <div className="form-group">
                 <label className="col-md-5 control-label tipo-de-anuncio">
-                Tipo de perfil no minisitio:
+                  Tipo de perfil no minisitio:
                 </label>
                 <div className="col-md-12 anuncio-options">
                   <label>
@@ -407,7 +402,7 @@ function Editar(props) {
               </div>
             </div>
             {/*dados para codigo promocional*/}
-            {radioCheck != 1 && <div
+            {/*           {radioCheck != 1 && <div
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
@@ -432,10 +427,7 @@ function Editar(props) {
                   id="discountValue"
                 />
               </div>
-           {/*    <h5 className="text-start">
-                Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)
-              </h5> */}
-            </div>}
+            </div>} */}
 
             {/*dados para publicação*/}
             <div className="assinatura">
@@ -475,6 +467,7 @@ function Editar(props) {
                 </div>
 
                 {/* <Marcadores /> */}
+                {radioCheck != 1 && <TagsInput tagValue={setTagValue} value={tagValue} />}
 
                 <div className="row">
                   <div class="col-md-4 col-xs-12">
@@ -546,7 +539,16 @@ function Editar(props) {
                   />
                 </div>
 
-                {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+                {/* {radioCheck != 1 && <ChooseFile codigoUser={codUser} />} */}
+                {
+                  radioCheck != 1 && <ChooseFile codigoUser={props.codigoUser}
+                    largura={"w-100 py-4"} preview={true}
+                    patrocinador={props.numeroPatrocinador}
+                    codImg={minisitio.descImagem}
+                    miniPreview={false}
+                    dt={minisitio} />
+                }
+
 
                 <div className="input-icon margin-top-10">
                   <i className="fa fa-map-marker"></i>
@@ -627,7 +629,7 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-calendar"></i>
                 <input
@@ -648,7 +650,7 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
 
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
@@ -658,7 +660,7 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
@@ -679,7 +681,7 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
@@ -702,7 +704,7 @@ function Editar(props) {
                   onChange={handleSelectChange}
                 />
               </div>
-              {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
               <h2>CashBack</h2>
@@ -711,7 +713,7 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
@@ -743,20 +745,20 @@ function Editar(props) {
                   id="descVideo"
                   className="form-control"
                   placeholder="Texto livre"
-                 /*  value={minisitio.descVideo}
-                  onChange={handleSelectChange} */
+                /*  value={minisitio.descVideo}
+                 onChange={handleSelectChange} */
                 ></textarea>
               </div>
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
                   type="text"
-                  name="descVideo"
-                  id="descVideo"
+                  name="descSite"
+                  id="descSite"
                   className="form-control"
-                  placeholder="Digite o site"
-               /*    value={minisitio.descVideo}
-                  onChange={handleSelectChange} */
+                  placeholder="Digite o link do site"
+                  value={minisitio.descSite}
+                  onChange={handleSelectChange}
                 />
               </div>
               <div className="input-icon margin-top-10">
@@ -767,7 +769,7 @@ function Editar(props) {
                   id="descVideo"
                   className="form-control"
                   placeholder="Digite o vídeo"
-                  value={minisitio.descVideo}
+                  value={minisitio.descYouTube}
                   onChange={handleSelectChange}
                 />
               </div>
@@ -803,7 +805,7 @@ function Editar(props) {
                   id="descWhatsApp"
                   className="form-control"
                   placeholder="Digite o whatsapp"
-                  value={minisitio.descWhatsapp}
+                  value={minisitio.descCelular}
                   onChange={handleSelectChange}
                 />{" "}
               </div>
@@ -927,7 +929,7 @@ function Editar(props) {
                   onChange={handleSelectChange}
                 />
               </div>
-              {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+              {/*   {radioCheck != 1 && <ChooseFile codigoUser={codUser} />} */}
             </div>}
             {/* Detalhes do anuncio */}
 
@@ -1105,8 +1107,10 @@ function Editar(props) {
                         <span className="cel">{(minisitio.descCelular) ? minisitio.descCelular : "(xx) xxxxx-xxxx"}</span>
                       </p>}
                     </div>
+                    {/* preview da imagem do card */}
+                    
                     <div class="conteudo comImagem" style={{ display: "none" }}>
-                      <img src="/resources/upload/istockphoto_1442417585_612x612_20240428_215703.jpg" height={191} />
+                      <img src={`${masterPath.url}/files/${minisitio.descImagem}`} height={191} />
                     </div>
                     {radioCheck != 1 && <div id="area-icons-actions" className="col-md-6">
                       <Tooltip text={"Mídias"}>

@@ -57,7 +57,7 @@ module.exports = {
 
         try {
             const listaUsers = await Users.create(dadosUsuario);
-            if(listaUsers) {
+            if (listaUsers) {
                 novoUsuario(Email, Nome, CPFCNPJ);
                 console.log("sjhajklhdsajlkfsafd", listaUsers.length)
             }
@@ -228,22 +228,28 @@ module.exports = {
 
         const uuid = req.params.id;
 
-        try {
-            //Atividades
-            const resultAnuncio = await Users.destroy({
-                where: {
-                    codUsuario: uuid
-                }
+             try {
+                 //Atividades
+                 const resultAnuncio = await Users.destroy({
+                     where: {
+                         codUsuario: uuid
+                     }
+     
+                 });
+               
+                 if(resultAnuncio) {
+                    const apagarEspaco = await Anuncio.destroy({
+                        where: {
+                            codUsuario: uuid
+                        }
+            
+                    });
+                 }
 
-            });
-            res.json({ success: true, message: resultAnuncio });
-        } catch (err) {
-            res.json(err);
-        }
-
-
-
-
+                 res.json({ success: true, message: resultAnuncio });
+             } catch (err) {
+                 res.json(err);
+             } 
 
     },
     buscarUsuario: async (req, res) => {
@@ -463,13 +469,13 @@ module.exports = {
                     }
                 });
 
-                if(resultAnuncio < 1) {
+                if (resultAnuncio < 1) {
                     res.json({ success: false, usuarios: resultAnuncio });
                     return;
                 }
 
-/*                 console.log(resultAnuncio[0].dataValues.codUf);
- */
+                /*                 console.log(resultAnuncio[0].dataValues.codUf);
+                 */
 
                 const resultAnuncio2 = await Users.findAll({
                     where: {

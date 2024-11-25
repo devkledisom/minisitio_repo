@@ -82,7 +82,6 @@ function Listar(props) {
     const teste = useRef(null)
 
     useEffect(() => {
-        console.log("motre", teste.current)
 
         /*     fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
               .then(x => x.json())
@@ -147,7 +146,6 @@ function Listar(props) {
         fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${nuDocumento}`)
             .then((x) => x.json())
             .then((res) => {
-                console.log(res)
                 if (res.success) {
                     setAnuncios(res.message.anuncios);
                     setShowSpinner(false);

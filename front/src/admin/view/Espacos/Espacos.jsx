@@ -275,7 +275,6 @@ const Espacos = () => {
 
 
                                         anuncios != '' && anuncios.message.anuncios.map((item) => {
-                                            console.log("map", anuncios)
 
                                             return (
                                                 <tr key={item.codAnuncio} id={item.codAnuncio} onClick={selecaoLinha}>

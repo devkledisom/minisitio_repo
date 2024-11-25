@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function TagsInput(props) {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    if(props.value.length > 0) {
+      setTags(props.value);
+      //console.log("values: ", props.value)
+    }
+  }, []);
+
+  useEffect(() => {
+    props.tagValue(tags)
+  }, [tags]);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -16,9 +27,11 @@ function TagsInput(props) {
       if (tags.length < 10 && !tags.includes(inputValue.trim())) {
         setTags([...tags, inputValue.trim()]);
         setInputValue('');
+        props.tagValue(tags)
       }
     } else if (e.key === 'Backspace' && !inputValue && tags.length) {
       setTags(tags.slice(0, -1));
+      
     }
   };
 

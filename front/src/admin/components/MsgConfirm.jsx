@@ -5,17 +5,22 @@ import Swal from 'sweetalert2';
 
 const MsgConfirm = (props) => {
     Swal.fire({
-        title: props.msg,
-        width: "300px",
+        title: props.title,
+        html: `<p style="font-size: 20px">${props.msg}</p>`,
+        width: "500px",
         showCancelButton: true,
+        icon: "info",
         confirmButtonColor: "#DD6B55",
         confirmButtonText: props.btnTitle,
+        cancelButtonText: "Cancelar"
       }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             props.funAction();
-          
-        } else if (result.isDenied) {
+        } else {
+          props.setShowMsgBox(false);
+        }
+        
+        if (result.isDenied) {
           Swal.fire("Changes are not saved", "", "info");
         }
       });

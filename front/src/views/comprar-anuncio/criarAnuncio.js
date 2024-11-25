@@ -1,7 +1,7 @@
 import { masterPath } from "../../config/config";
 
 export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert) {
-
+    setShowSpinner(true);
 
 
     var validation = false;
@@ -36,7 +36,6 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         })
 
     function criarUsuario() {
-        console.log(personType)
         const obj = {
             "TipoPessoa": pegarElemento('#descTipoPessoa-pf').checked ? "pf" : "pj",
             "CPFCNPJ": pegarElemento('#descCPFCNPJ').replace(/[.\-\/]/g, ''),
@@ -147,9 +146,6 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
             descYouTube: buscarElemento("descYouTube")
         };
 
-        console.log(obj)
-
-
         function buscarElemento(param) {
             let elementoSelecionado = document.querySelector(`#${param}`);
 
@@ -183,7 +179,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
 
                 setAlert(true);
 
-                setTimeout(() => {
+                 setTimeout(() => {
                     if (descontoAtivado && radioCheck == 3) {
                         window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                         console.log("1");
