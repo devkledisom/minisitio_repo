@@ -106,7 +106,7 @@ function Caderno() {
       fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
         .then(x => x.json())
         .then(async res => {
-          console.log(res)
+          //console.log(res)
           if (res.success) {
 
             const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
@@ -397,7 +397,7 @@ function Caderno() {
 
     if (book != undefined && id != undefined) {
       buscarAtividade();
-      console.log("primeiro")
+      //console.log("primeiro")
     } else {
       buscarTodosClassificado();
       console.log("segundo")
@@ -455,7 +455,11 @@ function Caderno() {
         paginaAtual: pageNumber
       });
 
-
+console.log('lsaflsjkdhfasdjklfsd: ', {
+  anuncios: paginatedResult.data,
+  totalPaginas: Math.ceil(param.length / limitPerPage),
+  paginaAtual: pageNumber
+})
 
       setLoading(false);
       setbtnNav(true);
@@ -794,7 +798,8 @@ function Caderno() {
 
       var list = (list % 2 == 0) ? list : list + 1;
 
-      let division = list / 2;
+      //let division = list / 2;
+      let division = list;
 
       const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
       const arrayParte2 = division > 5 ? removeDuplicate.slice(division) : [];
