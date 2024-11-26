@@ -284,6 +284,7 @@ function Editar(props) {
 
     minisitio.descImagem = localStorage.getItem("imgname");
     minisitio.tags = JSON.stringify(tagValue);
+    minisitio.logoPromocao = localStorage.getItem("imgname4");
 
     var validation = false;
     //setShowSpinner(true);
@@ -631,16 +632,23 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser}
+                origin={'promocao'}
+                largura={"w-100 py-4"} preview={false}
+                patrocinador={4}
+                codImg={minisitio.logoPromocao}
+                miniPreview={false} />}
+
+              <p>Data de validade da promoção:</p>
               <div className="input-icon margin-top-10">
                 <i className="fa fa-calendar"></i>
                 <input
                   type="date"
-                  name="descVideo"
-                  id="descVideo"
+                  name="promocaoData"
+                  id="promocaoData"
                   className="form-control"
                   placeholder="Digite o vídeo"
-                  value={minisitio.descVideo}
+                  value={minisitio.promocaoData}
                   onChange={handleSelectChange}
                 />
               </div>
@@ -747,8 +755,8 @@ function Editar(props) {
                   id="descDescricao"
                   className="form-control"
                   placeholder="Texto livre"
-                 value={minisitio.descDescricao}
-                 onChange={handleSelectChange} 
+                  value={minisitio.descDescricao}
+                  onChange={handleSelectChange}
                 ></textarea>
               </div>
               <div className="input-icon margin-top-10">
@@ -764,7 +772,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-              <i><img src="/assets/img/redes/youtube.png" height={25} /></i>
+                <i><img src="/assets/img/redes/youtube.png" height={25} /></i>
                 <input
                   type="text"
                   name="descVideo"
@@ -800,7 +808,7 @@ function Editar(props) {
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
-              <i><img src="/assets/img/teste/whatsapp.png" height={25} /></i>
+                <i><img src="/assets/img/teste/whatsapp.png" height={25} /></i>
                 <input
                   type="text"
                   name="descWhatsApp"
@@ -812,7 +820,7 @@ function Editar(props) {
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
-              <i><img src="/assets/img/teste/telegram.png" height={25} /></i>
+                <i><img src="/assets/img/teste/telegram.png" height={25} /></i>
                 <input
                   type="text"
                   name="descTelegram"
@@ -824,7 +832,7 @@ function Editar(props) {
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
-              <i><img src="/assets/img/teste/icons8-meu-negócio-48.png" height={25} /></i>
+                <i><img src="/assets/img/teste/icons8-meu-negócio-48.png" height={25} /></i>
                 <input
                   type="text"
                   name="descSkype"
@@ -836,7 +844,7 @@ function Editar(props) {
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
-              <i><img src="/assets/img/teste/facebook.png" height={25} /></i>
+                <i><img src="/assets/img/teste/facebook.png" height={25} /></i>
                 <input
                   type="text"
                   name="descFacebook"
@@ -848,7 +856,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-              <i><img src="/assets/img/teste/instagram.png" height={25} /></i>
+                <i><img src="/assets/img/teste/instagram.png" height={25} /></i>
                 <input
                   type="text"
                   name="descInsta"
@@ -860,7 +868,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-                <i><img src="/assets/img/redes/unnamed.webp" height={25} style={{ borderRadius: "5px" }}/></i>
+                <i><img src="/assets/img/redes/unnamed.webp" height={25} style={{ borderRadius: "5px" }} /></i>
                 <input
                   type="text"
                   name="descTweeter"
@@ -869,11 +877,11 @@ function Editar(props) {
                   placeholder="Digite o twitter"
                   value={minisitio.descTweeter}
                   onChange={handleSelectChange}
-                  
+
                 />
               </div>
               <div className="input-icon margin-top-10">
-              <i><img src="/assets/img/teste/linkedin.png" height={25} /></i>
+                <i><img src="/assets/img/teste/linkedin.png" height={25} /></i>
                 <input
                   type="text"
                   name="descLinkedin"
@@ -897,7 +905,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-android" style={{ color: "#3DDC84"}}></i>
+                <i className="fa fa-android" style={{ color: "#3DDC84" }}></i>
                 <input
                   type="text"
                   name="descAndroid"
@@ -921,7 +929,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-              <i><img src="/assets/img/teste/pix-2.png" height={25} style={{ borderRadius: "5px" }}/></i>
+                <i><img src="/assets/img/teste/pix-2.png" height={25} style={{ borderRadius: "5px" }} /></i>
                 <input
                   type="text"
                   name="descChavePix"

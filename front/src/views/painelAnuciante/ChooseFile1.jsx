@@ -47,7 +47,7 @@ function UploadImage(props) {
     // Criar um objeto FormData para enviar a imagem para o servidor
     //setPreview(props.preview);
 
-    if (props.patrocinador > 1 && props.patrocinador < 4) {
+    if (props.patrocinador >= 4) {
       localStorage.setItem("imgname" + props.patrocinador, acceptedFiles[0].name);
     } else {
       localStorage.setItem("imgname", acceptedFiles[0].name);
@@ -75,7 +75,7 @@ function UploadImage(props) {
     formData.append('image', acceptedFiles[0]);
 
     // Enviar a imagem para o servidor
-    fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}`, {
+    fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}&local=promocao`, {
       method: 'POST',
       body: formData
     })
@@ -99,17 +99,10 @@ function UploadImage(props) {
     if (props.preview == true) {
       document.querySelector('.semImagem').style.display = 'block';
       document.querySelector('.comImagem').style.display = 'none';
-
-      setImagem(false);
-      setMostrarLabel(true);
-      setMostrarMiniPreview(true);
-      //document.querySelector(".descImagem").style.display = 'none';
-      localStorage.setItem("imgname", "")
     } else {
       setImagem(false);
       setMostrarLabel(true);
       setMostrarMiniPreview(true);
-      //document.querySelector(".descImagem").style.display = 'none';
       localStorage.setItem("imgname", "")
     }
 

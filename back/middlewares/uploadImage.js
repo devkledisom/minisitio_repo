@@ -4,7 +4,12 @@ const path = require('path');
 module.exports = (multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
-            cb(null, path.join(__dirname, '../public/upload/img/'))
+            if(req.query.local) {
+                cb(null, path.join(__dirname, `../public/upload/img/${req.query.local}`))
+            } else {
+                cb(null, path.join(__dirname, '../public/upload/img/'))
+            }
+            
         },
         filename: (req, file, cb) => {
             //cb(null, Date.now().toString() + "_" + file.originalname)  

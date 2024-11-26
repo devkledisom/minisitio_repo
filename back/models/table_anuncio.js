@@ -321,6 +321,12 @@ const Anuncio = database.define('anuncio', {
          } */
     },
 
+    logoPromocao: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
+    },
+
     promocaoData: {
         type: Sequelize.TEXT,
         allowNull: true,
