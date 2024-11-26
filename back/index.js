@@ -24,6 +24,7 @@ app.use('/api', express.static('public'));
 app.use('/imgdefault', express.static('public'));
 
 app.use('/api/files', express.static(path.resolve(__dirname, "public", "upload", "img")));
+app.use('/api/files/2', express.static(path.resolve(__dirname, "public", "upload", "img", "promocao")));
 
 
 app.get('/outapi', (req, res) => {

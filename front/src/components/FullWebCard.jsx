@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useSearchParams, useParams} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, useParams } from 'react-router-dom';
 
 import '../assets/css/main.css';
 import '../assets/css/default.css';
@@ -32,20 +32,12 @@ function FullWebCard(props) {
     //params
     const [searchParams] = useSearchParams();
     const idParam = searchParams.get('id');
-    const {nomeAnuncio} = useParams();
+    const { nomeAnuncio } = useParams();
 
     useEffect(() => {
-  /*       if(result[0] != undefined && result[0] === "teste") {
-            let resultSalvo = sessionStorage.getItem("stateBusca");
-            setResult(JSON.parse(resultSalvo));
-            console.log(resultSalvo)
-        } else {
-            sessionStorage.setItem("stateBusca", JSON.stringify(result));
-        } */
-
 
         async function buscarAnuncio() {
-           const request = await fetch(`${masterPath.url}/anuncio/${idParam}`).then((x) => x.json());
+            const request = await fetch(`${masterPath.url}/anuncio/${idParam}`).then((x) => x.json());
             //console.log(request[0]);
             //console.log(result);
             props.setCodCaderno(request[0].codCaderno);
@@ -79,7 +71,7 @@ function FullWebCard(props) {
                             <Metadados data={result} />
                         </div>
                         <div className="mt-3">
-                            <MapContainer cep={result.descCEP} address={result.descEndereco}/>
+                            <MapContainer cep={result.descCEP} address={result.descEndereco} />
                         </div>
                     </section>
                     <section className="col-md-6">
@@ -90,12 +82,56 @@ function FullWebCard(props) {
                             </h2>
                             <div className='container'>
                                 <div className="row">
-                                    <div className='col-md-4'>Logo</div>
-                                    <div className='col-md-4'>Texto</div>
                                     <div className='col-md-4'>
-                                        <i className=' link-cinza'>
-                                            <img src="../assets/img/teste/diploma.png" alt="" height={64} />
-                                        </i>
+                                        {result.certificado_logo != "" &&
+                                            <img src={`${masterPath.url}/files/2/${result.certificado_logo}`} className='rounded' height="50" alt="logo" />
+                                        }
+                                        {result.certificado_logo == "" &&
+                                            <p>LOGO</p>
+                                        }
+
+                                    </div>
+                                    <div className='col-md-4'>{result.certificado_texto}</div>
+                                    <div className='col-md-4'>
+                                        {result.certificado_link && (
+                                            <a href={result.certificado_link} target="_blank" rel="noopener noreferrer">
+                                                <i className="link-cinza">
+                                                    <img
+                                                        src={
+                                                            result.certificado_imagem
+                                                                ? `${masterPath.url}/files/2/${result.certificado_imagem}`
+                                                                : "../assets/img/teste/diploma.png"
+                                                        }
+                                                        alt="Certificado"
+                                                        height={64}
+                                                        className='rounded'
+                                                    />
+                                                </i>
+                                            </a>
+                                        )}
+
+                                        {!result.certificado_link && result.certificado_imagem && (
+                                            <i className="link-cinza">
+                                                <img
+                                                    src={`${masterPath.url}/files/2/${result.certificado_imagem}`}
+                                                    alt="Certificado"
+                                                    height={64}
+                                                    className='rounded'
+                                                />
+                                            </i>
+                                        )}
+
+                                        {!result.certificado_link && !result.certificado_imagem && (
+                                            <i className="link-cinza">
+                                                <img
+                                                    src="../assets/img/teste/diploma.png"
+                                                    alt="Sem certificado"
+                                                    height={64}
+                                                />
+                                            </i>
+                                        )}
+
+
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +143,17 @@ function FullWebCard(props) {
                                 COMPRAR
                             </h2>
                             <div className="text-center btn-comprar">
-                                <a href="javacript:;" className="btn proximo link-cinza d-flex justify-content-center align-items-center w-50">Compre agora</a>
+                                {result.link_comprar != "" &&
+                                    <a href={result.link_comprar}
+                                        className="btn proximo link-cinza d-flex justify-content-center align-items-center w-50"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >Compre agora</a>
+                                }
+                                {result.link_comprar == "" &&
+                                    <a href="#" className="btn proximo link-cinza d-flex justify-content-center align-items-center w-50">Compre agora</a>
+                                }
+
                             </div>
                         </div>
                         <div className='border-cinza mb-4'>
@@ -135,7 +181,7 @@ function FullWebCard(props) {
                                 Fale com o dono
                             </h2>
                             <ContactForm />
-                            <Video link={result.descYouTube}/>
+                            <Video link={result.descYouTube} />
                         </div>
                         <div>
 
@@ -147,7 +193,7 @@ function FullWebCard(props) {
                 <div className="row">
                     <Socialmidia />
                 </div>
-                <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ} url={fullUrl} data={result}/>
+                <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ} url={fullUrl} data={result} />
             </div>
         </div>
     );

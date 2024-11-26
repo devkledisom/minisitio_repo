@@ -2327,14 +2327,14 @@ module.exports = {
             "dtAlteracao": "2020-11-30T23:59:59.000Z",
             "descLinkedin": descLinkedin,
             "descTelegram": descTelegram,
-            "certificado_logo": 0,
-            "certificado_texto": 0,
-            "certificado_imagem": 0,
+            "certificado_logo": certificado_logo,
+            "certificado_texto": certificado_texto,
+            "certificado_imagem": certificado_imagem,
             "descYouTube": descVideo,
             "link_comprar": link_comprar,
             "cashback_logo": 0,
             "cashback_link": 0,
-            "certificado_link": 0,
+            "certificado_link": certificado_link,
             "cartao_digital": 0,
             "descChavePix": descChavePix
         };

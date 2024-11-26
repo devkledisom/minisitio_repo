@@ -44,12 +44,6 @@ function Metadados(props) {
                         </h4>
                     </div>
                     <div className="col-md-12 link-cinza">
-                        <img src="../assets/img/teste/pix-bc.png" className='logo-pix' />
-                        <h4>
-                        {props.data.descChavePix}
-                        </h4>
-                    </div>
-                    <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/facebook.png" />
                         <h4>
                             <a href="" data-toggle="tooltip" title="Facebook">
@@ -103,6 +97,12 @@ function Metadados(props) {
                             <a href="" target="_blank" data-toggle="tooltip" title="Skype">
                             {props.data.descSkype !== "0" ? props.data.descSkype : ""}
                             </a>
+                        </h4>
+                    </div>
+                    <div className="col-md-12 link-cinza">
+                        <img src="../assets/img/teste/pix-bc.png" className='logo-pix' />
+                        <h4>
+                        {props.data.descChavePix}
                         </h4>
                     </div>
                 </div>

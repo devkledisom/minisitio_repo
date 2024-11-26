@@ -29,11 +29,8 @@ function UploadImage(props) {
     }
     //console.log("asddashfa", props.dt)
 
- if(!mostrarMiniPreview && props.codImg != 0) {
-  //document.querySelector('.comImagem img').src = `${masterPath.url}/files/${props.codImg}`;
-/*   document.querySelector('.semImagem').style.display = 'none';
-  document.querySelector('.comImagem').style.display = 'block';
-  setCodImg(true) */
+ if(props.codImg == 0 || props.codImg == "") {
+  setMostrarMiniPreview(false)
  }
 
 
@@ -103,7 +100,8 @@ function UploadImage(props) {
       setImagem(false);
       setMostrarLabel(true);
       setMostrarMiniPreview(true);
-      localStorage.setItem("imgname", "")
+      localStorage.setItem("imgname", "");
+      localStorage.setItem("imgname" + props.patrocinador, "");
     }
 
 
@@ -124,8 +122,8 @@ function UploadImage(props) {
             onChange={(event) => alert()}
           >
 
-            {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
-            {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/2/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
+            {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/2/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
 
             {/*             {!props.preview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
@@ -134,7 +132,7 @@ function UploadImage(props) {
  */}
             {/* console.log(mostrarLabel) */}
             {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""}
-            {imagem ? <a href={`${masterPath.url}/files/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {imagem ? <a href={`${masterPath.url}/files/2/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {mostrarLabel && textLabel}
             {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
 

@@ -285,6 +285,9 @@ function Editar(props) {
     minisitio.descImagem = localStorage.getItem("imgname");
     minisitio.tags = JSON.stringify(tagValue);
     minisitio.logoPromocao = localStorage.getItem("imgname4");
+    minisitio.certificado_logo = localStorage.getItem("imgname5");
+    minisitio.certificado_imagem = localStorage.getItem("imgname6");
+    
 
     var validation = false;
     //setShowSpinner(true);
@@ -691,30 +694,41 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser}
+                origin={'promocao'}
+                largura={"w-100 py-4"} preview={false}
+                patrocinador={5}
+                codImg={minisitio.certificado_logo}
+                miniPreview={false} />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
                   type="text"
-                  name="descVideo"
-                  id="descVideo"
+                  name="certificado_link"
+                  id="certificado_link"
                   className="form-control"
                   placeholder="Digite o link"
-                  value={minisitio.descVideo}
+                  value={minisitio.certificado_link}
                   onChange={handleSelectChange}
                 />
                 <i className="fa fa-tag"></i>
                 <input
                   type="text"
-                  name="descVideo"
-                  id="descVideo"
+                  name="certificado_texto"
+                  id="certificado_texto"
                   className="form-control"
                   placeholder="Digite o texto"
-                  value={minisitio.descVideo}
+                  value={minisitio.certificado_texto}
                   onChange={handleSelectChange}
+                  maxLength={15}
                 />
               </div>
-              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser}
+                origin={'promocao'}
+                largura={"w-100 py-4"} preview={false}
+                patrocinador={6}
+                codImg={minisitio.certificado_imagem}
+                miniPreview={false} />}
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
               <h2>CashBack</h2>
