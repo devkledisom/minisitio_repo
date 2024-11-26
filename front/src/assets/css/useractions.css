@@ -87,8 +87,8 @@
 
 .user-actions .master-icone {
     display: flex;
-    float: left;
     flex-direction: column;
+    align-items: center;
 }
 
 .user-actions>.master-icone>span{
@@ -126,6 +126,7 @@
     padding: 6px 13px;
     border: 1px solid #4f4f4f;
     border-radius: 5px;
+    height: 50px;
 }
 
 .btn-default {
@@ -137,5 +138,6 @@
 
 .area-master {
     display: flex;
+    align-items: center;
     gap: 10px;
 }

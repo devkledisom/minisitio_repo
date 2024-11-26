@@ -7,9 +7,27 @@ import { masterPath } from '../config/config';
 
 function UserActions(props) {
     const [docState, setDocState] = useState(props.doc);
+    const [master, setMaster] = useState(null);
 
     useEffect(() => {
-        setDocState(props.doc)
+        setDocState(props.doc);
+
+      /*   fetch(`${masterPath.url}/admin/desconto/edit/${props.data.codDesconto}`)
+            .then((x) => x.json())
+            .then((res) => {
+                console.log(res);
+            }).catch((err) => {
+                console.log(err)
+            })  */
+            if(props.data.codDesconto > 0) {
+                fetch(`${masterPath.url}/admin/usuario/edit/${props.data.codUsuario}`)
+                .then((x) => x.json())
+                .then((res) => {
+                    setMaster(res.descNome);
+                }).catch((err) => {
+                    console.log(err);
+                })
+            }
     })
 
     // Cria uma referência para o componente filho
@@ -61,13 +79,13 @@ function UserActions(props) {
                     <img src="/assets/img/logo.png" />
                     Denúncia
                 </a>
-                <a href="javascript:;" class="btn btn-default area-master" title="MARCOS QUIMAS">
+                <a href="javascript:;" class="btn btn-default area-master">
                     <div class="master-icone">
                         <span>Master:</span>
                         <img src="/assets/img/logo.png" />
                     </div>
                     <div class="master-descricao">
-                        MARCOS QUIMAS
+                    {master}
                     </div>
                 </a>
             </div>

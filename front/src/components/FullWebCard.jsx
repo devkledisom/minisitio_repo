@@ -66,6 +66,7 @@ function FullWebCard(props) {
         <div className="FullWebCard">
             <div className="container">
                 {/* teste row */}
+                <h1>PERFIL no espaço MINISITIO</h1>
                 <div className="row p-3">
                     <section className="col-md-6">
                         <h2 className='titulo-cinza'>
@@ -146,7 +147,7 @@ function FullWebCard(props) {
                 <div className="row">
                     <Socialmidia />
                 </div>
-                <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ} url={fullUrl}/>
+                <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ} url={fullUrl} data={result}/>
             </div>
         </div>
     );
