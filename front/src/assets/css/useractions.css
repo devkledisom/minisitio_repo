@@ -140,4 +140,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    overflow: hidden;
+    width: 200px;
+
 }

@@ -12,22 +12,22 @@ function UserActions(props) {
     useEffect(() => {
         setDocState(props.doc);
 
-      /*   fetch(`${masterPath.url}/admin/desconto/edit/${props.data.codDesconto}`)
+         fetch(`${masterPath.url}/admin/desconto/edit/${props.data.codDesconto}`)
             .then((x) => x.json())
             .then((res) => {
-                console.log(res);
+                if(props.data.codDesconto > 0) {
+                    fetch(`${masterPath.url}/admin/usuario/edit/${res[0].idUsuario}`)
+                    .then((x) => x.json())
+                    .then((res) => {
+                        setMaster(res.descNome);
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                }
             }).catch((err) => {
                 console.log(err)
-            })  */
-            if(props.data.codDesconto > 0) {
-                fetch(`${masterPath.url}/admin/usuario/edit/${props.data.codUsuario}`)
-                .then((x) => x.json())
-                .then((res) => {
-                    setMaster(res.descNome);
-                }).catch((err) => {
-                    console.log(err);
-                })
-            }
+            })  
+           
     })
 
     // Cria uma referência para o componente filho
