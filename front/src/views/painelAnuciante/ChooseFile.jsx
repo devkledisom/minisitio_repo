@@ -38,7 +38,6 @@ function UploadImage(props) {
       //document.querySelector('.comImagem img').src = `${masterPath.url}/files/${props.codImg}`;
       document.querySelector('.semImagem').style.display = 'none';
       document.querySelector('.comImagem').style.display = 'block';
-      console.log('props')
     }
 
 

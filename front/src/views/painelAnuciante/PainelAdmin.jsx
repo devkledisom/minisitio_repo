@@ -87,7 +87,6 @@ function PainelAdmin() {
     const teste = useRef(null)
 
     useEffect(() => {
-        console.log("motre", teste.current)
 
         /*     fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
               .then(x => x.json())

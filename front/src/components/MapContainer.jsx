@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-/* import GoogleMapReact from 'google-map-react'; */
 import { GoogleMap, StreetViewPanorama, LoadScript } from '@react-google-maps/api';
 import { BsDisplay } from "react-icons/bs";
 
@@ -13,17 +12,16 @@ export default function MapContainer(props) {
     const [centerGet, setCenter] = useState({ lat: -34.397, lng: 150.644 });
 
     useEffect(() => {
-        //console.log(props.cep)
         // Função para buscar coordenadas a partir do CEP usando a API de Geocoding do Google
         const fetchCoordinates = async () => {
             try {
-               
-                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${props.cep}&key=${apiKey}`);
+                //props.cep
+                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${props.address},${props.cep},BR&key=${apiKey}`);
                 const data = await response.json();
                 if (data.status === "OK" && data.results.length > 0) {
                     const location = data.results[0].geometry.location;
                     setCenter({ lat: location.lat, lng: location.lng });
-                    console.log({ lat: location.lat, lng: location.lng })
+                    //console.log({ lat: location.lat, lng: location.lng })
                 } else {
                     //console.error("Não foi possível encontrar as coordenadas para o CEP fornecido.");
                     setCenter({ lat: -34.397, lng: 150.644 });
@@ -61,7 +59,7 @@ export default function MapContainer(props) {
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={centerGet}
-                zoom={10}
+                zoom={15}
             >
                 <StreetViewPanorama options={streetViewPanoramaOptions} />
             </GoogleMap>

@@ -163,7 +163,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         }
 
         //console.log(obj);  /admin/usuario/criar-anuncio
-         fetch(`${masterPath.url}/admin/anuncio/create`, {
+        fetch(`${masterPath.url}/admin/anuncio/create`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(obj),
@@ -179,7 +179,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
 
                 setAlert(true);
 
-                 setTimeout(() => {
+                setTimeout(() => {
                     if (descontoAtivado && radioCheck == 3) {
                         window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                         console.log("1");
@@ -192,7 +192,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                     }
                 }, 5000);
 
-            }); 
+            });
     }
 
 

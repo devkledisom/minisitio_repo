@@ -2,9 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { masterPath } from "../../config/config";
 import he from 'he';
+import './style.css';
 
 import InputMask from 'react-input-mask';
-
+import { FaFacebook, FaFacebookSquare, FaInstagramSquare, FaTwitter, FaLinkedin, FaYoutube } from "react-icons/fa";
 
 //lib
 import {
@@ -41,7 +42,7 @@ function Editar(props) {
   const [atividades, setAtividades] = useState();
   const [radioCheck, setRadioCheck] = useState(1);
   const [personType, setPersonType] = useState("pf");
-  const [cep, setCep] = useState();
+  const [cep, setCep] = useState(null);
   const [showMap, setShowMap] = useState("none");
   const [precoFixo, setPrecoFixo] = useState(5);
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
@@ -96,6 +97,7 @@ function Editar(props) {
         setPersonType(res[0].descTipoPessoa);
         setRadioCheck(res[0].codTipoAnuncio);
         setTagValue(JSON.parse(res[0].tags));
+        setCep(res[0].descCEP);
       }).catch((err) => {
         console.log(err)
       })
@@ -578,7 +580,7 @@ function Editar(props) {
                   />
                 </div>}
 
-                {radioCheck != 1 && <MapContainer cep={cep} />}
+                {radioCheck != 1 && <MapContainer cep={cep} address={minisitio.descEndereco} />}
                 {/* <MapContainer cep={cep} showMap={"block"} /> */}
 
 
@@ -734,19 +736,19 @@ function Editar(props) {
               <h2>Detalhes do Perfil Minisitio</h2>
             </div>}
             {radioCheck != 1 && <div
-              className="codigo-promocional webcard"
+              className="codigo-promocional webcard metadados-icons"
               style={{ display: "block" }}
             >
               <div className="input-icon margin-top-10">
-                <i className="fa fa-globe"></i>
+                <i className="fa fa-pencil"></i>
                 <textarea
                   type="text"
-                  name="descVideo"
-                  id="descVideo"
+                  name="descDescricao"
+                  id="descDescricao"
                   className="form-control"
                   placeholder="Texto livre"
-                /*  value={minisitio.descVideo}
-                 onChange={handleSelectChange} */
+                 value={minisitio.descDescricao}
+                 onChange={handleSelectChange} 
                 ></textarea>
               </div>
               <div className="input-icon margin-top-10">
@@ -762,7 +764,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-youtube"></i>
+              <i><img src="/assets/img/redes/youtube.png" height={25} /></i>
                 <input
                   type="text"
                   name="descVideo"
@@ -798,7 +800,7 @@ function Editar(props) {
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-mobile"></i>
+              <i><img src="/assets/img/teste/whatsapp.png" height={25} /></i>
                 <input
                   type="text"
                   name="descWhatsApp"
@@ -810,7 +812,7 @@ function Editar(props) {
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-send"></i>
+              <i><img src="/assets/img/teste/telegram.png" height={25} /></i>
                 <input
                   type="text"
                   name="descTelegram"
@@ -822,7 +824,7 @@ function Editar(props) {
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-globe"></i>
+              <i><img src="/assets/img/teste/icons8-meu-negócio-48.png" height={25} /></i>
                 <input
                   type="text"
                   name="descSkype"
@@ -834,7 +836,7 @@ function Editar(props) {
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-facebook"></i>
+              <i><img src="/assets/img/teste/facebook.png" height={25} /></i>
                 <input
                   type="text"
                   name="descFacebook"
@@ -846,7 +848,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-instagram"></i>
+              <i><img src="/assets/img/teste/instagram.png" height={25} /></i>
                 <input
                   type="text"
                   name="descInsta"
@@ -858,7 +860,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-twitter"></i>
+                <i><img src="/assets/img/redes/unnamed.webp" height={25} style={{ borderRadius: "5px" }}/></i>
                 <input
                   type="text"
                   name="descTweeter"
@@ -867,10 +869,11 @@ function Editar(props) {
                   placeholder="Digite o twitter"
                   value={minisitio.descTweeter}
                   onChange={handleSelectChange}
+                  
                 />
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-linkedin"></i>
+              <i><img src="/assets/img/teste/linkedin.png" height={25} /></i>
                 <input
                   type="text"
                   name="descLinkedin"
@@ -894,7 +897,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-android"></i>
+                <i className="fa fa-android" style={{ color: "#3DDC84"}}></i>
                 <input
                   type="text"
                   name="descAndroid"
@@ -906,7 +909,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-apple"></i>
+                <i className="fa fa-apple" style={{ color: "#A2AAAD" }}></i>
                 <input
                   type="text"
                   name="descApple"
@@ -918,7 +921,7 @@ function Editar(props) {
                 />
               </div>
               <div className="input-icon margin-top-10">
-                <i className="fa fa-money"></i>
+              <i><img src="/assets/img/teste/pix-2.png" height={25} style={{ borderRadius: "5px" }}/></i>
                 <input
                   type="text"
                   name="descChavePix"
@@ -1108,7 +1111,7 @@ function Editar(props) {
                       </p>}
                     </div>
                     {/* preview da imagem do card */}
-                    
+
                     <div class="conteudo comImagem" style={{ display: "none" }}>
                       <img src={`${masterPath.url}/files/${minisitio.descImagem}`} height={191} />
                     </div>

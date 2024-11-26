@@ -54,7 +54,7 @@ function ComprarAnuncio() {
   const [precoFixo, setPrecoFixo] = useState(5);
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
   const [descontoAtivado, setDescontoAtivado] = useState(false);
-  const [tagValue, setTagValue] = useState();
+  const [tagValue, setTagValue] = useState([]);
   const [showSpinner, setShowSpinner] = useState(false);
   const [alert, setAlert] = useState(false);
   const [texto, setTexto] = useState(null);
