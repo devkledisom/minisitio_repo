@@ -83,15 +83,16 @@ function FullWebCard(props) {
                             <div className='container'>
                                 <div className="row">
                                     <div className='col-md-4'>
-                                        {result.certificado_logo != "" &&
+                                        {console.log(result.certificado_logo)}
+                                        {(result.certificado_logo != null && result.certificado_logo != "") &&
                                             <img src={`${masterPath.url}/files/2/${result.certificado_logo}`} className='rounded' height="50" alt="logo" />
                                         }
-                                        {result.certificado_logo == "" &&
+                                        {(result.certificado_logo == "" || result.certificado_logo == null) &&
                                             <p>LOGO</p>
                                         }
 
                                     </div>
-                                    <div className='col-md-4'>{result.certificado_texto}</div>
+                                    <div className='col-md-4'>{result.certificado_texto ? result.certificado_texto : "TEXTO"}</div>
                                     <div className='col-md-4'>
                                         {result.certificado_link && (
                                             <a href={result.certificado_link} target="_blank" rel="noopener noreferrer">
