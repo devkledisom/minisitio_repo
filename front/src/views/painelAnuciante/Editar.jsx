@@ -829,7 +829,7 @@ function Editar(props) {
                   id="descWhatsApp"
                   className="form-control"
                   placeholder="Digite o whatsapp"
-                  value={minisitio.descCelular}
+                  value={minisitio.descWhatsApp}
                   onChange={handleSelectChange}
                 />{" "}
               </div>
