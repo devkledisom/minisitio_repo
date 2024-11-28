@@ -29,6 +29,7 @@ router.use(function timelog(req, res, next) {
 });
 
 const uploadUser = require('../middlewares/uploadImage');
+const uploadPdf = require('../middlewares/uploadPdf');
 
 
 router.get('/api/', BemVindo.bemvindo);
@@ -117,6 +118,7 @@ router.post('/api/admin/anuncio/import', saveImport().single('uploadedfile'),Adm
 router.post('/api/admin/usuario/criar-anuncio', Users.criarAnuncio);
 router.get('/api/pa', Users.qtdaAnuncio);
 router.post('/api/upload-image', uploadUser.single('image'), Upload.uploadImg);
+router.post('/api/upload-pdf', uploadPdf.single('file'), Upload.uploadPdf);
 router.get('/api/list-image', Upload.listFiles);
 
 //ACÕES DO USUARIO

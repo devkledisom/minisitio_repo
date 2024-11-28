@@ -78,8 +78,8 @@ function Metadados(props) {
                     <div className="col-md-12 ">
                         <img src="../assets/img/teste/whatsapp.png" />
                         <h4>
-                            <a href={`https://api.whatsapp.com/send?1=pt_BR&amp;phone=55${props.data.descCelular}`} target="_blank" data-toggle="tooltip" title="WhatsApp">
-                                {props.data.descCelular !== "0" ? props.data.descCelular : "(xx) xxxxx-xxxx"}
+                            <a href={`https://api.whatsapp.com/send?1=pt_BR&amp;phone=55${props.data.descWhatsApp}`} target="_blank" data-toggle="tooltip" title="WhatsApp">
+                                {props.data.descWhatsApp !== "0" ? props.data.descWhatsApp : "(xx) xxxxx-xxxx"}
                             </a>
                         </h4>
                     </div>

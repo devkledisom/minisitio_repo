@@ -8,7 +8,7 @@ function UploadImage(props) {
   //state
   const [imagem, setImagem] = useState(false);
   const [mostrarLabel, setMostrarLabel] = useState(true);
-  const [textLabel, setTextLabel] = useState("Anexar imagem");
+  const [textLabel, setTextLabel] = useState(props.msg);
 
   const [mostrarMiniPreview, setMostrarMiniPreview] = useState(props.miniPreview);
   const [ativarPreview, setPreview] = useState(props.preview);
@@ -17,33 +17,22 @@ function UploadImage(props) {
 
   //ref
   const inputImg = useRef();
-  /*   if (props.codImg != '') {
-      setImagem(false);
-    } */
-
-     
-
   useEffect(() => {
     if (!mostrarMiniPreview) {
       setMostrarLabel(false);
     }
-    //console.log("asddashfa", props.dt)
+    console.log("asddashfa", props.codImg)
 
- if(props.codImg == 0 || props.codImg == "") {
-  setMostrarMiniPreview(false)
+ if(props.codImg == 0 || props.codImg == "" || props.codImg == undefined) {
+  setMostrarMiniPreview(true);
+  setMostrarLabel(true);
  }
 
 
   }, []);
 
 
-
-
   const onDrop = useCallback((acceptedFiles) => {
-    // Faça algo com os arquivos aceitos, como enviar para um servidor
-    // Criar um objeto FormData para enviar a imagem para o servidor
-    //setPreview(props.preview);
-
     if (props.patrocinador >= 4) {
       localStorage.setItem("imgname" + props.patrocinador, acceptedFiles[0].name);
     } else {
@@ -53,13 +42,7 @@ function UploadImage(props) {
     console.log(acceptedFiles[0])
     setImagem(acceptedFiles[0]);
     setMostrarLabel(false);
-    //setTextLabel(acceptedFiles[0].name);
-    //localStorage.setItem("imgname", acceptedFiles[0].name);
-
-  /*   if(props.teste != undefined) {
-      props.teste(acceptedFiles[0], true)
-    }; */
-    
+   
 
     if (props.preview == true) {
       document.querySelector('.comImagem img').src = URL.createObjectURL(acceptedFiles[0]);
@@ -100,7 +83,6 @@ function UploadImage(props) {
       setImagem(false);
       setMostrarLabel(true);
       setMostrarMiniPreview(true);
-      localStorage.setItem("imgname", "");
       localStorage.setItem("imgname" + props.patrocinador, "");
     }
 
@@ -115,22 +97,20 @@ function UploadImage(props) {
           <span
             className="form-control descImagem"
             style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
               paddingTop: "5px",
-              lineHeight: "38px",
-              color: "#4f4f4f!important"
+              /* lineHeight: "38px", */
+              color: "#4f4f4f!important",
+              margin: "auto"
             }}
-            onChange={(event) => alert()}
           >
 
             {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/2/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
             {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/2/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
 
-            {/*             {!props.preview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
-            {!props.preview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
-            {!props.preview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
- */}
-            {/* console.log(mostrarLabel) */}
             {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""}
             {imagem ? <a href={`${masterPath.url}/files/2/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {mostrarLabel && textLabel}

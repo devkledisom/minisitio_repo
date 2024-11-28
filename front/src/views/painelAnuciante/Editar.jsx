@@ -25,6 +25,7 @@ import "../../assets/css/caderno.css";
 import "../../assets/css/comprar-anuncio.css";
 import ChooseFile from "./ChooseFile";
 import ChooseFile1 from "./ChooseFile1";
+import ChooseFilePdf from "./ChooseFilePdf";
 import TemplateModal from "../../components/Modal/TemplateModal";
 
 //COMPONENTS
@@ -98,6 +99,12 @@ function Editar(props) {
         setRadioCheck(res[0].codTipoAnuncio);
         setTagValue(JSON.parse(res[0].tags));
         setCep(res[0].descCEP);
+
+        localStorage.setItem("imgname", res[0].descImagem);
+        localStorage.setItem("imgname4", res[0].logoPromocao);
+        localStorage.setItem("imgname5", res[0].certificado_logo);
+        localStorage.setItem("imgname6", res[0].certificado_imagem);
+
       }).catch((err) => {
         console.log(err)
       })
@@ -287,7 +294,7 @@ function Editar(props) {
     minisitio.logoPromocao = localStorage.getItem("imgname4");
     minisitio.certificado_logo = localStorage.getItem("imgname5");
     minisitio.certificado_imagem = localStorage.getItem("imgname6");
-    
+
 
     var validation = false;
     //setShowSpinner(true);
@@ -640,7 +647,10 @@ function Editar(props) {
                 largura={"w-100 py-4"} preview={false}
                 patrocinador={4}
                 codImg={minisitio.logoPromocao}
-                miniPreview={false} />}
+                miniPreview={false}
+                msg={"Anexar imagem da promoção"} />
+
+              }
 
               <p>Data de validade da promoção:</p>
               <div className="input-icon margin-top-10">
@@ -663,7 +673,15 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFilePdf codigoUser={codUser}
+                origin={'promocao'}
+                largura={"w-100 py-4"}
+                preview={false}
+                patrocinador={7}
+                codImg={minisitio.cartao_digital}
+                miniPreview={false}
+                msg={"Anexar imagem do cartão digital"}
+                data={minisitio} />}
 
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
@@ -673,7 +691,7 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} msg={"Anexar imagem"} />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
@@ -699,7 +717,9 @@ function Editar(props) {
                 largura={"w-100 py-4"} preview={false}
                 patrocinador={5}
                 codImg={minisitio.certificado_logo}
-                miniPreview={false} />}
+                miniPreview={false}
+                msg={"Anexar logo do certificado"} />
+              }
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
@@ -728,7 +748,8 @@ function Editar(props) {
                 largura={"w-100 py-4"} preview={false}
                 patrocinador={6}
                 codImg={minisitio.certificado_imagem}
-                miniPreview={false} />}
+                miniPreview={false}
+                msg={"Anexar imagem do certificado"} />}
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
               <h2>CashBack</h2>

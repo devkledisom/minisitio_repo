@@ -2167,7 +2167,7 @@ module.exports = {
             "cashback_logo": 0,
             "cashback_link": 0,
             "certificado_link": "",
-            "cartao_digital": 0,
+            "cartao_digital": "",
             "descYouTube": descYouTube,
         };
 
@@ -2335,7 +2335,7 @@ module.exports = {
             "cashback_logo": 0,
             "cashback_link": 0,
             "certificado_link": certificado_link,
-            "cartao_digital": 0,
+            "cartao_digital": cartao_digital,
             "descChavePix": descChavePix
         };
 
