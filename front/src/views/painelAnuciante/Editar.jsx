@@ -681,7 +681,8 @@ function Editar(props) {
                 codImg={minisitio.cartao_digital}
                 miniPreview={false}
                 msg={"Anexar imagem do cartão digital"}
-                data={minisitio} />}
+                minisitio={minisitio}
+                data={setMinisitio} />}
 
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>

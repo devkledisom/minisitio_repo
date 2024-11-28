@@ -2276,7 +2276,7 @@ module.exports = {
             cartao_digital,
             descChavePix,
             descVideo } = req.body;
-
+console.log("2323534503750378453253245: ", cartao_digital);
         const dadosAnuncio = {
             //"codAnuncio": 88888,
             //"codUsuario": codigoUsuario[0].codUsuario,

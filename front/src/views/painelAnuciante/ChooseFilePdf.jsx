@@ -65,7 +65,13 @@ function UploadImage(props) {
         }
         console.log('Pdf enviado com sucesso!');
 
-        props.data.cartao_digital = acceptedFiles[0].name;
+        //props.data.cartao_digital = acceptedFiles[0].name;
+
+        props.data({
+          ...props.minisitio,
+          ['cartao_digital']: acceptedFiles[0].name,
+    
+        });
 
         console.log(props.data.cartao_digital);
         setMostrarLabel(false);
@@ -80,6 +86,11 @@ function UploadImage(props) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const limparInputImg = () => {
+    props.data({
+      ...props.minisitio,
+      ['cartao_digital']: "",
+
+    });
     if (props.preview == true) {
       document.querySelector('.semImagem').style.display = 'block';
       document.querySelector('.comImagem').style.display = 'none';

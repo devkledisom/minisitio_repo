@@ -12,22 +12,22 @@ function UserActions(props) {
     useEffect(() => {
         setDocState(props.doc);
 
-         fetch(`${masterPath.url}/admin/desconto/edit/${props.data.codDesconto}`)
+        fetch(`${masterPath.url}/admin/desconto/edit/${props.data.codDesconto}`)
             .then((x) => x.json())
             .then((res) => {
-                if(props.data.codDesconto > 0) {
+                if (props.data.codDesconto > 0) {
                     fetch(`${masterPath.url}/admin/usuario/edit/${res[0].idUsuario}`)
-                    .then((x) => x.json())
-                    .then((res) => {
-                        setMaster(res.descNome);
-                    }).catch((err) => {
-                        console.log(err);
-                    })
+                        .then((x) => x.json())
+                        .then((res) => {
+                            setMaster(res.descNome);
+                        }).catch((err) => {
+                            console.log(err);
+                        })
                 }
             }).catch((err) => {
                 console.log(err)
-            })  
-           
+            })
+
     })
 
     // Cria uma referência para o componente filho
@@ -43,11 +43,11 @@ function UserActions(props) {
         fetch(`${masterPath.url}/cartao-digital?espaco=${props.url}&id=${props.id}`)
             .then(x => x.json())
             .then(res => {
-                if(res.success) {
+                if (res.success) {
                     window.open(res.url, '_blank');
-                    console.log("resultado",res)
+                    console.log("resultado", res)
                 }
-                
+
             })
     };
 
@@ -55,10 +55,10 @@ function UserActions(props) {
     return (
         <div class="user-actions row linksUteis margin-top-20 hidden-print my-5">
             <div class="col-md-12">
-                 <a href={`/ver-anuncios/${limparCPFouCNPJ(docState)}`} class="btn btn-default margin-bottom-10">
+                <a href={`/ver-anuncios/${limparCPFouCNPJ(docState)}`} class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Atualizar
-                </a> 
+                </a>
                 <a href="/area-assinante" class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Renovar
@@ -71,10 +71,19 @@ function UserActions(props) {
                     <img src="/assets/img/logo.png" />
                     Adesivo
                 </a>
-                <a href="#" class="btn btn-danger margin-bottom-10 hidden-xs" target="_blank" onClick={gerarCartaoDigital}>
-                    <img src="/assets/img/logo.png" />
-                    Cartão Digital
-                </a>
+                {(props.data.cartao_digital != "" || props.data.cartao_digital != 0) &&
+                    <a href={`${masterPath.url}/files/3/${props.data.cartao_digital}`} class="btn btn-danger margin-bottom-10 hidden-xs" target="_blank">
+                        <img src="/assets/img/logo.png" />
+                        Cartão Digital
+                    </a>
+                }
+                {(props.data.cartao_digital == "" || props.data.cartao_digital == 0) && 
+                      <a href="#" class="btn btn-danger margin-bottom-10 hidden-xs">
+                      <img src="/assets/img/logo.png" />
+                      Cartão Digital
+                  </a>
+                }   
+              
                 <a href="/contato" class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Denúncia
@@ -85,7 +94,7 @@ function UserActions(props) {
                         <img src="/assets/img/logo.png" />
                     </div>
                     <div class="master-descricao">
-                    {master}
+                        {master}
                     </div>
                 </a>
             </div>
