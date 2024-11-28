@@ -64,6 +64,13 @@ function UploadImage(props) {
           throw new Error('Erro ao enviar imagem para o servidor');
         }
         console.log('Imagem enviada com sucesso!');
+
+        props.data({
+          ...props.minisitio,
+          ['descParceiro']: acceptedFiles[0].name,
+    
+        });
+
         setMostrarLabel(false);
         setMostrarMiniPreview(true);
       })
@@ -76,6 +83,13 @@ function UploadImage(props) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const limparInputImg = () => {
+
+    props.data({
+      ...props.minisitio,
+      ['descParceiro']: "",
+
+    });
+
     if (props.preview == true) {
       document.querySelector('.semImagem').style.display = 'block';
       document.querySelector('.comImagem').style.display = 'none';

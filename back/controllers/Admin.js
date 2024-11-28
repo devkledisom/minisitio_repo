@@ -2247,6 +2247,8 @@ module.exports = {
             descCPFCNPJ,
             descNomeAutorizante,
             descEmailAutorizante,
+            descParceiro,
+            descParceiroLink,
             codDesconto,
             descLat,
             descLng,
@@ -2276,8 +2278,8 @@ module.exports = {
             cartao_digital,
             descChavePix,
             descVideo } = req.body;
-console.log("2323534503750378453253245: ", cartao_digital);
-        const dadosAnuncio = {
+
+            const dadosAnuncio = {
             //"codAnuncio": 88888,
             //"codUsuario": codigoUsuario[0].codUsuario,
             "codTipoAnuncio": codTipoAnuncio,
@@ -2308,6 +2310,8 @@ console.log("2323534503750378453253245: ", cartao_digital);
             "descCPFCNPJ": descCPFCNPJ,
             "descNomeAutorizante": descNomeAutorizante,
             "descEmailAutorizante": descEmailAutorizante,
+            "descParceiro": descParceiro,
+            "descParceiroLink": descParceiroLink,
             //"codDesconto": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
             "descLat": 0,
             "descLng": 0,

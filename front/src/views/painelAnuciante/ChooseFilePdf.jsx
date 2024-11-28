@@ -83,7 +83,11 @@ function UploadImage(props) {
 
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, 
+    accept: { 'application/pdf': [] }, // Aceita apenas arquivos PDF
+        maxFiles: 1, // Limite de 1 arquivo
+        //maxSize: 5 * 1024 * 1024, // Limite de tamanho (5MB)
+   });
 
   const limparInputImg = () => {
     props.data({

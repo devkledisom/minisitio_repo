@@ -171,16 +171,16 @@ function Listar(props) {
                 <i class="fa fa-spinner fa-spin"></i>Carregando
             </button>}
 
-           {/*  <header>
+            {/*  <header>
                 <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} />
             </header> */}
             <main>
-              {/*   <Busca paginaAtual={"caderno"} /> */}
+                {/*   <Busca paginaAtual={"caderno"} /> */}
                 {/*  <h1 id="title-caderno" className='py-2 text-center'>Todos os meus espaços</h1> */}
 
                 <div className='container'>
                     <div className='col-md-12'>
-                   {/*  <UserNav /> */}
+                        {/*  <UserNav /> */}
                         <div className="row lista">
                             <div class="col-md-12">
                                 <div class="bg-cinza" style={{ "padding-top": "10px" }}>
@@ -192,51 +192,62 @@ function Listar(props) {
                                             <input id="buscar" class="pull-right margin-bottom-0" type="text" placeholder="Buscar" />
                                         </div>
                                         <div class="col-md-12" style={{ "padding-top": "10px" }}>
-                                            <div id="paginacao"><table class="table table-bordered table-striped table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th style={{ "width": "132px" }}>--</th>
-                                                        <th>Anúncio</th>
-                                                        <th>COD</th>
-                                                        <th>Pagamento</th>
-                                                        <th>Cadastrado em</th>
-                                                        <th>Atualizado em</th>
-                                                        <th>Válido até</th>
-                                                        <th>Valor Pago</th>
-                                                        <th>Forma Pagamento</th>
-                                                        <th>Data Pagamento</th>
-                                                        <th>Cidade/UF</th>
-                                                        {/* <th>ID Desconto</th> */}
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {anuncios.map((item) => (
-                                                        <tr id={item.codAnuncio}>
-                                                            <td>
-                                                                <a class="btn btn-xs btn-success" title="Editar" href="/12178481426/criar-anuncio/582210" onClick={(e) => props.btnEdit(e, 2)}>
-                                                                    Editar
-                                                                </a>
-                                                                <a class="btn btn-xs btn-danger" title="Apagar" href="javascript:apagar('/12178481426/apagar-anuncio/582210');">
-                                                                    Apagar
-                                                                </a>
-                                                            </td>
-                                                            <td>{item.descAnuncio}</td>
-                                                            <td>{item.codAnuncio}</td>
-                                                            <td>
-                                                                <a class="btn btn-xs btn-success" href="javascript:;">Isento</a>
-                                                            </td>
-                                                            <td>{item.createdAt.split("T")[0]}</td>
-                                                            <td>{item.updatedAt.split("T")[0]}</td>
-                                                            <td>{item.dueDate.split("T")[0]}</td>
-                                                            <td>0,00</td>
-                                                            <td>isento</td>
-                                                            <td>06/09/2024</td>
-                                                            <td>{`${item.codCaderno}/${item.codUf}`}</td>
-                                                            {/* <td></td> */}
+                                            <div id="paginacao">
+                                                <table class="table table-bordered table-striped table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style={{ "width": "132px" }}>--</th>
+                                                            <th>Anúncio</th>
+                                                            <th>COD</th>
+                                                            <th>Pagamento</th>
+                                                            <th>Cadastrado em</th>
+                                                            <th>Atualizado em</th>
+                                                            <th>Válido até</th>
+                                                            <th>Valor Pago</th>
+                                                            <th>Forma Pagamento</th>
+                                                            <th>Data Pagamento</th>
+                                                            <th>Cidade/UF</th>
+                                                            <th>Ver perfil</th>
                                                         </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        {anuncios.map((item) => (
+                                                            <tr id={item.codAnuncio}>
+                                                                <td>
+                                                                    <a class="btn btn-xs btn-success" title="Editar" href="/12178481426/criar-anuncio/582210" onClick={(e) => props.btnEdit(e, 2)}>
+                                                                        Editar
+                                                                    </a>
+                                                                    <a class="btn btn-xs btn-danger" title="Apagar" href="javascript:apagar('/12178481426/apagar-anuncio/582210');">
+                                                                        Apagar
+                                                                    </a>
+                                                                </td>
+                                                                <td>{item.descAnuncio}</td>
+                                                                <td>{item.codAnuncio}</td>
+                                                                <td>
+                                                                    <a class="btn btn-xs btn-success" href="javascript:;">Isento</a>
+                                                                </td>
+                                                                <td>{item.createdAt.split("T")[0]}</td>
+                                                                <td>{item.updatedAt.split("T")[0]}</td>
+                                                                <td>{item.dueDate.split("T")[0]}</td>
+                                                                <td>0,00</td>
+                                                                <td>isento</td>
+                                                                <td>06/09/2024</td>
+                                                                <td>{`${item.codCaderno}/${item.codUf}`}</td>
+                                                                <td className='text-center ver-perfil'>
+                                                                    <a
+                                                                        href={`/local/${item.descAnuncio}?id=${item.codAnuncio}`}
+                                                                        className='text-decoration-none'
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                    >
+                                                                        <i class="fa fa-eye"></i>
+                                                                        Ver
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <p>Página 1/1 (Total: 1)</p>
@@ -289,7 +300,7 @@ function Listar(props) {
             </main>
 
             <footer>
-            {/*     <Nav styleclassName="Nav" />
+                {/*     <Nav styleclassName="Nav" />
                 <Footer /> */}
             </footer>
         </div >

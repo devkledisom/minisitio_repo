@@ -692,16 +692,26 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} msg={"Anexar imagem"} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} 
+                 origin={'promocao'}
+                 largura={"w-100 py-4"}
+                 preview={false}
+                 patrocinador={8}
+                 codImg={minisitio.descParceiro}
+                 miniPreview={false}
+                 msg={"Anexar logo da parceria"}
+                 minisitio={minisitio}
+                 data={setMinisitio}
+              />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
                   type="text"
-                  name="descVideo"
-                  id="descVideo"
+                  name="descParceiroLink"
+                  id="descParceiroLink"
                   className="form-control"
                   placeholder="Digite o link da parceria"
-                  value={minisitio.descVideo}
+                  value={minisitio.descParceiroLink}
                   onChange={handleSelectChange}
                 />
               </div>

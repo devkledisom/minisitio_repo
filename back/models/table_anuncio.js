@@ -287,6 +287,18 @@ const Anuncio = database.define('anuncio', {
         }
     },
 
+    descParceiro: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
+    },
+
+    descParceiroLink: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
+    },
+
     codDesconto: {
         type: Sequelize.STRING(255),
         allowNull: false,
