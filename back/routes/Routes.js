@@ -82,7 +82,7 @@ router.post('/api/admin/desconto/export', Admin.exportID);
 router.get('/admin/desconto/read', Admin.listarIds);
 router.get('/admin/desconto/edit/:id', Admin.listarUserId);
 router.put('/admin/desconto/update', Admin.atualizarIds);
-router.post('/admin/desconto/create', Admin.criarIds);
+//router.post('/admin/desconto/create', Admin.criarIds);
 router.delete('/admin/desconto/delete/:id', Admin.deleteIds);
 router.get('/admin/desconto/buscar/:id', Admin.buscarId);
 router.get('/admin/desconto/ddd/:id', Admin.buscarDDD);

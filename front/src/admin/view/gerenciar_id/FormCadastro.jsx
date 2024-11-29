@@ -171,15 +171,15 @@ const FormCadastro = () => {
                           })
                     } else {
                         setShowSpinner(false);
-                        if(res.message.original.code == 'ER_DUP_ENTRY') {
+                        //if(res.message.original.code == 'ER_DUP_ENTRY') {
                             Swal.fire({
                                 title: 'falha!',
-                                text: 'erro: duplicação de ID!',
+                                text: res.message.errors[0].message,
                                 icon: 'error',
                                 confirmButtonText: 'Entendi'
                               })
-                        }
-                        console.log(res.message.original.code);
+                        //}
+                        console.log(res.message);
                     }
                 }).catch((err) => {
                     console.log(err);

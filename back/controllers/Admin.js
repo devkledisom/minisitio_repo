@@ -772,12 +772,10 @@ module.exports = {
                 dtCadastro: dataNow(),
                 ativo: 1,
                 patrocinador_ativo: req.body.patrocinador,
-                utilizar_saldo: 0,
+                utilizar_saldo: req.body.saldoUtilizado,
                 saldo: req.body.saldo
 
             });
-
-            console.log(req.body)
 
             res.json({ success: true, message: "ID criado com sucesso!" });
         } catch (err) {
@@ -818,24 +816,51 @@ module.exports = {
 
         const nu_hash = req.params.id;
 
-        //Descontos
-        const resultAnuncio = await Descontos.findAll({
+        const resultUser = await Usuarios.findAll({
             where: {
                 [Op.or]: [
-                    { hash: nu_hash },
-                    { idDesconto: nu_hash }
+                    { descNome: { [Op.like]: `%${nu_hash}%` } }
                 ]
 
             }
         });
-        console.log(resultAnuncio)
-        if (resultAnuncio < 1) {
-            res.json({ success: false, message: "ID não encontrado" });
-            return;
-        }
-        console.log(resultAnuncio)
 
-        res.json({ success: true, IdsValue: resultAnuncio });
+        if (resultUser[0]) {
+            //Descontos
+            const resultAnuncio = await Descontos.findAll({
+                where: {
+                    [Op.or]: [
+                        { idUsuario: resultUser[0].codUsuario }
+                    ]
+
+                }
+            });
+
+            if (resultAnuncio < 1) {
+                res.json({ success: false, message: "ID não encontrado" });
+                return;
+            }
+
+            res.json({ success: true, IdsValue: resultAnuncio });
+        } else {
+            //Descontos
+            const resultAnuncio = await Descontos.findAll({
+                where: {
+                    [Op.or]: [
+                        { hash: nu_hash },
+                        { idDesconto: nu_hash }
+                    ]
+
+                }
+            });
+            if (resultAnuncio < 1 || resultAnuncio[0].hash == "00.000.0000") {
+                res.json({ success: false, message: "ID não encontrado 0" });
+                return;
+            }
+            
+            res.json({ success: true, IdsValue: resultAnuncio });
+        }
+
 
 
 
@@ -871,7 +896,7 @@ module.exports = {
         }
 
         res.json({ success: true, data: dddBusca[0], qtdeIds: descontoBusca });
-        res.json({ success: true, data: dddBusca });
+        //res.json({ success: true, data: dddBusca });
         //Descontos
         /*  const resultAnuncio = await Descontos.findAll({
              where: {
@@ -2279,7 +2304,7 @@ module.exports = {
             descChavePix,
             descVideo } = req.body;
 
-            const dadosAnuncio = {
+        const dadosAnuncio = {
             //"codAnuncio": 88888,
             //"codUsuario": codigoUsuario[0].codUsuario,
             "codTipoAnuncio": codTipoAnuncio,

@@ -60,7 +60,7 @@ function Metadados(props) {
                         </h4>
                     </div>
                     <div className="col-md-12 link-cinza">
-                        <img src="../assets/img/teste/twitter.png" />
+                        <img src="../assets/img/redes/unnamed.webp" className="rounded" />
                         <h4>
                             <a href="" data-toggle="tooltip" title="Twitter">
                             {props.data.descTweeter !== "teste" ? props.data.descTweeter : ""}

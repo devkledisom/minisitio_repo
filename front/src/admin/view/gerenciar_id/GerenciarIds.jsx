@@ -83,7 +83,7 @@ const GerenciarIds = () => {
         })
             .then((x) => x.json())
             .then((res) => {
-console.log(res)
+
                 if (res.success) {
                     setShowSpinner(false);
                     alert(res.message)
@@ -104,9 +104,9 @@ console.log(res)
                     alert("encontrado");
                     setIds(res);
                     setShowSpinner(false);
-                    console.log(res.usuarios);
                 } else {
-                    alert("Usuário não encontrado na base de dados");
+                    alert("Id não encontrado na base de dados");
+                    setShowSpinner(false);
                 }
 
             })
@@ -167,7 +167,7 @@ console.log(res)
                         </div>
                         <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
-                                <input id="buscar" type="text" placeholder="Buscar" />
+                                <input id="buscar" type="text" placeholder="Código, usuário" />
                                 <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
                                     <i className="icon-search"></i>
                                 </button>
