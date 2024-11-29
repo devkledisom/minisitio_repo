@@ -1,9 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
 
+
 //GLOBAL FUNCTIONS
 import { limparCPFouCNPJ, generatePdf } from "../globalFunctions/functions";
 import PdfGenerator from "../plugins/PdfGenerator";
 import { masterPath } from '../config/config';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ShareButton from "./ShareButton";
 
 function UserActions(props) {
     const [docState, setDocState] = useState(props.doc);
@@ -72,18 +75,31 @@ function UserActions(props) {
                     Adesivo
                 </a>
                 {(props.data.cartao_digital != "" || props.data.cartao_digital != 0) &&
-                    <a href={`${masterPath.url}/files/3/${props.data.cartao_digital}`} class="btn btn-danger margin-bottom-10 hidden-xs" target="_blank">
+                    /*       <a href={`${masterPath.url}/files/3/${props.data.cartao_digital}`} class="btn btn-danger margin-bottom-10 hidden-xs" target="_blank">
+                              <img src="/assets/img/logo.png" />
+                              Cartão Digital
+                          </a> */
+                    <div class="dropdown">
+                        <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="/assets/img/logo.png" />
+                            Cartão Digital
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        <ul class="dropdown-menu lista-cart" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href={`${masterPath.url}/files/3/${props.data.cartao_digital}`} target="_blank" rel="noopener noreferrer">Visualizar</a></li>
+                            <li><ShareButton showBtn={false} url={`${masterPath.url}/files/3/`} name={encodeURIComponent(props.data.cartao_digital)} /></li>
+                        </ul>
+                    </div>
+                }
+                {(props.data.cartao_digital == "" || props.data.cartao_digital == 0) &&
+                    <a href="#" class="btn btn-danger margin-bottom-10 hidden-xs">
                         <img src="/assets/img/logo.png" />
                         Cartão Digital
                     </a>
+
                 }
-                {(props.data.cartao_digital == "" || props.data.cartao_digital == 0) && 
-                      <a href="#" class="btn btn-danger margin-bottom-10 hidden-xs">
-                      <img src="/assets/img/logo.png" />
-                      Cartão Digital
-                  </a>
-                }   
-              
+
+
                 <a href="/contato" class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Denúncia
