@@ -5,7 +5,7 @@
 .formulario {
     position: relative;
     height: auto;
-    padding: 50px;
+    padding: 50px 10px;
     z-index: 0;
     background: #ffcc29 url(../img/bg-home.jpg) no-repeat fixed;
 }
@@ -14,7 +14,7 @@
     background: #ffcc29;
     color: #000;
     font-size: 20px !important;
-    font-weight:500;
+    font-weight: 500;
     /* height: 60px; */
 }
 
@@ -31,6 +31,7 @@
     font-size: 19px !important;
     margin: 0 6px 0 0;
 }
+
 .btnCaderno i {
     font-size: 19px !important;
     margin: 0 6px 0 0;
@@ -50,7 +51,7 @@
 
 .btn-group {
     width: 83%;
-} 
+}
 
 .form-control {
     display: block;
@@ -85,7 +86,7 @@
 /*icones componente busca*/
 .formulario-home i {
     font-size: 30px;
-   /*  margin: 0 6px 0 0; */
+    /*  margin: 0 6px 0 0; */
     /* color: #4f4f4f; */
 }
 
@@ -165,16 +166,6 @@ i.fa.fa-tags {
     text-transform: uppercase;
 }
 
-.header-navigation {
-    float: right;
-    list-style: none;
-    padding: 19px 0 0;
-    /* margin: 0; */
-    font: 400 18px "PT Sans Narrow", Arial, sans-serif;
-    text-transform: uppercase;
-}
-
-
 li.assine {
     padding: 10px;
     background-color: #ffcc29;
@@ -187,7 +178,7 @@ li.assine {
 }
 
 .logo {
-   /*  display: block; */
+    /*  display: block; */
     height: 100px;
     margin-top: -40px;
     margin-bottom: 10px;
@@ -291,4 +282,43 @@ li.assine {
     z-index: 1;
     min-width: 100px;
 
+}
+
+@media (max-width: 768px) {
+
+    .header-navigation {
+        display: flex;
+        gap: 5px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    .header-navigation li {
+        margin: 0;
+        white-space: nowrap;
+        font-size: 10px;
+    }
+
+    .faixa-header {
+        /* height: 100px; */
+
+    }
+
+    .btn-group {
+        width: 100%;
+    }
+
+    .coluna-2 {
+        margin-top: 20px;
+    }
+
+    .proximo {
+        white-space: nowrap;
+    }
+
+    .card-metadados {
+        font-size: 12px;
+    }
 }

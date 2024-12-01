@@ -33,3 +33,9 @@
     background-color: #edecec;
     padding: 10px;
 }
+
+@media (max-width: 768px) {
+    .p-bottom {
+        padding-bottom: 0px;
+    }
+}

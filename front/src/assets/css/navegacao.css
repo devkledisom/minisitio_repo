@@ -32,3 +32,10 @@
     float: right;
     padding: 0;
 }
+
+@media (max-width: 768px) {
+    .Navegacao .cinza {
+        padding: 0 !important;
+        width: 100%;
+    }
+}

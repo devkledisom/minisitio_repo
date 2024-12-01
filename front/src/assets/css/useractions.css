@@ -164,6 +164,7 @@
 @media (max-width: 768px) {
     .user-actions>div {
         flex-direction: column;
+        padding: 0 33px;
     }
 
     .user-actions>div>a {

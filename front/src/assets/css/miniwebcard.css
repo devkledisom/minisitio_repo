@@ -98,3 +98,9 @@
     height: 42px;
     width: 135px;
 }
+
+@media (max-width: 768px) {
+    .apoio img {
+        width: 112px;
+    }
+}

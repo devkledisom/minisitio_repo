@@ -167,17 +167,17 @@ function WebcardThumb(props) {
                         </div>
                     }
 
-                    <div className="row py-0 px-2">
+                    <div className="row py-0 px-2 card-metadados">
                         <div className="container">
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-6 col-6">
                                     <p className='text-start'>
                                         Anúncio visualizado: {props.data.qntVisualizacoes} vezes <br />
                                         Última atualização: {formatData(props.data.updatedAt)}<br />
                                         Código: {props.data.codAnuncio}
                                     </p>
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-md-6 col-6">
                                     <p className='text-end'>
                                         Desde: {formatData(props.data.createdAt)}<br />
                                         Renovado em: {formatData(props.data.updatedAt)}<br />

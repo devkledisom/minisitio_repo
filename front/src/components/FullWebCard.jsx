@@ -56,11 +56,11 @@ function FullWebCard(props) {
 
     return (
         <div className="FullWebCard">
-            <div className="container">
+            <div className="container p-0">
                 {/* teste row */}
                 <h1>PERFIL no espaço MINISITIO</h1>
                 <div className="row p-3">
-                    <section className="col-md-6">
+                    <section className="col-md-6 coluna-1">
                         <h2 className='titulo-cinza'>
                             {result.descAnuncio}
                         </h2>
@@ -74,7 +74,7 @@ function FullWebCard(props) {
                             <MapContainer cep={result.descCEP} address={result.descEndereco} />
                         </div>
                     </section>
-                    <section className="col-md-6">
+                    <section className="col-md-6 coluna-2">
                         <div className='border-cinza mb-4'>
                             <h2 className='titulo-cinza'>
                                 <i className="fa fa-certificate mx-2"></i>

@@ -58,7 +58,7 @@ function Navegacao() {
                         </li>
                     </ul> */}
                     <Breadcrumb items={migalhas} />
-                    <div className='col-md-2 d-flex justify-content-end align-items-center'>
+                    <div className='col-md-2 col-3 d-flex justify-content-end align-items-center'>
                         <button className='cinza px-3' onClick={goBack}>
                             <i className="fa fa-arrow-left"></i>
                             Voltar

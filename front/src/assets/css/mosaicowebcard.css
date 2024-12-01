@@ -10,3 +10,13 @@
     margin-top: 0;
     margin-bottom: 0;
 }
+
+@media (max-width: 768px) {
+    .mosaico-webcard>.header>.container>.container-mosaico {
+        gap: 0px;
+    }
+
+    .mosaico-webcard>.header>.container>.container-mosaico>a>.logo {
+        height: 70px;
+    }
+}

@@ -35,10 +35,10 @@ function Busca(props) {
         let codigoCidade = document.querySelectorAll('#codUf3')[0].value;
         const teste = caderno.find(cad => cad.codCaderno == codigoCidade);
 
-        if(codigoCidade != "TODO") {
+        if (codigoCidade != "TODO") {
             localStorage.setItem("caderno: ", teste.nomeCaderno);
             sessionStorage.setItem("caderno: ", codigoCidade);
-    
+
             setCadernoUf(teste.codUf);
             //setCadernoCidade(teste.nomeCaderno);
             setCodCaderno(codigoCidade);
@@ -52,7 +52,7 @@ function Busca(props) {
     };
 
     useEffect(() => {
-  
+
 
         let ufSalva = sessionStorage.getItem("uf: ");
         let cadSalvo = sessionStorage.getItem("caderno: ");
@@ -89,7 +89,7 @@ function Busca(props) {
             const codigoCaderno = document.querySelector('#codUf3').value;
             const valor_da_busca = document.querySelector('#inputBusca').value;
 
-            if(valor_da_busca.length < 1) {
+            if (valor_da_busca.length < 1) {
                 alert("por favor preencha o campo de pesquisa");
                 setLoading(false);
                 return;
@@ -116,11 +116,11 @@ function Busca(props) {
             setResult(request);
             //console.log(request);
             setLoading(false);
-                navigate("/buscar");
-           
-           /*  if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
-                navigate("/buscar");
-            } */
+            navigate("/buscar");
+
+            /*  if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
+                 navigate("/buscar");
+             } */
 
             //console.log(result)
 
@@ -157,6 +157,23 @@ function Busca(props) {
     };
 
 
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        // Adiciona o listener de evento para 'resize'
+        window.addEventListener("resize", handleResize);
+
+        // Remove o listener quando o componente é desmontado
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+
 
     /*   console.log(result) */
 
@@ -172,7 +189,7 @@ function Busca(props) {
                     <div className='col-md-offset-1 col-md-12'>
                         <form id="buscador-home" name="buscador-home" className="d-flex justify-content-center flex-column" action="" method="post">
                             <div className="row d-flex justify-content-center p-bottom">
-                                <div className="col-md-3 d-flex">
+                                <div className="col-md-3 col-6 d-flex">
                                     <i className="fa fa-compass icone-form"></i>
                                     <div className="form-group w-100">
 
@@ -185,7 +202,7 @@ function Busca(props) {
 
                                     </div>
                                 </div>
-                                <div className="col-lg-5 col-md-5 col-sm-5 col-xs-8 d-flex">
+                                <div className="col-lg-5 col-md-5 col-sm-5 col-xs-8 col-6 d-flex">
                                     <i className="fa fa-map-marker icone-form"></i>
                                     <div className="form-group w-100">
 
@@ -199,17 +216,21 @@ function Busca(props) {
 
                                     </div>
                                 </div>
-                                <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs">
-                                    <div className="btn-group" role="group">
-                                        <button type="button"
-                                            className="btn proximo btnCaderno btn-3"
-                                            onClick={verClassificado}
-                                            title=" Ver Caderno"><i className="fa fa-file-text"></i> <span>Ver Caderno</span></button>
-                                        <button type="button" className="btn proximo btnGrupo btnPromocao" data-promocao="1" title="Promoção">
-                                            <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
-                                        </button>
+                                {windowWidth >= 768 ? (
+                                    <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs">
+                                        <div className="btn-group" role="group">
+                                            <button type="button"
+                                                className="btn proximo btnCaderno btn-3"
+                                                onClick={verClassificado}
+                                                title=" Ver Caderno"><i className="fa fa-file-text"></i> <span>Ver Caderno</span></button>
+                                            <button type="button" className="btn proximo btnGrupo btnPromocao" data-promocao="1" title="Promoção">
+                                                <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    ""
+                                )}
                             </div>
                             <div className="row d-flex justify-content-center">
 
@@ -222,7 +243,7 @@ function Busca(props) {
                                 <div className="col-lg-3 col-md-4 col-sm-4 col-xs-5">
                                     <button
                                         type="button"
-                                        className="btn btn-block cinza btnBuscar target-start-search col-md-10"
+                                        className="btn btn-block cinza btnBuscar target-start-search col-md-10 w-100"
                                         id="btnBuscar"
                                         title="Buscar"
                                         onClick={() => fetchAnuncios()}>
@@ -230,7 +251,24 @@ function Busca(props) {
                                         Buscar
                                     </button>
                                 </div>
+
+
                             </div>
+                            {windowWidth >= 768 ? (
+                                ""
+                            ) : (
+                                <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs" style={{ paddingTop: "30px" }}>
+                                    <div className="btn-group" role="group">
+                                        <button type="button"
+                                            className="btn proximo btnCaderno btn-outline-dark rounded"
+                                            onClick={verClassificado}
+                                            title=" Ver Caderno"><i className="fa fa-file-text"></i> <span>Ver Caderno</span></button>
+                                        <button type="button" className="btn proximo btnGrupo btnPromocao" data-promocao="1" title="Promoção">
+                                            <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </form>
                     </div>
                 </div>
