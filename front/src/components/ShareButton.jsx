@@ -16,6 +16,11 @@ function ShareButton(props) {
       }
     } else {
       alert('A API de compartilhamento não é suportada neste dispositivo.');
+      navigator.clipboard.writeText({
+        title: 'Cartão Digital',
+        text: 'Descrição do conteúdo para compartilhar.',
+        url: `${masterPath.url}/files/3/${props.name}`,
+      });
     }
   };
 
@@ -27,7 +32,7 @@ function ShareButton(props) {
         </button>
       }
       {!props.showBtn &&
-        <a class="dropdown-item" href="#" onClick={handleShare} style={{textDecoration: "none"}} >Compartilhar</a>
+        <a class="dropdown-item" href="#" onClick={handleShare} style={{ textDecoration: "none" }} >Compartilhar</a>
       }
 
     </div>

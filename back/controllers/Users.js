@@ -59,7 +59,6 @@ module.exports = {
             const listaUsers = await Users.create(dadosUsuario);
             if (listaUsers) {
                 novoUsuario(Email, Nome, CPFCNPJ);
-                console.log("sjhajklhdsajlkfsafd", listaUsers.length)
             }
 
             res.json({ success: true, message: listaUsers })

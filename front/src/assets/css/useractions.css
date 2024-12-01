@@ -151,11 +151,35 @@
 
 }
 
-.lista-cart > li > a {
+.lista-cart>li>a {
     text-decoration: none;
 }
 
-.dropdown-item:focus, .dropdown-item:hover {
+.dropdown-item:focus,
+.dropdown-item:hover {
     color: var(--bs-dropdown-link-hover-color);
     background-color: #ffcc29;
+}
+
+@media (max-width: 768px) {
+    .user-actions>div {
+        flex-direction: column;
+    }
+
+    .user-actions>div>a {
+        width: 100%;
+    }
+
+    .user-actions>div>div {
+        width: 100%;
+    }
+
+    .user-actions>div>div>button {
+        width: 100%;
+    }
+
+    .user-actions>div>div>button>i {
+        position: absolute;
+        right: 10px;
+    }
 }

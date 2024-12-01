@@ -43,16 +43,12 @@ function Login() {
                         sessionStorage.setItem('userLogged', res.data);
     
                         navigate("/admin");
-                        console.log(res);
                     }
-                    /* console.log(res);
-                    console.log(res.data);
-                    console.log(res.data.codTipoUsuario == 1); */
                     
                     let tipoUsuario = res.data.codTipoUsuario;
                     let nuDocumento = res.data.descCPFCNPJ;
     
-                    if (tipoUsuario == 3) {
+                    if (tipoUsuario == 2 || tipoUsuario == 3) {
                         sessionStorage.setItem('authTokenMN', true);
                         sessionStorage.setItem('userLogged', res.data);
                         navigate(`/ver-anuncios/${nuDocumento.replace(/[.-]/g, '')}`);

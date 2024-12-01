@@ -225,6 +225,7 @@ const Users = () => {
                                                 {item.codTipoUsuario == 1 ? <td>SUPER ADMIN</td> : ''}
                                                 {item.codTipoUsuario == 2 ? <td>MASTER</td> : ''}
                                                 {item.codTipoUsuario == 3 ? <td>ANUNCIANTE</td> : ''}
+                                                {item.codTipoUsuario == 4 ? <td>MASTER / ANUNC</td> : ''}
                                                 {uf.map((estado) => (
                                                     estado.id_uf == item.codUf &&
                                                     <td>{estado.sigla_uf}</td>
