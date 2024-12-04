@@ -1,8 +1,6 @@
 import React from 'react';
 import { masterPath } from '../config/config';
 
-import QrcodeMosaico from '../plugins/QrcodeMosaico';
-
 function Mosaico(props) {
 
     const style = {
@@ -20,7 +18,7 @@ function Mosaico(props) {
             <div className="header hidden-print" style={
                 props.mosaicoImg ? style : { boxShadow: props.borda }
             }>
-                <div className="container">
+                <div className="container" style={{paddingTop: "15px"}}>
                     <div className="row">
                     {/* <QrcodeMosaico /> */}
                         <div className="col-md-12 col-sm-12 pull-right faixa-header">

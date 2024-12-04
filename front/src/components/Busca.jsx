@@ -112,6 +112,7 @@ function Busca(props) {
             };
 
             const request = await fetch(`${masterPath.url}/buscar`, options).then((x) => x.json())
+            console.log(request)
             //setAnuncio(request)
             setResult(request);
             //console.log(request);

@@ -13,7 +13,7 @@ module.exports = {
         await database.sync();
 
         const { uf, cidade, atividade, name, telefone, nu_documento, codigoCaderno } = req.body;
-        console.table([name, atividade, telefone, nu_documento]);
+        console.table([name, atividade, telefone, nu_documento, uf, codigoCaderno]);
         /*        const result = await Caderno.findAll({
                    where: {
                        codUf: uf,
@@ -32,8 +32,106 @@ module.exports = {
         //console.log("debug: ", atividades);
         //console.log("debug: ", codigoCaderno, uf, atividades[0].id);
 
+        let anuncios1;
+
         //anuncio
-        const anuncios = await Anuncio.findAll({
+        if(codigoCaderno != "TODO") {
+            anuncios1 = await Anuncio.findAll({
+                where: {
+                    [Op.or]: [
+                        {[Op.and]: [
+                            {codCaderno: codigoCaderno},
+                            {codUf: uf},
+                            {
+                                [Op.or]: [
+                                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                    {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
+                                    {descTelefone: atividade},
+                                    {descCPFCNPJ: atividade},
+                                    {tags: {
+                                        [Op.like]: `%${atividade}%`
+                                    }}
+                                ]
+                            }
+                        ]}/* ,
+                        {[Op.and]: [
+                            {codUf: uf},
+                            {
+                                [Op.or]: [
+                                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                    {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
+                                    {descTelefone: atividade},
+                                    {descCPFCNPJ: atividade},
+                                    {tags: {
+                                        [Op.like]: `%${atividade}%`
+                                    }}
+                                ]
+                            }
+                        ]} */
+                        
+                    ],
+                    /* [Op.or]: [
+                        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                        {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
+                        {descTelefone: atividade},
+                        {descCPFCNPJ: atividade},
+                        {tags: {
+                            [Op.like]: `%${atividade}%`
+                        }}
+                    ] */
+                    //codAtividade: 6
+                }
+            });
+        } else {
+            anuncios1 = await Anuncio.findAll({
+                where: {
+                    [Op.or]: [
+                        {[Op.and]: [
+                            {codUf: uf},
+                            {
+                                [Op.or]: [
+                                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                    {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
+                                    {descTelefone: atividade},
+                                    {descCPFCNPJ: atividade},
+                                    {tags: {
+                                        [Op.like]: `%${atividade}%`
+                                    }}
+                                ]
+                            }
+                        ]}/* ,
+                        {[Op.and]: [
+                            {codUf: uf},
+                            {
+                                [Op.or]: [
+                                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                    {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
+                                    {descTelefone: atividade},
+                                    {descCPFCNPJ: atividade},
+                                    {tags: {
+                                        [Op.like]: `%${atividade}%`
+                                    }}
+                                ]
+                            }
+                        ]} */
+                        
+                    ],
+                    /* [Op.or]: [
+                        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                        {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
+                        {descTelefone: atividade},
+                        {descCPFCNPJ: atividade},
+                        {tags: {
+                            [Op.like]: `%${atividade}%`
+                        }}
+                    ] */
+                    //codAtividade: 6
+                }
+            });
+
+        }
+
+        const  anuncios = await Anuncio.findAll({
             where: {
                 [Op.or]: [
                     {[Op.and]: [
@@ -50,7 +148,7 @@ module.exports = {
                                 }}
                             ]
                         }
-                    ]},
+                    ]}/* ,
                     {[Op.and]: [
                         {codUf: uf},
                         {
@@ -64,7 +162,7 @@ module.exports = {
                                 }}
                             ]
                         }
-                    ]}
+                    ]} */
                     
                 ],
                 /* [Op.or]: [
@@ -79,6 +177,7 @@ module.exports = {
                 //codAtividade: 6
             }
         });
+     
 
         //console.log(anuncios)
 

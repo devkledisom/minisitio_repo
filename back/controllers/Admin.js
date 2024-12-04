@@ -1427,6 +1427,8 @@ module.exports = {
 
         let codCaderno;
 
+        if(!req.params.caderno) return;
+
         if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             let codCaderno = await Caderno.findAll({
                 where: {
@@ -1452,7 +1454,6 @@ module.exports = {
         offset: offset */
             });
 
-            console.log("estreesse: ", anuncio.count)
 
             if (anuncio.count < 1) {
                 res.json({

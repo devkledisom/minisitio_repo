@@ -16,7 +16,7 @@ import { BsShareFill, BsFillSendFill, BsFacebook, BsInstagram, BsTwitter, BsYout
 
 function Socialmidia() {
     return (
-        <div className="UserActions p-4">
+        <div className="UserActions p-4 row">
             <h4 className='text-start'>
                 Compartilhar:
             </h4>

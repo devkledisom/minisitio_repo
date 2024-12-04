@@ -40,7 +40,6 @@ function Cardlist(props) {
   function urlTransform(url) {
     //const url = "http://localhost:3032/api/files/sefer7_logo_full (1).jpg";
     const encodedUrl = encodeURI(url); // Codifica a URL corretamente
-    console.log(encodedUrl);
     return encodedUrl;
   }
 
@@ -49,7 +48,7 @@ function Cardlist(props) {
       {/* {console.log(props.descImagem)} */}
       <div className="container card my-2">
         <div className="row card-list">
-          <div className="col-md-2 p-0">
+          <div className="col-md-2 p-0 thumb">
             
             {props.codImg !== "teste" && props.codImg !== "0" &&
               <img
@@ -76,7 +75,7 @@ function Cardlist(props) {
             }
 
           </div>
-          <div className="col-md-10 py-1">
+          <div className="col-md-10 col-6 py-1">
             <div className="container w-100 p-0">
               {/* row */}
               <div className="row text-start">
@@ -92,12 +91,11 @@ function Cardlist(props) {
                 <div className="col-md-12 col-xs-12 pesquisa-nome">
                   <h4 className="d-flex">{/* font-14 */}
                     <i className="fa fa-map-marker"></i>
-                    <span>{props.anuncio.descEndereco}</span> /{" "}
                     {caderno.map((item) => {
                       if (item.codCaderno == props.codCity) {
                         //console.log(uf)
-                        const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)
-                        return <span>{item.nomeCaderno} - {estado.sigla_uf} </span>
+                       /*  const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)*/
+                        return <span>{item.nomeCaderno} - {item.UF} </span> 
                       }
 
                     })}
@@ -105,7 +103,7 @@ function Cardlist(props) {
                 </div>
               </div>
               {/* row */}
-              <div className="row">
+              <div className="row area-btn">
                 <div className="col-md-12 d-flex justify-content-end btn-view-page">
                   <button>
                     <i className="fa fa-star"></i>{/*cadUf[1]*/}

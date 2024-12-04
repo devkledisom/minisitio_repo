@@ -58,8 +58,6 @@ function Caderno(props) {
 
         const minisitio = await res.json();
 
-        console.log(minisitio.anuncios.length)
-
         setMinisitio(minisitio);
 
         const codigosAtividades = minisitio.anuncios.map((item) => item.codAtividade);

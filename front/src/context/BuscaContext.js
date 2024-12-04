@@ -6,7 +6,7 @@ const BuscaContexto = createContext();
 
 // Componente Provedor do Contexto
 export const TemaProvider = ({ children }) => {
-    const [result, setResult] = useState(['teste']);
+    const [result, setResult] = useState([]);
 
     return (
         <BuscaContexto.Provider value={{ result, setResult }}>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Breadcrumb({ items }) {
   return (
-    <nav style={{ '--bs-breadcrumb-divider': "'>'", height: "36px", fontSize: "12px" }} aria-label="breadcrumb" className="col-md-10 col-9 d-flex">
+    <nav style={{ '--bs-breadcrumb-divider': "'>'", height: "36px", fontSize: "10px" }} aria-label="breadcrumb" className="col-md-10 col-9 d-flex">
       <ol className="breadcrumb" style={{ height: "100%", display: "flex", alignItems: "center" }}>
         {items.map((item, index) => (
           <li key={index} className="breadcrumb-item" style={{ textTransform: 'uppercase' }}>

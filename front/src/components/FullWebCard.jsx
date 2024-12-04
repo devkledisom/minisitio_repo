@@ -56,10 +56,10 @@ function FullWebCard(props) {
 
     return (
         <div className="FullWebCard">
-            <div className="container p-0">
+            <div className="container">
                 {/* teste row */}
                 <h1>PERFIL no espaço MINISITIO</h1>
-                <div className="row p-3">
+                <div className="row p-3 full-title">
                     <section className="col-md-6 coluna-1">
                         <h2 className='titulo-cinza'>
                             {result.descAnuncio}
@@ -83,7 +83,6 @@ function FullWebCard(props) {
                             <div className='container'>
                                 <div className="row">
                                     <div className='col-md-4'>
-                                        {console.log(result.certificado_logo)}
                                         {(result.certificado_logo != null && result.certificado_logo != "") &&
                                             <img src={`${masterPath.url}/files/2/${result.certificado_logo}`} className='rounded' height="50" alt="logo" />
                                         }

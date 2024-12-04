@@ -162,6 +162,11 @@
 }
 
 @media (max-width: 768px) {
+    .user-actions {
+        width: 100%;
+        margin: auto;
+    }
+
     .user-actions>div {
         flex-direction: column;
         padding: 0 33px;

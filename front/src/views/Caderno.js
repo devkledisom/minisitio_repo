@@ -59,18 +59,18 @@ function Caderno() {
   useEffect(() => {
 
     fetch(`${masterPath.url}/cadernos`)
-    .then((x) => x.json())
-    .then((res) => {
-      
-      let nome = res.find((item) => item.codCaderno == caderno)
-      setCadernos(nome.nomeCaderno);
-    });
-  fetch(`${masterPath.url}/ufs`)
-    .then((x) => x.json())
-    .then((res) => {
-      let nome = res.find((item) => item.id_uf == estado)
-      setUfs(nome.sigla_uf);
-    });
+      .then((x) => x.json())
+      .then((res) => {
+
+        let nome = res.find((item) => item.codCaderno == caderno)
+        setCadernos(nome.nomeCaderno);
+      });
+    fetch(`${masterPath.url}/ufs`)
+      .then((x) => x.json())
+      .then((res) => {
+        let nome = res.find((item) => item.id_uf == estado)
+        setUfs(nome.sigla_uf);
+      });
 
 
     setLoading(true);
@@ -149,7 +149,7 @@ function Caderno() {
 
 
             if (pageNumberUnique) {
-              
+
               arr.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
 
               const itemIndex = arr.findIndex(item => item.codAnuncio == id) + 1;
@@ -159,7 +159,7 @@ function Caderno() {
               //console.log(`pagina ${pageNumberClass}`, itemIndex);
               setNumberPage(pageNumberClass);
               paginator(arr, pageNumberClass);/*  */
-              
+
             } else {
               paginator(arr);/*  */
             }
@@ -397,7 +397,7 @@ function Caderno() {
 
     if (book != undefined && id != undefined) {
       buscarAtividade();
-      //console.log("primeiro")
+      console.log("primeiro")
     } else {
       buscarTodosClassificado();
       console.log("segundo")
@@ -422,7 +422,7 @@ function Caderno() {
         const startIndex = (pageNumber - 1) * limitPerPage;
         const endIndex = startIndex + limitPerPage;
 
-       
+
 
         // Retornar o array paginado e o total de páginas
         return {
@@ -455,11 +455,11 @@ function Caderno() {
         paginaAtual: pageNumber
       });
 
-console.log('lsaflsjkdhfasdjklfsd: ', {
-  anuncios: paginatedResult.data,
-  totalPaginas: Math.ceil(param.length / limitPerPage),
-  paginaAtual: pageNumber
-})
+      console.log('lsaflsjkdhfasdjklfsd: ', {
+        anuncios: paginatedResult.data,
+        totalPaginas: Math.ceil(param.length / limitPerPage),
+        paginaAtual: pageNumber
+      })
 
       setLoading(false);
       setbtnNav(true);
@@ -986,7 +986,7 @@ console.log('lsaflsjkdhfasdjklfsd: ', {
 
 
     return (
-      
+
       nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
 
         (index >= limit)
@@ -995,7 +995,7 @@ console.log('lsaflsjkdhfasdjklfsd: ', {
               <h2 className='bg-yellow py-2'>
                 {item.codAtividade}
               </h2>
-             
+
 
               {minisitio.anuncios.map((anuncio) => {
                 if (anuncio.codTipoAnuncio == 1) {
@@ -1017,7 +1017,7 @@ console.log('lsaflsjkdhfasdjklfsd: ', {
                       codDesconto={anuncio.codDesconto}
                       ids={buscarId(90)}
                     />
-                    
+
                   )
                 }
 
@@ -1035,14 +1035,14 @@ console.log('lsaflsjkdhfasdjklfsd: ', {
 
 
   function nextPage() {
-    if(numberPage >= minisitio.totalPaginas) {
+    if (numberPage >= minisitio.totalPaginas) {
       alert("Você está na última página!");
       return;
     }
 
     setNumberPage(numberPage + 1);
     console.log(numberPage + 1);
-    
+
 
     if (book != undefined && id != undefined) {
       setPageNumberUnique(false);
@@ -1050,14 +1050,14 @@ console.log('lsaflsjkdhfasdjklfsd: ', {
     //setNomeAtividade([]);
   }
   function prevPage() {
-    if(numberPage <= minisitio.totalPaginas) {
+    if (numberPage <= minisitio.totalPaginas) {
       alert("Você está na primeira página!");
       return;
     }
 
     setNumberPage(numberPage - 1);
     console.log(numberPage - 1);
-    
+
 
     if (book != undefined && id != undefined) {
       setPageNumberUnique(false);
@@ -1075,28 +1075,27 @@ console.log('lsaflsjkdhfasdjklfsd: ', {
       <main>
 
         {loading &&
-          <button class="buttonload" style={{ display: "block" }}>
+          <button className="buttonload" style={{ display: "block" }}>
             <i class="fa fa-spinner fa-spin"></i>Carregando
           </button>
         }
 
-
         <Busca paginaAtual={"caderno"} />
         <h1 id="title-caderno" className='py-2'>Caderno {cadernos} - {ufs}</h1>
-        <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {cadernos} - {ufs}. Você está vendo a página {minisitio.paginaAtual}.</h2>
-{/*         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
+        <h2 className='py-4 info-title'>Existem {minisitio.totalPaginas} páginas no Caderno {cadernos} - {ufs}. Você está vendo a página {minisitio.paginaAtual}.</h2>
+        {/*         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}        <div className="container">
           {btnNav &&
-            <div className="row p-3">
-              <div className="col-md-6 text-end">
+            <div className="row p-3 btn-nav">
+              <div className="col-md-6 col-6 text-end area-prev">
                 <button id="btn-prev" onClick={prevPage}>
-                {/* <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}> */}
+                  {/* <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}> */}
                   <i className="fa fa-arrow-left mx-2"></i>
                   Anterior
                 </button>
               </div>
-              <div className="col-md-6 text-start">
+              <div className="col-md-6 col-6 text-start area-next">
                 <button id="btn-next" onClick={nextPage}>
                   Próximo
                   <i className="fa fa-arrow-right mx-2"></i>
@@ -1104,7 +1103,6 @@ console.log('lsaflsjkdhfasdjklfsd: ', {
               </div>
             </div>
           }
-
           {/* teste row */}
           <div className="row p-3">
 
@@ -1112,7 +1110,6 @@ console.log('lsaflsjkdhfasdjklfsd: ', {
               <div class="grid-container">
 
                 <div class="column" id="col1" ref={col1Ref}>
-
                   {
                     //minisitio.anuncios
                     base1.map((anuncio, i) => {
@@ -1362,19 +1359,23 @@ console.log('lsaflsjkdhfasdjklfsd: ', {
           </div>
         </div>
 
+
         {btnNav &&
-          <div className="row p-3">
-            <div className="col-md-6 text-end">
-              <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}>
-                <i className="fa fa-arrow-left mx-2"></i>
-                Anterior
-              </button>
-            </div>
-            <div className="col-md-6 text-start">
-              <button id="btn-next" onClick={nextPage}>
-                Próximo
-                <i className="fa fa-arrow-right mx-2"></i>
-              </button>
+          <div className='container'>
+            <div className="row p-3 btn-nav">
+              <div className="col-md-6 col-6 text-end area-prev">
+                <button id="btn-prev" onClick={prevPage}>
+                  {/* <button id="btn-prev" onClick={() => setNumberPage(numberPage - 1)}> */}
+                  <i className="fa fa-arrow-left mx-2"></i>
+                  Anterior
+                </button>
+              </div>
+              <div className="col-md-6 col-6 text-start area-next">
+                <button id="btn-next" onClick={nextPage}>
+                  Próximo
+                  <i className="fa fa-arrow-right mx-2"></i>
+                </button>
+              </div>
             </div>
           </div>
         }

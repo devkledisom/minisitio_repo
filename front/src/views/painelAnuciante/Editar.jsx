@@ -648,7 +648,8 @@ function Editar(props) {
                 patrocinador={4}
                 codImg={minisitio.logoPromocao}
                 miniPreview={false}
-                msg={"Anexar imagem da promoção"} />
+                msg={"Anexar imagem da promoção"}
+                data={setMinisitio} />
 
               }
 
