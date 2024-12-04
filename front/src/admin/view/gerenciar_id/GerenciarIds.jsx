@@ -45,7 +45,6 @@ const GerenciarIds = () => {
                 setIds(resDesconto.message);
                 setUsuarios(resUsuarios.usuarios);
                 setShowSpinner(false);
-                console.log(resDesconto.message)
             })
             .catch(error => {
                 console.error('Error fetching data:', error);

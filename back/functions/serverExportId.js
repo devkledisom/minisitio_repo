@@ -2,7 +2,7 @@ const xl = require('excel4node');
 const path = require('path');
 const masterPath = require('../config/config');
 
-module.exports = function expExcel(dados, res) {
+module.exports = async function expExcel(dados, res) {
 
     const wb = new xl.Workbook();
     const ws = wb.addWorksheet('IDS');
@@ -122,9 +122,25 @@ module.exports = function expExcel(dados, res) {
 
     wb.write(path.join(__dirname, '../public/export/arquivo.xlsx'));
 
+    try {
+        // Lê os arquivos existentes no diretório
+        const files = await fs.readdir(directoryPath);
+        console.log("Arquivos encontrados:", files);
+
+        // Exclui o primeiro arquivo da lista, se existir
+        if (files.length > 0) {
+            const filePathToDelete = path.join(directoryPath, files[0]);
+            await fs.unlink(filePathToDelete);
+            console.log("Arquivo apagado:", filePathToDelete);
+        }
+    } catch (err) {
+        console.error("Erro ao manipular arquivos:", err);
+        return res.status(500).json({ success: false, message: "Erro ao processar a exportação." });
+    }
+
     // Escreve o novo arquivo Excel
     const newFilePath = path.join(__dirname, `../public/export/arquivo.xlsx`);
-    wb.write(newFilePath, function (err, stats) {
+    wb.write(newFilePath, function(err, stats) {
         if (err) {
             console.error(err);
             return res.status(500).json({ success: false, message: "Erro ao gerar o arquivo." });
@@ -133,5 +149,6 @@ module.exports = function expExcel(dados, res) {
             return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx` });
         }
     });
+
 
 }
