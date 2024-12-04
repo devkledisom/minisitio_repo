@@ -123,6 +123,8 @@ module.exports = async function expExcel(dados, res) {
 
     wb.write(path.join(__dirname, '../public/export/arquivo.xlsx'));
 
+    const directoryPath = path.join(__dirname, `../public/export`);
+    
     try {
         // Lê os arquivos existentes no diretório
         const files = await fs.readdir(directoryPath);
