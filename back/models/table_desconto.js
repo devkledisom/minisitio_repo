@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const database = require('../config/db');
 
+const Usuario = require('./table_usuarios');
+
 const Desconto = database.define('desconto', {
     idDesconto: {
         type: Sequelize.INTEGER,
@@ -166,6 +168,12 @@ const Desconto = database.define('desconto', {
     {
         freezeTableName: true,
         timestamps: false,
+    });
+
+    Desconto.belongsTo(Usuario, {
+        constraints: true,
+        targetKey: 'codUsuario',  
+        foreignKey: 'idUsuario'
     });
 
 module.exports = Desconto;

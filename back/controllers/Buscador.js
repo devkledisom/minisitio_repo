@@ -32,11 +32,11 @@ module.exports = {
         //console.log("debug: ", atividades);
         //console.log("debug: ", codigoCaderno, uf, atividades[0].id);
 
-        let anuncios;
+        let anunciosOld;
 
         //anuncio
         if(codigoCaderno != "TODO") {
-            anuncios = await Anuncio.findAll({
+            anunciosOld = await Anuncio.findAll({
                 where: {
                     [Op.or]: [
                         {[Op.and]: [
@@ -58,7 +58,7 @@ module.exports = {
                 }
             });
         } else {
-            anuncios = await Anuncio.findAll({
+            anunciosOld = await Anuncio.findAll({
                 where: {
                     [Op.or]: [
                         {[Op.and]: [
@@ -106,7 +106,7 @@ module.exports = {
 
         }
 
-        const  anunciosOld = await Anuncio.findAll({
+        const  anuncios = await Anuncio.findAll({
             where: {
                 [Op.or]: [
                     {[Op.and]: [

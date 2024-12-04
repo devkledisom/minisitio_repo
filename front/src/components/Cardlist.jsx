@@ -49,7 +49,7 @@ function Cardlist(props) {
       <div className="container card my-2">
         <div className="row card-list">
           <div className="col-md-2 p-0 thumb">
-            
+
             {props.codImg !== "teste" && props.codImg !== "0" &&
               <img
                 src={urlTransform(`${masterPath.url}/files/${props.codImg}`)}
@@ -82,7 +82,8 @@ function Cardlist(props) {
                 <div className="col-md-12 col-xs-12 pesquisa-nome">
                   <h4 className="d-flex font-20 border-bottom border-secondary p-2">
                     {/* <i className="fa fa-tags"></i> */}
-                    <span>{props.anuncio.descAnuncio}</span>
+                    <div class="endereco">{props.anuncio.descAnuncio}</div>
+                    
                   </h4>
                 </div>
               </div>
@@ -91,11 +92,15 @@ function Cardlist(props) {
                 <div className="col-md-12 col-xs-12 pesquisa-nome">
                   <h4 className="d-flex">{/* font-14 */}
                     <i className="fa fa-map-marker"></i>
+                    <div class="endereco">{props.anuncio.descEndereco}</div>
+
                     {caderno.map((item) => {
                       if (item.codCaderno == props.codCity) {
                         //console.log(uf)
-                       /*  const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)*/
-                        return <span>{item.nomeCaderno} - {item.UF} </span> 
+                        /*  const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)*/
+
+                        return <span>{item.descEndereco}</span>
+                        /* return <span>{item.nomeCaderno} - {item.UF} </span>  */
                       }
 
                     })}

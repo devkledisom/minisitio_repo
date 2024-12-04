@@ -84,6 +84,21 @@ function Busca(props) {
 
     const fetchAnuncios = async () => {
         setLoading(true);
+
+        let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
+        let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;
+
+
+        if (cadernoUf === "UF") {
+            setLoading(false);
+            alert("escolha um estado");
+            return;
+        } else if (cadernoCidade === "CIDADE") {
+            setLoading(false);
+            alert("escolha uma cidade");
+            return;
+        }
+
         try {
             const uf = document.querySelector('#codUf2').value;
             const codigoCaderno = document.querySelector('#codUf3').value;
@@ -208,7 +223,8 @@ function Busca(props) {
                                     <div className="form-group w-100">
 
                                         <select name="codUf3" id="codUf3" className="form-control form-select" onChange={definirCaderno} value={codCaderno}>
-                                            <option value="TODO">TODO</option>
+                                           {/*  <option value="TODO">TODO</option> */}
+                                           <option value="CIDADE">CIDADE</option>
                                             {caderno.map((item) => (
                                                 item.codUf == ufSelected &&
                                                 <option id={item.codCaderno} key={item.codCaderno} name={item.nomeCaderno} value={item.codCaderno}>{item.nomeCaderno}</option>

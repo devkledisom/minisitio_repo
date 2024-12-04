@@ -679,8 +679,21 @@ module.exports = {
 
                 // Adicionar o dado temporário
                 item.dataValues.qtdaGeral = result.count;
+
+        
+                const user = await item.getUsuario();
+                //item.dataValues.nmUsuario = user.descNome;
+
+                item.dataValues = {
+                    nmUsuario: user.descNome, // Adiciona a nova propriedade no início
+                    ...item.dataValues, // Mantém as demais propriedades
+                  };
+               
+
             })
         );
+
+      
 
 
         res.json({
@@ -1004,7 +1017,6 @@ module.exports = {
             limit: porPagina,
             offset: offset
         });
-        console.log("dasdasdsa", anuncio)
 
         // Número total de itens
         const totalItens = anuncio.count;

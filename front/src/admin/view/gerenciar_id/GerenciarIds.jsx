@@ -45,6 +45,7 @@ const GerenciarIds = () => {
                 setIds(resDesconto.message);
                 setUsuarios(resUsuarios.usuarios);
                 setShowSpinner(false);
+                console.log(resDesconto.message)
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -204,7 +205,8 @@ const GerenciarIds = () => {
                                             return (
                                                 <tr key={item.idDesconto} id={item.idDesconto} onClick={selecaoLinha}>
 
-                                                    <td>{teste(item.idUsuario)}</td>
+                                                    {/* <td>{teste(item.idUsuario)}</td> */}
+                                                    <td>{item.nmUsuario}</td>
                                                     <td>{String(parseFloat(item.desconto).toFixed(2)).replace('.', ',')}</td>
                                                     {/* <td>{parseFloat(item.desconto).toFixed(2)}</td> */}
                                                     <td>{item.hash}</td>

@@ -131,6 +131,12 @@ li#linkExterno {
     color: #000;
 }
 
+.pesquisa-nome .endereco {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
 .pesquisa-nome h4 {
     display: flex;
     gap: 5px;
