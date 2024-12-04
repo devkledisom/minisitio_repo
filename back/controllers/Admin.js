@@ -2303,7 +2303,7 @@ module.exports = {
             certificado_link,
             cartao_digital,
             descChavePix,
-            descVideo } = req.body;
+            descYouTube } = req.body;
 
         const dadosAnuncio = {
             //"codAnuncio": 88888,
@@ -2360,7 +2360,7 @@ module.exports = {
             "certificado_logo": certificado_logo,
             "certificado_texto": certificado_texto,
             "certificado_imagem": certificado_imagem,
-            "descYouTube": descVideo,
+            "descYouTube": descYouTube,
             "link_comprar": link_comprar,
             "cashback_logo": 0,
             "cashback_link": 0,

@@ -775,11 +775,11 @@ function Editar(props) {
                 <i className="fa fa-globe"></i>
                 <input
                   type="text"
-                  name="descVideo"
-                  id="descVideo"
+                  name="descVideo1"
+                  id="descVideo1"
                   className="form-control"
                   placeholder="Digite o link da parceria"
-                  value={minisitio.descVideo}
+                  value={minisitio.descVideo1}
                   onChange={handleSelectChange}
                 />
               </div>
@@ -822,8 +822,8 @@ function Editar(props) {
                 <i><img src="/assets/img/redes/youtube.png" height={25} /></i>
                 <input
                   type="text"
-                  name="descVideo"
-                  id="descVideo"
+                  name="descYouTube"
+                  id="descYouTube"
                   className="form-control"
                   placeholder="Digite o vídeo"
                   value={minisitio.descYouTube}

@@ -21,7 +21,8 @@ function Video(props) {
         }
         
         // URL do vídeo do YouTube
-        const url = "https://www.youtube.com/watch?v=CxY-tOLR9c0&t=23s";
+        //const url = "https://www.youtube.com/watch?v=CxY-tOLR9c0&t=23s";
+        const url = props.link;
         
         // Verifica se a URL é válida e extrai o ID
         if (isYouTubeURL(url)) {
