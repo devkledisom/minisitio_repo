@@ -40,8 +40,8 @@ const Espacos = () => {
 
     const param = getParam.get('page') ? getParam.get('page') : 1;
 
-    const campoBusca = useRef();
-    const codOriginFather = useRef();
+    const campoBusca = useRef(null);
+    const codOriginFather = useRef(null);
 
     useEffect(() => {
         setShowSpinner(true);
@@ -276,7 +276,6 @@ const Espacos = () => {
             <section className="pt-5">
 
                 {showSpinner && <Spinner />}
-
                 <h1 className="pt-4 px-4">Espaços</h1>
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
@@ -288,7 +287,7 @@ const Espacos = () => {
                             <button type="button" className="btn custom-button mx-2" onClick={() => navigator('/admin/anuncio/import')}>Importar</button>
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarAnuncio}>Apagar</button>
                             <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarMultiplosAnucios}>Apagar Todos</button>
-                            {campoBusca.current.value != '' &&
+                            {(campoBusca.current != null && campoBusca.current.value != '') &&
                                 <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarDup}>Apagar Duplicação</button>
                             }
                             <button type="button" className="btn btn-info custom-button text-light" onClick={editRow}>Editar</button>
