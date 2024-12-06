@@ -1,5 +1,5 @@
 // components/OutroComponente.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
@@ -40,23 +40,43 @@ const Espacos = () => {
 
     const param = getParam.get('page') ? getParam.get('page') : 1;
 
+    const campoBusca = useRef();
+    const codOriginFather = useRef();
 
     useEffect(() => {
         setShowSpinner(true);
 
-        Promise.all([
-            fetch(`${masterPath.url}/admin/espacos/read?page=${param}`).then((x) => x.json()),
-            fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
-        ])
-            .then(([resAnuncio]) => {
-                //console.log(resAnuncio.message.anuncios)
-                setAnucios(resAnuncio);
-                setShowSpinner(false);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                setShowSpinner(false);
-            });
+        if (campoBusca.current.value != '') {
+            Promise.all([
+                fetch(`${masterPath.url}/admin/anuncio/buscar?search=${campoBusca.current.value}&page=${param}`).then((x) => x.json()),
+                fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
+            ])
+                .then(([resAnuncio]) => {
+                    //console.log(resAnuncio.message.anuncios)
+                    setAnucios(resAnuncio);
+                    setShowSpinner(false);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    setShowSpinner(false);
+                });
+        } else {
+            Promise.all([
+                fetch(`${masterPath.url}/admin/espacos/read?page=${param}`).then((x) => x.json()),
+                fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
+            ])
+                .then(([resAnuncio]) => {
+                    //console.log(resAnuncio.message.anuncios)
+                    setAnucios(resAnuncio);
+                    setShowSpinner(false);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    setShowSpinner(false);
+                });
+        }
+
+
 
     }, [param]);
 
@@ -123,6 +143,24 @@ const Espacos = () => {
         });
     };
 
+    function apagarDup() {
+        setShowSpinner(true);
+        let codigoDeOrigem = codOriginFather.current.innerText;
+        fetch(`${masterPath.url}/admin/anuncio/delete/${codigoDeOrigem}?type=dup`, {
+            method: "DELETE"
+        })
+            .then((x) => x.json())
+            .then((res) => {
+                console.log(res)
+                if (res.success) {
+                    setShowSpinner(false);
+                    //alert("anuncio apagado")
+                    //document.querySelector(".selecionada").remove();
+                }
+
+            })
+    };
+
     function buscarAnuncioId(e) {
         setShowSpinner(true);
         const campoPesquisa = document.getElementById('buscar').value;
@@ -130,6 +168,7 @@ const Espacos = () => {
         fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}`)
             .then((x) => x.json())
             .then((res) => {
+                console.log(res)
                 if (res.success) {
                     //alert("encontrado");
                     setAnucios(res);
@@ -141,26 +180,48 @@ const Espacos = () => {
                 }
 
             })
+        /* 
+                fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}`)
+                    .then(response => {
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder('utf-8');
+                        let jsonBuffer = '';
+        
+                        reader.read().then(function processChunk({ done, value }) {
+                            if (done) {
+                                console.log('Todos os registros foram recebidos.');
+                                return;
+                            }
+        
+                            jsonBuffer += decoder.decode(value); // Decodifica os dados recebidos
+                            const records = JSON.parse(decoder.decode(value)); // Transforma em JSON
+                            console.log('Registros recebidos:', records);
+        
+                            return reader.read().then(processChunk); // Continua lendo
+                        });
+                    })
+                    .catch(error => console.error('Erro ao receber registros:', error)); */
+
     };
 
     const formatData = (dataCompleta) => {
-       let dataTempo = dataCompleta.split('T');
+        let dataTempo = dataCompleta.split('T');
         let dataOriginal = dataTempo[0].split('-');
 
         return `${dataOriginal[2]}/${dataOriginal[1]}/${dataOriginal[0]}`;
     };
 
     const dataExpiracao = (dataCompleta) => {
-        
-       let dataTempo = dataCompleta.split('T');
+
+        let dataTempo = dataCompleta.split('T');
         let dataOriginal = dataTempo[0];
-        
+
         //const expirationDate = moment(dataOriginal).add(1, 'year').format('DD/MM/YYYY');
         const expirationDate = moment(dataOriginal).format('DD/MM/YYYY');
- 
+
         //console.log("data", dataOriginal)
- 
-        return expirationDate; 
+
+        return expirationDate;
     };
 
     const definirTipoAnuncio = (tipo) => {
@@ -185,17 +246,17 @@ const Espacos = () => {
             },
             body: JSON.stringify(anuncios.message.anuncios)
         })
-        .then(x => x.json())
-        .then(res => {
-            if(res.success) {
-                //console.log(res);
-                window.location.href = res.downloadUrl;
-            }
-        })
+            .then(x => x.json())
+            .then(res => {
+                if (res.success) {
+                    //console.log(res);
+                    window.location.href = res.downloadUrl;
+                }
+            })
     };
 
     function editRow() {
-        if(selectId != null) {
+        if (selectId != null) {
             navigator(`/admin/anuncio/editar?id=${selectId}`);
         } else {
             Swal.fire({
@@ -222,16 +283,19 @@ const Espacos = () => {
                         <div className="span6 col-md-6">
                             <button type="button" className="btn custom-button" onClick={() => navigator('/admin/anuncio/cadastro')}>Adicionar</button>
                             {/* <button type="button" className="btn custom-button mx-2">Duplicar</button> */}
-                            <Duplicate className="btn custom-button mx-2" selectId={selectId}/> 
+                            <Duplicate className="btn custom-button mx-2" selectId={selectId} />
                             <button type="button" className="btn custom-button" onClick={exportExcell}>Exportar</button>
                             <button type="button" className="btn custom-button mx-2" onClick={() => navigator('/admin/anuncio/import')}>Importar</button>
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarAnuncio}>Apagar</button>
                             <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarMultiplosAnucios}>Apagar Todos</button>
+                            {campoBusca.current.value != '' &&
+                                <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarDup}>Apagar Dup</button>
+                            }
                             <button type="button" className="btn btn-info custom-button text-light" onClick={editRow}>Editar</button>
                         </div>
                         <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
-                                <input id="buscar" type="text" placeholder="Código, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''}/>
+                                <input id="buscar" type="text" placeholder="Código, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
                                 <button id="btnBuscar" className="" type="button" onClick={buscarAnuncioId} >
                                     <i className="icon-search"></i>
                                 </button>
@@ -282,15 +346,15 @@ const Espacos = () => {
                                                         <input type="checkbox" id={item.codAnuncio} className="chkChildren" />
                                                         <span className='mx-2'>{item.codAnuncio}</span>
                                                     </td>
-                                                    <td>{item.codOrigem}</td> 
+                                                    <td ref={codOriginFather}>{item.codOrigem}</td>
                                                     <td>{item.codDuplicado}</td>
                                                     <td>{item.descCPFCNPJ}</td>
                                                     <td>{item.descAnuncio}</td>
                                                     <td>{definirTipoAnuncio(item.codTipoAnuncio)}</td>
                                                     <td>{item.codCaderno}</td>
                                                     <td>{item.codUf}</td>
-                                                   {/*  <td>{item.activate ? "Ativado" : "Desativado"}</td> */}
-                                                   <td><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"}/></td>
+                                                    {/*  <td>{item.activate ? "Ativado" : "Desativado"}</td> */}
+                                                    <td><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"} /></td>
                                                     <td>Isento</td>
                                                     <td>{item.descPromocao}</td>
                                                     <td>{formatData(item.createdAt)}</td>

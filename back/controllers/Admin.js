@@ -680,20 +680,20 @@ module.exports = {
                 // Adicionar o dado temporário
                 item.dataValues.qtdaGeral = result.count;
 
-        
+
                 const user = await item.getUsuario();
                 //item.dataValues.nmUsuario = user.descNome;
 
                 item.dataValues = {
                     nmUsuario: user.descNome, // Adiciona a nova propriedade no início
                     ...item.dataValues, // Mantém as demais propriedades
-                  };
-               
+                };
+
 
             })
         );
 
-      
+
 
 
         res.json({
@@ -854,7 +854,19 @@ module.exports = {
                 return;
             }
 
-            res.json({ success: true, IdsValue: resultAnuncio });
+            await Promise.all(
+                resultAnuncio.map(async (item) => {
+                    const user = await item.getUsuario();
+
+                    item.dataValues = {
+                        nmUsuario: user.descNome, // Adiciona a nova propriedade no início
+                        ...item.dataValues, // Mantém as demais propriedades
+                    };
+                })
+            );
+
+
+            res.json({ success: true, IdsValue: resultAnuncio, totalItem: resultAnuncio.length, totalPaginas: 1, paginaAtual: 1 });
         } else {
             //Descontos
             const resultAnuncio = await Descontos.findAll({
@@ -870,7 +882,7 @@ module.exports = {
                 res.json({ success: false, message: "ID não encontrado 0" });
                 return;
             }
-            
+
             res.json({ success: true, IdsValue: resultAnuncio });
         }
 
@@ -1439,7 +1451,7 @@ module.exports = {
 
         let codCaderno;
 
-        if(!req.params.caderno) return;
+        if (!req.params.caderno) return;
 
         if (req.params.caderno == "null" || req.params.caderno == "TODO") {
             let codCaderno = await Caderno.findAll({
@@ -1835,10 +1847,15 @@ module.exports = {
         //const nu_hash = req.params.id;
         const nu_hash = req.query.search;
 
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+        const offset = (paginaAtual - 1) * porPagina;
+
+
+
         //verificação
         const contemNumero = () => /\d/.test(nu_hash);
 
-        console.log('dasifsdfsdgsfg', contemNumero())
 
         //ANUNCIO
         const resultAnuncio = await Anuncio.findAll({
@@ -1875,7 +1892,6 @@ module.exports = {
             }));
 
             const totalItens = resultAnuncio.length;
-            console.log(totalItens)
 
             res.json({
                 success: true,
@@ -1952,11 +1968,10 @@ module.exports = {
                     hash: nu_hash
                 }
             });
-            console.log('dqasdadasdas', resultID)
 
             if (resultID < 1) {
-                res.json({ success: false, message: "anúncio não encontrado" });
-                return;
+                //res.json({ success: false, message: "anúncio não encontrado" });
+                //return;
             } else {
                 const descId = resultID[0].idDesconto;
                 const resultAnuncio = await Anuncio.findAll({
@@ -2021,6 +2036,128 @@ module.exports = {
                           anuncios: resultAnuncio
                       }
                   }); */
+        }
+
+        //buscar por nome de perfil
+        if (resultAnuncio < 1) {
+            const resultID = await Usuarios.findAll({
+                where: {
+                    descNome: { [Op.like]: `%${nu_hash}%` }
+                    //descNome: nu_hash
+                }
+            });
+
+
+            if (resultID < 1) {
+                res.json({ success: false, message: "anúncio não encontrado" });
+                return;
+            } else {
+                //const descId = resultID[0].idDesconto;
+                const resultAnuncio = await Anuncio.findAll({
+                    where: {
+                        codUsuario: resultID[0].codUsuario
+                    },
+                    limit: porPagina,
+                    offset: offset 
+                }); 
+
+                const resultAnuncioCount = await Anuncio.count({
+                    where: {
+                        codUsuario: resultID[0].codUsuario
+                    }
+                });
+
+                if (resultAnuncioCount < 1) {
+                    res.json({ success: false, message: "anúncio não encontrado" });
+                    return;
+                }
+
+                // Número total de itens
+                const totalItens = resultAnuncioCount;
+                // Número total de páginas
+                const totalPaginas = Math.ceil(totalItens / porPagina);
+
+                //console.log("dasjfhsjklfsfhlksajhfdsaklfjhsjkfd", resultAnuncio, resultID[0].codUsuario)
+                 resultAnuncio.map(async (anun, i) => {
+
+                    try {
+                        await Promise.all(resultAnuncio.map(async (anun, i) => {
+                            const cader = await anun.getCaderno();
+                            anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+                            const estado = await anun.getUf();
+                            anun.codUf = estado.sigla_uf;
+
+                            const desconto = await anun.getDesconto();
+                            anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+
+                            const user = await anun.getUsuario();
+                            anun.codUsuario = user.descNome;
+                            anun.dataValues.loginUser = user.descCPFCNPJ;
+                            anun.dataValues.loginPass = user.senha;
+                            anun.dataValues.loginEmail = user.descEmail;
+                            anun.dataValues.loginContato = user.descTelefone;
+
+                            const atividades = await anun.getAtividade();
+                            anun.dataValues.mainAtividade = atividades.atividade
+
+                            //console.log(anuncio.rows[i])
+                        }));
+
+
+                        if (i === resultAnuncio.length - 1) {
+                            res.json({
+                                success: true,
+                                message: {
+                                    anuncios: resultAnuncio, // Itens da página atual
+                                    paginaAtual: paginaAtual,
+                                    totalPaginas: totalPaginas,
+                                    totalItem: totalItens
+                                }
+                            })
+                        }
+
+
+                    } catch (err) {
+                        console.log(err);
+                        res.status(500)
+                    }
+
+                }); 
+
+
+
+                /* const limit = 10; // Número de registros por lote
+                let offset = 0; // Início da consulta
+                let hasMore = true;
+              
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                try {
+                    while (hasMore) {
+                      const records = await Anuncio.findAll({
+                        where: {
+                            codUsuario: resultID[0].codUsuario
+                        },
+                        limit, // Busca 10 registros por vez
+                        offset, // Salta os registros já buscados
+                        raw: true, // Retorna objetos simples
+                      });
+                //console.log("asdfhsdfhsajdkfsaf: ", records)
+                      if (records.length > 0) {
+                        res.write(JSON.stringify(records)); // Envia o lote ao frontend
+                        offset += limit; // Move para o próximo lote
+                      } else {
+                        hasMore = false; // Finaliza se não houver mais registros
+                      }
+                    }
+                
+                    res.end(); // Finaliza o stream
+                  } catch (error) {
+                    console.error(error);
+                    res.status(500).send('Erro ao buscar os registros.');
+                  }
+ */
+            }
         }
 
 
@@ -2400,6 +2537,18 @@ module.exports = {
         await database.sync();
 
         const uuid = req.params.id;
+        const type = req.query.type;
+
+        if(type == "dup") {
+            const deleteAnuncio = await Anuncio.destroy({
+                where: {
+                    codOrigem: uuid
+                }
+
+            }); 
+            res.json({ success: true, message: uuid });
+            return;
+        }
 
         let registro = await Anuncio.findAll({
             where: {

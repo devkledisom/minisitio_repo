@@ -141,7 +141,7 @@ const GerenciarIds = () => {
         .then(x => x.json())
         .then(res => {
             if(res.success) {
-                //console.log(res);
+                console.log(res);
                 window.location.href = res.downloadUrl;
             }
         })
