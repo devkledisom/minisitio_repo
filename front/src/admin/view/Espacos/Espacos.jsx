@@ -289,7 +289,7 @@ const Espacos = () => {
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarAnuncio}>Apagar</button>
                             <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarMultiplosAnucios}>Apagar Todos</button>
                             {campoBusca.current.value != '' &&
-                                <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarDup}>Apagar Dup</button>
+                                <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarDup}>Apagar Duplicação</button>
                             }
                             <button type="button" className="btn btn-info custom-button text-light" onClick={editRow}>Editar</button>
                         </div>
