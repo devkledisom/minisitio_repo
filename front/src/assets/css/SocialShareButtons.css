@@ -20,7 +20,7 @@
     border-radius: 100%;
 }
 
-.shortcuts a {
+.social-share > li > a {
     text-decoration: none;
 }
 
