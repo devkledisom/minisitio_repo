@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46">
+  <g id="ouça" transform="translate(-494 -1529)">
+    <g id="Retângulo_501" data-name="Retângulo 501" transform="translate(494 1529)" fill="rgba(229,29,53,0)" stroke="#e51d35" stroke-width="1">
+      <rect width="46" height="46" rx="23" stroke="none"/>
+      <rect x="0.5" y="0.5" width="45" height="45" rx="22.5" fill="none"/>
+    </g>
+    <path id="up-arrow-svgrepo-com" d="M2.8,18.027H17.2a.8.8,0,0,0,.707-.5,1.072,1.072,0,0,0-.049-.965L10.659,4.4a.762.762,0,0,0-1.316,0L2.142,16.56a1.069,1.069,0,0,0-.052.966A.793.793,0,0,0,2.8,18.027Z" transform="translate(530.027 1542.001) rotate(90)" fill="#22133f"/>
+  </g>
+</svg>

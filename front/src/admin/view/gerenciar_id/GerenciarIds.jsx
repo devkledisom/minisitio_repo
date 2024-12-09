@@ -1,7 +1,8 @@
 // components/OutroComponente.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
+import '../../assets/css/gerenciarIds.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { masterPath, version } from '../../../config/config';
 
@@ -33,6 +34,7 @@ const GerenciarIds = () => {
 
     const param = getParam.get('page') ? getParam.get('page') : 1;
 
+    const campoBusca = useRef(null);
 
     useEffect(() => {
         setShowSpinner(true);
@@ -129,22 +131,92 @@ const GerenciarIds = () => {
         return `${dataOriginal[2]}/${dataOriginal[1]}/${dataOriginal[0]}`
     };
 
-    
-    function exportExcell() {
-        fetch(`${masterPath.url}/admin/desconto/export?limit=5000`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(ids.IdsValue)
-        })
-        .then(x => x.json())
-        .then(res => {
-            if(res.success) {
-                console.log(res);
-                window.location.href = res.downloadUrl;
-            }
-        })
+
+    function exportExcell(e) {
+        let tipoExport = e.target.innerText
+        let filtroAtivo = campoBusca.current.value
+        console.log(filtroAtivo)
+
+        if (filtroAtivo.length >= 1) {
+            fetch(`${masterPath.url}/admin/desconto/export?limit=5000&filtro=true`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(ids.IdsValue)
+            })
+                .then(x => x.json())
+                .then(res => {
+                    if (res.success) {
+                        console.log(res);
+                        window.location.href = res.downloadUrl;
+                    }
+                })
+        } else {
+            fetch(`${masterPath.url}/admin/desconto/export?limit=5000&filtro=false`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(ids.IdsValue)
+            })
+                .then(x => x.json())
+                .then(res => {
+                    if (res.success) {
+                        console.log(res);
+                        window.location.href = res.downloadUrl;
+                    }
+                })
+        }
+       /*  if (tipoExport === "Todos") {
+            fetch(`${masterPath.url}/admin/desconto/export?limit=5000&filtro=false`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(ids.IdsValue)
+            })
+                .then(x => x.json())
+                .then(res => {
+                    if (res.success) {
+                        console.log(res);
+                        window.location.href = res.downloadUrl;
+                    }
+                })
+        } else if (tipoExport === "Filtro" && filtroAtivo != '') {
+
+            fetch(`${masterPath.url}/admin/desconto/export?limit=5000&filtro=true`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(ids.IdsValue)
+            })
+                .then(x => x.json())
+                .then(res => {
+                    if (res.success) {
+                        console.log(res);
+                        window.location.href = res.downloadUrl;
+                    }
+                })
+        } else {
+            alert("Selecione um filtro para exportar");
+        } */
+
+        /*   fetch(`${masterPath.url}/admin/desconto/export?limit=5000`, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify(ids.IdsValue)
+          })
+              .then(x => x.json())
+              .then(res => {
+                  if (res.success) {
+                      console.log(res);
+                      window.location.href = res.downloadUrl;
+                  }
+              }) */
     };
 
     return (
@@ -159,15 +231,25 @@ const GerenciarIds = () => {
                 <h1 className="pt-4 px-4">Gerenciar IDs</h1>
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
-                        <div className="span6 col-md-6">
+                        <div className="span6 col-md-6 d-flex">
                             <button type="button" className="btn custom-button" onClick={() => navigator('/admin/desconto/cadastro')}>Adicionar</button>
                             <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/desconto/editar?id=${selectId}`)}>Editar</button>
                             <button type="button" className="btn custom-button" onClick={exportExcell}>Exportar</button>
                             <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarUser}>Apagar</button>
+                           {/*  <div class="dropdown">
+                                <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Exportar
+                                    <i class="bi bi-chevron-down px-2"></i>
+                                </button>
+                                <ul class="dropdown-menu lista-cart" aria-labelledby="dropdownMenuButton1">
+                                    <li><button onClick={exportExcell}>Todos</button></li>
+                                    <li><button onClick={exportExcell}>Filtro</button></li>
+                                </ul>
+                            </div> */}
                         </div>
                         <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
-                                <input id="buscar" type="text" placeholder="Código, usuário" />
+                                <input id="buscar" type="text" placeholder="Código, usuário"  ref={campoBusca}/>
                                 <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
                                     <i className="icon-search"></i>
                                 </button>
@@ -188,7 +270,7 @@ const GerenciarIds = () => {
                                         <th style={{ "width": "150px" }}>Código</th>
                                         <th style={{ "width": "250px" }}>Descrição</th>
                                         <th style={{ "width": "200px" }}>Cadastrado em</th>
-                                        
+
                                         <th style={{ "width": "150px" }}>Qtde Espaços</th>
                                         <th style={{ "width": "100px" }}>Saldo</th>
                                         <th style={{ "width": "100px" }}>Status</th>
@@ -210,11 +292,11 @@ const GerenciarIds = () => {
                                                     {/* <td>{parseFloat(item.desconto).toFixed(2)}</td> */}
                                                     <td>{item.hash}</td>
                                                     <td>{item.descricao}</td>
-                                                    <td>{formatData(item.dtCadastro)}</td>                                              
-                                                   {/*  <td>{item.ativo ? "Ativado" : "Desativado"}</td> */}
+                                                    <td>{formatData(item.dtCadastro)}</td>
+                                                    {/*  <td>{item.ativo ? "Ativado" : "Desativado"}</td> */}
                                                     <td>{item.qtdaGeral}</td>
                                                     <td>{item.saldo}</td>
-                                                    <td><BtnActivate data={item.ativo} idd={item.idDesconto} modulo={"desconto"}/></td>
+                                                    <td><BtnActivate data={item.ativo} idd={item.idDesconto} modulo={"desconto"} /></td>
                                                 </tr>
                                             )
                                         })

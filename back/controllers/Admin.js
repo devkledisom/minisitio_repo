@@ -943,71 +943,103 @@ module.exports = {
     exportID: async (req, res) => {
         const anunciosCount = await Anuncio.count();
         const limit = Number(req.query.limit);
+        const filtro = req.query.filtro;
 
-        //console.log(req.body)
+        if (filtro === "true") {
+            try {
+                /*      const anuncios = await Anuncio.findAll({
+                         limit: limit
+                     }); */
+                /*        let dados = await Promise.all(req.body.map(async item => {
+                           const {
+                               codAtividade,
+                               codPA,
+                               tags,
+                               codCidade,
+                               descAnuncioFriendly,
+                               descImagem,
+                               descEndereco,
+                               descCelular,
+                               descDescricao,
+                               descSite,
+                               descSkype,
+                               descPromocao,
+                               descEmailComercial,
+                               descEmailRetorno,
+                               descFacebook,
+                               descTweeter,
+                               descCEP,
+                               descTipoPessoa,
+                               descNomeAutorizante,
+                               descLat,
+                               descLng,
+                               formaPagamento,
+                               promocaoData,
+                               descContrato,
+                               descAndroid,
+                               descApple,
+                               descInsta,
+                               descPatrocinador,
+                               descPatrocinadorLink,
+                               qntVisualizacoes,
+                               dtAlteracao,
+                               descLinkedin,
+                               descTelegram,
+                               certificado_logo,
+                               certificado_texto,
+                               certificado_imagem,
+                               cashback_logo,
+                               cashback_link,
+                               certificado_link,
+                               cartao_digital,
+                               descChavePix, ...newObject } = item;
+           
+           
+           
+                           return newObject;
+                       })); */
 
-        try {
-            /*      const anuncios = await Anuncio.findAll({
-                     limit: limit
-                 }); */
-            /*        let dados = await Promise.all(req.body.map(async item => {
-                       const {
-                           codAtividade,
-                           codPA,
-                           tags,
-                           codCidade,
-                           descAnuncioFriendly,
-                           descImagem,
-                           descEndereco,
-                           descCelular,
-                           descDescricao,
-                           descSite,
-                           descSkype,
-                           descPromocao,
-                           descEmailComercial,
-                           descEmailRetorno,
-                           descFacebook,
-                           descTweeter,
-                           descCEP,
-                           descTipoPessoa,
-                           descNomeAutorizante,
-                           descLat,
-                           descLng,
-                           formaPagamento,
-                           promocaoData,
-                           descContrato,
-                           descAndroid,
-                           descApple,
-                           descInsta,
-                           descPatrocinador,
-                           descPatrocinadorLink,
-                           qntVisualizacoes,
-                           dtAlteracao,
-                           descLinkedin,
-                           descTelegram,
-                           certificado_logo,
-                           certificado_texto,
-                           certificado_imagem,
-                           cashback_logo,
-                           cashback_link,
-                           certificado_link,
-                           cartao_digital,
-                           descChavePix, ...newObject } = item;
-       
-       
-       
-                       return newObject;
-                   })); */
+                exportExcellId(req.body, res)
+            } catch (err) {
+                console.log(err)
+                res.json({ success: false, message: `o numero máximo de registros é ${anunciosCount}` })
+            }
+        } else {
+            try {
+                const Ids = await Descontos.findAll({
+                    order: [['dtCadastro', 'DESC']],
+                    raw: false
+                });
 
-            exportExcellId(req.body, res)
-        } catch (err) {
-            console.log(err)
-            res.json({ success: false, message: `o numero máximo de registros é ${anunciosCount}` })
+                const arr = [];
+
+                await Promise.all(
+                    Ids.map(async (item) => {
+                        const user = await item.getUsuario();
+
+                        try {
+                            item.dataValues = {
+                                nmUsuario: user.descNome, // Adiciona a nova propriedade no início
+                                ...item.dataValues, // Mantém as demais propriedades
+                            };
+                        } catch (err) {
+                            item.dataValues = {
+                                nmUsuario: "alterar", // Adiciona a nova propriedade no início
+                                ...item.dataValues, // Mantém as demais propriedades
+                            };
+                        }
+
+                        arr.push(item.dataValues);
+
+                    })
+                );
+                //console.log(arr)
+                exportExcellId(arr, res)
+            } catch (err) {
+                console.log(err)
+                res.json({ success: false, message: `o numero máximo de registros é ${anunciosCount}` })
+            }
         }
-
-
-
-
     },
     //ESPACOS
     listarEspacos: async (req, res) => {
@@ -1851,7 +1883,7 @@ module.exports = {
         const porPagina = 10; // Número de itens por página
         const offset = (paginaAtual - 1) * porPagina;
 
-
+        
 
         //verificação
         const contemNumero = () => /\d/.test(nu_hash);
@@ -1866,6 +1898,8 @@ module.exports = {
                 ]
             }
         });
+
+        console.table([1, "id", resultAnuncio])
 
         if (resultAnuncio.length > 0) {
             await Promise.all(resultAnuncio.map(async (anun, i) => {
@@ -1963,11 +1997,13 @@ module.exports = {
 
         //buscar por numero de ID
         if (resultAnuncio < 1) {
+           
             const resultID = await Desconto.findAll({
                 where: {
                     hash: nu_hash
                 }
             });
+          
 
             if (resultID < 1) {
                 //res.json({ success: false, message: "anúncio não encontrado" });
@@ -2040,6 +2076,7 @@ module.exports = {
 
         //buscar por nome de perfil
         if (resultAnuncio < 1) {
+            console.log(nu_hash)
             const resultID = await Usuarios.findAll({
                 where: {
                     descNome: { [Op.like]: `%${nu_hash}%` }
@@ -2058,8 +2095,8 @@ module.exports = {
                         codUsuario: resultID[0].codUsuario
                     },
                     limit: porPagina,
-                    offset: offset 
-                }); 
+                    offset: offset
+                });
 
                 const resultAnuncioCount = await Anuncio.count({
                     where: {
@@ -2078,7 +2115,7 @@ module.exports = {
                 const totalPaginas = Math.ceil(totalItens / porPagina);
 
                 //console.log("dasjfhsjklfsfhlksajhfdsaklfjhsjkfd", resultAnuncio, resultID[0].codUsuario)
-                 resultAnuncio.map(async (anun, i) => {
+                resultAnuncio.map(async (anun, i) => {
 
                     try {
                         await Promise.all(resultAnuncio.map(async (anun, i) => {
@@ -2123,7 +2160,7 @@ module.exports = {
                         res.status(500)
                     }
 
-                }); 
+                });
 
 
 
@@ -2539,13 +2576,13 @@ module.exports = {
         const uuid = req.params.id;
         const type = req.query.type;
 
-        if(type == "dup") {
+        if (type == "dup") {
             const deleteAnuncio = await Anuncio.destroy({
                 where: {
                     codOrigem: uuid
                 }
 
-            }); 
+            });
             res.json({ success: true, message: uuid });
             return;
         }

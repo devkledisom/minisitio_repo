@@ -23,7 +23,7 @@ import ContactForm from './ContactForm';
 import MapContainer from './MapContainer';
 import UserActions from './UserActions';
 import Socialmidia from './Socialmidia';
-
+import SocialShareButtons from './SocialShareButtons';
 
 
 function FullWebCard(props) {
@@ -187,11 +187,11 @@ function FullWebCard(props) {
 
                         </div>
                     </section>
-
                 </div>
 
                 <div className="row">
-                    <Socialmidia />
+                   {/*  <Socialmidia /> */}
+                    <SocialShareButtons url={window.location.href} />
                 </div>
                 <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ} url={fullUrl} data={result} />
             </div>

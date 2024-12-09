@@ -10,7 +10,8 @@ function Video(props) {
 
     useEffect(() => {
         function extractYouTubeID(url) {
-            const regex = /(?:\?v=|&v=|\/embed\/|\/watch\?v=|youtu\.be\/|\/v\/|\/watch\?.*v=)([^&?#]+)/;
+            //const regex = /(?:\?v=|&v=|\/embed\/|\/watch\?v=|youtu\.be\/|\/v\/|\/watch\?.*v=)([^&?#]+)/;
+            const regex = /(?:\?v=|&v=|\/embed\/|\/watch\?v=|youtu\.be\/|\/v\/|\/shorts\/|\/watch\?.*v=)([^&?#]+)/;
             const match = url.match(regex);
             return match ? match[1] : null;
         }
@@ -28,7 +29,7 @@ function Video(props) {
         if (isYouTubeURL(url)) {
             const videoID = extractYouTubeID(url);
             setIdVideo(videoID);
-            //console.log("ID do vídeo:", videoID); // Saída: CxY-tOLR9c0
+            console.log("ID do vídeo:", props.link,videoID); // Saída: CxY-tOLR9c0
         } else {
             //console.error("URL inválida do YouTube");
         }
