@@ -29,7 +29,6 @@ const socialMap = {
 function SocialShareButtons({ url }) {
   return (
     <ul className='social-share'>
-      {/* <li>Compartilhe</li> */}
       {
         Object.entries(socialMap).map((item, keySocial) => (
           <li key={keySocial}>
