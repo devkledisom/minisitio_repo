@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../assets/css/main.css';
 import '../assets/css/default.css';
 
@@ -17,9 +17,12 @@ function Busca(props) {
     const [codUf, setCodUf] = useState(null);
     const [codCaderno, setCodCaderno] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [ufLoc, setUfLoc] = useState(null);
 
     //contexto
     const { result, setResult } = useBusca();
+
+    const location = useLocation();
 
     const executarSelecao = (e) => {
         let codigoUf = document.querySelectorAll('#codUf2')[0].value;
@@ -56,7 +59,7 @@ function Busca(props) {
 
         let ufSalva = sessionStorage.getItem("uf: ");
         let cadSalvo = sessionStorage.getItem("caderno: ");
-
+        console.log(ufSalva, cadSalvo)
         setCodUf(ufSalva);
         setCodCaderno(cadSalvo);
 
@@ -78,7 +81,12 @@ function Busca(props) {
                     //document.querySelectorAll('#codUf3')[0].value = cadSalvo;
                 }
             })
-            getUserLocation();
+
+            if(location.pathname == '/') {
+                getUserLocation();
+            }
+
+        
 
     }, []);
 
@@ -212,37 +220,64 @@ function Busca(props) {
     function checkLocation(latitude, longitude) {
         const apiKey = "AIzaSyBpuxjyShwHApt-FthqurSP4G0xx7nznl0";  // Substitua com sua chave API do Google
         const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
-        
+
         fetch(url)
             .then(response => response.json())
             .then(data => {
                 const addressComponents = data.results[0].address_components;
                 let city = '';
                 let state = '';
-                console.log(data)
                 addressComponents.forEach(component => {
                     if (component.types.includes("administrative_area_level_2")) {
                         city = component.short_name;
-                        
-                        console.log(state)
+                        setCodCaderno(component.short_name)
+                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                        //console.log(state)
                     }
                     if (component.types.includes('administrative_area_level_1')) {
                         state = component.short_name;
+
                         //document.querySelectorAll('#codUf2')[0].value = component.short_name;
+                        setCodUf(component.short_name)
+                        localStorage.setItem("uf: ", component.short_name);
+                        sessionStorage.setItem("uf: ", component.short_name);
                         
+
+
                     }
                 });
-        
+
+
+
+
+
+
                 if (city === "Maceió" && state === "Alagoas") {
                     alert("Você está em Maceió, Alagoas!");
                 } else {
-                    alert(`Você está em ${city}, ${state}`);
+                    //alert(`Você está em ${city}, ${state}`);
+
                 }
             })
             .catch(error => console.error("Erro na consulta de geocodificação:", error));
-        
+
     }
-    
+
+    useEffect(() => {
+        if (uf.length > 0) {
+            if (codCaderno != null) {
+                const ufLoc = caderno.find((item) => item.nomeCaderno == codCaderno.toUpperCase())
+                if (ufLoc) {
+                    setCodUf(ufLoc.codUf);
+                    setUf(ufLoc.codUf);
+                    setCodCaderno(ufLoc.codCaderno);
+                }
+
+            };
+
+        }
+    }, [uf])
 
     return (
         <div className='border-busca container-fluid formulario formulario-home'>
@@ -274,8 +309,8 @@ function Busca(props) {
                                     <div className="form-group w-100">
 
                                         <select name="codUf3" id="codUf3" className="form-control form-select" onChange={definirCaderno} value={codCaderno}>
-                                           {/*  <option value="TODO">TODO</option> */}
-                                           <option value="CIDADE">CIDADE</option>
+                                            {/*  <option value="TODO">TODO</option> */}
+                                            <option value="CIDADE">CIDADE</option>
                                             {caderno.map((item) => (
                                                 item.codUf == ufSelected &&
                                                 <option id={item.codCaderno} key={item.codCaderno} name={item.nomeCaderno} value={item.codCaderno}>{item.nomeCaderno}</option>

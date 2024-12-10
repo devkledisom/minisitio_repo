@@ -29,7 +29,7 @@ function Video(props) {
         if (isYouTubeURL(url)) {
             const videoID = extractYouTubeID(url);
             setIdVideo(videoID);
-            console.log("ID do vídeo:", props.link,videoID); // Saída: CxY-tOLR9c0
+            //console.log("ID do vídeo:", props.link,videoID); // Saída: CxY-tOLR9c0
         } else {
             //console.error("URL inválida do YouTube");
         }
