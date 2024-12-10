@@ -155,8 +155,8 @@
     text-decoration: none;
 }
 
-.dropdown-item:focus,
-.dropdown-item:hover {
+.user-actions .dropdown-item:focus,
+.user-actions .dropdown-item:hover {
     color: var(--bs-dropdown-link-hover-color);
     background-color: #ffcc29;
 }
@@ -187,5 +187,17 @@
     .user-actions>div>div>button>i {
         position: absolute;
         right: 10px;
+    }
+
+    .swal2-popup {
+        width: 90% !important;
+    }
+
+    .cart-digital-modal > a {
+        font-size: 10px;
+    }
+
+    .cart-digital-modal > a > img {
+        width: 40px !important;
     }
 }

@@ -4,6 +4,11 @@ import '../assets/css/SocialShareButtons.css';
 
 
 const socialMap = {
+  whatsapp: {
+    shareUrl: "https://wa.me/?text=",
+    display: "share_whatsapp.svg",
+    alter: "Whatsapp"
+  },
   facebook: {
     shareUrl: "https://www.facebook.com/sharer/sharer.php?u=",
     display: "share_facebook.svg",
@@ -18,12 +23,7 @@ const socialMap = {
     shareUrl: "https://www.linkedin.com/shareArticle?mini=true&url=",
     display: "linkedin.png",
     alter: "Linkedin"
-  },
-  whatsapp: {
-    shareUrl: "https://wa.me/?text=",
-    display: "share_whatsapp.svg",
-    alter: "Whatsapp"
-  }
+  } 
 }
 
 function SocialShareButtons({ url }) {

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-
+import Swal from 'sweetalert2';
 
 //GLOBAL FUNCTIONS
 import { limparCPFouCNPJ, generatePdf } from "../globalFunctions/functions";
@@ -48,11 +48,41 @@ function UserActions(props) {
             .then(res => {
                 if (res.success) {
                     window.open(res.url, '_blank');
-                    console.log("resultado", res)
                 }
 
             })
     };
+
+    function openShareModal() {
+        const link = `${masterPath.url}/files/3/${encodeURIComponent(props.data.cartao_digital)}`;
+        Swal.fire({
+            title: 'Compartilhar Cartão Digital',
+            html: `
+                <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 30px;" class="cart-digital-modal">
+                    <a href="https://api.whatsapp.com/send?text=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                        <img src="../assets/img/icon-share/share_whatsapp.svg" width="80" alt="whatsapp" />    
+                        Compartilhar no WhatsApp
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                        <img src="../assets/img/icon-share/share_facebook.svg" width="80" alt="facebook" />
+                        Compartilhar no Facebook
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?url=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                        <img src="../assets/img/icon-share/share_x.svg" width="80" alt="x" />    
+                        Compartilhar no Twitter
+                    </a>
+                    <a href="https://www.linkedin.com/shareArticle?url=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                        <img src="../assets/img/icon-share/linkedin.png" width="80" alt="linkedin" style="border-radius: 100%;" />    
+                        Compartilhar no LinkedIn
+                    </a>
+                </div>
+            `,
+            width: "50%",
+            showCloseButton: true,
+            showConfirmButton: false,
+        });
+    }
+
 
 
     return (
@@ -87,10 +117,13 @@ function UserActions(props) {
                         </button>
                         <ul class="dropdown-menu lista-cart" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href={`${masterPath.url}/files/3/${props.data.cartao_digital}`} target="_blank" rel="noopener noreferrer">Visualizar</a></li>
-                            <li><ShareButton showBtn={false} url={`${masterPath.url}/files/3/`} name={encodeURIComponent(props.data.cartao_digital)} /></li>
+                           {/*  <li><ShareButton showBtn={false} url={`${masterPath.url}/files/3/`} name={encodeURIComponent(props.data.cartao_digital)} /></li> */}
+                            <li><button class="dropdown-item" onClick={openShareModal}>Compartilhar</button></li>
                         </ul>
                     </div>
+
                 }
+
                 {(props.data.cartao_digital == "" || props.data.cartao_digital == 0) &&
                     <a href="#" class="btn btn-danger margin-bottom-10 hidden-xs">
                         <img src="/assets/img/logo.png" />
@@ -98,6 +131,7 @@ function UserActions(props) {
                     </a>
 
                 }
+
 
 
                 <a href="/contato" class="btn btn-default margin-bottom-10">

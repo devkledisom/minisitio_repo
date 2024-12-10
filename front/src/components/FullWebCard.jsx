@@ -191,7 +191,7 @@ function FullWebCard(props) {
 
                 <div className="row">
                    {/*  <Socialmidia /> */}
-                    <SocialShareButtons url={window.location.href} />
+                    <SocialShareButtons url={fullUrl} />
                 </div>
                 <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ} url={fullUrl} data={result} />
             </div>
