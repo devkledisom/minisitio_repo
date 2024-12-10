@@ -228,7 +228,7 @@ function Busca(props) {
                     }
                     if (component.types.includes('administrative_area_level_1')) {
                         state = component.short_name;
-                        document.querySelectorAll('#codUf2')[0].value = component.short_name;
+                        //document.querySelectorAll('#codUf2')[0].value = component.short_name;
                         
                     }
                 });
