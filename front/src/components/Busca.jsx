@@ -59,7 +59,7 @@ function Busca(props) {
 
         let ufSalva = sessionStorage.getItem("uf: ");
         let cadSalvo = sessionStorage.getItem("caderno: ");
-        console.log(ufSalva, cadSalvo)
+        //console.log(ufSalva, cadSalvo)
         setCodUf(ufSalva);
         setCodCaderno(cadSalvo);
 
@@ -200,7 +200,7 @@ function Busca(props) {
 
 
     function getUserLocation() {
-        if ("geolocation" in navigator) {
+        if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const latitude = position.coords.latitude;
@@ -209,7 +209,21 @@ function Busca(props) {
                     checkLocation(latitude, longitude);  // Verificar localização
                 },
                 (error) => {
-                    console.error("Erro ao obter localização:", error.message);
+                    console.error("Erro ao obter localização:", error);
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            console.error("Permissão negada pelo usuário.");
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            console.error("A posição não está disponível.");
+                            break;
+                        case error.TIMEOUT:
+                            console.error("A solicitação expirou antes de obter a localização.");
+                            break;
+                        default:
+                            console.error("Ocorreu um erro desconhecido.");
+                            break;
+                    }
                 }
             );
         } else {
@@ -233,7 +247,7 @@ function Busca(props) {
                         setCodCaderno(component.short_name)
                         localStorage.setItem("caderno: ", component.short_name.toUpperCase());
                         sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                        //console.log(state)
+                        console.log(city)
                     }
                     if (component.types.includes('administrative_area_level_1')) {
                         state = component.short_name;
@@ -258,6 +272,7 @@ function Busca(props) {
                 } else {
                     //alert(`Você está em ${city}, ${state}`);
 
+            
                 }
             })
             .catch(error => console.error("Erro na consulta de geocodificação:", error));
@@ -266,8 +281,9 @@ function Busca(props) {
 
     useEffect(() => {
         if (uf.length > 0) {
+            console.log(codCaderno)
             if (codCaderno != null) {
-                const ufLoc = caderno.find((item) => item.nomeCaderno == codCaderno.toUpperCase())
+                const ufLoc = caderno.find((item) => item.nomeCaderno == codCaderno.toString().toUpperCase())
                 if (ufLoc) {
                     setCodUf(ufLoc.codUf);
                     setUf(ufLoc.codUf);
@@ -277,7 +293,7 @@ function Busca(props) {
             };
 
         }
-    }, [uf])
+    }, [uf, codCaderno])
 
     return (
         <div className='border-busca container-fluid formulario formulario-home'>
