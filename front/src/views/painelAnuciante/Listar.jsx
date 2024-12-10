@@ -34,6 +34,7 @@ function Listar(props) {
     const [smoot, setSmoot] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false);
     const [anuncios, setAnuncios] = useState([]);
+    const [dadoPaginacao, setDadoPaginacao] = useState({});
 
     const location = useLocation();
 
@@ -82,43 +83,9 @@ function Listar(props) {
     const teste = useRef(null)
 
     useEffect(() => {
-
-        /*     fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
-              .then(x => x.json())
-              .then(res => {
-                if (res.success) {
-                  setClassificados(res.data);
-                  setPathImg(res.teste.rows);
-                  setMosaicoImg(res.mosaico);
-                  console.log(res)
-                } else {
-        
-                }
-        
-              }) */
         buscarAnuncioId();
 
     }, []);
-
-    /*
-    * capa01 = ADMINISTRAÇÃO REGIONAL / PREFEITURA
-    * capa02 = EMERGÊNCIA
-    * capa03 = HOSPITAIS PÚBLICOS
-    * capa04 = SECRETARIA DE TURISMO
-    * capa05 = EVENTOS NA CIDADE
-    * capa06 = UTILIDADE PÚBLICA
-    * capa07 = CÂMARA DE VEREADORES/CÂMARA DISTRITAL
-    * capa08 = INFORMAÇÕES
-    */
-
-    let capa01 = pathImg[0] ? pathImg[0].descImagem : null;
-    let capa02 = pathImg[1] ? pathImg[1].descImagem : null;
-    let capa03 = pathImg[2] ? pathImg[2].descImagem : null;
-    let capa04 = pathImg[3] ? pathImg[3].descImagem : null;
-    let capa05 = pathImg[4] ? pathImg[4].descImagem : null;
-    let capa06 = pathImg[5] ? pathImg[5].descImagem : null;
-    let capa07 = pathImg[6] ? pathImg[6].descImagem : null;
-    let capa08 = pathImg[7] ? pathImg[7].descImagem : null;
 
     function buscarTodosClassificado() {
         fetch(`${masterPath.url}/admin/espacos/read?page=${1}`)
@@ -150,6 +117,7 @@ function Listar(props) {
                 if (res.success) {
                     setAnuncios(res.message.anuncios);
                     setShowSpinner(false);
+                    setDadoPaginacao(res.message)
                     //console.log("usussss", res.message.anuncios);
                 } else {
                     //alert("Anúncio não encontrado na base de dados");
@@ -251,7 +219,7 @@ function Listar(props) {
                                                 </table>
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <p>Página 1/1 (Total: 1)</p>
+                                                        <p>Página {dadoPaginacao.paginaAtual}/{dadoPaginacao.totalPaginas} (Total: {dadoPaginacao.totalItem})</p>
                                                     </div>
                                                     {/*  <div class="col-md-6">
                                                         <nav aria-label="Page navigation" class="pull-right">

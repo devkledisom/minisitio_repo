@@ -1883,7 +1883,7 @@ module.exports = {
         const porPagina = 10; // Número de itens por página
         const offset = (paginaAtual - 1) * porPagina;
 
-        
+
 
         //verificação
         const contemNumero = () => /\d/.test(nu_hash);
@@ -1896,7 +1896,9 @@ module.exports = {
                     { codAnuncio: nu_hash },
                     { descCPFCNPJ: nu_hash },
                 ]
-            }
+            },
+            limit: porPagina,
+            offset: offset
         });
 
         console.table([1, "id", resultAnuncio])
@@ -1925,14 +1927,24 @@ module.exports = {
                 //console.log(anuncio.rows[i])
             }));
 
-            const totalItens = resultAnuncio.length;
+            const resultAnuncioCount = await Anuncio.count({
+                where: {
+                    [Op.or]: [
+                        { codAnuncio: nu_hash },
+                        { descCPFCNPJ: nu_hash },
+                    ]
+                },
+            });
+
+            const totalItens = resultAnuncioCount;
+            const totalPaginas = Math.ceil(totalItens / porPagina);
 
             res.json({
                 success: true,
                 message: {
                     anuncios: resultAnuncio, // Itens da página atual
-                    paginaAtual: 1,
-                    totalPaginas: 1,
+                    paginaAtual: paginaAtual,
+                    totalPaginas: totalPaginas,
                     totalItem: totalItens
                 }
             });
@@ -1997,13 +2009,13 @@ module.exports = {
 
         //buscar por numero de ID
         if (resultAnuncio < 1) {
-           
+
             const resultID = await Desconto.findAll({
                 where: {
                     hash: nu_hash
                 }
             });
-          
+
 
             if (resultID < 1) {
                 //res.json({ success: false, message: "anúncio não encontrado" });

@@ -78,7 +78,7 @@ function Busca(props) {
                     //document.querySelectorAll('#codUf3')[0].value = cadSalvo;
                 }
             })
-
+            getUserLocation();
 
     }, []);
 
@@ -191,7 +191,58 @@ function Busca(props) {
 
 
 
-    /*   console.log(result) */
+    function getUserLocation() {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+                    checkLocation(latitude, longitude);  // Verificar localização
+                },
+                (error) => {
+                    console.error("Erro ao obter localização:", error.message);
+                }
+            );
+        } else {
+            console.error("Geolocalização não é suportada pelo navegador.");
+        }
+    }
+
+    function checkLocation(latitude, longitude) {
+        const apiKey = "AIzaSyBpuxjyShwHApt-FthqurSP4G0xx7nznl0";  // Substitua com sua chave API do Google
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const addressComponents = data.results[0].address_components;
+                let city = '';
+                let state = '';
+                console.log(data)
+                addressComponents.forEach(component => {
+                    if (component.types.includes("administrative_area_level_2")) {
+                        city = component.short_name;
+                        
+                        console.log(state)
+                    }
+                    if (component.types.includes('administrative_area_level_1')) {
+                        state = component.short_name;
+                        document.querySelectorAll('#codUf2')[0].value = component.short_name;
+                        
+                    }
+                });
+        
+                if (city === "Maceió" && state === "Alagoas") {
+                    alert("Você está em Maceió, Alagoas!");
+                } else {
+                    alert(`Você está em ${city}, ${state}`);
+                }
+            })
+            .catch(error => console.error("Erro na consulta de geocodificação:", error));
+        
+    }
+    
 
     return (
         <div className='border-busca container-fluid formulario formulario-home'>
