@@ -1,6 +1,12 @@
 const fs = require('fs');
 
-
+//streams
+const express = require('express');
+const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
+const server = http.createServer(app);
+const io = new Server(server);
 
 //models
 const database = require('../config/db');
@@ -33,6 +39,7 @@ const { Op } = Sequelize;
 const readXlsxFile = require('read-excel-file/node');
 const path = require('path');
 const { totalmem } = require('os');
+
 
 
 module.exports = {
@@ -2979,14 +2986,25 @@ module.exports = {
 
         res.json(atividades)
     },
-    import4excell: async (req, res) => {
+    import4excell: async (req, res, io) => {
+
+        //console.log("dasdasdas", te)
+   /*      setInterval(() => {
+            const progress = Math.floor(Math.random() * 100); // Progresso fictício
+            req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
+        }, 2000); */
+
+        
+
+     
         // req.file é o arquivo 'uploadedfile'
         // req.body conterá os campos de texto, se houver
         //Realizando leitura dos dados
-        readXlsxFile(path.join(__dirname, '../public/import/uploadedfile.xlsx')).then(async linhas => {
+        readXlsxFile(path.join(__dirname, '../public/import/uploadedfile.xlsx')).then(async (linhas) => {
             //console.log(linhas);
 
             const data = linhas;
+
 
             const resultPlan = data.slice(1).map(row => {
                 return row.reduce((obj, value, index) => {
@@ -2997,7 +3015,8 @@ module.exports = {
 
             const arrayImportado = [];
 
-            async function novaImportacao(result) {
+            async function novaImportacao(result, index) {
+                console.log(result, data.length, index)
                 //buscar por uf
                 const resultEstado = await Uf.findAll({
                     where: {
@@ -3018,16 +3037,16 @@ module.exports = {
 
 
                 const codTipoAnuncio = result['TIPO'];
-                const idDesconto = result['ID (MASTER)'];
+                const idDesconto = result['ID'];
                 const nomeAnuncio = result['NOME'];
-                const telefone = result['TEL'];
+                const telefone = result['TELEFONE'];
                 const estado = estadoId;
                 const cidade = cidadeId;
-                const tipoAtividade = result['ATIVIDADE PRINCIPAL  (CNAE)'];
-                const nuDocumento = result['CNPJ/CPF'];
+                const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
+                const nuDocumento = result['CNPJ_CPF'];
                 const autorizante = result['AUTORIZANTE'];
-                const email = result['E-MAIL'];
-                const chavePix = result['PIX ( chave)'];
+                const email = result['EMAIL'];
+                //const chavePix = result['PIX'];
                 const login = result['CNPJ/CPF'];
                 const senha = 12345;
 
@@ -3052,7 +3071,7 @@ module.exports = {
                     const dadosUsuario = {
                         "codTipoPessoa": "pf",
                         "descCPFCNPJ": nuDocumento,
-                        "descNome": nomeAnuncio,
+                        "descNome": nomeAnuncio || `import${index}`,
                         "descEmail": email || "atualizar",
                         "senha": senha,
                         "codTipoUsuario": 3,
@@ -3154,10 +3173,10 @@ module.exports = {
                         "descCEP": 0,
                         "descTipoPessoa": "pf",
                         "descCPFCNPJ": nuDocumento,
-                        "descNomeAutorizante": autorizante,
+                        "descNomeAutorizante": autorizante || `import${index}`,
                         "descEmailAutorizante": 0,
                         "codDesconto": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
-                        "descChavePix": chavePix,
+                        "descChavePix": 'chavePix',
                         "qntVisualizacoes": 0,
                         "codDuplicado": 0,
                         "descPromocao": 0,
@@ -3170,7 +3189,13 @@ module.exports = {
                     const criarAnuncios = await Anuncio.create(dataObj);
 
                     //console.log(criarAnuncios);
-
+                    const progress = index; // Progresso fictício
+                    req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
+console.log(data)
+                    if(index+1 == data.length-1) {
+                        //res.redirect("https://br.minisitio.net/admin/espacos");
+                    }
+                    
                 };
             }
 
@@ -3198,9 +3223,9 @@ module.exports = {
             const BATCH_SIZE = 100; // Tamanho do lote para processar de cada vez
 
             async function processBatch(batch) {
-                return Promise.all(batch.map(async (result) => {
+                return Promise.all(batch.map(async (result, index) => {
                     try {
-                        await novaImportacao(result);
+                        await novaImportacao(result, index);
                     } catch (error) {
                         console.error("Erro ao importar:", error);
                     }
@@ -3226,7 +3251,9 @@ module.exports = {
 
             await processImport(data);
 
-
+   // Readable Stream.
+ /*   const progress = (1 / linhas) * 100;
+   req.customParam.emit("progress", { progress }); */
         });
 
 
@@ -3239,11 +3266,13 @@ module.exports = {
 
         // Acessar o arquivo: req.file.path para o caminho completo
         console.log('Arquivo enviado:', req.file);
+        //console.log('Arquivo enviado:', req.customParam);
 
-        // Readable Stream.
+
+     
 
         //res.json({success: true, message: 'Arquivo recebido com sucesso!'});
-        res.redirect("https://minitest.minisitio.online/admin/espacos");
+        //res.redirect("https://minitest.minisitio.online/admin/espacos");
     },
     listarPin: async (req, res) => {
 

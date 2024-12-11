@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { masterPath, version } from '../../../config/config';
+import { io } from "socket.io-client";
 
 //LIBS
 import Swal from 'sweetalert2';
@@ -14,6 +15,26 @@ import Header from "../Header";
 import Spinner from '../../../components/Spinner';
 
 const Espacos = () => {
+
+    const [progressValue, setProgressValue] = useState(null);
+
+    useEffect(() => {
+        const socket = io("http://localhost:3032");
+        // client-side
+        socket.on("connect", () => {
+            console.log("adas", socket.id); // x8WIv7-mJelg7on_ALbx
+        });
+
+        socket.on("progress", (data) => {
+            setProgressValue(data.progress)
+            console.log(`Progresso recebido do backend: ${data.progress}%`);
+        });
+
+        return () => {
+            socket.disconnect(); // Desconecta ao desmontar o componente
+        };
+    }, []);
+
 
     const style = {
         position: "fixed",
@@ -57,13 +78,17 @@ const Espacos = () => {
 
                 <h1 className="pt-4 px-4">Importar Anúncio</h1>
 
-                <form action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" style={{"marginTop": "20px", "marginLeft": "50px"}}>
+                <form action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" style={{ "marginTop": "20px", "marginLeft": "50px" }}>
                     Importar Espaços <br />
 
                     <input type="hidden" name="MAX_FILE_SIZE" value="2097152" id="MAX_FILE_SIZE" />
                     <input type="file" name="uploadedfile" id="uploadedfile" /><br /><br />
-                        <button type="submit" className="btn custom-button" style={{"marginRight": "10px"}}>Enviar</button>
-                        <a href="https://br.minisitio.net/resources/files/modelo_importacao_anuncios.xlsx">Download modelo</a>
+                    {progressValue && 
+                        <h2>Registros enviados: {progressValue+1}</h2>
+                    }
+                    
+                    <button type="submit" className="btn custom-button" style={{ "marginRight": "10px" }}>Enviar</button>
+                    <a href="https://br.minisitio.net/resources/files/modelo_importacao_anuncios.xlsx">Download modelo</a>
                 </form>
 
 
