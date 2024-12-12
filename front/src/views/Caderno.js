@@ -803,9 +803,22 @@ function Caderno() {
 
    /*    const arrayParte1 = division < 5 ? removeDuplicate.slice(0, 4) : removeDuplicate.slice(0, division);
       const arrayParte2 = division == 4 ? removeDuplicate.slice(4) : []; */
-       const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
-      const arrayParte2 = division > 5 ? removeDuplicate.slice(division) : []; 
+       
+    /*    const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
+      const arrayParte2 = division > 5 ? removeDuplicate.slice(division) : [];  */
 
+
+      var arrayParte1;
+      var arrayParte2;
+
+
+      if(minisitio.anuncios.length == 5) {
+         arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, 6);
+         arrayParte2 = division >= 5 ? removeDuplicate.slice(6) : [];
+      } else if(minisitio.anuncios.length > 5) {
+         arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
+         arrayParte2 = division > 5 ? removeDuplicate.slice(division) : []; 
+      }
 
       // Remover duplicados comparando objetos
       const arraySemDuplicados = arrayParte1.filter((item, index, self) =>
