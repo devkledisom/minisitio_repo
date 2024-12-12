@@ -297,17 +297,22 @@ module.exports = {
         try {
             const cader = await resultAnuncio[0].getCaderno();
             const atividades = await resultAnuncio[0].getAtividade();
+            const descontoHash = await resultAnuncio[0].getDesconto();
+            console.log(resultAnuncio)
 
             resultAnuncio[0].setDataValue('nomeCaderno', cader.dataValues.nomeCaderno);
             resultAnuncio[0].setDataValue('nomeAtividade', atividades.dataValues.atividade);
+            resultAnuncio[0].setDataValue('hash', descontoHash.hash);
+
+            res.json(resultAnuncio);
         } catch(err) {
-            //console.log(err)
+            console.log(err)
         }
  
         //anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
 
         //resultAnuncio[0].setDataValue('nomeCaderno', cader[0].nomeCaderno);
 
-        res.json(resultAnuncio);
+        
     }
 }

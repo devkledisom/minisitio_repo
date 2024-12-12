@@ -30,9 +30,10 @@ function WebcardThumb(props) {
         };
 
         function buscarUserId() {
-            fetch(`${masterPath.url}/admin/desconto/buscar/${props.data.codDesconto}`)
+            fetch(`${masterPath.url}/admin/desconto/buscar/${props.data.hash}`)
                 .then((x) => x.json())
                 .then((res) => {
+                    //console.log(res, props.data)
                     if (res.success) {
                         setListaIds(res.IdsValue[0]);
                     } else {

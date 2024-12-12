@@ -1232,8 +1232,9 @@ function Caderno() {
                           telefone={anuncio.descTelefone}
                           celular={anuncio.descCelular}
                           codDesconto={anuncio.codDesconto}
-                          ids={buscarId(90)}
+                          ids={buscarId(anuncio.codDesconto)}
                         />
+                        
                         /* } <MsgProgramada />
                           if(i >= minisitio.anuncios.length-1) {
                            console.log("ultima render");

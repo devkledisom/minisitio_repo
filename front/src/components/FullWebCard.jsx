@@ -35,7 +35,7 @@ function FullWebCard(props) {
     const { nomeAnuncio } = useParams();
 
     useEffect(() => {
-
+console.log(result)
         async function buscarAnuncio() {
             const request = await fetch(`${masterPath.url}/anuncio/${idParam}`).then((x) => x.json());
             //console.log(request[0]);
@@ -44,6 +44,7 @@ function FullWebCard(props) {
             props.setCodUf(request[0].codUf);
             props.setNmAnuncio(nomeAnuncio);
             setResult(request[0]);
+            console.log(request[0])
         }
 
         buscarAnuncio();
