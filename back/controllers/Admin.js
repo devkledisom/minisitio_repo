@@ -3162,7 +3162,7 @@ module.exports = {
                         "codCaderno": cidadeId,
                         "codUf": estadoId,
                         "codCidade": cidadeId,
-                        "descAnuncio": nomeAnuncio,
+                        "descAnuncio": nomeAnuncio || `import${index}`,
                         "descImagem": 0,
                         "descEndereco": "atualizar",
                         "descTelefone": telefone || "atualizar",
