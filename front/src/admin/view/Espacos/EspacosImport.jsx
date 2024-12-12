@@ -19,7 +19,7 @@ const Espacos = () => {
     const [progressValue, setProgressValue] = useState(null);
 
     useEffect(() => {
-        const socket = io('https://br.minisitio.net/api');
+        const socket = io('http://br.minisitio.net/api');
         // client-side
         socket.on("connect", () => {
             console.log("adas", socket.id); // x8WIv7-mJelg7on_ALbx
