@@ -102,6 +102,7 @@ const GerenciarIds = () => {
         fetch(`${masterPath.url}/admin/desconto/buscar/${campoPesquisa.value}`)
             .then((x) => x.json())
             .then((res) => {
+                
                 if (res.success) {
                     alert("encontrado");
                     setIds(res);

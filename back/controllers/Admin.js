@@ -890,6 +890,17 @@ module.exports = {
                 return;
             }
 
+            await Promise.all(
+                resultAnuncio.map(async (item) => {
+                    const user = await item.getUsuario();
+
+                    item.dataValues = {
+                        nmUsuario: user.descNome, // Adiciona a nova propriedade no início
+                        ...item.dataValues, // Mantém as demais propriedades
+                    };
+                })
+            );
+
             res.json({ success: true, IdsValue: resultAnuncio });
         }
 
