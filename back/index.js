@@ -4,10 +4,19 @@ const port = 3032;
 const route = require('./routes/Routes');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 //streams
-const http = require("http");
+const http = require("https");
 //const { Server } = require("socket.io");
-const server = http.createServer(app);
+
+
+// Carregar certificados
+const options = {
+    key: fs.readFileSync("./certificados/key.pem"),
+    cert: fs.readFileSync("./certificados/cert.pem"),
+  };
+
+const server = http.createServer(options, app);
 //const io = new Server(server);
 var io = require("socket.io")(server, {
     cors: {
