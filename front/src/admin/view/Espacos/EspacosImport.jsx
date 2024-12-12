@@ -67,6 +67,35 @@ const Espacos = () => {
             })
     };
 
+
+    const handleFormSubmit = async (event) => {
+        event.preventDefault(); // Evita o recarregamento da página
+        setShowSpinner(true);
+
+        const formData = new FormData(event.target); // Captura os dados do formulário
+
+        try {
+            const response = await fetch(`${masterPath.url}/admin/anuncio/import`, {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao enviar o formulário");
+            }
+
+            const data = await response.json(); // Recebe a resposta da API
+            setShowSpinner(false);
+            setProgressValue(data.progress || null);
+
+            Swal.fire("Sucesso!", "Importação concluída com sucesso!", "success");
+        } catch (error) {
+            setShowSpinner(false);
+            console.error(error);
+            Swal.fire("Erro", "Ocorreu um erro ao importar os dados.", "error");
+        }
+    };
+
     return (
         <div className="users">
             <header style={style} className='w-100'>
@@ -77,8 +106,8 @@ const Espacos = () => {
                 {showSpinner && <Spinner />}
 
                 <h1 className="pt-4 px-4">Importar Anúncio</h1>
-
-                <form action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" style={{ "marginTop": "20px", "marginLeft": "50px" }}>
+               {/*  action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" */}
+                <form  onSubmit={handleFormSubmit} style={{ "marginTop": "20px", "marginLeft": "50px" }}>
                     Importar Espaços <br />
 
                     <input type="hidden" name="MAX_FILE_SIZE" value="2097152" id="MAX_FILE_SIZE" />

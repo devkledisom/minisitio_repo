@@ -3204,6 +3204,7 @@ module.exports = {
                     req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
 console.log(data)
                     if(index+1 == data.length-1) {
+                        res.json({success: true, progress: index})
                         //res.redirect("https://br.minisitio.net/admin/espacos");
                     }
                     
