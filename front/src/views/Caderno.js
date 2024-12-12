@@ -798,11 +798,13 @@ function Caderno() {
 
       var list = (list % 2 == 0) ? list : list + 1;
 
-      //let division = list / 2;
-      let division = list;
+      let division = list / 2;
+      //let division = list;
 
-      const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
-      const arrayParte2 = division > 5 ? removeDuplicate.slice(division) : [];
+   /*    const arrayParte1 = division < 5 ? removeDuplicate.slice(0, 4) : removeDuplicate.slice(0, division);
+      const arrayParte2 = division == 4 ? removeDuplicate.slice(4) : []; */
+       const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
+      const arrayParte2 = division > 5 ? removeDuplicate.slice(division) : []; 
 
 
       // Remover duplicados comparando objetos
