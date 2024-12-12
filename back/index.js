@@ -6,17 +6,17 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 //streams
-const http = require("http");
+const http = require("https");
 //const { Server } = require("socket.io");
 
 
 // Carregar certificados
 const options = {
-    key: fs.readFileSync("./certificados/key.pem"),
-    cert: fs.readFileSync("./certificados/cert.pem"),
+    key: fs.readFileSync("./certificados/code.key"),
+    cert: fs.readFileSync("./certificados/code.crt"),
   };
 
-const server = http.createServer(app);
+const server = http.createServer(options, app);
 //const io = new Server(server);
 var io = require("socket.io")(server, {
     cors: {
