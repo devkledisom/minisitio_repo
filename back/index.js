@@ -6,7 +6,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 //streams
-const http = require("https");
+const http = require("http");
 //const { Server } = require("socket.io");
 
 
@@ -29,7 +29,7 @@ app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Permita apenas esta origem
+    origin: ['http://localhost:3000', 'https://br.minisitio.net'], // Permita apenas esta origem
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
     credentials: true, // Permite envio de cookies e credenciais
 }));
