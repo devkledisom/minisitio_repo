@@ -2566,7 +2566,7 @@ module.exports = {
             "descInsta": descInsta,
             "descPatrocinador": 0,
             "descPatrocinadorLink": 0,
-            "qntVisualizacoes": 0,
+            /* "qntVisualizacoes": 0, */
             "activate": 1,
             "dtCadastro": dataNow(),
             "dtCadastro2": "2012-12-27T16:22:44.000Z",
