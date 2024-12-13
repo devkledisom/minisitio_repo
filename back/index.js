@@ -20,7 +20,7 @@ const server = http.createServer(options, app);
 //const io = new Server(server);
 var io = require("socket.io")(server, {
     cors: {
-      origin: 'https://br.minisitio.net',
+      origin: '*',
     }
   });
 
