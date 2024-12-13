@@ -19,7 +19,9 @@ const Espacos = () => {
     const [progressValue, setProgressValue] = useState(null);
 
     useEffect(() => {
-        const socket = io('http://localhost:3032');
+        const socket = io('https://br.minisitio.net', {
+            path: '/api/socket.io', // Use o mesmo endpoint configurado no servidor
+        });
         // client-side
         socket.on("connect", () => {
             console.log("adas", socket.id); // x8WIv7-mJelg7on_ALbx

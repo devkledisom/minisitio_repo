@@ -16,7 +16,7 @@ const options = {
     cert: fs.readFileSync("./certificados/code.crt"),
   };
 
-const server = http.createServer(options, app);
+const server = http.createServer(app);
 //const io = new Server(server);
 var io = require("socket.io")(server, {
     cors: {
@@ -24,15 +24,14 @@ var io = require("socket.io")(server, {
     }
   });
 
-
 app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({
+app.use(cors(/* {
     origin: ['http://localhost:3000', 'https://br.minisitio.net'], // Permita apenas esta origem
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
     credentials: true, // Permite envio de cookies e credenciais
-}));
+} */));
 
 // Middleware para passar a instância `io` para as rotas
 function customMiddleware(io) {
