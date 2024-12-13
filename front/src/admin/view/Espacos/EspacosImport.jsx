@@ -20,8 +20,12 @@ const Espacos = () => {
 
     useEffect(() => {
         const socket = io('https://br.minisitio.net', {
-            path: '/api/socket.io', // Use o mesmo endpoint configurado no servidor
+            path: '/socket.io', // Use o mesmo endpoint configurado no servidor
         });
+
+
+        //https://br.minisitio.net/api/socket.io/?EIO=4&transport=polling&t=a0kj7m2l
+
         // client-side
         socket.on("connect", () => {
             console.log("adas", socket.id); // x8WIv7-mJelg7on_ALbx
