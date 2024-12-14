@@ -3241,7 +3241,7 @@ module.exports = {
                     // Atualizar o nome
                     
                     if (index + 1 == data.length - 1) {
-                        res.json({ success: true, progress: index })
+                        //res.json({ success: true, progress: index })
                         //res.redirect("https://br.minisitio.net/admin/espacos");
                     }
 
@@ -3320,7 +3320,7 @@ module.exports = {
 
 
 
-        //res.json({success: true, message: 'Arquivo recebido com sucesso!'});
+        res.json({success: true, message: 'Arquivo recebido com sucesso!'});
         //res.redirect("https://minitest.minisitio.online/admin/espacos");
     },
     listarPin: async (req, res) => {
