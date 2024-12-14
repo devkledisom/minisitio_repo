@@ -18,28 +18,7 @@ const Espacos = () => {
 
     const [progressValue, setProgressValue] = useState(null);
 
-    useEffect(() => {
-        const socket = io('https://br.minisitio.net', {
-            path: '/socket.io', // Use o mesmo endpoint configurado no servidor
-        });
-
-
-        //https://br.minisitio.net/api/socket.io/?EIO=4&transport=polling&t=a0kj7m2l
-
-        // client-side
-        socket.on("connect", () => {
-            console.log("adas", socket.id); // x8WIv7-mJelg7on_ALbx
-        });
-
-        socket.on("progress", (data) => {
-            setProgressValue(data.progress)
-            console.log(`Progresso recebido do backend: ${data.progress}%`);
-        });
-
-        return () => {
-            socket.disconnect(); // Desconecta ao desmontar o componente
-        };
-    }, []);
+   
 
 
     const style = {
@@ -53,6 +32,40 @@ const Espacos = () => {
     const [selectId, setSelectId] = useState(null);
     const [showSpinner, setShowSpinner] = useState(false);
     const [del, setDel] = useState(false);
+    const [start, setStart] = useState(null);
+    const [end, setEnd] = useState(null);
+
+    useEffect(() => {
+        /*       const socket = io('https://br.minisitio.net', {
+                  path: '/socket.io', // Use o mesmo endpoint configurado no servidor
+              });
+      
+      
+      
+              // client-side
+              socket.on("connect", () => {
+                  console.log("adas", socket.id); // x8WIv7-mJelg7on_ALbx
+              });
+      
+              socket.on("progress", (data) => {
+                  setProgressValue(data.progress)
+                  console.log(`Progresso recebido do backend: ${data.progress}%`);
+              }); */
+
+        setInterval(() => {
+            fetch(`${masterPath.url}/admin/anuncio/progress`)
+                .then(x => x.json())
+                .then(res => {
+                    setProgressValue(res.message.progress);
+                    setEnd(res.message.fim)
+                    
+                })
+        }, 1000) 
+
+        /*      return () => {
+                 socket.disconnect(); // Desconecta ao desmontar o componente
+             }; */
+    }, []);
 
 
     const location = useLocation();
@@ -92,7 +105,18 @@ const Espacos = () => {
 
             const data = await response.json(); // Recebe a resposta da API
             setShowSpinner(false);
-            setProgressValue(data.progress || null);
+
+
+            const now = new Date();
+            const hours = now.getHours(); // Horas (0-23)
+            const minutes = now.getMinutes(); // Minutos (0-59)
+            const seconds = now.getSeconds(); // Segundos (0-59)
+
+            //console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
+
+            setStart(`${hours}:${minutes}:${seconds}`);
+
+            //setProgressValue(data.progress || null);
 
             Swal.fire("Sucesso!", "Importação concluída com sucesso!", "success");
         } catch (error) {
@@ -112,16 +136,22 @@ const Espacos = () => {
                 {showSpinner && <Spinner />}
 
                 <h1 className="pt-4 px-4">Importar Anúncio</h1>
-               {/*  action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" */}
-                <form  onSubmit={handleFormSubmit} style={{ "marginTop": "20px", "marginLeft": "50px" }}>
+                {/*  action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" */}
+                <form onSubmit={handleFormSubmit} style={{ "marginTop": "20px", "marginLeft": "50px" }}>
                     Importar Espaços <br />
 
                     <input type="hidden" name="MAX_FILE_SIZE" value="2097152" id="MAX_FILE_SIZE" />
                     <input type="file" name="uploadedfile" id="uploadedfile" /><br /><br />
-                    {progressValue && 
-                        <h2>Registros enviados: {progressValue+1}</h2>
+                    {progressValue &&
+                        <div>
+                            <h2>Registros enviados: {progressValue}</h2>
+                            <h3>inicio: {start}</h3>
+                            <h3>fim: {end}</h3>
+                            {/* <h3>tempo: {end - start}</h3> */}
+                        </div>
+
                     }
-                    
+
                     <button type="submit" className="btn custom-button" style={{ "marginRight": "10px" }}>Enviar</button>
                     <a href="https://br.minisitio.net/resources/files/modelo_importacao_anuncios.xlsx">Download modelo</a>
                 </form>

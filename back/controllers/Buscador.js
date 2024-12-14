@@ -4,6 +4,8 @@ const Caderno = require('../models/table_caderno');
 const Anuncio = require('../models/table_anuncio');
 const Atividade = require('../models/table_atividade');
 const Uf = require('../models/table_uf');
+const path = require('path');
+const fs = require('fs');
 
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
@@ -21,11 +23,11 @@ module.exports = {
                    }
                }); */
 
-        
+
         //Atividades
         const atividades = await Atividade.findAll({
             where: {
-                atividade: {[Op.like]: `%${atividade}%`}
+                atividade: { [Op.like]: `%${atividade}%` }
             }
         });
 
@@ -35,25 +37,29 @@ module.exports = {
         let anunciosOld;
 
         //anuncio
-        if(codigoCaderno != "TODO") {
+        if (codigoCaderno != "TODO") {
             anunciosOld = await Anuncio.findAll({
                 where: {
                     [Op.or]: [
-                        {[Op.and]: [
-                            {codCaderno: codigoCaderno},
-                            {codUf: uf},
-                            {
-                                [Op.or]: [
-                                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                                    {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
-                                    {descTelefone: atividade},
-                                    {descCPFCNPJ: atividade},
-                                    {tags: {
-                                        [Op.like]: `%${atividade}%`
-                                    }}
-                                ]
-                            }
-                        ]}                        
+                        {
+                            [Op.and]: [
+                                { codCaderno: codigoCaderno },
+                                { codUf: uf },
+                                {
+                                    [Op.or]: [
+                                        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                        { codAtividade: atividades.length > 0 ? atividades[0].id : "" },
+                                        { descTelefone: atividade },
+                                        { descCPFCNPJ: atividade },
+                                        {
+                                            tags: {
+                                                [Op.like]: `%${atividade}%`
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
                     ],
                 }
             });
@@ -61,20 +67,24 @@ module.exports = {
             anunciosOld = await Anuncio.findAll({
                 where: {
                     [Op.or]: [
-                        {[Op.and]: [
-                            {codUf: uf},
-                            {
-                                [Op.or]: [
-                                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                                    {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
-                                    {descTelefone: atividade},
-                                    {descCPFCNPJ: atividade},
-                                    {tags: {
-                                        [Op.like]: `%${atividade}%`
-                                    }}
-                                ]
-                            }
-                        ]}/* ,
+                        {
+                            [Op.and]: [
+                                { codUf: uf },
+                                {
+                                    [Op.or]: [
+                                        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                        { codAtividade: atividades.length > 0 ? atividades[0].id : "" },
+                                        { descTelefone: atividade },
+                                        { descCPFCNPJ: atividade },
+                                        {
+                                            tags: {
+                                                [Op.like]: `%${atividade}%`
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }/* ,
                         {[Op.and]: [
                             {codUf: uf},
                             {
@@ -89,7 +99,7 @@ module.exports = {
                                 ]
                             }
                         ]} */
-                        
+
                     ],
                     /* [Op.or]: [
                         Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
@@ -106,24 +116,28 @@ module.exports = {
 
         }
 
-        const  anuncios = await Anuncio.findAll({
+        const anuncios = await Anuncio.findAll({
             where: {
                 [Op.or]: [
-                    {[Op.and]: [
-                        {codCaderno: codigoCaderno},
-                        {codUf: uf},
-                        {
-                            [Op.or]: [
-                                Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                                {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
-                                {descTelefone: atividade},
-                                {descCPFCNPJ: atividade},
-                                {tags: {
-                                    [Op.like]: `%${atividade}%`
-                                }}
-                            ]
-                        }
-                    ]}/* ,
+                    {
+                        [Op.and]: [
+                            { codCaderno: codigoCaderno },
+                            { codUf: uf },
+                            {
+                                [Op.or]: [
+                                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                    { codAtividade: atividades.length > 0 ? atividades[0].id : "" },
+                                    { descTelefone: atividade },
+                                    { descCPFCNPJ: atividade },
+                                    {
+                                        tags: {
+                                            [Op.like]: `%${atividade}%`
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }/* ,
                     {[Op.and]: [
                         {codUf: uf},
                         {
@@ -138,7 +152,7 @@ module.exports = {
                             ]
                         }
                     ]} */
-                    
+
                 ],
                 /* [Op.or]: [
                     Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
@@ -152,11 +166,11 @@ module.exports = {
                 //codAtividade: 6
             }
         });
-     
+
 
         //console.log(anuncios)
 
-        if(atividades.length > 0) {
+        if (atividades.length > 0) {
             console.log(atividades[0].id)
         };
 
@@ -186,7 +200,7 @@ module.exports = {
         res.json(ufs);
     },
     buscaGeralCadernoold: async (req, res) => {
-  
+
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
         const codigoCaderno = req.params.codCaderno;
@@ -213,13 +227,13 @@ module.exports = {
         })
 
         res.json({
-         anuncios: anuncios.rows, // Itens da página atual
+            anuncios: anuncios.rows, // Itens da página atual
             paginaAtual: paginaAtual,
             totalPaginas: totalPaginas
-        });  
+        });
     },
     buscaGeralCaderno: async (req, res) => {
-  
+
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
         const codigoCaderno = req.params.codCaderno;
@@ -239,7 +253,7 @@ module.exports = {
                 ]
             },
         });
-        
+
         const indexDoItem = todosRegistros.findIndex(item => item.codAnuncio == 1134);
 
         const paginaDoItem = Math.floor(2003 / porPagina) + 1;
@@ -267,10 +281,10 @@ module.exports = {
         })
 
         res.json({
-         anuncios: anuncios.rows, // Itens da página atual
+            anuncios: anuncios.rows, // Itens da página atual
             paginaAtual: paginaAtual,
             totalPaginas: totalPaginas
-        });   
+        });
     },
     buscaAtividade: async (req, res) => {
         await database.sync();
@@ -305,14 +319,46 @@ module.exports = {
             resultAnuncio[0].setDataValue('hash', descontoHash.hash);
 
             res.json(resultAnuncio);
-        } catch(err) {
+        } catch (err) {
             console.log(err)
         }
- 
+
         //anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
 
         //resultAnuncio[0].setDataValue('nomeCaderno', cader[0].nomeCaderno);
 
-        
+
+    },
+    progressImport: async (req, res) => {
+
+        // Caminho do arquivo JSON
+        const filePath = path.join(__dirname, '../public/importLog.json');
+
+        // Função para ler o arquivo JSON
+        function readJsonFile(filePath) {
+            try {
+                const jsonData = fs.readFileSync(filePath, 'utf8'); // Lê o arquivo como texto
+                const data = JSON.parse(jsonData); // Converte o texto em um objeto JavaScript
+                //console.log('Conteúdo do arquivo JSON:', data);
+                res.json({success: true, message: data})
+                return data;
+            } catch (error) {
+                console.error('Erro ao ler o arquivo JSON:', error);
+                return null;
+            }
+        }
+
+        // Chamar a função
+        const jsonData = readJsonFile(filePath);
+
+        // Exemplo: acessar os dados do JSON
+   /*      if (jsonData) {
+            console.log(`Nome: ${jsonData.name}`);
+            console.log(`Idade: ${jsonData.age}`);
+            console.log(`Email: ${jsonData.email}`);
+        } */
+
+
+
     }
 }

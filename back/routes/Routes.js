@@ -113,6 +113,7 @@ router.get('/api/admin/pin/edit/:id', Admin.listarPinId);
 router.post('/api/admin/anuncio/export', Admin.export4excell);
 router.post('/api/admin/export/:modulo', Admin.exportPadrao);
 router.post('/api/admin/anuncio/import', saveImport().single('uploadedfile'),Admin.import4excell);
+router.get('/api/admin/anuncio/progress', Buscador.progressImport);
 
 //site
 router.post('/api/admin/usuario/criar-anuncio', Users.criarAnuncio);

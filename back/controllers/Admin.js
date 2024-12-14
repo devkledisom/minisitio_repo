@@ -1080,6 +1080,8 @@ module.exports = {
             offset: offset
         });
 
+        console.log(anuncio)
+
         // Número total de itens
         const totalItens = anuncio.count;
         // Número total de páginas
@@ -3000,14 +3002,45 @@ module.exports = {
     import4excell: async (req, res, io) => {
 
         //console.log("dasdasdas", te)
-   /*      setInterval(() => {
-            const progress = Math.floor(Math.random() * 100); // Progresso fictício
-            req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
-        }, 2000); */
+        /*      setInterval(() => {
+                 const progress = Math.floor(Math.random() * 100); // Progresso fictício
+                 req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
+             }, 2000); */
 
-        
+        const now = new Date();
+        const hours = now.getHours(); // Horas (0-23)
+        const minutes = now.getMinutes(); // Minutos (0-59)
+        const seconds = now.getSeconds(); // Segundos (0-59)
 
-     
+        //console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
+
+
+
+        // Caminho do arquivo JSON
+        const filePath = path.join(__dirname, '../public/importLog.json');
+
+        // Função para alterar a propriedade "name"
+        function updateJsonName(filePath, newName) {
+            try {
+                // 1. Ler o conteúdo do arquivo JSON
+                const jsonData = fs.readFileSync(filePath, 'utf8');
+                const data = JSON.parse(jsonData); // Converte o texto em um objeto JavaScript
+
+                // 2. Modificar a propriedade "name"
+                data.progress = newName;
+                data.fim = `${hours}:${minutes}:${seconds}`;
+
+                // 3. Escrever o conteúdo atualizado de volta no arquivo
+                fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8'); // null e 2 para formatar com indentação
+                console.log(`Propriedade "name" atualizada para: ${newName}`);
+            } catch (error) {
+                console.error('Erro ao atualizar a propriedade "name":', error);
+            }
+        }
+
+
+
+
         // req.file é o arquivo 'uploadedfile'
         // req.body conterá os campos de texto, se houver
         //Realizando leitura dos dados
@@ -3025,6 +3058,7 @@ module.exports = {
             });
 
             const arrayImportado = [];
+            let count = 0;
 
             async function novaImportacao(result, index) {
                 console.log(result, data.length, index)
@@ -3195,19 +3229,22 @@ module.exports = {
 
                     };
 
-
+                    count++
                     arrayImportado.push(dataObj);
                     const criarAnuncios = await Anuncio.create(dataObj);
+                    updateJsonName(filePath, count);
 
                     //console.log(criarAnuncios);
                     const progress = index; // Progresso fictício
-                    req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
-console.log(data)
-                    if(index+1 == data.length-1) {
-                        res.json({success: true, progress: index})
+                    //req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
+                    console.log("laksljhasfasdfgafsdf: ", progress);
+                    // Atualizar o nome
+                    
+                    if (index + 1 == data.length - 1) {
+                        res.json({ success: true, progress: index })
                         //res.redirect("https://br.minisitio.net/admin/espacos");
                     }
-                    
+
                 };
             }
 
@@ -3263,9 +3300,9 @@ console.log(data)
 
             await processImport(data);
 
-   // Readable Stream.
- /*   const progress = (1 / linhas) * 100;
-   req.customParam.emit("progress", { progress }); */
+            // Readable Stream.
+            /*   const progress = (1 / linhas) * 100;
+              req.customParam.emit("progress", { progress }); */
         });
 
 
@@ -3281,7 +3318,7 @@ console.log(data)
         //console.log('Arquivo enviado:', req.customParam);
 
 
-     
+
 
         //res.json({success: true, message: 'Arquivo recebido com sucesso!'});
         //res.redirect("https://minitest.minisitio.online/admin/espacos");
