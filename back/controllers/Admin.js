@@ -3085,6 +3085,7 @@ module.exports = {
                 const idDesconto = result['ID'];
                 const nomeAnuncio = result['NOME'];
                 const telefone = result['TELEFONE'];
+                const cep = result['CEP'];
                 const estado = estadoId;
                 const cidade = cidadeId;
                 const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
@@ -3215,7 +3216,7 @@ module.exports = {
                         "descEmailComercial": 0,
                         "descEmailRetorno": email,
                         "descWhatsApp": 0,
-                        "descCEP": 0,
+                        "descCEP": cep,
                         "descTipoPessoa": "pf",
                         "descCPFCNPJ": nuDocumento,
                         "descNomeAutorizante": autorizante || `import${index}`,
