@@ -92,6 +92,6 @@ app.get("/as", (req, res) => {
 })
 
 
-server.listen(port, () => {
+app.listen(port, () => {
     console.log("rodando na porta: ", port);
 });
