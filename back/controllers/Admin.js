@@ -1080,8 +1080,6 @@ module.exports = {
             offset: offset
         });
 
-        console.log(anuncio)
-
         // Número total de itens
         const totalItens = anuncio.count;
         // Número total de páginas
