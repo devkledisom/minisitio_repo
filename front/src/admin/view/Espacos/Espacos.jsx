@@ -52,7 +52,7 @@ const Espacos = () => {
                 //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
             ])
                 .then(([resAnuncio]) => {
-                    console.log(resAnuncio)
+                    //console.log(resAnuncio)
                     setAnucios(resAnuncio);
                     setShowSpinner(false);
                 })
@@ -66,7 +66,7 @@ const Espacos = () => {
                 //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
             ])
                 .then(([resAnuncio]) => {
-                    console.log(resAnuncio.message.anuncios)
+                    //console.log(resAnuncio.message.anuncios)
                     setAnucios(resAnuncio);
                     setShowSpinner(false);
                 })

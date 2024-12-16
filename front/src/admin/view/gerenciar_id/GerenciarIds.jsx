@@ -41,11 +41,11 @@ const GerenciarIds = () => {
 
         Promise.all([
             fetch(`${masterPath.url}/admin/desconto/read?page=${param}`).then((x) => x.json()),
-            fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
+            //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
         ])
             .then(([resDesconto, resUsuarios]) => {
                 setIds(resDesconto.message);
-                setUsuarios(resUsuarios.usuarios);
+                //setUsuarios(resUsuarios.usuarios);
                 setShowSpinner(false);
             })
             .catch(error => {
@@ -115,7 +115,7 @@ const GerenciarIds = () => {
             })
     };
 
-    function teste(meuParam) {
+/*     function teste(meuParam) {
         let user = usuarios.find(user => user.codUsuario == meuParam);
 
         if (user != undefined) {
@@ -123,7 +123,7 @@ const GerenciarIds = () => {
         }
         //console.log("users",meuParam, user)
 
-    }
+    } */
 
     const formatData = (dataCompleta) => {
         let dataTempo = dataCompleta.split('T');
@@ -279,7 +279,7 @@ const GerenciarIds = () => {
                                 </thead>
                                 <tbody>
                                     {
-                                        usuarios != '' &&
+                                        /* usuarios != '' && */
                                         ids != '' && ids.IdsValue.map((item) => {
                                             //console.log("map", usuarios)
                                             //console.log("ids", ids)
