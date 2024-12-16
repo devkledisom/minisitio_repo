@@ -27,7 +27,7 @@ var io = require("socket.io")(server, {
 app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 
-app.use();
+app.use(cors());
 
 // Middleware para passar a instância `io` para as rotas
 function customMiddleware(io) {

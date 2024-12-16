@@ -49,7 +49,7 @@ const Espacos = () => {
         if (campoBusca.current.value != '') {
             Promise.all([
                 fetch(`${masterPath.url}/admin/anuncio/buscar?search=${campoBusca.current.value}&page=${param}`).then((x) => x.json()),
-                fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
+                //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
             ])
                 .then(([resAnuncio]) => {
                     console.log(resAnuncio)
@@ -63,10 +63,10 @@ const Espacos = () => {
         } else {
             Promise.all([
                 fetch(`${masterPath.url}/admin/espacos/read?page=${param}`).then((x) => x.json()),
-                fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
+                //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
             ])
                 .then(([resAnuncio]) => {
-                    //console.log(resAnuncio.message.anuncios)
+                    console.log(resAnuncio.message.anuncios)
                     setAnucios(resAnuncio);
                     setShowSpinner(false);
                 })
