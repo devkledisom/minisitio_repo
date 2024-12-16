@@ -91,6 +91,7 @@ app.get("/as", (req, res) => {
     io.emit("progress", { a:1 });
 })
 
+
 server.listen(port, () => {
     console.log("rodando na porta: ", port);
 });
