@@ -3202,7 +3202,7 @@ module.exports = {
                     const dataObj = {
                         "codUsuario": codUser,
                         "codTipoAnuncio": codTipoAnuncio,
-                        "codAtividade": 0, //await buscarAtividade(),
+                        "codAtividade": await buscarAtividade(),
                         "codCaderno": cidade,
                         "codUf": estado,
                         "codCidade": cidade,
