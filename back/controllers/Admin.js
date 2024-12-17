@@ -7,6 +7,8 @@ const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server);
+const XLSX = require('xlsx');
+const ExcelJS = require('exceljs');
 
 //models
 const database = require('../config/db');
@@ -2999,6 +3001,48 @@ module.exports = {
     },
     import4excell: async (req, res, io) => {
 
+        /*     // Abre o arquivo em um stream
+            const workbook = XLSX.stream.to_json(fs.createReadStream(path.join(__dirname, '../public/import/uploadedfile.xlsx')));
+    
+            // Processamento de linhas em streaming
+            workbook.on('data', (row) => {
+                console.log("adsdas", row); // Processa cada linha individualmente
+            });
+    
+            workbook.on('end', (dt) => {
+                console.log("Processamento concluído!", dt);
+            }); */
+
+
+        async function processExcelInChunks() {
+
+
+            const workbook = new ExcelJS.stream.xlsx.WorkbookReader(path.join(__dirname, '../public/import/uploadedfile.xlsx'));
+
+            for await (const worksheet of workbook) {
+                console.log(`Processando planilha: ${worksheet.name}`);
+
+                let rowIndex = 0; // Inicialize o índice
+
+                for await (const row of worksheet) {
+                    //console.log(row.values); // Processa cada linha aqui
+                    //teste(row.values)
+
+                    if(row.values[1] != "TIPO") {
+                        let novo = await novaImportacao(row.values, rowIndex)
+                        console.log("adasdasd: ", novo);
+                        rowIndex++; // Incrementa o índice
+                    }
+                   
+                }
+            }
+            console.log("Processamento concluído."); 
+        }
+
+        processExcelInChunks().catch(console.error);
+
+        //return;
+
         //console.log("dasdasdas", te)
         /*      setInterval(() => {
                  const progress = Math.floor(Math.random() * 100); // Progresso fictício
@@ -3037,46 +3081,253 @@ module.exports = {
         }
 
 
+        async function novaImportacao(result, index) {
+           // updateJsonName(filePath, index);
+            /*   console.log(result, data.length, index)
+              //buscar por uf
+              const resultEstado = await Uf.findAll({
+                  where: {
+                      sigla_uf: result['UF']
+                  }
+              });
+
+              //buscar por cidade
+              const resultCidade = await Cadernos.findAll({
+                  where: {
+                      nomeCaderno: { [Op.like]: `%${result['CIDADE']}%` }
+                  }
+              });
 
 
-        // req.file é o arquivo 'uploadedfile'
-        // req.body conterá os campos de texto, se houver
-        //Realizando leitura dos dados
-        readXlsxFile(path.join(__dirname, '../public/import/uploadedfile.xlsx')).then(async (linhas) => {
+              const estadoId = resultEstado.length > 0 ? resultEstado[0].dataValues.id_uf : 0;
+              const cidadeId = resultCidade.length > 0 ? resultCidade[0].dataValues.codCaderno : 0; */
+
+              console.log(result, index,  result[1])
+
+            const codTipoAnuncio = result[1];
+            const idDesconto = result[2];
+            const nomeAnuncio = result[3];
+            const telefone = result[4];
+            const cep = result[5];
+            const estado = result[6];
+            const cidade = result[7];
+            const tipoAtividade = result[8];
+            const nuDocumento = result[9];
+            const autorizante = result[10];
+            const email = result[11];
+            //const chavePix = result['PIX'];
+            const login = result[9];
+            const senha = 12345;
+
+/*             const codTipoAnuncio = result['TIPO'];
+            const idDesconto = result['ID'];
+            const nomeAnuncio = result['NOME'];
+            const telefone = result['TELEFONE'];
+            const cep = result['CEP'];
+            const estado = result['UF'];
+            const cidade = result['CIDADE'];
+            const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
+            const nuDocumento = result['CNPJ_CPF'];
+            const autorizante = result['AUTORIZANTE'];
+            const email = result['EMAIL'];
+            //const chavePix = result['PIX'];
+            const login = result['CNPJ/CPF'];
+            const senha = 12345; */
+
+
+
+
+            const verificarUserExists = await Usuarios.findAll({
+                where: {
+                    descCPFCNPJ: nuDocumento
+                }
+            });
+
+            if (verificarUserExists.length > 0) {
+                let codUser = verificarUserExists[0].dataValues.codUsuario;
+
+
+                let sucesso = await criarAnuncioImportado(codUser);
+                console.log("dsadhjakhdlajdkasd: ", sucesso)
+                return sucesso;
+            } else {
+
+                await database.sync();
+
+                const dadosUsuario = {
+                    "codTipoPessoa": "pf",
+                    "descCPFCNPJ": nuDocumento,
+                    "descNome": nomeAnuncio || `import${index}`,
+                    "descEmail": email || "atualizar",
+                    "senha": senha,
+                    "codTipoUsuario": 3,
+                    "descTelefone": telefone || "atualizar",
+                    "codUf": estado,
+                    "codCidade": cidade,
+                    "dtCadastro": dataNow(),
+                    "usuarioCod": 0,
+                    "dtCadastro2": dataNow(),
+                    "dtAlteracao": dataNow(),
+                    "ativo": "1"
+                };
+
+
+                try {
+                    const listaUsers = await Usuarios.create(dadosUsuario);
+
+                    let codUser = listaUsers.dataValues.codUsuario;
+
+
+                    //criarAnuncioImportado(codUser);
+
+                    let sucesso = await criarAnuncioImportado(codUser);
+                    console.log("dsadhjakhdlajdkasd: ", sucesso)
+                    return sucesso;
+
+                    //res.status(201).json({ success: true, message: listaUsers })
+
+
+                } catch (erro) {
+                    console.error(erro.message);
+                    //res.status(500).json({ success: false, message: erro.errors[0].message })
+                }
+            }
+
+
+
+            function dataNow() {
+                // Criar um novo objeto Date (representando a data e hora atuais)
+                var dataAtual = new Date();
+
+                // Extrair os componentes da data e hora
+                var ano = dataAtual.getFullYear();
+                var mes = dataAtual.getMonth() + 1; // Meses começam de 0, então adicionamos 1
+                var dia = dataAtual.getDate();
+                var hora = dataAtual.getHours();
+                var minutos = dataAtual.getMinutes();
+                var segundos = dataAtual.getSeconds();
+
+                // Formatar a data e hora
+                var dataFormatada = ano + '-' + mes + '-' + dia;
+                var horaFormatada = hora + ':' + minutos + ':' + segundos;
+
+                // Exibir a data e hora atual
+                console.log('Data atual:', dataFormatada);
+                console.log('Hora atual:', horaFormatada);
+
+                return dataFormatada + " " + horaFormatada;
+            };
+
+
+            async function buscarAtividade() {
+                const atividades = await Atividade.findAll({
+                    where: {
+                        atividade: { [Op.like]: `%${tipoAtividade}%` }
+                    },
+
+                });
+
+                if (atividades.length > 0) {
+                    return atividades[0].dataValues.id;
+                } else {
+                    return 3845;
+                }
+
+
+            };
+
+
+            async function criarAnuncioImportado(codUser) {
+
+                let codigoDeDesconto = await Descontos.findAll({
+                    where: {
+                        hash: idDesconto
+                    }
+                });
+
+                const dataObj = {
+                    "codUsuario": codUser,
+                    "codTipoAnuncio": codTipoAnuncio,
+                    "codAtividade": await buscarAtividade(),
+                    "codCaderno": cidade,
+                    "codUf": estado,
+                    "codCidade": cidade,
+                    "descAnuncio": nomeAnuncio || `import${index}`,
+                    "descImagem": 0,
+                    "descEndereco": "atualizar",
+                    "descTelefone": telefone || "atualizar",
+                    "descCelular": 0,
+                    "descEmailComercial": 0,
+                    "descEmailRetorno": email,
+                    "descWhatsApp": 0,
+                    "descCEP": cep,
+                    "descTipoPessoa": "pf",
+                    "descCPFCNPJ": nuDocumento,
+                    "descNomeAutorizante": autorizante || `import${index}`,
+                    "descEmailAutorizante": 0,
+                    "codDesconto": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
+                    "descChavePix": 'chavePix',
+                    "qntVisualizacoes": 0,
+                    "codDuplicado": 0,
+                    "descPromocao": 0,
+                    "activate": 1,
+
+                };
+
+              /*   count++
+                arrayImportado.push(dataObj); */
+                const criarAnuncios = await Anuncio.create(dataObj);
+                updateJsonName(filePath, index);
+
+                //console.log(criarAnuncios);
+                const progress = index; // Progresso fictício
+                //req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
+                console.log("laksljhasfasdfgafsdf: ", progress);
+                // Atualizar o nome
+                return true;
+
+            };
+
+    
+
+        }
+
+
+        function teste(linhas) {
             //console.log(linhas);
 
             const data = linhas;
 
 
-            const resultPlan = data.slice(1).map(row => {
+        /*     const resultPlan = data.slice(1).map(row => {
                 return row.reduce((obj, value, index) => {
                     obj[data[0][index]] = value; // Usa o cabeçalho como chave
                     return obj;
                 }, {});
             });
-
+ */
             const arrayImportado = [];
             let count = 0;
 
             async function novaImportacao(result, index) {
-              /*   console.log(result, data.length, index)
-                //buscar por uf
-                const resultEstado = await Uf.findAll({
-                    where: {
-                        sigla_uf: result['UF']
-                    }
-                });
-
-                //buscar por cidade
-                const resultCidade = await Cadernos.findAll({
-                    where: {
-                        nomeCaderno: { [Op.like]: `%${result['CIDADE']}%` }
-                    }
-                });
-
-
-                const estadoId = resultEstado.length > 0 ? resultEstado[0].dataValues.id_uf : 0;
-                const cidadeId = resultCidade.length > 0 ? resultCidade[0].dataValues.codCaderno : 0; */
+                /*   console.log(result, data.length, index)
+                  //buscar por uf
+                  const resultEstado = await Uf.findAll({
+                      where: {
+                          sigla_uf: result['UF']
+                      }
+                  });
+  
+                  //buscar por cidade
+                  const resultCidade = await Cadernos.findAll({
+                      where: {
+                          nomeCaderno: { [Op.like]: `%${result['CIDADE']}%` }
+                      }
+                  });
+  
+  
+                  const estadoId = resultEstado.length > 0 ? resultEstado[0].dataValues.id_uf : 0;
+                  const cidadeId = resultCidade.length > 0 ? resultCidade[0].dataValues.codCaderno : 0; */
 
 
                 const codTipoAnuncio = result['TIPO'];
@@ -3238,7 +3489,201 @@ module.exports = {
                     //req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
                     console.log("laksljhasfasdfgafsdf: ", progress);
                     // Atualizar o nome
-                    
+
+                    if (index + 1 == data.length - 1) {
+                        //res.json({ success: true, progress: index })
+                        //res.redirect("https://br.minisitio.net/admin/espacos");
+                    }
+
+                };
+
+            }
+        }
+
+
+
+        // req.file é o arquivo 'uploadedfile'
+        // req.body conterá os campos de texto, se houver
+        //Realizando leitura dos dados
+      /*   readXlsxFile(path.join(__dirname, '../public/import/uploadedfile.xlsx')).then(async (linhas) => {
+            //console.log(linhas);
+
+            const data = linhas;
+
+
+            const resultPlan = data.slice(1).map(row => {
+                return row.reduce((obj, value, index) => {
+                    obj[data[0][index]] = value; // Usa o cabeçalho como chave
+                    return obj;
+                }, {});
+            });
+
+            const arrayImportado = [];
+            let count = 0;
+
+            async function novaImportacao(result, index) {
+
+
+                const codTipoAnuncio = result['TIPO'];
+                const idDesconto = result['ID'];
+                const nomeAnuncio = result['NOME'];
+                const telefone = result['TELEFONE'];
+                const cep = result['CEP'];
+                const estado = result['UF'];
+                const cidade = result['CIDADE'];
+                const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
+                const nuDocumento = result['CNPJ_CPF'];
+                const autorizante = result['AUTORIZANTE'];
+                const email = result['EMAIL'];
+                //const chavePix = result['PIX'];
+                const login = result['CNPJ/CPF'];
+                const senha = 12345;
+
+
+
+
+                const verificarUserExists = await Usuarios.findAll({
+                    where: {
+                        descCPFCNPJ: nuDocumento
+                    }
+                });
+
+                if (verificarUserExists.length > 0) {
+                    let codUser = verificarUserExists[0].dataValues.codUsuario;
+
+
+                    criarAnuncioImportado(codUser);
+                } else {
+
+                    await database.sync();
+
+                    const dadosUsuario = {
+                        "codTipoPessoa": "pf",
+                        "descCPFCNPJ": nuDocumento,
+                        "descNome": nomeAnuncio || `import${index}`,
+                        "descEmail": email || "atualizar",
+                        "senha": senha,
+                        "codTipoUsuario": 3,
+                        "descTelefone": telefone || "atualizar",
+                        "codUf": estado,
+                        "codCidade": cidade,
+                        "dtCadastro": dataNow(),
+                        "usuarioCod": 0,
+                        "dtCadastro2": dataNow(),
+                        "dtAlteracao": dataNow(),
+                        "ativo": "1"
+                    };
+
+
+                    try {
+                        const listaUsers = await Usuarios.create(dadosUsuario);
+
+                        let codUser = listaUsers.dataValues.codUsuario;
+
+
+                        criarAnuncioImportado(codUser);
+
+                        //res.status(201).json({ success: true, message: listaUsers })
+
+
+                    } catch (erro) {
+                        console.error(erro.message);
+                        //res.status(500).json({ success: false, message: erro.errors[0].message })
+                    }
+                }
+
+
+
+                function dataNow() {
+                    // Criar um novo objeto Date (representando a data e hora atuais)
+                    var dataAtual = new Date();
+
+                    // Extrair os componentes da data e hora
+                    var ano = dataAtual.getFullYear();
+                    var mes = dataAtual.getMonth() + 1; // Meses começam de 0, então adicionamos 1
+                    var dia = dataAtual.getDate();
+                    var hora = dataAtual.getHours();
+                    var minutos = dataAtual.getMinutes();
+                    var segundos = dataAtual.getSeconds();
+
+                    // Formatar a data e hora
+                    var dataFormatada = ano + '-' + mes + '-' + dia;
+                    var horaFormatada = hora + ':' + minutos + ':' + segundos;
+
+                    // Exibir a data e hora atual
+                    console.log('Data atual:', dataFormatada);
+                    console.log('Hora atual:', horaFormatada);
+
+                    return dataFormatada + " " + horaFormatada;
+                };
+
+
+                async function buscarAtividade() {
+                    const atividades = await Atividade.findAll({
+                        where: {
+                            atividade: { [Op.like]: `%${tipoAtividade}%` }
+                        },
+
+                    });
+
+                    if (atividades.length > 0) {
+                        return atividades[0].dataValues.id;
+                    } else {
+                        return 3845;
+                    }
+
+
+                };
+
+
+                async function criarAnuncioImportado(codUser) {
+
+                    let codigoDeDesconto = await Descontos.findAll({
+                        where: {
+                            hash: idDesconto
+                        }
+                    });
+
+                    const dataObj = {
+                        "codUsuario": codUser,
+                        "codTipoAnuncio": codTipoAnuncio,
+                        "codAtividade": await buscarAtividade(),
+                        "codCaderno": cidade,
+                        "codUf": estado,
+                        "codCidade": cidade,
+                        "descAnuncio": nomeAnuncio || `import${index}`,
+                        "descImagem": 0,
+                        "descEndereco": "atualizar",
+                        "descTelefone": telefone || "atualizar",
+                        "descCelular": 0,
+                        "descEmailComercial": 0,
+                        "descEmailRetorno": email,
+                        "descWhatsApp": 0,
+                        "descCEP": cep,
+                        "descTipoPessoa": "pf",
+                        "descCPFCNPJ": nuDocumento,
+                        "descNomeAutorizante": autorizante || `import${index}`,
+                        "descEmailAutorizante": 0,
+                        "codDesconto": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
+                        "descChavePix": 'chavePix',
+                        "qntVisualizacoes": 0,
+                        "codDuplicado": 0,
+                        "descPromocao": 0,
+                        "activate": 1,
+
+                    };
+
+                    count++
+                    arrayImportado.push(dataObj);
+                    const criarAnuncios = await Anuncio.create(dataObj);
+                    updateJsonName(filePath, count);
+
+                    //console.log(criarAnuncios);
+                    const progress = index; // Progresso fictício
+                    //req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
+                    console.log("laksljhasfasdfgafsdf: ", progress);
+                    // Atualizar o nome
+
                     if (index + 1 == data.length - 1) {
                         //res.json({ success: true, progress: index })
                         //res.redirect("https://br.minisitio.net/admin/espacos");
@@ -3268,7 +3713,7 @@ module.exports = {
                   } */
 
 
-            const BATCH_SIZE = 100; // Tamanho do lote para processar de cada vez
+       /*      const BATCH_SIZE = 100; // Tamanho do lote para processar de cada vez
 
             async function processBatch(batch) {
                 return Promise.all(batch.map(async (result, index) => {
@@ -3298,12 +3743,12 @@ module.exports = {
                 // res.status(201).json({ success: true, message: "importacao concluida" });
             }
 
-            await processImport(data);
+            await processImport(data); */
 
             // Readable Stream.
             /*   const progress = (1 / linhas) * 100;
-              req.customParam.emit("progress", { progress }); */
-        });
+              req.customParam.emit("progress", { progress }); 
+        }); */
 
 
 
@@ -3320,7 +3765,7 @@ module.exports = {
 
 
 
-        res.json({success: true, message: 'Arquivo recebido com sucesso!'});
+        res.json({ success: true, message: 'Arquivo recebido com sucesso!' });
         //res.redirect("https://minitest.minisitio.online/admin/espacos");
     },
     import4excellFuncinal: async (req, res, io) => {
@@ -3564,7 +4009,7 @@ module.exports = {
                     //req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
                     console.log("laksljhasfasdfgafsdf: ", progress);
                     // Atualizar o nome
-                    
+
                     if (index + 1 == data.length - 1) {
                         //res.json({ success: true, progress: index })
                         //res.redirect("https://br.minisitio.net/admin/espacos");
@@ -3646,7 +4091,7 @@ module.exports = {
 
 
 
-        res.json({success: true, message: 'Arquivo recebido com sucesso!'});
+        res.json({ success: true, message: 'Arquivo recebido com sucesso!' });
         //res.redirect("https://minitest.minisitio.online/admin/espacos");
     },
     listarPin: async (req, res) => {
