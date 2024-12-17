@@ -3013,7 +3013,7 @@ module.exports = {
                 console.log("Processamento concluído!", dt);
             }); */
 
-
+ 
         async function processExcelInChunks() {
 
 
@@ -3039,7 +3039,9 @@ module.exports = {
             console.log("Processamento concluído."); 
         }
 
-        processExcelInChunks().catch(console.error);
+        processExcelInChunks().catch(console.error); 
+
+
 
         //return;
 
