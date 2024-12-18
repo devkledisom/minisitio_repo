@@ -83,13 +83,19 @@ function Busca(props) {
                 }
             })
 
-            if(location.pathname == '/') {
-                getUserLocation();
-            }
+        if (location.pathname == '/') {
+            getUserLocation();
+        }
 
-        
+
 
     }, []);
+
+    useEffect(() => {
+        if (location.pathname == '/') {
+            getUserLocation();
+        }
+    }, [ufSelected])
 
     const fetchAnuncios = async () => {
         setLoading(true);
@@ -247,24 +253,46 @@ function Busca(props) {
                 const addressComponents = data.results[0].address_components;
                 let city = '';
                 let state = '';
+                console.log(addressComponents)
+
+                state = addressComponents[4].short_name;
+
+                //document.querySelectorAll('#codUf2')[0].value = component.short_name;
+                setCodUf(state)
+                setUf(state);
+
+                localStorage.setItem("uf: ", state);
+                sessionStorage.setItem("uf: ", state);
+
+                console.log(ufSelected)
+                if(ufSelected != 0) {
+                    city = addressComponents[2].short_name.toUpperCase();
+                    setCodCaderno(city)
+                    localStorage.setItem("caderno: ", city.toUpperCase());
+                    sessionStorage.setItem("caderno: ", city.toUpperCase());
+                    console.log(city)
+                }
+
+
+
                 addressComponents.forEach(component => {
-                    if (component.types.includes("administrative_area_level_2")) {
-                        city = component.short_name.toUpperCase();
-                        setCodCaderno(component.short_name)
-                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                        console.log(city)
-                    }
+                    /*      if (component.types.includes("administrative_area_level_2")) {
+                             city = component.short_name.toUpperCase();
+                             setCodCaderno(component.short_name)
+                             localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                             sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                             
+                         } */
                     if (component.types.includes('administrative_area_level_1')) {
-                        state = component.short_name;
+                        /*   state = component.short_name;
+  
+                          //document.querySelectorAll('#codUf2')[0].value = component.short_name;
+                          setCodUf(component.short_name)
+                          setUf(component.short_name);
+  
+                          localStorage.setItem("uf: ", component.short_name);
+                          sessionStorage.setItem("uf: ", component.short_name); */
 
-                        //document.querySelectorAll('#codUf2')[0].value = component.short_name;
-                        setCodUf(component.short_name)
-                        setUf(component.short_name);
-
-                        localStorage.setItem("uf: ", component.short_name);
-                        sessionStorage.setItem("uf: ", component.short_name);
-                        
 
 
                     }
@@ -280,7 +308,7 @@ function Busca(props) {
                 } else {
                     //alert(`Você está em ${city}, ${state}`);
 
-            
+
                 }
             })
             .catch(error => console.error("Erro na consulta de geocodificação:", error));
@@ -302,7 +330,7 @@ function Busca(props) {
             };
 
         }
-    }, [uf, codCaderno]) 
+    }, [uf, codCaderno])
 
     return (
         <div className='border-busca container-fluid formulario formulario-home'>
