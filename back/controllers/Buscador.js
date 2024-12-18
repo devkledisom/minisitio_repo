@@ -300,6 +300,7 @@ module.exports = {
         await database.sync();
 
         const codigoAnuncio = req.params.codAnuncio;
+        console.log("dsadasd", codigoAnuncio)
 
         //Atividades
         const resultAnuncio = await Anuncio.findAll({
@@ -312,11 +313,14 @@ module.exports = {
             const cader = await resultAnuncio[0].getCaderno();
             const atividades = await resultAnuncio[0].getAtividade();
             const descontoHash = await resultAnuncio[0].getDesconto();
-            console.log(resultAnuncio)
+            console.log(resultAnuncio[0].codCaderno)
 
-            resultAnuncio[0].setDataValue('nomeCaderno', cader.dataValues.nomeCaderno);
+            resultAnuncio[0].setDataValue('nomeCaderno', resultAnuncio[0].codCaderno);
+            resultAnuncio[0].setDataValue('nomeAtividade', resultAnuncio[0].codAtividade);
+            resultAnuncio[0].setDataValue('hash', resultAnuncio[0].codDesconto);
+       /*      resultAnuncio[0].setDataValue('nomeCaderno', cader.dataValues.nomeCaderno);
             resultAnuncio[0].setDataValue('nomeAtividade', atividades.dataValues.atividade);
-            resultAnuncio[0].setDataValue('hash', descontoHash.hash);
+            resultAnuncio[0].setDataValue('hash', descontoHash.hash); */
 
             res.json(resultAnuncio);
         } catch (err) {

@@ -68,7 +68,7 @@ module.exports = {
         const totalPaginas = Math.ceil(totalItens / porPagina);
 
         console.log({
-            anuncios: users.rows, // Itens da página atual
+            anuncios: users.rows[0].dataValues, // Itens da página atual
             paginaAtual: paginaAtual,
             totalPaginas: totalPaginas
         })
@@ -895,11 +895,13 @@ module.exports = {
             await Promise.all(
                 resultAnuncio.map(async (item) => {
                     const user = await item.getUsuario();
-
+                    console.log('dasjsdffasdfasdf: -----------', user)
                     item.dataValues = {
                         nmUsuario: user.descNome, // Adiciona a nova propriedade no início
                         ...item.dataValues, // Mantém as demais propriedades
-                    };
+                    }; 
+
+                    
                 })
             );
 
@@ -1105,21 +1107,25 @@ module.exports = {
                 anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
 
                 const estado = await anun.getUf();
-                anun.codUf = estado.sigla_uf;
+                //anun.codUf = estado.sigla_uf;
 
                 const desconto = await anun.getDesconto();
                 anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
 
                 const user = await anun.getUsuario();
-                anun.codUsuario = user.descNome;
-                anun.dataValues.loginUser = user.descCPFCNPJ;
-                anun.dataValues.loginPass = user.senha;
-                anun.dataValues.loginEmail = user.descEmail;
-                anun.dataValues.loginContato = user.descTelefone;
+                //console.log("adjasldj",user)
+                if(user) {
+                    anun.codUsuario = user.descNome;
+                    anun.dataValues.loginUser = user.descCPFCNPJ;
+                    anun.dataValues.loginPass = user.senha;
+                    anun.dataValues.loginEmail = user.descEmail;
+                    anun.dataValues.loginContato = user.descTelefone;
+                }
+        
 
-                const atividades = await anun.getAtividade();
+                /* const atividades = await anun.getAtividade();
                 anun.dataValues.mainAtividade = atividades.atividade
-
+ */
                 //console.log(anuncio.rows[i])
             }));
 
@@ -1191,10 +1197,10 @@ module.exports = {
         // Consulta para recuperar apenas os itens da página atual
         const codCaderno = await Caderno.findAll({
             where: {
-                codUf: req.params.uf,
+                UF: req.params.uf,
                 [Op.or]: [
-                    { nomeCaderno: req.params.caderno },
-                    { codCaderno: req.params.caderno }
+                    { nomeCaderno: req.params.caderno }/* ,
+                    { codCaderno: req.params.caderno } */
                 ]
 
             }
@@ -1206,8 +1212,8 @@ module.exports = {
         const anuncio = await Anuncio.findAndCountAll({
             where: {
                 [Op.and]: [
-                    { codUf: codCaderno[0].dataValues.codUf },
-                    { codCaderno: codCaderno[0].dataValues.codCaderno }
+                    { codUf: codCaderno[0].dataValues.UF },
+                    { codCaderno: codCaderno[0].dataValues.nomeCaderno }
                 ]
             }
         });
@@ -1233,11 +1239,26 @@ module.exports = {
             ]
         });
 
+        function removerAcentosESpeciaisComRegex(str) {
+            return str
+                .replace(/[ÀÁÂÃÄÅàáâãäå]/g, 'a')
+                .replace(/[ÈÉÊËèéêë]/g, 'e')
+                .replace(/[ÌÍÎÏìíîï]/g, 'i')
+                .replace(/[ÒÓÔÕÖØòóôõöø]/g, 'o')
+                .replace(/[ÙÚÛÜùúûü]/g, 'u')
+                .replace(/[Çç]/g, 'c')
+                .replace(/[Ññ]/g, 'n')
+                .replace(/[^a-zA-Z0-9\s]/g, ''); // Remove outros caracteres especiais
+        }
+
         const arrayClassificado = [];
 
         for (let x in count) {
             const anun = anuncio.rows.find(item => item.codAtividade == x);
-            const atividade = atividades.find(item => item.id == x);
+            const atividade = atividades.find(item => removerAcentosESpeciaisComRegex(item.atividade.toLowerCase()) == removerAcentosESpeciaisComRegex(x.toLowerCase()));
+
+
+            console.log("asdasjdhas: ", " | ", atividades[3014].atividade, " | ", removerAcentosESpeciaisComRegex(x.toLowerCase()))
 
             arrayClassificado.push({
                 id: atividade.dataValues.id,
@@ -1260,8 +1281,8 @@ module.exports = {
         const anuncioTeste = await Anuncio.findAndCountAll({
             where: {
                 [Op.and]: [
-                    { codUf: codCaderno[0].dataValues.codUf },
-                    { codCaderno: codCaderno[0].dataValues.codCaderno }
+                    { codUf: codCaderno[0].dataValues.UF },
+                    { codCaderno: codCaderno[0].dataValues.nomeCaderno }
                 ],
                 [Op.or]: [
                     { codAtividade: 1 },
@@ -1279,8 +1300,8 @@ module.exports = {
         const anuncio2 = await Anuncio.findAndCountAll({
             where: {
                 [Op.and]: [
-                    { codUf: codCaderno[0].dataValues.codUf },
-                    { codCaderno: codCaderno[0].dataValues.codCaderno }
+                    { codUf: codCaderno[0].dataValues.UF },
+                    { codCaderno: codCaderno[0].dataValues.nomeCaderno }
                 ]
             }/* ,
             order: [
@@ -1608,8 +1629,8 @@ module.exports = {
                 where: {
                     //codUf: req.params.uf,
                     [Op.or]: [
-                        { nomeCaderno: req.params.caderno },
-                        { codCaderno: req.params.caderno },
+                        { nomeCaderno: req.params.caderno }/* ,
+                        { codCaderno: req.params.caderno }, */
                         //{ codUf: req.params.uf }
                     ]
                 }
@@ -1621,8 +1642,8 @@ module.exports = {
             const anuncio = await Anuncio.findAndCountAll({
                 where: {
                     [Op.and]: [
-                        { codUf: codCaderno[0].dataValues.codUf },
-                        { codCaderno: codCaderno[0].dataValues.codCaderno }
+                        { codUf: codCaderno[0].dataValues.UF },
+                        { codCaderno: codCaderno[0].dataValues.nomeCaderno }
                     ]
                 }/* ,
         limit: porPagina,
@@ -1651,11 +1672,24 @@ module.exports = {
 
             //console.log("--------------====> ", atividades[0].dataValues)
 
+            function removerAcentosESpeciaisComRegex(str) {
+                return str
+                    .replace(/[ÀÁÂÃÄÅàáâãäå]/g, 'a')
+                    .replace(/[ÈÉÊËèéêë]/g, 'e')
+                    .replace(/[ÌÍÎÏìíîï]/g, 'i')
+                    .replace(/[ÒÓÔÕÖØòóôõöø]/g, 'o')
+                    .replace(/[ÙÚÛÜùúûü]/g, 'u')
+                    .replace(/[Çç]/g, 'c')
+                    .replace(/[Ññ]/g, 'n')
+                    .replace(/[^a-zA-Z0-9\s]/g, ''); // Remove outros caracteres especiais
+            }
+
             const arrayClassificado = [];
 
             for (let x in count) {
                 const anun = anuncio.rows.find(item => item.codAtividade == x);
-                const atividade = atividades.find(item => item.id == x);
+                const atividade = atividades.find(item => removerAcentosESpeciaisComRegex(item.atividade.toLowerCase()) == removerAcentosESpeciaisComRegex(x.toLowerCase()));
+                //const atividade = atividades.find(item => item.id == x);
 
                 arrayClassificado.push({
                     id: atividade.dataValues.id,
@@ -1679,8 +1713,8 @@ module.exports = {
             const anuncioTeste = await Anuncio.findAndCountAll({
                 where: {
                     [Op.and]: [
-                        { codUf: codCaderno[0].dataValues.codUf },
-                        { codCaderno: codCaderno[0].dataValues.codCaderno }
+                        { codUf: codCaderno[0].dataValues.UF },
+                        { codCaderno: codCaderno[0].dataValues.nomeCaderno }
                     ]
                 }
             });
@@ -1921,11 +1955,11 @@ module.exports = {
             offset: offset
         });
 
-        console.table([1, "id", resultAnuncio])
+        console.table([1, "id", nu_hash])
 
         if (resultAnuncio.length > 0) {
             await Promise.all(resultAnuncio.map(async (anun, i) => {
-                const cader = await anun.getCaderno();
+                /* const cader = await anun.getCaderno();
                 anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
 
                 const estado = await anun.getUf();
@@ -1943,7 +1977,26 @@ module.exports = {
 
                 const atividades = await anun.getAtividade();
                 anun.dataValues.mainAtividade = atividades.atividade
+ */
 
+                const cader = await anun.getCaderno();
+                anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+                const estado = await anun.getUf();
+                //anun.codUf = estado.sigla_uf;
+
+                const desconto = await anun.getDesconto();
+                anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+
+                const user = await anun.getUsuario();
+                //console.log("adjasldj",user)
+                if(user) {
+                    anun.codUsuario = user.descNome;
+                    anun.dataValues.loginUser = user.descCPFCNPJ;
+                    anun.dataValues.loginPass = user.senha;
+                    anun.dataValues.loginEmail = user.descEmail;
+                    anun.dataValues.loginContato = user.descTelefone;
+                }
                 //console.log(anuncio.rows[i])
             }));
 
@@ -2258,8 +2311,8 @@ module.exports = {
         const descontoHash = await obj.getDesconto();
         //obj.codAtividade = atividade != null ? atividade.id : '';
 
-        obj.setDataValue('nomeAtividade', atividade.atividade);
-        obj.setDataValue('hash', descontoHash.hash);
+        obj.setDataValue('nomeAtividade', obj.codAtividade);
+        obj.setDataValue('hash', obj.codDesconto);
         //obj.kledisom = atividade != null ? atividade.id : null; 
 
 

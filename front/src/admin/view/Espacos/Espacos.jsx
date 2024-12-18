@@ -358,13 +358,13 @@ const Espacos = () => {
                                                     <td>{item.descPromocao}</td>
                                                     <td>{formatData(item.createdAt)}</td>
                                                     <td>{dataExpiracao(item.dueDate)}</td>
-                                                    <td>{item.codPA}</td>
+                                                    <td>{item.codDesconto}</td>
                                                     <td>{item.codUsuario}</td>
                                                     <td>{item.loginUser}</td>
                                                     <td>{item.loginPass}</td>
                                                     <td>{item.loginEmail}</td>
                                                     <td>{item.loginContato}</td>
-                                                    <td>{item.mainAtividade}</td>
+                                                    <td>{item.codAtividade}</td>
                                                 </tr>
                                             )
                                         })

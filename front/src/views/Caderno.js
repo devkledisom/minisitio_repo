@@ -62,15 +62,17 @@ function Caderno() {
       .then((x) => x.json())
       .then((res) => {
 
-        let nome = res.find((item) => item.codCaderno == caderno)
+        let nome = res.find((item) => item.nomeCaderno == caderno)
         setCadernos(nome.nomeCaderno);
+        setUfs(nome.UF);
       });
-    fetch(`${masterPath.url}/ufs`)
+    /* fetch(`${masterPath.url}/ufs`)
       .then((x) => x.json())
       .then((res) => {
-        let nome = res.find((item) => item.id_uf == estado)
-        setUfs(nome.sigla_uf);
-      });
+        console.log(estado)
+         let nome = res.find((item) => item.id_sigla == estado)
+        setUfs(nome.sigla_uf); 
+      }); */
 
 
     setLoading(true);
@@ -106,7 +108,7 @@ function Caderno() {
       fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
         .then(x => x.json())
         .then(async res => {
-          //console.log(res)
+          console.log(res,  caderno)
           if (res.success) {
 
             const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
@@ -115,7 +117,7 @@ function Caderno() {
             const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
             const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id));
 
-            const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
+            //const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
 
             let result = res.teste.rows.filter(category =>
               res.data.some(anuncio => category.id === anuncio.codAtividade)
@@ -125,7 +127,7 @@ function Caderno() {
 
             let result1 = res.data.map((category) => {
               // Filtra os anúncios que correspondem à categoria atual
-              let teste = res.teste.rows.filter(anuncio => category.id === anuncio.codAtividade);
+              let teste = res.teste.rows.filter(anuncio => category.atividade === anuncio.codAtividade);
 
               // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
               category.kledisom = teste;
@@ -149,7 +151,7 @@ function Caderno() {
 
 
             if (pageNumberUnique) {
-
+console.log("arr", arr)
               arr.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
 
               const itemIndex = arr.findIndex(item => item.codAnuncio == id) + 1;
@@ -298,7 +300,7 @@ function Caderno() {
             const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
             const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id));
 
-            const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
+            const arrTeste = res.data.filter((category) => category.atividade == res.teste.rows[0].codAtividade);
 
             let result = res.teste.rows.filter(category =>
               res.data.some(anuncio => category.id === anuncio.codAtividade)
@@ -308,7 +310,7 @@ function Caderno() {
 
             let result1 = res.data.map((category) => {
               // Filtra os anúncios que correspondem à categoria atual
-              let teste = res.teste.rows.filter(anuncio => category.id === anuncio.codAtividade);
+              let teste = res.teste.rows.filter(anuncio => category.atividade === anuncio.codAtividade);
 
               // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
               category.kledisom = teste;
@@ -1150,7 +1152,7 @@ function Caderno() {
                           telefone={anuncio.descTelefone}
                           celular={anuncio.descCelular}
                           codDesconto={anuncio.codDesconto}
-                          ids={buscarId(anuncio.codDesconto)}
+                          ids={anuncio.codDesconto}
                         />
                         /* } <MsgProgramada />
                           if(i >= minisitio.anuncios.length-1) {
@@ -1245,7 +1247,8 @@ function Caderno() {
                           telefone={anuncio.descTelefone}
                           celular={anuncio.descCelular}
                           codDesconto={anuncio.codDesconto}
-                          ids={buscarId(anuncio.codDesconto)}
+                          ids={anuncio.codDesconto}
+                          /* ids={buscarId(anuncio.codDesconto)} */
                         />
                         
                         /* } <MsgProgramada />

@@ -518,7 +518,8 @@ Anuncio.beforeCreate((instance, options) => {
 
 Anuncio.belongsTo(Caderno, {
     constraints: true,
-    foreignKey: 'codCaderno'
+    foreignKey: 'codCaderno',
+    targetKey: 'nomeCaderno'
 });
 
 Anuncio.belongsTo(Uf, {
@@ -534,7 +535,8 @@ Anuncio.belongsTo(Desconto, {
 
 Anuncio.belongsTo(Usuario, {
     constraints: true,
-    foreignKey: 'codUsuario'
+    foreignKey: 'descCPFCNPJ',
+    targetKey: 'descCPFCNPJ'
 });
 
 Anuncio.belongsTo(Atividade, {

@@ -87,6 +87,7 @@ function Caderno(props) {
     fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
       .then(x => x.json())
       .then(res => {
+        console.log(res)
         if (res.success) {
           setClassificados(res.data);
           setPathImg(res.teste.rows);
@@ -181,6 +182,7 @@ function Caderno(props) {
                 </li>
                 <li className="classificado">
                   <ul className="list-unstyled">
+                    {/* {console.log(classificados)} */}
                     {classificados.map(item => (
                       /* "/caderno/maceio/ziiz_569885_27" */
                       <li key={item.id}>

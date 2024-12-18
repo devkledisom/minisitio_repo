@@ -43,6 +43,7 @@ const Users = () => {
             .then((res) => {
                 setUsuarios(res);
                 setShowSpinner(false);
+                console.log(res)
             })
         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
@@ -226,7 +227,7 @@ const Users = () => {
                                                 {item.codTipoUsuario == 2 ? <td>MASTER</td> : ''}
                                                 {item.codTipoUsuario == 3 ? <td>ANUNCIANTE</td> : ''}
                                                 {item.codTipoUsuario == 4 ? <td>MASTER / ANUNC</td> : ''}
-                                                {uf.map((estado) => (
+                                               {/*  {uf.map((estado) => (
                                                     estado.id_uf == item.codUf &&
                                                     <td>{estado.sigla_uf}</td>
                                                 ))}
@@ -235,7 +236,9 @@ const Users = () => {
                                                     cidade.codCaderno == item.codCidade &&
                                                     <td>{cidade.nomeCaderno}</td>
 
-                                                ))}
+                                                ))} */}
+                                                <td>{item.codUf}</td>
+                                                <td>{item.codCidade}</td>
                                                 {item.codUf == 0 && <td>atualizar</td>}
                                                 {item.codCidade == 0 && <td>atualizar</td>}
                                                 <td>{formatData(item.dtCadastro)}</td>

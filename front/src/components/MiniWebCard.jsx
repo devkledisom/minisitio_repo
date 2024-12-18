@@ -29,6 +29,7 @@ function MiniWebCard(props) {
         qntVisualizacoes()
         const request = await fetch(`${masterPath.url}/anuncio/${props.id}`).then((x) => x.json());
         request.kledisom = "1q12314234"
+        console.log(request)
         setResult(request[0]);
         navigate(`/local/${props.empresa}?id=${props.id}&ids=${props.ids}`);
     }

@@ -132,17 +132,18 @@ function PainelAdmin() {
 
     function buscarAnuncioId(e) {
         setShowSpinner(true);
-        let nuDocumento = "";
-
-        if (cpf.length == 11) {
-            nuDocumento = cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
-        } else {
-            nuDocumento = cpf.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
-        }
+        let nuDocumento = (cpf) => {
+            console.log("---------------------------=: ", cpf)
+            if (cpf.length == 11) {
+                return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+            } else {
+                return cpf.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+            }
+        };
 
         const campoPesquisa = document.getElementById('buscar').value;
 
-        fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${nuDocumento}`)
+        fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${cpf}`)
             .then((x) => x.json())
             .then((res) => {
                 console.log(res)

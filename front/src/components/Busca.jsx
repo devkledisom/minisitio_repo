@@ -27,7 +27,7 @@ function Busca(props) {
     const executarSelecao = (e) => {
         let codigoUf = document.querySelectorAll('#codUf2')[0].value;
         setUf(codigoUf);
-        const teste = uf.find(u => u.id_uf == codigoUf);
+        const teste = uf.find(u => u.sigla_uf == codigoUf);
         localStorage.setItem("uf: ", teste.sigla_uf);
         sessionStorage.setItem("uf: ", codigoUf);
         setCadernoUf(teste.id_uf);
@@ -36,13 +36,14 @@ function Busca(props) {
     };
     const definirCaderno = (e) => {
         let codigoCidade = document.querySelectorAll('#codUf3')[0].value;
-        const teste = caderno.find(cad => cad.codCaderno == codigoCidade);
+        const teste = caderno.find(cad => cad.nomeCaderno == codigoCidade);
 
         if (codigoCidade != "TODO") {
             localStorage.setItem("caderno: ", teste.nomeCaderno);
             sessionStorage.setItem("caderno: ", codigoCidade);
 
-            setCadernoUf(teste.codUf);
+            setCadernoUf(teste.UF);
+            console.log(teste.UF, codigoCidade)
             //setCadernoCidade(teste.nomeCaderno);
             setCodCaderno(codigoCidade);
         } else {
@@ -278,22 +279,23 @@ function Busca(props) {
             .catch(error => console.error("Erro na consulta de geocodificação:", error));
 
     }
-
+/* 
     useEffect(() => {
         if (uf.length > 0) {
             console.log(codCaderno)
             if (codCaderno != null) {
                 const ufLoc = caderno.find((item) => item.nomeCaderno == codCaderno.toString().toUpperCase())
+                console.log(ufLoc)
                 if (ufLoc) {
-                    setCodUf(ufLoc.codUf);
-                    setUf(ufLoc.codUf);
-                    setCodCaderno(ufLoc.codCaderno);
+                    setCodUf(ufLoc.UF);
+                    setUf(ufLoc.Uf);
+                    setCodCaderno(ufLoc.nomeCaderno);
                 }
 
             };
 
         }
-    }, [uf, codCaderno])
+    }, [uf, codCaderno]) */
 
     return (
         <div className='border-busca container-fluid formulario formulario-home'>
@@ -314,7 +316,7 @@ function Busca(props) {
                                         <select name="codUf2" id="codUf2" className="form-control form-select" onChange={executarSelecao} value={codUf}>
                                             <option value="UF">UF</option>
                                             {uf.map((item) => (
-                                                <option id={item.id_uf} key={item.id_uf} name={item.nome_uf} value={item.id_uf}>{item.sigla_uf}</option>
+                                                <option id={item.id_uf} key={item.id_uf} name={item.nome_uf} value={item.sigla_uf}>{item.sigla_uf}</option>
                                             ))}
                                         </select>
 
@@ -328,8 +330,8 @@ function Busca(props) {
                                             {/*  <option value="TODO">TODO</option> */}
                                             <option value="CIDADE">CIDADE</option>
                                             {caderno.map((item) => (
-                                                item.codUf == ufSelected &&
-                                                <option id={item.codCaderno} key={item.codCaderno} name={item.nomeCaderno} value={item.codCaderno}>{item.nomeCaderno}</option>
+                                                item.UF == ufSelected &&
+                                                <option id={item.codCaderno} key={item.codCaderno} name={item.nomeCaderno} value={item.nomeCaderno}>{item.nomeCaderno}</option>
                                             ))}
                                         </select>
 
