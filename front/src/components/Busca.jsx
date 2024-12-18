@@ -227,6 +227,9 @@ function Busca(props) {
                             console.error("Ocorreu um erro desconhecido.");
                             break;
                     }
+                },
+                {
+                    enableHighAccuracy: true,
                 }
             );
         } else {
@@ -246,7 +249,7 @@ function Busca(props) {
                 let state = '';
                 addressComponents.forEach(component => {
                     if (component.types.includes("administrative_area_level_2")) {
-                        city = component.short_name;
+                        city = component.short_name.toUpperCase();
                         setCodCaderno(component.short_name)
                         localStorage.setItem("caderno: ", component.short_name.toUpperCase());
                         sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
@@ -257,6 +260,8 @@ function Busca(props) {
 
                         //document.querySelectorAll('#codUf2')[0].value = component.short_name;
                         setCodUf(component.short_name)
+                        setUf(component.short_name);
+
                         localStorage.setItem("uf: ", component.short_name);
                         sessionStorage.setItem("uf: ", component.short_name);
                         
@@ -281,23 +286,23 @@ function Busca(props) {
             .catch(error => console.error("Erro na consulta de geocodificação:", error));
 
     }
-/* 
+
     useEffect(() => {
         if (uf.length > 0) {
-            console.log(codCaderno)
+            //console.log(codCaderno)
             if (codCaderno != null) {
                 const ufLoc = caderno.find((item) => item.nomeCaderno == codCaderno.toString().toUpperCase())
-                console.log(ufLoc)
+                //console.log(ufLoc)
                 if (ufLoc) {
                     setCodUf(ufLoc.UF);
-                    setUf(ufLoc.Uf);
+                    setUf(ufLoc.UF);
                     setCodCaderno(ufLoc.nomeCaderno);
                 }
 
             };
 
         }
-    }, [uf, codCaderno]) */
+    }, [uf, codCaderno]) 
 
     return (
         <div className='border-busca container-fluid formulario formulario-home'>
