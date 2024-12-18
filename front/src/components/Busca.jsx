@@ -142,7 +142,7 @@ function Busca(props) {
             };
 
             const request = await fetch(`${masterPath.url}/buscar`, options).then((x) => x.json())
-            console.log(request)
+            //console.log(request)
             //setAnuncio(request)
             setResult(request);
             //console.log(request);
@@ -233,10 +233,10 @@ function Busca(props) {
                             console.error("Ocorreu um erro desconhecido.");
                             break;
                     }
-                },
+                }/* ,
                 {
                     enableHighAccuracy: true,
-                }
+                } */
             );
         } else {
             console.error("Geolocalização não é suportada pelo navegador.");
@@ -253,7 +253,7 @@ function Busca(props) {
                 const addressComponents = data.results[0].address_components;
                 let city = '';
                 let state = '';
-                console.log(addressComponents)
+                //console.log(addressComponents)
 
                 state = addressComponents[4].short_name;
 
@@ -270,7 +270,7 @@ function Busca(props) {
                     setCodCaderno(city)
                     localStorage.setItem("caderno: ", city.toUpperCase());
                     sessionStorage.setItem("caderno: ", city.toUpperCase());
-                    console.log(city)
+                    //console.log(city)
                 }
 
 
