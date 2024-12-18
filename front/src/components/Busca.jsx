@@ -69,6 +69,9 @@ function Busca(props) {
             .then((res) => {
                 setUfs(res);
                 setUf(ufSalva);
+                if (location.pathname == '/') {
+                    getUserLocation();
+                }
                 if (ufSalva != undefined) {
                     //document.querySelectorAll('#codUf2')[0].value = ufSalva;
                 }
@@ -78,24 +81,25 @@ function Busca(props) {
             .then((x) => x.json())
             .then((res) => {
                 setCaderno(res)
+                if (location.pathname == '/') {
+                    getUserLocation();
+                }
                 if (cadSalvo != undefined) {
                     //document.querySelectorAll('#codUf3')[0].value = cadSalvo;
                 }
             })
 
-        if (location.pathname == '/') {
-            getUserLocation();
-        }
+
 
 
 
     }, []);
 
-    useEffect(() => {
-        if (location.pathname == '/') {
-            getUserLocation();
-        }
-    }, [])
+    /*     useEffect(() => {
+            if (location.pathname == '/') {
+                getUserLocation();
+            }
+        }, []) */
 
     const fetchAnuncios = async () => {
         setLoading(true);
@@ -253,55 +257,92 @@ function Busca(props) {
                 const addressComponents = data.results[0].address_components;
                 let city = '';
                 let state = '';
-                //console.log(addressComponents)
+                console.log(addressComponents)
 
-/*                 state = addressComponents[4].short_name;
+                /*                 state = addressComponents[4].short_name;
+                
+                                //document.querySelectorAll('#codUf2')[0].value = component.short_name;
+                                setCodUf(state)
+                                setUf(state);
+                
+                                localStorage.setItem("uf: ", state);
+                                sessionStorage.setItem("uf: ", state);
+                
+                                console.log(ufSelected)
+                                if(ufSelected != 0) {
+                                    city = addressComponents[2].short_name.toUpperCase();
+                                    setCodCaderno(city)
+                                    localStorage.setItem("caderno: ", city.toUpperCase());
+                                    sessionStorage.setItem("caderno: ", city.toUpperCase());
+                                    //console.log(city)
+                                }
+                 */
 
-                //document.querySelectorAll('#codUf2')[0].value = component.short_name;
-                setCodUf(state)
-                setUf(state);
 
-                localStorage.setItem("uf: ", state);
-                sessionStorage.setItem("uf: ", state);
+                /* addressComponents.forEach(component => {
 
-                console.log(ufSelected)
-                if(ufSelected != 0) {
-                    city = addressComponents[2].short_name.toUpperCase();
-                    setCodCaderno(city)
-                    localStorage.setItem("caderno: ", city.toUpperCase());
-                    sessionStorage.setItem("caderno: ", city.toUpperCase());
-                    //console.log(city)
-                }
- */
-
-
-                addressComponents.forEach(component => {
-                         if (component.types.includes("administrative_area_level_4")) {
-                            city = component.short_name.toUpperCase();
-                            setCodCaderno(component.short_name)
-                            localStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                            sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                         } else {
-                             city = component.short_name.toUpperCase();
-                             setCodCaderno(component.short_name)
-                             localStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                             sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                             
-                         } 
                     if (component.types.includes('administrative_area_level_1')) {
-                          state = component.short_name;
-  
-                          //document.querySelectorAll('#codUf2')[0].value = component.short_name;
-                          setCodUf(component.short_name)
-                          setUf(component.short_name);
-  
-                          localStorage.setItem("uf: ", component.short_name);
-                          sessionStorage.setItem("uf: ", component.short_name); 
+                        state = component.short_name;
+
+                        //document.querySelectorAll('#codUf2')[0].value = component.short_name;
+                        setCodUf(component.short_name)
+                        setUf(component.short_name);
+
+                        localStorage.setItem("uf: ", component.short_name);
+                        sessionStorage.setItem("uf: ", component.short_name);
 
 
                     }
-                });
 
+
+                    if (component.types.includes("administrative_area_level_4")) {
+                        console.log("administrative_area_level_4")
+                        city = component.short_name.toUpperCase();
+                        setCodCaderno(component.short_name)
+                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+
+                        return;
+
+                    } else if (component.types.includes("administrative_area_level_2")) {
+                        city = component.short_name.toUpperCase();
+                        setCodCaderno(component.short_name)
+                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                        console.log("administrative_area_level_2")
+
+                    }
+
+                }); */
+
+                for (const component of addressComponents) {
+                    if (component.types.includes('administrative_area_level_1')) {
+                        state = component.short_name;
+                
+                        setCodUf(component.short_name);
+                        setUf(component.short_name);
+                
+                        localStorage.setItem("uf: ", component.short_name);
+                        sessionStorage.setItem("uf: ", component.short_name);
+                    }
+                
+                    if (component.types.includes("administrative_area_level_4")) {
+                        console.log("administrative_area_level_4");
+                        city = component.short_name.toUpperCase();
+                        setCodCaderno(component.short_name);
+                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                
+                        break; // Interrompe o loop completamente
+                    } else if (component.types.includes("administrative_area_level_2")) {
+                        console.log("administrative_area_level_2");
+                        city = component.short_name.toUpperCase();
+                        setCodCaderno(component.short_name);
+                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                    }
+                }
+                
 
 
 
@@ -364,7 +405,7 @@ function Busca(props) {
                                 <div className="col-lg-5 col-md-5 col-sm-5 col-xs-8 col-6 d-flex">
                                     <i className="fa fa-map-marker icone-form"></i>
                                     <div className="form-group w-100">
-
+                                        {console.log("cidade: ", codCaderno)}
                                         <select name="codUf3" id="codUf3" className="form-control form-select" onChange={definirCaderno} value={codCaderno}>
                                             {/*  <option value="TODO">TODO</option> */}
                                             <option value="CIDADE">CIDADE</option>
