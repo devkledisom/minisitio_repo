@@ -95,7 +95,7 @@ function Busca(props) {
         if (location.pathname == '/') {
             getUserLocation();
         }
-    }, [ufSelected])
+    }, [])
 
     const fetchAnuncios = async () => {
         setLoading(true);
@@ -255,7 +255,7 @@ function Busca(props) {
                 let state = '';
                 //console.log(addressComponents)
 
-                state = addressComponents[4].short_name;
+/*                 state = addressComponents[4].short_name;
 
                 //document.querySelectorAll('#codUf2')[0].value = component.short_name;
                 setCodUf(state)
@@ -272,27 +272,31 @@ function Busca(props) {
                     sessionStorage.setItem("caderno: ", city.toUpperCase());
                     //console.log(city)
                 }
-
+ */
 
 
                 addressComponents.forEach(component => {
-                    /*      if (component.types.includes("administrative_area_level_2")) {
+                         if (component.types.includes("administrative_area_level_4")) {
+                            city = component.short_name.toUpperCase();
+                            setCodCaderno(component.short_name)
+                            localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                            sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                         } else {
                              city = component.short_name.toUpperCase();
                              setCodCaderno(component.short_name)
                              localStorage.setItem("caderno: ", component.short_name.toUpperCase());
                              sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
                              
-                         } */
+                         } 
                     if (component.types.includes('administrative_area_level_1')) {
-                        /*   state = component.short_name;
+                          state = component.short_name;
   
                           //document.querySelectorAll('#codUf2')[0].value = component.short_name;
                           setCodUf(component.short_name)
                           setUf(component.short_name);
   
                           localStorage.setItem("uf: ", component.short_name);
-                          sessionStorage.setItem("uf: ", component.short_name); */
-
+                          sessionStorage.setItem("uf: ", component.short_name); 
 
 
                     }
