@@ -155,6 +155,7 @@ function Busca(props) {
     };
 
     const verClassificado = () => {
+        setLoading(true);
         let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
         let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;
 
@@ -171,6 +172,7 @@ function Busca(props) {
                 .then(res => {
                     console.log(res)
                     if (res.success) {
+                        setLoading(false)
                         window.location = `/caderno-geral/${codCaderno}/${codUf}`;
                     } else {
                         alert("caderno não localizado")
