@@ -820,7 +820,10 @@ console.log("arr", arr)
       } else if(minisitio.anuncios.length > 5) {
          arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
          arrayParte2 = division > 5 ? removeDuplicate.slice(division) : []; 
-      }
+      } else if(minisitio.anuncios.length < 5) {
+         arrayParte1 = division <= 4 ? removeDuplicate.slice(0, division) : removeDuplicate.slice(0, division);
+         arrayParte2 = division <= 4 ? removeDuplicate.slice(division) : []; 
+      } 
 
       // Remover duplicados comparando objetos
       const arraySemDuplicados = arrayParte1.filter((item, index, self) =>
