@@ -898,9 +898,9 @@ module.exports = {
                     item.dataValues = {
                         nmUsuario: user.descNome, // Adiciona a nova propriedade no início
                         ...item.dataValues, // Mantém as demais propriedades
-                    }; 
+                    };
 
-                    
+
                 })
             );
 
@@ -1113,14 +1113,14 @@ module.exports = {
 
                 const user = await anun.getUsuario();
                 //console.log("adjasldj",user)
-                if(user) {
+                if (user) {
                     anun.codUsuario = user.descNome;
                     anun.dataValues.loginUser = user.descCPFCNPJ;
                     anun.dataValues.loginPass = user.senha;
                     anun.dataValues.loginEmail = user.descEmail;
                     anun.dataValues.loginContato = user.descTelefone;
                 }
-        
+
 
                 /* const atividades = await anun.getAtividade();
                 anun.dataValues.mainAtividade = atividades.atividade
@@ -1595,7 +1595,7 @@ module.exports = {
                 //console.log()
             }
 
-            console.log("debug------------------>", [
+            console.log("debug------------------>2", [
                 { codUf: codCaderno[0].dataValues.codUf },
                 { codCaderno: codCaderno[0].dataValues.codCaderno }
             ]);
@@ -1644,7 +1644,12 @@ module.exports = {
                         { codUf: codCaderno[0].dataValues.UF },
                         { codCaderno: codCaderno[0].dataValues.nomeCaderno }
                     ]
-                }/* ,
+                  
+                },
+                order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
+                limit: 10,          // Tamanho da página
+                offset: offset           // Registros ignorados
+                /* ,
         limit: porPagina,
         offset: offset */
             });
@@ -1704,7 +1709,7 @@ module.exports = {
                 //console.log()
             }
 
-            console.log("debug------------------>", [
+            console.log("debug------------------>3", [
                 { codUf: codCaderno[0].dataValues.codUf },
                 { codCaderno: codCaderno[0].dataValues.codCaderno }
             ]);
@@ -1715,17 +1720,96 @@ module.exports = {
                         { codUf: codCaderno[0].dataValues.UF },
                         { codCaderno: codCaderno[0].dataValues.nomeCaderno }
                     ]
-                }
+                },
+                order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
+                limit: 10,          // Tamanho da página
+                offset: offset  
             });
+            //console.log(anuncioTeste)
+
+ /*            buscarAtividade(res,{
+                success: true,
+                data: arrayClassificado,
+                teste: anuncioTeste,
+                mosaico: codCaderno[0].dataValues.descImagem
+            }, req.params.caderno, req.params.uf, atividades) */
 
             res.json({
                 success: true,
                 data: arrayClassificado,
                 teste: anuncioTeste,
                 mosaico: codCaderno[0].dataValues.descImagem
-            });
+            }); 
         }
 
+        async function buscarAtividade(res, response, caderno, uf, atividades) {
+            //fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
+
+            //console.log(res, caderno)
+            if (response.success) {
+
+                const codigosAtividades = response.teste.rows.map((item) => item.codAtividade);
+                const valores = [...new Set(codigosAtividades)];
+
+                //const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
+                const atividadesEncontradas = atividades.filter((item) => valores.includes(item.id));
+
+                //const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
+
+                let result = response.teste.rows.filter(category =>
+                    response.data.some(anuncio => category.id === anuncio.codAtividade)
+                );
+
+                const arr = [];
+
+                let result1 = response.data.map((category, index) => {
+                    // Filtra os anúncios que correspondem à categoria atual
+                    let teste = response.teste.rows.filter(anuncio => category.atividade === anuncio.codAtividade);
+
+                    // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+                    category.kledisom = teste;
+                    teste.forEach((item) => {
+                        item.codAtividade = category.atividade; //adiciona as categorias
+                        arr.push(item); //salva so os anuncios
+                    });
+
+                    console.log(index)
+
+                    // Retorna o objeto category modificado
+                    return category;
+                });
+
+                //console.log(result1);
+
+                // Atualiza o estado com os dados paginados
+                /* setMinisitio({ anuncios: result1 });
+                setNomeAtividade(result1); */
+                if(arr.length == 100) {
+                    const obj = {...response, arr}
+
+                    res.json(obj)
+                }
+       
+
+            /*     if (pageNumberUnique) {
+                    //console.log("arr", arr)
+                    arr.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
+
+                    const itemIndex = arr.findIndex(item => item.codAnuncio == id) + 1;
+
+                    const pageNumberClass = Math.ceil(itemIndex / 10);
+
+                    //console.log(`pagina ${pageNumberClass}`, itemIndex);
+                    
+
+                } else {
+                    // paginator(arr);
+                    console.log(arr)
+                } */
+            }
+
+
+        }
 
 
 
@@ -1989,7 +2073,7 @@ module.exports = {
 
                 const user = await anun.getUsuario();
                 //console.log("adjasldj",user)
-                if(user) {
+                if (user) {
                     anun.codUsuario = user.descNome;
                     anun.dataValues.loginUser = user.descCPFCNPJ;
                     anun.dataValues.loginPass = user.senha;
@@ -3065,7 +3149,7 @@ module.exports = {
                 console.log("Processamento concluído!", dt);
             }); */
 
- 
+
         async function processExcelInChunks() {
 
 
@@ -3080,18 +3164,18 @@ module.exports = {
                     //console.log(row.values); // Processa cada linha aqui
                     //teste(row.values)
 
-                    if(row.values[1] != "TIPO") {
+                    if (row.values[1] != "TIPO") {
                         let novo = await novaImportacao(row.values, rowIndex)
                         console.log("adasdasd: ", novo);
                         rowIndex++; // Incrementa o índice
                     }
-                   
+
                 }
             }
-            console.log("Processamento concluído."); 
+            console.log("Processamento concluído.");
         }
 
-        processExcelInChunks().catch(console.error); 
+        processExcelInChunks().catch(console.error);
 
 
 
@@ -3136,7 +3220,7 @@ module.exports = {
 
 
         async function novaImportacao(result, index) {
-           // updateJsonName(filePath, index);
+            // updateJsonName(filePath, index);
             /*   console.log(result, data.length, index)
               //buscar por uf
               const resultEstado = await Uf.findAll({
@@ -3156,7 +3240,7 @@ module.exports = {
               const estadoId = resultEstado.length > 0 ? resultEstado[0].dataValues.id_uf : 0;
               const cidadeId = resultCidade.length > 0 ? resultCidade[0].dataValues.codCaderno : 0; */
 
-              console.log(result, index,  result[1])
+            console.log(result, index, result[1])
 
             const codTipoAnuncio = result[1];
             const idDesconto = result[2];
@@ -3173,20 +3257,20 @@ module.exports = {
             const login = result[9];
             const senha = 12345;
 
-/*             const codTipoAnuncio = result['TIPO'];
-            const idDesconto = result['ID'];
-            const nomeAnuncio = result['NOME'];
-            const telefone = result['TELEFONE'];
-            const cep = result['CEP'];
-            const estado = result['UF'];
-            const cidade = result['CIDADE'];
-            const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
-            const nuDocumento = result['CNPJ_CPF'];
-            const autorizante = result['AUTORIZANTE'];
-            const email = result['EMAIL'];
-            //const chavePix = result['PIX'];
-            const login = result['CNPJ/CPF'];
-            const senha = 12345; */
+            /*             const codTipoAnuncio = result['TIPO'];
+                        const idDesconto = result['ID'];
+                        const nomeAnuncio = result['NOME'];
+                        const telefone = result['TELEFONE'];
+                        const cep = result['CEP'];
+                        const estado = result['UF'];
+                        const cidade = result['CIDADE'];
+                        const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
+                        const nuDocumento = result['CNPJ_CPF'];
+                        const autorizante = result['AUTORIZANTE'];
+                        const email = result['EMAIL'];
+                        //const chavePix = result['PIX'];
+                        const login = result['CNPJ/CPF'];
+                        const senha = 12345; */
 
 
 
@@ -3328,8 +3412,8 @@ module.exports = {
 
                 };
 
-              /*   count++
-                arrayImportado.push(dataObj); */
+                /*   count++
+                  arrayImportado.push(dataObj); */
                 const criarAnuncios = await Anuncio.create(dataObj);
                 updateJsonName(filePath, index);
 
@@ -3342,7 +3426,7 @@ module.exports = {
 
             };
 
-    
+
 
         }
 
@@ -3353,13 +3437,13 @@ module.exports = {
             const data = linhas;
 
 
-        /*     const resultPlan = data.slice(1).map(row => {
-                return row.reduce((obj, value, index) => {
-                    obj[data[0][index]] = value; // Usa o cabeçalho como chave
-                    return obj;
-                }, {});
-            });
- */
+            /*     const resultPlan = data.slice(1).map(row => {
+                    return row.reduce((obj, value, index) => {
+                        obj[data[0][index]] = value; // Usa o cabeçalho como chave
+                        return obj;
+                    }, {});
+                });
+     */
             const arrayImportado = [];
             let count = 0;
 
@@ -3559,250 +3643,250 @@ module.exports = {
         // req.file é o arquivo 'uploadedfile'
         // req.body conterá os campos de texto, se houver
         //Realizando leitura dos dados
-      /*   readXlsxFile(path.join(__dirname, '../public/import/uploadedfile.xlsx')).then(async (linhas) => {
-            //console.log(linhas);
+        /*   readXlsxFile(path.join(__dirname, '../public/import/uploadedfile.xlsx')).then(async (linhas) => {
+              //console.log(linhas);
+  
+              const data = linhas;
+  
+  
+              const resultPlan = data.slice(1).map(row => {
+                  return row.reduce((obj, value, index) => {
+                      obj[data[0][index]] = value; // Usa o cabeçalho como chave
+                      return obj;
+                  }, {});
+              });
+  
+              const arrayImportado = [];
+              let count = 0;
+  
+              async function novaImportacao(result, index) {
+  
+  
+                  const codTipoAnuncio = result['TIPO'];
+                  const idDesconto = result['ID'];
+                  const nomeAnuncio = result['NOME'];
+                  const telefone = result['TELEFONE'];
+                  const cep = result['CEP'];
+                  const estado = result['UF'];
+                  const cidade = result['CIDADE'];
+                  const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
+                  const nuDocumento = result['CNPJ_CPF'];
+                  const autorizante = result['AUTORIZANTE'];
+                  const email = result['EMAIL'];
+                  //const chavePix = result['PIX'];
+                  const login = result['CNPJ/CPF'];
+                  const senha = 12345;
+  
+  
+  
+  
+                  const verificarUserExists = await Usuarios.findAll({
+                      where: {
+                          descCPFCNPJ: nuDocumento
+                      }
+                  });
+  
+                  if (verificarUserExists.length > 0) {
+                      let codUser = verificarUserExists[0].dataValues.codUsuario;
+  
+  
+                      criarAnuncioImportado(codUser);
+                  } else {
+  
+                      await database.sync();
+  
+                      const dadosUsuario = {
+                          "codTipoPessoa": "pf",
+                          "descCPFCNPJ": nuDocumento,
+                          "descNome": nomeAnuncio || `import${index}`,
+                          "descEmail": email || "atualizar",
+                          "senha": senha,
+                          "codTipoUsuario": 3,
+                          "descTelefone": telefone || "atualizar",
+                          "codUf": estado,
+                          "codCidade": cidade,
+                          "dtCadastro": dataNow(),
+                          "usuarioCod": 0,
+                          "dtCadastro2": dataNow(),
+                          "dtAlteracao": dataNow(),
+                          "ativo": "1"
+                      };
+  
+  
+                      try {
+                          const listaUsers = await Usuarios.create(dadosUsuario);
+  
+                          let codUser = listaUsers.dataValues.codUsuario;
+  
+  
+                          criarAnuncioImportado(codUser);
+  
+                          //res.status(201).json({ success: true, message: listaUsers })
+  
+  
+                      } catch (erro) {
+                          console.error(erro.message);
+                          //res.status(500).json({ success: false, message: erro.errors[0].message })
+                      }
+                  }
+  
+  
+  
+                  function dataNow() {
+                      // Criar um novo objeto Date (representando a data e hora atuais)
+                      var dataAtual = new Date();
+  
+                      // Extrair os componentes da data e hora
+                      var ano = dataAtual.getFullYear();
+                      var mes = dataAtual.getMonth() + 1; // Meses começam de 0, então adicionamos 1
+                      var dia = dataAtual.getDate();
+                      var hora = dataAtual.getHours();
+                      var minutos = dataAtual.getMinutes();
+                      var segundos = dataAtual.getSeconds();
+  
+                      // Formatar a data e hora
+                      var dataFormatada = ano + '-' + mes + '-' + dia;
+                      var horaFormatada = hora + ':' + minutos + ':' + segundos;
+  
+                      // Exibir a data e hora atual
+                      console.log('Data atual:', dataFormatada);
+                      console.log('Hora atual:', horaFormatada);
+  
+                      return dataFormatada + " " + horaFormatada;
+                  };
+  
+  
+                  async function buscarAtividade() {
+                      const atividades = await Atividade.findAll({
+                          where: {
+                              atividade: { [Op.like]: `%${tipoAtividade}%` }
+                          },
+  
+                      });
+  
+                      if (atividades.length > 0) {
+                          return atividades[0].dataValues.id;
+                      } else {
+                          return 3845;
+                      }
+  
+  
+                  };
+  
+  
+                  async function criarAnuncioImportado(codUser) {
+  
+                      let codigoDeDesconto = await Descontos.findAll({
+                          where: {
+                              hash: idDesconto
+                          }
+                      });
+  
+                      const dataObj = {
+                          "codUsuario": codUser,
+                          "codTipoAnuncio": codTipoAnuncio,
+                          "codAtividade": await buscarAtividade(),
+                          "codCaderno": cidade,
+                          "codUf": estado,
+                          "codCidade": cidade,
+                          "descAnuncio": nomeAnuncio || `import${index}`,
+                          "descImagem": 0,
+                          "descEndereco": "atualizar",
+                          "descTelefone": telefone || "atualizar",
+                          "descCelular": 0,
+                          "descEmailComercial": 0,
+                          "descEmailRetorno": email,
+                          "descWhatsApp": 0,
+                          "descCEP": cep,
+                          "descTipoPessoa": "pf",
+                          "descCPFCNPJ": nuDocumento,
+                          "descNomeAutorizante": autorizante || `import${index}`,
+                          "descEmailAutorizante": 0,
+                          "codDesconto": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
+                          "descChavePix": 'chavePix',
+                          "qntVisualizacoes": 0,
+                          "codDuplicado": 0,
+                          "descPromocao": 0,
+                          "activate": 1,
+  
+                      };
+  
+                      count++
+                      arrayImportado.push(dataObj);
+                      const criarAnuncios = await Anuncio.create(dataObj);
+                      updateJsonName(filePath, count);
+  
+                      //console.log(criarAnuncios);
+                      const progress = index; // Progresso fictício
+                      //req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
+                      console.log("laksljhasfasdfgafsdf: ", progress);
+                      // Atualizar o nome
+  
+                      if (index + 1 == data.length - 1) {
+                          //res.json({ success: true, progress: index })
+                          //res.redirect("https://br.minisitio.net/admin/espacos");
+                      }
+  
+                  };
+              }
+  
+  
+  
+  
+              /* 
+                          resultPlan.forEach(async (item, index) => {
+                              novaImportacao(item);
+              
+                              if (resultPlan.length == index + 1) {
+                                  console.log(arrayImportado)
+                                  //res.status(201).json({ success: true, message: "importacao concluida" })
+                              }
+                          }); */
 
-            const data = linhas;
+        /*       try{
+                  console.log(arrayImportado)
+                  //const lotes = await Anuncio.bulkCreate(resultPlan); 
+              } catch(err) {
+                  console.log(err.message)
+              } */
 
 
-            const resultPlan = data.slice(1).map(row => {
-                return row.reduce((obj, value, index) => {
-                    obj[data[0][index]] = value; // Usa o cabeçalho como chave
-                    return obj;
-                }, {});
-            });
+        /*      const BATCH_SIZE = 100; // Tamanho do lote para processar de cada vez
+ 
+             async function processBatch(batch) {
+                 return Promise.all(batch.map(async (result, index) => {
+                     try {
+                         console.log(result)
+                         await novaImportacao(result, index);
+                     } catch (error) {
+                         console.error("Erro ao importar:", error);
+                     }
+                 }));
+             }
+ 
+             async function processImport(data) {
+                 const resultPlan = data.slice(1).map(row => {
+                     return row.reduce((obj, value, index) => {
+                         obj[data[0][index]] = value; // Usa o cabeçalho como chave
+                         return obj;
+                     }, {});
+                 });
+ 
+                 for (let i = 0; i < resultPlan.length; i += BATCH_SIZE) {
+                     const batch = resultPlan.slice(i, i + BATCH_SIZE);
+                     await processBatch(batch); // Processa cada lote
+                 }
+ 
+                 console.log(arrayImportado);
+                 // res.status(201).json({ success: true, message: "importacao concluida" });
+             }
+ 
+             await processImport(data); */
 
-            const arrayImportado = [];
-            let count = 0;
-
-            async function novaImportacao(result, index) {
-
-
-                const codTipoAnuncio = result['TIPO'];
-                const idDesconto = result['ID'];
-                const nomeAnuncio = result['NOME'];
-                const telefone = result['TELEFONE'];
-                const cep = result['CEP'];
-                const estado = result['UF'];
-                const cidade = result['CIDADE'];
-                const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
-                const nuDocumento = result['CNPJ_CPF'];
-                const autorizante = result['AUTORIZANTE'];
-                const email = result['EMAIL'];
-                //const chavePix = result['PIX'];
-                const login = result['CNPJ/CPF'];
-                const senha = 12345;
-
-
-
-
-                const verificarUserExists = await Usuarios.findAll({
-                    where: {
-                        descCPFCNPJ: nuDocumento
-                    }
-                });
-
-                if (verificarUserExists.length > 0) {
-                    let codUser = verificarUserExists[0].dataValues.codUsuario;
-
-
-                    criarAnuncioImportado(codUser);
-                } else {
-
-                    await database.sync();
-
-                    const dadosUsuario = {
-                        "codTipoPessoa": "pf",
-                        "descCPFCNPJ": nuDocumento,
-                        "descNome": nomeAnuncio || `import${index}`,
-                        "descEmail": email || "atualizar",
-                        "senha": senha,
-                        "codTipoUsuario": 3,
-                        "descTelefone": telefone || "atualizar",
-                        "codUf": estado,
-                        "codCidade": cidade,
-                        "dtCadastro": dataNow(),
-                        "usuarioCod": 0,
-                        "dtCadastro2": dataNow(),
-                        "dtAlteracao": dataNow(),
-                        "ativo": "1"
-                    };
-
-
-                    try {
-                        const listaUsers = await Usuarios.create(dadosUsuario);
-
-                        let codUser = listaUsers.dataValues.codUsuario;
-
-
-                        criarAnuncioImportado(codUser);
-
-                        //res.status(201).json({ success: true, message: listaUsers })
-
-
-                    } catch (erro) {
-                        console.error(erro.message);
-                        //res.status(500).json({ success: false, message: erro.errors[0].message })
-                    }
-                }
-
-
-
-                function dataNow() {
-                    // Criar um novo objeto Date (representando a data e hora atuais)
-                    var dataAtual = new Date();
-
-                    // Extrair os componentes da data e hora
-                    var ano = dataAtual.getFullYear();
-                    var mes = dataAtual.getMonth() + 1; // Meses começam de 0, então adicionamos 1
-                    var dia = dataAtual.getDate();
-                    var hora = dataAtual.getHours();
-                    var minutos = dataAtual.getMinutes();
-                    var segundos = dataAtual.getSeconds();
-
-                    // Formatar a data e hora
-                    var dataFormatada = ano + '-' + mes + '-' + dia;
-                    var horaFormatada = hora + ':' + minutos + ':' + segundos;
-
-                    // Exibir a data e hora atual
-                    console.log('Data atual:', dataFormatada);
-                    console.log('Hora atual:', horaFormatada);
-
-                    return dataFormatada + " " + horaFormatada;
-                };
-
-
-                async function buscarAtividade() {
-                    const atividades = await Atividade.findAll({
-                        where: {
-                            atividade: { [Op.like]: `%${tipoAtividade}%` }
-                        },
-
-                    });
-
-                    if (atividades.length > 0) {
-                        return atividades[0].dataValues.id;
-                    } else {
-                        return 3845;
-                    }
-
-
-                };
-
-
-                async function criarAnuncioImportado(codUser) {
-
-                    let codigoDeDesconto = await Descontos.findAll({
-                        where: {
-                            hash: idDesconto
-                        }
-                    });
-
-                    const dataObj = {
-                        "codUsuario": codUser,
-                        "codTipoAnuncio": codTipoAnuncio,
-                        "codAtividade": await buscarAtividade(),
-                        "codCaderno": cidade,
-                        "codUf": estado,
-                        "codCidade": cidade,
-                        "descAnuncio": nomeAnuncio || `import${index}`,
-                        "descImagem": 0,
-                        "descEndereco": "atualizar",
-                        "descTelefone": telefone || "atualizar",
-                        "descCelular": 0,
-                        "descEmailComercial": 0,
-                        "descEmailRetorno": email,
-                        "descWhatsApp": 0,
-                        "descCEP": cep,
-                        "descTipoPessoa": "pf",
-                        "descCPFCNPJ": nuDocumento,
-                        "descNomeAutorizante": autorizante || `import${index}`,
-                        "descEmailAutorizante": 0,
-                        "codDesconto": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
-                        "descChavePix": 'chavePix',
-                        "qntVisualizacoes": 0,
-                        "codDuplicado": 0,
-                        "descPromocao": 0,
-                        "activate": 1,
-
-                    };
-
-                    count++
-                    arrayImportado.push(dataObj);
-                    const criarAnuncios = await Anuncio.create(dataObj);
-                    updateJsonName(filePath, count);
-
-                    //console.log(criarAnuncios);
-                    const progress = index; // Progresso fictício
-                    //req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
-                    console.log("laksljhasfasdfgafsdf: ", progress);
-                    // Atualizar o nome
-
-                    if (index + 1 == data.length - 1) {
-                        //res.json({ success: true, progress: index })
-                        //res.redirect("https://br.minisitio.net/admin/espacos");
-                    }
-
-                };
-            }
-
-
-
-
-            /* 
-                        resultPlan.forEach(async (item, index) => {
-                            novaImportacao(item);
-            
-                            if (resultPlan.length == index + 1) {
-                                console.log(arrayImportado)
-                                //res.status(201).json({ success: true, message: "importacao concluida" })
-                            }
-                        }); */
-
-            /*       try{
-                      console.log(arrayImportado)
-                      //const lotes = await Anuncio.bulkCreate(resultPlan); 
-                  } catch(err) {
-                      console.log(err.message)
-                  } */
-
-
-       /*      const BATCH_SIZE = 100; // Tamanho do lote para processar de cada vez
-
-            async function processBatch(batch) {
-                return Promise.all(batch.map(async (result, index) => {
-                    try {
-                        console.log(result)
-                        await novaImportacao(result, index);
-                    } catch (error) {
-                        console.error("Erro ao importar:", error);
-                    }
-                }));
-            }
-
-            async function processImport(data) {
-                const resultPlan = data.slice(1).map(row => {
-                    return row.reduce((obj, value, index) => {
-                        obj[data[0][index]] = value; // Usa o cabeçalho como chave
-                        return obj;
-                    }, {});
-                });
-
-                for (let i = 0; i < resultPlan.length; i += BATCH_SIZE) {
-                    const batch = resultPlan.slice(i, i + BATCH_SIZE);
-                    await processBatch(batch); // Processa cada lote
-                }
-
-                console.log(arrayImportado);
-                // res.status(201).json({ success: true, message: "importacao concluida" });
-            }
-
-            await processImport(data); */
-
-            // Readable Stream.
-            /*   const progress = (1 / linhas) * 100;
-              req.customParam.emit("progress", { progress }); 
-        }); */
+        // Readable Stream.
+        /*   const progress = (1 / linhas) * 100;
+          req.customParam.emit("progress", { progress }); 
+    }); */
 
 
 

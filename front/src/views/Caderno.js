@@ -105,7 +105,7 @@ function Caderno() {
       }
     }
     async function buscarAtividade() {
-      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
+      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${page}`)
         .then(x => x.json())
         .then(async res => {
           console.log(res,  caderno)
