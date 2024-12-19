@@ -894,7 +894,7 @@ module.exports = {
             await Promise.all(
                 resultAnuncio.map(async (item) => {
                     const user = await item.getUsuario();
-                    console.log('dasjsdffasdfasdf: -----------', user)
+                    console.log('dasjsdffasdfasdf: -----------', resultAnuncio)
                     item.dataValues = {
                         nmUsuario: user.descNome, // Adiciona a nova propriedade no início
                         ...item.dataValues, // Mantém as demais propriedades

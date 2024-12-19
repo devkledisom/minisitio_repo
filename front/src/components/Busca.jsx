@@ -257,7 +257,7 @@ function Busca(props) {
                 const addressComponents = data.results[0].address_components;
                 let city = '';
                 let state = '';
-                console.log(addressComponents)
+                //console.log(addressComponents)
 
                 /*                 state = addressComponents[4].short_name;
                 
@@ -405,7 +405,7 @@ function Busca(props) {
                                 <div className="col-lg-5 col-md-5 col-sm-5 col-xs-8 col-6 d-flex">
                                     <i className="fa fa-map-marker icone-form"></i>
                                     <div className="form-group w-100">
-                                        {console.log("cidade: ", codCaderno)}
+                                        
                                         <select name="codUf3" id="codUf3" className="form-control form-select" onChange={definirCaderno} value={codCaderno}>
                                             {/*  <option value="TODO">TODO</option> */}
                                             <option value="CIDADE">CIDADE</option>

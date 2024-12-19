@@ -173,7 +173,7 @@ const Desconto = database.define('desconto', {
     Desconto.belongsTo(Usuario, {
         constraints: true,
         foreignKey: 'idUsuario',
-        targetKey: 'descCPFCNPJ'
+        targetKey: 'codUsuario'
     });
   /*   Desconto.belongsTo(Usuario, {
         constraints: true,
