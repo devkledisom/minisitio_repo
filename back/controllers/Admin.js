@@ -1633,23 +1633,20 @@ module.exports = {
             });
 
         } else {
-            let codCaderno = await Caderno.findAll({
+     /*        let codCaderno = await Caderno.findAll({
                 where: {
                     //codUf: req.params.uf,
                     [Op.or]: [
-                        { nomeCaderno: req.params.caderno }/* ,
-                        { codCaderno: req.params.caderno }, */
+                        { nomeCaderno: req.params.caderno },
+                        //{ codCaderno: req.params.caderno }, 
                         //{ codUf: req.params.uf }
                     ]
-                }
-            });
+                },
+                attributes: ['descImagem']
+            });  */
 
             console.log(codCaderno, req.params.uf);
             console.log("estreesse: ", req.params.caderno)
-
-
-            // Consultar o registro específico
-            const registroId = 126331; // O ID do registro que você quer buscar
 
 
             /*      const anuncioChave = await Anuncio.findAll({
@@ -1667,7 +1664,7 @@ module.exports = {
             //console.log("estreesse: ", anuncioChave)
 
 
-            const anuncio = await Anuncio.findAndCountAll({
+     /*        const anuncio = await Anuncio.findAndCountAll({
                 where: {
                     [Op.and]: [
                         { codUf: codCaderno[0].dataValues.UF },
@@ -1681,7 +1678,7 @@ module.exports = {
 
             });
 
-            console.log("estreesse: ", anuncio.count)
+            console.log("estreesse: ", anuncio.count, offset)
             console.log("estreesse: ", req.params.uf)
 
             if (anuncio.count < 1) {
@@ -1740,7 +1737,7 @@ module.exports = {
                 { codUf: codCaderno[0].dataValues.codUf },
                 { codCaderno: codCaderno[0].dataValues.codCaderno }
             ]);
-
+ */
 
 
             /*            const resultado = await database.query(`
@@ -1764,19 +1761,450 @@ module.exports = {
                          let byIndex = resultado.find(item => item.codAnuncio == 126313);
                          console.log('Resultado:', byIndex); */
 
-            if (req.query.idd) {
-                let quantidadeGeral = await Anuncio.findAndCountAll({
+            let quantidadeGeral = await Anuncio.findAndCountAll({
+                where: {
+                    [Op.and]: [
+                        { codUf: req.params.uf },
+                        { codCaderno: req.params.caderno },
+                    ]
+                },
+                attributes: ['codAnuncio'],
+                raw: true
+            });
+
+
+            if (req.query.idd && req.query.unique == false) {
+                let anuncioIdd = await Anuncio.findAndCountAll({
                     where: {
                         [Op.and]: [
-                            { codUf: codCaderno[0].dataValues.UF },
-                            { codCaderno: codCaderno[0].dataValues.nomeCaderno },
+                            { codUf: req.params.uf },
+                            { codCaderno: req.params.caderno },
+                            { codAnuncio: req.query.idd }
                         ]
                     },
-                    attributes: ['codAnuncio'],
+                    attributes: ['page'],
                     raw: true
                 });
 
-                let anuncioIdd = await Anuncio.findOne({
+
+                const anuncioTeste = await Anuncio.findAndCountAll({
+                    where: {
+                        [Op.and]: [
+                            { codUf: req.params.uf },
+                            { codCaderno: req.params.caderno },
+                            { page: anuncioIdd.page }
+                        ]
+                    },
+                    order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
+                    attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'page' ],
+
+                });
+
+               res.json({
+                    success: true,
+                    data: arrayClassificado,
+                    teste: anuncioTeste,
+                    mosaico: 0,
+                    qtdaConsulta: quantidadeGeral.count,
+                    paginaLocalizada: anuncioIdd.page,
+                    pagina: paginaAtual
+                }); 
+            } else {
+
+                const anuncioTeste = await Anuncio.findAndCountAll({
+                    where: {
+                        [Op.and]: [
+                            { codUf: req.params.uf },
+                            { codCaderno: req.params.caderno },
+                            { page: paginaAtual }
+                        ]
+                    },
+                    order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
+                    attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'page' ],
+
+                });
+
+                res.json({
+                    success: true,
+                    teste: anuncioTeste,
+                    mosaico: 0,
+                    qtdaConsulta: quantidadeGeral.count,
+                    paginaLocalizada: paginaAtual
+                });
+            }
+
+
+
+
+
+            /*      anuncioTeste.rows.map((item, index) => {
+                     item.codAnuncio2 = anuncioChave.findIndex(position => position.codAnuncio == item.codAnuncio)
+                 }) */
+
+
+            //console.log(anuncioTeste)
+
+            /*            buscarAtividade(res,{
+                           success: true,
+                           data: arrayClassificado,
+                           teste: anuncioTeste,
+                           mosaico: codCaderno[0].dataValues.descImagem
+                       }, req.params.caderno, req.params.uf, atividades) */
+
+            //let b = anuncioChave.findIndex(item => item.codAnuncio == 126313)//139964
+
+            //console.log("-==========================> ", b)
+
+
+        }
+
+        async function buscarAtividade(res, response, caderno, uf, atividades) {
+            //fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
+
+            //console.log(res, caderno)
+            if (response.success) {
+
+                const codigosAtividades = response.teste.rows.map((item) => item.codAtividade);
+                const valores = [...new Set(codigosAtividades)];
+
+                //const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
+                const atividadesEncontradas = atividades.filter((item) => valores.includes(item.id));
+
+                //const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
+
+                let result = response.teste.rows.filter(category =>
+                    response.data.some(anuncio => category.id === anuncio.codAtividade)
+                );
+
+                const arr = [];
+
+                let result1 = response.data.map((category, index) => {
+                    // Filtra os anúncios que correspondem à categoria atual
+                    let teste = response.teste.rows.filter(anuncio => category.atividade === anuncio.codAtividade);
+
+                    // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+                    category.kledisom = teste;
+                    teste.forEach((item) => {
+                        item.codAtividade = category.atividade; //adiciona as categorias
+                        arr.push(item); //salva so os anuncios
+                    });
+
+                    console.log(index)
+
+                    // Retorna o objeto category modificado
+                    return category;
+                });
+
+                //console.log(result1);
+
+                // Atualiza o estado com os dados paginados
+                /* setMinisitio({ anuncios: result1 });
+                setNomeAtividade(result1); */
+                if (arr.length == 100) {
+                    const obj = { ...response, arr }
+
+                    res.json(obj)
+                }
+
+
+                /*     if (pageNumberUnique) {
+                        //console.log("arr", arr)
+                        arr.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
+    
+                        const itemIndex = arr.findIndex(item => item.codAnuncio == id) + 1;
+    
+                        const pageNumberClass = Math.ceil(itemIndex / 10);
+    
+                        //console.log(`pagina ${pageNumberClass}`, itemIndex);
+                        
+    
+                    } else {
+                        // paginator(arr);
+                        console.log(arr)
+                    } */
+            }
+
+
+        }
+
+
+
+
+    },
+    listarClassificadoGeralold2: async (req, res) => {
+
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+
+        //const offset = (paginaAtual - 1) * porPagina;
+        const offset = Math.max(0, (paginaAtual - 1) * porPagina);
+
+
+        console.log("offsewt: ", offset, paginaAtual)
+
+
+
+
+        // Consulta para recuperar apenas os itens da página atual
+        /* var codCaderno = await Caderno.findAll({
+            where: {
+                //codUf: req.params.uf,
+                [Op.or]: [
+                    { nomeCaderno: req.params.caderno },
+                    { codCaderno: req.params.caderno },
+                    //{ codUf: req.params.uf }
+                ]
+            }
+        }); */
+
+        let codCaderno;
+
+        if (!req.params.caderno) return;
+
+        if (req.params.caderno == "null" || req.params.caderno == "TODO") {
+            let codCaderno = await Caderno.findAll({
+                where: {
+                    //codUf: req.params.uf,
+                    [Op.or]: [
+                        { nomeCaderno: req.params.caderno },
+                        { codCaderno: req.params.caderno },
+                        { codUf: req.params.uf }
+                    ]
+                }
+            });
+
+            console.log(codCaderno, req.params.uf);
+
+            const anuncio = await Anuncio.findAndCountAll({
+                where: {
+                    [Op.and]: [
+                        { codUf: codCaderno[0].dataValues.codUf },
+                        { codCaderno: codCaderno[0].dataValues.codCaderno }
+                    ]
+                }/* ,
+        limit: porPagina,
+        offset: offset */
+            });
+
+
+            if (anuncio.count < 1) {
+                res.json({
+                    success: false,
+                    message: "caderno não localizado"
+                });
+
+                return;
+            };
+
+            const count = anuncio.rows.reduce((acc, item) => {
+                // Incrementa o contador do codAtividade no acumulador
+                acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+                return acc;
+            }, {});
+
+            const atividades = await Atividade.findAll(/* {order: [
+        ['atividade', 'ASC']
+    ],
+        limit: porPagina,
+        offset: offset
+    } */);
+
+            //console.log("--------------====> ", atividades[0].dataValues)
+
+            const arrayClassificado = [];
+
+            for (let x in count) {
+                const anun = anuncio.rows.find(item => item.codAtividade == x);
+                const atividade = atividades.find(item => item.id == x);
+
+                arrayClassificado.push({
+                    id: atividade.dataValues.id,
+                    atividade: atividade.dataValues.atividade,
+                    qtdAtividade: count[x],
+                    codigoAnuncio: anun.codAnuncio,
+                    nomeAnuncio: anun.descAnuncio,
+                    estado: anun.codUf,
+                    caderno: anun.codCaderno
+                });
+
+                //console.log(anun.dataValues)
+                //console.log()
+            }
+
+            console.log("debug------------------>2", [
+                { codUf: codCaderno[0].dataValues.codUf },
+                { codCaderno: codCaderno[0].dataValues.codCaderno }
+            ]);
+
+            const anuncioTeste = await Anuncio.findAndCountAll({
+                /*             order: [
+                                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                                ['createdAt', 'DESC'],
+                                ['codDuplicado', 'ASC'],
+                            ], */
+                where: {
+                    [Op.and]: [
+                        { codUf: codCaderno[0].dataValues.codUf },
+                        { codCaderno: codCaderno[0].dataValues.codCaderno }
+                    ]
+                }/* ,
+        limit: porPagina,
+        offset: offset */
+            });
+
+            res.json({
+                success: true,
+                data: arrayClassificado,
+                teste: anuncioTeste,
+                mosaico: codCaderno[0].dataValues.descImagem
+            });
+
+        } else {
+          /*   let codCaderno = await Caderno.findAll({
+                where: {
+                    //codUf: req.params.uf,
+                    [Op.or]: [
+                        { nomeCaderno: req.params.caderno },
+                        //{ codCaderno: req.params.caderno }, 
+                        //{ codUf: req.params.uf }
+                    ]
+                }
+            }); */
+
+            console.log(codCaderno, req.params.uf);
+            console.log("estreesse: ", req.params.caderno)
+
+
+            // Consultar o registro específico
+            const registroId = 126331; // O ID do registro que você quer buscar
+
+
+            /*      const anuncioChave = await Anuncio.findAll({
+                     where: {
+                         [Op.and]: [
+                             { codUf: codCaderno[0].dataValues.UF },
+                             { codCaderno: codCaderno[0].dataValues.nomeCaderno },
+                         ]
+     
+                     },
+                     order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
+                     attributes: ['codAtividade', 'codAnuncio']
+                 }); */
+
+            //console.log("estreesse: ", anuncioChave)
+
+
+     /*        const anuncio = await Anuncio.findAndCountAll({
+                where: {
+                    [Op.and]: [
+                        { codUf: codCaderno[0].dataValues.UF },
+                        { codCaderno: codCaderno[0].dataValues.nomeCaderno },
+                    ]
+
+                },
+                order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
+                limit: 10,          // Tamanho da página
+                offset: offset           // Registros ignorados
+
+            });
+
+            console.log("estreesse: ", anuncio.count, offset)
+            console.log("estreesse: ", req.params.uf)
+
+            if (anuncio.count < 1) {
+                res.json({
+                    success: false,
+                    message: "caderno não localizado"
+                });
+
+                return;
+            };
+
+            const count = anuncio.rows.reduce((acc, item) => {
+                // Incrementa o contador do codAtividade no acumulador
+                acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+                return acc;
+            }, {});
+
+            const atividades = await Atividade.findAll();
+
+            //console.log("--------------====> ", atividades[0].dataValues)
+
+            function removerAcentosESpeciaisComRegex(str) {
+                return str
+                    .replace(/[ÀÁÂÃÄÅàáâãäå]/g, 'a')
+                    .replace(/[ÈÉÊËèéêë]/g, 'e')
+                    .replace(/[ÌÍÎÏìíîï]/g, 'i')
+                    .replace(/[ÒÓÔÕÖØòóôõöø]/g, 'o')
+                    .replace(/[ÙÚÛÜùúûü]/g, 'u')
+                    .replace(/[Çç]/g, 'c')
+                    .replace(/[Ññ]/g, 'n')
+                    .replace(/[^a-zA-Z0-9\s]/g, ''); // Remove outros caracteres especiais
+            }
+
+            const arrayClassificado = [];
+
+            for (let x in count) {
+                const anun = anuncio.rows.find(item => item.codAtividade == x);
+                const atividade = atividades.find(item => removerAcentosESpeciaisComRegex(item.atividade.toLowerCase()) == removerAcentosESpeciaisComRegex(x.toLowerCase()));
+                //const atividade = atividades.find(item => item.id == x);
+
+                arrayClassificado.push({
+                    id: atividade.dataValues.id,
+                    atividade: atividade.dataValues.atividade,
+                    qtdAtividade: count[x],
+                    codigoAnuncio: anun.codAnuncio,
+                    nomeAnuncio: anun.descAnuncio,
+                    estado: anun.codUf,
+                    caderno: anun.codCaderno
+                });
+
+                //console.log(anun.dataValues)
+                //console.log()
+            }
+
+            console.log("debug------------------>3", [
+                { codUf: codCaderno[0].dataValues.codUf },
+                { codCaderno: codCaderno[0].dataValues.codCaderno }
+            ]);
+ */
+
+
+            /*            const resultado = await database.query(`
+                           SELECT codAnuncio, codAtividade, 
+                           CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC) / 10) AS 'page_number' 
+                           FROM anuncio 
+                           WHERE codUf = :codUf AND codCaderno = :codCaderno
+                           ORDER BY codAtividade ASC
+                       `, {
+                           replacements: {
+                               codUf: codCaderno[0].dataValues.UF,
+                               codCaderno: codCaderno[0].dataValues.nomeCaderno,
+                               codAnuncio: 126313
+                           },
+                           type: database.QueryTypes.SELECT
+                       });
+                       
+                         
+                         
+                         
+                         let byIndex = resultado.find(item => item.codAnuncio == 126313);
+                         console.log('Resultado:', byIndex); */
+
+            let quantidadeGeral = await Anuncio.findAndCountAll({
+                where: {
+                    [Op.and]: [
+                        { codUf: req.params.uf },
+                        { codCaderno: req.params.caderno },
+                    ]
+                },
+                attributes: ['codAnuncio'],
+                raw: true
+            });
+
+
+            if (req.query.idd && req.query.unique == false) {
+                let anuncioIdd = await Anuncio.findAndCountAll({
                     where: {
                         [Op.and]: [
                             { codUf: codCaderno[0].dataValues.UF },
@@ -1807,9 +2235,13 @@ module.exports = {
                     teste: anuncioTeste,
                     mosaico: codCaderno[0].dataValues.descImagem,
                     qtdaConsulta: quantidadeGeral.count,
-                    paginaLocalizada: anuncioIdd
+                    paginaLocalizada: anuncioIdd.page,
+                    pagina: paginaAtual
                 });
             } else {
+
+                console.log("dasdasdasdsa", 2, paginaAtual)
+               
                 let quantidadeGeral = await Anuncio.findAndCountAll({
                     where: {
                         [Op.and]: [
@@ -1825,7 +2257,7 @@ module.exports = {
                         [Op.and]: [
                             { codUf: codCaderno[0].dataValues.UF },
                             { codCaderno: codCaderno[0].dataValues.nomeCaderno },
-                            { page: paginaAtual }
+                            { page: 1 }
                         ]
                     },
                     order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
@@ -1838,7 +2270,8 @@ module.exports = {
                     data: arrayClassificado,
                     teste: anuncioTeste,
                     mosaico: codCaderno[0].dataValues.descImagem,
-                    qtdaConsulta: quantidadeGeral.count
+                    qtdaConsulta: quantidadeGeral.count,
+                    paginaLocalizada: paginaAtual
                 });
             }
 

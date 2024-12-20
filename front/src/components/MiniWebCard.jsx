@@ -37,7 +37,7 @@ function MiniWebCard(props) {
     useEffect(() => {
         setParceiros(props.ids)
         props.data.anuncios.map(item => setImg(item.descImagem))
-
+        
         if (props.codImg == 0 || props.codImg == "teste") {
             setImgDefault(false);
         } else {

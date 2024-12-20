@@ -55,6 +55,7 @@ function Caderno() {
   const [pageNumberUnique, setPageNumberUnique] = useState(true);
   const [ufs, setUfs] = useState([]);
   const [cadernos, setCadernos] = useState([]);
+  const [unique, setUnique] = useState(false);
 
   useEffect(() => {
 
@@ -105,13 +106,17 @@ function Caderno() {
       }
     }
     async function buscarAtividade() {
-      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}`)
+      console.log(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}&unique=${unique}`)
+      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}&unique=${unique}`)
         .then(x => x.json())
         .then(async res => {
           console.log(res, res.teste.count)
           if (res.success) {
 
-            setNumberPage(res.paginaLocalizada.page);
+            if(!unique) {
+              setNumberPage(res.paginaLocalizada);
+
+            }
 
             const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
             const valores = [...new Set(codigosAtividades)];
@@ -121,15 +126,15 @@ function Caderno() {
 
             //const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
 
-            let result = res.teste.rows.filter(category =>
+         /*    let result = res.teste.rows.filter(category =>
               res.data.some(anuncio => category.id === anuncio.codAtividade)
-            );
+            ); */
 
-            const arr = [];
-
-            let result1 = res.data.map((category) => {
+            const arr = res.teste.rows;
+/* 
+            let result1 = res.teste.rows.map((category) => {
               // Filtra os anúncios que correspondem à categoria atual
-              let teste = res.teste.rows.filter(anuncio => category.atividade.toLowerCase() == anuncio.codAtividade.toLowerCase());
+              let teste = res.teste.rows.filter(anuncio => category.codAtividade.toLowerCase() == anuncio.codAtividade.toLowerCase());
               //console.log(codAtividade)
               // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
               category.kledisom = teste;
@@ -143,13 +148,13 @@ function Caderno() {
 
               // Retorna o objeto category modificado
               return category;
-            });
+            }); */
 
             //console.log(result1);
 
             // Atualiza o estado com os dados paginados
-            setMinisitio({ anuncios: result1 });
-            setNomeAtividade(result1);
+            setMinisitio({ anuncios: res.teste.rows });
+            setNomeAtividade(res.teste.rows);
 
             /*     setMinisitio({
                   anuncios: paginatedResult.data,
@@ -1074,6 +1079,7 @@ function Caderno() {
     }
 
     setNumberPage(numberPage + 1);
+    setUnique(true);
     console.log(numberPage + 1);
 
 
@@ -1083,7 +1089,8 @@ function Caderno() {
     //setNomeAtividade([]);
   }
   function prevPage() {
-    if (numberPage <= minisitio.totalPaginas) {
+    console.log(minisitio.totalPaginas)
+    if (numberPage == 1) {
       alert("Você está na primeira página!");
       return;
     }
