@@ -500,6 +500,12 @@ const Anuncio = database.define('anuncio', {
         } */
     },
 
+    descChavePix: {
+        type: Sequelize.TEXT(255),
+        allowNull: true,
+        unique: false
+    },
+
     dueDate: {
         type: Sequelize.DATE,
         allowNull: true

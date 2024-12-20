@@ -51,7 +51,7 @@ function Caderno() {
   const caderno = pegarParam.get('caderno');
   const estado = pegarParam.get('estado');
 
-  const [numberPage, setNumberPage] = useState(1);
+  const [numberPage, setNumberPage] = useState(1);//6205
   const [pageNumberUnique, setPageNumberUnique] = useState(true);
   const [ufs, setUfs] = useState([]);
   const [cadernos, setCadernos] = useState([]);
@@ -74,7 +74,7 @@ function Caderno() {
         setUfs(nome.sigla_uf); 
       }); */
 
-
+    console.log("asaskfasdfsd", numberPage)
     setLoading(true);
     async function buscarAtividadeold() {
       try {
@@ -105,11 +105,13 @@ function Caderno() {
       }
     }
     async function buscarAtividade() {
-      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${page}`)
+      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}`)
         .then(x => x.json())
         .then(async res => {
-          console.log(res,  caderno)
+          console.log(res, res.teste.count)
           if (res.success) {
+
+            setNumberPage(res.paginaLocalizada.page);
 
             const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
             const valores = [...new Set(codigosAtividades)];
@@ -127,11 +129,12 @@ function Caderno() {
 
             let result1 = res.data.map((category) => {
               // Filtra os anúncios que correspondem à categoria atual
-              let teste = res.teste.rows.filter(anuncio => category.atividade === anuncio.codAtividade);
-
+              let teste = res.teste.rows.filter(anuncio => category.atividade.toLowerCase() == anuncio.codAtividade.toLowerCase());
+              //console.log(codAtividade)
               // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
               category.kledisom = teste;
               teste.forEach((item) => {
+                console.log(item.codAtividade == category.atividade)
                 item.codAtividade = category.atividade; //adiciona as categorias
                 arr.push(item); //salva so os anuncios
               });
@@ -148,10 +151,16 @@ function Caderno() {
             setMinisitio({ anuncios: result1 });
             setNomeAtividade(result1);
 
+            /*     setMinisitio({
+                  anuncios: paginatedResult.data,
+                  totalPaginas: Math.ceil(total / limitPerPage),
+                  paginaAtual: pageNumber
+                }); */
 
-
+               let totalPaginas = Math.ceil(res.qtdaConsulta / 10);
+              let paginaAtual = numberPage;
             if (pageNumberUnique) {
-console.log("arr", arr)
+              console.log("arr", arr)
               arr.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
 
               const itemIndex = arr.findIndex(item => item.codAnuncio == id) + 1;
@@ -159,11 +168,14 @@ console.log("arr", arr)
               const pageNumberClass = Math.ceil(itemIndex / 10);
 
               //console.log(`pagina ${pageNumberClass}`, itemIndex);
-              setNumberPage(pageNumberClass);
-              paginator(arr, pageNumberClass);/*  */
+              //setNumberPage(pageNumberClass);
+
+
+
+              paginator(arr, pageNumberClass, totalPaginas, paginaAtual);/*  */
 
             } else {
-              paginator(arr);/*  */
+              paginator(arr, "1", totalPaginas, paginaAtual);/*  */
             }
           }
 
@@ -406,8 +418,9 @@ console.log("arr", arr)
     }
 
 
-    function paginator(param, pageNumberClass) {
+    function paginator(param, pageNumberClass, total, atual) {
       // Array de 3000 objetos (exemplo)
+      console.log(param, total, pageNumberClass, numberPage)
       let arrayDeObjetos = Array.from({ length: 3000 }, (_, i) => ({ id: i + 1 }));
 
       param.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
@@ -450,16 +463,16 @@ console.log("arr", arr)
       //setNomeAtividade(paginatedResult.data);
 
       //console.log(currentPageData)
-      //console.log(pageNumber)
-      setMinisitio({
-        anuncios: paginatedResult.data,
-        totalPaginas: Math.ceil(param.length / limitPerPage),
-        paginaAtual: pageNumber
-      });
+      console.log("drama total: ", total)
+         setMinisitio({
+           anuncios: paginatedResult.data,
+           totalPaginas: total,
+           paginaAtual: atual
+         }); 
 
       console.log('lsaflsjkdhfasdjklfsd: ', {
         anuncios: paginatedResult.data,
-        totalPaginas: Math.ceil(param.length / limitPerPage),
+        totalPaginas: Math.ceil(total / limitPerPage),
         paginaAtual: pageNumber
       })
 
@@ -803,27 +816,27 @@ console.log("arr", arr)
       let division = list / 2;
       //let division = list;
 
-   /*    const arrayParte1 = division < 5 ? removeDuplicate.slice(0, 4) : removeDuplicate.slice(0, division);
-      const arrayParte2 = division == 4 ? removeDuplicate.slice(4) : []; */
-       
-    /*    const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
-      const arrayParte2 = division > 5 ? removeDuplicate.slice(division) : [];  */
+      /*    const arrayParte1 = division < 5 ? removeDuplicate.slice(0, 4) : removeDuplicate.slice(0, division);
+         const arrayParte2 = division == 4 ? removeDuplicate.slice(4) : []; */
+
+      /*    const arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
+        const arrayParte2 = division > 5 ? removeDuplicate.slice(division) : [];  */
 
 
       var arrayParte1;
       var arrayParte2;
+//console.log("--------------------------->",  minisitio.anuncios)
 
-
-      if(minisitio.anuncios.length == 5) {
-         arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, 6);
-         arrayParte2 = division >= 5 ? removeDuplicate.slice(6) : [];
-      } else if(minisitio.anuncios.length > 5) {
-         arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
-         arrayParte2 = division > 5 ? removeDuplicate.slice(division) : []; 
-      } else if(minisitio.anuncios.length < 5) {
-         arrayParte1 = division <= 4 ? removeDuplicate.slice(0, division) : removeDuplicate.slice(0, division);
-         arrayParte2 = division <= 4 ? removeDuplicate.slice(division) : []; 
-      } 
+      if (minisitio.anuncios.length == 5) {
+        arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, 6);
+        arrayParte2 = division >= 5 ? removeDuplicate.slice(6) : [];
+      } else if (minisitio.anuncios.length > 5) {
+        arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, division);
+        arrayParte2 = division > 5 ? removeDuplicate.slice(division) : [];
+      } else if (minisitio.anuncios.length < 5) {
+        arrayParte1 = division <= 4 ? removeDuplicate.slice(0, division) : removeDuplicate.slice(0, division);
+        arrayParte2 = division <= 4 ? removeDuplicate.slice(division) : [];
+      }
 
       // Remover duplicados comparando objetos
       const arraySemDuplicados = arrayParte1.filter((item, index, self) =>
@@ -1251,9 +1264,9 @@ console.log("arr", arr)
                           celular={anuncio.descCelular}
                           codDesconto={anuncio.codDesconto}
                           ids={anuncio.codDesconto}
-                          /* ids={buscarId(anuncio.codDesconto)} */
+                        /* ids={buscarId(anuncio.codDesconto)} */
                         />
-                        
+
                         /* } <MsgProgramada />
                           if(i >= minisitio.anuncios.length-1) {
                            console.log("ultima render");
