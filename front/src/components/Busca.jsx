@@ -176,8 +176,8 @@ function Busca(props) {
         } else if (cadernoCidade === "TODO") {
             alert("escolha uma cidade");
         } else {
-            fetch(`${masterPath.url}/admin/anuncio/classificado/${codCaderno}/${codUf}`)
-                /* fetch(`${masterPath.url}/admin/anuncio/classificado/${cadernoCidade}/${cadernoUf}`) */
+            window.location = `/caderno-geral/${codCaderno}/${codUf}`;
+            /* fetch(`${masterPath.url}/admin/anuncio/classificado/${codCaderno}/${codUf}`)
                 .then(x => x.json())
                 .then(res => {
                     console.log(res)
@@ -188,7 +188,7 @@ function Busca(props) {
                         alert("caderno não localizado")
                     }
 
-                })
+                }) */
 
         }
     };
