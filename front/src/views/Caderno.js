@@ -1076,9 +1076,9 @@ function Caderno() {
       return;
     }
 
-    setNumberPage(numberPage + 1);
+    setNumberPage(Number(numberPage) + 1);
     setUnique(true);
-    console.log(numberPage + 1);
+    console.log(Number(numberPage) + 1);
 
 
     if (book != undefined && id != undefined) {
@@ -1093,8 +1093,8 @@ function Caderno() {
       return;
     }
 
-    setNumberPage(numberPage - 1);
-    console.log(numberPage - 1);
+    setNumberPage(Number(numberPage) - 1);
+    console.log(Number(numberPage) - 1);
 
 
     if (book != undefined && id != undefined) {
