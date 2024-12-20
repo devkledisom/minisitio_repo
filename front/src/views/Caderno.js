@@ -106,7 +106,6 @@ function Caderno() {
       }
     }
     async function buscarAtividade() {
-      console.log(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}&unique=${unique}`)
       fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}&unique=${unique}`)
         .then(x => x.json())
         .then(async res => {
@@ -115,7 +114,6 @@ function Caderno() {
 
             if(!unique) {
               setNumberPage(res.paginaLocalizada);
-
             }
 
             const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);

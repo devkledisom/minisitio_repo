@@ -1773,8 +1773,9 @@ module.exports = {
             });
 
 
-            if (req.query.idd && req.query.unique == false) {
-                let anuncioIdd = await Anuncio.findAndCountAll({
+
+            if (req.query.unique == 'false') {
+                let anuncioIdd = await Anuncio.findOne({
                     where: {
                         [Op.and]: [
                             { codUf: req.params.uf },
@@ -1802,12 +1803,11 @@ module.exports = {
 
                res.json({
                     success: true,
-                    data: arrayClassificado,
+                    //data: arrayClassificado,
                     teste: anuncioTeste,
                     mosaico: 0,
                     qtdaConsulta: quantidadeGeral.count,
                     paginaLocalizada: anuncioIdd.page,
-                    pagina: paginaAtual
                 }); 
             } else {
 
