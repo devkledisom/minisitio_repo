@@ -1204,14 +1204,14 @@ module.exports = {
                          { codCaderno: codCaderno[0].dataValues.nomeCaderno } */
                     ]
                 },
-              attributes: [
-                'codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio',
-                [Sequelize.fn('COUNT', Sequelize.col('codAtividade')), 'quantidade']
-              ],
-              group: ['codAtividade'],
-              order: [['codAtividade', 'ASC']]
+                attributes: [
+                    'codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio',
+                    [Sequelize.fn('COUNT', Sequelize.col('codAtividade')), 'quantidade']
+                ],
+                group: ['codAtividade'],
+                order: [['codAtividade', 'ASC']]
             });
-        
+
             //console.log("resultado", result.map(r => r.toJSON())); // Resultado formatado
 
             res.json({
@@ -1223,11 +1223,11 @@ module.exports = {
                 kledisom: 123
             });
 
-          } catch (error) {
+        } catch (error) {
             console.error('Erro ao buscar dados:', error);
-          }
+        }
 
-         
+
 
         return;
 
@@ -1338,17 +1338,17 @@ module.exports = {
             }
         });
 
-   /*      const anuncio2 = await Anuncio.findAndCountAll({
-            where: {
-                [Op.and]: [
-                    { codUf: req.params.uf },
-                    { codCaderno: req.params.caderno }
-                ]
-            } ,
-            order: [
-                ['nomeAtividade', 'ASC'],
-            ] 
-        }); */
+        /*      const anuncio2 = await Anuncio.findAndCountAll({
+                 where: {
+                     [Op.and]: [
+                         { codUf: req.params.uf },
+                         { codCaderno: req.params.caderno }
+                     ]
+                 } ,
+                 order: [
+                     ['nomeAtividade', 'ASC'],
+                 ] 
+             }); */
 
         res.json({
             success: true,
@@ -1544,6 +1544,62 @@ module.exports = {
     },
     listarClassificadoGeral: async (req, res) => {
 
+        const page = req.query.page ? parseInt(req.query.page) : 1;
+        const limit = 10;
+        //const offset = (page - 1) * limit;
+        const offset = Math.max(0, (page - 1) * limit);
+
+        const [quantidadeGeral, anuncioIdd] = await Promise.all([
+            Anuncio.count({
+                where: { codUf: req.params.uf, codCaderno: req.params.caderno },
+            }),
+            req.query.unique == 'false'
+                ? Anuncio.findOne({
+                    where: {
+                        codUf: req.params.uf,
+                        codCaderno: req.params.caderno,
+                        codAnuncio: req.query.idd,
+                    },
+                    attributes: ['page'],
+                    raw: true,
+                })
+                : null,
+        ]);
+
+        const pageToQuery = req.query.unique == 'false' && anuncioIdd ? anuncioIdd.page : page;
+
+        console.log("daskdaklsdjalkj",anuncioIdd, page, pageToQuery)
+     
+        const anuncioTeste = await Anuncio.findAndCountAll({
+            where: {
+                [Op.and]: [
+                    { codUf: req.params.uf },
+                    { codCaderno: req.params.caderno },
+                    { page: pageToQuery },
+                ],
+            },
+            order: [['codAtividade', 'ASC']],
+            limit,
+            offset,
+            attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'page'],
+        });
+
+        console.log("daskdaklsdjalkj",anuncioIdd, page, anuncioTeste.rows)
+     
+        res.json({
+            success: true,
+            teste: anuncioTeste,
+            mosaico: 0,
+            qtdaConsulta: quantidadeGeral,
+            paginaLocalizada: pageToQuery,
+        });
+
+
+
+
+    },
+    listarClassificadoGeralold3: async (req, res) => {
+
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
 
@@ -1671,17 +1727,17 @@ module.exports = {
             });
 
         } else {
-     /*        let codCaderno = await Caderno.findAll({
-                where: {
-                    //codUf: req.params.uf,
-                    [Op.or]: [
-                        { nomeCaderno: req.params.caderno },
-                        //{ codCaderno: req.params.caderno }, 
-                        //{ codUf: req.params.uf }
-                    ]
-                },
-                attributes: ['descImagem']
-            });  */
+            /*        let codCaderno = await Caderno.findAll({
+                       where: {
+                           //codUf: req.params.uf,
+                           [Op.or]: [
+                               { nomeCaderno: req.params.caderno },
+                               //{ codCaderno: req.params.caderno }, 
+                               //{ codUf: req.params.uf }
+                           ]
+                       },
+                       attributes: ['descImagem']
+                   });  */
 
             console.log(codCaderno, req.params.uf);
             console.log("estreesse: ", req.params.caderno)
@@ -1702,80 +1758,80 @@ module.exports = {
             //console.log("estreesse: ", anuncioChave)
 
 
-     /*        const anuncio = await Anuncio.findAndCountAll({
-                where: {
-                    [Op.and]: [
-                        { codUf: codCaderno[0].dataValues.UF },
-                        { codCaderno: codCaderno[0].dataValues.nomeCaderno },
-                    ]
-
-                },
-                order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
-                limit: 10,          // Tamanho da página
-                offset: offset           // Registros ignorados
-
-            });
-
-            console.log("estreesse: ", anuncio.count, offset)
-            console.log("estreesse: ", req.params.uf)
-
-            if (anuncio.count < 1) {
-                res.json({
-                    success: false,
-                    message: "caderno não localizado"
-                });
-
-                return;
-            };
-
-            const count = anuncio.rows.reduce((acc, item) => {
-                // Incrementa o contador do codAtividade no acumulador
-                acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
-                return acc;
-            }, {});
-
-            const atividades = await Atividade.findAll();
-
-            //console.log("--------------====> ", atividades[0].dataValues)
-
-            function removerAcentosESpeciaisComRegex(str) {
-                return str
-                    .replace(/[ÀÁÂÃÄÅàáâãäå]/g, 'a')
-                    .replace(/[ÈÉÊËèéêë]/g, 'e')
-                    .replace(/[ÌÍÎÏìíîï]/g, 'i')
-                    .replace(/[ÒÓÔÕÖØòóôõöø]/g, 'o')
-                    .replace(/[ÙÚÛÜùúûü]/g, 'u')
-                    .replace(/[Çç]/g, 'c')
-                    .replace(/[Ññ]/g, 'n')
-                    .replace(/[^a-zA-Z0-9\s]/g, ''); // Remove outros caracteres especiais
-            }
-
-            const arrayClassificado = [];
-
-            for (let x in count) {
-                const anun = anuncio.rows.find(item => item.codAtividade == x);
-                const atividade = atividades.find(item => removerAcentosESpeciaisComRegex(item.atividade.toLowerCase()) == removerAcentosESpeciaisComRegex(x.toLowerCase()));
-                //const atividade = atividades.find(item => item.id == x);
-
-                arrayClassificado.push({
-                    id: atividade.dataValues.id,
-                    atividade: atividade.dataValues.atividade,
-                    qtdAtividade: count[x],
-                    codigoAnuncio: anun.codAnuncio,
-                    nomeAnuncio: anun.descAnuncio,
-                    estado: anun.codUf,
-                    caderno: anun.codCaderno
-                });
-
-                //console.log(anun.dataValues)
-                //console.log()
-            }
-
-            console.log("debug------------------>3", [
-                { codUf: codCaderno[0].dataValues.codUf },
-                { codCaderno: codCaderno[0].dataValues.codCaderno }
-            ]);
- */
+            /*        const anuncio = await Anuncio.findAndCountAll({
+                       where: {
+                           [Op.and]: [
+                               { codUf: codCaderno[0].dataValues.UF },
+                               { codCaderno: codCaderno[0].dataValues.nomeCaderno },
+                           ]
+       
+                       },
+                       order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
+                       limit: 10,          // Tamanho da página
+                       offset: offset           // Registros ignorados
+       
+                   });
+       
+                   console.log("estreesse: ", anuncio.count, offset)
+                   console.log("estreesse: ", req.params.uf)
+       
+                   if (anuncio.count < 1) {
+                       res.json({
+                           success: false,
+                           message: "caderno não localizado"
+                       });
+       
+                       return;
+                   };
+       
+                   const count = anuncio.rows.reduce((acc, item) => {
+                       // Incrementa o contador do codAtividade no acumulador
+                       acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+                       return acc;
+                   }, {});
+       
+                   const atividades = await Atividade.findAll();
+       
+                   //console.log("--------------====> ", atividades[0].dataValues)
+       
+                   function removerAcentosESpeciaisComRegex(str) {
+                       return str
+                           .replace(/[ÀÁÂÃÄÅàáâãäå]/g, 'a')
+                           .replace(/[ÈÉÊËèéêë]/g, 'e')
+                           .replace(/[ÌÍÎÏìíîï]/g, 'i')
+                           .replace(/[ÒÓÔÕÖØòóôõöø]/g, 'o')
+                           .replace(/[ÙÚÛÜùúûü]/g, 'u')
+                           .replace(/[Çç]/g, 'c')
+                           .replace(/[Ññ]/g, 'n')
+                           .replace(/[^a-zA-Z0-9\s]/g, ''); // Remove outros caracteres especiais
+                   }
+       
+                   const arrayClassificado = [];
+       
+                   for (let x in count) {
+                       const anun = anuncio.rows.find(item => item.codAtividade == x);
+                       const atividade = atividades.find(item => removerAcentosESpeciaisComRegex(item.atividade.toLowerCase()) == removerAcentosESpeciaisComRegex(x.toLowerCase()));
+                       //const atividade = atividades.find(item => item.id == x);
+       
+                       arrayClassificado.push({
+                           id: atividade.dataValues.id,
+                           atividade: atividade.dataValues.atividade,
+                           qtdAtividade: count[x],
+                           codigoAnuncio: anun.codAnuncio,
+                           nomeAnuncio: anun.descAnuncio,
+                           estado: anun.codUf,
+                           caderno: anun.codCaderno
+                       });
+       
+                       //console.log(anun.dataValues)
+                       //console.log()
+                   }
+       
+                   console.log("debug------------------>3", [
+                       { codUf: codCaderno[0].dataValues.codUf },
+                       { codCaderno: codCaderno[0].dataValues.codCaderno }
+                   ]);
+        */
 
 
             /*            const resultado = await database.query(`
@@ -1835,18 +1891,18 @@ module.exports = {
                         ]
                     },
                     order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
-                    attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'page' ],
+                    attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'page'],
 
                 });
 
-               res.json({
+                res.json({
                     success: true,
                     //data: arrayClassificado,
                     teste: anuncioTeste,
                     mosaico: 0,
                     qtdaConsulta: quantidadeGeral.count,
                     paginaLocalizada: anuncioIdd.page,
-                }); 
+                });
             } else {
 
                 const anuncioTeste = await Anuncio.findAndCountAll({
@@ -1858,7 +1914,7 @@ module.exports = {
                         ]
                     },
                     order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
-                    attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'page' ],
+                    attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'page'],
 
                 });
 
@@ -2098,16 +2154,16 @@ module.exports = {
             });
 
         } else {
-          /*   let codCaderno = await Caderno.findAll({
-                where: {
-                    //codUf: req.params.uf,
-                    [Op.or]: [
-                        { nomeCaderno: req.params.caderno },
-                        //{ codCaderno: req.params.caderno }, 
-                        //{ codUf: req.params.uf }
-                    ]
-                }
-            }); */
+            /*   let codCaderno = await Caderno.findAll({
+                  where: {
+                      //codUf: req.params.uf,
+                      [Op.or]: [
+                          { nomeCaderno: req.params.caderno },
+                          //{ codCaderno: req.params.caderno }, 
+                          //{ codUf: req.params.uf }
+                      ]
+                  }
+              }); */
 
             console.log(codCaderno, req.params.uf);
             console.log("estreesse: ", req.params.caderno)
@@ -2132,80 +2188,80 @@ module.exports = {
             //console.log("estreesse: ", anuncioChave)
 
 
-     /*        const anuncio = await Anuncio.findAndCountAll({
-                where: {
-                    [Op.and]: [
-                        { codUf: codCaderno[0].dataValues.UF },
-                        { codCaderno: codCaderno[0].dataValues.nomeCaderno },
-                    ]
-
-                },
-                order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
-                limit: 10,          // Tamanho da página
-                offset: offset           // Registros ignorados
-
-            });
-
-            console.log("estreesse: ", anuncio.count, offset)
-            console.log("estreesse: ", req.params.uf)
-
-            if (anuncio.count < 1) {
-                res.json({
-                    success: false,
-                    message: "caderno não localizado"
-                });
-
-                return;
-            };
-
-            const count = anuncio.rows.reduce((acc, item) => {
-                // Incrementa o contador do codAtividade no acumulador
-                acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
-                return acc;
-            }, {});
-
-            const atividades = await Atividade.findAll();
-
-            //console.log("--------------====> ", atividades[0].dataValues)
-
-            function removerAcentosESpeciaisComRegex(str) {
-                return str
-                    .replace(/[ÀÁÂÃÄÅàáâãäå]/g, 'a')
-                    .replace(/[ÈÉÊËèéêë]/g, 'e')
-                    .replace(/[ÌÍÎÏìíîï]/g, 'i')
-                    .replace(/[ÒÓÔÕÖØòóôõöø]/g, 'o')
-                    .replace(/[ÙÚÛÜùúûü]/g, 'u')
-                    .replace(/[Çç]/g, 'c')
-                    .replace(/[Ññ]/g, 'n')
-                    .replace(/[^a-zA-Z0-9\s]/g, ''); // Remove outros caracteres especiais
-            }
-
-            const arrayClassificado = [];
-
-            for (let x in count) {
-                const anun = anuncio.rows.find(item => item.codAtividade == x);
-                const atividade = atividades.find(item => removerAcentosESpeciaisComRegex(item.atividade.toLowerCase()) == removerAcentosESpeciaisComRegex(x.toLowerCase()));
-                //const atividade = atividades.find(item => item.id == x);
-
-                arrayClassificado.push({
-                    id: atividade.dataValues.id,
-                    atividade: atividade.dataValues.atividade,
-                    qtdAtividade: count[x],
-                    codigoAnuncio: anun.codAnuncio,
-                    nomeAnuncio: anun.descAnuncio,
-                    estado: anun.codUf,
-                    caderno: anun.codCaderno
-                });
-
-                //console.log(anun.dataValues)
-                //console.log()
-            }
-
-            console.log("debug------------------>3", [
-                { codUf: codCaderno[0].dataValues.codUf },
-                { codCaderno: codCaderno[0].dataValues.codCaderno }
-            ]);
- */
+            /*        const anuncio = await Anuncio.findAndCountAll({
+                       where: {
+                           [Op.and]: [
+                               { codUf: codCaderno[0].dataValues.UF },
+                               { codCaderno: codCaderno[0].dataValues.nomeCaderno },
+                           ]
+       
+                       },
+                       order: [['codAtividade', 'ASC']], // Ordena alfabeticamente
+                       limit: 10,          // Tamanho da página
+                       offset: offset           // Registros ignorados
+       
+                   });
+       
+                   console.log("estreesse: ", anuncio.count, offset)
+                   console.log("estreesse: ", req.params.uf)
+       
+                   if (anuncio.count < 1) {
+                       res.json({
+                           success: false,
+                           message: "caderno não localizado"
+                       });
+       
+                       return;
+                   };
+       
+                   const count = anuncio.rows.reduce((acc, item) => {
+                       // Incrementa o contador do codAtividade no acumulador
+                       acc[item.codAtividade] = (acc[item.codAtividade] || 0) + 1;
+                       return acc;
+                   }, {});
+       
+                   const atividades = await Atividade.findAll();
+       
+                   //console.log("--------------====> ", atividades[0].dataValues)
+       
+                   function removerAcentosESpeciaisComRegex(str) {
+                       return str
+                           .replace(/[ÀÁÂÃÄÅàáâãäå]/g, 'a')
+                           .replace(/[ÈÉÊËèéêë]/g, 'e')
+                           .replace(/[ÌÍÎÏìíîï]/g, 'i')
+                           .replace(/[ÒÓÔÕÖØòóôõöø]/g, 'o')
+                           .replace(/[ÙÚÛÜùúûü]/g, 'u')
+                           .replace(/[Çç]/g, 'c')
+                           .replace(/[Ññ]/g, 'n')
+                           .replace(/[^a-zA-Z0-9\s]/g, ''); // Remove outros caracteres especiais
+                   }
+       
+                   const arrayClassificado = [];
+       
+                   for (let x in count) {
+                       const anun = anuncio.rows.find(item => item.codAtividade == x);
+                       const atividade = atividades.find(item => removerAcentosESpeciaisComRegex(item.atividade.toLowerCase()) == removerAcentosESpeciaisComRegex(x.toLowerCase()));
+                       //const atividade = atividades.find(item => item.id == x);
+       
+                       arrayClassificado.push({
+                           id: atividade.dataValues.id,
+                           atividade: atividade.dataValues.atividade,
+                           qtdAtividade: count[x],
+                           codigoAnuncio: anun.codAnuncio,
+                           nomeAnuncio: anun.descAnuncio,
+                           estado: anun.codUf,
+                           caderno: anun.codCaderno
+                       });
+       
+                       //console.log(anun.dataValues)
+                       //console.log()
+                   }
+       
+                   console.log("debug------------------>3", [
+                       { codUf: codCaderno[0].dataValues.codUf },
+                       { codCaderno: codCaderno[0].dataValues.codCaderno }
+                   ]);
+        */
 
 
             /*            const resultado = await database.query(`
@@ -2279,7 +2335,7 @@ module.exports = {
             } else {
 
                 console.log("dasdasdasdsa", 2, paginaAtual)
-               
+
                 let quantidadeGeral = await Anuncio.findAndCountAll({
                     where: {
                         [Op.and]: [

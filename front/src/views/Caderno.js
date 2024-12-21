@@ -116,11 +116,11 @@ function Caderno() {
               setNumberPage(res.paginaLocalizada);
             }
 
-            const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
+        /*     const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
             const valores = [...new Set(codigosAtividades)];
 
             const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
-            const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id));
+            const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id)); */
 
             //const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
 

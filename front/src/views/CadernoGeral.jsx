@@ -87,7 +87,7 @@ function Caderno(props) {
     fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
       .then(x => x.json())
       .then(res => {
-        console.log(res)
+        //console.log(res)
         if (res.success) {
           setClassificados(res.data);
           //setPathImg(res.teste.rows);
