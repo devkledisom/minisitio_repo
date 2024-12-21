@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { masterPath } from '../config/config';
+import { useQuery } from '@tanstack/react-query';
 
 //lib
 import Masonry from 'react-masonry-css';
@@ -57,8 +58,146 @@ function Caderno() {
   const [cadernos, setCadernos] = useState([]);
   const [unique, setUnique] = useState(false);
 
-  useEffect(() => {
+  
+  
+  //const {data, isError, isLoading} = useQuery({ queryKey: 'users', queryFn: buscarAtividade });
 
+
+ 
+
+  async function buscarAtividade() {
+    setLoading(true);
+    try {
+      const response = await fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}&unique=${unique}`);
+      const res = await response.json();
+      
+      if (res.success) {
+        if (!unique) {
+          setNumberPage(res.paginaLocalizada);
+        }
+  
+      /*   setMinisitio({ anuncios: res.teste.rows });
+        setNomeAtividade(res.teste.rows); */
+        setbtnNav(true);
+        setLoading(false);
+        //console.log(res)
+      }
+      return res;
+    } catch (error) {
+      console.error("Erro ao buscar atividade:", error);
+    }
+    
+  }
+
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ['users', numberPage, unique],  // Use os parâmetros relevantes como a chave da query
+    queryFn: buscarAtividade
+  });
+
+  useEffect(() => {
+  console.log(data)
+
+  if(!isLoading) {
+    setLoading(false);
+  }
+
+  if(data) {
+    setMinisitio({ anuncios: data.teste.rows, totalPaginas: data.qtdaConsulta, paginaAtual: data.paginaLocalizada  });
+    setNomeAtividade(data.teste.rows);
+  }
+
+    //paginaLocalizada
+
+//qtdaConsulta
+
+  },[data])
+  //console.log("Dados recebidos no onSuccess fora:", data);
+
+
+
+  //console.log("kledisom: ", data)
+  async function buscarAtividadevelha() {
+    fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}&unique=${unique}`)
+      .then(x => x.json())
+      .then(async res => {
+        console.log(res, res.teste.count)
+        if (res.success) {
+
+          if(!unique) {
+            setNumberPage(res.paginaLocalizada);
+          }
+
+      /*     const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
+          const valores = [...new Set(codigosAtividades)];
+
+          const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
+          const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id)); */
+
+          //const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
+
+       /*    let result = res.teste.rows.filter(category =>
+            res.data.some(anuncio => category.id === anuncio.codAtividade)
+          ); */
+
+          const arr = res.teste.rows;
+/* 
+          let result1 = res.teste.rows.map((category) => {
+            // Filtra os anúncios que correspondem à categoria atual
+            let teste = res.teste.rows.filter(anuncio => category.codAtividade.toLowerCase() == anuncio.codAtividade.toLowerCase());
+            //console.log(codAtividade)
+            // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+            category.kledisom = teste;
+            teste.forEach((item) => {
+              console.log(item.codAtividade == category.atividade)
+              item.codAtividade = category.atividade; //adiciona as categorias
+              arr.push(item); //salva so os anuncios
+            });
+
+            //console.log(arr)
+
+            // Retorna o objeto category modificado
+            return category;
+          }); */
+
+          //console.log(result1);
+
+          // Atualiza o estado com os dados paginados
+          setMinisitio({ anuncios: res.teste.rows });
+          setNomeAtividade(res.teste.rows);
+
+          /*     setMinisitio({
+                anuncios: paginatedResult.data,
+                totalPaginas: Math.ceil(total / limitPerPage),
+                paginaAtual: pageNumber
+              }); */
+
+             let totalPaginas = Math.ceil(res.qtdaConsulta / 10);
+            let paginaAtual = numberPage;
+          if (pageNumberUnique) {
+            console.log("arr", arr)
+            arr.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
+
+            const itemIndex = arr.findIndex(item => item.codAnuncio == id) + 1;
+
+            const pageNumberClass = Math.ceil(itemIndex / 10);
+
+            //console.log(`pagina ${pageNumberClass}`, itemIndex);
+            //setNumberPage(pageNumberClass);
+
+
+
+            //paginator(arr, pageNumberClass, totalPaginas, paginaAtual);/*  */
+
+          } else {
+            //paginator(arr, "1", totalPaginas, paginaAtual);/*  */
+          }
+        }
+
+      })
+  }
+
+  useEffect(() => {
+   
     fetch(`${masterPath.url}/cadernos`)
       .then((x) => x.json())
       .then((res) => {
@@ -75,8 +214,8 @@ function Caderno() {
         setUfs(nome.sigla_uf); 
       }); */
 
-    console.log("asaskfasdfsd", numberPage)
-    setLoading(true);
+    //console.log("asaskfasdfsd", numberPage)
+    //setLoading(true);
     async function buscarAtividadeold() {
       try {
         const res = await fetch(`${masterPath.url}/anuncios/${book}?page=${page}`, {
@@ -413,7 +552,7 @@ function Caderno() {
 
 
     if (book != undefined && id != undefined) {
-      buscarAtividade();
+      //buscarAtividade();
       console.log("primeiro")
     } else {
       buscarTodosClassificado();

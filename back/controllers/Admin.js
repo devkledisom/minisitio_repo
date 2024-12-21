@@ -1579,8 +1579,8 @@ module.exports = {
                 ],
             },
             order: [['codAtividade', 'ASC']],
-            limit,
-            offset,
+           /*  limit,
+            offset, */
             attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'page'],
         });
 
