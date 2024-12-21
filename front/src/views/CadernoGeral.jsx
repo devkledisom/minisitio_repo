@@ -90,7 +90,7 @@ function Caderno(props) {
         console.log(res)
         if (res.success) {
           setClassificados(res.data);
-          setPathImg(res.teste.rows);
+          //setPathImg(res.teste.rows);
           setMosaicoImg(res.mosaico);
           //console.log("caderno geral", res);
           setLoading(false);
@@ -186,9 +186,9 @@ function Caderno(props) {
                     {classificados.map(item => (
                       /* "/caderno/maceio/ziiz_569885_27" */
                       <li key={item.id}>
-                        <a href={`/caderno/${item.nomeAnuncio}_${item.codigoAnuncio}_${item.estado}?page=1&book=${item.caderno}&id=${item.codigoAnuncio}&caderno=${caderno}&estado=${estado}`} onClick={definePage}>
+                        <a href={`/caderno/${item.descAnuncio}_${item.codAnuncio}_${item.codUf}?page=1&book=${item.codCaderno}&id=${item.codAnuncio}&caderno=${item.codCaderno}&estado=${item.codUf}`} onClick={definePage}>
 
-                          {item.nomeAtividade} <span>{item.qtdAtividade} resultado</span>
+                          {item.codAtividade} <span>{item.quantidade} resultado</span>
                         </a>
                       </li>
                     ))}

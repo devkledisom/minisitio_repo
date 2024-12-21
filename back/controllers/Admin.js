@@ -1194,6 +1194,44 @@ module.exports = {
 
         console.log(req.params)
 
+        try {
+            const result = await Anuncio.findAll({
+                where: {
+                    [Op.and]: [
+                        { codUf: req.params.uf },
+                        { codCaderno: req.params.caderno }
+                        /*  { codUf: codCaderno[0].dataValues.UF },
+                         { codCaderno: codCaderno[0].dataValues.nomeCaderno } */
+                    ]
+                },
+              attributes: [
+                'codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio',
+                [Sequelize.fn('COUNT', Sequelize.col('codAtividade')), 'quantidade']
+              ],
+              group: ['codAtividade'],
+              order: [['codAtividade', 'ASC']]
+            });
+        
+            //console.log("resultado", result.map(r => r.toJSON())); // Resultado formatado
+
+            res.json({
+                success: true,
+                data: result.map(r => r.toJSON()),
+                teste: [],
+                //anuncio2: anuncio2,
+                mosaico: 0,
+                kledisom: 123
+            });
+
+          } catch (error) {
+            console.error('Erro ao buscar dados:', error);
+          }
+
+         
+
+        return;
+
+
         // Consulta para recuperar apenas os itens da página atual
         const codCaderno = await Caderno.findAll({
             where: {
@@ -1300,23 +1338,23 @@ module.exports = {
             }
         });
 
-        const anuncio2 = await Anuncio.findAndCountAll({
+   /*      const anuncio2 = await Anuncio.findAndCountAll({
             where: {
                 [Op.and]: [
                     { codUf: req.params.uf },
                     { codCaderno: req.params.caderno }
                 ]
-            }/* ,
+            } ,
             order: [
                 ['nomeAtividade', 'ASC'],
-            ] */
-        });
+            ] 
+        }); */
 
         res.json({
             success: true,
             data: arrayClassificado,
             teste: anuncioTeste,
-            anuncio2: anuncio2,
+            //anuncio2: anuncio2,
             mosaico: codCaderno[0].dataValues.descImagem,
             kledisom: 123
         });
