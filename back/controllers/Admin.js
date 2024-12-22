@@ -1581,7 +1581,7 @@ module.exports = {
             order: [['codAtividade', 'ASC']],
            /*  limit,
             offset, */
-            attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'page'],
+            attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page'],
         });
 
         console.log("daskdaklsdjalkj",anuncioIdd, page, anuncioTeste.rows)

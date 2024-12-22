@@ -44,6 +44,7 @@ function MiniWebCard(props) {
             setImgDefault(`files/${props.codImg}`);
         }
 
+       // console.log(props.codDesconto)
     }, [props]);
 
 

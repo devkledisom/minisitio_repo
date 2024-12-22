@@ -20,6 +20,7 @@ import Footer from '../components/Footer';
 import MsgProgramada from '../components/MsgProgramada';
 import MiniWebCardSimples from '../components/MiniWebCardSimples';
 import DistribuirAnuncios from './classificados/DistribuirAnuncios';
+import { use } from 'react';
 
 function Caderno() {
 
@@ -102,7 +103,7 @@ function Caderno() {
   }
 
   if(data) {
-    setMinisitio({ anuncios: data.teste.rows, totalPaginas: data.qtdaConsulta, paginaAtual: data.paginaLocalizada  });
+    setMinisitio({ anuncios: data.teste.rows, totalPaginas: Math.ceil(data.qtdaConsulta / 10), paginaAtual: data.paginaLocalizada  });
     setNomeAtividade(data.teste.rows);
   }
 
@@ -623,25 +624,6 @@ function Caderno() {
 
     };
 
-    function buscarId() {
-      fetch(`${masterPath.url}/admin/desconto/read/all`)
-        .then((x) => x.json())
-        .then((res) => {
-          if (res.success) {
-            setListaIds(res.data);
-
-          } else {
-            console.error("encontrado na base de dados")
-          }
-
-        })
-      return;
-    };
-
-    buscarId();
-
-
-
   }, [book, page, numberPage]);
 
 
@@ -665,233 +647,36 @@ function Caderno() {
 
   }, [id])
 
+
+  useEffect(() => {
+ 
+    function buscarId() {
+      fetch(`${masterPath.url}/admin/desconto/read/all`)
+        .then((x) => x.json())
+        .then((res) => {
+          if (res.success) {
+            setListaIds(res.data);
+
+          } else {
+            console.error("encontrado na base de dados")
+          }
+
+        })
+      return;
+    };
+
+    buscarId();
+  }, []) 
+
+
   function buscarId(id) {
-    const idEncontrado = listaIds.find(item => item.idDesconto == id);
+    const idEncontrado = listaIds.find(item => item.hash == id);
+    //console.log("kleidsom", id)
     return idEncontrado;
   };
 
 
 
-
-
-  useEffect(() => {
-    function mensagemProgramada() {
-      document.querySelectorAll('.msg-programada').forEach(item => item.remove());
-
-      const ads = document.querySelectorAll('.MiniWebCard');
-
-      if (ads.length > 0) {
-        let rectUm = ads[0].getBoundingClientRect();
-        let rectDois = ads[1].getBoundingClientRect();
-        let rectTres = ads[2].getBoundingClientRect();
-        let rectQuatro = ads[3].getBoundingClientRect();
-        let rectCinco = ads[4].getBoundingClientRect();
-        let rectSeis = ads[5].getBoundingClientRect();
-        let rectSete = ads[6].getBoundingClientRect();
-        let rectOito = ads[7].getBoundingClientRect();
-        let rectNove = ads[8].getBoundingClientRect();
-
-        const distance1 = rectDois.top - rectUm.bottom; // Distância vertical
-        const distance2 = rectTres.top - rectDois.bottom; // Distância vertical
-        const distance3 = rectQuatro.top - rectTres.bottom; // Distância vertical
-        const distance4 = rectCinco.top - rectQuatro.bottom; // Distância vertical
-        const distance5 = rectSeis.top - rectCinco.bottom; // Distância vertical
-        const distance6 = rectSete.top - rectSeis.bottom; // Distância vertical
-        const distance7 = rectOito.top - rectSete.bottom; // Distância vertical
-        const distance8 = rectNove.top - rectOito.bottom; // Distância vertical
-        //const distance9 = rectCinco.top - rectNove.bottom; // Distância vertical
-
-
-
-
-
-
-        /* console.log(`Distância vertical entre ${5} e ${6}: ${distance6}px`);  
-        console.log(`Distância vertical entre ${6} e ${7}: ${distance7}px`);  
-        console.log(`Distância vertical entre ${7} e ${8}: ${distance8}px`);   */
-
-        if (distance1 < 0) {
-          const tempDiv = document.createElement("div");
-          tempDiv.style.backgroundColor = 'red';
-          tempDiv.innerHTML = "dfahfdjkfh";
-          tempDiv.classList.add("msg-programada");
-
-          console.log(`Distância vertical entre ${0} e ${1}: ${distance1}px`);
-
-          // Insere a div antes do terceiro item
-          ads[0].insertAdjacentElement("afterend", tempDiv);
-        } else if (distance2 < 0) {
-          const tempDiv = document.createElement("div");
-          tempDiv.style.backgroundColor = 'red';
-          tempDiv.innerHTML = "dfahfdjkfh";
-          tempDiv.classList.add("msg-programada");
-
-          console.log(`Distância vertical entre ${1} e ${2}: ${distance2}px`);
-
-          // Insere a div antes do terceiro item
-          ads[1].insertAdjacentElement("afterend", tempDiv);
-        } else if (distance3 < 0) {
-          const tempDiv = document.createElement("div");
-          tempDiv.style.backgroundColor = 'red';
-          tempDiv.innerHTML = "dfahfdjkfh";
-          tempDiv.classList.add("msg-programada");
-
-          console.log(`Distância vertical entre ${2} e ${3}: ${distance3}px`);
-
-          // Insere a div antes do terceiro item
-          ads[2].insertAdjacentElement("afterend", tempDiv);
-        } else if (distance4 < 0) {
-          const tempDiv = document.createElement("div");
-          tempDiv.style.backgroundColor = 'red';
-          tempDiv.innerHTML = "dfahfdjkfh";
-          tempDiv.classList.add("msg-programada");
-
-          console.log(`Distância vertical entre ${3} e ${4}: ${distance4}px`);
-
-          // Insere a div antes do terceiro item
-          ads[4].insertAdjacentElement("afterend", tempDiv);
-        } else if (distance5 < 0) {
-          const tempDiv = document.createElement("div");
-          tempDiv.style.backgroundColor = 'red';
-          tempDiv.innerHTML = "dfahfdjkfh";
-          tempDiv.classList.add("msg-programada");
-
-          console.log(`Distância vertical entre ${4} e ${5}: ${distance5}px`);
-
-          // Insere a div antes do terceiro item
-          document.querySelector('.masonry-layout').appendChild(tempDiv);
-        }
-
-      }
-
-
-
-
-
-      /*   ads.forEach((item, i) => {
-          if (i < ads.length - 1) { // Garante que não tentamos acessar ads[i+1] no último item
-            let rectQuatro = item.getBoundingClientRect();
-            let rectCinco = ads[i + 1].getBoundingClientRect();
-            
-            const distance = rectCinco.top - rectQuatro.bottom; // Distância vertical
-            
-            console.log(`Distância vertical entre ${i} e ${i + 1}: ${distance}px`);  
-            console.log(item, ads[i + 1])
-    
-            if(i == 4) {
-              if(distance < 0) {
-                const tempDiv = document.createElement("div");
-                tempDiv.style.backgroundColor = 'red';
-                tempDiv.innerHTML = "dfahfdjkfh";
-                tempDiv.classList.add("msg-programada");
-         
-                // Insere a div antes do terceiro item
-                document.querySelector('.masonry-layout').appendChild(tempDiv);
-              }
-              console.log("5 elemento")
-            } else {
-              if(distance < 0) {
-                const tempDiv = document.createElement("div");
-                tempDiv.style.backgroundColor = 'red';
-                tempDiv.innerHTML = "dfahfdjkfh";
-                tempDiv.classList.add("msg-programada");
-         
-                // Insere a div antes do terceiro item
-                item.insertAdjacentElement("afterend", tempDiv);
-              }
-            }
-    
-          }
-        }); */
-
-
-
-
-
-
-      let quatro = document.querySelectorAll('.MiniWebCard')[4];
-      let cinco = document.querySelectorAll('.MiniWebCard')[5];
-
-
-      let start = 0;
-      let next = 1;
-
-      const atividadeTitles = document.querySelectorAll('.atividade-title');
-
-      atividadeTitles.forEach((item, i, currentArr) => {
-        // Certifique-se de que não estamos no último item
-        if (i < atividadeTitles.length - 1) {
-          let teste1 = item.getBoundingClientRect(); // Usando o item diretamente
-          let teste2 = atividadeTitles[i + 1].getBoundingClientRect();
-
-          const distance = teste2.top - teste1.bottom; // Distância vertical
-
-          //console.log(`Distância vertical entre ${i} e ${i + 1}: ${distance}px`);
-          //console.log(distance < 7, i)
-          if (distance < 7 && i < 4) {
-            //console.log("é maior")
-          }
-
-          if (distance <= -1) {
-
-            /*     const tempDiv = document.createElement("div");
-                tempDiv.style.backgroundColor = 'red';
-                tempDiv.innerHTML = "dfahfdjkfh"
-  
-                item.insertAdjacentElement("afterend", tempDiv);
-                 
-                return; */
-          }
-
-          /* if (distance <= -2000 && distance >= -2500 && start == 0) {
-  
-            document.querySelectorAll('.msg-programada').forEach(item => item.remove())
-  
-            console.log(currentArr)
-            const tempDiv = document.createElement("div");
-            tempDiv.style.backgroundColor = 'red';
-            tempDiv.innerHTML = "dfahfdjkfh";
-            tempDiv.classList.add("msg-programada")
-  
-  
-            //document.querySelectorAll('.atividade-title')[currentArr.length - 1].insertAdjacentElement("afterend", tempDiv);
-            start = 1;
-  
-            document.querySelector('.masonry-layout').appendChild(tempDiv);
-  
-  
-            // Renderiza o componente React dentro da div
-            ReactDOM.render(<MsgProgramada />, tempDiv);
-  
-            return;
-          } */
-
-        } else {
-          //console.log(`Não há próximo elemento para o índice ${i}`);
-        }
-      });
-
-
-
-
-    }
-
-    //mensagemProgramada();
-    /* 
-        let column1 = document.getElementById("col1");
-        let column2 = document.getElementById("col2");
-        let counter = 1; // Contador para rotular as divs
-    
-        setColumn1(column1.scrollHeight);
-        setColumn2(column1.clientHeight);
-     */
-
-
-
-
-
-
-  })
 
   const addDiv = () => {
     // Cria uma nova div e atualiza o estado
@@ -1160,6 +945,8 @@ function Caderno() {
       } */
 
 
+
+
     return (
 
       nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
@@ -1243,6 +1030,8 @@ function Caderno() {
   }
 
 
+
+
   return (
     <div className="App">
 
@@ -1311,8 +1100,8 @@ function Caderno() {
                           endereco={anuncio.descEndereco}
                           telefone={anuncio.descTelefone}
                           celular={anuncio.descCelular}
-                          codDesconto={anuncio.codDesconto}
-                          ids={anuncio.codDesconto}
+                          codDesconto={buscarId(anuncio.codDesconto)}
+                          ids={buscarId(anuncio.codDesconto)}
                         />
                         /* } <MsgProgramada />
                           if(i >= minisitio.anuncios.length-1) {
@@ -1407,7 +1196,7 @@ function Caderno() {
                           telefone={anuncio.descTelefone}
                           celular={anuncio.descCelular}
                           codDesconto={anuncio.codDesconto}
-                          ids={anuncio.codDesconto}
+                          ids={buscarId(anuncio.codDesconto)}
                         /* ids={buscarId(anuncio.codDesconto)} */
                         />
 
