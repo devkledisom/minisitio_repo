@@ -9,6 +9,7 @@ import { masterPath } from '../config/config';
 import '../assets/css/cadernoClassificado.css';
 
 import Mosaico from '../components/Mosaico';
+import MosaicoWebCard from '../components/MosaicoWebCard';
 import Busca from '../components/Busca';
 import MiniWebCard from '../components/MiniWebCard';
 import Nav from '../components/Nav';
@@ -35,6 +36,7 @@ function Caderno(props) {
   const [mosaicoImg, setMosaicoImg] = useState([]);
   const [smoot, setSmoot] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [nmAnuncio, setNmAnuncio] = useState(null);
 
   const location = useLocation();
 
@@ -156,7 +158,8 @@ function Caderno(props) {
 
 
       <header>
-        <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} />
+        {/* <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} /> */}
+        <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={window.location.href} />
       </header>
       <main>
         <Busca paginaAtual={"caderno"} />

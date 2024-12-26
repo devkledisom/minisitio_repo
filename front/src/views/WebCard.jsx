@@ -5,6 +5,7 @@ import '../assets/css/caderno.css';
 import { masterPath } from '../config/config';
 
 import MosaicoWebCard from '../components/MosaicoWebCard';
+import Mosaico from '../components/Mosaico';
 import Busca from '../components/Busca';
 import MiniWebCard from '../components/MiniWebCard';
 import Nav from '../components/Nav';
@@ -82,8 +83,8 @@ function WebCard() {
     return (
         <div className="App">
             <header>
-                {/* <Mosaico logoTop={true} borda="none" mosaicoImg={true} /> */}
-                <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={nmAnuncio} />
+               <Mosaico logoTop={true} borda="none" mosaicoImg={true} />
+                {/* <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={nmAnuncio} /> */}
             </header>
             <main>
                 <Busca />

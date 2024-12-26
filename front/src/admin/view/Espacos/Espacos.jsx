@@ -45,6 +45,7 @@ const Espacos = () => {
 
     useEffect(() => {
         setShowSpinner(true);
+       
 
         if (campoBusca.current.value != '') {
             Promise.all([
@@ -205,6 +206,7 @@ const Espacos = () => {
     };
 
     const formatData = (dataCompleta) => {
+        if (!dataCompleta) return;
         let dataTempo = dataCompleta.split('T');
         let dataOriginal = dataTempo[0].split('-');
 
@@ -212,6 +214,7 @@ const Espacos = () => {
     };
 
     const dataExpiracao = (dataCompleta) => {
+        if (!dataCompleta) return;
 
         let dataTempo = dataCompleta.split('T');
         let dataOriginal = dataTempo[0];
@@ -239,7 +242,7 @@ const Espacos = () => {
     };
 
     function exportExcell() {
-        fetch(`${masterPath.url}/admin/anuncio/export?limit=5000`, {
+         fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -252,7 +255,7 @@ const Espacos = () => {
                     //console.log(res);
                     window.location.href = res.downloadUrl;
                 }
-            })
+            }) 
     };
 
     function editRow() {
@@ -305,7 +308,7 @@ const Espacos = () => {
 
                 <article>
                     <div className="container-fluid">
-                        <div className='row px-4'>
+                        <div className='row px-4 table-perfil'>
                             <table className="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
@@ -330,7 +333,7 @@ const Espacos = () => {
                                         <th style={{ "width": "auto" }}>Email</th>
                                         <th style={{ "width": "auto" }}>Contato</th>
                                         <th style={{ "width": "auto" }}>Atividade Principal</th>
-
+                                        <th style={{ "width": "auto" }}>Link do perfil</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -338,7 +341,6 @@ const Espacos = () => {
 
 
                                         anuncios != '' && anuncios.message.anuncios.map((item) => {
-
                                             return (
                                                 <tr key={item.codAnuncio} id={item.codAnuncio} onClick={selecaoLinha}>
                                                     <td className=''>
@@ -365,6 +367,18 @@ const Espacos = () => {
                                                     <td>{item.loginEmail}</td>
                                                     <td>{item.loginContato}</td>
                                                     <td>{item.codAtividade}</td>
+                                                    <td>
+                                                        <a
+                                                            href={`/local/${item.descAnuncio}?id=${item.codAnuncio}`}
+                                                            className='text-decoration-none'
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            {`${masterPath.domain}/local/${encodeURIComponent(item.descAnuncio)}?id=${item.codAnuncio}`}
+                                                          {/*   <i class="fa fa-eye"></i>
+                                                            Ver */}
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             )
                                         })

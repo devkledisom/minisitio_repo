@@ -125,6 +125,7 @@ const Users = () => {
     };
 
     const formatData = (dataCompleta) => {
+        if (!dataCompleta) return;
         let dataTempo = dataCompleta.split('T');
         let dataOriginal = dataTempo[0].split('-');
 

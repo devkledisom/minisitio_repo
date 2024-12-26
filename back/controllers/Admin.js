@@ -8,6 +8,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server);
 const ExcelJS = require('exceljs');
+const masterPath = require('../config/config');
 
 //models
 const database = require('../config/db');
@@ -633,13 +634,12 @@ module.exports = {
         // Consulta para recuperar apenas os itens da página atual
         const Ids = await Descontos.findAndCountAll({
             order: [['dtCadastro', 'DESC']],
-            /*         where: {
-                        codCaderno: 2,
-                    }, */
             limit: porPagina,
             offset: offset
         });
 
+        /*         console.log(Ids.rows)
+        return; */
         // Número total de itens
         const totalItens = Ids.count;
         // Número total de páginas
@@ -679,24 +679,42 @@ module.exports = {
                 // Corrigir caracteres na descrição
                 item.dataValues.atividade = corrigirCaracteres(item.dataValues.descricao);
 
-                // Buscar a quantidade geral e adicionar como um novo dado
-                const result = await Anuncio.findAndCountAll({
-                    where: {
-                        codDesconto: item.dataValues.idDesconto
-                    }
-                });
 
-                // Adicionar o dado temporário
-                item.dataValues.qtdaGeral = result.count;
+                try {
+                    // Buscar a quantidade geral e adicionar como um novo dado
+                    const result = await Anuncio.findAndCountAll({
+                        where: {
+                            codDesconto: item.dataValues.hash
+                        }
+                    });
+
+                    if (result.count === 0) {
+                        // Tratar o caso em que codDesconto não existe
+                        console.log(`Nenhum registro encontrado para codDesconto: ${item.dataValues.hash}`);
+                        item.dataValues.qtdaGeral = 0; // Adicionar valor padrão ou ignorar
+                        /* await database.close(); */
+                    } else {
+                        // Adicionar o dado temporário
+                        item.dataValues.qtdaGeral = result.count;
+                        /* await database.close(); */
+                    }
+                } catch (err) {
+                    console.error('Erro ao buscar os dados:', err);
+                }
+
 
 
                 const user = await item.getUsuario();
                 //item.dataValues.nmUsuario = user.descNome;
+                console.log(user)
+                if (user) {
+                    item.dataValues = {
+                        nmUsuario: user.descNome, // Adiciona a nova propriedade no início
+                        ...item.dataValues, // Mantém as demais propriedades
+                    };
+                }
 
-                item.dataValues = {
-                    nmUsuario: user.descNome, // Adiciona a nova propriedade no início
-                    ...item.dataValues, // Mantém as demais propriedades
-                };
+
 
 
             })
@@ -1081,7 +1099,23 @@ module.exports = {
                 ['codDuplicado', 'ASC'],
             ],
             limit: porPagina,
-            offset: offset
+            offset: offset,
+            attributes: [
+                'codAnuncio',
+                'codOrigem',
+                'codDuplicado',
+                'descCPFCNPJ',
+                'descAnuncio',
+                'codTipoAnuncio',
+                'codCaderno',
+                'codUf',
+                'activate',
+                'descPromocao',
+                'createdAt',
+                'dueDate',
+                'codDesconto',
+                'codAtividade'
+            ]
         });
 
         // Número total de itens
@@ -1090,27 +1124,27 @@ module.exports = {
         const totalPaginas = Math.ceil(totalItens / porPagina);
 
         // Importe a biblioteca 'iconv-lite'
-        const iconv = require('iconv-lite');
-
-        // Função para corrigir caracteres codificados incorretamente
-        function corrigirCaracteres(cadeiaCodificada) {
-            // Decodifica a cadeia usando UTF-8
-            const buffer = Buffer.from(cadeiaCodificada, 'binary');
-            const cadeiaCorrigida = iconv.decode(buffer, 'utf-8');
-
-            return cadeiaCorrigida;
-        }
-
+        /*       const iconv = require('iconv-lite');
+      
+              // Função para corrigir caracteres codificados incorretamente
+              function corrigirCaracteres(cadeiaCodificada) {
+                  // Decodifica a cadeia usando UTF-8
+                  const buffer = Buffer.from(cadeiaCodificada, 'binary');
+                  const cadeiaCorrigida = iconv.decode(buffer, 'utf-8');
+      
+                  return cadeiaCorrigida;
+              }
+       */
         try {
             await Promise.all(anuncio.rows.map(async (anun, i) => {
-                const cader = await anun.getCaderno();
-                anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+                /*  const cader = await anun.getCaderno();
+                 anun.codCaderno = cader ? cader.nomeCaderno : "não registrado"; */
 
-                const estado = await anun.getUf();
+                //const estado = await anun.getUf();
                 //anun.codUf = estado.sigla_uf;
 
-                const desconto = await anun.getDesconto();
-                anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+                /*   const desconto = await anun.getDesconto();
+                  anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999"; */
 
                 const user = await anun.getUsuario();
                 //console.log("adjasldj",user)
@@ -1568,8 +1602,8 @@ module.exports = {
 
         const pageToQuery = req.query.unique == 'false' && anuncioIdd ? anuncioIdd.page : page;
 
-        console.log("daskdaklsdjalkj",anuncioIdd, page, pageToQuery)
-     
+        console.log("daskdaklsdjalkj", anuncioIdd, page, pageToQuery)
+
         const anuncioTeste = await Anuncio.findAndCountAll({
             where: {
                 [Op.and]: [
@@ -1579,13 +1613,13 @@ module.exports = {
                 ],
             },
             order: [['codAtividade', 'ASC']],
-           /*  limit,
-            offset, */
+            /*  limit,
+             offset, */
             attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page'],
         });
 
-        console.log("daskdaklsdjalkj",anuncioIdd, page, anuncioTeste.rows)
-     
+        console.log("daskdaklsdjalkj", anuncioIdd, page, anuncioTeste.rows)
+
         res.json({
             success: true,
             teste: anuncioTeste,
@@ -3683,91 +3717,136 @@ module.exports = {
             /*      const anuncios = await Anuncio.findAll({
                      limit: limit
                  }); */
-            let dados = await Promise.all(req.body.map(async item => {
-                const {
-                    codAtividade,
-                    codPA,
-                    tags,
-                    codCidade,
-                    descAnuncioFriendly,
-                    descImagem,
-                    descEndereco,
-                    descCelular,
-                    descDescricao,
-                    descSite,
-                    descSkype,
-                    descPromocao,
-                    descEmailComercial,
-                    descEmailRetorno,
-                    descFacebook,
-                    descTweeter,
-                    descCEP,
-                    descTipoPessoa,
-                    descNomeAutorizante,
-                    descLat,
-                    descLng,
-                    formaPagamento,
-                    promocaoData,
-                    descContrato,
-                    descAndroid,
-                    descApple,
-                    descInsta,
-                    descPatrocinador,
-                    descPatrocinadorLink,
-                    qntVisualizacoes,
-                    dtAlteracao,
-                    descLinkedin,
-                    descTelegram,
-                    certificado_logo,
-                    certificado_texto,
-                    certificado_imagem,
-                    cashback_logo,
-                    cashback_link,
-                    certificado_link,
-                    cartao_digital,
-                    descChavePix, ...newObject } = item;
 
 
-                /* 
-                                const dateTimeString = newObject.dtCadastro2;
-                                const dateObject = new Date(dateTimeString);
-                
-                                const dateTimeString2 = newObject.dtCadastro2;
-                                const dateObject2 = new Date(dateTimeString2);
-                
-                                // Formata a data no formato YYYY-MM-DD
-                                const dateOnly = dateObject.toISOString().split('T')[0];
-                                const dateOnly2 = dateObject2.toISOString().split('T')[0];
-                
-                                newObject.dtCadastro = dateOnly;
-                                newObject.dtCadastro2 = dateOnly2;
-                
-                                //atualizar nome do usuario
-                                const user = await item.getUsuario();
-                                newObject.codUsuario = user.descNome;
-                
-                                //atualizar nome do estado
-                                const estado = await item.getUf();
-                                newObject.codUf = estado.sigla_uf;
-                
-                                //atualizar tipo de anuncio
-                                newObject.codTipoAnuncio = definirTipoAnuncio(item.codTipoAnuncio);
-                
-                                //atualizar nome do caderno
-                                const cader = await item.getCaderno();
-                                newObject.codCaderno = cader ? cader.nomeCaderno : "não registrado";
-                
-                                //atualizar codigo de id
-                                const desconto = await item.getDesconto();
-                                newObject.codDesconto = desconto != undefined ? desconto.hash : "99.999.9999";
-                
-                                //atualizar status
-                                newObject.activate = item.activate == 1 ? "Ativado" : "Desativado" */
+            const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+            const porPagina = 10; // Número de itens por página
 
-                return newObject;
+            const offset = (paginaAtual - 1) * porPagina;
+
+            // Consulta para recuperar apenas os itens da página atual
+            const anuncio = await Anuncio.findAndCountAll({
+                order: [
+                    [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                    ['createdAt', 'DESC'],
+                    ['codDuplicado', 'ASC'],
+                ],
+                limit: porPagina,
+                offset: offset,
+                raw: false,
+                attributes: [
+                    'codAnuncio',
+                    /*                       'codOrigem',
+                                          'codDuplicado', */
+                    'descCPFCNPJ',
+                    'descAnuncio',
+                    'codTipoAnuncio',
+                    'codCaderno',
+                    'codUf',
+                    'activate',
+                    /* 'descPromocao', */
+                    'createdAt',
+                    'dueDate',
+                    'codDesconto',
+                    /* 'codAtividade' */
+                ],
+                /*      include: [
+                        {
+                            model: Usuarios,
+                            as: 'usuario',
+                        },
+                    ], */
+            });
+
+
+            await Promise.all(anuncio.rows.map(async (anun, i) => {
+
+                function dateformat(data) {
+                    const date = new Date(data);
+                    const formattedDate = date.toISOString().split('T')[0];
+
+                    return formattedDate;
+                };
+
+                const user = await anun.getUsuario();
+                if (user) {
+                    anun.codUsuario = user.descNome;
+                    anun.dataValues.loginUser = user.descCPFCNPJ;
+                    anun.dataValues.loginPass = user.senha;
+                    anun.dataValues.loginEmail = user.descEmail;
+                    anun.dataValues.loginContato = user.descTelefone;
+                    anun.dataValues.link = `${masterPath.url}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
+                    anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
+                    anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
+                };
+
+                if(anun.dataValues.codTipoAnuncio == 3) {
+                    anun.dataValues.codTipoAnuncio = "Completo";
+                }
+
+                if(anun.dataValues.activate == 1) {
+                    anun.dataValues.activate = "Ativo";
+                } else {
+                    anun.dataValues.activate = "Inativo";
+                }
+
+
+                /* const atividades = await anun.getAtividade();
+                anun.dataValues.mainAtividade = atividades.atividade
+ */
+                //console.log(anuncio.rows[i])
             }));
 
-            exportExcell(dados, res)
+
+            /*      let dados = await Promise.all(req.body.map(async item => {
+                     const {
+                         codAtividade,
+                         codPA,
+                         tags,
+                         codCidade,
+                         descAnuncioFriendly,
+                         descImagem,
+                         descEndereco,
+                         descCelular,
+                         descDescricao,
+                         descSite,
+                         descSkype,
+                         descPromocao,
+                         descEmailComercial,
+                         descEmailRetorno,
+                         descFacebook,
+                         descTweeter,
+                         descCEP,
+                         descTipoPessoa,
+                         descNomeAutorizante,
+                         descLat,
+                         descLng,
+                         formaPagamento,
+                         promocaoData,
+                         descContrato,
+                         descAndroid,
+                         descApple,
+                         descInsta,
+                         descPatrocinador,
+                         descPatrocinadorLink,
+                         qntVisualizacoes,
+                         dtAlteracao,
+                         descLinkedin,
+                         descTelegram,
+                         certificado_logo,
+                         certificado_texto,
+                         certificado_imagem,
+                         cashback_logo,
+                         cashback_link,
+                         certificado_link,
+                         cartao_digital,
+                         descChavePix, ...newObject } = item;
+     
+     
+                     return newObject;
+                 })); */
+
+            exportExcell(anuncio.rows, res)
         } catch (err) {
             console.log(err)
             res.json({ success: false, message: `o numero máximo de registros é ${anunciosCount}` })

@@ -19,38 +19,75 @@ module.exports = async function expExcel(dados, res) {
         }
     ];
 
+    //console.log(dados)
+
     const headingColumnNames = [
-        "codAnuncio",
-        "Usuario",
-        "Tipo",
-        "duplicado",
+        "codPerfil",
+/*         "Origem",
+        "Duplicado", */
+        "CPFCNPJ",
+        "Nome_do_perfil",
+        "Tipo_do_perfil",
         "Caderno",
         "UF",
-        "Anuncio",
-        "Telefone",
-        "Whatsapp",
-        "CPFCNPJ",
-        "EmailAutorizante",
-        "IDDesconto",
-        "Status",
-        "Cadastro",
-        "DataFim",
-        "LinkMINISITIO",
+        "Activate",
+        "Data_inicio",
+        "Data_vencimento",
+        "ID_desconto",
+        "Nome_do_usuario",
         "Login",
         "Senha",
-        "PagamentoValor"
+        "Email",
+        "Contato",
+        "Link"
     ];
+
+    const headerStyle = wb.createStyle({
+        font: {
+            bold: true,
+            color: '#000000',
+            size: 12,
+        },
+        fill: {
+            type: 'pattern',
+            patternType: 'solid',
+            fgColor: 'ffff00',
+        },
+        alignment: {
+            horizontal: 'center',
+            vertical: 'center',
+        },
+    });
 
     let headingColumnIndex = 1;
     headingColumnNames.forEach(heading => {
-        ws.cell(1, headingColumnIndex++).string(heading);
+        ws.cell(1, headingColumnIndex++).string(heading).style(headerStyle);
     });
+
+     // Ajusta a largura das colunas
+     ws.column(1).setWidth(10); // Coluna A
+     ws.column(2).setWidth(20); // Coluna B
+     ws.column(3).setWidth(50); // Coluna C
+     ws.column(4).setWidth(15); // Coluna D
+     ws.column(5).setWidth(30); // Coluna E
+     ws.column(6).setWidth(10); // Coluna F
+     ws.column(7).setWidth(15); // Coluna G
+     ws.column(8).setWidth(15); // Coluna H
+     ws.column(9).setWidth(15); // Coluna I
+     ws.column(10).setWidth(20); // Coluna J
+     ws.column(11).setWidth(30); // Coluna K
+     ws.column(12).setWidth(30); // Coluna L
+     ws.column(13).setWidth(15); // Coluna M
+     ws.column(14).setWidth(45); // Coluna N
+     ws.column(15).setWidth(20); // Coluna O
+     ws.column(16).setWidth(100); // Coluna P
 
     let rowIndex = 2;
     dados.forEach(record => {
+        console.log(record.dataValues)
         let columnIndex = 1;
-        Object.keys(record).forEach(columnName => {
-            const value = record[columnName];
+        Object.keys(record.dataValues).forEach(columnName => {
+            const value = record.dataValues[columnName];
             if (value === null || value === undefined) {
                 ws.cell(rowIndex, columnIndex++).string("0");
             } else if (typeof value === "string") {

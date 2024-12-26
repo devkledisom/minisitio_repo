@@ -542,7 +542,8 @@ Anuncio.belongsTo(Desconto, {
 Anuncio.belongsTo(Usuario, {
     constraints: true,
     foreignKey: 'descCPFCNPJ',
-    targetKey: 'descCPFCNPJ'
+    targetKey: 'descCPFCNPJ',
+    attributes: ['descNome', 'descCPFCNPJ', 'senha', 'descEmail', 'descTelefone']
 });
 
 Anuncio.belongsTo(Atividade, {
