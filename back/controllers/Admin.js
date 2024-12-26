@@ -3775,7 +3775,7 @@ module.exports = {
                     anun.dataValues.loginPass = user.senha;
                     anun.dataValues.loginEmail = user.descEmail;
                     anun.dataValues.loginContato = user.descTelefone;
-                    anun.dataValues.link = `${masterPath.url}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
+                    anun.dataValues.link = `${masterPath.domain}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
                     anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
                     anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
                 };
