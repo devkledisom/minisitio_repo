@@ -2719,7 +2719,9 @@ module.exports = {
                     { codAnuncio: nu_hash },
                     { descCPFCNPJ: nu_hash },
                     { codDesconto: nu_hash },
-                    { codUf: nu_hash }
+                    { codUf: nu_hash },
+                    { codCaderno: nu_hash },
+                    { descAnuncio: nu_hash }
                 ]
             },
             limit: porPagina,

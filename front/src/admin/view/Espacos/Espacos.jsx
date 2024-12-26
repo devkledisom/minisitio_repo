@@ -321,7 +321,7 @@ const Espacos = () => {
                         </div>
                         <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
-                                <input id="buscar" type="text" placeholder="Código, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
+                                <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
                                 <button id="btnBuscar" className="" type="button" onClick={buscarAnuncioId} >
                                     <i className="icon-search"></i>
                                 </button>
@@ -333,34 +333,34 @@ const Espacos = () => {
                 <article>
                     <div className="container-fluid">
                         <div className='row px-4 table-perfil'>
-                            <table className="table table-bordered table-striped table-hover">
-                                <thead>
+                            <table className="table table-bordered table-striped table-hover"  style={{ tableLayout: 'fixed', width: '100%' }}>
+                                <thead>                                  
                                     <tr>
-                                        {/* <th>Nome</th> */}
-                                        <th style={{ "width": "auto" }}>Código</th>
-                                        <th style={{ "width": "100px" }}>CodOrigem</th>
-                                        <th style={{ "width": "auto" }}>Duplicado</th>
-                                        <th style={{ "width": "auto" }}>CPF/CNPJ</th>
-                                        <th style={{ "width": "auto" }}>Nome</th>
-                                        <th style={{ "width": "auto" }}>Tipo</th>
-                                        <th style={{ "width": "auto" }}>Caderno</th>
-                                        <th style={{ "width": "auto" }}>UF</th>
-                                        <th style={{ "width": "auto" }}>Status</th>
-                                        <th style={{ "width": "auto" }}>Pagamento</th>
-                                        <th style={{ "width": "auto" }}>Valor</th>
-                                        <th style={{ "width": "auto" }}>Cadastrado em</th>
-                                        <th style={{ "width": "auto" }}>Data Fim</th>
-                                        <th style={{ "width": "auto" }}>ID Desconto</th>
-                                        <th style={{ "width": "auto" }}>Usuário</th>
-                                        <th style={{ "width": "auto" }}>Login</th>
-                                        <th style={{ "width": "auto" }}>Senha</th>
-                                        <th style={{ "width": "auto" }}>Email</th>
-                                        <th style={{ "width": "auto" }}>Contato</th>
-                                        <th style={{ "width": "auto" }}>Atividade Principal</th>
-                                        <th style={{ "width": "auto" }}>Link do perfil</th>
+                                        <th>Código</th>
+                                        <th>CodOrigem</th>
+                                        <th>Duplicado</th>
+                                        <th>CPF/CNPJ</th>
+                                        <th>Nome</th>
+                                        <th>Tipo</th>
+                                        <th>Caderno</th>
+                                        <th>UF</th>
+                                        <th>Status</th>
+                                        <th>Pagamento</th>
+                                        {/* <th>Valor</th> */}
+                                        <th>Cadastrado em</th>
+                                        <th>Data Fim</th>
+                                        <th>ID Desconto</th>
+                                        <th>Usuário</th>
+                                        <th>Login</th>
+                                        <th>Senha</th>
+                                        <th>Email</th>
+                                        <th>Contato</th>
+                                        <th>Atividade Principal</th>
+                                        <th>Link do perfil</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                {console.log(anuncios)}
                                     {
 
 
@@ -381,7 +381,7 @@ const Espacos = () => {
                                                     {/*  <td>{item.activate ? "Ativado" : "Desativado"}</td> */}
                                                     <td><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"} /></td>
                                                     <td>Isento</td>
-                                                    <td>{item.descPromocao}</td>
+                                                   {/*  <td>{item.descPromocao}</td> */}
                                                     <td>{formatData(item.createdAt)}</td>
                                                     <td>{dataExpiracao(item.dueDate)}</td>
                                                     <td>{item.codDesconto}</td>
