@@ -242,6 +242,7 @@ const Espacos = () => {
     };
 
     function exportExcell() {
+        setShowSpinner(true);
          fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000`, {
             method: "POST",
             headers: {
@@ -253,6 +254,7 @@ const Espacos = () => {
             .then(res => {
                 if (res.success) {
                     //console.log(res);
+                    setShowSpinner(false);
                     window.location.href = res.downloadUrl;
                 }
             }) 
