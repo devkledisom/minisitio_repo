@@ -31,6 +31,7 @@ const Espacos = () => {
     const [selectId, setSelectId] = useState(null);
     const [showSpinner, setShowSpinner] = useState(true);
     const [del, setDel] = useState(false);
+    const [busca, setBusca] = useState(false);
 
 
     const location = useLocation();
@@ -164,6 +165,7 @@ const Espacos = () => {
 
     function buscarAnuncioId(e) {
         setShowSpinner(true);
+        setBusca(true);
         const campoPesquisa = document.getElementById('buscar').value;
 
         fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}`)
@@ -243,21 +245,41 @@ const Espacos = () => {
 
     function exportExcell() {
         setShowSpinner(true);
-         fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(anuncios.message.anuncios)
-        })
-            .then(x => x.json())
-            .then(res => {
-                if (res.success) {
-                    //console.log(res);
-                    setShowSpinner(false);
-                    window.location.href = res.downloadUrl;
-                }
-            }) 
+
+        if (campoBusca.current.value != '') {
+            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000&export=full`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(anuncios.message.anuncios)
+            })
+                .then(x => x.json())
+                .then(res => {
+                    if (res.success) {
+                        //console.log(res);
+                        setShowSpinner(false);
+                        window.location.href = res.downloadUrl;
+                    }
+                }) 
+        } else {
+            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(anuncios.message.anuncios)
+            })
+                .then(x => x.json())
+                .then(res => {
+                    if (res.success) {
+                        //console.log(res);
+                        setShowSpinner(false);
+                        window.location.href = res.downloadUrl;
+                    }
+                }) 
+        }
+       
     };
 
     function editRow() {
@@ -390,9 +412,14 @@ const Espacos = () => {
                         </div>
 
                     </div>
-                    {anuncios != '' &&
+           {/*          {busca &&
                         <Pagination totalPages={anuncios.message.totalPaginas} paginaAtual={anuncios.message.paginaAtual} totalItem={anuncios.message.totalItem} table={"espacos"} />
-                    }
+                    } */}
+
+
+                  {anuncios != '' &&
+                        <Pagination totalPages={anuncios.message.totalPaginas} paginaAtual={anuncios.message.paginaAtual} totalItem={anuncios.message.totalItem} table={"espacos"} />
+                    } 
 
 
                 </article>

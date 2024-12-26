@@ -4,27 +4,17 @@ const path = require('path');
 const masterPath = require('../config/config');
 
 module.exports = async function expExcel(dados, res) {
+    //const wb = new xl.Workbook();
     const wb = new xl.Workbook();
-    const ws = wb.addWorksheet('espacos');
-    const data = [
-        {
-            name: "teste",
-            email: "teste@hot.com",
-            celular: "736478236"
-        },
-        {
-            name: "person",
-            email: "person@hot.com",
-            celular: 736478236
-        }
-    ];
+    //const ws = wb.addWorksheet('espacos');
 
-    //console.log(dados)
+    let rowIndex = 2; // Início da contagem das linhas (assumindo 1 é o cabeçalho)
+    let sheetIndex = 1; // Contador de abas
+    let ws = wb.addWorksheet(`Sheet${sheetIndex}`); // Criando a primeira aba
+
 
     const headingColumnNames = [
         "codPerfil",
-/*         "Origem",
-        "Duplicado", */
         "CPFCNPJ",
         "Nome_do_perfil",
         "Tipo_do_perfil",
@@ -64,28 +54,59 @@ module.exports = async function expExcel(dados, res) {
         ws.cell(1, headingColumnIndex++).string(heading).style(headerStyle);
     });
 
-     // Ajusta a largura das colunas
-     ws.column(1).setWidth(10); // Coluna A
-     ws.column(2).setWidth(20); // Coluna B
-     ws.column(3).setWidth(50); // Coluna C
-     ws.column(4).setWidth(15); // Coluna D
-     ws.column(5).setWidth(30); // Coluna E
-     ws.column(6).setWidth(10); // Coluna F
-     ws.column(7).setWidth(15); // Coluna G
-     ws.column(8).setWidth(15); // Coluna H
-     ws.column(9).setWidth(15); // Coluna I
-     ws.column(10).setWidth(20); // Coluna J
-     ws.column(11).setWidth(30); // Coluna K
-     ws.column(12).setWidth(30); // Coluna L
-     ws.column(13).setWidth(15); // Coluna M
-     ws.column(14).setWidth(45); // Coluna N
-     ws.column(15).setWidth(20); // Coluna O
-     ws.column(16).setWidth(100); // Coluna P
+    // Ajusta a largura das colunas
+    ws.column(1).setWidth(10); // Coluna A
+    ws.column(2).setWidth(20); // Coluna B
+    ws.column(3).setWidth(50); // Coluna C
+    ws.column(4).setWidth(15); // Coluna D
+    ws.column(5).setWidth(30); // Coluna E
+    ws.column(6).setWidth(10); // Coluna F
+    ws.column(7).setWidth(15); // Coluna G
+    ws.column(8).setWidth(15); // Coluna H
+    ws.column(9).setWidth(15); // Coluna I
+    ws.column(10).setWidth(20); // Coluna J
+    ws.column(11).setWidth(30); // Coluna K
+    ws.column(12).setWidth(30); // Coluna L
+    ws.column(13).setWidth(15); // Coluna M
+    ws.column(14).setWidth(45); // Coluna N
+    ws.column(15).setWidth(20); // Coluna O
+    ws.column(16).setWidth(100); // Coluna P
 
-    let rowIndex = 2;
-    dados.forEach(record => {
-        console.log(record.dataValues)
+    //let rowIndex = 2;
+    /*     dados.forEach(record => {
+            console.log(record.dataValues)
+            let columnIndex = 1;
+            Object.keys(record.dataValues).forEach(columnName => {
+                const value = record.dataValues[columnName];
+                if (value === null || value === undefined) {
+                    ws.cell(rowIndex, columnIndex++).string("0");
+                } else if (typeof value === "string") {
+                    ws.cell(rowIndex, columnIndex++).string(value);
+                } else if (typeof value === "number") {
+                    ws.cell(rowIndex, columnIndex++).number(value);
+                } else {
+                    ws.cell(rowIndex, columnIndex++).string(value.toString());
+                }
+            });
+            rowIndex++;
+        }); */
+
+
+
+
+
+    dados.forEach((record, index) => {
+        // Verifica se é necessário criar uma nova aba
+        if ((index + 1) % 5000 === 0) {
+            sheetIndex++;
+            ws = wb.addWorksheet(`Sheet${sheetIndex}`); // Cria uma nova aba
+            rowIndex = 2; // Reseta a contagem de linhas para a nova aba
+        }
+
+        console.log(record.dataValues);
         let columnIndex = 1;
+
+        // Itera sobre os valores do registro e preenche as células
         Object.keys(record.dataValues).forEach(columnName => {
             const value = record.dataValues[columnName];
             if (value === null || value === undefined) {
@@ -98,8 +119,13 @@ module.exports = async function expExcel(dados, res) {
                 ws.cell(rowIndex, columnIndex++).string(value.toString());
             }
         });
-        rowIndex++;
+
+        rowIndex++; // Incrementa o índice da linha
     });
+
+
+
+
 
     console.log("Gerando");
 
@@ -123,7 +149,7 @@ module.exports = async function expExcel(dados, res) {
 
     // Escreve o novo arquivo Excel
     const newFilePath = path.join(__dirname, `../public/export/arquivo.xlsx`);
-    wb.write(newFilePath, function(err, stats) {
+    wb.write(newFilePath, function (err, stats) {
         if (err) {
             console.error(err);
             return res.status(500).json({ success: false, message: "Erro ao gerar o arquivo." });
