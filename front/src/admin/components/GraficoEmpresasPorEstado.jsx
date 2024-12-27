@@ -3,7 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "rec
 
 const GraficoEmpresasPorEstado = ({ data }) => (
   <BarChart
-    width={1100}
+    width={1200}
     height={400}
     data={data}
     margin={{

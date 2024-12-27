@@ -28,7 +28,9 @@ function Administrator() {
             <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
                 <a href="/"><img src="../assets/img/logo.png" className="" /></a>
             </div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
             <GraficoEmpresasPorEstado data={data} />
+            </div>
             <footer className='w-100' style={{ paddingTop: '50px' }}>
             <p className='w-100 text-center'>© MINISITIO - {version.version}</p>
             </footer>
