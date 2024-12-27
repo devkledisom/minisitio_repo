@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --max-old-space-size=2048 ./node_modules/nodemon/bin/nodemon.js index.js --ignore ./public/importLog.json"
+    "start": "node --max-old-space-size=2048 ./node_modules/nodemon/bin/nodemon.js index.js --ignore ./public/importLog.json",
+    "startold": "node --max-old-space-size=2048 ./node_modules/nodemon/bin/nodemon.js index.js --ignore ./public/importLog.json --stdout >> ./temp/logs/app.log 2>&1"
   },
   "author": "devKledisom",
   "license": "ISC",

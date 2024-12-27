@@ -3524,6 +3524,108 @@ module.exports = {
         }
 
     },
+    quantidadeUf: async (req, res) => {
+
+
+
+        const resultados = await Anuncio.findAll({
+            attributes: [
+              "codUf", 
+              [Sequelize.fn("COUNT", Sequelize.col("codUf")), "total"]
+            ],
+            group: ["codUf"],
+            raw: true
+          });
+          
+          // Mapear os resultados com os nomes dos estados
+          const estadosBrasil = [
+            { sigla: "AC", nome: "Acre" },
+            { sigla: "AL", nome: "Alagoas" },
+            { sigla: "AP", nome: "Amapá" },
+            { sigla: "AM", nome: "Amazonas" },
+            { sigla: "BA", nome: "Bahia" },
+            { sigla: "CE", nome: "Ceará" },
+            { sigla: "DF", nome: "Distrito Federal" },
+            { sigla: "ES", nome: "Espírito Santo" },
+            { sigla: "GO", nome: "Goiás" },
+            { sigla: "MA", nome: "Maranhão" },
+            { sigla: "MT", nome: "Mato Grosso" },
+            { sigla: "MS", nome: "Mato Grosso do Sul" },
+            { sigla: "MG", nome: "Minas Gerais" },
+            { sigla: "PA", nome: "Pará" },
+            { sigla: "PB", nome: "Paraíba" },
+            { sigla: "PR", nome: "Paraná" },
+            { sigla: "PE", nome: "Pernambuco" },
+            { sigla: "PI", nome: "Piauí" },
+            { sigla: "RJ", nome: "Rio de Janeiro" },
+            { sigla: "RN", nome: "Rio Grande do Norte" },
+            { sigla: "RS", nome: "Rio Grande do Sul" },
+            { sigla: "RO", nome: "Rondônia" },
+            { sigla: "RR", nome: "Roraima" },
+            { sigla: "SC", nome: "Santa Catarina" },
+            { sigla: "SP", nome: "São Paulo" },
+            { sigla: "SE", nome: "Sergipe" },
+            { sigla: "TO", nome: "Tocantins" }
+          ];
+          
+          const arr = estadosBrasil.map(estado => {
+            const matching = resultados.find(result => result.codUf === estado.sigla);
+            return {
+              estado: estado.sigla,
+              empresas: matching ? matching.total : 0
+            };
+          });
+          
+          res.json({ success: true, data: arr });
+
+
+
+        /* const estadosBrasil = [
+            { sigla: "AC", nome: "Acre" },
+            { sigla: "AL", nome: "Alagoas" },
+            { sigla: "AP", nome: "Amapá" },
+            { sigla: "AM", nome: "Amazonas" },
+            { sigla: "BA", nome: "Bahia" },
+            { sigla: "CE", nome: "Ceará" },
+            { sigla: "DF", nome: "Distrito Federal" },
+            { sigla: "ES", nome: "Espírito Santo" },
+            { sigla: "GO", nome: "Goiás" },
+            { sigla: "MA", nome: "Maranhão" },
+            { sigla: "MT", nome: "Mato Grosso" },
+            { sigla: "MS", nome: "Mato Grosso do Sul" },
+            { sigla: "MG", nome: "Minas Gerais" },
+            { sigla: "PA", nome: "Pará" },
+            { sigla: "PB", nome: "Paraíba" },
+            { sigla: "PR", nome: "Paraná" },
+            { sigla: "PE", nome: "Pernambuco" },
+            { sigla: "PI", nome: "Piauí" },
+            { sigla: "RJ", nome: "Rio de Janeiro" },
+            { sigla: "RN", nome: "Rio Grande do Norte" },
+            { sigla: "RS", nome: "Rio Grande do Sul" },
+            { sigla: "RO", nome: "Rondônia" },
+            { sigla: "RR", nome: "Roraima" },
+            { sigla: "SC", nome: "Santa Catarina" },
+            { sigla: "SP", nome: "São Paulo" },
+            { sigla: "SE", nome: "Sergipe" },
+            { sigla: "TO", nome: "Tocantins" }
+          ];
+          
+
+          const arr = [];
+          estadosBrasil.map(async estado => {
+            const userActivate = await Anuncio.count({
+                where: {
+                    codUf: estado.sigla
+                }
+            });
+            arr.push(userActivate);
+            console.log(userActivate);
+          });
+       
+
+        res.json({ success: true, message: arr }) */
+
+    },
     //ESPAÇOS DUPLICADOS
     duplicar: async (req, res) => {
 
@@ -3746,50 +3848,50 @@ module.exports = {
                 });
 
 
-/*                 const fs = require('fs');
-                const { ModelName } = require('./models'); // Substitua pelo modelo correto
-
-                async function exportLargeDataToFile(batchSize = 1000) {
-                    let offset = 0;
-                    let hasMoreData = true;
-
-                    try {
-                        // Cria ou limpa o arquivo inicial
-                        const filePath = 'output.json';
-                        fs.writeFileSync(filePath, '[\n', 'utf-8'); // Abre o array JSON
-
-                        while (hasMoreData) {
-                            // Busca registros em lotes
-                            const records = await ModelName.findAll({
-                                limit: batchSize,
-                                offset: offset,
-                                raw: true, // Retorna apenas os dados (sem metadados do Sequelize)
-                            });
-
-                            if (records.length > 0) {
-                                // Converte os registros em JSON e remove o último `\n` para evitar vírgulas inválidas
-                                const jsonData = JSON.stringify(records, null, 2).slice(1, -1);
-
-                                // Adiciona ao arquivo (com uma vírgula se houver mais lotes a seguir)
-                                fs.appendFileSync(filePath, `${offset > 0 ? ',\n' : ''}${jsonData}`, 'utf-8');
-
-                                // Incrementa o offset
-                                offset += batchSize;
-                            } else {
-                                hasMoreData = false; // Para o loop se não houver mais registros
-                            }
-                        }
-
-                        // Fecha o array JSON
-                        fs.appendFileSync(filePath, '\n]', 'utf-8');
-
-                        console.log('Exportação concluída com sucesso!');
-                    } catch (error) {
-                        console.error('Erro ao exportar os dados:', error);
-                    }
-                }
-
-                exportLargeDataToFile(); */
+                /*                 const fs = require('fs');
+                                const { ModelName } = require('./models'); // Substitua pelo modelo correto
+                
+                                async function exportLargeDataToFile(batchSize = 1000) {
+                                    let offset = 0;
+                                    let hasMoreData = true;
+                
+                                    try {
+                                        // Cria ou limpa o arquivo inicial
+                                        const filePath = 'output.json';
+                                        fs.writeFileSync(filePath, '[\n', 'utf-8'); // Abre o array JSON
+                
+                                        while (hasMoreData) {
+                                            // Busca registros em lotes
+                                            const records = await ModelName.findAll({
+                                                limit: batchSize,
+                                                offset: offset,
+                                                raw: true, // Retorna apenas os dados (sem metadados do Sequelize)
+                                            });
+                
+                                            if (records.length > 0) {
+                                                // Converte os registros em JSON e remove o último `\n` para evitar vírgulas inválidas
+                                                const jsonData = JSON.stringify(records, null, 2).slice(1, -1);
+                
+                                                // Adiciona ao arquivo (com uma vírgula se houver mais lotes a seguir)
+                                                fs.appendFileSync(filePath, `${offset > 0 ? ',\n' : ''}${jsonData}`, 'utf-8');
+                
+                                                // Incrementa o offset
+                                                offset += batchSize;
+                                            } else {
+                                                hasMoreData = false; // Para o loop se não houver mais registros
+                                            }
+                                        }
+                
+                                        // Fecha o array JSON
+                                        fs.appendFileSync(filePath, '\n]', 'utf-8');
+                
+                                        console.log('Exportação concluída com sucesso!');
+                                    } catch (error) {
+                                        console.error('Erro ao exportar os dados:', error);
+                                    }
+                                }
+                
+                                exportLargeDataToFile(); */
 
 
 
