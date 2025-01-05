@@ -14,22 +14,32 @@ module.exports = async function expExcel(dados, res) {
 
 
     const headingColumnNames = [
-        "codPerfil",
-        "CPFCNPJ",
-        "Nome_do_perfil",
-        "Tipo_do_perfil",
-        "Caderno",
+        "COD",
+        "COD_OR",
+        "DUPLI",
+        "CNPJ",
+        "NOME",
+        "TIPO",
+        "CADERNO",
         "UF",
-        "Activate",
-        "Data_inicio",
-        "Data_vencimento",
-        "ID_desconto",
-        "Nome_do_usuario",
-        "Login",
-        "Senha",
-        "Email",
-        "Contato",
-        "Link"
+        "STATUS",
+        /* "PAGAMENTO", */
+        "DATA_PAG",
+        "VALOR",
+        "DESCONTO",
+        "CAD. PARA CONF.",
+        "CONFIRMADO",
+        "DATA_FIM",
+        "TEMP. VALE PR. TIPO",
+        "ID",
+        "USUARIO/DECISOR",
+        "LOGIN",
+        "SENHA",
+        "EMAIL",
+        "CONTATO",
+        "LINK_PERFIL",
+        "ATIVIDADE PRINCIPAL"
+        
     ];
 
     const headerStyle = wb.createStyle({
@@ -56,8 +66,8 @@ module.exports = async function expExcel(dados, res) {
 
     // Ajusta a largura das colunas
     ws.column(1).setWidth(10); // Coluna A
-    ws.column(2).setWidth(20); // Coluna B
-    ws.column(3).setWidth(50); // Coluna C
+    ws.column(2).setWidth(10); // Coluna B
+    ws.column(3).setWidth(10); // Coluna C
     ws.column(4).setWidth(15); // Coluna D
     ws.column(5).setWidth(30); // Coluna E
     ws.column(6).setWidth(10); // Coluna F
@@ -69,8 +79,8 @@ module.exports = async function expExcel(dados, res) {
     ws.column(12).setWidth(30); // Coluna L
     ws.column(13).setWidth(15); // Coluna M
     ws.column(14).setWidth(45); // Coluna N
-    ws.column(15).setWidth(20); // Coluna O
-    ws.column(16).setWidth(100); // Coluna P
+    ws.column(15).setWidth(30); // Coluna O
+    ws.column(16).setWidth(30); // Coluna P
 
     //let rowIndex = 2;
     /*     dados.forEach(record => {
@@ -94,7 +104,6 @@ module.exports = async function expExcel(dados, res) {
 
 
 
-
     dados.forEach((record, index) => {
         // Verifica se é necessário criar uma nova aba
         if ((index + 1) % 5000 === 0) {
@@ -103,12 +112,43 @@ module.exports = async function expExcel(dados, res) {
             rowIndex = 2; // Reseta a contagem de linhas para a nova aba
         }
 
-        console.log(record.dataValues);
+        //console.log(record.dataValues);
+
+        /*       for (let key in record.dataValues) {
+                  //console.log("key", key)
+                  //newObj[key] = obj[key];
+                  if (key === 'activate') {
+                    //newObj['newProperty'] = 42; // Adiciona a nova propriedade após 'a'
+                    console.log('adicionado', key)
+                    record.dataValues.kledisom = '123'
+                  }
+                } */
+
+
+        // Inserir uma nova propriedade após a propriedade 'a'
+        let newObj = {};
+        for (let key in record.dataValues) {
+            newObj[key] = record.dataValues[key];
+            if (key === 'activate') {
+                newObj['dataPagamento'] = "Isento"; // Adiciona a nova propriedade após 'a'
+                newObj['valor'] = "Isento";
+            }
+            if (key === 'descPromocao') {
+                newObj['cad'] = record.dataValues.createdAt;
+            }
+            if (key === 'dueDate') {
+                newObj['tempValePrTipo'] = '';
+            }
+        }
+
+
         let columnIndex = 1;
 
         // Itera sobre os valores do registro e preenche as células
-        Object.keys(record.dataValues).forEach(columnName => {
-            const value = record.dataValues[columnName];
+        Object.keys(newObj).forEach(columnName => {
+            const value = newObj[columnName];
+
+            //console.log(newObj)
             if (value === null || value === undefined) {
                 ws.cell(rowIndex, columnIndex++).string("0");
             } else if (typeof value === "string") {
@@ -119,7 +159,21 @@ module.exports = async function expExcel(dados, res) {
                 ws.cell(rowIndex, columnIndex++).string(value.toString());
             }
         });
+/*         Object.keys(record.dataValues).forEach(columnName => {
+            const value = record.dataValues[columnName];
 
+            console.log(newObj)
+            if (value === null || value === undefined) {
+                ws.cell(rowIndex, columnIndex++).string("0");
+            } else if (typeof value === "string") {
+                ws.cell(rowIndex, columnIndex++).string(value);
+            } else if (typeof value === "number") {
+                ws.cell(rowIndex, columnIndex++).number(value);
+            } else {
+                ws.cell(rowIndex, columnIndex++).string(value.toString());
+            }
+        });
+ */
         rowIndex++; // Incrementa o índice da linha
     });
 

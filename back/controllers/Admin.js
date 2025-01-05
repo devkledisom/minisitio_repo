@@ -3530,15 +3530,15 @@ module.exports = {
 
         const resultados = await Anuncio.findAll({
             attributes: [
-              "codUf", 
-              [Sequelize.fn("COUNT", Sequelize.col("codUf")), "total"]
+                "codUf",
+                [Sequelize.fn("COUNT", Sequelize.col("codUf")), "total"]
             ],
             group: ["codUf"],
             raw: true
-          });
-          
-          // Mapear os resultados com os nomes dos estados
-          const estadosBrasil = [
+        });
+
+        // Mapear os resultados com os nomes dos estados
+        const estadosBrasil = [
             { sigla: "AC", nome: "Acre" },
             { sigla: "AL", nome: "Alagoas" },
             { sigla: "AP", nome: "Amapá" },
@@ -3566,17 +3566,17 @@ module.exports = {
             { sigla: "SP", nome: "São Paulo" },
             { sigla: "SE", nome: "Sergipe" },
             { sigla: "TO", nome: "Tocantins" }
-          ];
-          
-          const arr = estadosBrasil.map(estado => {
+        ];
+
+        const arr = estadosBrasil.map(estado => {
             const matching = resultados.find(result => result.codUf === estado.sigla);
             return {
-              estado: estado.sigla,
-              empresas: matching ? matching.total : 0
+                estado: estado.sigla,
+                empresas: matching ? matching.total : 0
             };
-          });
-          
-          res.json({ success: true, data: arr });
+        });
+
+        res.json({ success: true, data: arr });
 
 
 
@@ -3825,19 +3825,19 @@ module.exports = {
                     raw: false,
                     attributes: [
                         'codAnuncio',
-                        /*                       'codOrigem',
-                                              'codDuplicado', */
+                        'codOrigem',
+                        'codDuplicado',
                         'descCPFCNPJ',
                         'descAnuncio',
                         'codTipoAnuncio',
                         'codCaderno',
                         'codUf',
                         'activate',
-                        /* 'descPromocao', */
+                        'descPromocao',
                         'createdAt',
                         'dueDate',
                         'codDesconto',
-                        /* 'codAtividade' */
+                        'codAtividade'
                     ],
                     /*      include: [
                             {
@@ -3905,7 +3905,7 @@ module.exports = {
                     };
 
                     const user = await anun.getUsuario();
-                    if (user) {
+                   /*  if (user) {
                         anun.codUsuario = user.descNome;
                         anun.dataValues.loginUser = user.descCPFCNPJ;
                         anun.dataValues.loginPass = user.senha;
@@ -3914,7 +3914,7 @@ module.exports = {
                         anun.dataValues.link = `${masterPath.domain}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
                         anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
                         anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
-                    };
+                    }; */
 
                     if (anun.dataValues.codTipoAnuncio == 3) {
                         anun.dataValues.codTipoAnuncio = "Completo";
@@ -3950,19 +3950,19 @@ module.exports = {
                     raw: false,
                     attributes: [
                         'codAnuncio',
-                        /*                       'codOrigem',
-                                              'codDuplicado', */
+                        'codOrigem',
+                        'codDuplicado',
                         'descCPFCNPJ',
                         'descAnuncio',
                         'codTipoAnuncio',
                         'codCaderno',
                         'codUf',
                         'activate',
-                        /* 'descPromocao', */
+                        'descPromocao',
                         'createdAt',
                         'dueDate',
                         'codDesconto',
-                        /* 'codAtividade' */
+                        'codAtividade'
                     ],
                     /*      include: [
                             {
@@ -3973,7 +3973,7 @@ module.exports = {
                 });
 
 
-                await Promise.all(anuncio.rows.map(async (anun, i) => {
+               /*  await Promise.all(anuncio.rows.map(async (anun, i) => {
 
                     function dateformat(data) {
                         const date = new Date(data);
@@ -3983,16 +3983,26 @@ module.exports = {
                     };
 
                     const user = await anun.getUsuario();
-                    if (user) {
-                        anun.codUsuario = user.descNome;
-                        anun.dataValues.loginUser = user.descCPFCNPJ;
-                        anun.dataValues.loginPass = user.senha;
-                        anun.dataValues.loginEmail = user.descEmail;
-                        anun.dataValues.loginContato = user.descTelefone;
-                        anun.dataValues.link = `${masterPath.domain}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
-                        anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
-                        anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
-                    };
+
+                    for (let key in anun.dataValues) {
+                        //console.log("key: ", key)
+                        if (key == 'codDesconto') {
+                            //newObj['newProperty'] = 42; // Adiciona a nova propriedade após 'a'
+                            
+                            if (user) {
+                                anun.codUsuario = user.descNome;
+                                anun.dataValues.loginUser = user.descCPFCNPJ;
+                                anun.dataValues.loginPass = user.senha;
+                                anun.dataValues.loginEmail = user.descEmail;
+                                anun.dataValues.loginContato = user.descTelefone;
+                                anun.dataValues.link = `${masterPath.domain}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
+                                anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
+                                anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
+                            };
+                        }
+                    }
+
+                 
 
                     if (anun.dataValues.codTipoAnuncio == 3) {
                         anun.dataValues.codTipoAnuncio = "Completo";
@@ -4005,11 +4015,9 @@ module.exports = {
                     }
 
 
-                    /* const atividades = await anun.getAtividade();
-                    anun.dataValues.mainAtividade = atividades.atividade
-     */
+      
                     //console.log(anuncio.rows[i])
-                }));
+                })); */
 
 
                 /*      let dados = await Promise.all(req.body.map(async item => {
@@ -4059,6 +4067,52 @@ module.exports = {
          
                          return newObject;
                      })); */
+
+
+                     function dateformat(data) {
+                        const date = new Date(data);
+                        return date.toISOString().split('T')[0];
+                    }
+                    
+                    await Promise.all(
+                        anuncio.rows.map(async (anun) => {
+                            try {
+                                const user = await anun.getUsuario();
+                    
+                                if (user) {
+                                    // Cria um novo objeto com as informações do usuário inseridas após 'codDesconto'
+                                    const reorderedData = {};
+                                    for (const key in anun.dataValues) {
+                                        reorderedData[key] = anun.dataValues[key];
+                                        if (key === 'codDesconto') {
+                                            // Adiciona as propriedades do usuário após 'codDesconto'
+                                            reorderedData.codUsuario = user.descNome;
+                                            reorderedData.loginUser = user.descCPFCNPJ;
+                                            reorderedData.loginPass = user.senha;
+                                            reorderedData.loginEmail = user.descEmail;
+                                            reorderedData.loginContato = user.descTelefone;
+                                            reorderedData.link = `${masterPath.domain}/local/${encodeURIComponent(
+                                                anun.dataValues.descAnuncio
+                                            )}?id=${anun.dataValues.codAnuncio}`;
+                                            reorderedData.createdAt = dateformat(anun.dataValues.createdAt);
+                                            reorderedData.dueDate = dateformat(anun.dataValues.dueDate);
+                                        }
+                                    }
+                                    anun.dataValues = reorderedData;
+                                }
+                    
+                                // Traduzindo valores específicos
+                                anun.dataValues.codTipoAnuncio =
+                                    anun.dataValues.codTipoAnuncio == 3 ? "Completo" : anun.dataValues.codTipoAnuncio;
+                                anun.dataValues.activate = anun.dataValues.activate == 1 ? "Ativo" : "Inativo";
+                            } catch (error) {
+                                console.error(`Erro ao processar anúncio ${anun.dataValues.codAnuncio}:`, error);
+                            }
+                        })
+                    );
+                    
+
+
 
                 exportExcell(anuncio.rows, res);
             }

@@ -336,27 +336,31 @@ const Espacos = () => {
                             <table className="table table-bordered table-striped table-hover"  style={{ tableLayout: 'fixed', width: '100%' }}>
                                 <thead>                                  
                                     <tr>
-                                        <th>Código</th>
-                                        <th>CodOrigem</th>
-                                        <th>Duplicado</th>
-                                        <th>CPF/CNPJ</th>
-                                        <th>Nome</th>
-                                        <th>Tipo</th>
-                                        <th>Caderno</th>
+                                        <th>COD</th>
+                                        <th>COD_OR</th>
+                                        <th>DUPLI</th>
+                                        <th>CNPJ</th>
+                                        <th>NOME</th>
+                                        <th>TIPO</th>
+                                        <th>CADERNO</th>
                                         <th>UF</th>
-                                        <th>Status</th>
-                                        <th>Pagamento</th>
-                                        {/* <th>Valor</th> */}
-                                        <th>Cadastrado em</th>
-                                        <th>Data Fim</th>
-                                        <th>ID Desconto</th>
-                                        <th>Usuário</th>
-                                        <th>Login</th>
-                                        <th>Senha</th>
-                                        <th>Email</th>
-                                        <th>Contato</th>
-                                        <th>Atividade Principal</th>
-                                        <th>Link do perfil</th>
+                                        <th>STATUS</th>
+                                        <th>PAG.</th>
+                                        <th>DATA_PAG</th>
+                                        <th>VALOR</th>
+                                        <th>DESCONTO</th>
+                                        <th>CAD. PARA CONF.</th>
+                                        <th>CONFIRMADO</th>
+                                        <th>DATA_FIM</th>
+                                        <th>TEMP. VALE PR. TIPO</th>
+                                        <th>ID</th>
+                                        <th>USUARIO/DECISOR</th>
+                                        <th>LOGIN</th>
+                                        <th>SENHA</th>
+                                        <th>EMAIL</th>
+                                        <th>CONTATO</th>
+                                        <th>ATIVIDADE PRINCIPAL</th>
+                                        <th>LINK_PERFIL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -381,9 +385,14 @@ const Espacos = () => {
                                                     {/*  <td>{item.activate ? "Ativado" : "Desativado"}</td> */}
                                                     <td><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"} /></td>
                                                     <td>Isento</td>
-                                                   {/*  <td>{item.descPromocao}</td> */}
+                                                    <td>Isento</td>
+                                                    <td>Isento</td>
+                                                   
+                                                   <td>{item.descPromocao}</td>
+                                                    <td>{formatData(item.createdAt)}</td>
                                                     <td>{formatData(item.createdAt)}</td>
                                                     <td>{dataExpiracao(item.dueDate)}</td>
+                                                    <td></td>
                                                     <td>{item.codDesconto}</td>
                                                     <td>{item.codUsuario}</td>
                                                     <td>{item.loginUser}</td>
