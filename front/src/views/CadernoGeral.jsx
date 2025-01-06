@@ -141,7 +141,7 @@ function Caderno(props) {
   }
 
   useEffect(() => {
-    fetch(`${masterPath.url}/admin/lista/test`)
+    fetch(`${masterPath.url}/admin/lista/test/${caderno}/${estado}`)
     .then((x) => x.json())
     .then((res) => {
       console.log(res);

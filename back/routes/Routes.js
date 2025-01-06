@@ -102,7 +102,7 @@ router.get('/api/admin/anuncio/classificado/geral/:caderno/:uf', Admin.listarCla
 router.get('/api/admin/anuncio/classificado/geral2', Admin.listarClassificadoGeral2);
 router.get('/api/admin/anuncio/classificado/especifico/:caderno/:uf', Admin.listarClassificadoEspecifico);
 router.get('/api/admin/anuncio/quantidade/uf', Admin.quantidadeUf);
-router.get('/api/admin/lista/test', Admin.listaTeste);
+router.get('/api/admin/lista/test/:caderno/:uf', Admin.listaTeste);
 
 //ROTAS MODULO PIN
 router.get('/api/admin/pin/read', Admin.listarPin);

@@ -1089,8 +1089,8 @@ module.exports = {
             codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, 
             COUNT(codAtividade) AS quantidade
         FROM anuncio
-        WHERE codUf = 'AL'
-          AND codCaderno = 'PENEDO'
+        WHERE codUf = '${req.params.uf}'
+          AND codCaderno = '${req.params.caderno}'
           AND codAtividade != 'ADMINISTRAÇÃO REGIONAL / PREFEITURA'
         GROUP BY codAtividade
         ORDER BY codAtividade ASC;
