@@ -3,7 +3,7 @@ import { masterPath } from '../../config/config';
 
 function CardClassificado(props) {
     //prefeitura_maceio_20180302_143719.jpg
-    //console.log("dasd", props.pathImg)
+    console.log("dasd", props)
     return (
         <>
             <li className="titulo titulo-cinza">
@@ -14,8 +14,9 @@ function CardClassificado(props) {
             {props.pathImg != null && props.pathImg != "teste" && props.pathImg != 0 ? (
                 <li className="cartao">
                     <div className="conteudo">
-                        <a href="/local/maceio/prefeitura_190278">
-                        {}
+                        <a href={`${masterPath.domain}/local/${encodeURIComponent(props.data.descAnuncio)}?id=${props.data.codAnuncio}`} target="_blank"
+                            rel="noopener noreferrer">
+                            { }
                             <img src={`${masterPath.url}/files/${props.pathImg}`} alt="Prefeitura" />
                         </a>
                     </div>
@@ -23,12 +24,13 @@ function CardClassificado(props) {
                     <div className="links">
                         <ul className="list-inline">
                             <li className="pull-left">
-                                <a href="/local/maceio/prefeitura_190278" data-toggle="tooltip" title="Detalhes">
+                                <a href={`${masterPath.domain}/local/${encodeURIComponent(props.data.descAnuncio)}?id=${props.data.codAnuncio}`} data-toggle="tooltip" title="Detalhes" target="_blank"
+                                    rel="noopener noreferrer">
                                     <img src="/assets/img/miniwebcard/link_detalhe.png" />
                                 </a>
                             </li>
                             <li className="pull-right">
-                                <a href="/local/maceio/prefeitura_190278" data-toggle="tooltip" title="SAC - Fale Comigo">
+                                <a href="#" data-toggle="tooltip" title="SAC - Fale Comigo">
                                     <img src="/assets/img/miniwebcard/link_email.png" />
                                 </a>
                             </li>

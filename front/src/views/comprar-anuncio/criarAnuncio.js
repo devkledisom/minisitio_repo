@@ -120,7 +120,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
             descWhatsApp: buscarElemento("descWhatsApp"),
             descCEP: buscarElemento("descCEP"),
             descTipoPessoa: buscarElemento("descTipoPessoa-pf").checked ? "pf" : "pj",
-            descCPFCNPJ: buscarElemento("descCPFCNPJ"),
+            descCPFCNPJ: buscarElemento("descCPFCNPJ").replace(/[.\-\/]/g, ''),
             descNomeAutorizante: buscarElemento("descNomeAutorizante"),
             descEmailAutorizante: buscarElemento("descEmailAutorizante"),
             codDesconto: buscarElemento("discountHash"),

@@ -8,14 +8,10 @@ import { masterPath } from '../config/config';
 /* import 'font-awesome/css/font-awesome.min.css'; */
 import '../assets/css/cadernoClassificado.css';
 
-import Mosaico from '../components/Mosaico';
 import MosaicoWebCard from '../components/MosaicoWebCard';
 import Busca from '../components/Busca';
-import MiniWebCard from '../components/MiniWebCard';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import MsgProgramada from '../components/MsgProgramada';
-import MiniWebCardSimples from '../components/MiniWebCardSimples';
 import CardClassificado from './classificados/CardClassificado';
 import Letter from './classificados/Letter';
 
@@ -92,13 +88,11 @@ function Caderno(props) {
         //console.log(res)
         if (res.success) {
           setClassificados(res.data);
-          //setPathImg(res.teste.rows);
+          setPathImg(res.teste.rows);
           setMosaicoImg(res.mosaico);
-          //console.log("caderno geral", res);
+          console.log("caderno geral", res);
           setLoading(false);
           document.querySelector('.caderno').style.filter = "none";
-        } else {
-
         }
 
       })
@@ -197,16 +191,16 @@ function Caderno(props) {
                     ))}
                   </ul>
                 </li>
-                <CardClassificado title={"UTILIDADE PÚBLICA"} pathImg={capa06} />
-                <CardClassificado title={"CÂMARA DE VEREADORES/CÂMARA DISTRITAL"} pathImg={capa07} />
-                <CardClassificado title={"INFORMAÇÕES"} pathImg={capa08} />
+                <CardClassificado title={"UTILIDADE PÚBLICA"} pathImg={capa06} data={pathImg[5]} />
+                <CardClassificado title={"CÂMARA DE VEREADORES/CÂMARA DISTRITAL"} pathImg={capa07} data={pathImg[6]} />
+                <CardClassificado title={"INFORMAÇÕES"} pathImg={capa08} data={pathImg[7]} />
               </ul>
               <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled teste">
-                <CardClassificado title={"ADMINISTRAÇÃO REGIONAL / PREFEITURA"} pathImg={capa01} />
-                <CardClassificado title={"EMERGÊNCIA"} pathImg={capa02} />
-                <CardClassificado title={"HOSPITAIS PÚBLICOS"} pathImg={capa03} />
-                <CardClassificado title={"SECRETARIA DE TURISMO"} pathImg={capa04} />
-                <CardClassificado title={"EVENTOS NA CIDADE"} pathImg={capa05} />
+                <CardClassificado title={"ADMINISTRAÇÃO REGIONAL / PREFEITURA"} pathImg={capa01} data={pathImg[0]} />
+                <CardClassificado title={"EMERGÊNCIA"} pathImg={capa02} data={pathImg[1]} />
+                <CardClassificado title={"HOSPITAIS PÚBLICOS"} pathImg={capa03} data={pathImg[2]} />
+                <CardClassificado title={"SECRETARIA DE TURISMO"} pathImg={capa04} data={pathImg[3]} />
+                <CardClassificado title={"EVENTOS NA CIDADE"} pathImg={capa05} data={pathImg[4]} />
               </ul>
 
             </div>

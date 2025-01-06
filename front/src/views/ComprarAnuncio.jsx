@@ -60,8 +60,8 @@ function ComprarAnuncio() {
   const [texto, setTexto] = useState(null);
 
 
-  const executarSelecao = () => {
-    let codigoUf = document.querySelectorAll("#codUf4")[0].value;
+  const executarSelecao = (e) => {
+    let codigoUf = e.target.value;
     setUf(codigoUf);
   };
 
@@ -354,7 +354,7 @@ function ComprarAnuncio() {
 
                           <option
                             key={item.id}
-                            value={item.id}
+                            value={item.atividade}
                           >
                             {item.atividade}
                           </option>
@@ -388,7 +388,7 @@ function ComprarAnuncio() {
                           <option
                             id={item.id_uf}
                             key={item.id_uf}
-                            value={item.id_uf}
+                            value={item.sigla_uf}
                           >
                             {item.sigla_uf}
                           </option>
@@ -409,11 +409,11 @@ function ComprarAnuncio() {
                         <option value="">- CIDADE -</option>
                         {caderno.map(
                           (item) =>
-                            item.codUf == ufSelected && (
+                            item.UF == ufSelected && (
                               <option
                                 id={item.codCaderno}
                                 key={item.codCaderno}
-                                value={item.codCaderno}
+                                value={item.nomeCaderno}
                               >
                                 {item.nomeCaderno}
                               </option>

@@ -200,6 +200,8 @@ const Cadernos = () => {
                                         <th>UF</th>
                                         <th>CADERNO</th>
                                         <th>MOSAICO</th>
+                                        <th>CEP_INICIAL</th>
+                                        <th>CEP_FINAL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -210,6 +212,8 @@ const Cadernos = () => {
                                             <td key={item.id_uf}>{item.UF}</td>
                                             <td key={item.id_uf}>{item.nomeCaderno}</td>
                                             {item.descImagem != '' ? <td key={item.id_uf}>SIM</td> : <td key={item.id_uf}>NÃO</td>}
+                                            <td key={item.id_uf}>{item.cep_inicial}</td>
+                                            <td key={item.id_uf}>{item.cep_final}</td>
                                             
                                         </tr>
                                     ))}
