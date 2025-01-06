@@ -3,7 +3,7 @@ import { masterPath } from '../../config/config';
 
 function CardClassificado(props) {
     //prefeitura_maceio_20180302_143719.jpg
-    console.log("dasd", props)
+    //console.log("dasd", props)
     return (
         <>
             <li className="titulo titulo-cinza">

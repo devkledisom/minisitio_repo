@@ -87,7 +87,7 @@ function Caderno(props) {
       .then(res => {
         //console.log(res)
         if (res.success) {
-          setClassificados(res.data);
+          //setClassificados(res.data);
           setPathImg(res.teste.rows);
           setMosaicoImg(res.mosaico);
           console.log("caderno geral", res);
@@ -140,6 +140,18 @@ function Caderno(props) {
     return pageNumber;
   }
 
+  useEffect(() => {
+    fetch(`${masterPath.url}/admin/lista/test`)
+    .then((x) => x.json())
+    .then((res) => {
+      console.log(res);
+      setClassificados(res);
+      setLoading(false);
+      document.querySelector('.caderno').style.filter = "none";
+   /*    setResult(res.anuncios);
+      navigate("/caderno/maceio_27"); */
+    })
+  }, [])
 
   return (
     <div className="App">

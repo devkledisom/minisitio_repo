@@ -1082,6 +1082,85 @@ module.exports = {
         }
     },
     //ESPACOS
+    listaTeste: async (req, res) => {
+        const mysql = require('mysql2'); // Substitua por 'pg' se usar PostgreSQL
+        const query =  `
+        SELECT 
+            codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, 
+            COUNT(codAtividade) AS quantidade
+        FROM anuncio
+        WHERE codUf = 'AL'
+          AND codCaderno = 'PENEDO'
+          AND codAtividade != 'ADMINISTRAÇÃO REGIONAL / PREFEITURA'
+        GROUP BY codAtividade
+        ORDER BY codAtividade ASC;
+    `;
+    
+    try {
+        // Obter uma conexão do Sequelize
+        const connection = await database.connectionManager.getConnection();
+        //console.log(connection.config.host)
+   
+        // Criar a conexão nativa usando o `mysql2` ou `pg`
+        const nativeConnection = mysql.createConnection({
+            host: connection.config.host,
+            user: connection.config.user,
+            password: connection.config.password,
+            database: connection.config.database,
+        });
+
+        // Definir a consulta SQL
+     /*    const query = `
+            SELECT codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, COUNT(codAtividade) AS quantidade
+            FROM oi_clientes
+            WHERE codUf = ? AND codCaderno = ? AND codAtividade != 'ADMINISTRAÇÃO REGIONAL / PREFEITURA'
+            GROUP BY codAtividade
+            ORDER BY codAtividade ASC
+        `; */
+
+        // Iniciar o streaming
+        const stream = nativeConnection.query(query, [req.params.uf, req.params.caderno]).stream();
+
+        // Configurar o cabeçalho da resposta
+        res.setHeader('Content-Type', 'application/json');
+        res.write('['); // Iniciar o JSON
+
+        let isFirst = true;
+
+        stream.on('data', (row) => {
+            if (!isFirst) res.write(',');
+            res.write(JSON.stringify(row));
+            isFirst = false;
+        });
+
+        stream.on('end', () => {
+            res.write(']'); // Finalizar o JSON
+            res.end();
+
+            // Fechar a conexão ao final
+            nativeConnection.end((err) => {
+                if (err) console.error('Erro ao fechar a conexão:', err);
+            });
+        });
+
+        stream.on('error', (err) => {
+            console.error('Erro no streaming:', err);
+            res.status(500).send('Erro ao processar os dados');
+
+            // Certifique-se de fechar a conexão em caso de erro
+            nativeConnection.end((endErr) => {
+                if (endErr) console.error('Erro ao fechar a conexão após erro:', endErr);
+            });
+        });
+
+        stream.on('close', () => {
+            console.log('Stream fechado.');
+        });
+    } catch (error) {
+        console.error('Erro ao criar o stream:', error);
+        res.status(500).send('Erro interno do servidor');
+    }
+    },
     listarEspacos: async (req, res) => {
 
         await database.sync();
@@ -1229,14 +1308,12 @@ module.exports = {
         console.log(req.params)
 
         try {
-            const result = await Anuncio.findAll({
+         /*    const result = await Anuncio.findAll({
                 where: {
                     [Op.and]: [
                         { codUf: req.params.uf },
                         { codCaderno: req.params.caderno },
                         { codAtividade: { [Op.ne]: "ADMINISTRAÇÃO REGIONAL / PREFEITURA" } }
-                        /*  { codUf: codCaderno[0].dataValues.UF },
-                         { codCaderno: codCaderno[0].dataValues.nomeCaderno } */
                     ]
                 },
                 attributes: [
@@ -1245,7 +1322,7 @@ module.exports = {
                 ],
                 group: ['codAtividade'],
                 order: [['codAtividade', 'ASC']]
-            });
+            }); */
 
             //console.log("resultado", result.map(r => r.toJSON())); // Resultado formatado
 
@@ -1271,7 +1348,7 @@ module.exports = {
 
             res.json({
                 success: true,
-                data: result.map(r => r.toJSON()),
+                //data: result.map(r => r.toJSON()),
                 teste: anuncioTeste,
                 //anuncio2: anuncio2,
                 mosaico: 0,
