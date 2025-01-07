@@ -36,7 +36,7 @@ const Cadernos = () => {
 
     useEffect(() => {
         setShowSpinner(true);
-        //setCidade([])
+        setCidade([])
         /*  fetch(`${masterPath.url}/admin/cadernos?page=${param}`)
              .then((x) => x.json())
              .then((res) => {
@@ -72,7 +72,6 @@ const Cadernos = () => {
                 } else {
                     setPaginas(objReadble.totalPaginas);
                     setPaginaAtual(objReadble.paginaAtual);
-                    setShowSpinner(false);
                     setTotalRegistro(objReadble.totalItens);
                 }
 
