@@ -72,6 +72,7 @@ const Cadernos = () => {
                 } else {
                     setPaginas(objReadble.totalPaginas);
                     setPaginaAtual(objReadble.paginaAtual);
+   
                     setTotalRegistro(objReadble.totalItens);
                 }
 
@@ -88,6 +89,7 @@ const Cadernos = () => {
             }
             //console.log(buffer)
             console.log('Streaming completo');
+            setShowSpinner(false);
         }
 
         function renderRecord(record) {

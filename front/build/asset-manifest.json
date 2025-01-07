@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.ad3a5b65.css",
-    "main.js": "/static/js/main.064206a6.js",
+    "main.js": "/static/js/main.37ccc9b6.js",
     "static/js/213.6d705f01.chunk.js": "/static/js/213.6d705f01.chunk.js",
     "static/js/732.642803b4.chunk.js": "/static/js/732.642803b4.chunk.js",
     "static/js/453.a393c848.chunk.js": "/static/js/453.a393c848.chunk.js",
@@ -18,13 +18,13 @@
     "static/media/glyphicons-halflings.png": "/static/media/glyphicons-halflings.e54998a8fe454b8c4370.png",
     "index.html": "/index.html",
     "main.ad3a5b65.css.map": "/static/css/main.ad3a5b65.css.map",
-    "main.064206a6.js.map": "/static/js/main.064206a6.js.map",
+    "main.37ccc9b6.js.map": "/static/js/main.37ccc9b6.js.map",
     "213.6d705f01.chunk.js.map": "/static/js/213.6d705f01.chunk.js.map",
     "732.642803b4.chunk.js.map": "/static/js/732.642803b4.chunk.js.map",
     "453.a393c848.chunk.js.map": "/static/js/453.a393c848.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ad3a5b65.css",
-    "static/js/main.064206a6.js"
+    "static/js/main.37ccc9b6.js"
   ]
 }
