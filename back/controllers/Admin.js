@@ -265,14 +265,104 @@ module.exports = {
     },
     //cadernos
     listarCadernos: async (req, res) => {
-        const listaCadernos = await Cadernos.findAll();
-        const listaUf = await Ufs.findAll();
+        /*   const listaCadernos = await Cadernos.findAll();
+          const listaUf = await Ufs.findAll(); */
 
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = parseInt(req.query.rows) || 10; // Número de itens por página
         const codigoCaderno = req.params.codCaderno;
 
         const offset = (paginaAtual - 1) * porPagina;
+
+        try {
+            // Configura o cabeçalho para streaming JSON
+            res.setHeader('Content-Type', 'application/json');
+
+            // Consulta para obter os cadernos
+            const cadernos = await Cadernos.findAndCountAll({
+                order: [
+                    ['UF', 'ASC'],
+                    [Sequelize.literal('isCapital ASC')],
+                    ['nomeCaderno', 'ASC']
+                ],
+                limit: porPagina,
+                offset: offset
+            });
+
+              // Calculando o número total de itens e páginas
+    const totalItens = cadernos.count;
+    const totalPaginas = Math.ceil(totalItens / porPagina);
+
+    // Envia as informações de total de itens e páginas antes dos registros
+    res.write(JSON.stringify({
+        totalItens,
+        totalPaginas,
+        paginaAtual
+    }));
+
+            // Obter todos os dados de resumo de anúncios para todos os cadernos em uma consulta
+            const anunciosResumo = await Anuncio.findAll({
+                where: {
+                    codUf: { [Sequelize.Op.in]: cadernos.rows.map(c => c.UF) }, // Buscar somente para os estados dos cadernos
+                    codCaderno: { [Sequelize.Op.in]: cadernos.rows.map(c => c.nomeCaderno) } // Buscar somente para os cadernos dos cadernos
+                },
+                attributes: [
+                    'codUf',
+                    'codCaderno',
+                    [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],
+                    [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 3 THEN 1 ELSE 0 END)'), 'completo']
+                ],
+                group: ['codUf', 'codCaderno'],
+                raw: true
+            });
+
+            // Criar um mapa para acessar os resumos de anúncios de forma eficiente
+            const resumoMap = anunciosResumo.reduce((acc, resumo) => {
+                acc[`${resumo.codUf}-${resumo.codCaderno}`] = resumo;
+                return acc;
+            }, {});
+
+            let isFirst = true;
+
+
+            for (const caderno of cadernos.rows) {
+                // Use o mapa de resumos para encontrar o resumo correspondente
+                const resumo = resumoMap[`${caderno.UF}-${caderno.nomeCaderno}`];
+
+                const record = {
+                    caderno: {
+                        codCaderno: caderno.codCaderno,
+                        UF: caderno.UF,
+                        nomeCaderno: caderno.nomeCaderno,
+                        isCapital: caderno.isCapital,
+                        cep_inicial: caderno.cep_inicial,
+                        cep_final: caderno.cep_final,
+                        basico: resumo.basico,
+                        completo: resumo.completo,
+                        paginaAtual: paginaAtual,
+                        totalPaginas: totalPaginas,
+                        totalItem: totalItens,
+                    },
+                    resumo: resumo || {} // Caso não encontre o resumo, retorna um objeto vazio
+                };
+
+                // Envia o registro em formato JSON
+                // if (!isFirst) res.write(','); // Adiciona vírgula antes de cada registro, exceto o primeiro
+                res.write(JSON.stringify(record));
+                isFirst = false;
+
+                // Pequeno atraso opcional para simular streaming
+                await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms (opcional)
+            }
+
+            res.end(); // Finaliza a resposta
+        } catch (error) {
+            console.error('Erro ao buscar dados:', error);
+            res.status(500).json({ success: false, message: 'Erro interno do servidor' });
+        }
+
+
+
 
         // Consulta para recuperar apenas os itens da página atual
         const anuncios = await Cadernos.findAndCountAll({
@@ -290,26 +380,73 @@ module.exports = {
         const totalItens = anuncios.count;
         // Número total de páginas
         const totalPaginas = Math.ceil(totalItens / porPagina);
+        /* 
+                const results = await Anuncio.findAll({
+                    where: {
+                        codUf: 'AL',
+                        codCaderno: 'PENEDO',
+                        codTipoAnuncio: 1
+                      },
+                    attributes: [
+                        'codUf', 'codCaderno',
+                        [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],
+                        [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 3 THEN 1 ELSE 0 END)'), 'completo'],
+                    ],
+                    group: ['codUf', 'codCaderno'],
+                });
+                console.log('12331231231221312', results) */
 
-        anuncios.rows.map((item) => {
-            console.log(item)
-        })
+        /* anuncios.rows.map(async (item) => {
+            //console.log(item.dataValues)
+            
+            const qtdBasico = await Anuncio.count({
+              where: {
+                codUf: item.UF,
+                codCaderno: item.nomeCaderno,
+                codTipoAnuncio: 1
+              }
+            });
+
+            const qtdCompleto = await Anuncio.count({
+              where: {
+                codUf: item.UF,
+                codCaderno: item.nomeCaderno,
+                codTipoAnuncio: 3
+              }
+            });
+
+            console.log("dasdadqasdasd", qtdAnuncios)
+            item.dataValues.basico = qtdBasico
+            item.dataValues.completo = qtdCompleto
+        }) */
+        /* 
+                const qtdAnuncios = await Anuncio.count({
+                    order: [
+                        ['UF', 'ASC'], // Ordena pelo campo 'name' em ordem ascendente (alfabética)
+                        [Sequelize.literal('isCapital ASC')],
+                        ['nomeCaderno', 'ASC']
+        
+                    ],
+                    limit: porPagina,
+                    offset: offset
+                }); */
 
         console.log({
             anuncios: anuncios.rows, // Itens da página atual
             paginaAtual: paginaAtual,
             totalPaginas: totalPaginas,
-
+            //qtd: results
         })
 
-        res.json({
-            success: true, data: { cidades: listaCadernos, estados: listaUf }, message: {
-                anuncios: anuncios.rows, // Itens da página atual
-                paginaAtual: paginaAtual,
-                totalPaginas: totalPaginas,
-                totalItem: totalItens
-            }
-        })
+        /*        res.json({
+                   success: true, data: { cidades: listaCadernos, estados: listaUf }, message: {
+                       anuncios: anuncios.rows, // Itens da página atual
+                       paginaAtual: paginaAtual,
+                       totalPaginas: totalPaginas,
+                       totalItem: totalItens,
+                       //qtd: results
+                   }
+               }) */
 
     },
     criarCaderno: async (req, res) => {
@@ -1084,7 +1221,7 @@ module.exports = {
     //ESPACOS
     listaTeste: async (req, res) => {
         const mysql = require('mysql2'); // Substitua por 'pg' se usar PostgreSQL
-        const query =  `
+        const query = `
         SELECT 
             codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, 
             COUNT(codAtividade) AS quantidade
@@ -1095,71 +1232,71 @@ module.exports = {
         GROUP BY codAtividade
         ORDER BY codAtividade ASC;
     `;
-    
-    try {
-        // Obter uma conexão do Sequelize
-        const connection = await database.connectionManager.getConnection();
-        //console.log(connection.config.host)
-   
-        // Criar a conexão nativa usando o `mysql2` ou `pg`
-        const nativeConnection = mysql.createConnection({
-            host: connection.config.host,
-            user: connection.config.user,
-            password: connection.config.password,
-            database: connection.config.database,
-        });
 
-        // Definir a consulta SQL
-     /*    const query = `
-            SELECT codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, COUNT(codAtividade) AS quantidade
-            FROM oi_clientes
-            WHERE codUf = ? AND codCaderno = ? AND codAtividade != 'ADMINISTRAÇÃO REGIONAL / PREFEITURA'
-            GROUP BY codAtividade
-            ORDER BY codAtividade ASC
-        `; */
+        try {
+            // Obter uma conexão do Sequelize
+            const connection = await database.connectionManager.getConnection();
+            //console.log(connection.config.host)
 
-        // Iniciar o streaming
-        const stream = nativeConnection.query(query, [req.params.uf, req.params.caderno]).stream();
-
-        // Configurar o cabeçalho da resposta
-        res.setHeader('Content-Type', 'application/json');
-        res.write('['); // Iniciar o JSON
-
-        let isFirst = true;
-
-        stream.on('data', (row) => {
-            if (!isFirst) res.write(',');
-            res.write(JSON.stringify(row));
-            isFirst = false;
-        });
-
-        stream.on('end', () => {
-            res.write(']'); // Finalizar o JSON
-            res.end();
-
-            // Fechar a conexão ao final
-            nativeConnection.end((err) => {
-                if (err) console.error('Erro ao fechar a conexão:', err);
+            // Criar a conexão nativa usando o `mysql2` ou `pg`
+            const nativeConnection = mysql.createConnection({
+                host: connection.config.host,
+                user: connection.config.user,
+                password: connection.config.password,
+                database: connection.config.database,
             });
-        });
 
-        stream.on('error', (err) => {
-            console.error('Erro no streaming:', err);
-            res.status(500).send('Erro ao processar os dados');
+            // Definir a consulta SQL
+            /*    const query = `
+                   SELECT codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, COUNT(codAtividade) AS quantidade
+                   FROM oi_clientes
+                   WHERE codUf = ? AND codCaderno = ? AND codAtividade != 'ADMINISTRAÇÃO REGIONAL / PREFEITURA'
+                   GROUP BY codAtividade
+                   ORDER BY codAtividade ASC
+               `; */
 
-            // Certifique-se de fechar a conexão em caso de erro
-            nativeConnection.end((endErr) => {
-                if (endErr) console.error('Erro ao fechar a conexão após erro:', endErr);
+            // Iniciar o streaming
+            const stream = nativeConnection.query(query, [req.params.uf, req.params.caderno]).stream();
+
+            // Configurar o cabeçalho da resposta
+            res.setHeader('Content-Type', 'application/json');
+            res.write('['); // Iniciar o JSON
+
+            let isFirst = true;
+
+            stream.on('data', (row) => {
+                if (!isFirst) res.write(',');
+                res.write(JSON.stringify(row));
+                isFirst = false;
             });
-        });
 
-        stream.on('close', () => {
-            console.log('Stream fechado.');
-        });
-    } catch (error) {
-        console.error('Erro ao criar o stream:', error);
-        res.status(500).send('Erro interno do servidor');
-    }
+            stream.on('end', () => {
+                res.write(']'); // Finalizar o JSON
+                res.end();
+
+                // Fechar a conexão ao final
+                nativeConnection.end((err) => {
+                    if (err) console.error('Erro ao fechar a conexão:', err);
+                });
+            });
+
+            stream.on('error', (err) => {
+                console.error('Erro no streaming:', err);
+                res.status(500).send('Erro ao processar os dados');
+
+                // Certifique-se de fechar a conexão em caso de erro
+                nativeConnection.end((endErr) => {
+                    if (endErr) console.error('Erro ao fechar a conexão após erro:', endErr);
+                });
+            });
+
+            stream.on('close', () => {
+                console.log('Stream fechado.');
+            });
+        } catch (error) {
+            console.error('Erro ao criar o stream:', error);
+            res.status(500).send('Erro interno do servidor');
+        }
     },
     listarEspacos: async (req, res) => {
 
@@ -1308,21 +1445,21 @@ module.exports = {
         console.log(req.params)
 
         try {
-         /*    const result = await Anuncio.findAll({
-                where: {
-                    [Op.and]: [
-                        { codUf: req.params.uf },
-                        { codCaderno: req.params.caderno },
-                        { codAtividade: { [Op.ne]: "ADMINISTRAÇÃO REGIONAL / PREFEITURA" } }
-                    ]
-                },
-                attributes: [
-                    'codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio',
-                    [Sequelize.fn('COUNT', Sequelize.col('codAtividade')), 'quantidade']
-                ],
-                group: ['codAtividade'],
-                order: [['codAtividade', 'ASC']]
-            }); */
+            /*    const result = await Anuncio.findAll({
+                   where: {
+                       [Op.and]: [
+                           { codUf: req.params.uf },
+                           { codCaderno: req.params.caderno },
+                           { codAtividade: { [Op.ne]: "ADMINISTRAÇÃO REGIONAL / PREFEITURA" } }
+                       ]
+                   },
+                   attributes: [
+                       'codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio',
+                       [Sequelize.fn('COUNT', Sequelize.col('codAtividade')), 'quantidade']
+                   ],
+                   group: ['codAtividade'],
+                   order: [['codAtividade', 'ASC']]
+               }); */
 
             //console.log("resultado", result.map(r => r.toJSON())); // Resultado formatado
 
@@ -1335,7 +1472,7 @@ module.exports = {
                     ],
                     [Op.or]: [
                         { codAtividade: "ADMINISTRAÇÃO REGIONAL / PREFEITURA" },
-                        { codAtividade: 2 },
+                        { codAtividade: "EMERGÊNCIA" },
                         { codAtividade: 3 },
                         { codAtividade: 4 },
                         { codAtividade: 5 },
@@ -2795,6 +2932,83 @@ module.exports = {
         });
 
     },
+    buscarAnuncioIdpublic: async (req, res) => {
+        //await database.sync();
+        //const nu_hash = req.params.id;
+        const nu_hash = req.query.search;
+        console.log(nu_hash);
+
+
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+        const offset = (paginaAtual - 1) * porPagina;
+
+
+
+        //verificação
+        const contemNumero = () => /\d/.test(nu_hash);
+
+
+        //ANUNCIO
+        const resultAnuncio = await Anuncio.findAll({
+            where: {
+                codUf: 'AL',
+                codCaderno: 'PENEDO',
+                descCPFCNPJ: '45564523534'
+            },
+            attributes: ['codAnuncio', 'descAnuncio', 'createdAt', 'updatedAt', 'dueDate', 'codUf', 'codCaderno'],
+            raw: false,
+            limit: porPagina,
+            offset: offset
+        });
+
+        console.table([1, "id", nu_hash])
+
+        if (resultAnuncio.length > 0) {
+            /*  await Promise.all(resultAnuncio.map(async (anun, i) => {
+             
+ 
+                 const user = await anun.getUsuario();
+ 
+                 if (user) {
+                     anun.codUsuario = user.descNome;
+                     anun.dataValues.loginUser = user.descCPFCNPJ;
+                     anun.dataValues.loginPass = user.senha;
+                     anun.dataValues.loginEmail = user.descEmail;
+                     anun.dataValues.loginContato = user.descTelefone;
+                 }
+ 
+             })); */
+
+            /*    const resultAnuncioCount = await Anuncio.count({
+                   where: {
+                       [Op.or]: [
+                           { codAnuncio: nu_hash },
+                           { descCPFCNPJ: nu_hash },
+                           { codDesconto: nu_hash },
+                           { codUf: nu_hash }
+                       ]
+                   },
+               });
+   
+               const totalItens = resultAnuncioCount;
+               const totalPaginas = Math.ceil(totalItens / porPagina); */
+
+            res.json({
+                success: true,
+                message: {
+                    anuncios: resultAnuncio, // Itens da página atual
+                    /*   paginaAtual: paginaAtual,
+                      totalPaginas: totalPaginas,
+                      totalItem: totalItens */
+                }
+            });
+            return;
+        };
+
+
+
+    },
     buscarAnuncioId: async (req, res) => {
         await database.sync();
         //const nu_hash = req.params.id;
@@ -3259,7 +3473,7 @@ module.exports = {
                 hash: codDesconto
             },
             attributes: ['desconto']
-        }); 
+        });
 
 
 

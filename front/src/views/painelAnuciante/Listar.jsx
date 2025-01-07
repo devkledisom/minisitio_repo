@@ -112,10 +112,10 @@ function Listar(props) {
 
         const campoPesquisa = document.getElementById('buscar').value;
 
-        fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${cpf}`)
+        fetch(`${masterPath.url}/admin/anuncio/public/?search=${cpf}`)
             .then((x) => x.json())
             .then((res) => {
-                console.log(res)
+                //console.log(res)
                 if (res.success) {
                     setAnuncios(res.message.anuncios);
                     setShowSpinner(false);

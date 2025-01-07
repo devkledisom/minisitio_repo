@@ -143,7 +143,7 @@ function PainelAdmin() {
 
         const campoPesquisa = document.getElementById('buscar').value;
 
-        fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${cpf}`)
+        fetch(`${masterPath.url}/admin/anuncio/public/?search=${cpf}`)
             .then((x) => x.json())
             .then((res) => {
                 console.log(res)
@@ -168,7 +168,7 @@ function PainelAdmin() {
         e.preventDefault();
         setAction(page);
         setEspacoId(e.target.parentNode.parentNode.id);
-        //console.log("event", e.target, page)
+        console.log("event", e.target.parentNode.parentNode, page)
     };
 
 

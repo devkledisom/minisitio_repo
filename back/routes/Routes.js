@@ -95,6 +95,7 @@ router.put('/api/admin/anuncio/status/:id', Admin.updateAnuncioStatus);
 router.delete('/api/admin/anuncio/delete/:id', Admin.deleteAnuncio);
 router.put('/api/admin/anuncio/update', Admin.atualizarAnuncio);
 router.get('/api/admin/anuncio/buscar', Admin.buscarAnuncioId);
+router.get('/api/admin/anuncio/public', Admin.buscarAnuncioIdpublic);
 router.get('/api/admin/anuncio/visualizacoes', Admin.visualizacoes);
 router.post('/api/admin/anuncio/duplicate', Admin.duplicar);
 router.get('/api/admin/anuncio/classificado/:caderno/:uf', Admin.listarClassificado);

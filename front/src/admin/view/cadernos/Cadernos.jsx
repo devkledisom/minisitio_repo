@@ -36,17 +36,65 @@ const Cadernos = () => {
 
     useEffect(() => {
         setShowSpinner(true);
-        fetch(`${masterPath.url}/admin/cadernos?page=${param}`)
-            .then((x) => x.json())
-            .then((res) => {
-                setEstado(res.data.estados);
-                setCidade(res.message.anuncios);
-                setPaginas(res.message.totalPaginas);
-                setPaginaAtual(res.message.paginaAtual);
-                setShowSpinner(false);
-                setTotalRegistro(res.message.totalItem);
-                //console.log(res.message);
-            })
+        //setCidade([])
+        /*  fetch(`${masterPath.url}/admin/cadernos?page=${param}`)
+             .then((x) => x.json())
+             .then((res) => {
+                 console.log(res);
+                 setEstado(res.data.estados);
+                 setCidade(res.message.anuncios);
+                 setPaginas(res.message.totalPaginas);
+                 setPaginaAtual(res.message.paginaAtual);
+                 setShowSpinner(false);
+                 setTotalRegistro(res.message.totalItem);
+                 
+             })  */
+        fetchData()
+        async function fetchData() {
+            const response = await fetch(`${masterPath.url}/admin/cadernos?page=${param}`);
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder('utf-8');
+            let buffer = [];
+
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                //console.log(decoder.decode(value, { stream: true }))
+
+                // buffer.push(decoder.decode(value, { stream: true }));
+
+                let objReadble = JSON.parse(decoder.decode(value, { stream: true }))
+
+                //console.log(objReadble)
+                if (!Object.keys(objReadble).includes("totalItens")) {
+                    setCidade(prev => [...prev, JSON.parse(decoder.decode(value, { stream: true })).caderno]);
+                } else {
+                    setPaginas(objReadble.totalPaginas);
+                    setPaginaAtual(objReadble.paginaAtual);
+                    setShowSpinner(false);
+                    setTotalRegistro(objReadble.totalItens);
+                }
+
+
+
+
+                // Processa e renderiza os registros à medida que chegam
+                /*  const parts = buffer.split(',');
+                 for (let i = 0; i < parts.length - 1; i++) {
+                     const record = JSON.parse(parts[i]);
+                     renderRecord(record); // Função para renderizar o registro
+                 }
+                 buffer = parts[parts.length - 1];  */// Mantém o buffer incompleto
+            }
+            //console.log(buffer)
+            console.log('Streaming completo');
+        }
+
+        function renderRecord(record) {
+            // Lógica para renderizar os dados no front-end
+            console.log('Registro recebido:', record);
+        }
     }, [param]);
 
 
@@ -122,7 +170,7 @@ const Cadernos = () => {
                         text: 'Registro apagado!',
                         icon: 'success',
                         confirmButtonText: 'Confirmar'
-                      })
+                    })
                     document.querySelector(".selecionada").remove();
                 }
 
@@ -144,13 +192,13 @@ const Cadernos = () => {
             },
             body: JSON.stringify(cidadeBusca)
         })
-        .then(x => x.json())
-        .then(res => {
-            if(res.success) {
-                console.log(res);
-                window.location.href = res.downloadUrl;
-            }
-        })
+            .then(x => x.json())
+            .then(res => {
+                if (res.success) {
+                    console.log(res);
+                    window.location.href = res.downloadUrl;
+                }
+            })
     };
 
 
@@ -202,10 +250,11 @@ const Cadernos = () => {
                                         <th>MOSAICO</th>
                                         <th>CEP_INICIAL</th>
                                         <th>CEP_FINAL</th>
+                                        <th>BÁSICOS</th>
+                                        <th>COMPLETOS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     {cidade.map((item) => (
 
                                         <tr onClick={selecaoLinha} key={item.id_uf} id={item.codCaderno}>
@@ -214,7 +263,8 @@ const Cadernos = () => {
                                             {item.descImagem != '' ? <td key={item.id_uf}>SIM</td> : <td key={item.id_uf}>NÃO</td>}
                                             <td key={item.id_uf}>{item.cep_inicial}</td>
                                             <td key={item.id_uf}>{item.cep_final}</td>
-                                            
+                                             <td key={item.id_uf}>{item.basico}</td>
+                                            <td key={item.id_uf}>{item.completo}</td> 
                                         </tr>
                                     ))}
 

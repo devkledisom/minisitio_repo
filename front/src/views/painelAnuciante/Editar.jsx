@@ -90,6 +90,7 @@ function Editar(props) {
   }, []);
 
   useEffect(() => {
+    console.log("id: ", props.espacoId)
     fetch(`${masterPath.url}/admin/anuncio/edit/${props.espacoId}`)
       .then((x) => x.json())
       .then((res) => {
