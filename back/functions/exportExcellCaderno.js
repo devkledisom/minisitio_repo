@@ -17,7 +17,7 @@ module.exports = async function expExcel(dados, res, counts) {
         return registro;
     }); 
 
-console.log(newDados)
+console.log(newDados);
 
     const headingColumnNames = [
             "codCaderno",
