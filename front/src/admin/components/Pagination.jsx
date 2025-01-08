@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useHistory, useNavigate } from 'react-router-dom';
 
-const Pagination = ({ totalPages, paginaAtual, totalItem, table }) => {
+const Pagination = ({ totalPages, paginaAtual, totalItem, table, busca }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate();
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        navigate(`/admin/${table}?page=${page}`);
+        navigate(`/admin/${table}?page=${page}&search=${busca}`);
     };
 
     const renderPaginationNumbers = () => {

@@ -274,93 +274,94 @@ module.exports = {
 
         const offset = (paginaAtual - 1) * porPagina;
 
-        try {
-            // Configura o cabeçalho para streaming JSON
-            res.setHeader('Content-Type', 'application/json');
-
-            // Consulta para obter os cadernos
-            const cadernos = await Cadernos.findAndCountAll({
-                order: [
-                    ['UF', 'ASC'],
-                    [Sequelize.literal('isCapital ASC')],
-                    ['nomeCaderno', 'ASC']
-                ],
-                limit: porPagina,
-                offset: offset
-            });
-
-              // Calculando o número total de itens e páginas
-    const totalItens = cadernos.count;
-    const totalPaginas = Math.ceil(totalItens / porPagina);
-
-    // Envia as informações de total de itens e páginas antes dos registros
-    res.write(JSON.stringify({
-        totalItens,
-        totalPaginas,
-        paginaAtual
-    }));
-
-            // Obter todos os dados de resumo de anúncios para todos os cadernos em uma consulta
-            const anunciosResumo = await Anuncio.findAll({
-                where: {
-                    codUf: { [Sequelize.Op.in]: cadernos.rows.map(c => c.UF) }, // Buscar somente para os estados dos cadernos
-                    codCaderno: { [Sequelize.Op.in]: cadernos.rows.map(c => c.nomeCaderno) } // Buscar somente para os cadernos dos cadernos
-                },
-                attributes: [
-                    'codUf',
-                    'codCaderno',
-                    [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],
-                    [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 3 THEN 1 ELSE 0 END)'), 'completo']
-                ],
-                group: ['codUf', 'codCaderno'],
-                raw: true
-            });
-
-            // Criar um mapa para acessar os resumos de anúncios de forma eficiente
-            const resumoMap = anunciosResumo.reduce((acc, resumo) => {
-                acc[`${resumo.codUf}-${resumo.codCaderno}`] = resumo;
-                return acc;
-            }, {});
-
-            let isFirst = true;
-
-
-            for (const caderno of cadernos.rows) {
-                // Use o mapa de resumos para encontrar o resumo correspondente
-                const resumo = resumoMap[`${caderno.UF}-${caderno.nomeCaderno}`];
-
-                const record = {
-                    caderno: {
-                        codCaderno: caderno.codCaderno,
-                        UF: caderno.UF,
-                        nomeCaderno: caderno.nomeCaderno,
-                        isCapital: caderno.isCapital,
-                        cep_inicial: caderno.cep_inicial,
-                        cep_final: caderno.cep_final,
-                        basico: resumo.basico,
-                        completo: resumo.completo,
-                        paginaAtual: paginaAtual,
-                        totalPaginas: totalPaginas,
-                        totalItem: totalItens,
-                    },
-                    resumo: resumo || {} // Caso não encontre o resumo, retorna um objeto vazio
-                };
-
-                // Envia o registro em formato JSON
-                // if (!isFirst) res.write(','); // Adiciona vírgula antes de cada registro, exceto o primeiro
-                res.write(JSON.stringify(record));
-                isFirst = false;
-
-                // Pequeno atraso opcional para simular streaming
-                await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms (opcional)
-            }
-
-            res.end(); // Finaliza a resposta
-        } catch (error) {
-            console.error('Erro ao buscar dados:', error);
-            res.status(500).json({ success: false, message: 'Erro interno do servidor' });
-        }
-
+        /*      try {
+                 // Configura o cabeçalho para streaming JSON
+                 res.setHeader('Content-Type', 'application/json');
+     
+                 // Consulta para obter os cadernos
+                 const cadernos = await Cadernos.findAndCountAll({
+                     order: [
+                         ['UF', 'ASC'],
+                         [Sequelize.literal('isCapital ASC')],
+                         ['nomeCaderno', 'ASC']
+                     ],
+                     limit: porPagina,
+                     offset: offset
+                 });
+     
+                   // Calculando o número total de itens e páginas
+         const totalItens = cadernos.count;
+         const totalPaginas = Math.ceil(totalItens / porPagina);
+     
+         // Envia as informações de total de itens e páginas antes dos registros
+         res.write(JSON.stringify({
+             totalItens,
+             totalPaginas,
+             paginaAtual
+         }));
+     
+                 // Obter todos os dados de resumo de anúncios para todos os cadernos em uma consulta
+                 const anunciosResumo = await Anuncio.findAll({
+                     where: {
+                         codUf: { [Sequelize.Op.in]: cadernos.rows.map(c => c.UF) }, // Buscar somente para os estados dos cadernos
+                         codCaderno: { [Sequelize.Op.in]: cadernos.rows.map(c => c.nomeCaderno) } // Buscar somente para os cadernos dos cadernos
+                     },
+                     attributes: [
+                         'codUf',
+                         'codCaderno',
+                         [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],
+                         [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 3 THEN 1 ELSE 0 END)'), 'completo']
+                     ],
+                     group: ['codUf', 'codCaderno'],
+                     raw: true
+                 });
+     
+                 // Criar um mapa para acessar os resumos de anúncios de forma eficiente
+                 const resumoMap = anunciosResumo.reduce((acc, resumo) => {
+                     acc[`${resumo.codUf}-${resumo.codCaderno}`] = resumo;
+                     return acc;
+                 }, {});
+     
+                 let isFirst = true;
+     
+     
+                 for (const caderno of cadernos.rows) {
+                     // Use o mapa de resumos para encontrar o resumo correspondente
+                     const resumo = resumoMap[`${caderno.UF}-${caderno.nomeCaderno}`];
+     
+                     const record = {
+                         caderno: {
+                             codCaderno: caderno.codCaderno,
+                             UF: caderno.UF,
+                             nomeCaderno: caderno.nomeCaderno,
+                             descImagem: caderno.descImagem,
+                             isCapital: caderno.isCapital,
+                             cep_inicial: caderno.cep_inicial,
+                             cep_final: caderno.cep_final,
+                             basico: resumo.basico,
+                             completo: resumo.completo,
+                             paginaAtual: paginaAtual,
+                             totalPaginas: totalPaginas,
+                             totalItem: totalItens,
+                         },
+                         resumo: resumo || {} // Caso não encontre o resumo, retorna um objeto vazio
+                     };
+     
+                     // Envia o registro em formato JSON
+                     // if (!isFirst) res.write(','); // Adiciona vírgula antes de cada registro, exceto o primeiro
+                     res.write(JSON.stringify(record));
+                     isFirst = false;
+     
+                     // Pequeno atraso opcional para simular streaming
+                     await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms (opcional)
+                 }
+     
+                 res.end(); // Finaliza a resposta
+             } catch (error) {
+                 console.error('Erro ao buscar dados:', error);
+                 res.status(500).json({ success: false, message: 'Erro interno do servidor' });
+             }
+      */
 
 
 
@@ -438,15 +439,49 @@ module.exports = {
             //qtd: results
         })
 
-        /*        res.json({
-                   success: true, data: { cidades: listaCadernos, estados: listaUf }, message: {
-                       anuncios: anuncios.rows, // Itens da página atual
-                       paginaAtual: paginaAtual,
-                       totalPaginas: totalPaginas,
-                       totalItem: totalItens,
-                       //qtd: results
-                   }
-               }) */
+        res.json({
+            success: true, message: {
+                anuncios: anuncios.rows, // Itens da página atual
+                paginaAtual: paginaAtual,
+                totalPaginas: totalPaginas,
+                totalItem: totalItens,
+                //qtd: results
+            }
+        })
+        /*           res.json({
+                     success: true, data: { cidades: listaCadernos, estados: listaUf }, message: {
+                         anuncios: anuncios.rows, // Itens da página atual
+                         paginaAtual: paginaAtual,
+                         totalPaginas: totalPaginas,
+                         totalItem: totalItens,
+                         //qtd: results
+                     }
+                 }) 
+   */
+    },
+    countPerfis: async (req, res) => {
+
+        const arrCadernos = req.body.data;
+
+        const anunciosResumo = await Anuncio.findAll({
+            /*     where: {
+                    codUf: req.query.uf, // Buscar somente para os estados dos cadernos
+                }, */
+            where: {
+                codUf: req.query.uf, // Buscar somente para os estados dos cadernos
+                codCaderno: { [Sequelize.Op.in]: arrCadernos } // Buscar somente para os cadernos dos cadernos
+            },
+            attributes: [
+                'codUf',
+                'codCaderno',
+                [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],
+                [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 3 THEN 1 ELSE 0 END)'), 'completo']
+            ],
+            group: ['codUf', 'codCaderno'],
+            raw: true
+        });
+        res.json(anunciosResumo)
+
 
     },
     criarCaderno: async (req, res) => {
@@ -488,6 +523,11 @@ module.exports = {
         //const nu_hash = req.params.id;
         const nu_hash = req.query.search;
 
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = parseInt(req.query.rows) || 10; // Número de itens por página
+        const codigoCaderno = req.params.codCaderno;
+
+        const offset = (paginaAtual - 1) * porPagina;
 
         //Descontos
         const resultAnuncio = await Cadernos.findAll({
@@ -502,7 +542,9 @@ module.exports = {
                     { UF: nu_hash },
                     { nomeCaderno: nu_hash },
                 ]
-            }
+            },
+            limit: porPagina,
+            offset: offset
         });
 
         if (resultAnuncio < 1) {
@@ -510,10 +552,28 @@ module.exports = {
             return;
         }
 
+        const countCadernos = await Cadernos.count({
+            where: {
+                [Op.or]: [
+                    { UF: nu_hash },
+                    { nomeCaderno: nu_hash },
+                ]
+            }
+        });
+        console.log(countCadernos)
+
+        // Número total de itens
+        const totalItens = countCadernos;
+        // Número total de páginas
+        const totalPaginas = Math.ceil(totalItens / porPagina);
+
         res.json({
             success: true,
             message: {
-                registros: resultAnuncio
+                registros: resultAnuncio,
+                paginaAtual: paginaAtual,
+                totalPaginas: totalPaginas,
+                totalItem: totalItens,
             }
         });
 
@@ -5636,16 +5696,42 @@ module.exports = {
     //rota de exportar unica
     exportPadrao: async (req, res) => {
         const modulo = req.params.modulo;
-
+       
         try {
 
             switch (modulo) {
                 case "cadernos":
-                    if (Object.keys(req.body).length == 0) {
-                        const allCadernos = await Caderno.findAll();
-                        const allCadernosObj = allCadernos.map(registro => registro.get({ plain: true }));
+                    if (Object.keys(req.body).length > 0) {
+                        const allCadernos = await Caderno.findAll({raw: true});
+
+                        // Supondo que você tenha o modelo 'Anuncio'
+                        const resultados = await Anuncio.findAll({
+                            //where: {codCaderno: "PENEDO"},
+                            attributes: [
+                                'codCaderno', // Referência ao campo codCaderno
+                                [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],
+                                [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 3 THEN 1 ELSE 0 END)'), 'completo'],
+                              /*   [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 1 }, 1, 0)), 'basico'], // SUM CASE para codTipoAnuncio = 1
+                                [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 3 }, 1, 0)), 'completo'] // SUM CASE para codTipoAnuncio = 3 */
+                            ],
+                            group: ['codCaderno'], // Agrupar por codCaderno
+                            raw: true
+                        });
+
+                        console.log("sakhfloskdjhfljkasdhnfljkasdnfsa=======:> ", resultados)
+
+                 /*        const allCadernosObj = allCadernos.map((registro, i) => {
+                            registro.basico = resultados[i].basico;
+                            registro.completo = resultados[i].completo;
+                            return registro;
+                        }); */
+                        
+
+                        //console.log(resultados)
+                        exportExcellCaderno(allCadernos, res, resultados); 
+                      /*   const allCadernosObj = newObj.map(registro => registro.get({ plain: true }));
                         console.log(allCadernosObj)
-                        exportExcellCaderno(allCadernosObj, res);
+                        exportExcellCaderno(allCadernosObj, res); */
 
                     } else {
                         exportExcellCaderno(req.body, res);

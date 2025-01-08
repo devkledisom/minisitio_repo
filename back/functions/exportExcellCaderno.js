@@ -3,9 +3,21 @@ const fs = require('fs').promises;
 const path = require('path');
 const masterPath = require('../config/config');
 
-module.exports = async function expExcel(dados, res) {
+module.exports = async function expExcel(dados, res, counts) {
     const wb = new xl.Workbook();
     const ws = wb.addWorksheet('cadernos');
+
+    let newDados = dados.map((registro, i) => {
+
+        const obj1 = counts.find(itemBasico => itemBasico.codCaderno == registro.nomeCaderno);
+        const obj2 = counts.find(itemCompleto => itemCompleto.codCaderno == registro.nomeCaderno);
+
+         registro.basico = obj1 ? obj1.basico : 0;
+        registro.completo = obj2 ? obj2.completo : 0; 
+        return registro;
+    }); 
+
+console.log(newDados)
 
     const headingColumnNames = [
             "codCaderno",
@@ -16,7 +28,9 @@ module.exports = async function expExcel(dados, res) {
             "descImagem",
             "cep_inicial",
             "cep_final",
-            "isCapital"
+            "isCapital",
+            "basicos",
+            "completos"
     ];
 
     let headingColumnIndex = 1;
@@ -25,7 +39,7 @@ module.exports = async function expExcel(dados, res) {
     });
 
     let rowIndex = 2;
-    dados.forEach(record => {
+    newDados.forEach(record => {
         let columnIndex = 1;
         Object.keys(record).forEach(columnName => {
             const value = record[columnName];
