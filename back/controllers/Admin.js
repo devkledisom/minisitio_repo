@@ -5734,7 +5734,34 @@ module.exports = {
                         exportExcellCaderno(allCadernosObj, res); */
 
                     } else {
-                        exportExcellCaderno(req.body, res);
+                        const allCadernos = await Caderno.findAll({raw: true});
+
+                        // Supondo que você tenha o modelo 'Anuncio'
+                        const resultados = await Anuncio.findAll({
+                            //where: {codCaderno: "PENEDO"},
+                            attributes: [
+                                'codCaderno', // Referência ao campo codCaderno
+                                [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],
+                                [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 3 THEN 1 ELSE 0 END)'), 'completo'],
+                              /*   [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 1 }, 1, 0)), 'basico'], // SUM CASE para codTipoAnuncio = 1
+                                [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 3 }, 1, 0)), 'completo'] // SUM CASE para codTipoAnuncio = 3 */
+                            ],
+                            group: ['codCaderno'], // Agrupar por codCaderno
+                            raw: true
+                        });
+
+                        console.log("sakhfloskdjhfljkasdhnfljkasdnfsa=======:> ", resultados)
+
+                 /*        const allCadernosObj = allCadernos.map((registro, i) => {
+                            registro.basico = resultados[i].basico;
+                            registro.completo = resultados[i].completo;
+                            return registro;
+                        }); */
+                        
+
+                        //console.log(resultados)
+                        exportExcellCaderno(allCadernos, res, resultados); 
+                        //exportExcellCaderno(req.body, res);
                     }
                     break;
                 case "atividades":
