@@ -45,7 +45,7 @@ const Users = () => {
                 setShowSpinner(false);
                 console.log(res)
             })
-        fetch(`${masterPath.url}/cadernos`)
+/*         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
             .then((res) => {
                 setCaderno(res)
@@ -54,7 +54,7 @@ const Users = () => {
             .then((x) => x.json())
             .then((res) => {
                 setUfs(res);
-            })
+            }) */
     }, [page, param]);
 
 
@@ -228,6 +228,7 @@ const Users = () => {
                                                 {item.codTipoUsuario == 2 ? <td>MASTER</td> : ''}
                                                 {item.codTipoUsuario == 3 ? <td>ANUNCIANTE</td> : ''}
                                                 {item.codTipoUsuario == 4 ? <td>MASTER / ANUNC</td> : ''}
+                                                {item.codTipoUsuario == 5 ? <td>PREFEITURA</td> : ''}
                                                {/*  {uf.map((estado) => (
                                                     estado.id_uf == item.codUf &&
                                                     <td>{estado.sigla_uf}</td>

@@ -48,9 +48,10 @@ function Login() {
                     let tipoUsuario = res.data.codTipoUsuario;
                     let nuDocumento = res.data.descCPFCNPJ;
     
-                    if (tipoUsuario == 2 || tipoUsuario == 3) {
+                    if (tipoUsuario == 2 || tipoUsuario == 3 || tipoUsuario == 5 ) {
                         sessionStorage.setItem('authTokenMN', true);
-                        sessionStorage.setItem('userLogged', res.data);
+                        //sessionStorage.setItem('userLogged', res.data);
+                        sessionStorage.setItem('userLogged', res.type);
                         navigate(`/ver-anuncios/${nuDocumento.replace(/[.-]/g, '')}`);
                     }
                 } else {console.log(res);

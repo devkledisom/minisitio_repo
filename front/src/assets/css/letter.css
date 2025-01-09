@@ -29,12 +29,12 @@
 .marquee {
     display: flex;
     /* padding-left: 100%; */ /* Começa fora da div */
-    animation: scrolling 15s linear infinite; /* Duração da animação e repetição infinita */
+    animation: scrolling 20s linear infinite; /* Duração da animação e repetição infinita */
 }
 
 @keyframes scrolling {
     from {
-        transform: translateX(0); /* Ponto inicial (direita fora da div) */
+        transform: translateX(100%); /* Ponto inicial (direita fora da div) */
     }
     to {
         transform: translateX(-100%); /* Ponto final (esquerda fora da div) */

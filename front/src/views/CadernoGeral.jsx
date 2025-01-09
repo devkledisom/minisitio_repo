@@ -216,7 +216,7 @@ function Caderno(props) {
               </ul>
 
             </div>
-            <Letter />
+            <Letter estado={estado} caderno={caderno}/>
           </div>
         </div>
 

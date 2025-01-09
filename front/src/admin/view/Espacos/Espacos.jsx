@@ -388,7 +388,7 @@ const Espacos = () => {
                                                     <td>Isento</td>
                                                     <td>Isento</td>
                                                    
-                                                   <td>{item.descPromocao}</td>
+                                                   <td>R$ {item.descPromocao},00</td>
                                                     <td>{formatData(item.createdAt)}</td>
                                                     <td>{formatData(item.createdAt)}</td>
                                                     <td>{dataExpiracao(item.dueDate)}</td>

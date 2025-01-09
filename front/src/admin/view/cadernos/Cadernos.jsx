@@ -202,7 +202,7 @@ const Cadernos = () => {
                 //console.log("fsdfsdfasd", )
                 if (res.success) {
                     setShowSpinner(false);
-                    alert("Encontrado " + res.message.registros.length + " registros");
+                    alert("Encontrado " + res.message.totalItem + " registros");
                     setCidade(res.message.registros);
                     setPaginas(res.message.totalPaginas);
                     setCidadeBusca(res.message.registros);

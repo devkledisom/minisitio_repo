@@ -35,6 +35,8 @@ function Listar(props) {
     const [showSpinner, setShowSpinner] = useState(false);
     const [anuncios, setAnuncios] = useState([]);
     const [dadoPaginacao, setDadoPaginacao] = useState({});
+    const [userType, setUserType] = useState(null);
+    
 
     const location = useLocation();
 
@@ -84,7 +86,7 @@ function Listar(props) {
 
     useEffect(() => {
         buscarAnuncioId();
-
+        setUserType(sessionStorage.getItem('userLogged'))
     }, []);
 
     function buscarTodosClassificado() {
@@ -118,6 +120,7 @@ function Listar(props) {
                 //console.log(res)
                 if (res.success) {
                     setAnuncios(res.message.anuncios);
+                    props.setAnunciosPainel(res.message.anuncios)
                     setShowSpinner(false);
                     setDadoPaginacao(res.message)
                     //console.log("usussss", res.message.anuncios);

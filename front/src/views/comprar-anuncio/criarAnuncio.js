@@ -1,6 +1,9 @@
 import { masterPath } from "../../config/config";
 
-export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert) {
+//LIBS
+import Swal from 'sweetalert2';
+
+export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin) {
     setShowSpinner(true);
 
 
@@ -28,10 +31,10 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
             if (res.success) {
                 setShowSpinner(true);
 
-     /*            switch(res.usuarios[0].codTipoUsuario) {
-                    case 1:
-                        criarUsuario();
-                } */
+                /*            switch(res.usuarios[0].codTipoUsuario) {
+                               case 1:
+                                   criarUsuario();
+                           } */
 
                 cadastrarAnuncio(res.usuarios[0].codUsuario)
             } else {
@@ -183,20 +186,73 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
 
-                setAlert(true);
-
-                setTimeout(() => {
-                    if (descontoAtivado && radioCheck == 3) {
-                        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-                        console.log("1");
-                    } else if (radioCheck == 1) {
-                        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-                        console.log("2");
-                    } else {
-                        window.location.href = `https://mpago.la/1pWzL7A`;
-                        console.log("3");
+                //setAlert(true);
+                Swal.fire({
+                    title: "Perfil Cadastrado",
+                    text: "Você será redirecionado para página de login, para efetuar o login use o seu cnpj e a senha defenida no cadastro. Você também receberá as informações do acesso no email cadastrado.",
+                    icon: "success"
+                }).then(res => {
+                    if (res.isConfirmed) {
+                        if (isAdmin) {
+ 
+                            if (descontoAtivado && radioCheck == 3) {
+                                window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
+                                console.log("1");
+                            } else if (radioCheck == 1) {
+                                window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
+                                console.log("2");
+                            } else {
+                                window.open(`https://mpago.la/1pWzL7A`, '_blank');
+                                console.log("3");
+                            }
+    
+                            return;
+    
+                        }
+    
+                        if (descontoAtivado && radioCheck == 3) {
+                            window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                            console.log("1");
+                        } else if (radioCheck == 1) {
+                            window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                            console.log("2");
+                        } else {
+                            window.location.href = `https://mpago.la/1pWzL7A`;
+                            console.log("3");
+                        }
                     }
-                }, 5000);
+
+                });
+
+                /*  setTimeout(() => {
+                     if (isAdmin) {
+ 
+                         if (descontoAtivado && radioCheck == 3) {
+                             window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
+                             console.log("1");
+                         } else if (radioCheck == 1) {
+                             window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
+                             console.log("2");
+                         } else {
+                             window.open(`https://mpago.la/1pWzL7A`, '_blank');
+                             console.log("3");
+                         }
+ 
+                         return;
+ 
+                     }
+ 
+                     if (descontoAtivado && radioCheck == 3) {
+                         window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                         console.log("1");
+                     } else if (radioCheck == 1) {
+                         window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                         console.log("2");
+                     } else {
+                         window.location.href = `https://mpago.la/1pWzL7A`;
+                         console.log("3");
+                     }
+                 }, 5000); */
 
             });
     }

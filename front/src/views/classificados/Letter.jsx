@@ -14,6 +14,20 @@ function Letter(props) {
 
     const concatenatedText = arr.join(" | ");
 
+    useEffect(() => {
+         let uf = document.querySelector("#codUf2").value;
+            let caderno = document.querySelector("#codUf3").value;
+        /*     let uf = props.anuncios[0].codUf;
+            let caderno = props.anuncios[0].codCaderno; */
+        
+            fetch(`${masterPath.url}/caderno/legenda/${props.estado}/${props.caderno}`)
+              .then((x) => x.json())
+              .then((res) => {
+                setLegenda(res[0].legenda);
+                console.log(res)
+              });
+    }, [])
+
     /*   useEffect(() => {
         const interval = setInterval(() => {
           setLegenda(arr[(contador + 1) % arr.length]);
@@ -27,8 +41,11 @@ function Letter(props) {
         <div className="letter">
             <div className="letter-div">
                 <div className="div-marquee marquee">
-                    <span>{arr[0]}</span>
-                    <span>{arr[1]}</span>
+                {/*     <span>{arr[0]}</span>
+                    <span>{arr[1]}</span> */}
+                    <span>{legenda}</span>
+                    <span>{legenda}</span>
+                    {/* <span>{arr[1]}</span> */}
                 </div>
             </div>
         </div>

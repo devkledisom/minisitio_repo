@@ -211,3 +211,7 @@ a:hover {
 #area-icons-actions i {
     display: flex;
 }
+
+.swal2-confirm {
+    background-color: #4f4f4f;
+}

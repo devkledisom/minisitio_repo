@@ -636,6 +636,44 @@ module.exports = {
 
         res.json(resultCaderno);
     },
+    cadernoLegenda: async (req, res) => {
+        console.log("dasjkhdkljashdfas")
+
+        const uf = req.params.uf;
+        const caderno = req.params.caderno;
+        console.log()
+
+        //Atividades
+        const resultCaderno = await Cadernos.findAll({
+            where: {
+                nomeCaderno: caderno,
+                UF: uf
+            },
+            attributes: ['legenda'],
+            raw: true
+        });
+        console.log(resultCaderno)
+        res.json(resultCaderno);
+    },
+    cadernoLegendaUpdate: async (req, res) => {
+        console.log("dasjkhdkljashdfas")
+
+        const uf = req.params.uf;
+        const caderno = req.params.caderno;
+        const data = req.body.legenda;
+
+        //Atividades
+        const resultCaderno = await Cadernos.update({
+            legenda: data
+        }, {
+            where: {
+                nomeCaderno: caderno,
+                UF: uf
+            }
+        });
+        console.log(resultCaderno)
+        res.json(resultCaderno);
+    },
     //atividades
     listarAtividades: async (req, res) => {
 
@@ -1533,12 +1571,12 @@ module.exports = {
                     [Op.or]: [
                         { codAtividade: "ADMINISTRAÇÃO REGIONAL / PREFEITURA" },
                         { codAtividade: "EMERGÊNCIA" },
-                        { codAtividade: 3 },
-                        { codAtividade: 4 },
-                        { codAtividade: 5 },
-                        { codAtividade: 6 },
-                        { codAtividade: 7 },
-                        { codAtividade: 8 },
+                        { codAtividade: "UTILIDADE PÚBLICA" },
+                        { codAtividade: "HOSPITAIS PÚBLICOS" },
+                        { codAtividade: "CÂMARA DE VEREADORES - CÂMARA DISTRITAL" },
+                        { codAtividade: "SECRETARIA DE TURISMO" },
+                        { codAtividade: "INFORMAÇÕES" },
+                        { codAtividade: "EVENTOS NA CIDADE" },
                     ]
                 }
             });
@@ -3087,6 +3125,8 @@ module.exports = {
         //ANUNCIO
         const resultAnuncio = await Anuncio.findAll({
             where: {
+                codUf: "AL",
+                codCaderno: "PENEDO",
                 [Op.or]: [
                     { codAnuncio: nu_hash },
                     { descCPFCNPJ: nu_hash },
@@ -3108,7 +3148,7 @@ module.exports = {
                 const cader = await anun.getCaderno();
                 anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
 
-                const estado = await anun.getUf();
+                //const estado = await anun.getUf();
                 //anun.codUf = estado.sigla_uf;
 
                 const desconto = await anun.getDesconto();
@@ -3151,7 +3191,7 @@ module.exports = {
             });
             return;
         };
-
+        return;
         //buscar por uf
         const resultEstado = await Uf.findAll({
             where: {
@@ -5696,13 +5736,13 @@ module.exports = {
     //rota de exportar unica
     exportPadrao: async (req, res) => {
         const modulo = req.params.modulo;
-       
+
         try {
 
             switch (modulo) {
                 case "cadernos":
                     if (Object.keys(req.body).length > 0) {
-                        const allCadernos = await Caderno.findAll({raw: true});
+                        const allCadernos = await Caderno.findAll({ raw: true });
 
                         // Supondo que você tenha o modelo 'Anuncio'
                         const resultados = await Anuncio.findAll({
@@ -5711,8 +5751,8 @@ module.exports = {
                                 'codCaderno', // Referência ao campo codCaderno
                                 [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],
                                 [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 3 THEN 1 ELSE 0 END)'), 'completo'],
-                              /*   [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 1 }, 1, 0)), 'basico'], // SUM CASE para codTipoAnuncio = 1
-                                [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 3 }, 1, 0)), 'completo'] // SUM CASE para codTipoAnuncio = 3 */
+                                /*   [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 1 }, 1, 0)), 'basico'], // SUM CASE para codTipoAnuncio = 1
+                                  [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 3 }, 1, 0)), 'completo'] // SUM CASE para codTipoAnuncio = 3 */
                             ],
                             group: ['codCaderno'], // Agrupar por codCaderno
                             raw: true
@@ -5720,21 +5760,21 @@ module.exports = {
 
                         console.log("sakhfloskdjhfljkasdhnfljkasdnfsa=======:> ", resultados)
 
-                 /*        const allCadernosObj = allCadernos.map((registro, i) => {
-                            registro.basico = resultados[i].basico;
-                            registro.completo = resultados[i].completo;
-                            return registro;
-                        }); */
-                        
+                        /*        const allCadernosObj = allCadernos.map((registro, i) => {
+                                   registro.basico = resultados[i].basico;
+                                   registro.completo = resultados[i].completo;
+                                   return registro;
+                               }); */
+
 
                         //console.log(resultados)
-                        exportExcellCaderno(allCadernos, res, resultados); 
-                      /*   const allCadernosObj = newObj.map(registro => registro.get({ plain: true }));
-                        console.log(allCadernosObj)
-                        exportExcellCaderno(allCadernosObj, res); */
+                        exportExcellCaderno(allCadernos, res, resultados);
+                        /*   const allCadernosObj = newObj.map(registro => registro.get({ plain: true }));
+                          console.log(allCadernosObj)
+                          exportExcellCaderno(allCadernosObj, res); */
 
                     } else {
-                        const allCadernos = await Caderno.findAll({raw: true});
+                        const allCadernos = await Caderno.findAll({ raw: true });
 
                         // Supondo que você tenha o modelo 'Anuncio'
                         const resultados = await Anuncio.findAll({
@@ -5743,8 +5783,8 @@ module.exports = {
                                 'codCaderno', // Referência ao campo codCaderno
                                 [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],
                                 [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 3 THEN 1 ELSE 0 END)'), 'completo'],
-                              /*   [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 1 }, 1, 0)), 'basico'], // SUM CASE para codTipoAnuncio = 1
-                                [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 3 }, 1, 0)), 'completo'] // SUM CASE para codTipoAnuncio = 3 */
+                                /*   [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 1 }, 1, 0)), 'basico'], // SUM CASE para codTipoAnuncio = 1
+                                  [fn('SUM', fn('CASE', { when: col('codTipoAnuncio'), op: 3 }, 1, 0)), 'completo'] // SUM CASE para codTipoAnuncio = 3 */
                             ],
                             group: ['codCaderno'], // Agrupar por codCaderno
                             raw: true
@@ -5752,15 +5792,15 @@ module.exports = {
 
                         console.log("sakhfloskdjhfljkasdhnfljkasdnfsa=======:> ", resultados)
 
-                 /*        const allCadernosObj = allCadernos.map((registro, i) => {
-                            registro.basico = resultados[i].basico;
-                            registro.completo = resultados[i].completo;
-                            return registro;
-                        }); */
-                        
+                        /*        const allCadernosObj = allCadernos.map((registro, i) => {
+                                   registro.basico = resultados[i].basico;
+                                   registro.completo = resultados[i].completo;
+                                   return registro;
+                               }); */
+
 
                         //console.log(resultados)
-                        exportExcellCaderno(allCadernos, res, resultados); 
+                        exportExcellCaderno(allCadernos, res, resultados);
                         //exportExcellCaderno(req.body, res);
                     }
                     break;

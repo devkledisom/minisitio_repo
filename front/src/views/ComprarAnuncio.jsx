@@ -36,11 +36,15 @@ import Map from '../components/Maps/Map';
 import MapContainer from "../components/MapContainer";
 import TagsInput from "../admin/components/TagsInput";
 import AlertMsg from "../components/Alerts/AlertMsg";
+import Header from "../admin/view/Header";
 
 //FUNCTION EXTERNA
 import { criarAnuncio } from "./comprar-anuncio/criarAnuncio";
 
-function ComprarAnuncio() {
+//LIBS
+import Swal from 'sweetalert2';
+
+function ComprarAnuncio({ isAdmin }) {
   //States
   const [ufSelected, setUf] = useState(0);
   const [uf, setUfs] = useState([]);
@@ -92,6 +96,17 @@ function ComprarAnuncio() {
         //decodificar()
       });
 
+    console.log(isAdmin)
+/*     Swal.fire({
+      title: "Perfil Cadastrado",
+      text: "Você será redirecionado para página de login, para efetuar o login use o seu cnpj e a senha defenida no cadastro. Você também receberá as informações do acesso no email cadastrado.",
+      icon: "success"
+  }).then(res => {
+      if (res.isConfirmed) {
+          console.log(res)
+      }
+
+  }); */
 
   }, []);
 
@@ -214,9 +229,18 @@ function ComprarAnuncio() {
 
   return (
     <div className="App">
-      <header>
-        <Mosaico logoTop={true} borda="none" />
-      </header>
+      {isAdmin &&
+        <header style={{ position: "fixed", zIndex: "999" }} className='w-100'>
+          <Header />
+        </header>
+      }
+
+      {!isAdmin &&
+        <header>
+          <Mosaico logoTop={true} borda="none" />
+        </header>
+      }
+
       <main>
         {/*      <TemplateModal
           descontoAtivado={descontoAtivado}
@@ -230,8 +254,8 @@ function ComprarAnuncio() {
 
         {alert && <AlertMsg message={"Cadastro Realizado, verifique a sua caixa de email para obter o acesso a plataforma"} />}
 
-
-        <Busca paginaAtual={"caderno"} />
+        {!isAdmin && <Busca paginaAtual={"caderno"} />}
+        {/*  */}
         <h1 id="title-caderno" className="py-2">
           Cadastro da Assinatura/Espaço Minisitio
         </h1>
@@ -286,6 +310,20 @@ function ComprarAnuncio() {
                     />
                     Completo
                   </label>
+                  {isAdmin &&
+                    <label className="prefeitura">
+                      <input
+                        type="radio"
+                        name="codTipoAnuncio"
+                        id="codTipoAnuncio-4"
+                        value="4"
+                        onClick={(e) => setRadioCheck(e.target.value)}
+                        checked={radioCheck == 4}
+                        className="mx-1"
+                      />
+                      Prefeitura
+                    </label>
+                  }
                 </div>
               </div>
             </div>
@@ -341,26 +379,47 @@ function ComprarAnuncio() {
               <div className="form-group">
                 <div className="input-icon margin-top-10">
                   <i className="fa fa-briefcase icone-form p-0"></i>
-                  <select
-                    name="codAtividade"
-                    id="codAtividade"
-                    className="form-control"
-                  >
-                    <option value="">Selecione a atividade principal</option>
-                    {atividades &&
+                  {radioCheck != 4 &&
+                    <select
+                      name="codAtividade"
+                      id="codAtividade"
+                      className="form-control"
+                    >
+                      <option value="">Selecione a atividade principal</option>
+                      {atividades &&
 
-                      atividades.map(
-                        (item) =>
+                        atividades.map(
+                          (item, i) =>
+                            i > 7 ? <option
+                          key={item.id}
+                          value={item.atividade}
+                        >
+                          {item.atividade}
+                        </option> : ""
+                            
 
-                          <option
-                            key={item.id}
-                            value={item.atividade}
-                          >
-                            {item.atividade}
-                          </option>
+                        )}
+                    </select>
+                  }
 
-                      )}
-                  </select>
+                  {radioCheck == 4 &&
+                    <select
+                      name="codAtividade"
+                      id="codAtividade"
+                      className="form-control"
+                    >
+                      <option value="">Selecione a atividade principal</option>
+                      <option value="ADMINISTRAÇÃO REGIONAL / PREFEITURA">ADMINISTRAÇÃO REGIONAL / PREFEITURA</option>
+                      <option value="EMERGÊNCIA">EMERGÊNCIA</option>
+                      <option value="UTILIDADE PÚBLICA">UTILIDADE PÚBLICA</option>
+                      <option value="HOSPITAIS PÚBLICOS">HOSPITAIS PÚBLICOS</option>
+                      <option value="CÂMARA DE VEREADORES - CÂMARA DISTRITAL">CÂMARA DE VEREADORES - CÂMARA DISTRITAL</option>
+                      <option value="SECRETARIA DE TURISMO">SECRETARIA DE TURISMO</option>
+                      <option value="INFORMAÇÕES">INFORMAÇÕES</option>
+                      <option value="EVENTOS NA CIDADE">EVENTOS NA CIDADE</option>
+                    </select>
+                  }
+
                 </div>
 
                 {/* <Marcadores /> */}
@@ -521,7 +580,7 @@ function ComprarAnuncio() {
                   className="form-control"
                   placeholder="Digite o vídeo"
                   onChange={handleCpfCnpjChange}
-                  /* value={cpfCnpjValue} */
+                /* value={cpfCnpjValue} */
                 />
               </div>
               <div className="input-icon margin-top-10">
@@ -647,13 +706,13 @@ function ComprarAnuncio() {
 
             {/* Forma de Pagamento */}
 
-            {( radioCheck != 1 && descontoAtivado == false) && <div
+            {(radioCheck != 1 && descontoAtivado == false) && <div
               className="assinatura webcard formaPagamento"
               style={{ display: "block" }}
             >
               <h2>Forma de Pagamento</h2>
             </div>}
-            {( radioCheck != 1 && descontoAtivado == false) && <div
+            {(radioCheck != 1 && descontoAtivado == false) && <div
               className="codigo-promocional webcard formaPagamento"
               style={{ display: "block" }}
             >
@@ -901,10 +960,18 @@ function ComprarAnuncio() {
         </div>
       </main>
 
-      <footer>
-        <Nav styleclassName="Nav" />
-        <Footer />
-      </footer>
+      {isAdmin &&
+        <footer className='w-100' style={{ position: "relative", bottom: "0px" }}>
+          <p className='w-100 text-center'>© MINISITIO</p>
+        </footer>
+      }
+
+      {!isAdmin &&
+        <footer>
+          <Nav styleclassName="Nav" />
+          <Footer />
+        </footer>
+      }
     </div>
   );
 }

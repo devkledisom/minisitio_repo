@@ -39,7 +39,8 @@ import GerenciarIdEditar from "../admin/view/gerenciar_id/FormEdit";
 
 import Espacos from "../admin/view/Espacos/Espacos";
 import AnuncioEditar from "../admin/view/Espacos/FormEdit";
-import AnuncioCadastro from "../admin/view/Espacos/FormCadastro";
+//import AnuncioCadastro from "../admin/view/Espacos/ComprarAnuncio";//-------------
+import AnuncioCadastro from "../views/ComprarAnuncio";//-------------
 import EspacosImport from "../admin/view/Espacos/EspacosImport";
 
 import Pin from "../admin/view/Pin/Pin";
@@ -100,7 +101,7 @@ function Rotas() {
                     <Route path="admin/desconto/editar" element={<PrivateRoute><GerenciarIdEditar /></PrivateRoute>} />
 
                     <Route path="admin/espacos" element={<PrivateRoute><Espacos /></PrivateRoute>} />
-                    <Route path="admin/anuncio/cadastro" element={<PrivateRoute><AnuncioCadastro /></PrivateRoute>} />
+                    <Route path="admin/anuncio/cadastro" element={<PrivateRoute><AnuncioCadastro isAdmin={true} /></PrivateRoute>} />
                     <Route path="admin/anuncio/editar" element={<PrivateRoute><AnuncioEditar /></PrivateRoute>} />
                     <Route path="admin/anuncio/import" element={<PrivateRoute><EspacosImport /></PrivateRoute>} />
                     

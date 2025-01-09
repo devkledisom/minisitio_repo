@@ -128,10 +128,12 @@ router.get('/api/list-image', Upload.listFiles);
 
 //ACÕES DO USUARIO
 router.get('/api/cartao-digital', UserActions.cartaoDigital);
+router.get('/api/cartao-digital', UserActions.cartaoDigital);
 
 //EMAILS
 router.post('/api/contato', Email.contato);
-router.post('/api/novo-usuario', Email.novoUsuario);
+router.get('/api/caderno/legenda/:uf/:caderno', Admin.cadernoLegenda);
+router.put('/api/caderno/legenda/:uf/:caderno', Admin.cadernoLegendaUpdate);
 
 
 //EMAIL FALE COM O DONO

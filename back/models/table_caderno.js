@@ -90,6 +90,11 @@ const Caderno = database.define('caderno', {
                 msg: "Esse campo não pode está vazio.."
             },
         }
+    },
+
+    legenda: {
+        type: Sequelize.TEXT,
+        allowNull: true
     }
 },
     {

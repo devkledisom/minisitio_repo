@@ -21,6 +21,7 @@ import Listar from './Listar';
 import Editar from './Editar';
 import UserNav from './UserNav';
 import DadosPessoais from './DadosPessoais';
+import Legenda from './Legenda';
 
 //FUNCTIONS
 import useIsMobile from '../../admin/functions/useIsMobile';
@@ -39,9 +40,10 @@ function PainelAdmin() {
     const [mosaicoImg, setMosaicoImg] = useState([]);
     const [smoot, setSmoot] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false);
-    const [anuncios, setAnuncios] = useState([]);
+    const [anunciosPainel, setAnunciosPainel] = useState([]);
     const [action, setAction] = useState(1);
     const [espacoId, setEspacoId] = useState(null);
+    const [userType, setUserType] = useState(null);
 
     const location = useLocation();
 
@@ -95,7 +97,9 @@ function PainelAdmin() {
 
         console.log(isMobile)
 
-        buscarAnuncioId();
+       // buscarAnuncioId();
+
+        setUserType(sessionStorage.getItem('userLogged'))
 
     }, []);
 
@@ -148,9 +152,9 @@ function PainelAdmin() {
             .then((res) => {
                 console.log(res)
                 if (res.success) {
-                    setAnuncios(res.message.anuncios);
+                    //setAnuncios(res.message.anuncios);
                     setShowSpinner(false);
-                    //console.log("usussss", res.message.anuncios);
+                    console.log("usussss", res.message.anuncios[0].codUf);
                 } else {
                     //alert("Anúncio não encontrado na base de dados");
                     setShowSpinner(false);
@@ -220,6 +224,7 @@ function PainelAdmin() {
                                     {!isMobile &&
                                         <ul class="list-inline pull-right">
 
+                                            <li><a href="#" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 5)}>Legenda</a></li>
                                             <li><a href="#" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 3)}>Dados pessoais</a></li>
                                             <li><a href="/comprar-espaco-minisitio" class="btn cinza btnMenu">Criar anúncio</a></li>
                                             <li><a href="/12178481426/ver-anuncios" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 1)}>Listar Espaços</a></li>
@@ -302,13 +307,16 @@ function PainelAdmin() {
                             </div>
                         </div> */}
                         {action === 1 &&
-                            <Listar btnEdit={selectPage} />
+                            <Listar btnEdit={selectPage} setAnunciosPainel={setAnunciosPainel} />
                         }
                         {action === 2 &&
                             <Editar espacoId={espacoId} selectPage={selectPage} />
                         }
                         {action === 3 &&
                             <DadosPessoais espacoId={espacoId} selectPage={selectPage} />
+                        }
+                        {action === 5 &&
+                            <Legenda espacoId={espacoId} selectPage={selectPage} anuncios={anunciosPainel} />
                         }
 
 

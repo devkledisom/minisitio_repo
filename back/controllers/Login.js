@@ -33,6 +33,8 @@ module.exports = {
             res.json({ success: true, message: "Não é possível entrar com acesso MASTER", data: users[0], type: 2 })
         } else if (users[0].ativo && users[0].codTipoUsuario == 3) {
             res.json({ success: true, message: "Não é possível entrar com acesso ANUNCIANTE", data: users[0], type: 3 })
+        } else if (users[0].ativo && users[0].codTipoUsuario == 5) {
+            res.json({ success: true, message: "Não é possível entrar com acesso ANUNCIANTE", data: users[0], type: 5 })
         } else {
             res.json({ success: false, message: "O usuário não está ativo, por favor fale com o suporte." })
         }
