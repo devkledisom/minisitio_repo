@@ -946,7 +946,7 @@ function ComprarAnuncio({ isAdmin }) {
                       className="btn-block formulario-de-cadastro btn btn-primary"
                       id="anunciar"
                       /* data-bs-toggle="modal" data-bs-target="#myModal" */
-                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert)}
+                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin)}
                     >
                       Confirmar
                     </button>

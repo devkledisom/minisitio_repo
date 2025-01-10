@@ -194,7 +194,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                 }).then(res => {
                     if (res.isConfirmed) {
                         if (isAdmin) {
- 
+                            console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf")
                             if (descontoAtivado && radioCheck == 4) {
                                 window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
                                 console.log("1");
@@ -209,7 +209,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                             return;
     
                         } else {
-                            
+                            console.log("segundo dasdfaskhjfsdafhjasdbfnjaksdf")
                         if (descontoAtivado && radioCheck == 3) {
                             window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                             console.log("1");
@@ -219,7 +219,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                         } else {
                             window.location.href = `https://mpago.la/1pWzL7A`;
                             console.log("3");
-                        }
+                        } 
                         }
     
                     }
