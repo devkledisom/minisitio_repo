@@ -3110,7 +3110,8 @@ module.exports = {
         //ANUNCIO
         const resultAnuncio = await Anuncio.findAll({
             where: {
-                descCPFCNPJ: nu_hash
+                descCPFCNPJ: nu_hash,
+                codUf: "AL"
             },
             attributes: ['codAnuncio', 'descAnuncio', 'createdAt', 'updatedAt', 'dueDate', 'codUf', 'codCaderno'],
             raw: false,

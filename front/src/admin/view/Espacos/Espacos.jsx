@@ -238,6 +238,8 @@ const Espacos = () => {
                 return "Simples";
             case "3":
                 return "Completo";
+            case "4":
+                return "Prefeitura";
             default:
                 return "Tipo desconhecido";
         }
@@ -390,7 +392,7 @@ const Espacos = () => {
                                                    
                                                    <td>R$ {item.descPromocao},00</td>
                                                     <td>{formatData(item.createdAt)}</td>
-                                                    <td>{formatData(item.createdAt)}</td>
+                                                    <td></td>
                                                     <td>{dataExpiracao(item.dueDate)}</td>
                                                     <td></td>
                                                     <td>{item.codDesconto}</td>
