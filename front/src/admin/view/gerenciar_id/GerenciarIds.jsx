@@ -295,7 +295,7 @@ const GerenciarIds = () => {
                                                     <td>{item.descricao}</td>
                                                     <td>{formatData(item.dtCadastro)}</td>
                                                     {/*  <td>{item.ativo ? "Ativado" : "Desativado"}</td> */}
-                                                    <td>{item.qtdaGeral}</td>
+                                                    <td>{item.total_registros}</td>
                                                     <td>{item.saldo}</td>
                                                     <td><BtnActivate data={item.ativo} idd={item.idDesconto} modulo={"desconto"} /></td>
                                                 </tr>

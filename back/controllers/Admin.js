@@ -907,39 +907,16 @@ module.exports = {
         
                 console.log(Ids.rows) */
 
-       /*   await Promise.all(
+          await Promise.all(
             Ids.rows.map(async (item) => {
                 console.log(item.dataValues.descricao);
 
                 // Corrigir caracteres na descrição
                 item.dataValues.atividade = corrigirCaracteres(item.dataValues.descricao);
 
-
-                try {
-                    // Buscar a quantidade geral e adicionar como um novo dado
-                    const result = await Anuncio.findAndCountAll({
-                        where: {
-                            codDesconto: item.dataValues.hash
-                        }
-                    });
-
-                    if (result.count === 0) {
-                        // Tratar o caso em que codDesconto não existe
-                        console.log(`Nenhum registro encontrado para codDesconto: ${item.dataValues.hash}`);
-                        item.dataValues.qtdaGeral = 0; // Adicionar valor padrão ou ignorar
-                    } else {
-                        // Adicionar o dado temporário
-                        item.dataValues.qtdaGeral = result.count;
-                    }
-                } catch (err) {
-                    console.error('Erro ao buscar os dados:', err);
-                }
-
-
-
                 const user = await item.getUsuario();
                 //item.dataValues.nmUsuario = user.descNome;
-                console.log(user)
+               
                 if (user) {
                     item.dataValues = {
                         nmUsuario: user.descNome, // Adiciona a nova propriedade no início
@@ -951,10 +928,10 @@ module.exports = {
 
 
             })
-        );  */
+        );  
 
 
-        const idsData = Ids.rows.map((item) => ({
+       /*  const idsData = Ids.rows.map((item) => ({
             hash: item.dataValues.hash,
             descricao: item.dataValues.descricao,
           }));
@@ -1007,7 +984,7 @@ module.exports = {
             console.log('Processamento concluído!');
           } catch (err) {
             console.error('Erro ao processar os dados:', err);
-          }
+          } */
           
 
 
@@ -1039,7 +1016,7 @@ module.exports = {
         }
         
         contarNumeros(); */
-        
+
 
         res.json({
             success: true, message: {

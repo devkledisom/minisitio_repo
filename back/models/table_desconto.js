@@ -2,6 +2,8 @@ const Sequelize = require('sequelize');
 const database = require('../config/db');
 
 const Usuario = require('./table_usuarios');
+const Anuncio = require('./table_anuncio');
+
 
 const Desconto = database.define('desconto', {
     idDesconto: {
@@ -163,6 +165,16 @@ const Desconto = database.define('desconto', {
                 msg: "Esse campo não pode está vazio.."
             },
         } */
+    },
+    total_registros: {
+        type: Sequelize.STRING(150),
+        allowNull: false,
+        unique: false,
+        /* validate: {
+            notEmpty: {
+                msg: "Esse campo não pode está vazio.."
+            },
+        } */
     }
 },
     {
@@ -175,6 +187,11 @@ const Desconto = database.define('desconto', {
         foreignKey: 'idUsuario',
         targetKey: 'codUsuario'
     });
+
+    // models/Tabela1.js
+ /*    Desconto.hasMany(Anuncio, { foreignKey: 'codDesconto', sourceKey: 'hash' });
+    Anuncio.belongsTo(Desconto, { foreignKey: 'codDesconto', targetKey: 'hash' }); */
+    
 
  /*    Desconto.belongsTo(Anuncio, {
         constraints: true,
