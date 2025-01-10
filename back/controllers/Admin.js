@@ -907,7 +907,7 @@ module.exports = {
         
                 console.log(Ids.rows) */
 
-        await Promise.all(
+       /*   await Promise.all(
             Ids.rows.map(async (item) => {
                 console.log(item.dataValues.descricao);
 
@@ -927,11 +927,9 @@ module.exports = {
                         // Tratar o caso em que codDesconto não existe
                         console.log(`Nenhum registro encontrado para codDesconto: ${item.dataValues.hash}`);
                         item.dataValues.qtdaGeral = 0; // Adicionar valor padrão ou ignorar
-                        /* await database.close(); */
                     } else {
                         // Adicionar o dado temporário
                         item.dataValues.qtdaGeral = result.count;
-                        /* await database.close(); */
                     }
                 } catch (err) {
                     console.error('Erro ao buscar os dados:', err);
@@ -953,10 +951,95 @@ module.exports = {
 
 
             })
-        );
+        );  */
+
+
+        const idsData = Ids.rows.map((item) => ({
+            hash: item.dataValues.hash,
+            descricao: item.dataValues.descricao,
+          }));
+          
+          // Obter todos os códigos hash em uma única consulta
+          const hashes = idsData.map((item) => item.hash);
+          
+          try {
+            // Consulta para contar os registros agrupados por codDesconto
+            const totais = await Anuncio.findAll({
+              attributes: [
+                'codDesconto',
+                [Sequelize.fn('COUNT', Sequelize.col('codDesconto')), 'qtdaGeral'],
+              ],
+              where: {
+                codDesconto: hashes, // Filtra apenas os códigos que precisamos
+              },
+              group: ['codDesconto'],
+              raw: true,
+            });
+          
+            // Transformar o resultado em um mapa para acesso rápido
+            const totaisMap = totais.reduce((acc, item) => {
+              acc[item.codDesconto] = parseInt(item.qtdaGeral, 10);
+              return acc;
+            }, {});
+          
+            // Atualizar cada item com os dados calculados
+            await Promise.all(
+              Ids.rows.map(async (item) => {
+                const { hash, descricao } = item.dataValues;
+          
+                // Corrigir caracteres na descrição
+                item.dataValues.atividade = corrigirCaracteres(descricao);
+          
+                // Buscar o total do mapa (ou 0 se não existir)
+                item.dataValues.qtdaGeral = totaisMap[hash] || 0;
+          
+                // Adicionar informações do usuário
+                const user = await item.getUsuario();
+                if (user) {
+                  item.dataValues = {
+                    nmUsuario: user.descNome, // Adiciona a nova propriedade no início
+                    ...item.dataValues, // Mantém as demais propriedades
+                  };
+                }
+              })
+            );
+          
+            console.log('Processamento concluído!');
+          } catch (err) {
+            console.error('Erro ao processar os dados:', err);
+          }
+          
 
 
 
+/* 
+        const arrCadernos = req.body.data;
+
+        async function contarNumeros() {
+          try {
+            const resultado = await Anuncio.findAll({
+                where: {
+                    codCaderno: { [Sequelize.Op.in]: arrCadernos } // Buscar somente para os cadernos dos cadernos
+                },
+              attributes: ['codDesconto', [Sequelize.fn('COUNT', Sequelize.col('codDesconto')), 'total']],
+              group: ['codDesconto'], // Agrupa por valores na coluna "numero"
+              raw: true, // Retorna os dados como objetos simples
+            });
+        
+            console.log("asdasdas", resultado);
+            // Saída:
+            // [
+            //   { numero: 1, total: 3 },
+            //   { numero: 2, total: 2 },
+            //   { numero: 3, total: 1 }
+            // ]
+          } catch (error) {
+            console.error('Erro ao contar números:', error);
+          }
+        }
+        
+        contarNumeros(); */
+        
 
         res.json({
             success: true, message: {
