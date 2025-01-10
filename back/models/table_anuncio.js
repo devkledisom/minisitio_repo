@@ -514,7 +514,14 @@ const Anuncio = database.define('anuncio', {
     {
         freezeTableName: true,
         timestamps: true,
-    });
+    },
+    {
+        indexes: [
+          {
+            name: 'idx_descCPFCNPJ',
+            fields: ['descCPFCNPJ'], // O campo para o qual o índice será criado
+          },
+        ]});
 
 Anuncio.beforeCreate((instance, options) => {
     const dueDate = new Date(instance.createdAt);
