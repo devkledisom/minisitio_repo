@@ -1488,7 +1488,8 @@ module.exports = {
                 'createdAt',
                 'dueDate',
                 'codDesconto',
-                'codAtividade'
+                'codAtividade',
+                'periodo'
             ]
         });
 
@@ -3111,7 +3112,7 @@ module.exports = {
         const resultAnuncio = await Anuncio.findAll({
             where: {
                 descCPFCNPJ: nu_hash,
-                codUf: "AL"
+                /* codUf: "AL" */
             },
             attributes: ['codAnuncio', 'descAnuncio', 'createdAt', 'updatedAt', 'dueDate', 'codUf', 'codCaderno'],
             raw: false,
@@ -3531,11 +3532,12 @@ module.exports = {
 
         const user = await obj.getUsuario();
         obj.codUsuario = user.descNome;
+        console.log(user)
 
 
 
-        const atividade = await obj.getAtividade();
-        const descontoHash = await obj.getDesconto();
+    /*     const atividade = await obj.getAtividade();
+        const descontoHash = await obj.getDesconto(); */
         //obj.codAtividade = atividade != null ? atividade.id : '';
 
         obj.setDataValue('nomeAtividade', obj.codAtividade);
@@ -3802,7 +3804,9 @@ module.exports = {
             certificado_link,
             cartao_digital,
             descChavePix,
-            descYouTube } = req.body;
+            descYouTube,
+            periodo
+        } = req.body;
 
         const dadosAnuncio = {
             //"codAnuncio": 88888,
@@ -3865,7 +3869,8 @@ module.exports = {
             "cashback_link": 0,
             "certificado_link": certificado_link,
             "cartao_digital": cartao_digital,
-            "descChavePix": descChavePix
+            "descChavePix": descChavePix,
+            "periodo": periodo
         };
 
 

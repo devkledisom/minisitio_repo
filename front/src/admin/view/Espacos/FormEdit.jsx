@@ -94,7 +94,8 @@ const FormEdit = () => {
             "link_comprar": null,
             "promocaoData": null,
             "qntVisualizacoes": 73,
-            "tags": "atacado,som,musica"
+            "tags": "atacado,som,musica",
+            "periodo": null
         }
         
     );
@@ -347,7 +348,7 @@ const FormEdit = () => {
                                 <option value="" selected="selected">- Selecione um estado -</option>
                                 {
                                     uf.map((uf) => (
-                                        <option key={uf.id_uf} value={uf.id_uf}>{uf.sigla_uf}</option>
+                                        <option key={uf.id_uf} value={uf.sigla_uf}>{uf.sigla_uf}</option>
                                     ))
                                 }
                             </select>
@@ -358,8 +359,8 @@ const FormEdit = () => {
                                 {/*  <option value="" selected="selected">- Selecione uma cidade -</option> */}
                                 {
                                     caderno.map((cidades) => (
-                                        cidades.codUf == ids.codUf &&
-                                        <option value={cidades.codCaderno}>{cidades.nomeCaderno}</option>
+                                        cidades.UF == ids.codUf &&
+                                        <option value={cidades.nomeCaderno}>{cidades.nomeCaderno}</option>
                                     ))
                                     /*   caderno.map((cidades) => (
                                          <option value={cidades.codCaderno}>{cidades.nomeCaderno}</option>
@@ -690,6 +691,17 @@ const FormEdit = () => {
                                 id="chavePix"
                                 name="chavePix"
                                 value={ids.descChavePix}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="periodo" className="w-50 px-1">Periodo de teste:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="periodo"
+                                name="periodo"
+                                value={ids.periodo}
                                 onChange={handleChange}
                             />
                         </div>

@@ -278,13 +278,8 @@ const Anuncio = database.define('anuncio', {
 
     descEmailAutorizante: {
         type: Sequelize.TEXT,
-        allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        allowNull: true,
+        unique: false
     },
 
     descParceiro: {
@@ -502,6 +497,12 @@ const Anuncio = database.define('anuncio', {
 
     descChavePix: {
         type: Sequelize.TEXT(255),
+        allowNull: true,
+        unique: false
+    },
+
+    periodo: {
+        type: Sequelize.TEXT,
         allowNull: true,
         unique: false
     },
