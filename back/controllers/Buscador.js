@@ -25,11 +25,11 @@ module.exports = {
 
 
         //Atividades
-        const atividades = await Atividade.findAll({
+      /*   const atividades = await Atividade.findAll({
             where: {
                 atividade: { [Op.like]: `%${atividade}%` }
             }
-        });
+        }); */
 
         //console.log("debug: ", atividades);
         //console.log("debug: ", codigoCaderno, uf, atividades[0].id);
@@ -38,7 +38,7 @@ module.exports = {
 
         //anuncio
         if (codigoCaderno != "TODO") {
-            anunciosOld = await Anuncio.findAll({
+            /* anunciosOld = await Anuncio.findAll({
                 where: {
                     [Op.or]: [
                         {
@@ -62,9 +62,9 @@ module.exports = {
                         }
                     ],
                 }
-            });
+            }); */
         } else {
-            anunciosOld = await Anuncio.findAll({
+         /*    anunciosOld = await Anuncio.findAll({
                 where: {
                     [Op.or]: [
                         {
@@ -84,76 +84,57 @@ module.exports = {
                                     ]
                                 }
                             ]
-                        }/* ,
-                        {[Op.and]: [
-                            {codUf: uf},
-                            {
-                                [Op.or]: [
-                                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                                    {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
-                                    {descTelefone: atividade},
-                                    {descCPFCNPJ: atividade},
-                                    {tags: {
-                                        [Op.like]: `%${atividade}%`
-                                    }}
-                                ]
-                            }
-                        ]} */
-
+                        }
                     ],
-                    /* [Op.or]: [
-                        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                        {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
-                        {descTelefone: atividade},
-                        {descCPFCNPJ: atividade},
-                        {tags: {
-                            [Op.like]: `%${atividade}%`
-                        }}
-                    ] */
-                    //codAtividade: 6
+
                 }
-            });
+            }); */
 
         }
+
+      /*   const [results] = await database.query(
+            "EXPLAIN SELECT * FROM anuncio WHERE descAnuncio LIKE 'MERCADODEUSEFIEL2015%'"
+          );
+          
+          console.log("kledisom: ", results); */
+          
 
         const anuncios = await Anuncio.findAll({
             where: {
                 [Op.or]: [
+                    ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
+                      { descAnuncio: { [Op.like]: `${atividade}%` } },
+                      { codAtividade: {[Op.like]: `${atividade}%`} }, //atividades.length > 0 ? atividades[0].id : "" },
+                   { descTelefone: atividade },
+                          { descCPFCNPJ: atividade },
+                     {
+                         tags: {
+                             [Op.like]: `${atividade}%`
+                         }
+                     }  
+                 ]
+                /* [Op.or]: [
                     {
                         [Op.and]: [
                             { codCaderno: codigoCaderno },
-                            { codUf: uf },
+                            { codUf: uf }, 
                             {
                                 [Op.or]: [
-                                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                                    { codAtividade: atividades.length > 0 ? atividades[0].id : "" },
+                                   Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                    { codAtividade: {[Op.like]: `%${atividade}%`} }, //atividades.length > 0 ? atividades[0].id : "" },
                                     { descTelefone: atividade },
                                     { descCPFCNPJ: atividade },
                                     {
                                         tags: {
                                             [Op.like]: `%${atividade}%`
                                         }
-                                    }
+                                    } 
                                 ]
                             }
                         ]
-                    }/* ,
-                    {[Op.and]: [
-                        {codUf: uf},
-                        {
-                            [Op.or]: [
-                                Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                                {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
-                                {descTelefone: atividade},
-                                {descCPFCNPJ: atividade},
-                                {tags: {
-                                    [Op.like]: `%${atividade}%`
-                                }}
-                            ]
-                        }
-                    ]} */
+                    }
 
-                ],
+                ], */
                 /* [Op.or]: [
                     Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
                     {codAtividade: atividades.length > 0 ? atividades[0].id : ""},
@@ -168,20 +149,21 @@ module.exports = {
         });
 
 
-        //console.log(anuncios)
+        console.log('23y4238r934h8r734rhn34: ', anuncios)
 
-        if (atividades.length > 0) {
+       /*  if (atividades.length > 0) {
             console.log(atividades[0].id)
-        };
+        }; */
 
         const anuncio = anuncios.filter((item) => {
-            var verificarCodAtividade = (atividades.length == 0) ? null : atividades[0].id;
+            //var verificarCodAtividade = (atividades.length == 0) ? null : atividades[0].id;
             return item.descAnuncio == atividade ||
                 item.descTelefone == atividade ||
                 item.descCPFCNPJ == atividade ||
-                item.codAtividade == verificarCodAtividade;
+                item.codAtividade == atividade;
         })
 
+        console.log(anuncios)
 
         res.json(anuncios);
     },

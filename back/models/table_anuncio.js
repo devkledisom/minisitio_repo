@@ -522,6 +522,30 @@ const Anuncio = database.define('anuncio', {
             name: 'idx_descCPFCNPJ',
             fields: ['descCPFCNPJ'], // O campo para o qual o índice será criado
           },
+          {
+            name: 'idx_descAnuncio',
+            fields: ['descAnuncio'], // O campo para o qual o índice será criado
+          },
+          {
+            name: 'idx_descTelefone',
+            fields: ['descTelefone'], // O campo para o qual o índice será criado
+          },
+          {
+            name: 'idx_tags',
+            fields: ['descTelefone'], // O campo para o qual o índice será criado
+          },
+          {
+            name: 'idx_codUf',
+            fields: ['codUf'], // O campo para o qual o índice será criado
+          },
+          {
+            name: 'idx_codCaderno',
+            fields: ['codCaderno'], // O campo para o qual o índice será criado
+          },
+          {
+            name: 'idx_codDesconto',
+            fields: ['codDesconto'], // O campo para o qual o índice será criado
+          },
         ]});
 
 Anuncio.beforeCreate((instance, options) => {
