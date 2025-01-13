@@ -907,7 +907,7 @@ module.exports = {
         
                 console.log(Ids.rows) */
 
-          await Promise.all(
+        await Promise.all(
             Ids.rows.map(async (item) => {
                 console.log(item.dataValues.descricao);
 
@@ -916,7 +916,7 @@ module.exports = {
 
                 const user = await item.getUsuario();
                 //item.dataValues.nmUsuario = user.descNome;
-               
+
                 if (user) {
                     item.dataValues = {
                         nmUsuario: user.descNome, // Adiciona a nova propriedade no início
@@ -928,94 +928,94 @@ module.exports = {
 
 
             })
-        );  
+        );
 
 
-       /*  const idsData = Ids.rows.map((item) => ({
-            hash: item.dataValues.hash,
-            descricao: item.dataValues.descricao,
-          }));
-          
-          // Obter todos os códigos hash em uma única consulta
-          const hashes = idsData.map((item) => item.hash);
-          
-          try {
-            // Consulta para contar os registros agrupados por codDesconto
-            const totais = await Anuncio.findAll({
-              attributes: [
-                'codDesconto',
-                [Sequelize.fn('COUNT', Sequelize.col('codDesconto')), 'qtdaGeral'],
-              ],
-              where: {
-                codDesconto: hashes, // Filtra apenas os códigos que precisamos
-              },
-              group: ['codDesconto'],
-              raw: true,
-            });
-          
-            // Transformar o resultado em um mapa para acesso rápido
-            const totaisMap = totais.reduce((acc, item) => {
-              acc[item.codDesconto] = parseInt(item.qtdaGeral, 10);
-              return acc;
-            }, {});
-          
-            // Atualizar cada item com os dados calculados
-            await Promise.all(
-              Ids.rows.map(async (item) => {
-                const { hash, descricao } = item.dataValues;
-          
-                // Corrigir caracteres na descrição
-                item.dataValues.atividade = corrigirCaracteres(descricao);
-          
-                // Buscar o total do mapa (ou 0 se não existir)
-                item.dataValues.qtdaGeral = totaisMap[hash] || 0;
-          
-                // Adicionar informações do usuário
-                const user = await item.getUsuario();
-                if (user) {
-                  item.dataValues = {
-                    nmUsuario: user.descNome, // Adiciona a nova propriedade no início
-                    ...item.dataValues, // Mantém as demais propriedades
-                  };
+        /*  const idsData = Ids.rows.map((item) => ({
+             hash: item.dataValues.hash,
+             descricao: item.dataValues.descricao,
+           }));
+           
+           // Obter todos os códigos hash em uma única consulta
+           const hashes = idsData.map((item) => item.hash);
+           
+           try {
+             // Consulta para contar os registros agrupados por codDesconto
+             const totais = await Anuncio.findAll({
+               attributes: [
+                 'codDesconto',
+                 [Sequelize.fn('COUNT', Sequelize.col('codDesconto')), 'qtdaGeral'],
+               ],
+               where: {
+                 codDesconto: hashes, // Filtra apenas os códigos que precisamos
+               },
+               group: ['codDesconto'],
+               raw: true,
+             });
+           
+             // Transformar o resultado em um mapa para acesso rápido
+             const totaisMap = totais.reduce((acc, item) => {
+               acc[item.codDesconto] = parseInt(item.qtdaGeral, 10);
+               return acc;
+             }, {});
+           
+             // Atualizar cada item com os dados calculados
+             await Promise.all(
+               Ids.rows.map(async (item) => {
+                 const { hash, descricao } = item.dataValues;
+           
+                 // Corrigir caracteres na descrição
+                 item.dataValues.atividade = corrigirCaracteres(descricao);
+           
+                 // Buscar o total do mapa (ou 0 se não existir)
+                 item.dataValues.qtdaGeral = totaisMap[hash] || 0;
+           
+                 // Adicionar informações do usuário
+                 const user = await item.getUsuario();
+                 if (user) {
+                   item.dataValues = {
+                     nmUsuario: user.descNome, // Adiciona a nova propriedade no início
+                     ...item.dataValues, // Mantém as demais propriedades
+                   };
+                 }
+               })
+             );
+           
+             console.log('Processamento concluído!');
+           } catch (err) {
+             console.error('Erro ao processar os dados:', err);
+           } */
+
+
+
+
+        /* 
+                const arrCadernos = req.body.data;
+        
+                async function contarNumeros() {
+                  try {
+                    const resultado = await Anuncio.findAll({
+                        where: {
+                            codCaderno: { [Sequelize.Op.in]: arrCadernos } // Buscar somente para os cadernos dos cadernos
+                        },
+                      attributes: ['codDesconto', [Sequelize.fn('COUNT', Sequelize.col('codDesconto')), 'total']],
+                      group: ['codDesconto'], // Agrupa por valores na coluna "numero"
+                      raw: true, // Retorna os dados como objetos simples
+                    });
+                
+                    console.log("asdasdas", resultado);
+                    // Saída:
+                    // [
+                    //   { numero: 1, total: 3 },
+                    //   { numero: 2, total: 2 },
+                    //   { numero: 3, total: 1 }
+                    // ]
+                  } catch (error) {
+                    console.error('Erro ao contar números:', error);
+                  }
                 }
-              })
-            );
-          
-            console.log('Processamento concluído!');
-          } catch (err) {
-            console.error('Erro ao processar os dados:', err);
-          } */
-          
-
-
-
-/* 
-        const arrCadernos = req.body.data;
-
-        async function contarNumeros() {
-          try {
-            const resultado = await Anuncio.findAll({
-                where: {
-                    codCaderno: { [Sequelize.Op.in]: arrCadernos } // Buscar somente para os cadernos dos cadernos
-                },
-              attributes: ['codDesconto', [Sequelize.fn('COUNT', Sequelize.col('codDesconto')), 'total']],
-              group: ['codDesconto'], // Agrupa por valores na coluna "numero"
-              raw: true, // Retorna os dados como objetos simples
-            });
-        
-            console.log("asdasdas", resultado);
-            // Saída:
-            // [
-            //   { numero: 1, total: 3 },
-            //   { numero: 2, total: 2 },
-            //   { numero: 3, total: 1 }
-            // ]
-          } catch (error) {
-            console.error('Erro ao contar números:', error);
-          }
-        }
-        
-        contarNumeros(); */
+                
+                contarNumeros(); */
 
 
         res.json({
@@ -3171,6 +3171,383 @@ module.exports = {
         await database.sync();
         //const nu_hash = req.params.id;
         const nu_hash = req.query.search;
+        const requisito = req.query.require;
+
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+        const offset = (paginaAtual - 1) * porPagina;
+
+
+        //verificação
+        const contemNumero = () => /\d/.test(nu_hash);
+
+        const resultAnuncio = await Anuncio.findAll({
+            where: {
+                [requisito]: nu_hash
+            },
+            limit: porPagina,
+            offset: offset,
+            attributes: [
+                'codAnuncio',
+                'codOrigem',
+                'codDuplicado',
+                'descCPFCNPJ',
+                'descAnuncio',
+                'codTipoAnuncio',
+                'codCaderno',
+                'codUf',
+                'activate',
+                'descPromocao',
+                'createdAt',
+                'dueDate',
+                'codDesconto',
+                'codAtividade',
+                'periodo'
+            ]
+        });
+
+
+        //ANUNCIO
+        /*        const resultAnuncio = await Anuncio.findAll({
+                    where: {
+                    //    codUf: "AL",
+                        //codCaderno: "AGUA BRANCA", 
+                        [Op.or]: [
+                             { codAnuncio: nu_hash },
+                             { descCPFCNPJ: nu_hash },
+                            { codDesconto: nu_hash }, 
+                            { codUf: nu_hash },
+                             { codCaderno: nu_hash },
+                            { descAnuncio: nu_hash }  
+                        ]
+                    },
+                    limit: porPagina,
+                    offset: offset,
+                    //attributes: ['codAnuncio', 'codDesconto']
+                });  */
+
+        /*         let resultAnuncio;
+        for (const column of ['codAnuncio', 'descCPFCNPJ', 'codDesconto', 'codUf', 'codCaderno', 'descAnuncio' ]) {
+            resultAnuncio = await Anuncio.findAll({
+                where: { [column]: nu_hash },
+                limit: porPagina,
+                offset: offset,
+            });
+            if (resultAnuncio.length > 0) break;
+        } */
+
+
+        console.table([1, "id", nu_hash])
+
+        if (resultAnuncio.length > 0) {
+            await Promise.all(resultAnuncio.map(async (anun, i) => {
+
+                const cader = await anun.getCaderno();
+                anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+                //const estado = await anun.getUf();
+                //anun.codUf = estado.sigla_uf;
+
+                const desconto = await anun.getDesconto();
+                anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+
+                const user = await anun.getUsuario();
+
+                if (user) {
+                    anun.codUsuario = user.descNome;
+                    anun.dataValues.loginUser = user.descCPFCNPJ;
+                    anun.dataValues.loginPass = user.senha;
+                    anun.dataValues.loginEmail = user.descEmail;
+                    anun.dataValues.loginContato = user.descTelefone;
+                }
+
+            }));
+
+            const resultAnuncioCount = await Anuncio.count({
+                where: {
+                    [requisito]: nu_hash
+                },
+            });
+
+            const totalItens = resultAnuncioCount;
+            const totalPaginas = Math.ceil(totalItens / porPagina);
+
+            res.json({
+                success: true,
+                message: {
+                    anuncios: resultAnuncio, // Itens da página atual
+                    paginaAtual: paginaAtual,
+                    totalPaginas: totalPaginas,
+                    totalItem: totalItens
+                }
+            });
+            return;
+        };
+        return;
+        //buscar por uf
+        const resultEstado = await Uf.findAll({
+            where: {
+                sigla_uf: nu_hash
+            }
+        });
+
+        if (resultEstado.length > 0) {
+            const resultAnuncioEstado = await Anuncio.findAll({
+                where: {
+                    codUf: resultEstado[0].dataValues.id_uf
+                }
+            });
+
+
+            if (resultAnuncioEstado.length > 0) {
+                await Promise.all(resultAnuncioEstado.map(async (anun, i) => {
+                    const cader = await anun.getCaderno();
+                    anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+                    const estado = await anun.getUf();
+                    anun.codUf = estado.sigla_uf;
+
+                    const desconto = await anun.getDesconto();
+                    anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+
+                    const user = await anun.getUsuario();
+                    anun.codUsuario = user.descNome;
+                    anun.dataValues.loginUser = user.descCPFCNPJ;
+                    anun.dataValues.loginPass = user.senha;
+                    anun.dataValues.loginEmail = user.descEmail;
+                    anun.dataValues.loginContato = user.descTelefone;
+
+                    const atividades = await anun.getAtividade();
+                    anun.dataValues.mainAtividade = atividades.atividade
+
+                    //console.log(anuncio.rows[i])
+                }));
+
+                const totalItens = resultAnuncioEstado.length;
+                console.log(totalItens)
+
+                res.json({
+                    success: true,
+                    message: {
+                        anuncios: resultAnuncioEstado, // Itens da página atual
+                        paginaAtual: 1,
+                        totalPaginas: 1,
+                        totalItem: totalItens
+                    }
+                });
+                return;
+            }
+        }
+
+
+        //buscar por numero de ID
+        if (resultAnuncio < 1) {
+
+            const resultID = await Desconto.findAll({
+                where: {
+                    hash: nu_hash
+                }
+            });
+
+
+            if (resultID < 1) {
+                //res.json({ success: false, message: "anúncio não encontrado" });
+                //return;
+            } else {
+                const descId = resultID[0].idDesconto;
+                const resultAnuncio = await Anuncio.findAll({
+                    where: {
+                        codDesconto: nu_hash
+                    }
+                });
+
+
+                resultAnuncio.map(async (anun, i) => {
+                    try {
+                        await Promise.all(resultAnuncio.map(async (anun, i) => {
+                            const cader = await anun.getCaderno();
+                            anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+                            const estado = await anun.getUf();
+                            anun.codUf = estado.sigla_uf;
+
+                            const desconto = await anun.getDesconto();
+                            anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+
+                            const user = await anun.getUsuario();
+                            anun.codUsuario = user.descNome;
+                            anun.dataValues.loginUser = user.descCPFCNPJ;
+                            anun.dataValues.loginPass = user.senha;
+                            anun.dataValues.loginEmail = user.descEmail;
+                            anun.dataValues.loginContato = user.descTelefone;
+
+                            const atividades = await anun.getAtividade();
+                            anun.dataValues.mainAtividade = atividades.atividade
+
+                            //console.log(anuncio.rows[i])
+                        }));
+
+
+                        if (i === resultAnuncio.length - 1) {
+                            res.json({
+                                success: true,
+                                message: {
+                                    anuncios: resultAnuncio, // Itens da página atual
+                                    paginaAtual: 1,
+                                    totalPaginas: 1,
+                                    totalItem: resultAnuncio.length
+                                }
+                            })
+                        }
+
+
+                    } catch (err) {
+                        console.log(err);
+                        res.status(500)
+                    }
+
+                });
+
+            }
+        } else {
+
+            /*       res.json({
+                      success: true,
+                      message: {
+                          anuncios: resultAnuncio
+                      }
+                  }); */
+        }
+
+        //buscar por nome de perfil
+        if (resultAnuncio < 1) {
+            //console.log(nu_hash)
+            const resultID = await Usuarios.findAll({
+                where: {
+                    descNome: { [Op.like]: `%${nu_hash}%` }
+                    //descNome: nu_hash
+                }
+            });
+
+
+            if (resultID < 1) {
+                res.json({ success: false, message: "anúncio não encontrado" });
+                return;
+            } else {
+                //const descId = resultID[0].idDesconto;
+                const resultAnuncio = await Anuncio.findAll({
+                    where: {
+                        codUsuario: resultID[0].codUsuario
+                    },
+                    limit: porPagina,
+                    offset: offset
+                });
+
+                const resultAnuncioCount = await Anuncio.count({
+                    where: {
+                        codUsuario: resultID[0].codUsuario
+                    }
+                });
+
+                if (resultAnuncioCount < 1) {
+                    res.json({ success: false, message: "anúncio não encontrado" });
+                    return;
+                }
+
+                // Número total de itens
+                const totalItens = resultAnuncioCount;
+                // Número total de páginas
+                const totalPaginas = Math.ceil(totalItens / porPagina);
+
+                //console.log("dasjfhsjklfsfhlksajhfdsaklfjhsjkfd", resultAnuncio, resultID[0].codUsuario)
+                resultAnuncio.map(async (anun, i) => {
+
+                    try {
+                        await Promise.all(resultAnuncio.map(async (anun, i) => {
+                            const cader = await anun.getCaderno();
+                            anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+                            const estado = await anun.getUf();
+                            anun.codUf = estado.sigla_uf;
+
+                            const desconto = await anun.getDesconto();
+                            anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+
+                            const user = await anun.getUsuario();
+                            anun.codUsuario = user.descNome;
+                            anun.dataValues.loginUser = user.descCPFCNPJ;
+                            anun.dataValues.loginPass = user.senha;
+                            anun.dataValues.loginEmail = user.descEmail;
+                            anun.dataValues.loginContato = user.descTelefone;
+
+                            const atividades = await anun.getAtividade();
+                            anun.dataValues.mainAtividade = atividades.atividade
+
+                            //console.log(anuncio.rows[i])
+                        }));
+
+
+                        if (i === resultAnuncio.length - 1) {
+                            res.json({
+                                success: true,
+                                message: {
+                                    anuncios: resultAnuncio, // Itens da página atual
+                                    paginaAtual: paginaAtual,
+                                    totalPaginas: totalPaginas,
+                                    totalItem: totalItens
+                                }
+                            })
+                        }
+
+
+                    } catch (err) {
+                        console.log(err);
+                        res.status(500)
+                    }
+
+                });
+
+
+
+                /* const limit = 10; // Número de registros por lote
+                let offset = 0; // Início da consulta
+                let hasMore = true;
+              
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                try {
+                    while (hasMore) {
+                      const records = await Anuncio.findAll({
+                        where: {
+                            codUsuario: resultID[0].codUsuario
+                        },
+                        limit, // Busca 10 registros por vez
+                        offset, // Salta os registros já buscados
+                        raw: true, // Retorna objetos simples
+                      });
+                //console.log("asdfhsdfhsajdkfsaf: ", records)
+                      if (records.length > 0) {
+                        res.write(JSON.stringify(records)); // Envia o lote ao frontend
+                        offset += limit; // Move para o próximo lote
+                      } else {
+                        hasMore = false; // Finaliza se não houver mais registros
+                      }
+                    }
+                
+                    res.end(); // Finaliza o stream
+                  } catch (error) {
+                    console.error(error);
+                    res.status(500).send('Erro ao buscar os registros.');
+                  }
+ */
+            }
+        }
+
+
+    },
+    buscarAnuncioIdold: async (req, res) => {
+        await database.sync();
+        //const nu_hash = req.params.id;
+        const nu_hash = req.query.search;
 
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
@@ -3185,20 +3562,32 @@ module.exports = {
         //ANUNCIO
         const resultAnuncio = await Anuncio.findAll({
             where: {
-                codUf: "AL",
-                codCaderno: "PENEDO",
+                //    codUf: "AL",
+                //codCaderno: "AGUA BRANCA", 
                 [Op.or]: [
-                    { codAnuncio: nu_hash },
-                    { descCPFCNPJ: nu_hash },
-                    { codDesconto: nu_hash },
+                    /*     { codAnuncio: nu_hash },
+                         { descCPFCNPJ: nu_hash },
+                        { codDesconto: nu_hash }, */
                     { codUf: nu_hash },
-                    { codCaderno: nu_hash },
-                    { descAnuncio: nu_hash }
+                    /*    { codCaderno: nu_hash },
+                       { descAnuncio: nu_hash }  */
                 ]
             },
             limit: porPagina,
-            offset: offset
+            offset: offset,
+            //attributes: ['codAnuncio', 'codDesconto']
         });
+
+        /*         let resultAnuncio;
+        for (const column of ['codAnuncio', 'descCPFCNPJ', 'codDesconto', 'codUf', 'codCaderno', 'descAnuncio' ]) {
+            resultAnuncio = await Anuncio.findAll({
+                where: { [column]: nu_hash },
+                limit: porPagina,
+                offset: offset,
+            });
+            if (resultAnuncio.length > 0) break;
+        } */
+
 
         console.table([1, "id", nu_hash])
 
@@ -3230,9 +3619,9 @@ module.exports = {
                 where: {
                     [Op.or]: [
                         { codAnuncio: nu_hash },
-                        { descCPFCNPJ: nu_hash },
-                        { codDesconto: nu_hash },
-                        { codUf: nu_hash }
+                        /*       { descCPFCNPJ: nu_hash },
+                              { codDesconto: nu_hash },
+                              { codUf: nu_hash } */
                     ]
                 },
             });
@@ -3536,8 +3925,8 @@ module.exports = {
 
 
 
-    /*     const atividade = await obj.getAtividade();
-        const descontoHash = await obj.getDesconto(); */
+        /*     const atividade = await obj.getAtividade();
+            const descontoHash = await obj.getDesconto(); */
         //obj.codAtividade = atividade != null ? atividade.id : '';
 
         obj.setDataValue('nomeAtividade', obj.codAtividade);

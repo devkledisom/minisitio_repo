@@ -2,9 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { masterPath, version } from '../../../config/config';
+
+//CSS
+import '../../assets/css/users.css';
+import '../../assets/css/espacos/espacos.css';
 
 //LIBS
 import Swal from 'sweetalert2';
@@ -32,6 +35,7 @@ const Espacos = () => {
     const [showSpinner, setShowSpinner] = useState(true);
     const [del, setDel] = useState(false);
     const [busca, setBusca] = useState(false);
+    const [searchOptioncheck, setSearchOptioncheck] = useState(false);
 
 
     const location = useLocation();
@@ -46,7 +50,7 @@ const Espacos = () => {
 
     useEffect(() => {
         setShowSpinner(true);
-       
+
 
         if (campoBusca.current.value != '') {
             Promise.all([
@@ -168,7 +172,7 @@ const Espacos = () => {
         setBusca(true);
         const campoPesquisa = document.getElementById('buscar').value;
 
-        fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}`)
+        fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}&require=${searchOptioncheck}`)
             .then((x) => x.json())
             .then((res) => {
                 console.log(res)
@@ -263,7 +267,7 @@ const Espacos = () => {
                         setShowSpinner(false);
                         window.location.href = res.downloadUrl;
                     }
-                }) 
+                })
         } else {
             fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000`, {
                 method: "POST",
@@ -279,9 +283,9 @@ const Espacos = () => {
                         setShowSpinner(false);
                         window.location.href = res.downloadUrl;
                     }
-                }) 
+                })
         }
-       
+
     };
 
     function editRow() {
@@ -298,7 +302,7 @@ const Espacos = () => {
     };
 
     return (
-        <div className="users">
+        <div className="users app-espacos">
             <header style={style} className='w-100'>
                 <Header />
             </header>
@@ -321,12 +325,42 @@ const Espacos = () => {
                             }
                             <button type="button" className="btn btn-info custom-button text-light" onClick={editRow}>Editar</button>
                         </div>
-                        <div className="span6 col-md-6">
-                            <div className="pull-right d-flex justify-content-center align-items-center">
-                                <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
-                                <button id="btnBuscar" className="" type="button" onClick={buscarAnuncioId} >
-                                    <i className="icon-search"></i>
-                                </button>
+                        <div className="span6 col-md-6 d-flex flex-column align-items-end">
+                            <div className='d-flex flex-column'>
+                                <div className="pull-right d-flex justify-content-center align-items-center">
+                                    <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
+                                    <button id="btnBuscar" className="" type="button" onClick={buscarAnuncioId} >
+                                        <i className="icon-search"></i>
+                                    </button>
+                                </div>
+                                <div className='SearchOption'>
+
+                                    <label htmlFor="codigo" onClick={() => setSearchOptioncheck('codAnuncio')}>
+                                        <input type='radio' name="option" id="codigo" onClick={() => setSearchOptioncheck('codAnuncio')} />
+                                        Código
+                                    </label>
+                                    <label htmlFor="nome" onClick={() => setSearchOptioncheck('descAnuncio')}>
+                                        <input type='radio' name="option" id="nome" onClick={() => setSearchOptioncheck('descAnuncio')} />
+                                        Nome
+                                    </label>
+                                    <label htmlFor="caderno" onClick={() => setSearchOptioncheck('codCaderno')}>
+                                        <input type='radio' name="option" id="caderno" onClick={() => setSearchOptioncheck('codCaderno')} />
+                                        Caderno
+                                    </label>
+                                    <label htmlFor="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')}>
+                                        <input type='radio' name="option" id="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')} />
+                                        CNPJ
+                                    </label>
+                                    <label htmlFor="id" onClick={() => setSearchOptioncheck('codDesconto')}>
+                                        <input type='radio' name="option" id="id" onClick={() => setSearchOptioncheck('codDesconto')} />
+                                        ID
+                                    </label>
+                                    <label htmlFor="uf" onClick={() => setSearchOptioncheck('codUf')}>
+                                        <input type='radio' name="option" id="uf" onClick={() => setSearchOptioncheck('codUf')} />
+                                        UF
+                                    </label>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -335,8 +369,8 @@ const Espacos = () => {
                 <article>
                     <div className="container-fluid">
                         <div className='row px-4 table-perfil'>
-                            <table className="table table-bordered table-striped table-hover"  style={{ tableLayout: 'fixed', width: '100%' }}>
-                                <thead>                                  
+                            <table className="table table-bordered table-striped table-hover" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                <thead>
                                     <tr>
                                         <th>COD</th>
                                         <th>COD_OR</th>
@@ -366,7 +400,7 @@ const Espacos = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {console.log(anuncios)}
+                                    {console.log(anuncios)}
                                     {
 
 
@@ -389,8 +423,8 @@ const Espacos = () => {
                                                     <td>Isento</td>
                                                     <td>Isento</td>
                                                     <td>Isento</td>
-                                                   
-                                                   <td>R$ {item.descPromocao},00</td>
+
+                                                    <td>R$ {item.descPromocao},00</td>
                                                     <td>{formatData(item.createdAt)}</td>
                                                     <td></td>
                                                     <td>{dataExpiracao(item.dueDate)}</td>
@@ -410,7 +444,7 @@ const Espacos = () => {
                                                             rel="noopener noreferrer"
                                                         >
                                                             {`${masterPath.domain}/local/${encodeURIComponent(item.descAnuncio)}?id=${item.codAnuncio}`}
-                                                          {/*   <i class="fa fa-eye"></i>
+                                                            {/*   <i class="fa fa-eye"></i>
                                                             Ver */}
                                                         </a>
                                                     </td>
@@ -423,14 +457,14 @@ const Espacos = () => {
                         </div>
 
                     </div>
-           {/*          {busca &&
+                    {/*          {busca &&
                         <Pagination totalPages={anuncios.message.totalPaginas} paginaAtual={anuncios.message.paginaAtual} totalItem={anuncios.message.totalItem} table={"espacos"} />
                     } */}
 
 
-                  {anuncios != '' &&
+                    {anuncios != '' &&
                         <Pagination totalPages={anuncios.message.totalPaginas} paginaAtual={anuncios.message.paginaAtual} totalItem={anuncios.message.totalItem} table={"espacos"} />
-                    } 
+                    }
 
 
                 </article>

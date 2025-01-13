@@ -1,0 +1,27 @@
+.app-espacos .SearchOption {
+    display: flex;
+    gap: 5px;
+    padding: 5px 0;
+}
+
+.app-espacos .SearchOption label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+    cursor: pointer;
+}
+
+.app-espacos .SearchOption label input {
+    cursor: pointer;
+}
+
+.app-espacos #buscar {
+    border-radius: 5px;
+}
+
+.app-espacos #btnBuscar {
+    border-radius: 5px;
+    height: 29px;
+    padding-left: 5px;
+}
