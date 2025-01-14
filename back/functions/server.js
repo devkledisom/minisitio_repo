@@ -209,7 +209,7 @@ module.exports = async function expExcel(dados, res) {
         }
     } catch (err) {
         console.error("Erro ao manipular arquivos:", err);
-       // return res.status(500).json({ success: false, message: "Erro ao processar a exportação." });
+       return res.status(500).json({ success: false, message: "Erro ao processar a exportação." });
     }
 
     // Escreve o novo arquivo Excel
@@ -217,10 +217,10 @@ module.exports = async function expExcel(dados, res) {
     wb.write(newFilePath, function (err, stats) {
         if (err) {
             console.error(err);
-            //return res.status(500).json({ success: false, message: "Erro ao gerar o arquivo." });
+            return res.status(500).json({ success: false, message: "Erro ao gerar o arquivo." });
         } else {
             console.log("Arquivo gerado:", stats);
-            //return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx` });
+            return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx` });
         }
     });
 
