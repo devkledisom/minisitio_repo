@@ -4654,6 +4654,9 @@ module.exports = {
     export4excell: async (req, res) => {
         const anunciosCount = await Anuncio.count();
         //const limit = Number(req.query.limit);
+        const cadernoParam = req.query.caderno;
+
+
 
         const definirTipoAnuncio = (tipo) => {
             switch (tipo) {
@@ -4786,7 +4789,7 @@ async function convertTxtToExcel() {
                 // Consulta para recuperar apenas os itens da página atual
                 const anuncio = await Anuncio.findAndCountAll({
                     where: {
-                        codCaderno: 'AGUA BRANCA'
+                        codCaderno: cadernoParam
                     },
                /*      order: [
                         [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
@@ -4797,7 +4800,7 @@ async function convertTxtToExcel() {
                     //offset: offset, 
                     raw: false,
                     attributes: [
-                         'codAnuncio',
+                        'codAnuncio',
                         'codOrigem',
                         'codDuplicado',
                         'descCPFCNPJ',
@@ -4810,7 +4813,7 @@ async function convertTxtToExcel() {
                         'createdAt',
                         'dueDate',
                         'codDesconto',
-                        'codAtividade' 
+                        'codAtividade'  
                     ],
                        /*    include: [
                             {
@@ -4819,10 +4822,17 @@ async function convertTxtToExcel() {
                             },
                         ],  */
                 });
+                console.log(anuncio)
                 const usuarios = await Usuarios.findAll({
                     where: {
-                        codCidade: 'PENEDO'
+                        codCidade: cadernoParam
                     },
+                    attributes: [
+                        'descNome',
+                        'descCPFCNPJ',
+                        'senha',
+                        'descTelefone',
+                        'descEmail'],
                /*      order: [
                         [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
                         ['createdAt', 'DESC'],
@@ -4876,9 +4886,11 @@ async function convertTxtToExcel() {
 
 
                 }));
+
+                
  */
                 await Promise.all(
-                    anuncio.rows.map(async (anun) => {
+                   anuncio.rows.map(async (anun) => {
                         try {
                             const user = usuarios.find(teste => teste.descCPFCNPJ == anun.dataValues.descCPFCNPJ);
 
