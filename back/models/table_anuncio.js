@@ -546,6 +546,18 @@ const Anuncio = database.define('anuncio', {
             name: 'idx_codDesconto',
             fields: ['codDesconto'], // O campo para o qual o índice será criado
           },
+          {
+            name: 'idx_activate',
+            fields: ['activate'], // O campo para o qual o índice será criado
+          },
+          {
+            name: 'idx_createdAt',
+            fields: ['createdAt'], // O campo para o qual o índice será criado
+          },
+          {
+            name: 'idx_codDuplicado ',
+            fields: ['codDuplicado '], // O campo para o qual o índice será criado
+          },
         ]});
 
 Anuncio.beforeCreate((instance, options) => {

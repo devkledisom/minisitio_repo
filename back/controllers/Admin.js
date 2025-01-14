@@ -41,6 +41,7 @@ const { Op } = Sequelize;
 const readXlsxFile = require('read-excel-file/node');
 const path = require('path');
 const { totalmem } = require('os');
+const Users = require('./Users');
 
 
 
@@ -1468,7 +1469,7 @@ module.exports = {
         // Consulta para recuperar apenas os itens da página atual
         const anuncio = await Anuncio.findAndCountAll({
             order: [
-                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
                 ['createdAt', 'DESC'],
                 ['codDuplicado', 'ASC'],
             ],
@@ -4652,7 +4653,7 @@ module.exports = {
     },
     export4excell: async (req, res) => {
         const anunciosCount = await Anuncio.count();
-        const limit = Number(req.query.limit);
+        //const limit = Number(req.query.limit);
 
         const definirTipoAnuncio = (tipo) => {
             switch (tipo) {
@@ -4667,7 +4668,109 @@ module.exports = {
             }
         };
 
+       /*  const filePath = path.join(__dirname, 'dados.json');
+        const stream = fs.createWriteStream(filePath, { flags: 'a' });
+        
+        let offset = 0;
+        const limit = 2000;
+        const arr = [];
+        
+        while (true) {
+            const dados = await database.query(
+                "SELECT codAnuncio, codOrigem, codDuplicado, descCPFCNPJ, descAnuncio, codTipoAnuncio, codCaderno, codUf, activate, descPromocao, createdAt, dueDate, codDesconto, codAtividade FROM anuncio WHERE codCaderno = 'AGUA BRANCA' LIMIT :limit OFFSET :offset",
+                {
+                    replacements: { limit, offset },
+                    type: database.QueryTypes.SELECT,
+                },
+            );
+        
+            if (dados.length === 0) {
+              
+                exportExcell(arr, res);
+                break
 
+            }; // Sai do loop se não houver mais registros
+        
+            // Escreve os dados no arquivo como JSON
+            dados.forEach(record => {
+                arr.push(record)
+                const jsonRecord = JSON.stringify(record); // Converte o registro para JSON
+                stream.write(jsonRecord + '\n'); // Adiciona cada linha em formato JSON no arquivo
+            });
+        
+            offset += limit;
+        }
+        
+        stream.end(); 
+        console.log(`Dados salvos em: ${filePath}`); */
+        //console.log(arr);
+        
+
+    //convertTxtToExcel()
+
+async function convertTxtToExcel() {
+    const xl = require('excel4node');
+    const filePath = path.join(__dirname, 'dados.txt');
+    const wb = new xl.Workbook();
+    const ws = wb.addWorksheet('Dados');
+
+    // Cabeçalhos da tabela
+    const headingColumnNames = [
+        "COD", "COD_OR", "DUPLI", "CNPJ", "NOME", "TIPO", "CADERNO",
+        "UF", "STATUS", "DATA_PAG", "VALOR", "DESCONTO",
+        "CAD. PARA CONF.", "CONFIRMADO", "DATA_FIM", "TEMP. VALE PR. TIPO",
+        "ID", "USUARIO/DECISOR", "LOGIN", "SENHA", "EMAIL", "CONTATO",
+        "LINK_PERFIL", "ATIVIDADE PRINCIPAL"
+    ];
+
+    // Estilo do cabeçalho
+    const headerStyle = wb.createStyle({
+        font: { bold: true, color: '#000000', size: 12 },
+        fill: { type: 'pattern', patternType: 'solid', fgColor: 'ffff00' },
+        alignment: { horizontal: 'center', vertical: 'center' },
+    });
+
+    // Escreve os cabeçalhos
+    headingColumnNames.forEach((heading, index) => {
+        ws.cell(1, index + 1).string(heading).style(headerStyle);
+    });
+
+    // Ajusta larguras automaticamente (ou manualmente)
+    headingColumnNames.forEach((_, index) => {
+        ws.column(index + 1).setWidth(20); // Largura padrão
+    });
+
+    // Lê os dados do arquivo
+    if (!fs.existsSync(filePath)) {
+        console.error('Arquivo não encontrado:', filePath);
+        return;
+    }
+
+    const data = fs.readFileSync(filePath, 'utf8').trim();
+    if (!data) {
+        console.error('O arquivo está vazio.');
+        return;
+    }
+
+    // Escreve os dados na planilha
+    const rows = data.split('\n');
+    rows.forEach((line, rowIndex) => {
+        const values = line.split(';'); // Assume separação por ponto e vírgula
+        values.forEach((value, colIndex) => {
+            ws.cell(rowIndex + 2, colIndex + 1).string(value.trim());
+        });
+    });
+
+    // Salva o Excel
+    wb.write('dados.xlsx', (err) => {
+        if (err) console.error('Erro ao gerar Excel:', err);
+        else console.log('Excel gerado com sucesso!');
+    });
+}
+
+
+
+        
         try {
             /*      const anuncios = await Anuncio.findAll({
                      limit: limit
@@ -4678,24 +4781,28 @@ module.exports = {
                 const porPagina = 10; // Número de itens por página
 
                 const offset = (paginaAtual - 1) * porPagina;
-
+                
+              
                 // Consulta para recuperar apenas os itens da página atual
                 const anuncio = await Anuncio.findAndCountAll({
-                    order: [
+                    where: {
+                        codCaderno: 'PENEDO'
+                    },
+               /*      order: [
                         [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
                         ['createdAt', 'DESC'],
                         ['codDuplicado', 'ASC'],
-                    ],
-                    limit: 10,
-                    offset: offset,
+                    ], */
+                     //limit: 1000,
+                    //offset: offset, 
                     raw: false,
                     attributes: [
-                        'codAnuncio',
+                         'codAnuncio',
                         'codOrigem',
                         'codDuplicado',
                         'descCPFCNPJ',
                         'descAnuncio',
-                        'codTipoAnuncio',
+                        'codTipoAnuncio', 
                         'codCaderno',
                         'codUf',
                         'activate',
@@ -4703,15 +4810,109 @@ module.exports = {
                         'createdAt',
                         'dueDate',
                         'codDesconto',
-                        'codAtividade'
+                        'codAtividade' 
                     ],
-                    /*      include: [
+                       /*    include: [
                             {
                                 model: Usuarios,
                                 as: 'usuario',
                             },
-                        ], */
+                        ],  */
                 });
+                const usuarios = await Usuarios.findAll({
+                    where: {
+                        codCidade: 'PENEDO'
+                    },
+               /*      order: [
+                        [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                        ['createdAt', 'DESC'],
+                        ['codDuplicado', 'ASC'],
+                    ], */
+                     //limit: 1000,
+                    //offset: offset, 
+                    raw: true,
+                  
+                       /*    include: [
+                            {
+                                model: Usuarios,
+                                as: 'usuario',
+                            },
+                        ],  */
+                });
+
+
+                function dateformat(data) {
+                    const date = new Date(data);
+                    const formattedDate = date.toISOString().split('T')[0];
+
+                    return formattedDate;
+                };
+
+             /*    await Promise.all(anuncio.rows.map(async (anun, i) => {
+
+        
+
+                    const user = usuarios.find(teste => teste.descCPFCNPJ == anun.dataValues.descCPFCNPJ);
+                    console.log(user)
+                      if (user) {
+                         anun.codUsuario = user.descNome;
+                         anun.dataValues.loginUser = user.descCPFCNPJ;
+                         anun.dataValues.loginPass = user.senha;
+                         anun.dataValues.loginEmail = user.descEmail;
+                         anun.dataValues.loginContato = user.descTelefone;
+                         anun.dataValues.link = `${masterPath.domain}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
+                         anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
+                         anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
+                     }; 
+                    if (anun.dataValues.codTipoAnuncio == 3) {
+                        anun.dataValues.codTipoAnuncio = "Completo";
+                    }
+
+                    if (anun.dataValues.activate == 1) {
+                        anun.dataValues.activate = "Ativo";
+                    } else {
+                        anun.dataValues.activate = "Inativo";
+                    }
+
+
+                }));
+ */
+                await Promise.all(
+                    anuncio.rows.map(async (anun) => {
+                        try {
+                            const user = usuarios.find(teste => teste.descCPFCNPJ == anun.dataValues.descCPFCNPJ);
+
+                            if (user) {
+                                // Cria um novo objeto com as informações do usuário inseridas após 'codDesconto'
+                                const reorderedData = {};
+                                for (const key in anun.dataValues) {
+                                    reorderedData[key] = anun.dataValues[key];
+                                    if (key === 'codDesconto') {
+                                        // Adiciona as propriedades do usuário após 'codDesconto'
+                                        reorderedData.codUsuario = user.descNome;
+                                        reorderedData.loginUser = user.descCPFCNPJ;
+                                        reorderedData.loginPass = user.senha;
+                                        reorderedData.loginEmail = user.descEmail;
+                                        reorderedData.loginContato = user.descTelefone;
+                                        reorderedData.link = `${masterPath.domain}/local/${encodeURIComponent(
+                                            anun.dataValues.descAnuncio
+                                        )}?id=${anun.dataValues.codAnuncio}`;
+                                        reorderedData.createdAt = dateformat(anun.dataValues.createdAt);
+                                        reorderedData.dueDate = dateformat(anun.dataValues.dueDate);
+                                    }
+                                }
+                                anun.dataValues = reorderedData;
+                            }
+
+                            // Traduzindo valores específicos
+                            anun.dataValues.codTipoAnuncio =
+                                anun.dataValues.codTipoAnuncio == 3 ? "Completo" : anun.dataValues.codTipoAnuncio;
+                            anun.dataValues.activate = anun.dataValues.activate == 1 ? "Ativo" : "Inativo";
+                        } catch (error) {
+                            console.error(`Erro ao processar anúncio ${anun.dataValues.codAnuncio}:`, error);
+                        }
+                    })
+                );
 
 
                 /*                 const fs = require('fs');
@@ -4761,7 +4962,7 @@ module.exports = {
 
 
 
-                await Promise.all(anuncio.rows.map(async (anun, i) => {
+              /*   await Promise.all(anuncio.rows.map(async (anun, i) => {
 
                     function dateformat(data) {
                         const date = new Date(data);
@@ -4771,7 +4972,7 @@ module.exports = {
                     };
 
                     const user = await anun.getUsuario();
-                    /*  if (user) {
+                      if (user) {
                          anun.codUsuario = user.descNome;
                          anun.dataValues.loginUser = user.descCPFCNPJ;
                          anun.dataValues.loginPass = user.senha;
@@ -4780,8 +4981,7 @@ module.exports = {
                          anun.dataValues.link = `${masterPath.domain}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
                          anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
                          anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
-                     }; */
-
+                     }; 
                     if (anun.dataValues.codTipoAnuncio == 3) {
                         anun.dataValues.codTipoAnuncio = "Completo";
                     }
@@ -4793,8 +4993,10 @@ module.exports = {
                     }
 
 
-                }));
+                })); */
 
+                console.log(usuarios)
+ 
 
                 exportExcell(anuncio.rows, res);
 

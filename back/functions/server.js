@@ -12,6 +12,8 @@ module.exports = async function expExcel(dados, res) {
     let sheetIndex = 1; // Contador de abas
     let ws = wb.addWorksheet(`Sheet${sheetIndex}`); // Criando a primeira aba
 
+    //console.log(dados)
+
 
     const headingColumnNames = [
         "COD",
@@ -81,6 +83,15 @@ module.exports = async function expExcel(dados, res) {
     ws.column(14).setWidth(45); // Coluna N
     ws.column(15).setWidth(30); // Coluna O
     ws.column(16).setWidth(30); // Coluna P
+    ws.column(17).setWidth(30); // Coluna Q
+    ws.column(18).setWidth(30); // Coluna R
+    ws.column(19).setWidth(30); // Coluna S
+    ws.column(20).setWidth(30); // Coluna T
+    ws.column(21).setWidth(30); // Coluna U
+    ws.column(22).setWidth(30); // Coluna V
+    ws.column(23).setWidth(30); // Coluna W
+    ws.column(24).setWidth(30); // Coluna X
+
 
     //let rowIndex = 2;
     /*     dados.forEach(record => {
@@ -112,7 +123,7 @@ module.exports = async function expExcel(dados, res) {
             rowIndex = 2; // Reseta a contagem de linhas para a nova aba
         }
 
-        //console.log(record.dataValues);
+        //console.log(record);
 
         /*       for (let key in record.dataValues) {
                   //console.log("key", key)
@@ -198,7 +209,7 @@ module.exports = async function expExcel(dados, res) {
         }
     } catch (err) {
         console.error("Erro ao manipular arquivos:", err);
-        return res.status(500).json({ success: false, message: "Erro ao processar a exportação." });
+       // return res.status(500).json({ success: false, message: "Erro ao processar a exportação." });
     }
 
     // Escreve o novo arquivo Excel
@@ -206,10 +217,10 @@ module.exports = async function expExcel(dados, res) {
     wb.write(newFilePath, function (err, stats) {
         if (err) {
             console.error(err);
-            return res.status(500).json({ success: false, message: "Erro ao gerar o arquivo." });
+            //return res.status(500).json({ success: false, message: "Erro ao gerar o arquivo." });
         } else {
             console.log("Arquivo gerado:", stats);
-            return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx` });
+            //return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx` });
         }
     });
 

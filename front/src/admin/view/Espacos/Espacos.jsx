@@ -172,6 +172,12 @@ const Espacos = () => {
         setBusca(true);
         const campoPesquisa = document.getElementById('buscar').value;
 
+        if(!searchOptioncheck) {
+            alert('Selecione um critério para a pesquisa');
+            setShowSpinner(false);
+            return;
+        }
+
         fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}&require=${searchOptioncheck}`)
             .then((x) => x.json())
             .then((res) => {

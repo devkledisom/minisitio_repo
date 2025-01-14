@@ -187,7 +187,17 @@ const Usuario = database.define('usuario', {
     {
         freezeTableName: true,
         timestamps: false,
-    });
+    },
+
+{
+    indexes: [
+        {
+          name: 'descCPFCNPJ',
+          fields: ['descCPFCNPJ'], // O campo para o qual o índice será criado
+        }
+    ]
+}
+);
 
 /* Usuario.belongsTo(DDD, {
     constraints: true,
