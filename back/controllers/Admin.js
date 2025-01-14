@@ -1387,10 +1387,11 @@ module.exports = {
         FROM anuncio
         WHERE codUf = '${req.params.uf}'
           AND codCaderno = '${req.params.caderno}'
-          AND codAtividade != 'ADMINISTRAÇÃO REGIONAL / PREFEITURA'
+          
         GROUP BY codAtividade
         ORDER BY codAtividade ASC;
     `;
+    //AND codAtividade != 'ADMINISTRAÇÃO REGIONAL / PREFEITURA'
 
         try {
             // Obter uma conexão do Sequelize
@@ -1997,7 +1998,7 @@ module.exports = {
 
         const pageToQuery = req.query.unique == 'false' && anuncioIdd ? anuncioIdd.page : page;
 
-        console.log("daskdaklsdjalkj", anuncioIdd, page, pageToQuery)
+        //console.log("daskdaklsdjalkj", anuncioIdd, page, pageToQuery)
 
         const anuncioTeste = await Anuncio.findAndCountAll({
             where: {
@@ -2006,6 +2007,9 @@ module.exports = {
                     { codCaderno: req.params.caderno },
                     { page: pageToQuery },
                 ],
+             /*    codAtividade: {
+                    [Op.notIn]: ['ADMINISTRAÇÃO REGIONAL / PREFEITURA', "EMERGÊNCIA", "UTILIDADE PÚBLICA", "HOSPITAIS PÚBLICOS", "CÂMARA DE VEREADORES - CÂMARA DISTRITAL", "SECRETARIA DE TURISMO", "INFORMAÇÕES", "EVENTOS NA CIDADE"]  // Ignorar esse valor
+                }, */
             },
             order: [['codAtividade', 'ASC']],
             /*  limit,
@@ -2013,7 +2017,7 @@ module.exports = {
             attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page'],
         });
 
-        console.log("daskdaklsdjalkj", anuncioIdd, page, anuncioTeste.rows)
+        //console.log("daskdaklsdjalkj", anuncioIdd, page, anuncioTeste.rows)
 
         res.json({
             success: true,
