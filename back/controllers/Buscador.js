@@ -25,11 +25,11 @@ module.exports = {
 
 
         //Atividades
-      /*   const atividades = await Atividade.findAll({
-            where: {
-                atividade: { [Op.like]: `%${atividade}%` }
-            }
-        }); */
+        /*   const atividades = await Atividade.findAll({
+              where: {
+                  atividade: { [Op.like]: `%${atividade}%` }
+              }
+          }); */
 
         //console.log("debug: ", atividades);
         //console.log("debug: ", codigoCaderno, uf, atividades[0].id);
@@ -64,55 +64,61 @@ module.exports = {
                 }
             }); */
         } else {
-         /*    anunciosOld = await Anuncio.findAll({
-                where: {
-                    [Op.or]: [
-                        {
-                            [Op.and]: [
-                                { codUf: uf },
-                                {
-                                    [Op.or]: [
-                                        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                                        { codAtividade: atividades.length > 0 ? atividades[0].id : "" },
-                                        { descTelefone: atividade },
-                                        { descCPFCNPJ: atividade },
-                                        {
-                                            tags: {
-                                                [Op.like]: `%${atividade}%`
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ],
-
-                }
-            }); */
+            /*    anunciosOld = await Anuncio.findAll({
+                   where: {
+                       [Op.or]: [
+                           {
+                               [Op.and]: [
+                                   { codUf: uf },
+                                   {
+                                       [Op.or]: [
+                                           Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
+                                           { codAtividade: atividades.length > 0 ? atividades[0].id : "" },
+                                           { descTelefone: atividade },
+                                           { descCPFCNPJ: atividade },
+                                           {
+                                               tags: {
+                                                   [Op.like]: `%${atividade}%`
+                                               }
+                                           }
+                                       ]
+                                   }
+                               ]
+                           }
+                       ],
+   
+                   }
+               }); */
 
         }
 
-      /*   const [results] = await database.query(
-            "EXPLAIN SELECT * FROM anuncio WHERE descAnuncio LIKE 'MERCADODEUSEFIEL2015%'"
-          );
-          
-          console.log("kledisom: ", results); */
-          
+        /*   const [results] = await database.query(
+              "EXPLAIN SELECT * FROM anuncio WHERE descAnuncio LIKE 'MERCADODEUSEFIEL2015%'"
+            );
+            
+            console.log("kledisom: ", results); */
+
 
         const anuncios = await Anuncio.findAll({
             where: {
-                [Op.or]: [
-                    ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
-                      { descAnuncio: { [Op.like]: `${atividade}%` } },
-                      { codAtividade: {[Op.like]: `${atividade}%`} }, //atividades.length > 0 ? atividades[0].id : "" },
-                   { descTelefone: atividade },
-                          { descCPFCNPJ: atividade },
-                     {
-                         tags: {
-                             [Op.like]: `${atividade}%`
-                         }
-                     }  
-                 ]
+                [Op.and]: [
+                    { codCaderno: codigoCaderno },
+                    { codUf: uf },
+                    {
+                        [Op.or]: [
+                            ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
+                            { descAnuncio: { [Op.like]: `${atividade}%` } },
+                            { codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
+                            { descTelefone: atividade },
+                            { descCPFCNPJ: atividade },
+                            {
+                                tags: {
+                                    [Op.like]: `${atividade}%`
+                                }
+                            }
+                        ]
+                    }
+                ]
                 /* [Op.or]: [
                     {
                         [Op.and]: [
@@ -151,9 +157,9 @@ module.exports = {
 
         console.log('23y4238r934h8r734rhn34: ', anuncios)
 
-       /*  if (atividades.length > 0) {
-            console.log(atividades[0].id)
-        }; */
+        /*  if (atividades.length > 0) {
+             console.log(atividades[0].id)
+         }; */
 
         const anuncio = anuncios.filter((item) => {
             //var verificarCodAtividade = (atividades.length == 0) ? null : atividades[0].id;
@@ -300,9 +306,9 @@ module.exports = {
             resultAnuncio[0].setDataValue('nomeCaderno', resultAnuncio[0].codCaderno);
             resultAnuncio[0].setDataValue('nomeAtividade', resultAnuncio[0].codAtividade);
             resultAnuncio[0].setDataValue('hash', resultAnuncio[0].codDesconto);
-       /*      resultAnuncio[0].setDataValue('nomeCaderno', cader.dataValues.nomeCaderno);
-            resultAnuncio[0].setDataValue('nomeAtividade', atividades.dataValues.atividade);
-            resultAnuncio[0].setDataValue('hash', descontoHash.hash); */
+            /*      resultAnuncio[0].setDataValue('nomeCaderno', cader.dataValues.nomeCaderno);
+                 resultAnuncio[0].setDataValue('nomeAtividade', atividades.dataValues.atividade);
+                 resultAnuncio[0].setDataValue('hash', descontoHash.hash); */
 
             res.json(resultAnuncio);
         } catch (err) {
@@ -326,7 +332,7 @@ module.exports = {
                 const jsonData = fs.readFileSync(filePath, 'utf8'); // Lê o arquivo como texto
                 const data = JSON.parse(jsonData); // Converte o texto em um objeto JavaScript
                 //console.log('Conteúdo do arquivo JSON:', data);
-                res.json({success: true, message: data})
+                res.json({ success: true, message: data })
                 return data;
             } catch (error) {
                 console.error('Erro ao ler o arquivo JSON:', error);
@@ -338,11 +344,11 @@ module.exports = {
         const jsonData = readJsonFile(filePath);
 
         // Exemplo: acessar os dados do JSON
-   /*      if (jsonData) {
-            console.log(`Nome: ${jsonData.name}`);
-            console.log(`Idade: ${jsonData.age}`);
-            console.log(`Email: ${jsonData.email}`);
-        } */
+        /*      if (jsonData) {
+                 console.log(`Nome: ${jsonData.name}`);
+                 console.log(`Idade: ${jsonData.age}`);
+                 console.log(`Email: ${jsonData.email}`);
+             } */
 
 
 
