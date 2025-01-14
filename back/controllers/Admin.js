@@ -4786,7 +4786,7 @@ async function convertTxtToExcel() {
                 // Consulta para recuperar apenas os itens da página atual
                 const anuncio = await Anuncio.findAndCountAll({
                     where: {
-                        codCaderno: 'PENEDO'
+                        codCaderno: 'AGUA BRANCA'
                     },
                /*      order: [
                         [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
