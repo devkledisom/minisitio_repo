@@ -4661,7 +4661,7 @@ module.exports = {
         const cadernoParam = req.query.caderno;
 
 
-
+        const startTime = Date.now(); // Início da medição do tempo
         const definirTipoAnuncio = (tipo) => {
             switch (tipo) {
                 case 1:
@@ -4826,7 +4826,7 @@ async function convertTxtToExcel() {
                             },
                         ],  */
                 });
-                console.log(anuncio)
+                //console.log(anuncio)
                 const usuarios = await Usuarios.findAll({
                     where: {
                         codCidade: cadernoParam
@@ -4931,90 +4931,12 @@ async function convertTxtToExcel() {
                 );
 
 
-                /*                 const fs = require('fs');
-                                const { ModelName } = require('./models'); // Substitua pelo modelo correto
-                
-                                async function exportLargeDataToFile(batchSize = 1000) {
-                                    let offset = 0;
-                                    let hasMoreData = true;
-                
-                                    try {
-                                        // Cria ou limpa o arquivo inicial
-                                        const filePath = 'output.json';
-                                        fs.writeFileSync(filePath, '[\n', 'utf-8'); // Abre o array JSON
-                
-                                        while (hasMoreData) {
-                                            // Busca registros em lotes
-                                            const records = await ModelName.findAll({
-                                                limit: batchSize,
-                                                offset: offset,
-                                                raw: true, // Retorna apenas os dados (sem metadados do Sequelize)
-                                            });
-                
-                                            if (records.length > 0) {
-                                                // Converte os registros em JSON e remove o último `\n` para evitar vírgulas inválidas
-                                                const jsonData = JSON.stringify(records, null, 2).slice(1, -1);
-                
-                                                // Adiciona ao arquivo (com uma vírgula se houver mais lotes a seguir)
-                                                fs.appendFileSync(filePath, `${offset > 0 ? ',\n' : ''}${jsonData}`, 'utf-8');
-                
-                                                // Incrementa o offset
-                                                offset += batchSize;
-                                            } else {
-                                                hasMoreData = false; // Para o loop se não houver mais registros
-                                            }
-                                        }
-                
-                                        // Fecha o array JSON
-                                        fs.appendFileSync(filePath, '\n]', 'utf-8');
-                
-                                        console.log('Exportação concluída com sucesso!');
-                                    } catch (error) {
-                                        console.error('Erro ao exportar os dados:', error);
-                                    }
-                                }
-                
-                                exportLargeDataToFile(); */
+               
 
-
-
-              /*   await Promise.all(anuncio.rows.map(async (anun, i) => {
-
-                    function dateformat(data) {
-                        const date = new Date(data);
-                        const formattedDate = date.toISOString().split('T')[0];
-
-                        return formattedDate;
-                    };
-
-                    const user = await anun.getUsuario();
-                      if (user) {
-                         anun.codUsuario = user.descNome;
-                         anun.dataValues.loginUser = user.descCPFCNPJ;
-                         anun.dataValues.loginPass = user.senha;
-                         anun.dataValues.loginEmail = user.descEmail;
-                         anun.dataValues.loginContato = user.descTelefone;
-                         anun.dataValues.link = `${masterPath.domain}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
-                         anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
-                         anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
-                     }; 
-                    if (anun.dataValues.codTipoAnuncio == 3) {
-                        anun.dataValues.codTipoAnuncio = "Completo";
-                    }
-
-                    if (anun.dataValues.activate == 1) {
-                        anun.dataValues.activate = "Ativo";
-                    } else {
-                        anun.dataValues.activate = "Inativo";
-                    }
-
-
-                })); */
-
-                console.log(usuarios)
+                //console.log(usuarios)
  
 
-                exportExcell(anuncio.rows, res);
+                exportExcell(anuncio.rows, res, startTime);
 
             } else {
                 const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1

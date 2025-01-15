@@ -25,9 +25,26 @@ function Resultados() {
 
         console.log(result)
 
+        const capas = [
+        "ADMINISTRAÇÃO REGIONAL / PREFEITURA",
+        "EMERGÊNCIA",
+        "UTILIDADE PÚBLICA",
+        "HOSPITAIS PÚBLICOS",
+        "CÂMARA DE VEREADORES - CÂMARA DISTRITAL",
+        "SECRETARIA DE TURISMO",
+        "INFORMAÇÕES",
+        "EVENTOS NA CIDADE"
+        ]
+
         if(result.length == 1) {
-            navigate(`/caderno/${result[0].descAnuncio}?page=1&book=${result[0].codCaderno}&id=${result[0].codAnuncio}&caderno=${result[0].codCaderno}&estado=${cadernoUf}
-`);
+
+            if(capas.includes(result[0].codAtividade)) {
+                navigate(`/caderno-geral/${encodeURIComponent(result[0].codCaderno)}/${cadernoUf}`);
+            } else {
+                navigate(`/caderno/${result[0].descAnuncio}?page=1&book=${result[0].codCaderno}&id=${result[0].codAnuncio}&caderno=${result[0].codCaderno}&estado=${cadernoUf}`);
+            }
+
+
         }
 
     }, [])

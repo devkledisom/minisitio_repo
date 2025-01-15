@@ -153,6 +153,17 @@ function Caderno(props) {
     })
   }, [])
 
+  const capas = [
+    "ADMINISTRAÇÃO REGIONAL / PREFEITURA",
+    "EMERGÊNCIA",
+    "UTILIDADE PÚBLICA",
+    "HOSPITAIS PÚBLICOS",
+    "CÂMARA DE VEREADORES - CÂMARA DISTRITAL",
+    "SECRETARIA DE TURISMO",
+    "INFORMAÇÕES",
+    "EVENTOS NA CIDADE"
+    ]
+
   return (
     <div className="App">
 
@@ -194,12 +205,21 @@ function Caderno(props) {
                     {/* {console.log(classificados)} */}
                     {classificados.map(item => (
                       /* "/caderno/maceio/ziiz_569885_27" */
+                      capas.includes(item.codAtividade) ?
+                      <li key={item.id}>
+                        <a href="#">
+
+                          {item.codAtividade} <span>{item.quantidade} resultado</span>
+                        </a>
+                      </li>
+                      :
                       <li key={item.id}>
                         <a href={`/caderno/${item.descAnuncio}_${item.codAnuncio}_${item.codUf}?page=1&book=${item.codCaderno}&id=${item.codAnuncio}&caderno=${item.codCaderno}&estado=${item.codUf}`} onClick={definePage}>
 
                           {item.codAtividade} <span>{item.quantidade} resultado</span>
                         </a>
                       </li>
+                      
                     ))}
                   </ul>
                 </li>

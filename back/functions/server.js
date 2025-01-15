@@ -3,7 +3,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const masterPath = require('../config/config');
 
-module.exports = async function expExcel(dados, res) {
+module.exports = async function expExcel(dados, res, startTime) {
     //const wb = new xl.Workbook();
     const wb = new xl.Workbook();
     //const ws = wb.addWorksheet('espacos');
@@ -220,7 +220,12 @@ module.exports = async function expExcel(dados, res) {
             return res.status(500).json({ success: false, message: "Erro ao gerar o arquivo." });
         } else {
             console.log("Arquivo gerado:", stats);
-            return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx` });
+            const endTime = Date.now(); // Fim da medição do tempo
+            const executionTime = endTime - startTime; // Calcula o tempo total
+
+            console.log("previsto: ", executionTime, " ms")
+
+            return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx`, time: executionTime });
         }
     });
 

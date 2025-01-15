@@ -1,12 +1,23 @@
 import React from "react";
 
 
-const Spinner = () => {
+const Spinner = (props) => {
     return (
         <div className="spinner-main">
-            <button className="" style={style} >{/* ref={loadingButton} */}
-                <i className="fa fa-spinner fa-spin"></i>Carregando
-            </button>
+            
+                {props.progress == 0 && 
+                <button className="" style={style} >{/* ref={loadingButton} */}
+                    <i className="fa fa-spinner fa-spin"></i>Carregando
+                    </button>
+                }
+                
+                {props.progress > 0 && 
+                <button className="" style={style} >{/* ref={loadingButton} */}
+                    <i className="fa fa-spinner fa-spin"></i>Carregando <span>{props.progress}%</span>
+                    </button>
+                }
+                
+            
         </div>
 
     );

@@ -33,6 +33,7 @@ const Espacos = () => {
     const [page, setPage] = useState(1);
     const [selectId, setSelectId] = useState(null);
     const [showSpinner, setShowSpinner] = useState(true);
+    const [progressExport, setProgressExport] = useState(0);
     const [del, setDel] = useState(false);
     const [busca, setBusca] = useState(false);
     const [searchOptioncheck, setSearchOptioncheck] = useState(false);
@@ -172,7 +173,7 @@ const Espacos = () => {
         setBusca(true);
         const campoPesquisa = document.getElementById('buscar').value;
 
-        if(!searchOptioncheck) {
+        if (!searchOptioncheck) {
             alert('Selecione um critério para a pesquisa');
             setShowSpinner(false);
             return;
@@ -258,7 +259,49 @@ const Espacos = () => {
     function exportExcell() {
         setShowSpinner(true);
 
+
+        /*
+        Para 1000 linhas: 3125ms
+Para 10000 linhas: 31250ms
+Para 20000 linhas: 62500ms
+Para 30000 linhas: 93750ms
+Para 40000 linhas: 125000ms
+Para 50000 linhas: 156250ms
+Para 60000 linhas: 187500ms
+Para 70000 linhas: 218750ms
+Para 80000 linhas: 250000ms
+Para 90000 linhas: 281250ms
+Para 100000 linhas: 312500ms
+        */
+
         if (campoBusca.current.value != '') {
+
+            // Valor máximo em milissegundos
+            const maxTime = 312500;
+
+            // Atualiza o progresso a cada 10 ms (ajuste conforme necessário)
+            const interval = 10;
+            let currentTime = 0;
+
+            // Função para calcular e exibir o percentual
+            const intervalId = setInterval(() => {
+                currentTime += interval;
+
+                // Calcula o percentual
+                const percent = Math.min((currentTime / maxTime) * 100, 100); // Garante que não ultrapasse 100%
+
+                console.log(`Progresso: ${percent.toFixed(2)}%`);
+                setProgressExport(percent.toFixed(2));
+
+                // Para quando alcançar o valor máximo
+                if (currentTime >= maxTime) {
+                    clearInterval(intervalId);
+                    console.log("Requisição concluída.");
+                }
+            }, interval);
+
+
+
             console.log(campoBusca.current.value)
             fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000&export=full&caderno=${campoBusca.current.value}`, {
                 method: "POST",
@@ -272,6 +315,7 @@ const Espacos = () => {
                     if (res.success) {
                         //console.log(res);
                         setShowSpinner(false);
+                        setProgressExport(0);
                         window.location.href = res.downloadUrl;
                     }
                 })
@@ -315,7 +359,7 @@ const Espacos = () => {
             </header>
             <section className="pt-5">
 
-                {showSpinner && <Spinner />}
+                {showSpinner && <Spinner progress={progressExport}/>}
                 <h1 className="pt-4 px-4">Espaços</h1>
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
