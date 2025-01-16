@@ -219,6 +219,11 @@
     filter: drop-shadow(2px 4px 6px black);
 }
 
+.caderno .btn-class {
+    padding: 10px 40px; 
+    filter: drop-shadow(2px 4px 6px black);
+}
+
 .proximo:hover {
     background-color: #ffcc29;
 }
