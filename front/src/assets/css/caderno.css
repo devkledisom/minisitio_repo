@@ -203,6 +203,7 @@
         align-items: flex-start;
         grid-template-columns: repeat(1, 1fr);
         grid-gap: 10px;
+        /* width: 360px; */
     }
 
     .column {
@@ -211,7 +212,7 @@
 
     .info-title {
         text-align: left;
-        width: 370px;
+        /* width: 360px; */
         font-size: 20px;
         padding: 0 20px;
     }
@@ -260,5 +261,28 @@
         padding: 0px !important;
     }
     
+    .caderno .btn {
+        padding: 0;
+    }
+
+    .caderno .column {
+        width: 360px;
+    }
+
+    .caderno .column h2 {
+        font-size: 18px;
+    }
+
+    .FullWebCard .container h1 {
+        font-size: 25px;
+    }
+
+    .FullWebCard .container .titulo-cinza {
+        font-size: 18px;
+    }
+
+    .logo {
+        display: block;
+    }
 
 }

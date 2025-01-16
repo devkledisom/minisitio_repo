@@ -316,6 +316,7 @@ Para 100000 linhas: 312500ms
                         //console.log(res);
                         setShowSpinner(false);
                         setProgressExport(0);
+                        clearInterval(intervalId);
                         window.location.href = res.downloadUrl;
                     }
                 })

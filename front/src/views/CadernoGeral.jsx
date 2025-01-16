@@ -165,7 +165,7 @@ function Caderno(props) {
     ]
 
   return (
-    <div className="App">
+    <div className="App caderno-geral">
 
       {loading &&
         <button class="buttonload" style={{ display: "block" }}>
@@ -180,7 +180,7 @@ function Caderno(props) {
       </header>
       <main>
         <Busca paginaAtual={"caderno"} />
-        <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
+        <h1 id="title-caderno" className='py-2 title-caderno'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
         {/*         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
         <div className='container caderno'>
@@ -208,15 +208,15 @@ function Caderno(props) {
                       capas.includes(item.codAtividade) ?
                       <li key={item.id}>
                         <a href="#">
-
-                          {item.codAtividade} <span>{item.quantidade} resultado</span>
+                        <div>{item.codAtividade}</div>
+                        <span>{item.quantidade} resultado</span>
                         </a>
                       </li>
                       :
                       <li key={item.id}>
                         <a href={`/caderno/${item.descAnuncio}_${item.codAnuncio}_${item.codUf}?page=1&book=${item.codCaderno}&id=${item.codAnuncio}&caderno=${item.codCaderno}&estado=${item.codUf}`} onClick={definePage}>
-
-                          {item.codAtividade} <span>{item.quantidade} resultado</span>
+                          <div>{item.codAtividade}</div>
+                           <span>{item.quantidade} resultado</span>
                         </a>
                       </li>
                       

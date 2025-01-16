@@ -157,7 +157,7 @@ function ContactForm() {
                 </div>
 
                 <div className="col-md-12 px-3 py-3 text-end">
-                    <button type="submit" className="btn cinza btn-sendmessage"><i className="fa fa-arrow-right"></i> enviar</button>
+                    <button type="submit" className="btn cinza btn-sendmessage"><i className="fa fa-arrow-right m-0"></i> enviar</button>
                 </div>
                 <input type="hidden" {...register('id')} value={id} />
                 {/*  <div className="form-group d-flex">

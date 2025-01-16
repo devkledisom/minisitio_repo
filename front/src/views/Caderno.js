@@ -1033,7 +1033,7 @@ function Caderno() {
 
 
   return (
-    <div className="App">
+    <div className="App caderno">
 
       <header>
         <Mosaico logoTop={true} borda="none" />

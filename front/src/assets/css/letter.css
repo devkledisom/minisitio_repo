@@ -40,3 +40,9 @@
         transform: translateX(-100%); /* Ponto final (esquerda fora da div) */
     }
 }
+
+@media (max-width: 768px) {
+    .letter > .letter-div > .div-marquee > span {
+         font-size: 18px;
+     }
+}
