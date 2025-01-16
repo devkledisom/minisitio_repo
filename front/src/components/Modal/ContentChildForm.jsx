@@ -243,16 +243,16 @@ const ContentChildForm = (props) => {
         localStorage.removeItem("imgname");
         //console.log(res)
 
-       if(props.descontoAtivado && props.radioCheck == 3) {
+        if (props.descontoAtivado && props.radioCheck == 3) {
           window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
           console.log("1");
-        } else if(props.radioCheck == 1) {
+        } else if (props.radioCheck == 1) {
           window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
           console.log("2");
         } else {
           window.location.href = `https://mpago.la/1pWzL7A`;
           console.log("3");
-        } 
+        }
 
         //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
         //navigate(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`);
@@ -266,15 +266,13 @@ const ContentChildForm = (props) => {
     return cpfOuCnpj.replace(/[.\-\/]/g, '');
   }
 
-
-
   return (
     <div className="content-child-form">
       <div className="header hidden-print d-flex justify-content-center align-items-center">
         <h1>Cadastro de Usuário</h1>
       </div>
 
-      {alert && <AlertMsg message={"Cadastro Realizado"}/>}
+      {alert && <AlertMsg message={"Cadastro Realizado"} />}
 
       <button class="buttonload" style={{ display: "none" }} ref={loadingButton}>
         <i class="fa fa-spinner fa-spin"></i>Carregando
@@ -311,12 +309,12 @@ const ContentChildForm = (props) => {
                     <div className="col-md-12">
                       <div className="input-icon margin-top-10">
                         <i className="fa fa-credit-card"></i>
-                    {/*     <InputCpf
+                        {/*     <InputCpf
                           value={cpf}
                           onChange={(event) => setCPF(event.target.value)}
                         /> */}
 
-{/* {cpf != null && cpf.length <= 14 && 
+                        {/* {cpf != null && cpf.length <= 14 && 
     <InputMask 
     mask="999.999.999-99" 
     value={cpf} 
@@ -327,16 +325,16 @@ const ContentChildForm = (props) => {
     placeholder="Digite um CPF ou CNPJ" />
 
 } */}
-{cpf != null && cpf.length > 14 && 
-   <InputMask 
-    mask="99.999.999/9999-99" 
-    value={cpf} 
-    onChange={(e) => setCPF(e.target.value)}
-    name="descCPFCNPJ"
-    id="descCPFCNPJ"
-    className="form-control"
-    placeholder="Digite um CPF ou CNPJ" />
-}
+                        {cpf != null && cpf.length > 14 &&
+                          <InputMask
+                            mask="99.999.999/9999-99"
+                            value={cpf}
+                            onChange={(e) => setCPF(e.target.value)}
+                            name="descCPFCNPJ"
+                            id="descCPFCNPJ"
+                            className="form-control"
+                            placeholder="Digite um CPF ou CNPJ" />
+                        }
 
                       </div>
                     </div>
@@ -396,7 +394,7 @@ const ContentChildForm = (props) => {
                     <div className="col-md-6 col-sm-6">
                       <div className="input-icon margin-top-10">
                         <i className="fa fa-phone"></i>
-                     {/*    <input
+                        {/*    <input
                           type="text"
                           name="descTelefone"
                           id="descTelefone"
@@ -404,13 +402,13 @@ const ContentChildForm = (props) => {
                           placeholder="Digite seu telefone"
                         /> */}
                         <InputMask
-                    type="text"
-                    name="descTelefone"
-                    id="descTelefone"
-                    className="form-control"
-                    placeholder="(99) 99999-9999"
-                    required
-                    mask={'(99) 99999-9999'}></InputMask>
+                          type="text"
+                          name="descTelefone"
+                          id="descTelefone"
+                          className="form-control"
+                          placeholder="(99) 99999-9999"
+                          required
+                          mask={'(99) 99999-9999'}></InputMask>
                       </div>
                     </div>
                     <div className="col-md-6 col-sm-6">

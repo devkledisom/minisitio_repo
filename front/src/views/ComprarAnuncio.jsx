@@ -55,7 +55,7 @@ function ComprarAnuncio({ isAdmin }) {
   const [personType, setPersonType] = useState("pf");
   const [cep, setCep] = useState();
   const [showMap, setShowMap] = useState("none");
-  const [precoFixo, setPrecoFixo] = useState(5);
+  const [precoFixo, setPrecoFixo] = useState(10);
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
   const [descontoAtivado, setDescontoAtivado] = useState(false);
   const [tagValue, setTagValue] = useState([]);
@@ -97,16 +97,16 @@ function ComprarAnuncio({ isAdmin }) {
       });
 
     console.log(isAdmin)
-/*     Swal.fire({
-      title: "Perfil Cadastrado",
-      text: "Você será redirecionado para página de login, para efetuar o login use o seu cnpj e a senha defenida no cadastro. Você também receberá as informações do acesso no email cadastrado.",
-      icon: "success"
-  }).then(res => {
-      if (res.isConfirmed) {
-          console.log(res)
-      }
-
-  }); */
+    /*     Swal.fire({
+          title: "Perfil Cadastrado",
+          text: "Você será redirecionado para página de login, para efetuar o login use o seu cnpj e a senha defenida no cadastro. Você também receberá as informações do acesso no email cadastrado.",
+          icon: "success"
+      }).then(res => {
+          if (res.isConfirmed) {
+              console.log(res)
+          }
+    
+      }); */
 
   }, []);
 
@@ -225,6 +225,21 @@ function ComprarAnuncio({ isAdmin }) {
         setValidation(true);
       };
     });
+  }
+
+  // Obter a data de hoje
+  const hoje = new Date();
+
+  // Adicionar um ano
+  const proximoAno = new Date(hoje);
+  proximoAno.setFullYear(proximoAno.getFullYear() + 1);
+
+  // Função para formatar a data
+  function formatarData(data) {
+    const dia = String(data.getDate()).padStart(2, '0'); // Adiciona zero à esquerda se necessário
+    const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam em 0
+    const ano = data.getFullYear();
+    return `${dia}/${mes}/${ano}`;
   }
 
   return (
@@ -391,12 +406,12 @@ function ComprarAnuncio({ isAdmin }) {
                         atividades.map(
                           (item, i) =>
                             i > 7 ? <option
-                          key={item.id}
-                          value={item.atividade}
-                        >
-                          {item.atividade}
-                        </option> : ""
-                            
+                              key={item.id}
+                              value={item.atividade}
+                            >
+                              {item.atividade}
+                            </option> : ""
+
 
                         )}
                     </select>
@@ -918,7 +933,7 @@ function ComprarAnuncio({ isAdmin }) {
                   <div className="margin-top-20">
                     {radioCheck != 1 && <p className="webcard" style={{ display: "block" }}>
                       *A duração da assinatura é de 12 meses, portanto válido até
-                      14/04/2025.
+                      <span> {formatarData(proximoAno)}.</span>
                     </p>}
                     {/*       {!validation &&
                       <button
