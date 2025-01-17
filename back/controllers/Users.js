@@ -442,6 +442,7 @@ module.exports = {
         const nu_doc = req.params.id;
 
         if (nu_doc != "all") {
+            console.log(nu_doc)
             //Atividades
             const resultAnuncio = await Users.findAll({
                 where: {

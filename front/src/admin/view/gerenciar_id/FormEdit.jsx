@@ -23,7 +23,7 @@ const FormEdit = () => {
     const [page, setPage] = useState(1);
     const [showSpinner, setShowSpinner] = useState(false);
     const [descricaoId, setDescricaoId] = useState(false);
-    const [descontoId, setDescontoId] = useState(false);
+    const [descontoId, setDescontoId] = useState('carregando');
     const [hash, setHash] = useState(false);
     const [descImagem, setDescImg] = useState([]);
 
@@ -63,7 +63,7 @@ const FormEdit = () => {
             .then((res) => {
                 setIds(res);
                 setDescricaoId(res[0].descricao);
-                setDescontoId(res[0].desconto);
+                setDescontoId(String(`${res[0].desconto},00`));
                 setHash(res[0].hash);
                 setLinks({
                     link_1: res[0].descLink,
@@ -89,19 +89,20 @@ const FormEdit = () => {
                     //setPatrocinio(1)
                 }
 
+                fetch(`${masterPath.url}/admin/desconto/usuario/buscar/${res[0].idUsuario}`)
+                    .then((x) => x.json())
+                    .then((res) => {
+                        setUsuarios(res.usuarios);
+                        setShowSpinner(false);
+                    }).catch((err) => {
+                        console.log(err);
+                        setShowSpinner(false);
+                    })
 
             }).catch((err) => {
                 console.log(err)
             })
-        fetch(`${masterPath.url}/admin/usuario/buscar/all`)
-            .then((x) => x.json())
-            .then((res) => {
-                setUsuarios(res.usuarios);
-                setShowSpinner(false);
-            }).catch((err) => {
-                console.log(err);
-                setShowSpinner(false);
-            })
+
     }, []);
 
 
@@ -148,8 +149,6 @@ const FormEdit = () => {
             "addSaldo": saldoValue//document.getElementById('add-saldo') ? document.getElementById('add-saldo').value : 0
         };
 
-        console.log(data)
-
         const config = {
             method: "PUT",
             headers: {
@@ -175,10 +174,15 @@ const FormEdit = () => {
                             text: 'ID Atualizado!',
                             icon: 'success',
                             confirmButtonText: 'Confirmar'
-                          })
+                        })
                     } else {
                         //alert(res.message);
                         console.log(res.message);
+                       
+                        if(res.message == "Token inválido") {
+                            alert("Sessão expirada, faça login para continuar.");
+                            navigate('/login')
+                        }
                     }
                 })
         }
@@ -215,9 +219,39 @@ const FormEdit = () => {
         if (user != undefined) {
             return user.descNome
         }
-        //console.log("users", meuParam, user)
+        //console.log("users", meuParam, usuarios, user)
 
     }
+
+    const handleInputChange = (e) => {
+        let value = e.target.value || descontoId;
+        // Remove qualquer caractere que não seja número ou vírgula
+        value = value.replace(/[^0-9,]/g, '');
+
+        // Se já existe uma vírgula, impede a digitação de outra
+        const parts = value.split(',');
+
+        value = parseFloat(value).toFixed(2); 
+
+        if (value.length == 2) {
+            //value = `${value},00`; // Mantém apenas 2 dígitos após a vírgula
+        }
+
+        // Adiciona o "0," inicial se o campo ficar vazio ou começar com uma vírgula
+        if (value == '' || value == ',' || value.length == 3) {
+            value = '';
+        }
+
+        // Garante duas casas decimais ao final
+      /*   if (parts.length == 2) {
+            const [integer, decimal] = parts;
+            value = `${integer},${decimal.slice(0, 2)}`;
+        } */
+
+        console.log(value, parts)
+
+        setDescontoId(value);
+    };
 
     return (
         <div className="users">
@@ -257,17 +291,37 @@ const FormEdit = () => {
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="valorDesconto" className="w-50 px-1">Valor do desconto:</label>
-                            <input type="text"
+                         {/*         <input type="text"
                                 className="form-control h-25 w-50"
                                 id="valorDesconto"
                                 name="valorDesconto"
-                                value={String(parseFloat(descontoId).toFixed(2)).replace('.', ',')}
-                                onChange={(e) => setDescontoId(String(e.target.value))}
+                               value={parseFloat(descontoId).toFixed(2).replace('.', ',')}
+
+                                onChange={(e) => setDescontoId(`${parseFloat(e.target.value)}`)}
                                 placeholder="0,00"
-                            />
-                            <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span>
+                            />  */}
+                            {/*           <InputMask
+                                type="text"
+                                className="form-control h-25 w-50"
+                                id="valorDesconto"
+                                name="valorDesconto"
+                                value={`${descontoId}`}
+                                onChange={(e) => setDescontoId(`${e.target.value}`)}
+                                placeholder="0,00"
+                                mask={'99,99'}
+                            ></InputMask> */}
+
+                          <input type="number"
+                                className="form-control h-25 w-50"
+                                id="valorDesconto"
+                                name="valorDesconto"
+                                value={`${parseFloat(descontoId).toFixed(2)}`}
+                                onChange={(e) => setDescontoId(`${parseFloat(e.target.value)}`)}
+                                placeholder="0,00"
+                            /> 
+
+                            {/*  <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span> */}
                         </div>
-                                
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="patrocinador" className="w-50 px-1">Habilitar Patrocinador ?</label>
@@ -281,10 +335,10 @@ const FormEdit = () => {
 
                         {patrocinio == 1 &&
                             <div className="form-group d-flex flex-column align-items-center py-3">
-                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink} codImg={descImagem.descImagem} miniPreview={false} valueLink={links.link_1}/>
-                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink2} codImg={descImagem.descImagem2} miniPreview={false} valueLink={links.link_2}/>
-                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink3} codImg={descImagem.descImagem3} miniPreview={false} valueLink={links.link_3}/>
-                           </div>
+                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink} codImg={descImagem.descImagem} miniPreview={false} valueLink={links.link_1} />
+                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink2} codImg={descImagem.descImagem2} miniPreview={false} valueLink={links.link_2} />
+                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink3} codImg={descImagem.descImagem3} miniPreview={false} valueLink={links.link_3} />
+                            </div>
 
                         }
 

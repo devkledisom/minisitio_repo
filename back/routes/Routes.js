@@ -81,6 +81,7 @@ router.post('/api/admin/desconto/create', auth, Admin.criarIds);
 router.delete('/api/admin/desconto/delete/:id', auth, Admin.deleteIds);
 router.get('/api/admin/desconto/buscar/:id', Admin.buscarId);
 router.get('/api/admin/desconto/read/all', Admin.buscarAllId);
+router.get('/api/admin/desconto/usuario/buscar/:id', Admin.buscarUsuarioId);
 router.get('/api/admin/desconto/ddd/:id', Admin.buscarDDD);
 router.post('/api/admin/desconto/export', auth, Admin.exportID);
 
