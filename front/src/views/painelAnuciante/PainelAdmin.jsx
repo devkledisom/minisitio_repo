@@ -95,7 +95,6 @@ function PainelAdmin() {
 
     useEffect(() => {
 
-        console.log(isMobile)
 
        // buscarAnuncioId();
 
@@ -172,7 +171,6 @@ function PainelAdmin() {
         e.preventDefault();
         setAction(page);
         setEspacoId(e.target.parentNode.parentNode.id);
-        console.log("event", e.target.parentNode.parentNode, page)
     };
 
 

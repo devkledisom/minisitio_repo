@@ -28,7 +28,11 @@ function Login() {
         setShowSpinner(true);
         fetch(`${masterPath.url}/entrar`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                api_key: "keytesteProd",
+                secret_key: "secrettesteProd"
+             },
             body: JSON.stringify({
                 "descCPFCNPJ": limparCPFouCNPJ(loginValue.current.value),
                 "senha": passValue.current.value
@@ -41,6 +45,7 @@ function Login() {
                     if (res.type == 1) {
                         sessionStorage.setItem('authTokenMN', true);
                         sessionStorage.setItem('userLogged', res.data);
+                        sessionStorage.setItem('userTokenAccess', res.accessToken);
     
                         navigate("/admin");
                     }
@@ -52,6 +57,8 @@ function Login() {
                         sessionStorage.setItem('authTokenMN', true);
                         //sessionStorage.setItem('userLogged', res.data);
                         sessionStorage.setItem('userLogged', res.type);
+                        sessionStorage.setItem('userTokenAccess', res.accessToken);
+
                         navigate(`/ver-anuncios/${nuDocumento.replace(/[.-]/g, '')}`);
                     }
                 } else {console.log(res);

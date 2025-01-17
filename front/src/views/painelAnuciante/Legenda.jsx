@@ -36,7 +36,6 @@ const DadosPessoais = (props) => {
 
   useEffect(() => {
     //loadingButton.current.style.display = "block";
-console.log(props.anuncios)
 
     let uf = document.querySelector("#codUf2").value;
     let caderno = document.querySelector("#codUf3").value;
@@ -63,7 +62,6 @@ console.log(props.anuncios)
       }); */
 
 
- console.log("legenda: ", props.anuncios[0].codCaderno)
 
   }, []);
 
@@ -143,7 +141,10 @@ console.log(props.anuncios)
   
     const config = {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": 'Bearer ' + masterPath.accessToken
+      },
         body: JSON.stringify({legenda: legenda})
     };
 

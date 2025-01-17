@@ -128,7 +128,7 @@ const FormEdit = () => {
             }).catch((err) => {
                 console.log(err)
             })
-        fetch(`${masterPath.url}/admin/usuario/buscar/all`)
+/*         fetch(`${masterPath.url}/admin/usuario/buscar/all`)
             .then((x) => x.json())
             .then((res) => {
                 setUsuarios(res.usuarios);
@@ -136,7 +136,7 @@ const FormEdit = () => {
             }).catch((err) => {
                 console.log(err);
                 setShowSpinner(false);
-            })
+            }) 
 
         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
@@ -154,7 +154,7 @@ const FormEdit = () => {
                 setAtividades(res);
                 //console.log(res)
                 //decodificar()
-            });
+            });*/
     }, []);
 
 
@@ -192,7 +192,10 @@ const FormEdit = () => {
 
         const config = {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
             body: JSON.stringify(ids)
         };
 
@@ -251,9 +254,9 @@ const FormEdit = () => {
             
         });
 
-        console.log("resressedsfasdfsf----------->", name, value)
+       /*  console.log("resressedsfasdfsf----------->", name, value)
         console.log(ids.descCPFCNPJ.replace(/\D/g, '').length)
-        console.log(ids.descCPFCNPJ.replace(/\D/g, ''))
+        console.log(ids.descCPFCNPJ.replace(/\D/g, '')) */
 
     };
 

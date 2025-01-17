@@ -9,7 +9,8 @@ function Header() {
 
     function sair() {
         sessionStorage.removeItem('authTokenMN');
-
+        sessionStorage.removeItem('userLogged');
+        sessionStorage.removeItem('userTokenAccess');
     };
 
     let usuarioLogado = sessionStorage.getItem('userLogged');

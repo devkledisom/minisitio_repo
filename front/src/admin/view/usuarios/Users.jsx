@@ -34,7 +34,7 @@ const Users = () => {
 
     const param = getParam.get('page') ? getParam.get('page') : 1;
 
-
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
     useEffect(() => {
         setShowSpinner(true);
@@ -43,7 +43,6 @@ const Users = () => {
             .then((res) => {
                 setUsuarios(res);
                 setShowSpinner(false);
-                console.log(res)
             })
 /*         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
@@ -81,11 +80,14 @@ const Users = () => {
     function apagarUser() {
         //setShowSpinner(true);
         fetch(`${masterPath.url}/admin/usuario/delete/${selectId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: { 
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + tokenAuth
+             }
         })
             .then((x) => x.json())
             .then((res) => {
-                console.log(res)
                 if (res.success) {
                     fetch(`${masterPath.url}/admin/usuario?page=${param}`)
                         .then((x) => x.json())

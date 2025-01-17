@@ -25,6 +25,8 @@ const FormCadastro = () => {
 
     const param = getParam.get('id') ? getParam.get('id') : 1;
 
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
+
     useEffect(() => {
         setShowSpinner(true);
         fetch(`${masterPath.url}/admin/usuario/edit/${param}`)
@@ -104,7 +106,10 @@ const FormCadastro = () => {
 
         const config = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
             body: JSON.stringify(data)
         };
 
@@ -279,15 +284,15 @@ const FormCadastro = () => {
                                 value={usuarios.senha}
                                 onChange={handleChange} />
                         </div>
-                 
+
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">Tipo usuário:</label>
-                            <select 
-                            name="codTipoPessoa" 
-                            id="codTipoPerfil" 
-                            className="w-50 py-1"
-                            value={usuarios.codTipoUsuario}
-                            onChange={handleChange}>
+                            <select
+                                name="codTipoPessoa"
+                                id="codTipoPerfil"
+                                className="w-50 py-1"
+                                value={usuarios.codTipoUsuario}
+                                onChange={handleChange}>
                                 <option value="" selected="selected">- Selecione o tipo de perfil -</option>
                                 {/* <option value="1">Administrador</option> */}
                                 {/* <option value="2">Associado</option>
@@ -335,7 +340,7 @@ const FormCadastro = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">Cidade:</label>
                             <select name="cidade" id="codcidade" className="w-50 py-1" value={usuarios.codCidade} onChange={handleChange}>
-                              {/*   <option value="" selected="selected">- Selecione uma cidade -</option> */}
+                                {/*   <option value="" selected="selected">- Selecione uma cidade -</option> */}
                                 {
                                     caderno.map((cidades) => (
                                         cidades.codUf == ufSelected &&

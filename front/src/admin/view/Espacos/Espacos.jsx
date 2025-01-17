@@ -114,7 +114,11 @@ const Espacos = () => {
     function apagarAnuncio() {
         setShowSpinner(true);
         fetch(`${masterPath.url}/admin/anuncio/delete/${selectId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
         })
             .then((x) => x.json())
             .then((res) => {
@@ -135,7 +139,11 @@ const Espacos = () => {
             if (line.checked) {
                 setShowSpinner(true);
                 fetch(`${masterPath.url}/admin/anuncio/delete/${line.id}`, {
-                    method: "DELETE"
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": 'Bearer ' + masterPath.accessToken
+                    },
                 })
                     .then((x) => x.json())
                     .then((res) => {
@@ -154,7 +162,11 @@ const Espacos = () => {
         setShowSpinner(true);
         let codigoDeOrigem = codOriginFather.current.innerText;
         fetch(`${masterPath.url}/admin/anuncio/delete/${codigoDeOrigem}?type=dup`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
         })
             .then((x) => x.json())
             .then((res) => {
@@ -452,7 +464,7 @@ Para 100000 linhas: 312500ms
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {console.log(anuncios)}
+  
                                     {
 
 

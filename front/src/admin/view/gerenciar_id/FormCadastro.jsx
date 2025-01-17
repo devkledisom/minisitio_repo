@@ -99,28 +99,6 @@ const FormCadastro = () => {
         var validation = true;
         setShowSpinner(true);
 
-       /*  document.querySelectorAll('[name="pwd"]').forEach((item) => {
-            if (item.value == "") {
-                item.style.border = "1px solid red";
-                validation = false;
-                return;
-            } else {
-                item.style.border = "1px solid gray";
-                validation = true;
-            };
-        });
-
-        document.querySelectorAll('select').forEach((item) => {
-            if (item.value == "") {
-                item.style.border = "1px solid red";
-                validation = false;
-                return;
-            } else {
-                item.style.border = "1px solid gray";
-                validation = true;
-            };
-        }); */
-
         let valorDescontoString = value.replace(",", ".");
         let valorDescontoNumber = parseFloat(valorDescontoString).toFixed(2);
         console.log(valorDescontoNumber);
@@ -143,7 +121,10 @@ const FormCadastro = () => {
 
         const config = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
             body: JSON.stringify(data)
         };
 
@@ -209,18 +190,11 @@ const FormCadastro = () => {
             ...links,
             [name]: value
         });
-        //console.log("------------->", e.target.name, e.target.value);
     };
 
     const handleInputChange = (e) => {
         let inputValue = e.target.value;
-       /*  inputValue = inputValue.replace(/\D/g, ''); // Remove tudo que não é dígito
-        if (inputValue.length > 2) {
-          inputValue = inputValue.replace(/(\d)(\d{2})$/, '$1.$2'); // Adiciona a vírgula antes dos dois últimos dígitos
-          
-        } else {
-            setValue('');
-        } */
+
         setValue(inputValue);
       
       };

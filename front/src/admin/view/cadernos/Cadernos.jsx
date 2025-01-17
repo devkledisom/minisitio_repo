@@ -221,7 +221,11 @@ const Cadernos = () => {
     function apagarCaderno() {
         setShowSpinner(true);
         fetch(`${masterPath.url}/admin/cadernos/delete/${selectId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
         })
             .then((x) => x.json())
             .then((res) => {

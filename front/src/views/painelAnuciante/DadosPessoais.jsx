@@ -138,7 +138,10 @@ const DadosPessoais = (props) => {
 
     fetch(`${masterPath.url}/admin/usuario/create`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": 'Bearer ' + masterPath.accessToken
+    },
       body: JSON.stringify(obj),
     })
       .then((x) => x.json())
@@ -186,7 +189,10 @@ const DadosPessoais = (props) => {
 
     const config = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": 'Bearer ' + masterPath.accessToken
+      },
         body: JSON.stringify(user)
     };
 

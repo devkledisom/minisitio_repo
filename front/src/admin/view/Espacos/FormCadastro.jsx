@@ -131,7 +131,7 @@ function ComprarAnuncio() {
     };
 
     useEffect(() => {
-        fetch(`${masterPath.url}/cadernos`)
+      /*   fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
             .then((res) => {
                 setCaderno(res);
@@ -142,7 +142,7 @@ function ComprarAnuncio() {
             .then((res) => {
                 setUfs(res);
                 //console.log(res)
-            });
+            }); */
         fetch(`${masterPath.url}/pa`)
             .then((x) => x.json())
             .then((res) => {

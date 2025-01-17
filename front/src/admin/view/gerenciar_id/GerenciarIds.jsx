@@ -81,7 +81,11 @@ const GerenciarIds = () => {
     function apagarUser() {
         setShowSpinner(true);
         fetch(`${masterPath.url}/admin/desconto/delete/${selectId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
         })
             .then((x) => x.json())
             .then((res) => {
@@ -142,7 +146,8 @@ const GerenciarIds = () => {
             fetch(`${masterPath.url}/admin/desconto/export?limit=5000&filtro=true`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "authorization": 'Bearer ' + masterPath.accessToken
                 },
                 body: JSON.stringify(ids.IdsValue)
             })
@@ -157,7 +162,8 @@ const GerenciarIds = () => {
             fetch(`${masterPath.url}/admin/desconto/export?limit=5000&filtro=false`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "authorization": 'Bearer ' + masterPath.accessToken
                 },
                 body: JSON.stringify(ids.IdsValue)
             })

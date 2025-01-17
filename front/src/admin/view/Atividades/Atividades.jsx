@@ -65,7 +65,11 @@ const Atividades = () => {
 
     function apagarUser() {
         fetch(`${masterPath.url}/admin/atividade/delete/${selectId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
         })
             .then((x) => x.json())
             .then((res) => {

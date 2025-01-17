@@ -60,7 +60,11 @@ const Pin = () => {
 
     function apagarUser() {
         fetch(`${masterPath.url}/admin/pin/delete/${selectId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
         })
             .then((x) => x.json())
             .then((res) => {

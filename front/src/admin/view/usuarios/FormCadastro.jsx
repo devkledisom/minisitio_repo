@@ -104,7 +104,10 @@ const FormCadastro = () => {
 
         const config = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + masterPath.accessToken
+            },
             body: JSON.stringify(data)
         };
 

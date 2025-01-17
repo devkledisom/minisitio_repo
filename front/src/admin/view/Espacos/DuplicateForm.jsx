@@ -65,8 +65,9 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
    fetch(`${masterPath.url}/admin/anuncio/duplicate?id=${selectId}&duplicationType=1`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+      "authorization": 'Bearer ' + masterPath.accessToken
+  },
   })
       .then((x) => x.json())
       .then((res) => {
@@ -88,8 +89,9 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
     fetch(`${masterPath.url}/admin/anuncio/duplicate?id=${selectId}&duplicationType=2&uf=${ufSelected}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+        "authorization": 'Bearer ' + masterPath.accessToken
+    },
     })
     .then((x) => x.json())
     .then((res) => {
@@ -112,8 +114,9 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
     fetch(`${masterPath.url}/admin/anuncio/duplicate?id=${selectId}&duplicationType=3&uf=${ufSelected}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
-      },
+        "Content-Type": "application/json",
+        "authorization": 'Bearer ' + masterPath.accessToken
+    },
       body: JSON.stringify(city)
     })
     .then((x) => x.json())

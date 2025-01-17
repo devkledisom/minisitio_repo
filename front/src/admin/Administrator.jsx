@@ -14,10 +14,18 @@ function Administrator() {
       const [data, setData] = useState(null);
 
       useEffect(() => {
-         fetch(`${masterPath.url}/admin/anuncio/quantidade/uf`)
+        const tokenAuth = sessionStorage.getItem('userTokenAccess');
+
+         fetch(`${masterPath.url}/admin/anuncio/quantidade/uf`, {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + tokenAuth
+             }
+         })
                     .then((x) => x.json())
                     .then((res) => {
-                        console.log(res)
+                        //console.log(res)
                         setData(res.data);
                     })
       }, []);

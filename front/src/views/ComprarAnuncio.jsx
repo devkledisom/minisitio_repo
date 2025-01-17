@@ -96,17 +96,6 @@ function ComprarAnuncio({ isAdmin }) {
         //decodificar()
       });
 
-    console.log(isAdmin)
-    /*     Swal.fire({
-          title: "Perfil Cadastrado",
-          text: "Você será redirecionado para página de login, para efetuar o login use o seu cnpj e a senha defenida no cadastro. Você também receberá as informações do acesso no email cadastrado.",
-          icon: "success"
-      }).then(res => {
-          if (res.isConfirmed) {
-              console.log(res)
-          }
-    
-      }); */
 
   }, []);
 
