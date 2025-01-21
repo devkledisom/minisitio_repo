@@ -55,7 +55,7 @@ async function execLogin(req, res, users) {
             if (credentialKey != undefined) {
                 if (credentialKey.secret_key == secret_key) {
     
-                    jwt.sign({ id: credentialKey.id, user: credentialKey.nome }, secretKey, { expiresIn: '60m' }, (err, token) => {
+                    jwt.sign({ id: credentialKey.id, user: credentialKey.nome }, secretKey, { expiresIn: '1h' }, (err, token) => {
                         if (err) {
                             res.status(400);
                             res.json({ err: "falha interna" });
