@@ -46,12 +46,11 @@ const FormCadastro = () => {
 
     useEffect(() => {
         setShowSpinner(true);
-        fetch(`${masterPath.url}/admin/usuario/buscar/all`)
+        fetch(`${masterPath.url}/admin/usuario/buscar/master`)
             .then((x) => x.json())
             .then((res) => {
                 setUsuarios(res.usuarios);
                 setShowSpinner(false);
-                console.log(res.usuarios)
             }).catch((err) => {
                 console.log(err);
                 setShowSpinner(false);
@@ -64,12 +63,12 @@ const FormCadastro = () => {
         usuarios.find((item) => {
             if (item.codUsuario == codigoDoMaster) {
                 fetch(`${masterPath.url}/admin/desconto/ddd/${item.codUf}`)
-                .then((x) => x.json())
-                .then((res) => {
-                    //console.log(res.data.ddd, String(item.codUsuario).padStart(3, "0"), String(res.qtdeIds).padStart(4, "0"))
-                    setHash(`${res.data.ddd}.${String(item.codUsuario).padStart(3, "0")}.${String(res.qtdeIds).padStart(4, "0")}`);
-                    setShowSpinner(false);
-                })
+                    .then((x) => x.json())
+                    .then((res) => {
+                        //console.log(res.data.ddd, String(item.codUsuario).padStart(3, "0"), String(res.qtdeIds).padStart(4, "0"))
+                        setHash(`${res.data.ddd}.${String(item.codUsuario).padStart(3, "0")}.${String(res.qtdeIds).padStart(4, "0")}`);
+                        setShowSpinner(false);
+                    })
             }
         }
 
@@ -132,6 +131,7 @@ const FormCadastro = () => {
             fetch(`${masterPath.url}/admin/desconto/create`, config)
                 .then((x) => x.json())
                 .then((res) => {
+                    console.log(res)
                     if (res.success) {
                         setShowSpinner(false);
                         //alert("Usuário Cadastrado!"); 
@@ -145,25 +145,25 @@ const FormCadastro = () => {
                             text: 'ID cadastrado!',
                             icon: 'success',
                             confirmButtonText: 'Confirmar'
-                          }).then((result) => {
-                            if(result.isConfirmed) {
+                        }).then((result) => {
+                            if (result.isConfirmed) {
                                 window.location.reload();
                             }
-                          })
+                        })
                     } else {
                         setShowSpinner(false);
                         //if(res.message.original.code == 'ER_DUP_ENTRY') {
-                            Swal.fire({
-                                title: 'falha!',
-                                text: res.message.errors[0].message,
-                                icon: 'error',
-                                confirmButtonText: 'Entendi'
-                              })
+                        Swal.fire({
+                            title: 'falha!',
+                            text: res.message.errors[0].message,
+                            icon: 'error',
+                            confirmButtonText: 'Entendi'
+                        })
                         //}
                         console.log(res.message);
                     }
                 }).catch((err) => {
-                    console.log(err);
+                    // console.log(err);
                     setShowSpinner(false);
                 })
         }
@@ -196,8 +196,8 @@ const FormCadastro = () => {
         let inputValue = e.target.value;
 
         setValue(inputValue);
-      
-      };
+
+    };
 
     return (
         <div className="users">
@@ -215,8 +215,10 @@ const FormCadastro = () => {
                             {hash && <span className='codigoId'>Código: {hash}</span>}
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
                             <select name="user" id="user" className="w-50 py-1" onChange={gerarIdMaster}>
+                                <option>- Selecionar Usuário -</option>
                                 {
                                     usuarios.map((user) => (
+
                                         <option value={user.codUsuario}>{user.descNome}</option>
                                     ))
                                 }
@@ -229,11 +231,11 @@ const FormCadastro = () => {
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="valorDesconto" className="w-50 px-1">Valor do desconto:</label>
-                            <input type="text" className="form-control h-25 w-50" id="valorDesconto" name="valorDesconto" 
-                             value={value}
-                             onChange={handleInputChange}
-                             placeholder="0,00"
-                              />
+                            <input type="text" className="form-control h-25 w-50" id="valorDesconto" name="valorDesconto"
+                                value={value}
+                                onChange={handleInputChange}
+                                placeholder="0,00"
+                            />
                             <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span>
                         </div>
 
@@ -247,9 +249,9 @@ const FormCadastro = () => {
                         </div>
                         {patrocinio == 1 &&
                             <div className="form-group d-flex flex-column align-items-center py-3">
-                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} miniPreview={true}/>
-                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} miniPreview={true}/>
-                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} miniPreview={true}/>
+                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} miniPreview={true} />
+                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} miniPreview={true} />
+                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} miniPreview={true} />
                                 {/*  <label className="w-50 px-1">Imagem:</label> */}
                                 {/*  <ChooseFile codigoUser={param} largura={"w-50"} preview={true} /> */}
                             </div>

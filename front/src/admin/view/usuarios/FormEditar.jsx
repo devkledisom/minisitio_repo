@@ -115,9 +115,19 @@ const FormCadastro = () => {
 
         if (validation) {
             fetch(`${masterPath.url}/admin/usuario/update/${param}`, config)
-                .then((x) => x.json())
+                .then((x) => {
+
+                    if (x.status == 401) {
+                        alert("Sessão expirada, faça login para continuar.");
+                        navigate('/login');
+                        window.location.reload();
+                        return Promise.reject('Sessão expirada');
+                    }
+                    return x.json();
+                })
                 .then((res) => {
                     setShowSpinner(false);
+                    console.log(res)
                     if (res.success) {
                         alert("Dados Atualizados!");
 
@@ -125,7 +135,15 @@ const FormCadastro = () => {
                         alert(res.message);
                         console.log(res.message)
                     }
-                })
+                }).catch((error) => {
+                    if (error === 'Sessão expirada') {
+                        console.log("Sessão expirada, redirecionamento já realizado.");
+                        // Aqui você pode evitar que o erro seja mostrado globalmente
+                    } else {
+                        // Trate outros erros aqui, se necessário
+                        console.error('Erro na requisição:', error);
+                    }
+                });
         }
 
     };
@@ -332,7 +350,7 @@ const FormCadastro = () => {
                                 </option>
                                 {
                                     uf.map((uf) => (
-                                        <option value={uf.id_uf}>{uf.sigla_uf}</option>
+                                        <option value={uf.sigla_uf}>{uf.sigla_uf}</option>
                                     ))
                                 }
                             </select>
@@ -343,8 +361,8 @@ const FormCadastro = () => {
                                 {/*   <option value="" selected="selected">- Selecione uma cidade -</option> */}
                                 {
                                     caderno.map((cidades) => (
-                                        cidades.codUf == ufSelected &&
-                                        <option value={cidades.codCaderno}>{cidades.nomeCaderno}</option>
+                                        cidades.UF == ufSelected &&
+                                        <option value={cidades.nomeCaderno}>{cidades.nomeCaderno}</option>
                                     ))
                                 }
                             </select>

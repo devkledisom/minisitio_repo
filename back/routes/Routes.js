@@ -49,6 +49,7 @@ router.get('/api/admin/usuario', Admin.listarUsuarios);
 
 //Login
 router.post('/api/entrar', Login.login);
+router.post('/api/test-connection', auth, (req, res) => res.json({success: true}));
 
 //Admin
 router.post('/api/admin/usuario/create', auth, Users.create);

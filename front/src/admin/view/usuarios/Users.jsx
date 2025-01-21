@@ -26,9 +26,11 @@ const Users = () => {
     const [uf, setUfs] = useState([]);
     const [caderno, setCaderno] = useState([]);
     const [exportTodos, setExpotTodos] = useState(false);
+    const [searchOptioncheck, setSearchOptioncheck] = useState(false);
+     const [progressExport, setProgressExport] = useState(0);
 
     const location = useLocation();
-
+    const navigate = useNavigate();
 
     const getParam = new URLSearchParams(location.search);
 
@@ -38,22 +40,42 @@ const Users = () => {
 
     useEffect(() => {
         setShowSpinner(true);
-        fetch(`${masterPath.url}/admin/usuario?page=${param}`)
-            .then((x) => x.json())
-            .then((res) => {
-                setUsuarios(res);
-                setShowSpinner(false);
-            })
-/*         fetch(`${masterPath.url}/cadernos`)
-            .then((x) => x.json())
-            .then((res) => {
-                setCaderno(res)
-            })
-        fetch(`${masterPath.url}/ufs`)
-            .then((x) => x.json())
-            .then((res) => {
-                setUfs(res);
-            }) */
+        const campoPesquisa = document.getElementById('buscar');
+
+        if (campoPesquisa.value != '') {
+            Promise.all([
+                fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa.value}?require=${searchOptioncheck}&page=${param}`).then((x) => x.json()),
+                //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
+            ])
+                .then(([res]) => {
+                    setUsuarios(res);
+                    setExpotTodos(true);
+                    setShowSpinner(false);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    setShowSpinner(false);
+                });
+        } else {
+            fetch(`${masterPath.url}/admin/usuario?page=${param}`)
+                .then((x) => x.json())
+                .then((res) => {
+                    setUsuarios(res);
+                    setShowSpinner(false);
+                })
+        }
+
+
+        /*         fetch(`${masterPath.url}/cadernos`)
+                    .then((x) => x.json())
+                    .then((res) => {
+                        setCaderno(res)
+                    })
+                fetch(`${masterPath.url}/ufs`)
+                    .then((x) => x.json())
+                    .then((res) => {
+                        setUfs(res);
+                    }) */
     }, [page, param]);
 
 
@@ -81,12 +103,20 @@ const Users = () => {
         //setShowSpinner(true);
         fetch(`${masterPath.url}/admin/usuario/delete/${selectId}`, {
             method: "DELETE",
-            headers: { 
+            headers: {
                 "Content-Type": "application/json",
                 "authorization": 'Bearer ' + tokenAuth
-             }
+            }
         })
-            .then((x) => x.json())
+            .then((x) => {
+                if (x.status == 401) {
+                    alert("Sessão expirada, faça login para continuar.");
+                    navigate('/login');
+                    window.location.reload();
+                    return Promise.reject('Sessão expirada');
+                }
+                return x.json();
+            })
             .then((res) => {
                 if (res.success) {
                     fetch(`${masterPath.url}/admin/usuario?page=${param}`)
@@ -104,15 +134,37 @@ const Users = () => {
                         })
                 }
 
-            })
+            }).catch((error) => {
+                if (error === 'Sessão expirada') {
+                    console.log("Sessão expirada, redirecionamento já realizado.");
+                    // Aqui você pode evitar que o erro seja mostrado globalmente
+                } else {
+                    // Trate outros erros aqui, se necessário
+                    console.error('Erro na requisição:', error);
+                }
+            });
     };
 
     function buscarUserId() {
         setShowSpinner(true);
         const campoPesquisa = document.getElementById('buscar');
 
-        fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa.value}`)
-            .then((x) => x.json())
+        if (!searchOptioncheck) {
+            alert('Selecione um critério para a pesquisa');
+            setShowSpinner(false);
+            return;
+        }
+
+        fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa.value}?require=${searchOptioncheck}`)
+            .then((x) => {
+                if (x.status == 401) {
+                    alert("Sessão expirada, faça login para continuar.");
+                    navigate('/login');
+                    window.location.reload();
+                    return Promise.reject('Sessão expirada');
+                }
+                return x.json();
+            })
             .then((res) => {
                 if (res.success) {
                     setUsuarios(res);
@@ -123,7 +175,15 @@ const Users = () => {
                     setShowSpinner(false);
                 }
 
-            })
+            }).catch((error) => {
+                if (error === 'Sessão expirada') {
+                    console.log("Sessão expirada, redirecionamento já realizado.");
+                    // Aqui você pode evitar que o erro seja mostrado globalmente
+                } else {
+                    // Trate outros erros aqui, se necessário
+                    console.error('Erro na requisição:', error);
+                }
+            });
     };
 
     const formatData = (dataCompleta) => {
@@ -140,37 +200,84 @@ const Users = () => {
     }
 
     function exportExcell() {
-        console.log(exportTodos)
-        fetch(`${masterPath.url}/admin/usuario/export?exportAll=${exportTodos}&limit=5000`, {
+        const campoPesquisa = document.getElementById('buscar');
+        setShowSpinner(true);
+
+                    // Valor máximo em milissegundos
+                    const maxTime = 312500;
+
+                    // Atualiza o progresso a cada 10 ms (ajuste conforme necessário)
+                    const interval = 10;
+                    let currentTime = 0;
+        
+                    // Função para calcular e exibir o percentual
+                    const intervalId = setInterval(() => {
+                        currentTime += interval;
+        
+                        // Calcula o percentual
+                        const percent = Math.min((currentTime / maxTime) * 100, 100); // Garante que não ultrapasse 100%
+        
+                       // console.log(`Progresso: ${percent.toFixed(2)}%`);
+                        setProgressExport(percent.toFixed(2));
+                       
+        
+                        // Para quando alcançar o valor máximo
+                        if (currentTime >= maxTime) {
+                            clearInterval(intervalId);
+                            console.log("Requisição concluída.");
+                        }
+                    }, interval);
+
+        fetch(`${masterPath.url}/admin/usuario/export?exportAll=${exportTodos}&limit=5000&require=${searchOptioncheck}&id=${campoPesquisa.value}`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + tokenAuth
             },
             body: JSON.stringify(usuarios)
         })
-        .then(x => x.json())
-        .then(res => {
-            if(res.success) {
-                console.log(res);
-                //window.location.href = res.downloadUrl;
-                setTimeout(() => {
-                    window.location.href = res.downloadUrl;
-                    setShowSpinner(false);
-                }, 2000)
-            }
-        })
+            .then((x) => {
+                if (x.status == 401) {
+                    alert("Sessão expirada, faça login para continuar.");
+                    navigate('/login');
+                    window.location.reload();
+                    return Promise.reject('Sessão expirada');
+                }
+                return x.json();
+            })
+            .then(res => {
+                setProgressExport(0);
+                if (res.success) {
+                    console.log(res);
+                    //window.location.href = res.downloadUrl;
+                    setProgressExport(0);
+                    setTimeout(() => {
+                        window.location.href = res.downloadUrl;
+                        setShowSpinner(false);
+                    }, 2000)
+                }
+            }).catch((error) => {
+                if (error === 'Sessão expirada') {
+                    console.log("Sessão expirada, redirecionamento já realizado.");
+                    // Aqui você pode evitar que o erro seja mostrado globalmente
+                } else {
+                    // Trate outros erros aqui, se necessário
+                    console.error('Erro na requisição:', error);
+                }
+            });
     };
 
 
     return (
-        <div className="users">
+        <div className="users app-users">
             <header style={style} className='w-100'>
                 <Header />
             </header>
             <section className="pt-5">
 
-                {showSpinner && <Spinner />}
+                {/* {showSpinner && <Spinner progress={0} />} */}
 
+                {showSpinner && <Spinner progress={progressExport}/>}
 
                 {showMsgBox && <MsgConfirm
                     title={"Atenção!"}
@@ -188,13 +295,43 @@ const Users = () => {
                             <button type="button" className="btn custom-button" onClick={exportExcell}>Exportar</button>
                             <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={() => setShowMsgBox(true)}>Apagar</button>
                         </div>
-                        <div className="span6 col-md-6">
-                            <div className="pull-right d-flex justify-content-center align-items-center">
-                                <input id="buscar" type="text" style={{"width": "250px"}} placeholder="Nome, Email, CPF/CNPJ, UF ou Cidade" />
-                                <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
-                                    <i className="icon-search"></i>
-                                </button>
+                        <div className="span6 col-md-6 d-flex flex-column align-items-end">
+                            <div className='d-flex flex-column'>
+                                <div className="pull-right d-flex justify-content-center align-items-center">
+                                    <input id="buscar" type="text" style={{ "width": "300px" }} placeholder="Nome, Email, CPF/CNPJ, UF, Cidade ou Tipo" />
+                                    <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
+                                        <i className="icon-search"></i>
+                                    </button>
+                                </div>
+                                <div className='SearchOption'>
+                                    <label htmlFor="nome" onClick={() => setSearchOptioncheck('descNome')}>
+                                        <input type='radio' name="option" id="nome" onClick={() => setSearchOptioncheck('descNome')} />
+                                        NOME
+                                    </label>
+
+                                    <label htmlFor="email" onClick={() => setSearchOptioncheck('descEmail')}>
+                                        <input type='radio' name="option" id="email" onClick={() => setSearchOptioncheck('descEmail')} />
+                                        EMAIL
+                                    </label>
+                                    <label htmlFor="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')}>
+                                        <input type='radio' name="option" id="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')} />
+                                        CNPJ
+                                    </label>
+                                    <label htmlFor="uf" onClick={() => setSearchOptioncheck('codUf')}>
+                                        <input type='radio' name="option" id="uf" onClick={() => setSearchOptioncheck('codUf')} />
+                                        UF
+                                    </label>
+                                    <label htmlFor="caderno" onClick={() => setSearchOptioncheck('codCidade')}>
+                                        <input type='radio' name="option" id="caderno" onClick={() => setSearchOptioncheck('codCidade')} />
+                                        CADERNO
+                                    </label>
+                                    <label htmlFor="tipo" onClick={() => setSearchOptioncheck('codDesconto')}>
+                                        <input type='radio' name="option" id="tipo" onClick={() => setSearchOptioncheck('codDesconto')} />
+                                        TIPO
+                                    </label>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -218,7 +355,7 @@ const Users = () => {
                                 </thead>
                                 <tbody>
                                     {
-                                        
+
                                         usuarios != '' && usuarios.usuarios.map((item) => (
 
                                             <tr key={item.codUsuario} id={item.codUsuario} onClick={selecaoLinha}>
@@ -231,7 +368,7 @@ const Users = () => {
                                                 {item.codTipoUsuario == 3 ? <td>ANUNCIANTE</td> : ''}
                                                 {item.codTipoUsuario == 4 ? <td>MASTER / ANUNC</td> : ''}
                                                 {item.codTipoUsuario == 5 ? <td>PREFEITURA</td> : ''}
-                                               {/*  {uf.map((estado) => (
+                                                {/*  {uf.map((estado) => (
                                                     estado.id_uf == item.codUf &&
                                                     <td>{estado.sigla_uf}</td>
                                                 ))}
@@ -246,7 +383,7 @@ const Users = () => {
                                                 {item.codUf == 0 && <td>atualizar</td>}
                                                 {item.codCidade == 0 && <td>atualizar</td>}
                                                 <td>{formatData(item.dtCadastro)}</td>
-                                                <td><BtnActivate data={item.ativo} idd={item.codUsuario} modulo={"usuario"}/></td>
+                                                <td><BtnActivate data={item.ativo} idd={item.codUsuario} modulo={"usuario"} /></td>
                                                 {/* <td>{item.ativo ? "Ativado" : "Desativado"}</td> */}
                                             </tr>
                                         ))

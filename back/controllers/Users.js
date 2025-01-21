@@ -227,28 +227,28 @@ module.exports = {
 
         const uuid = req.params.id;
 
-             try {
-                 //Atividades
-                 const resultAnuncio = await Users.destroy({
-                     where: {
-                         codUsuario: uuid
-                     }
-     
-                 });
-               
-                 if(resultAnuncio) {
-                    const apagarEspaco = await Anuncio.destroy({
-                        where: {
-                            codUsuario: uuid
-                        }
-            
-                    });
-                 }
+        try {
+            //Atividades
+            const resultAnuncio = await Users.destroy({
+                where: {
+                    codUsuario: uuid
+                }
 
-                 res.json({ success: true, message: resultAnuncio });
-             } catch (err) {
-                 res.json(err);
-             } 
+            });
+
+            if (resultAnuncio) {
+                const apagarEspaco = await Anuncio.destroy({
+                    where: {
+                        codUsuario: uuid
+                    }
+
+                });
+            }
+
+            res.json({ success: true, message: resultAnuncio });
+        } catch (err) {
+            res.json(err);
+        }
 
     },
     buscarUsuario: async (req, res) => {
@@ -437,23 +437,68 @@ module.exports = {
         }
     },
     buscarUsuarioId: async (req, res) => {
-        await database.sync();
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+        const codigoCaderno = req.params.codCaderno;
+        const requisito = req.query.require;
+        console.log("dasdasd", requisito)
 
-        const nu_doc = req.params.id;
+        const offset = (paginaAtual - 1) * porPagina;
+        var nu_doc = req.params.id;
 
         if (nu_doc != "all") {
             console.log(nu_doc)
+
+            const arrTypes = ['super admin', 'master'];
+
+            if (arrTypes.includes(nu_doc.toLowerCase())) {
+
+
+                switch (nu_doc.toLowerCase()) {
+                    case "super admin":
+                        buscarPorTipoUsuario(1);
+                        break;
+                    case "master":
+                        buscarPorTipoUsuario(2);
+                        break;
+                    default:
+                        console.log("não localizado")
+                }
+
+                return;
+            }
+
+
+
             //Atividades
-            const resultAnuncio = await Users.findAll({
+            const resultAnuncio = await Users.findAndCountAll({
                 where: {
-                    [Op.or]: [
+                /*     [Op.or]: [
                         { descNome: { [Op.like]: `%${nu_doc}%` } },
                         { descEmail: nu_doc },
-                        { descCPFCNPJ: nu_doc }
-                    ]
+                        { descCPFCNPJ: nu_doc },
+                        { codUf: { [Op.like]: `${nu_doc}%` } },
+                        { codCidade: { [Op.like]: `${nu_doc}%` } }
+                    ] */
+                        [requisito]: nu_doc
 
                 },
                 order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+                attributes: [
+                    //[Sequelize.literal('DISTINCT `descCPFCNPJ`'), 'descCPFCNPJ'],
+                    'codUsuario',
+                    'descCPFCNPJ', // Aplique DISTINCT diretamente aqui
+                    'descNome',
+                    'descEmail',
+                    'senha',
+                    'codTipoUsuario',
+                    'codUf',
+                    'codCidade',
+                    'dtCadastro',
+                    'ativo'
+                ],
+                limit: porPagina,
+                offset: offset,
             });
 
             console.log("debug: ", resultAnuncio.length);
@@ -500,12 +545,15 @@ module.exports = {
                     totalPaginas: totalPaginas, totalItem: totalItens
                 });
                 return;
-            } else {
-                //res.json({ success: false, message: "Usuario não encontrado1" });
-                //return;
             }
 
-            res.json({ success: true, usuarios: resultAnuncio });
+            //res.json({ success: true, usuarios: resultAnuncio });
+
+            const totalItens = resultAnuncio.count;
+            const totalPaginas = Math.ceil(totalItens / porPagina);
+
+            res.json({ success: true, usuarios: resultAnuncio.rows, totalItem: totalItens, totalPaginas: totalPaginas, paginaAtual: paginaAtual, });
+
         } else {
             //Atividades
             const resultAnuncio = await Users.findAll();
@@ -516,6 +564,51 @@ module.exports = {
             }
 
             res.json({ success: true, usuarios: resultAnuncio });
+        }
+/* 
+        if(nu_doc == "formList") {
+            const resultAnuncio = await Users.findAll({
+                where: {
+                    [Op.or]: [
+                        { codUf: { [Op.like]: `%${resultAnuncio[0].dataValues.codUf}%` } },
+                        { codCidade: { [Op.like]: `%${resultAnuncio[0].dataValues.codCaderno}%` } },
+                    ]
+
+                },
+                order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+            });
+
+
+            res.json({ success: true, usuarios: resultAnuncio });
+        }
+ */
+        async function buscarPorTipoUsuario(codigo) {
+            const resultAnuncio = await Users.findAndCountAll({
+                where: {
+                    [Op.or]: [
+                        { codTipoUsuario: codigo },
+                    ]
+
+                },
+                order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+                attributes: [
+                    'codUsuario',
+                    'descCPFCNPJ',
+                    'descNome',
+                    'descEmail',
+                    'senha',
+                    'codTipoUsuario',
+                    'codUf',
+                    'codCidade',
+                    'dtCadastro',
+                    'ativo'
+                ],
+            });
+
+            const totalItens = resultAnuncio.count;
+            const totalPaginas = Math.ceil(totalItens / porPagina);
+
+            res.json({ success: true, usuarios: resultAnuncio.rows, totalItem: totalItens, totalPaginas: totalPaginas });
         }
 
 

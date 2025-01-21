@@ -30,13 +30,13 @@ const FormCadastro = () => {
 
     useEffect(() => {
 
-        fetch(`${masterPath.url}/admin/usuario?page=${param}`)
+/*         fetch(`${masterPath.url}/admin/usuario?page=${param}`)
             .then((x) => x.json())
             .then((res) => {
                 setUsuarios(res);
                 console.log(usuarios);
             })
-
+ */
         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
             .then((res) => {
@@ -114,8 +114,18 @@ const FormCadastro = () => {
         if (validation) {
             
             fetch(`${masterPath.url}/admin/usuario/create`, config)
-                .then((x) => x.json())
+                .then((x) => {
+
+                    if(x.status == 401) {
+                            alert("Sessão expirada, faça login para continuar.");
+                            navigate('/login');
+                            window.location.reload();
+                            return Promise.reject('Sessão expirada');
+                    }
+                    return x.json();
+                })
                 .then((res) => {
+                   
                     if (res.success) {
                         setShowSpinner(false);
                         Swal.fire({
@@ -126,17 +136,27 @@ const FormCadastro = () => {
                           })
                         //let msg = alert("Usuário Cadastrado! \n você deseja voltar para a listagem de usuários?");
                     } else {
+                    
                         setShowSpinner(false);
                         Swal.fire({
                             title: 'erro!',
                             text: res.message.errors[0].message,
                             icon: 'error',
                             confirmButtonText: 'Entendi'
-                          })
+                          }) 
                         //alert(res.message.errors[0].message);
                         // console.log(res.message.errors[0].message);
+                        
                     }
-                })
+                }).catch((error) => {
+                    if (error === 'Sessão expirada') {
+                      console.log("Sessão expirada, redirecionamento já realizado.");
+                      // Aqui você pode evitar que o erro seja mostrado globalmente
+                    } else {
+                      // Trate outros erros aqui, se necessário
+                      console.error('Erro na requisição:', error);
+                    }
+                  });
         } else {
             setShowSpinner(false);
         }
@@ -232,7 +252,7 @@ const FormCadastro = () => {
                                 <option value="" selected="selected">- Selecione um estado -</option>
                                 {
                                     uf.map((uf) => (
-                                        <option value={uf.id_uf}>{uf.sigla_uf}</option>
+                                        <option value={uf.sigla_uf}>{uf.sigla_uf}</option>
                                     ))
                                 }
                             </select>
@@ -243,8 +263,8 @@ const FormCadastro = () => {
                                 <option value="" selected="selected">- Selecione uma cidade -</option>
                                 {
                                     caderno.map((cidades) => (
-                                        cidades.codUf == ufSelected &&
-                                        <option value={cidades.codCaderno}>{cidades.nomeCaderno}</option>
+                                        cidades.UF == ufSelected &&
+                                        <option value={cidades.nomeCaderno}>{cidades.nomeCaderno}</option>
                                     ))
                                 }
                             </select>

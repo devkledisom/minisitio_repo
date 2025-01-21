@@ -128,3 +128,13 @@ tr {
     width: 200px !important;
 }
 
+.app-users .SearchOption {
+    display: flex;
+    gap: 5px;
+    padding: 5px 0;
+}
+
+.app-users .SearchOption label {
+    display: flex;
+    gap: 1px;
+}

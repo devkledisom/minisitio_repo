@@ -5,7 +5,10 @@ const masterPath = require('../config/config');
 
 module.exports = async function expExcel(dados, res, hrnow, teste1) {
     const wb = new xl.Workbook();
-    const ws = wb.addWorksheet('usuarios');
+    //const ws = wb.addWorksheet('usuarios');
+
+    let sheetIndex = 1; // Contador de abas
+    let ws = wb.addWorksheet(`Sheet${sheetIndex}`); // Criando a primeira aba
 
     const headingColumnNames = [
         "codUsuario", "codTipoPessoa", "descCPFCNPJ", "descNome", "descEmail", "senha",
@@ -18,10 +21,37 @@ module.exports = async function expExcel(dados, res, hrnow, teste1) {
     });
 
     let rowIndex = 2;
-    dados.forEach(record => {
+    dados.forEach((record, index) => {
+
+        if ((index + 1) % 5000 === 0) {
+            sheetIndex++;
+            ws = wb.addWorksheet(`Sheet${sheetIndex}`); // Cria uma nova aba
+            rowIndex = 2; // Reseta a contagem de linhas para a nova aba
+        }
+
+
         let columnIndex = 1;
         Object.keys(record).forEach(columnName => {
-            const value = record[columnName];
+            let value = record[columnName];
+
+            if(record[columnName] == 1) {
+                value = 'Ativo';
+            } else if(record[columnName] == 2) {
+                value = 'MASTER';
+            } else if(record[columnName] == 3) {
+                value = 'ANUNCIANTE';
+            } else if(record[columnName] == 4) {
+                value = 'PREFEITURA';
+            }
+
+            if(columnIndex == 10) {
+                const date = new Date(value);
+                const formattedDate = date.toISOString().split('T')[0];
+                console.log(formattedDate)
+                value = formattedDate;
+            }
+    
+            
             if (value === null || value === undefined) {
                 ws.cell(rowIndex, columnIndex++).string("0");
             } else if (typeof value === "string") {

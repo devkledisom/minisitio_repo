@@ -49,11 +49,10 @@ const Users = require('./Users');
 module.exports = {
     //usuarios
     listarUsuarios: async (req, res) => {
-        await database.sync();
-
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
         const codigoCaderno = req.params.codCaderno;
+        
 
         const offset = (paginaAtual - 1) * porPagina;
 
@@ -61,7 +60,22 @@ module.exports = {
         const users = await Usuarios.findAndCountAll({
             order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
             limit: porPagina,
-            offset: offset
+            offset: offset,
+            attributes: [
+                //[Sequelize.literal('DISTINCT `descCPFCNPJ`'), 'descCPFCNPJ'],
+                'codUsuario',
+                'descCPFCNPJ', // Aplique DISTINCT diretamente aqui
+                'descNome',
+                'descEmail',
+                'senha',
+                'codTipoUsuario',
+                'codUf',
+                'codCidade',
+                'dtCadastro',
+                'ativo'
+            ],
+            distinct: false,
+
         });
 
         // Número total de itens
@@ -114,10 +128,38 @@ module.exports = {
         const ufs = await Ufs.findAll();
         const cidades = await Cadernos.findAll();
 
+        const requisito = req.query.require;
+        var nu_doc = req.query.id;
+
         console.log(req.query);
 
         if (exportarTodos == "true") {
             const corpo = req.body.usuarios;
+
+            const users = await Usuarios.findAll({
+                where: {
+                    [requisito]: nu_doc
+                },
+                attributes: [
+                    //[Sequelize.literal('DISTINCT `descCPFCNPJ`'), 'descCPFCNPJ'],
+                    'codUsuario',
+                    'codTipoPessoa',
+                    'descCPFCNPJ', // Aplique DISTINCT diretamente aqui
+                    'descNome',
+                    'descEmail',
+                    'senha',
+                    'codTipoUsuario',
+                    'codUf',
+                    'codCidade',
+                    'dtCadastro',
+                    'ativo'
+                ],
+                distinct: false,
+                raw: true
+            });
+
+            exportExcellUser(users, res, Date.now(), 1);
+            return;
 
             corpo.map(async (item, index) => {
 
@@ -253,12 +295,7 @@ module.exports = {
         }
 
 
-        try {
-
-        } catch (err) {
-            console.log(err)
-            res.json({ success: false, message: `o numero máximo de registros é ${anunciosCount}` })
-        }
+    
 
 
 
@@ -1087,6 +1124,7 @@ module.exports = {
             }
         });
 
+        console.log(usuario)
 
         try {
             //Descontos
@@ -1109,7 +1147,8 @@ module.exports = {
                 ativo: 1,
                 patrocinador_ativo: req.body.patrocinador,
                 utilizar_saldo: req.body.saldoUtilizado,
-                saldo: req.body.saldo
+                saldo: req.body.saldo,
+                total_registros: 0
 
             });
 
@@ -1265,7 +1304,7 @@ module.exports = {
 
         const dddBusca = await DDD.findAll({
             where: {
-                id_uf: codUf
+                sigla_uf: codUf
             }
         });
 
