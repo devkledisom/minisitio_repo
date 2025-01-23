@@ -12,7 +12,7 @@ import Rotas from './routes/Rotas'
 
 function App() {
 
-  setInterval(() => {
+ /*  setInterval(() => {
     const config = {
       method: "POST",
       headers: {
@@ -43,7 +43,7 @@ function App() {
           console.error('Erro na requisição:', error);
         }
       });
-  }, 300000)
+  }, 300000) */
 
   return (
     <div>

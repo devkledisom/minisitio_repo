@@ -315,7 +315,7 @@ Para 100000 linhas: 312500ms
 
 
             console.log(campoBusca.current.value)
-            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000&export=full&caderno=${campoBusca.current.value}`, {
+            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&caderno=${campoBusca.current.value}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

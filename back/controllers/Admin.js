@@ -33,6 +33,7 @@ const exportExcellId = require('../functions/serverExportId');
 const exportExcellUser = require('../functions/serverExportUser');
 const exportExcellCaderno = require('../functions/exportExcellCaderno');
 const exportExcellAtividade = require('../functions/exportExcellAtividade');
+const archiverCompactor = require('../functions/archiver');
 
 //moduls
 const Sequelize = require('sequelize');
@@ -52,7 +53,7 @@ module.exports = {
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
         const codigoCaderno = req.params.codCaderno;
-        
+
 
         const offset = (paginaAtual - 1) * porPagina;
 
@@ -295,7 +296,7 @@ module.exports = {
         }
 
 
-    
+
 
 
 
@@ -1264,6 +1265,38 @@ module.exports = {
 
 
 
+    },
+    aplicarDesconto: async (req, res) => {
+        //Descontos
+        const nu_hash = req.params.id;
+        const resultAnuncio = await Descontos.findAll({
+            where: {
+                hash: nu_hash
+           /*      [Op.or]: [
+                    { hash: nu_hash },
+                    { idDesconto: nu_hash }
+                ] */
+
+            }
+        });
+        if (resultAnuncio < 1 || resultAnuncio[0].hash == "00.000.0000") {
+            res.json({ success: false, message: "ID não encontrado 0" });
+            return;
+        }
+
+        await Promise.all(
+            resultAnuncio.map(async (item) => {
+                const user = await item.getUsuario();
+                if(user) {
+                    item.dataValues = {
+                        nmUsuario: user.descNome, // Adiciona a nova propriedade no início
+                        ...item.dataValues, // Mantém as demais propriedades
+                    };
+                }
+            })
+        );
+
+        res.json({ success: true, IdsValue: resultAnuncio });
     },
     buscarAllId: async (req, res) => {
         //Descontos
@@ -3241,6 +3274,7 @@ module.exports = {
         const porPagina = 10; // Número de itens por página
         const offset = (paginaAtual - 1) * porPagina;
 
+        if (!requisito) return;
 
         //verificação
         const contemNumero = () => /\d/.test(nu_hash);
@@ -4715,6 +4749,491 @@ module.exports = {
 
     },
     export4excell: async (req, res) => {
+        //const anunciosCount = await Anuncio.count();
+        //const limit = Number(req.query.limit);
+        const cadernoParam = req.query.caderno;
+        const totalConsulta = req.query.limit;
+
+
+        const startTime = Date.now(); // Início da medição do tempo
+        const definirTipoAnuncio = (tipo) => {
+            switch (tipo) {
+                case 1:
+                    return "Básico";
+                case 2:
+                    return "Simples";
+                case 3:
+                    return "Completo";
+                default:
+                    return "Tipo desconhecido";
+            }
+        };
+
+        /*  const filePath = path.join(__dirname, 'dados.json');
+         const stream = fs.createWriteStream(filePath, { flags: 'a' });
+         
+         let offset = 0;
+         const limit = 2000;
+         const arr = [];
+         
+         while (true) {
+             const dados = await database.query(
+                 "SELECT codAnuncio, codOrigem, codDuplicado, descCPFCNPJ, descAnuncio, codTipoAnuncio, codCaderno, codUf, activate, descPromocao, createdAt, dueDate, codDesconto, codAtividade FROM anuncio WHERE codCaderno = 'AGUA BRANCA' LIMIT :limit OFFSET :offset",
+                 {
+                     replacements: { limit, offset },
+                     type: database.QueryTypes.SELECT,
+                 },
+             );
+         
+             if (dados.length === 0) {
+               
+                 exportExcell(arr, res);
+                 break
+ 
+             }; // Sai do loop se não houver mais registros
+         
+             // Escreve os dados no arquivo como JSON
+             dados.forEach(record => {
+                 arr.push(record)
+                 const jsonRecord = JSON.stringify(record); // Converte o registro para JSON
+                 stream.write(jsonRecord + '\n'); // Adiciona cada linha em formato JSON no arquivo
+             });
+         
+             offset += limit;
+         }
+         
+         stream.end(); 
+         console.log(`Dados salvos em: ${filePath}`); */
+        //console.log(arr);
+
+
+        //convertTxtToExcel()
+
+        async function convertTxtToExcel() {
+            const xl = require('excel4node');
+            const filePath = path.join(__dirname, 'dados.txt');
+            const wb = new xl.Workbook();
+            const ws = wb.addWorksheet('Dados');
+
+            // Cabeçalhos da tabela
+            const headingColumnNames = [
+                "COD", "COD_OR", "DUPLI", "CNPJ", "NOME", "TIPO", "CADERNO",
+                "UF", "STATUS", "DATA_PAG", "VALOR", "DESCONTO",
+                "CAD. PARA CONF.", "CONFIRMADO", "DATA_FIM", "TEMP. VALE PR. TIPO",
+                "ID", "USUARIO/DECISOR", "LOGIN", "SENHA", "EMAIL", "CONTATO",
+                "LINK_PERFIL", "ATIVIDADE PRINCIPAL"
+            ];
+
+            // Estilo do cabeçalho
+            const headerStyle = wb.createStyle({
+                font: { bold: true, color: '#000000', size: 12 },
+                fill: { type: 'pattern', patternType: 'solid', fgColor: 'ffff00' },
+                alignment: { horizontal: 'center', vertical: 'center' },
+            });
+
+            // Escreve os cabeçalhos
+            headingColumnNames.forEach((heading, index) => {
+                ws.cell(1, index + 1).string(heading).style(headerStyle);
+            });
+
+            // Ajusta larguras automaticamente (ou manualmente)
+            headingColumnNames.forEach((_, index) => {
+                ws.column(index + 1).setWidth(20); // Largura padrão
+            });
+
+            // Lê os dados do arquivo
+            if (!fs.existsSync(filePath)) {
+                console.error('Arquivo não encontrado:', filePath);
+                return;
+            }
+
+            const data = fs.readFileSync(filePath, 'utf8').trim();
+            if (!data) {
+                console.error('O arquivo está vazio.');
+                return;
+            }
+
+            // Escreve os dados na planilha
+            const rows = data.split('\n');
+            rows.forEach((line, rowIndex) => {
+                const values = line.split(';'); // Assume separação por ponto e vírgula
+                values.forEach((value, colIndex) => {
+                    ws.cell(rowIndex + 2, colIndex + 1).string(value.trim());
+                });
+            });
+
+            // Salva o Excel
+            wb.write('dados.xlsx', (err) => {
+                if (err) console.error('Erro ao gerar Excel:', err);
+                else console.log('Excel gerado com sucesso!');
+            });
+        }
+
+
+
+
+        try {
+            if (req.query.export == "full") {
+
+                const directoryPath = path.join(__dirname, `../public/export/caderno`);
+
+                try {
+                    // Lê os arquivos existentes no diretório
+                    const files = await fs.promises.readdir(directoryPath);
+                    console.log("Arquivos encontrados:", files);
+
+                    // Exclui o primeiro arquivo da lista, se existir
+                    if (files.length > 0) {
+                        for (const file of files) {
+                            const filePathToDelete = path.join(directoryPath, file);
+                            await fs.promises.unlink(filePathToDelete);
+                            console.log("Arquivo apagado:", filePathToDelete);
+                        }
+
+                    }
+                } catch (err) {
+                    console.error("Erro ao manipular arquivos:", err);
+                    //return res.status(500).json({ success: false, message: "Erro ao processar a exportação." });
+                }
+
+                let countRegistros = 0;
+
+                async function exportFullTest(execCount, flagFim, offset) {
+                    const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+                    const porPagina = 10; // Número de itens por página
+
+                    //const offset = (paginaAtual - 1) * porPagina;
+
+
+                    // Consulta para recuperar apenas os itens da página atual
+                    const anuncio = await Anuncio.findAndCountAll({
+                        where: {
+                            codCaderno: cadernoParam
+                        },
+                        limit: 10000,
+                        offset: offset, 
+                        raw: false,
+                        attributes: [
+                            'codAnuncio',
+                            'codOrigem',
+                            'codDuplicado',
+                            'descCPFCNPJ',
+                            'descAnuncio',
+                            'codTipoAnuncio',
+                            'codCaderno',
+                            'codUf',
+                            'activate',
+                            'descPromocao',
+                            'createdAt',
+                            'dueDate',
+                            'codDesconto',
+                            'codAtividade'
+                        ]
+                    });
+                    //console.log(anuncio)
+
+                    countRegistros = anuncio.count;
+
+                    const usuarios = await Usuarios.findAll({
+                        where: {
+                            codCidade: cadernoParam
+                        },
+                        attributes: [
+                            'descNome',
+                            'descCPFCNPJ',
+                            'senha',
+                            'descTelefone',
+                            'descEmail'],
+                        limit: 10000,
+                        offset: offset, 
+                        raw: true,
+                    });
+
+
+                    function dateformat(data) {
+                        const date = new Date(data);
+                        const formattedDate = date.toISOString().split('T')[0];
+
+                        return formattedDate;
+                    };
+
+                    await Promise.all(
+                        anuncio.rows.map(async (anun) => {
+                            try {
+                                const user = usuarios.find(teste => teste.descCPFCNPJ == anun.dataValues.descCPFCNPJ);
+
+                                if (user) {
+                                    // Cria um novo objeto com as informações do usuário inseridas após 'codDesconto'
+                                    const reorderedData = {};
+                                    for (const key in anun.dataValues) {
+                                        reorderedData[key] = anun.dataValues[key];
+                                        if (key === 'codDesconto') {
+                                            // Adiciona as propriedades do usuário após 'codDesconto'
+                                            reorderedData.codUsuario = user.descNome;
+                                            reorderedData.loginUser = user.descCPFCNPJ;
+                                            reorderedData.loginPass = user.senha;
+                                            reorderedData.loginEmail = user.descEmail;
+                                            reorderedData.loginContato = user.descTelefone;
+                                            reorderedData.link = `${masterPath.domain}/local/${encodeURIComponent(
+                                                anun.dataValues.descAnuncio
+                                            )}?id=${anun.dataValues.codAnuncio}`;
+                                            reorderedData.createdAt = dateformat(anun.dataValues.createdAt);
+                                            reorderedData.dueDate = dateformat(anun.dataValues.dueDate);
+                                        }
+                                    }
+                                    anun.dataValues = reorderedData;
+                                }
+
+                                // Traduzindo valores específicos
+                                anun.dataValues.codTipoAnuncio =
+                                    anun.dataValues.codTipoAnuncio == 3 ? "Completo" : anun.dataValues.codTipoAnuncio;
+                                anun.dataValues.activate = anun.dataValues.activate == 1 ? "Ativo" : "Inativo";
+                            } catch (error) {
+                                console.error(`Erro ao processar anúncio ${anun.dataValues.codAnuncio}:`, error);
+                            }
+                        })
+                    );
+
+
+
+
+                    //console.log(usuarios)
+
+
+                    exportExcell(anuncio.rows, res, startTime, cadernoParam, execCount, flagFim).then(response => {
+                        console.log("resultado do service", response);
+
+                    })
+
+                    return anuncio.rows.length;
+                }
+
+                let offset = 0;
+                const limit = 10000;
+                const maxRecords = totalConsulta;//83517;
+                let totalFetched = 0;
+
+                while (totalFetched < maxRecords) {
+                    //exportFullTest();
+                    let fim = ((totalFetched + limit) >= maxRecords) ? true : false;
+                    let count = await exportFullTest(totalFetched, fim, offset);
+
+                    totalFetched += count;
+                    offset += limit;
+
+                    if (count < limit) {
+                        console.log("Todos os registros foram consultados.");
+                        //return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx`, time: 'executionTime' });
+                        //break;
+                    }
+
+                    console.log(`Consulta finalizada. Total de registros recuperados: ${totalFetched}`);
+
+                }
+
+
+                if (totalFetched >= maxRecords) {
+                    console.log("Todos os registros foram consultados.");
+                    //archiverCompactor();
+                    return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.zip`, time: 'executionTime' });
+                    //break;
+                }
+
+
+            } else {
+                const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+                const porPagina = 10; // Número de itens por página
+
+                const offset = (paginaAtual - 1) * porPagina;
+
+                // Consulta para recuperar apenas os itens da página atual
+                const anuncio = await Anuncio.findAndCountAll({
+                    order: [
+                        [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                        ['createdAt', 'DESC'],
+                        ['codDuplicado', 'ASC'],
+                    ],
+                    limit: porPagina,
+                    offset: offset,
+                    raw: false,
+                    attributes: [
+                        'codAnuncio',
+                        'codOrigem',
+                        'codDuplicado',
+                        'descCPFCNPJ',
+                        'descAnuncio',
+                        'codTipoAnuncio',
+                        'codCaderno',
+                        'codUf',
+                        'activate',
+                        'descPromocao',
+                        'createdAt',
+                        'dueDate',
+                        'codDesconto',
+                        'codAtividade'
+                    ],
+                    /*      include: [
+                            {
+                                model: Usuarios,
+                                as: 'usuario',
+                            },
+                        ], */
+                });
+
+
+                /*  await Promise.all(anuncio.rows.map(async (anun, i) => {
+ 
+                     function dateformat(data) {
+                         const date = new Date(data);
+                         const formattedDate = date.toISOString().split('T')[0];
+ 
+                         return formattedDate;
+                     };
+ 
+                     const user = await anun.getUsuario();
+ 
+                     for (let key in anun.dataValues) {
+                         //console.log("key: ", key)
+                         if (key == 'codDesconto') {
+                             //newObj['newProperty'] = 42; // Adiciona a nova propriedade após 'a'
+                             
+                             if (user) {
+                                 anun.codUsuario = user.descNome;
+                                 anun.dataValues.loginUser = user.descCPFCNPJ;
+                                 anun.dataValues.loginPass = user.senha;
+                                 anun.dataValues.loginEmail = user.descEmail;
+                                 anun.dataValues.loginContato = user.descTelefone;
+                                 anun.dataValues.link = `${masterPath.domain}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
+                                 anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
+                                 anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
+                             };
+                         }
+                     }
+ 
+                  
+ 
+                     if (anun.dataValues.codTipoAnuncio == 3) {
+                         anun.dataValues.codTipoAnuncio = "Completo";
+                     }
+ 
+                     if (anun.dataValues.activate == 1) {
+                         anun.dataValues.activate = "Ativo";
+                     } else {
+                         anun.dataValues.activate = "Inativo";
+                     }
+ 
+ 
+       
+                     //console.log(anuncio.rows[i])
+                 })); */
+
+
+                /*      let dados = await Promise.all(req.body.map(async item => {
+                         const {
+                             codAtividade,
+                             codPA,
+                             tags,
+                             codCidade,
+                             descAnuncioFriendly,
+                             descImagem,
+                             descEndereco,
+                             descCelular,
+                             descDescricao,
+                             descSite,
+                             descSkype,
+                             descPromocao,
+                             descEmailComercial,
+                             descEmailRetorno,
+                             descFacebook,
+                             descTweeter,
+                             descCEP,
+                             descTipoPessoa,
+                             descNomeAutorizante,
+                             descLat,
+                             descLng,
+                             formaPagamento,
+                             promocaoData,
+                             descContrato,
+                             descAndroid,
+                             descApple,
+                             descInsta,
+                             descPatrocinador,
+                             descPatrocinadorLink,
+                             qntVisualizacoes,
+                             dtAlteracao,
+                             descLinkedin,
+                             descTelegram,
+                             certificado_logo,
+                             certificado_texto,
+                             certificado_imagem,
+                             cashback_logo,
+                             cashback_link,
+                             certificado_link,
+                             cartao_digital,
+                             descChavePix, ...newObject } = item;
+         
+         
+                         return newObject;
+                     })); */
+
+
+                function dateformat(data) {
+                    const date = new Date(data);
+                    return date.toISOString().split('T')[0];
+                }
+
+                await Promise.all(
+                    anuncio.rows.map(async (anun) => {
+                        try {
+                            const user = await anun.getUsuario();
+
+                            if (user) {
+                                // Cria um novo objeto com as informações do usuário inseridas após 'codDesconto'
+                                const reorderedData = {};
+                                for (const key in anun.dataValues) {
+                                    reorderedData[key] = anun.dataValues[key];
+                                    if (key === 'codDesconto') {
+                                        // Adiciona as propriedades do usuário após 'codDesconto'
+                                        reorderedData.codUsuario = user.descNome;
+                                        reorderedData.loginUser = user.descCPFCNPJ;
+                                        reorderedData.loginPass = user.senha;
+                                        reorderedData.loginEmail = user.descEmail;
+                                        reorderedData.loginContato = user.descTelefone;
+                                        reorderedData.link = `${masterPath.domain}/local/${encodeURIComponent(
+                                            anun.dataValues.descAnuncio
+                                        )}?id=${anun.dataValues.codAnuncio}`;
+                                        reorderedData.createdAt = dateformat(anun.dataValues.createdAt);
+                                        reorderedData.dueDate = dateformat(anun.dataValues.dueDate);
+                                    }
+                                }
+                                anun.dataValues = reorderedData;
+                            }
+
+                            // Traduzindo valores específicos
+                            anun.dataValues.codTipoAnuncio =
+                                anun.dataValues.codTipoAnuncio == 3 ? "Completo" : anun.dataValues.codTipoAnuncio;
+                            anun.dataValues.activate = anun.dataValues.activate == 1 ? "Ativo" : "Inativo";
+                        } catch (error) {
+                            console.error(`Erro ao processar anúncio ${anun.dataValues.codAnuncio}:`, error);
+                        }
+                    })
+                );
+
+
+
+
+                exportExcell(anuncio.rows, res);
+            }
+        } catch (err) {
+            console.log(err)
+            res.json({ success: false, message: `o numero máximo de registros é ${anunciosCount}` })
+        }
+
+
+
+
+    },
+    export4excellold: async (req, res) => {
         const anunciosCount = await Anuncio.count();
         //const limit = Number(req.query.limit);
         const cadernoParam = req.query.caderno;
@@ -4859,7 +5378,7 @@ module.exports = {
                              ['createdAt', 'DESC'],
                              ['codDuplicado', 'ASC'],
                          ], */
-                    //limit: 1000,
+                    limit: 10,
                     //offset: offset, 
                     raw: false,
                     attributes: [
@@ -4901,7 +5420,7 @@ module.exports = {
                              ['createdAt', 'DESC'],
                              ['codDuplicado', 'ASC'],
                          ], */
-                    //limit: 1000,
+                    limit: 10,
                     //offset: offset, 
                     raw: true,
 
@@ -4921,37 +5440,6 @@ module.exports = {
                     return formattedDate;
                 };
 
-                /*    await Promise.all(anuncio.rows.map(async (anun, i) => {
-   
-           
-   
-                       const user = usuarios.find(teste => teste.descCPFCNPJ == anun.dataValues.descCPFCNPJ);
-                       console.log(user)
-                         if (user) {
-                            anun.codUsuario = user.descNome;
-                            anun.dataValues.loginUser = user.descCPFCNPJ;
-                            anun.dataValues.loginPass = user.senha;
-                            anun.dataValues.loginEmail = user.descEmail;
-                            anun.dataValues.loginContato = user.descTelefone;
-                            anun.dataValues.link = `${masterPath.domain}/local/${encodeURIComponent(anun.dataValues.descAnuncio)}?id=${anun.dataValues.codAnuncio}`;
-                            anun.dataValues.createdAt = dateformat(anun.dataValues.createdAt);
-                            anun.dataValues.dueDate = dateformat(anun.dataValues.dueDate);
-                        }; 
-                       if (anun.dataValues.codTipoAnuncio == 3) {
-                           anun.dataValues.codTipoAnuncio = "Completo";
-                       }
-   
-                       if (anun.dataValues.activate == 1) {
-                           anun.dataValues.activate = "Ativo";
-                       } else {
-                           anun.dataValues.activate = "Inativo";
-                       }
-   
-   
-                   }));
-   
-                   
-    */
                 await Promise.all(
                     anuncio.rows.map(async (anun) => {
                         try {
@@ -4994,8 +5482,10 @@ module.exports = {
 
                 //console.log(usuarios)
 
+                exportExcell(anuncio.rows, res, startTime).then(response => {
+                    console.log("resultado do service", response);
+                })
 
-                exportExcell(anuncio.rows, res, startTime);
 
             } else {
                 const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
@@ -6518,4 +7008,4 @@ function dataNow() {
 };
 
 //exportExcell();
-
+console.log(path.join(__dirname, `../public/export/caderno/`))

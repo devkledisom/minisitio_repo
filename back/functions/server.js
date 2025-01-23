@@ -2,8 +2,9 @@ const xl = require('excel4node');
 const fs = require('fs').promises;
 const path = require('path');
 const masterPath = require('../config/config');
+const archiverCompactor = require('../functions/archiver');
 
-module.exports = async function expExcel(dados, res, startTime) {
+module.exports = async function expExcel(dados, res, startTime, cadernoParam, execCount, flagFim) {
     //const wb = new xl.Workbook();
     const wb = new xl.Workbook();
     //const ws = wb.addWorksheet('espacos');
@@ -117,11 +118,11 @@ module.exports = async function expExcel(dados, res, startTime) {
 
     dados.forEach((record, index) => {
         // Verifica se é necessário criar uma nova aba
-        if ((index + 1) % 5000 === 0) {
+    /*     if ((index + 1) % 5000 === 0) {
             sheetIndex++;
             ws = wb.addWorksheet(`Sheet${sheetIndex}`); // Cria uma nova aba
             rowIndex = 2; // Reseta a contagem de linhas para a nova aba
-        }
+        } */
 
         //console.log(record);
 
@@ -194,7 +195,7 @@ module.exports = async function expExcel(dados, res, startTime) {
 
     console.log("Gerando");
 
-    const directoryPath = path.join(__dirname, `../public/export`);
+    const directoryPath = path.join(__dirname, `../public/export/caderno`);
 
     try {
         // Lê os arquivos existentes no diretório
@@ -202,18 +203,21 @@ module.exports = async function expExcel(dados, res, startTime) {
         console.log("Arquivos encontrados:", files);
 
         // Exclui o primeiro arquivo da lista, se existir
-        if (files.length > 0) {
-            const filePathToDelete = path.join(directoryPath, files[0]);
-            await fs.unlink(filePathToDelete);
-            console.log("Arquivo apagado:", filePathToDelete);
-        }
+/*         if (files.length > 0) {
+            for(const file of files) {
+                const filePathToDelete = path.join(directoryPath, file);
+                await fs.unlink(filePathToDelete);
+                console.log("Arquivo apagado:", filePathToDelete);
+            }
+          
+        } */
     } catch (err) {
         console.error("Erro ao manipular arquivos:", err);
-       return res.status(500).json({ success: false, message: "Erro ao processar a exportação." });
+       //return res.status(500).json({ success: false, message: "Erro ao processar a exportação." });
     }
 
     // Escreve o novo arquivo Excel
-    const newFilePath = path.join(__dirname, `../public/export/arquivo.xlsx`);
+    const newFilePath = path.join(__dirname, `../public/export/caderno/${cadernoParam.replace(/\s+/g, '') + execCount}.xlsx`);
     wb.write(newFilePath, function (err, stats) {
         if (err) {
             console.error(err);
@@ -223,10 +227,17 @@ module.exports = async function expExcel(dados, res, startTime) {
             const endTime = Date.now(); // Fim da medição do tempo
             const executionTime = endTime - startTime; // Calcula o tempo total
 
-            console.log("previsto: ", executionTime, " ms")
+            console.log("previsto: ", executionTime, " ms", flagFim)
 
-            return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx`, time: executionTime });
+            if(flagFim) {
+                console.log('chegou ao fim')
+                archiverCompactor();
+            };
+
+            //return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx`, time: executionTime });
         }
     });
 
+    return "processo finalizado";
 }
+

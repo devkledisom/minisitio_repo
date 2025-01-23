@@ -143,18 +143,22 @@ function ComprarAnuncio({ isAdmin }) {
     let codId = e.target.value;
 
     if (codId.length == 11 || codId.length == 12) {
-      fetch(`${masterPath.url}/admin/desconto/buscar/${codId}`)
+      fetch(`${masterPath.url}/admin/desconto/aplicar/${codId}`)
         .then((x) => x.json())
         .then((res) => {
-          console.log("desconto ", res)
-          let valorDesconto = res.IdsValue[0].desconto;
-          let precoComDesconto = precoFixo - valorDesconto;
-          setPrecoFixo(precoComDesconto);
-          setDescontoAtivado(res.success);
-          setTexto(res.IdsValue[0].descricao);
+          if (res.success) {
+            let valorDesconto = res.IdsValue[0].desconto;
+            let precoComDesconto = precoFixo - valorDesconto;
+            setPrecoFixo(precoComDesconto);
+            setDescontoAtivado(res.success);
+            setTexto(res.IdsValue[0].descricao);
+          } else {
+            setDescontoAtivado(res.success);
+          }
+
         })
     } else {
-      setPrecoFixo(5);
+      setPrecoFixo(10);
       setDescontoAtivado(false);
       setTexto(null);
     }

@@ -81,18 +81,19 @@ router.put('/api/admin/desconto/status/:id', auth, Admin.updateUserStatus);
 router.post('/api/admin/desconto/create', auth, Admin.criarIds);
 router.delete('/api/admin/desconto/delete/:id', auth, Admin.deleteIds);
 router.get('/api/admin/desconto/buscar/:id', Admin.buscarId);
+router.get('/api/admin/desconto/aplicar/:id', Admin.aplicarDesconto);
 router.get('/api/admin/desconto/read/all', Admin.buscarAllId);
 router.get('/api/admin/desconto/usuario/buscar/:id', Admin.buscarUsuarioId);
 router.get('/api/admin/desconto/ddd/:id', Admin.buscarDDD);
 router.post('/api/admin/desconto/export', auth, Admin.exportID);
 
-router.get('/admin/desconto/read', Admin.listarIds);
+/* router.get('/admin/desconto/read', Admin.listarIds);
 router.get('/admin/desconto/edit/:id', Admin.listarUserId);
 router.put('/admin/desconto/update', auth, Admin.atualizarIds);
 //router.post('/admin/desconto/create', Admin.criarIds);
 router.delete('/admin/desconto/delete/:id', auth, Admin.deleteIds);
 router.get('/admin/desconto/buscar/:id', Admin.buscarId);
-router.get('/admin/desconto/ddd/:id', Admin.buscarDDD);
+router.get('/admin/desconto/ddd/:id', Admin.buscarDDD); */
 
 //ANUNCIOS
 router.get('/api/admin/espacos/read', Admin.listarEspacos);
