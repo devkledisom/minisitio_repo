@@ -198,7 +198,7 @@ const Espacos = () => {
                     //alert("encontrado");
                     setAnucios(res);
                     setShowSpinner(false);
-                    console.log("usussss", res);
+                    console.log("usussss", res)
                 } else {
                     alert("Perfil não encontrado na base de dados");
                     setShowSpinner(false);

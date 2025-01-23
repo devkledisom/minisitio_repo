@@ -3,9 +3,9 @@ import { masterPath } from "../../config/config";
 //LIBS
 import Swal from 'sweetalert2';
 
-export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin) {
+export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor) {
     setShowSpinner(true);
-
+    document.querySelector('.form-create').style.filter = 'blur(2px)';
 
     var validation = false;
     document.querySelectorAll('[required]').forEach((item) => {
@@ -30,11 +30,6 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         .then((res) => {
             if (res.success) {
                 setShowSpinner(true);
-
-                /*            switch(res.usuarios[0].codTipoUsuario) {
-                               case 1:
-                                   criarUsuario();
-                           } */
 
                 cadastrarAnuncio(res.usuarios[0].codUsuario)
             } else {
@@ -86,7 +81,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                     console.log("Esse usuário já está cadastrado!");
                 }
                 console.log(res);
-                setShowSpinner(false);
+                //setShowSpinner(false);
             });
     }
 
@@ -115,7 +110,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
             descDescricao: "",
             descSite: "www.oficinadetortas.com.br",
             descSkype: null,
-            descPromocao: "",
+            descPromocao: descValor,
             descEmailComercial: buscarElemento("descEmailComercial"),
             descEmailRetorno: buscarElemento("descEmailRetorno"),
             descFacebook: "",
@@ -179,10 +174,10 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         })
             .then((x) => x.json())
             .then((res) => {
-                setShowSpinner(false);
+                //setShowSpinner(false);
                 // Remover um item do localStorage
                 localStorage.removeItem("imgname");
-                //console.log(res)
+                console.log(res)
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
 
@@ -190,8 +185,10 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                 Swal.fire({
                     title: "Perfil Cadastrado",
                     text: "Você será redirecionado para página de login, para efetuar o login use o seu cnpj e a senha defenida no cadastro. Você também receberá as informações do acesso no email cadastrado.",
-                    icon: "success"
+                    icon: "success",
+                    didOpen: () => {setShowSpinner(false);}
                 }).then(res => {
+                    
                     if (res.isConfirmed) {
                         if (isAdmin) {
                             console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf")

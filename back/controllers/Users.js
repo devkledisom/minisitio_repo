@@ -443,6 +443,11 @@ module.exports = {
         const requisito = req.query.require;
         console.log("dasdasd", requisito)
 
+        if(!requisito) {
+            res.json({ success: false, message: "não encontrado"});
+            return;
+        }
+
         const offset = (paginaAtual - 1) * porPagina;
         var nu_doc = req.params.id;
 

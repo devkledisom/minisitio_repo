@@ -52,7 +52,7 @@ router.post('/api/entrar', Login.login);
 router.post('/api/test-connection', auth, (req, res) => res.json({success: true}));
 
 //Admin
-router.post('/api/admin/usuario/create', auth, Users.create);
+router.post('/api/admin/usuario/create', Users.create);
 router.post('/api/admin/usuario/update/:id', auth, Users.update);
 router.put('/api/admin/usuario/status/:id', auth, Users.updateStatus);
 router.get('/api/admin/usuario/edit/:id', Users.buscarUsuario);
@@ -98,7 +98,7 @@ router.get('/admin/desconto/ddd/:id', Admin.buscarDDD); */
 //ANUNCIOS
 router.get('/api/admin/espacos/read', Admin.listarEspacos);
 router.get('/api/admin/anuncio/edit/:id', Admin.listarAnuncioId);
-router.post('/api/admin/anuncio/create', auth, Admin.criarAnuncio);
+router.post('/api/admin/anuncio/create', Admin.criarAnuncio);
 router.put('/api/admin/anuncio/status/:id', auth, Admin.updateAnuncioStatus);
 router.delete('/api/admin/anuncio/delete/:id', auth, Admin.deleteAnuncio);
 router.put('/api/admin/anuncio/update', auth, Admin.atualizarAnuncio);

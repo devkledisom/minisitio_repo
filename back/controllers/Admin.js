@@ -4100,7 +4100,7 @@ module.exports = {
             descYouTube } = req.body;
 
 
-        const codigoUsuario = await Usuarios.findAll({
+/*         const codigoUsuario = await Usuarios.findAll({
             where: {
                 [Op.or]: [
                     { descNome: codUsuario },
@@ -4117,21 +4117,21 @@ module.exports = {
         if (codigoUsuario < 1) {
             res.json({ success: false, message: "Usuario não encontrado, por favor digite a identificação correta, caso contrário não será possível atribuir esse anúncio a nenhum usúario" });
             return;
-        }
+        } */
 
         //console.log("tajsdnfkjfbdsjkbfsd;;;;;;", descAnuncio)
-        let codigoDeDesconto = await Descontos.findAll({
+ /*        let codigoDeDesconto = await Descontos.findAll({
             where: {
                 hash: codDesconto
             },
             attributes: ['desconto']
-        });
+        }); */
 
 
 
         const dadosAnuncio = {
             //"codAnuncio": 88888,
-            "codUsuario": codigoUsuario[0].codUsuario,
+            "codUsuario": 88,//codigoUsuario[0].codUsuario,
             "codTipoAnuncio": codTipoAnuncio,
             "codAtividade": codAtividade,
             "codPA": 0,
@@ -4149,7 +4149,7 @@ module.exports = {
             "descDescricao": "",
             "descSite": "",
             "descSkype": "",
-            "descPromocao": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].desconto : '0',
+            "descPromocao": descPromocao || 0,//codigoDeDesconto.length > 0 ? codigoDeDesconto[0].desconto : '0',
             "descEmailComercial": descEmailComercial,
             "descEmailRetorno": descEmailRetorno,
             "descFacebook": "",

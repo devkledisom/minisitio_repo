@@ -56,6 +56,7 @@ function ComprarAnuncio({ isAdmin }) {
   const [cep, setCep] = useState();
   const [showMap, setShowMap] = useState("none");
   const [precoFixo, setPrecoFixo] = useState(10);
+  const [descValor, setDescValor] = useState(0);
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
   const [descontoAtivado, setDescontoAtivado] = useState(false);
   const [tagValue, setTagValue] = useState([]);
@@ -150,6 +151,7 @@ function ComprarAnuncio({ isAdmin }) {
             let valorDesconto = res.IdsValue[0].desconto;
             let precoComDesconto = precoFixo - valorDesconto;
             setPrecoFixo(precoComDesconto);
+            setDescValor(valorDesconto);
             setDescontoAtivado(res.success);
             setTexto(res.IdsValue[0].descricao);
           } else {
@@ -257,7 +259,7 @@ function ComprarAnuncio({ isAdmin }) {
         /> */}
 
         {showSpinner && <button class="buttonload">
-          <i class="fa fa-spinner fa-spin"></i>Carregando
+          <i class="fa fa-spinner fa-spin"></i>CADASTRANDO PERFIL
         </button>}
 
         {alert && <AlertMsg message={"Cadastro Realizado, verifique a sua caixa de email para obter o acesso a plataforma"} />}
@@ -271,7 +273,7 @@ function ComprarAnuncio({ isAdmin }) {
           Preencha os campos abaixo para simular e incluir sua
           Assinatura/Espaço Minisitio.
         </h2>
-        <div className="container d-flex flex-row">
+        <div className="container d-flex flex-row form-create">
           {/*inicio da row form */}
           <div className="row col-md-6 p-3 interna" id="form-cadastro-data">
             <div className="formulario-de-cadastro-titulo">
@@ -954,7 +956,7 @@ function ComprarAnuncio({ isAdmin }) {
                       className="btn-block formulario-de-cadastro btn btn-primary"
                       id="anunciar"
                       /* data-bs-toggle="modal" data-bs-target="#myModal" */
-                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin)}
+                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor)}
                     >
                       Confirmar
                     </button>
