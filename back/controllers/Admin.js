@@ -3380,7 +3380,12 @@ module.exports = {
                 }
             });
             return;
-        };
+        } else {
+            res.json({
+                success: false,
+                message: "não encontrado"
+            });
+        }
         return;
         //buscar por uf
         const resultEstado = await Uf.findAll({

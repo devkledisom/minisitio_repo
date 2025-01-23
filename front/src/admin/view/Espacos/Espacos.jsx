@@ -194,14 +194,13 @@ const Espacos = () => {
         fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}&require=${searchOptioncheck}`)
             .then((x) => x.json())
             .then((res) => {
-                console.log(res)
                 if (res.success) {
                     //alert("encontrado");
                     setAnucios(res);
                     setShowSpinner(false);
                     console.log("usussss", res);
                 } else {
-                    alert("Anúncio não encontrado na base de dados");
+                    alert("Perfil não encontrado na base de dados");
                     setShowSpinner(false);
                 }
 
