@@ -594,7 +594,7 @@ module.exports = {
                     ]
 
                 },
-                order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+                order: [['descNome', 'ASC']],//['dtCadastro', 'DESC'], 
                 attributes: [
                     'codUsuario',
                     'descCPFCNPJ',
