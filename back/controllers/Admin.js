@@ -5040,7 +5040,7 @@ module.exports = {
                 if (totalFetched >= maxRecords) {
                     console.log("Todos os registros foram consultados.");
                     //archiverCompactor();
-                    return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.zip`, time: 'executionTime' });
+                    return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/api/export/arquivo.zip`, time: 'executionTime' });
                     //break;
                 }
 
