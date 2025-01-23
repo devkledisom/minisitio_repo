@@ -480,7 +480,7 @@ module.exports = {
                         { codUf: { [Op.like]: `${nu_doc}%` } },
                         { codCidade: { [Op.like]: `${nu_doc}%` } }
                     ] */
-                        [requisito]: nu_doc
+                        [requisito]: { [Op.like]: `${nu_doc}%` }
 
                 },
                 order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
@@ -502,6 +502,10 @@ module.exports = {
             });
 
             console.log("debug: ", resultAnuncio.length);
+            if(resultAnuncio.count < 1) {
+                res.json({ success: false, message: "não encontrado"});
+                return;
+            }
 
             if (resultAnuncio.length < 1) {
                 const resultAnuncio = await Cadernos.findAll({
