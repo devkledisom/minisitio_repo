@@ -221,7 +221,7 @@ module.exports = async function expExcel(dados, res, startTime, cadernoParam, ex
     wb.write(newFilePath, function (err, stats) {
         if (err) {
             console.error(err);
-            return res.status(500).json({ success: false, message: "Erro ao gerar o arquivo." });
+            //return res.status(500).json({ success: false, message: "Erro ao gerar o arquivo." });
         } else {
             console.log("Arquivo gerado:", stats);
             const endTime = Date.now(); // Fim da medição do tempo

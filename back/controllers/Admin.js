@@ -1272,10 +1272,10 @@ module.exports = {
         const resultAnuncio = await Descontos.findAll({
             where: {
                 hash: nu_hash
-           /*      [Op.or]: [
-                    { hash: nu_hash },
-                    { idDesconto: nu_hash }
-                ] */
+                /*      [Op.or]: [
+                         { hash: nu_hash },
+                         { idDesconto: nu_hash }
+                     ] */
 
             }
         });
@@ -1287,7 +1287,7 @@ module.exports = {
         await Promise.all(
             resultAnuncio.map(async (item) => {
                 const user = await item.getUsuario();
-                if(user) {
+                if (user) {
                     item.dataValues = {
                         nmUsuario: user.descNome, // Adiciona a nova propriedade no início
                         ...item.dataValues, // Mantém as demais propriedades
@@ -4916,7 +4916,7 @@ module.exports = {
                             codCaderno: cadernoParam
                         },
                         limit: 10000,
-                        offset: offset, 
+                        offset: offset,
                         raw: false,
                         attributes: [
                             'codAnuncio',
@@ -4950,7 +4950,7 @@ module.exports = {
                             'descTelefone',
                             'descEmail'],
                         limit: 10000,
-                        offset: offset, 
+                        offset: offset,
                         raw: true,
                     });
 
@@ -5020,19 +5020,24 @@ module.exports = {
 
                 while (totalFetched < maxRecords) {
                     //exportFullTest();
-                    let fim = ((totalFetched + limit) >= maxRecords) ? true : false;
-                    let count = await exportFullTest(totalFetched, fim, offset);
+                    try {
+                        let fim = ((totalFetched + limit) >= maxRecords) ? true : false;
+                        let count = await exportFullTest(totalFetched, fim, offset);
 
-                    totalFetched += count;
-                    offset += limit;
+                        totalFetched += count;
+                        offset += limit;
 
-                    if (count < limit) {
-                        console.log("Todos os registros foram consultados.");
-                        //return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx`, time: 'executionTime' });
-                        //break;
+                        if (count < limit) {
+                            console.log("Todos os registros foram consultados.");
+                            //return res.json({ success: true, message: "Exportação Finalizada", downloadUrl: `${masterPath.url}/export/arquivo.xlsx`, time: 'executionTime' });
+                            //break;
+                        }
+
+                        console.log(`Consulta finalizada. Total de registros recuperados: ${totalFetched}`);
+                    } catch (error) {
+                        console.error("Erro ao processar exportação:", error);
+                        break;
                     }
-
-                    console.log(`Consulta finalizada. Total de registros recuperados: ${totalFetched}`);
 
                 }
 
