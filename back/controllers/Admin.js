@@ -1197,7 +1197,7 @@ module.exports = {
             where: {
                 [Op.and]: [
                     { descNome: { [Op.like]: `%${nu_hash}%` } },
-                    {codTipoUsuario: 2}
+                    { codTipoUsuario: 2 }
                 ]
 
             },
@@ -1352,14 +1352,14 @@ module.exports = {
                 codUf: codUf,
                 codTipoUsuario: 2
             }
-        })       
+        })
 
         if (dddBusca < 1) {
             res.json({ success: false, message: "ddd não encontrado" });
             return;
         }
 
-        res.json({ success: true, data: dddBusca[0], qtdeIds: descontoBusca, masters: masters});
+        res.json({ success: true, data: dddBusca[0], qtdeIds: descontoBusca, masters: masters });
         //res.json({ success: true, data: dddBusca });
         //Descontos
         /*  const resultAnuncio = await Descontos.findAll({
@@ -4052,6 +4052,8 @@ module.exports = {
         res.json(resultAnuncio);
     },
     criarAnuncio: async (req, res) => {
+
+
         await database.sync();
         const { codAnuncio,
             codUsuario,
@@ -4112,35 +4114,6 @@ module.exports = {
             descYouTube } = req.body;
 
 
-/*         const codigoUsuario = await Usuarios.findAll({
-            where: {
-                [Op.or]: [
-                    { descNome: codUsuario },
-                    { descEmail: codUsuario },
-                    { descCPFCNPJ: codUsuario },
-                    { codUsuario: codUsuario }
-                ]
-
-            }
-        });
-
-        //console.log(codigoUsuario[0].codUsuario)
-
-        if (codigoUsuario < 1) {
-            res.json({ success: false, message: "Usuario não encontrado, por favor digite a identificação correta, caso contrário não será possível atribuir esse anúncio a nenhum usúario" });
-            return;
-        } */
-
-        //console.log("tajsdnfkjfbdsjkbfsd;;;;;;", descAnuncio)
- /*        let codigoDeDesconto = await Descontos.findAll({
-            where: {
-                hash: codDesconto
-            },
-            attributes: ['desconto']
-        }); */
-
-
-
         const dadosAnuncio = {
             //"codAnuncio": 88888,
             "codUsuario": 88,//codigoUsuario[0].codUsuario,
@@ -4172,7 +4145,7 @@ module.exports = {
             "descCPFCNPJ": descCPFCNPJ,
             "descNomeAutorizante": descNomeAutorizante,
             "descEmailAutorizante": descEmailAutorizante,
-            "codDesconto": codDesconto,//codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
+            "codDesconto": codDesconto || '00.000.0000',//codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
             "descLat": 0,
             "descLng": 0,
             "formaPagamento": 0,
@@ -4203,7 +4176,7 @@ module.exports = {
 
         try {
             const listaAnuncios = await Anuncio.create(dadosAnuncio);
-
+            console.log(`Reorganização concluída para o estado:`, { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno });
             if (codTipoAnuncio == 3) {
                 const idUtilizado = await Desconto.update({
                     //utilizar_saldo: codigoDeDesconto[0].utilizar_saldo + 1,
@@ -4216,8 +4189,32 @@ module.exports = {
                 })
             }
 
+            const query = `UPDATE anuncio
+            JOIN (
+                SELECT codAnuncio, 
+                    CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC) / 10) AS 'page_number'
+                FROM anuncio
+                WHERE codUf = :estado AND codCaderno = :caderno
+            ) AS temp
+            ON anuncio.codAnuncio = temp.codAnuncio
+            SET anuncio.page = temp.page_number
+            WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
+         `;
+         
+        //try {
+            // Executa a query com parâmetros
+            await database.query(query, {
+                replacements: { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno }, // Substitui o parâmetro :estado
+                type: Sequelize.QueryTypes.UPDATE, // Define o tipo de query
+            });
+            console.log(`Reorganização concluída para o estado:`);
+     /*    } catch (error) {
+            console.error(`Erro ao reorganizar anúncios para o estado :`, error);
+        } */
+
             res.json({ success: true, message: listaAnuncios })
         } catch (err) {
+            console.log(err)
             res.json({ success: false, message: err, ter: codTipoAnuncio })
         }
 

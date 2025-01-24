@@ -68,7 +68,6 @@ function MiniWebCard(props) {
                 </button>
             }
             <div className='container cartao my-2 p-0' key={props.key}>
-                {console.log(parceiros)}
 
                 {parceiros && (
                         (isValid(props.ids.descImagem) ||
