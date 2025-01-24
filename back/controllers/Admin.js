@@ -1347,12 +1347,19 @@ module.exports = {
 
         const descontoBusca = await Descontos.count();
 
+        const masters = await Usuarios.count({
+            where: {
+                codUf: codUf,
+                codTipoUsuario: 2
+            }
+        })       
+
         if (dddBusca < 1) {
             res.json({ success: false, message: "ddd não encontrado" });
             return;
         }
 
-        res.json({ success: true, data: dddBusca[0], qtdeIds: descontoBusca });
+        res.json({ success: true, data: dddBusca[0], qtdeIds: descontoBusca, masters: masters});
         //res.json({ success: true, data: dddBusca });
         //Descontos
         /*  const resultAnuncio = await Descontos.findAll({

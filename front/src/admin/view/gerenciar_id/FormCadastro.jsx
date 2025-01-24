@@ -74,7 +74,7 @@ const FormCadastro = () => {
                     .then((x) => x.json())
                     .then((res) => {
                         //console.log(res.data.ddd, String(item.codUsuario).padStart(3, "0"), String(res.qtdeIds).padStart(4, "0"))
-                        setHash(`${res.data.ddd}.${String(item.codUsuario).padStart(3, "0")}.${String(res.qtdeIds).padStart(4, "0")}`);
+                        setHash(`${res.data.ddd}.${String(res.masters).padStart(3, "0")}.${String(res.qtdeIds).padStart(4, "0")}`);
                         setShowSpinner(false);
                     })
             }
