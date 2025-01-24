@@ -36,14 +36,15 @@ function MiniWebCard(props) {
     useEffect(() => {
         setParceiros(props.ids)
         props.data.anuncios.map(item => setImg(item.descImagem))
-        
+
+
         if (props.codImg == 0 || props.codImg == "teste" || props.codImg == null) {
             setImgDefault(false);
         } else {
             setImgDefault(`files/${props.codImg}`);
         }
 
-       // console.log(props.codDesconto)
+        // console.log(props.codDesconto)
     }, [props]);
 
 
@@ -55,7 +56,7 @@ function MiniWebCard(props) {
             })
     };
 
-
+    const isValid = (value) => value !== 'null' && value !== '';
 
 
     return (
@@ -67,9 +68,12 @@ function MiniWebCard(props) {
                 </button>
             }
             <div className='container cartao my-2 p-0' key={props.key}>
+                {console.log(parceiros)}
 
-                {parceiros &&
-                    ((props.ids.descImagem || props.ids.descImagem2 || props.ids.descImagem3) && (
+                {parceiros && (
+                        (isValid(props.ids.descImagem) ||
+                        isValid(props.ids.descImagem2) ||
+                        isValid(props.ids.descImagem3)) && (
                         <div className="apoio kledisom">
                             <div>
                                 {[{ img: props.ids.descImagem, link: props.ids.descLink },

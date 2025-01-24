@@ -96,7 +96,6 @@ function Caderno() {
   });
 
   useEffect(() => {
-  console.log(data)
 
   if(!isLoading) {
     setLoading(false);

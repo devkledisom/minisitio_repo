@@ -114,7 +114,7 @@ function Rotas() {
                     <Route path="admin/cadernos/editar" element={<PrivateRoute><CadernosEdit /></PrivateRoute>} />
 
                     {/* ROTAS PAINEL ADMIN DO ANUNCIANTE */}
-                    <Route path="ver-anuncios/:cpf" element={<PrivateRoute><PainelAdmin /></PrivateRoute>} />
+                    <Route path="ver-anuncios/:cpf" element={<PrivateRoute><PainelAdmin isPublic={true}/></PrivateRoute>} />
 
                     {/* ROTAS AREA DO ASSINANTE */}
                     <Route path="criar-cadastro" element={<AssinanteCadastro />} />

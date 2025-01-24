@@ -153,7 +153,7 @@ function PainelAdmin() {
                 if (res.success) {
                     //setAnuncios(res.message.anuncios);
                     setShowSpinner(false);
-                    console.log("usussss", res.message.anuncios[0].codUf);
+                    //console.log("usussss", res.message.anuncios[0].codUf);
                 } else {
                     //alert("Anúncio não encontrado na base de dados");
                     setShowSpinner(false);
