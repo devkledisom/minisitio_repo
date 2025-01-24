@@ -443,8 +443,8 @@ module.exports = {
         const requisito = req.query.require;
         console.log("dasdasd", requisito)
 
-        if(!requisito) {
-            res.json({ success: false, message: "não encontrado"});
+        if (!requisito) {
+            res.json({ success: false, message: "não encontrado" });
             return;
         }
 
@@ -478,14 +478,14 @@ module.exports = {
             //Atividades
             const resultAnuncio = await Users.findAndCountAll({
                 where: {
-                /*     [Op.or]: [
-                        { descNome: { [Op.like]: `%${nu_doc}%` } },
-                        { descEmail: nu_doc },
-                        { descCPFCNPJ: nu_doc },
-                        { codUf: { [Op.like]: `${nu_doc}%` } },
-                        { codCidade: { [Op.like]: `${nu_doc}%` } }
-                    ] */
-                        [requisito]: { [Op.like]: `${nu_doc}%` }
+                    /*     [Op.or]: [
+                            { descNome: { [Op.like]: `%${nu_doc}%` } },
+                            { descEmail: nu_doc },
+                            { descCPFCNPJ: nu_doc },
+                            { codUf: { [Op.like]: `${nu_doc}%` } },
+                            { codCidade: { [Op.like]: `${nu_doc}%` } }
+                        ] */
+                    [requisito]: { [Op.like]: `${nu_doc}%` }
 
                 },
                 order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
@@ -507,8 +507,8 @@ module.exports = {
             });
 
             console.log("debug: ", resultAnuncio.length);
-            if(resultAnuncio.count < 1) {
-                res.json({ success: false, message: "não encontrado"});
+            if (resultAnuncio.count < 1) {
+                res.json({ success: false, message: "não encontrado" });
                 return;
             }
 
@@ -574,23 +574,23 @@ module.exports = {
 
             res.json({ success: true, usuarios: resultAnuncio });
         }
-/* 
-        if(nu_doc == "formList") {
-            const resultAnuncio = await Users.findAll({
-                where: {
-                    [Op.or]: [
-                        { codUf: { [Op.like]: `%${resultAnuncio[0].dataValues.codUf}%` } },
-                        { codCidade: { [Op.like]: `%${resultAnuncio[0].dataValues.codCaderno}%` } },
-                    ]
-
-                },
-                order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
-            });
-
-
-            res.json({ success: true, usuarios: resultAnuncio });
-        }
- */
+        /* 
+                if(nu_doc == "formList") {
+                    const resultAnuncio = await Users.findAll({
+                        where: {
+                            [Op.or]: [
+                                { codUf: { [Op.like]: `%${resultAnuncio[0].dataValues.codUf}%` } },
+                                { codCidade: { [Op.like]: `%${resultAnuncio[0].dataValues.codCaderno}%` } },
+                            ]
+        
+                        },
+                        order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+                    });
+        
+        
+                    res.json({ success: true, usuarios: resultAnuncio });
+                }
+         */
         async function buscarPorTipoUsuario(codigo) {
             const resultAnuncio = await Users.findAndCountAll({
                 where: {

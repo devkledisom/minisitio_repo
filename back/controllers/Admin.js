@@ -1089,7 +1089,8 @@ module.exports = {
     atualizarIds: async (req, res) => {
 
         // Consulta para recuperar apenas os itens da página atual
-        const atividades = await Descontos.update({
+        const ids = await Descontos.update({
+            idUsuario: req.body.usuario,
             descricao: req.body.descricao,
             desconto: req.body.valorDesconto,
             patrocinador_ativo: req.body.patrocinador,
@@ -1110,7 +1111,7 @@ module.exports = {
 
 
         res.json({
-            success: true, message: atividades
+            success: true, message: ids
         })
 
 

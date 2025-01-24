@@ -44,6 +44,7 @@ const FormCadastro = () => {
         fetch(`${masterPath.url}/ufs`)
             .then((x) => x.json())
             .then((res) => {
+               
                 setUfs(res);
             })
     }, [page, param]);

@@ -46,11 +46,19 @@ const FormCadastro = () => {
 
     useEffect(() => {
         setShowSpinner(true);
-        fetch(`${masterPath.url}/admin/usuario/buscar/master`)
+        fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
             .then((x) => x.json())
             .then((res) => {
-                setUsuarios(res.usuarios);
-                setShowSpinner(false);
+                if(res.success) {
+                    console.log(res)
+                    setUsuarios(res.usuarios);
+                    setShowSpinner(false);
+                } else {
+                    console.log(res)
+                    setUsuarios([]);
+                    setShowSpinner(false);
+                }
+
             }).catch((err) => {
                 console.log(err);
                 setShowSpinner(false);

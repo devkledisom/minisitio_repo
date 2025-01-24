@@ -88,8 +88,10 @@ const FormEdit = () => {
                     //console.log(res[0].descImagem);
                     //setPatrocinio(1)
                 }
+                
+                document.getElementById('user').value = res[0].idUsuario;
 
-                fetch(`${masterPath.url}/admin/desconto/usuario/buscar/${res[0].idUsuario}`)
+           /*      fetch(`${masterPath.url}/admin/desconto/usuario/buscar/${res[0].idUsuario}`)
                     .then((x) => x.json())
                     .then((res) => {
                         setUsuarios(res.usuarios);
@@ -97,10 +99,50 @@ const FormEdit = () => {
                     }).catch((err) => {
                         console.log(err);
                         setShowSpinner(false);
-                    })
+                    }) */
+
+
+                    /*  fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
+                                .then((x) => x.json())
+                                .then((res) => {
+                                    if(res.success) {
+                                        console.log(ids[0].idUsuario)
+                                        setUsuarios(res.usuarios);
+                                        setShowSpinner(false);
+                                        document.getElementById('user').value = ids[0].idUsuario;
+                                    } else {
+                                        console.log(res)
+                                        setUsuarios([]);
+                                        setShowSpinner(false);
+                                    }
+                    
+                                }).catch((err) => {
+                                    console.log(err);
+                                    setShowSpinner(false);
+                                }) */
+
 
             }).catch((err) => {
                 console.log(err)
+            })
+
+            fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
+            .then((x) => x.json())
+            .then((res) => {
+                if(res.success) {
+                    //console.log(ids[0].idUsuario)
+                    setUsuarios(res.usuarios);
+                    setShowSpinner(false);
+                    
+                } else {
+                    console.log(res)
+                    setUsuarios([]);
+                    setShowSpinner(false);
+                }
+
+            }).catch((err) => {
+                console.log(err);
+                setShowSpinner(false);
             })
 
     }, []);
@@ -134,7 +176,7 @@ const FormEdit = () => {
         });
 
         const data = {
-            "usuario": usuarios,
+            "usuario": document.getElementById('user').value,
             "descricao": document.getElementById('descID').value,
             "valorDesconto": document.getElementById('valorDesconto').value,
             "patrocinador": document.getElementById('patrocinador').value,
@@ -148,6 +190,7 @@ const FormEdit = () => {
             "utilizarSaldo": saldo,
             "addSaldo": saldoValue//document.getElementById('add-saldo') ? document.getElementById('add-saldo').value : 0
         };
+
 
         const config = {
             method: "PUT",
@@ -271,9 +314,11 @@ const FormEdit = () => {
 
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
                             <select name="user" id="user" className="w-50 py-1">
+                            <option value="0">- Carregando -</option>
                                 {
-                                    ids.map((user) => (
-                                        <option key={user.idUsuario} value={user.descNome}>{teste(user.idUsuario)}</option>
+                                    
+                                    usuarios.map((user) => (
+                                        <option key={user.codUsuario} value={user.codUsuario}>{/* teste(user.idUsuario) */user.descNome}</option>
                                     ))
                                 }
                             </select>
