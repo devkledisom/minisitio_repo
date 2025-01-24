@@ -1164,11 +1164,11 @@ module.exports = {
         const uuid = req.params.id;
 
         try {
-            const resultDesconto = await Descontos.findAll({ where: { idDesconto: uuid } });
+            //const resultDesconto = await Descontos.findAll({ where: { idDesconto: uuid } });
 
-            const apagarUsuario = await Usuarios.destroy({ where: { codUsuario: resultDesconto[0].idUsuario } });
+            //const apagarUsuario = await Usuarios.destroy({ where: { codUsuario: resultDesconto[0].idUsuario } });
 
-            const apagarEspaco = await Anuncio.destroy({ where: { codUsuario: resultDesconto[0].idUsuario } });
+            //const apagarEspaco = await Anuncio.destroy({ where: { codUsuario: resultDesconto[0].idUsuario } });
 
             const resultAnuncio = await Descontos.destroy({ where: { idDesconto: uuid } });
 
