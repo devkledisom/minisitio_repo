@@ -85,7 +85,7 @@ router.get('/api/admin/desconto/aplicar/:id', Admin.aplicarDesconto);
 router.get('/api/admin/desconto/read/all', Admin.buscarAllId);
 router.get('/api/admin/desconto/usuario/buscar/:id', Admin.buscarUsuarioId);
 router.get('/api/admin/desconto/ddd/:id', Admin.buscarDDD);
-router.post('/api/admin/desconto/export', auth, Admin.exportID);
+router.post('/api/admin/desconto/export', Admin.exportID);
 
 /* router.get('/admin/desconto/read', Admin.listarIds);
 router.get('/admin/desconto/edit/:id', Admin.listarUserId);

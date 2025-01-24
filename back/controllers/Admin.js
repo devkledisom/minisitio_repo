@@ -1194,12 +1194,16 @@ module.exports = {
 
         const resultUser = await Usuarios.findAll({
             where: {
-                [Op.or]: [
-                    { descNome: { [Op.like]: `%${nu_hash}%` } }
+                [Op.and]: [
+                    { descNome: { [Op.like]: `%${nu_hash}%` } },
+                    {codTipoUsuario: 2}
                 ]
 
-            }
+            },
+            attributes: ['codUsuario']
         });
+
+        //console.log(resultUser)
 
         if (resultUser[0]) {
             //Descontos
@@ -4410,7 +4414,7 @@ module.exports = {
             }
         });
 
-        console.log("dasfjdsfshdljh", codigoDeDesconto[0].hash)
+        ///console.log("dasfjdsfshdljh", codigoDeDesconto[0].hash)
 
         try {
             //Atividades
