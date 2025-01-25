@@ -1482,14 +1482,87 @@ module.exports = {
     },
     //ESPACOS
     listaTeste: async (req, res) => {
+
+
+     /*    const PAGE_SIZE = 100; // Quantidade de registros por lote
+
+        //async function streamDataByBatch(req, res) {
+            try {
+                if (!req.params.uf || !req.params.caderno) {
+                    return res.status(400).send('Parâmetros inválidos');
+                }
+        
+                let offset = 0;
+                let hasMore = true;
+        
+                // Configuração inicial da resposta
+                res.setHeader('Content-Type', 'application/json');
+                res.write('[');
+                let isFirst = true;
+        
+                while (hasMore) {
+                    const query = `
+                        SELECT 
+                            codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, 
+                            COUNT(codAtividade) AS quantidade
+                        FROM anuncio
+                        WHERE codUf = ?
+                          AND codCaderno = ?
+                        GROUP BY codAtividade
+                        ORDER BY codAtividade ASC
+                        LIMIT ? OFFSET ?;
+                    `;
+        
+                    const results = await database.query(query, {
+                        replacements: [req.params.uf, req.params.caderno, PAGE_SIZE, offset],
+                        type: Sequelize.QueryTypes.SELECT,
+                    });
+        
+                    if (results.length === 0) {
+                        hasMore = false; // Se não houver mais registros, terminar o loop
+                        break;
+                    }
+        
+                    results.forEach((row) => {
+                        if (!isFirst) res.write(',');
+                        res.write(JSON.stringify(row));
+                        isFirst = false;
+                    });
+        
+                    offset += PAGE_SIZE; // Ir para o próximo lote
+                }
+        
+                res.write(']');
+                res.end();
+            } catch (error) {
+                console.error('Erro ao processar os dados:', error);
+                res.status(500).send('Erro interno do servidor');
+            } */
+       // }
+        
+
+        //return;
+
+    /*     const allPerfil = await Anuncio.findAndCountAll({
+            where: {
+                codCaderno: 'curitiba',
+                codUf: 'PR'
+            },
+            attributes: ['codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio']
+        });
+
+        console.log('kledisom', allPerfil.rows)
+        res.json({success: true, data: allPerfil.rows})
+        return; */
+
         const mysql = require('mysql2'); // Substitua por 'pg' se usar PostgreSQL
         const query = `
         SELECT 
-            codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, 
+            codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, page,
             COUNT(codAtividade) AS quantidade
         FROM anuncio
-        WHERE codUf = '${req.params.uf}'
-          AND codCaderno = '${req.params.caderno}'
+        WHERE codUf = ?
+          AND codCaderno = ?
           
         GROUP BY codAtividade
         ORDER BY codAtividade ASC;
@@ -1520,7 +1593,8 @@ module.exports = {
 
             // Iniciar o streaming
             const stream = nativeConnection.query(query, [req.params.uf, req.params.caderno]).stream();
-
+            //const stream = [1,2,3,4,5,6,7,8,9].stream()
+console.log("kledisom", stream)
             // Configurar o cabeçalho da resposta
             res.setHeader('Content-Type', 'application/json');
             res.write('['); // Iniciar o JSON
@@ -2082,7 +2156,7 @@ module.exports = {
         //const offset = (page - 1) * limit;
         const offset = Math.max(0, (page - 1) * limit);
 
-        const [quantidadeGeral, anuncioIdd] = await Promise.all([
+   /*      const [quantidadeGeral, anuncioIdd] = await Promise.all([
             Anuncio.count({
                 where: { codUf: req.params.uf, codCaderno: req.params.caderno },
             }),
@@ -2099,7 +2173,7 @@ module.exports = {
                 : null,
         ]);
 
-        const pageToQuery = req.query.unique == 'false' && anuncioIdd ? anuncioIdd.page : page;
+        const pageToQuery = req.query.unique == 'false' && anuncioIdd ? anuncioIdd.page : page; */
 
         //console.log("daskdaklsdjalkj", anuncioIdd, page, pageToQuery)
 
@@ -2108,7 +2182,7 @@ module.exports = {
                 [Op.and]: [
                     { codUf: req.params.uf },
                     { codCaderno: req.params.caderno },
-                    { page: pageToQuery },
+                    { page: req.query.page },
                 ],
                 /*    codAtividade: {
                        [Op.notIn]: ['ADMINISTRAÇÃO REGIONAL / PREFEITURA', "EMERGÊNCIA", "UTILIDADE PÚBLICA", "HOSPITAIS PÚBLICOS", "CÂMARA DE VEREADORES - CÂMARA DISTRITAL", "SECRETARIA DE TURISMO", "INFORMAÇÕES", "EVENTOS NA CIDADE"]  // Ignorar esse valor
@@ -2120,14 +2194,17 @@ module.exports = {
             attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page'],
         });
 
-        //console.log("daskdaklsdjalkj", anuncioIdd, page, anuncioTeste.rows)
+        const contador = await Anuncio.count({
+            where: { codUf: req.params.uf, codCaderno: req.params.caderno },
+        })
+        //console.log("daskdaklsdjalkj", contador)
 
         res.json({
             success: true,
             teste: anuncioTeste,
             mosaico: 0,
-            qtdaConsulta: quantidadeGeral,
-            paginaLocalizada: pageToQuery,
+            qtdaConsulta: contador,
+            paginaLocalizada: req.query.page,
         });
 
 

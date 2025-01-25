@@ -50,10 +50,11 @@ function Caderno() {
   const page = pegarParam.get('page');
   const book = pegarParam.get('book');
   const id = pegarParam.get('id');
+  const index = pegarParam.get('index');
   const caderno = pegarParam.get('caderno');
   const estado = pegarParam.get('estado');
 
-  const [numberPage, setNumberPage] = useState(1);//6205
+  const [numberPage, setNumberPage] = useState(index);//6205
   const [pageNumberUnique, setPageNumberUnique] = useState(true);
   const [ufs, setUfs] = useState([]);
   const [cadernos, setCadernos] = useState([]);
@@ -69,7 +70,7 @@ function Caderno() {
   async function buscarAtividade() {
     setLoading(true);
     try {
-      const response = await fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}&unique=${unique}`);
+      const response = await fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}&unique=${unique}&index=${index}`);
       const res = await response.json();
       
       if (res.success) {
@@ -81,7 +82,7 @@ function Caderno() {
         setNomeAtividade(res.teste.rows); */
         setbtnNav(true);
         setLoading(false);
-        //console.log(res)
+       
       }
       return res;
     } catch (error) {
@@ -110,7 +111,7 @@ function Caderno() {
 
 //qtdaConsulta
 
-  },[data])
+  },[data, numberPage])
   //console.log("Dados recebidos no onSuccess fora:", data);
 
 
@@ -1003,16 +1004,12 @@ function Caderno() {
 
     setNumberPage(Number(numberPage) + 1);
     setUnique(true);
-    console.log(Number(numberPage) + 1);
-
 
     if (book != undefined && id != undefined) {
       setPageNumberUnique(false);
     }
-    //setNomeAtividade([]);
   }
   function prevPage() {
-    console.log(minisitio.totalPaginas)
     if (numberPage == 1) {
       alert("Você está na primeira página!");
       return;
