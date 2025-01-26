@@ -113,7 +113,7 @@ function Cardlist(props) {
                   <button>
                     <i className="fa fa-star"></i>{/*cadUf[1]*/}
                     <Link
-                      to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&caderno=${props.anuncio.codCaderno}&estado=${cadUf[0]}
+                      to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&index=${props.anuncio.page}&caderno=${props.anuncio.codCaderno}&estado=${cadUf[0]}
 `}
                     >
                       VER MINISITIO

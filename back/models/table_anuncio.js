@@ -507,6 +507,12 @@ const Anuncio = database.define('anuncio', {
         unique: false
     },
 
+    page: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
+    },
+
     dueDate: {
         type: Sequelize.DATE,
         allowNull: true

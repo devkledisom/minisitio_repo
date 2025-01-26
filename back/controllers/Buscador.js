@@ -155,7 +155,7 @@ module.exports = {
         });
 
 
-        console.log('23y4238r934h8r734rhn34: ', anuncios)
+        //console.log('23y4238r934h8r734rhn34: ', anuncios)
 
         /*  if (atividades.length > 0) {
              console.log(atividades[0].id)
