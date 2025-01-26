@@ -23,7 +23,7 @@ function WebcardThumb(props) {
     //console.log(props.codImg)
 
     useEffect(() => {
-        if (props.codImg == 0 || props.codImg == "teste") {
+        if (props.codImg == 0 || props.codImg == "teste" || props.codImg == null) {
             setImgDefault(false);
         } else {
             setImgDefault(`files/${props.codImg}`);
@@ -86,7 +86,14 @@ function WebcardThumb(props) {
          return expirationDate; */
     };
 
-
+    var thumb = (img) => {
+        console.log('kledisom', img)
+        if(img != false && img != 'files/null' && img != 'files/undefined') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     return (
         <div className="WebcardThumb">
@@ -137,11 +144,12 @@ function WebcardThumb(props) {
                     </div>
                 } */}
                     <div className='row p-2'>
+                        
                         {/*  <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={200} /> */}
-                        {(imgDefault != false && imgDefault != null) && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
+                        {thumb(imgDefault) && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
                     </div>
 
-                    {(imgDefault == false && imgDefault == null) &&
+                    {!thumb(imgDefault) &&
                         <div className="conteudo semImagem">
                             <h2 className="nome-empresa text-start">{props.data.descAnuncio}</h2>
                             <h4
