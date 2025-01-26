@@ -3346,8 +3346,13 @@ console.log("kledisom", stream)
                       totalItem: totalItens */
                 }
             });
-            return;
-        };
+            
+        } else {
+            res.json({
+                success: false,
+                message: "não existe perfis publicados para este usuario"
+            });
+        }
 
 
 

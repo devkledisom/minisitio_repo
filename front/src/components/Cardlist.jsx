@@ -43,6 +43,14 @@ function Cardlist(props) {
     return encodedUrl;
   }
 
+  const cardListThumb = (imgName) => {
+    if(imgName !== "teste" && imgName !== "0" && imgName != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
     <div className="Cardlist" key={props.key}>
       {/* {console.log(props.descImagem)} */}
@@ -50,7 +58,7 @@ function Cardlist(props) {
         <div className="row card-list">
           <div className="col-md-2 p-0 thumb">
 
-            {props.codImg !== "teste" && props.codImg !== "0" &&
+            {cardListThumb(props.codImg) &&
               <img
                 src={urlTransform(`${masterPath.url}/files/${props.codImg}`)}
                 alt="Foto"
@@ -59,14 +67,14 @@ function Cardlist(props) {
               />
 
             }
-            {props.codImg == "teste" &&
+            {/* props.codImg == "teste" &&
               <img
                 src="../assets/img/logo.png"
                 alt="Foto"
                 className="h-100 w-100"
-              />
+              /> */
             }
-            {props.codImg == "0" &&
+            {!cardListThumb(props.codImg) &&
               <img
                 src="../assets/img/placeholder.png"
                 alt="Foto"

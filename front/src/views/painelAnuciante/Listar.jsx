@@ -117,16 +117,17 @@ function Listar(props) {
         fetch(`${masterPath.url}/admin/anuncio/public/?search=${cpf}`)
             .then((x) => x.json())
             .then((res) => {
-                //console.log(res)
+                console.log(res)
                 if (res.success) {
                     setAnuncios(res.message.anuncios);
                     props.setAnunciosPainel(res.message.anuncios)
                     setShowSpinner(false);
                     setDadoPaginacao(res.message)
-                    //console.log("usussss", res.message.anuncios);
+                    console.log("usussss", res.message.anuncios);
                 } else {
-                    //alert("Anúncio não encontrado na base de dados");
+                    alert("Perfil não encontrado na base de dados");
                     setShowSpinner(false);
+                    sair();
                 }
 
             })
