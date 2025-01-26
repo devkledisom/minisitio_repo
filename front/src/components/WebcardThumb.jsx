@@ -138,10 +138,10 @@ function WebcardThumb(props) {
                 } */}
                     <div className='row p-2'>
                         {/*  <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={200} /> */}
-                        {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
+                        {(imgDefault != false && imgDefault != null) && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
                     </div>
 
-                    {imgDefault == false &&
+                    {(imgDefault == false && imgDefault == null) &&
                         <div className="conteudo semImagem">
                             <h2 className="nome-empresa text-start">{props.data.descAnuncio}</h2>
                             <h4
