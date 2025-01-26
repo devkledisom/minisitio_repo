@@ -109,31 +109,31 @@ function Editar(props) {
         console.log(err)
       })
 
- /*    fetch(`${masterPath.url}/cadernos`)
+   fetch(`${masterPath.url}/cadernos`)
       .then((x) => x.json())
       .then((res) => {
         setCaderno(res);
         //console.log(res)
-      }); */
-/*     fetch(`${masterPath.url}/ufs`)
+      }); 
+    fetch(`${masterPath.url}/ufs`)
       .then((x) => x.json())
       .then((res) => {
         setUfs(res);
         //console.log(res)
-      }); */
+      }); 
     fetch(`${masterPath.url}/pa`)
       .then((x) => x.json())
       .then((res) => {
         setCodUser(res.message + 1);
         //console.log(res.message + 1)
       });
-/*     fetch(`${masterPath.url}/atividade/:codAtividade`)
+    fetch(`${masterPath.url}/atividade/:codAtividade`)
       .then((x) => x.json())
       .then((res) => {
         setAtividades(res);
         //console.log(res)
         //decodificar()
-      }); */
+      }); 
   }, []);
 
 
