@@ -46,7 +46,7 @@ function Metadados(props) {
                     <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/facebook.png" />
                         <h4>
-                            <a href="" data-toggle="tooltip" title="Facebook">
+                            <a href={props.data.descFacebook !== "teste" ? props.data.descFacebook : ""} data-toggle="tooltip" title="Facebook">
                             {props.data.descFacebook !== "teste" ? props.data.descFacebook : ""}
                             </a>
                         </h4>
@@ -54,7 +54,7 @@ function Metadados(props) {
                     <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/instagram.png" />
                         <h4>
-                            <a href="" data-toggle="tooltip" title="Instagram">
+                            <a href={props.data.descInsta !== "0" ? props.data.descInsta : ""} data-toggle="tooltip" title="Instagram">
                             {props.data.descInsta !== "0" ? props.data.descInsta : ""}
                             </a>
                         </h4>
@@ -78,7 +78,7 @@ function Metadados(props) {
                     <div className="col-md-12 ">
                         <img src="../assets/img/teste/whatsapp.png" />
                         <h4>
-                            <a href={`https://api.whatsapp.com/send?1=pt_BR&amp;phone=55${props.data.descWhatsApp}`} target="_blank" data-toggle="tooltip" title="WhatsApp">
+                            <a href={`https://api.whatsapp.com/send?phone=55${props.data.descWhatsApp}`} target="_blank" data-toggle="tooltip" title="WhatsApp">
                                 {props.data.descWhatsApp !== "0" ? props.data.descWhatsApp : "(xx) xxxxx-xxxx"}
                             </a>
                         </h4>

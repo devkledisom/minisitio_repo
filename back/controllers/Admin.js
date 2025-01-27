@@ -1647,7 +1647,8 @@ module.exports = {
         // Consulta para recuperar apenas os itens da página atual
         const anuncio = await Anuncio.findAndCountAll({
             order: [
-                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                ['activate', 'ASC'],
                 ['createdAt', 'DESC'],
                 ['codDuplicado', 'ASC'],
             ],
@@ -1668,7 +1669,7 @@ module.exports = {
                 'dueDate',
                 'codDesconto',
                 'codAtividade',
-                'periodo'
+                'periodo' 
             ]
         });
 
