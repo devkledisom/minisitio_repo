@@ -1484,76 +1484,76 @@ module.exports = {
     listaTeste: async (req, res) => {
 
 
-     /*    const PAGE_SIZE = 100; // Quantidade de registros por lote
+        /*    const PAGE_SIZE = 100; // Quantidade de registros por lote
+   
+           //async function streamDataByBatch(req, res) {
+               try {
+                   if (!req.params.uf || !req.params.caderno) {
+                       return res.status(400).send('Parâmetros inválidos');
+                   }
+           
+                   let offset = 0;
+                   let hasMore = true;
+           
+                   // Configuração inicial da resposta
+                   res.setHeader('Content-Type', 'application/json');
+                   res.write('[');
+                   let isFirst = true;
+           
+                   while (hasMore) {
+                       const query = `
+                           SELECT 
+                               codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, 
+                               COUNT(codAtividade) AS quantidade
+                           FROM anuncio
+                           WHERE codUf = ?
+                             AND codCaderno = ?
+                           GROUP BY codAtividade
+                           ORDER BY codAtividade ASC
+                           LIMIT ? OFFSET ?;
+                       `;
+           
+                       const results = await database.query(query, {
+                           replacements: [req.params.uf, req.params.caderno, PAGE_SIZE, offset],
+                           type: Sequelize.QueryTypes.SELECT,
+                       });
+           
+                       if (results.length === 0) {
+                           hasMore = false; // Se não houver mais registros, terminar o loop
+                           break;
+                       }
+           
+                       results.forEach((row) => {
+                           if (!isFirst) res.write(',');
+                           res.write(JSON.stringify(row));
+                           isFirst = false;
+                       });
+           
+                       offset += PAGE_SIZE; // Ir para o próximo lote
+                   }
+           
+                   res.write(']');
+                   res.end();
+               } catch (error) {
+                   console.error('Erro ao processar os dados:', error);
+                   res.status(500).send('Erro interno do servidor');
+               } */
+        // }
 
-        //async function streamDataByBatch(req, res) {
-            try {
-                if (!req.params.uf || !req.params.caderno) {
-                    return res.status(400).send('Parâmetros inválidos');
-                }
-        
-                let offset = 0;
-                let hasMore = true;
-        
-                // Configuração inicial da resposta
-                res.setHeader('Content-Type', 'application/json');
-                res.write('[');
-                let isFirst = true;
-        
-                while (hasMore) {
-                    const query = `
-                        SELECT 
-                            codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, 
-                            COUNT(codAtividade) AS quantidade
-                        FROM anuncio
-                        WHERE codUf = ?
-                          AND codCaderno = ?
-                        GROUP BY codAtividade
-                        ORDER BY codAtividade ASC
-                        LIMIT ? OFFSET ?;
-                    `;
-        
-                    const results = await database.query(query, {
-                        replacements: [req.params.uf, req.params.caderno, PAGE_SIZE, offset],
-                        type: Sequelize.QueryTypes.SELECT,
-                    });
-        
-                    if (results.length === 0) {
-                        hasMore = false; // Se não houver mais registros, terminar o loop
-                        break;
-                    }
-        
-                    results.forEach((row) => {
-                        if (!isFirst) res.write(',');
-                        res.write(JSON.stringify(row));
-                        isFirst = false;
-                    });
-        
-                    offset += PAGE_SIZE; // Ir para o próximo lote
-                }
-        
-                res.write(']');
-                res.end();
-            } catch (error) {
-                console.error('Erro ao processar os dados:', error);
-                res.status(500).send('Erro interno do servidor');
-            } */
-       // }
-        
 
         //return;
 
-    /*     const allPerfil = await Anuncio.findAndCountAll({
-            where: {
-                codCaderno: 'curitiba',
-                codUf: 'PR'
-            },
-            attributes: ['codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio']
-        });
-
-        console.log('kledisom', allPerfil.rows)
-        res.json({success: true, data: allPerfil.rows})
-        return; */
+        /*     const allPerfil = await Anuncio.findAndCountAll({
+                where: {
+                    codCaderno: 'curitiba',
+                    codUf: 'PR'
+                },
+                attributes: ['codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio']
+            });
+    
+            console.log('kledisom', allPerfil.rows)
+            res.json({success: true, data: allPerfil.rows})
+            return; */
 
         const mysql = require('mysql2'); // Substitua por 'pg' se usar PostgreSQL
         const query = `
@@ -1594,7 +1594,7 @@ module.exports = {
             // Iniciar o streaming
             const stream = nativeConnection.query(query, [req.params.uf, req.params.caderno]).stream();
             //const stream = [1,2,3,4,5,6,7,8,9].stream()
-console.log("kledisom", stream)
+            console.log("kledisom", stream)
             // Configurar o cabeçalho da resposta
             res.setHeader('Content-Type', 'application/json');
             res.write('['); // Iniciar o JSON
@@ -1647,7 +1647,7 @@ console.log("kledisom", stream)
         // Consulta para recuperar apenas os itens da página atual
         const anuncio = await Anuncio.findAndCountAll({
             order: [
-                //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                [Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
                 ['createdAt', 'DESC'],
                 ['codDuplicado', 'ASC'],
             ],
@@ -2156,24 +2156,24 @@ console.log("kledisom", stream)
         //const offset = (page - 1) * limit;
         const offset = Math.max(0, (page - 1) * limit);
 
-   /*      const [quantidadeGeral, anuncioIdd] = await Promise.all([
-            Anuncio.count({
-                where: { codUf: req.params.uf, codCaderno: req.params.caderno },
-            }),
-            req.query.unique == 'false'
-                ? Anuncio.findOne({
-                    where: {
-                        codUf: req.params.uf,
-                        codCaderno: req.params.caderno,
-                        codAnuncio: req.query.idd,
-                    },
-                    attributes: ['page'],
-                    raw: true,
-                })
-                : null,
-        ]);
-
-        const pageToQuery = req.query.unique == 'false' && anuncioIdd ? anuncioIdd.page : page; */
+        /*      const [quantidadeGeral, anuncioIdd] = await Promise.all([
+                 Anuncio.count({
+                     where: { codUf: req.params.uf, codCaderno: req.params.caderno },
+                 }),
+                 req.query.unique == 'false'
+                     ? Anuncio.findOne({
+                         where: {
+                             codUf: req.params.uf,
+                             codCaderno: req.params.caderno,
+                             codAnuncio: req.query.idd,
+                         },
+                         attributes: ['page'],
+                         raw: true,
+                     })
+                     : null,
+             ]);
+     
+             const pageToQuery = req.query.unique == 'false' && anuncioIdd ? anuncioIdd.page : page; */
 
         //console.log("daskdaklsdjalkj", anuncioIdd, page, pageToQuery)
 
@@ -3346,7 +3346,7 @@ console.log("kledisom", stream)
                       totalItem: totalItens */
                 }
             });
-            
+
         } else {
             res.json({
                 success: false,
@@ -4271,28 +4271,28 @@ console.log("kledisom", stream)
                 })
             }
 
-            const query = `UPDATE anuncio
-            JOIN (
-                SELECT codAnuncio, 
-                    CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC) / 10) AS 'page_number'
-                FROM anuncio
-                WHERE codUf = :estado AND codCaderno = :caderno
-            ) AS temp
-            ON anuncio.codAnuncio = temp.codAnuncio
-            SET anuncio.page = temp.page_number
-            WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
-         `;
-         
-        //try {
-            // Executa a query com parâmetros
-            await database.query(query, {
-                replacements: { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno }, // Substitui o parâmetro :estado
-                type: Sequelize.QueryTypes.UPDATE, // Define o tipo de query
-            });
-            console.log(`Reorganização concluída para o estado:`);
-     /*    } catch (error) {
-            console.error(`Erro ao reorganizar anúncios para o estado :`, error);
-        } */
+            console.log(listaAnuncios)
+            if (listaAnuncios) {
+                const query = `UPDATE anuncio
+                JOIN (
+                    SELECT codAnuncio, 
+                        CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
+                    FROM anuncio
+                    WHERE codUf = :estado AND codCaderno = :caderno
+                ) AS temp
+                ON anuncio.codAnuncio = temp.codAnuncio
+                SET anuncio.page = temp.page_number
+                WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
+             `;
+
+                await database.query(query, {
+                    replacements: { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno }, // Substitui o parâmetro :estado
+                    type: Sequelize.QueryTypes.UPDATE, // Define o tipo de query
+                });
+                console.log(`Reorganização concluída para o estado:`);
+            }
+
+
 
             res.json({ success: true, message: listaAnuncios })
         } catch (err) {

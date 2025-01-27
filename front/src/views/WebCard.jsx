@@ -38,8 +38,6 @@ function WebCard() {
                         setMosaicoImg(res.mosaico);
                         //console.log("caderno geral", res);
 
-                    } else {
-
                     }
 
                 })
