@@ -117,7 +117,7 @@ const Espacos = () => {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
             },
         })
             .then((x) => x.json())
