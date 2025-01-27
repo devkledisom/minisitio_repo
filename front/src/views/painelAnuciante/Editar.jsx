@@ -280,7 +280,6 @@ function Editar(props) {
   };
 
   function editID(e) {
-
     aplicarCupom(e);
 
     if (minisitio.codTipoAnuncio == 3 && descontoAtivado == false && e.target.value.length) {
@@ -327,7 +326,7 @@ function Editar(props) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "authorization": 'Bearer ' + masterPath.accessToken
+        "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
     },
       body: JSON.stringify(minisitio)
     };

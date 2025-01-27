@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 function auth(req, res, next) {
   const secretKey = key.apiSecret;
     const authToken = req.headers['authorization'];
-    console.log(authToken)
+    console.log(authToken, req.headers)
 
     if (authToken != undefined) {
 
