@@ -78,7 +78,7 @@ function Caderno(props) {
 
   const teste = useRef(null)
 
-  /* useEffect(() => {
+  useEffect(() => {
     setLoading(true);
     document.querySelector('.caderno').style.filter = "blur(3px)";
 
@@ -97,7 +97,7 @@ function Caderno(props) {
 
       }) 
 
-  }, []); */
+  }, []);
 
   /*
   * capa01 = ADMINISTRAÇÃO REGIONAL / PREFEITURA
