@@ -78,7 +78,7 @@ function Caderno(props) {
 
   const teste = useRef(null)
 
-  useEffect(() => {
+  /* useEffect(() => {
     setLoading(true);
     document.querySelector('.caderno').style.filter = "blur(3px)";
 
@@ -97,7 +97,7 @@ function Caderno(props) {
 
       }) 
 
-  }, []);
+  }, []); */
 
   /*
   * capa01 = ADMINISTRAÇÃO REGIONAL / PREFEITURA
@@ -145,7 +145,7 @@ function Caderno(props) {
     .then((x) => x.json())
     .then((res) => {
       console.log(res);
-      setClassificados(res);
+      setClassificados(res.data);
       setLoading(false);
       document.querySelector('.caderno').style.filter = "none";
     })  
@@ -247,7 +247,7 @@ function Caderno(props) {
                 </li>
                 <li className="classificado">
                   <ul className="list-unstyled">
-                    {/* {console.log(classificados)} */}
+                     {console.log(classificados)} 
                     {classificados.map(item => (
                       /* "/caderno/maceio/ziiz_569885_27" */
                       capas.includes(item.codAtividade) ?

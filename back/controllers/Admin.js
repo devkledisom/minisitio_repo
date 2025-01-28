@@ -1543,17 +1543,34 @@ module.exports = {
 
         //return;
 
-        /*     const allPerfil = await Anuncio.findAndCountAll({
+      /*        const allPerfil = await Anuncio.findAndCountAll({
                 where: {
                     codCaderno: 'curitiba',
                     codUf: 'PR'
                 },
                 attributes: ['codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio']
-            });
+            }); */
+
+            const allPerfil = await database.query(
+                `
+                SELECT 
+                    codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, page,
+                    COUNT(codAtividade) AS quantidade
+                FROM anuncio
+                WHERE codUf = :codUf
+                  AND codCaderno = :codCaderno
+                GROUP BY codAtividade
+                ORDER BY codAtividade ASC;
+                `,
+                {
+                    replacements: { codUf: req.params.uf, codCaderno: req.params.caderno }, // Substitua por variáveis dinâmicas, req.params.caderno
+                    type: Sequelize.QueryTypes.SELECT
+                }
+            );
     
-            console.log('kledisom', allPerfil.rows)
-            res.json({success: true, data: allPerfil.rows})
-            return; */
+            console.log('kledisom', allPerfil, "kledisom")
+            res.json({success: true, data: allPerfil})
+            return; 
 
         const mysql = require('mysql2'); // Substitua por 'pg' se usar PostgreSQL
         const query = `
@@ -1692,15 +1709,6 @@ module.exports = {
        */
         try {
             await Promise.all(anuncio.rows.map(async (anun, i) => {
-                /*  const cader = await anun.getCaderno();
-                 anun.codCaderno = cader ? cader.nomeCaderno : "não registrado"; */
-
-                //const estado = await anun.getUf();
-                //anun.codUf = estado.sigla_uf;
-
-                /*   const desconto = await anun.getDesconto();
-                  anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999"; */
-
                 const user = await anun.getUsuario();
                 //console.log("adjasldj",user)
                 if (user) {
@@ -1711,11 +1719,6 @@ module.exports = {
                     anun.dataValues.loginContato = user.descTelefone;
                 }
 
-
-                /* const atividades = await anun.getAtividade();
-                anun.dataValues.mainAtividade = atividades.atividade
- */
-                //console.log(anuncio.rows[i])
             }));
 
             res.json({
