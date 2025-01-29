@@ -210,6 +210,7 @@ function Caderno(props) {
   }
 
   const selectCapa = (capa) => {
+    console.log(pathImg)
     let result = pathImg.find((item) => item.codAtividade == capa);
 
     if(!result) return null;
@@ -278,7 +279,7 @@ function Caderno(props) {
                   </ul>
                 </li>
                  <CardClassificado title={"UTILIDADE PÚBLICA"} pathImg={capa06} data={selectCapa("UTILIDADE PÚBLICA")} />
-                <CardClassificado title={"CÂMARA DE VEREADORES/CÂMARA DISTRITAL"} pathImg={capa07} data={selectCapa("CÂMARA DE VEREADORES/CÂMARA DISTRITAL")} />
+                <CardClassificado title={"CÂMARA DE VEREADORES/CÂMARA DISTRITAL"} pathImg={capa07} data={selectCapa("CÂMARA DE VEREADORES - CÂMARA DISTRITAL")} />
                 <CardClassificado title={"INFORMAÇÕES"} pathImg={capa08} data={selectCapa("INFORMAÇÕES")} />
               </ul>
               <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled teste">
