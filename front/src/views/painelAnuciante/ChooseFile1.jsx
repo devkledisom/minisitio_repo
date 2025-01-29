@@ -91,8 +91,7 @@ function UploadImage(props) {
     });
 
     if (props.preview == true) {
-      document.querySelector('.semImagem').style.display = 'block';
-      document.querySelector('.comImagem').style.display = 'none';
+     /*      */
     } else {
       setImagem(false);
       setMostrarLabel(true);

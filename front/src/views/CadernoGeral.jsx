@@ -209,6 +209,15 @@ function Caderno(props) {
       }
   }
 
+  const selectCapa = (capa) => {
+    let result = pathImg.find((item) => item.codAtividade == capa);
+
+    if(!result) return null;
+
+    return result;
+  }
+  
+
   return (
     <div className="App caderno-geral">
 
@@ -268,16 +277,16 @@ function Caderno(props) {
                     ))}
                   </ul>
                 </li>
-                <CardClassificado title={"UTILIDADE PÚBLICA"} pathImg={capa06} data={pathImg[5]} />
-                <CardClassificado title={"CÂMARA DE VEREADORES/CÂMARA DISTRITAL"} pathImg={capa07} data={pathImg[6]} />
-                <CardClassificado title={"INFORMAÇÕES"} pathImg={capa08} data={pathImg[7]} />
+                 <CardClassificado title={"UTILIDADE PÚBLICA"} pathImg={capa06} data={selectCapa("UTILIDADE PÚBLICA")} />
+                <CardClassificado title={"CÂMARA DE VEREADORES/CÂMARA DISTRITAL"} pathImg={capa07} data={selectCapa("CÂMARA DE VEREADORES/CÂMARA DISTRITAL")} />
+                <CardClassificado title={"INFORMAÇÕES"} pathImg={capa08} data={selectCapa("INFORMAÇÕES")} />
               </ul>
               <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled teste">
-                <CardClassificado title={"ADMINISTRAÇÃO REGIONAL / PREFEITURA"} pathImg={capa01} data={pathImg[0]} />
-                <CardClassificado title={"EMERGÊNCIA"} pathImg={capa02} data={pathImg[1]} />
-                <CardClassificado title={"HOSPITAIS PÚBLICOS"} pathImg={capa03} data={pathImg[2]} />
-                <CardClassificado title={"SECRETARIA DE TURISMO"} pathImg={capa04} data={pathImg[3]} />
-                <CardClassificado title={"EVENTOS NA CIDADE"} pathImg={capa05} data={pathImg[4]} />
+                <CardClassificado title={"ADMINISTRAÇÃO REGIONAL / PREFEITURA"} pathImg={capa01} data={selectCapa("ADMINISTRAÇÃO REGIONAL / PREFEITURA")} />
+                <CardClassificado title={"EMERGÊNCIA"} pathImg={capa02} data={selectCapa("EMERGÊNCIA")} />
+                <CardClassificado title={"HOSPITAIS PÚBLICOS"} pathImg={capa03} data={selectCapa("HOSPITAIS PÚBLICOS")} />
+                <CardClassificado title={"SECRETARIA DE TURISMO"} pathImg={capa04} data={selectCapa("SECRETARIA DE TURISMO")} />
+                <CardClassificado title={"EVENTOS NA CIDADE"} pathImg={capa05} data={selectCapa("EVENTOS NA CIDADE")} /> 
               </ul>
 
             </div>

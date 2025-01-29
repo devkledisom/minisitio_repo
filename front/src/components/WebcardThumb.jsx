@@ -87,7 +87,6 @@ function WebcardThumb(props) {
     };
 
     var thumb = (img) => {
-        console.log('kledisom', img)
         if(img != false && img != 'files/null' && img != 'files/undefined') {
             return true;
         } else {

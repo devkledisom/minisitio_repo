@@ -24,6 +24,7 @@ import MapContainer from './MapContainer';
 import UserActions from './UserActions';
 import Socialmidia from './Socialmidia';
 import SocialShareButtons from './SocialShareButtons';
+import TemplateModalPromo from "../components/Modal/TemplateModalPromo";
 
 
 function FullWebCard(props) {
@@ -163,17 +164,54 @@ function FullWebCard(props) {
                             </h2>
                             <div className='py-3'>
                                 <i className='link-cinza'>
-                                    <img src="../assets/img/link_promocao.png" alt="" width={60} />
+                                    {
+                                        result.logoPromocao != null ?
+                                            <img src="../assets/img/link_promocao.png" data-bs-toggle="modal"
+                                                data-bs-target="#myModal" alt="icone" width={60} /> :
+                                            <img src="../assets/img/link_promocao.png" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)"}} alt="icone" width={60} />
+                                    }
+
                                 </i>
                             </div>
 
                         </div>
+                        <TemplateModalPromo path={result.logoPromocao} validade={result.promocaoData} />
+                        {/* <!-- Trigger the modal with a button --> */}
+                        {/*                        <button
+                            type="button"
+                            class="btn btn-info btn-lg"
+                            data-bs-toggle="modal"
+                            data-bs-target="#myModal">
+                                Open Modal
+                        </button> */}
+
+                        {/*  <!-- Modal --> */}
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog">
+
+                                {/*     <!-- Modal content--> */}
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Modal Header</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Some text in the modal.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                         <div className='border-cinza mb-4'>
                             <h2 className='titulo-cinza'>
                                 CASHBACK
                             </h2>
                             <i className='link-cinza'>
-                                <img src="../assets/img/teste/cashback.jpg" alt="" width={60} />
+                                <img src="../assets/img/teste/cashback.jpg" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)"}} alt="" width={60} />
                             </i>
                         </div>
                         <div className='mb-4'>
@@ -191,7 +229,7 @@ function FullWebCard(props) {
                 </div>
 
                 <div className="row">
-                   {/*  <Socialmidia /> */}
+                    {/*  <Socialmidia /> */}
                     <SocialShareButtons url={fullUrl} />
                 </div>
                 <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ} url={fullUrl} data={result} />

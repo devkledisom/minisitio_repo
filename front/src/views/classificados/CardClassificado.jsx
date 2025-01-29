@@ -3,7 +3,6 @@ import { masterPath } from '../../config/config';
 
 function CardClassificado(props) {
     //prefeitura_maceio_20180302_143719.jpg
-    //console.log("dasd", props)
     return (
         <>
             <li className="titulo titulo-cinza">
@@ -11,13 +10,14 @@ function CardClassificado(props) {
             </li>
 
 
-            {props.pathImg != null && props.pathImg != "teste" && props.pathImg != 0 ? (
+
+            {props.data != null && props.data.descImagem != null && props.data.descImagem != "teste" && props.data.descImagem != 0 ? (
                 <li className="cartao">
                     <div className="conteudo">
                         <a href={`${masterPath.domain}/local/${encodeURIComponent(props.data.descAnuncio)}?id=${props.data.codAnuncio}`} target="_blank"
                             rel="noopener noreferrer">
                             { }
-                            <img src={`${masterPath.url}/files/${props.pathImg}`} alt="Prefeitura" />
+                            <img src={`${masterPath.url}/files/${props.data.descImagem}`} alt={props.data.descAnuncio} />
                         </a>
                     </div>
 
