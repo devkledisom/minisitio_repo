@@ -128,7 +128,7 @@ const FormEdit = () => {
             }).catch((err) => {
                 console.log(err)
             })
-/*         fetch(`${masterPath.url}/admin/usuario/buscar/all`)
+       fetch(`${masterPath.url}/admin/usuario/buscar/all`)
             .then((x) => x.json())
             .then((res) => {
                 setUsuarios(res.usuarios);
@@ -154,7 +154,7 @@ const FormEdit = () => {
                 setAtividades(res);
                 //console.log(res)
                 //decodificar()
-            });*/
+            });
     }, []);
 
 
