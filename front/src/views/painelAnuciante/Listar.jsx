@@ -133,6 +133,30 @@ function Listar(props) {
             })
     };
 
+    function apagarAnuncio(e) {
+        setShowSpinner(true);
+        e.target.parentNode.parentNode.remove();
+
+        fetch(`${masterPath.url}/admin/anuncio/delete/${e.target.title}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
+            },
+        })
+            .then((x) => x.json())
+            .then((res) => {
+                console.log(res)
+                if (res.success) {
+                    setShowSpinner(false);
+                    alert("perfil apagado");
+                    sair()
+                    //document.querySelector(".selecionada").remove();
+                }
+
+            })
+    };
+
     function sair() {
         sessionStorage.removeItem('authTokenMN');
 
@@ -192,7 +216,7 @@ function Listar(props) {
                                                                     <a class="btn btn-xs btn-success" title="Editar" href="/12178481426/criar-anuncio/582210" onClick={(e) => props.btnEdit(e, 2)}>
                                                                         Editar
                                                                     </a>
-                                                                    <a class="btn btn-xs btn-danger" title="Apagar" href="javascript:apagar('/12178481426/apagar-anuncio/582210');">
+                                                                    <a class="btn btn-xs btn-danger" title={item.codAnuncio} code={item.codAnuncio} href="#" onClick={(e) => apagarAnuncio(e)}>
                                                                         Apagar
                                                                     </a>
                                                                 </td>
