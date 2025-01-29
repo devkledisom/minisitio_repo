@@ -210,7 +210,6 @@ function Caderno(props) {
   }
 
   const selectCapa = (capa) => {
-    console.log(pathImg)
     let result = pathImg.find((item) => item.codAtividade == capa);
 
     if(!result) return null;

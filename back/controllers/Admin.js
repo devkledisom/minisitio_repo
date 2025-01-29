@@ -695,7 +695,6 @@ module.exports = {
         res.json(resultCaderno);
     },
     cadernoLegendaUpdate: async (req, res) => {
-        console.log("dasjkhdkljashdfas")
 
         const uf = req.params.uf;
         const caderno = req.params.caderno;
@@ -710,8 +709,7 @@ module.exports = {
                 UF: uf
             }
         });
-        console.log(resultCaderno)
-        res.json(resultCaderno);
+        res.json({success: true, message: resultCaderno});
     },
     //atividades
     listarAtividades: async (req, res) => {

@@ -140,7 +140,7 @@ router.get('/api/cartao-digital', UserActions.cartaoDigital);
 //EMAILS
 router.post('/api/contato', Email.contato);
 router.get('/api/caderno/legenda/:uf/:caderno', Admin.cadernoLegenda);
-router.put('/api/caderno/legenda/:uf/:caderno', auth, Admin.cadernoLegendaUpdate);
+router.put('/api/caderno/legenda/:uf/:caderno', Admin.cadernoLegendaUpdate);
 
 
 //EMAIL FALE COM O DONO

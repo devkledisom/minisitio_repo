@@ -225,7 +225,7 @@ function PainelAdmin() {
                                             <li><a href="#" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 5)}>Legenda</a></li>
                                             <li><a href="#" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 3)}>Dados pessoais</a></li>
                                             <li><a href="/comprar-espaco-minisitio" class="btn cinza btnMenu">Criar anúncio</a></li>
-                                            <li><a href="/12178481426/ver-anuncios" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 1)}>Listar Espaços</a></li>
+                                            <li><a href="/12178481426/ver-anuncios" id="listar" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 1)}>Listar Espaços</a></li>
                                             {/*   <li><a href="/resources/img/galeria-area-do-assinante.zip" class="btn cinza btnMenu">Galeria de imagens</a></li> */}
                                             <li><a href="/login" class="btn cinza btnMenu" onClick={sair}>Sair</a></li>
                                         </ul>

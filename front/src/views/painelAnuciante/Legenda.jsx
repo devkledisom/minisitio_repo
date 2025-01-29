@@ -46,7 +46,7 @@ const DadosPessoais = (props) => {
       .then((x) => x.json())
       .then((res) => {
         setLegenda(res[0].legenda);
-        //console.log(res)
+        console.log(res)
       });
 
     /*   const doc = searchParams.get('cpf');
@@ -154,10 +154,8 @@ const DadosPessoais = (props) => {
         fetch(`${masterPath.url}/caderno/legenda/${uf}/${caderno}`, config)
             .then((x) => x.json())
             .then((res) => {
-             
-         
-                    //alert(res.message);
-                    console.log(res.message)
+
+              document.getElementById('listar').click();
                 
             })
 
