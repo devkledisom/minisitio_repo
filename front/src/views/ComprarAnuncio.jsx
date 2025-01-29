@@ -320,7 +320,7 @@ function ComprarAnuncio({ isAdmin }) {
                     />
                     Completo
                   </label>
-                  {isAdmin &&
+                 {/*  {isAdmin && */}
                     <label className="prefeitura">
                       <input
                         type="radio"
@@ -333,7 +333,7 @@ function ComprarAnuncio({ isAdmin }) {
                       />
                       Prefeitura
                     </label>
-                  }
+                 
                 </div>
               </div>
             </div>

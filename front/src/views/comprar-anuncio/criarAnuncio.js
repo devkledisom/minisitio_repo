@@ -186,9 +186,9 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                     title: "Perfil Cadastrado",
                     text: "Você será redirecionado para página de login, para efetuar o login use o seu cnpj e a senha defenida no cadastro. Você também receberá as informações do acesso no email cadastrado.",
                     icon: "success",
-                    didOpen: () => {setShowSpinner(false);}
+                    didOpen: () => { setShowSpinner(false); }
                 }).then(res => {
-                    
+                    console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf", descontoAtivado, radioCheck)
                     if (res.isConfirmed) {
                         if (isAdmin) {
                             console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf")
@@ -202,23 +202,27 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                 window.open(`https://mpago.la/1pWzL7A`, '_blank');
                                 console.log("3");
                             }
-    
+
                             return;
-    
+
                         } else {
                             console.log("segundo dasdfaskhjfsdafhjasdbfnjaksdf")
-                        if (descontoAtivado && radioCheck == 3) {
-                            window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-                            console.log("1");
-                        } else if (radioCheck == 1) {
-                            window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-                            console.log("2");
-                        } else {
-                            window.location.href = `https://mpago.la/1pWzL7A`;
-                            console.log("3");
-                        } 
+
+                            if (descontoAtivado && radioCheck == 4) {
+                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                console.log("1");
+                            } else if (descontoAtivado && radioCheck == 3) {
+                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                console.log("1");
+                            } else if (radioCheck == 1) {
+                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                console.log("2");
+                            } else {
+                                window.location.href = `https://mpago.la/1pWzL7A`;
+                                console.log("3");
+                            }
                         }
-    
+
                     }
 
                 });
