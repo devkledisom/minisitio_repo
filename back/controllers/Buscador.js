@@ -113,7 +113,7 @@ module.exports = {
                             { descCPFCNPJ: atividade },
                             {
                                 tags: {
-                                    [Op.like]: `${atividade}%`
+                                    [Op.like]: `%${atividade}%`
                                 }
                             }
                         ]
@@ -161,14 +161,14 @@ module.exports = {
              console.log(atividades[0].id)
          }; */
 
-        const anuncio = anuncios.filter((item) => {
+  /*       const anuncio = anuncios.filter((item) => {
             //var verificarCodAtividade = (atividades.length == 0) ? null : atividades[0].id;
             return item.descAnuncio == atividade ||
                 item.descTelefone == atividade ||
                 item.descCPFCNPJ == atividade ||
                 item.codAtividade == atividade;
         })
-
+ */
         console.log(anuncios)
 
         res.json(anuncios);
