@@ -90,7 +90,6 @@ function Caderno(props) {
           //setClassificados(res.data);
           setPathImg(res.teste.rows);
           setMosaicoImg(res.mosaico);
-          console.log("caderno geral", res);
           //setLoading(false);
           //document.querySelector('.caderno').style.filter = "none";
         }
@@ -144,7 +143,6 @@ function Caderno(props) {
    fetch(`${masterPath.url}/admin/lista/test/${caderno}/${estado}`)
     .then((x) => x.json())
     .then((res) => {
-      console.log(res);
       setClassificados(res.data);
       setLoading(false);
       document.querySelector('.caderno').style.filter = "none";
@@ -250,13 +248,12 @@ function Caderno(props) {
 
 
             <div className="row lista">
-              <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled">
+              <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled sumario">
                 <li className="titulo">
                   <h2>Sumário do classificado</h2>
                 </li>
                 <li className="classificado">
                   <ul className="list-unstyled">
-                     {console.log(classificados)} 
                     {classificados.map(item => (
                       /* "/caderno/maceio/ziiz_569885_27" */
                       capas.includes(item.codAtividade) ?
