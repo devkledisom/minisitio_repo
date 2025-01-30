@@ -47,6 +47,11 @@ function Resultados() {
 
         }
 
+        if(capas.includes(result[0].codAtividade)) {
+            navigate(`/caderno-geral/${encodeURIComponent(result[0].codCaderno)}/${cadernoUf}`);
+        } 
+
+
     }, [])
 
     var cidade = document.querySelector('#codUf3');

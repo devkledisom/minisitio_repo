@@ -34,7 +34,7 @@ const TemplateModalPromo = (props) => {
 
      {/*  <!-- Modal body --> */}
       <div className="modal-body">
-        <img src={`${masterPath.url}/files/${props.path}`} className='w-100' alt="promoção" />       
+        <img src={`${masterPath.url}/files/2/${props.path}`} className='w-100' alt="promoção" />       
       </div>
       <span>Validade da promoção: {moment(props.validade).format("DD/MM/YYYY")}</span>
 

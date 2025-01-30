@@ -2186,9 +2186,9 @@ module.exports = {
                     { codCaderno: req.params.caderno },
                     { page: req.query.page },
                 ],
-                /*    codAtividade: {
+                    codAtividade: {
                        [Op.notIn]: ['ADMINISTRAÇÃO REGIONAL / PREFEITURA', "EMERGÊNCIA", "UTILIDADE PÚBLICA", "HOSPITAIS PÚBLICOS", "CÂMARA DE VEREADORES - CÂMARA DISTRITAL", "SECRETARIA DE TURISMO", "INFORMAÇÕES", "EVENTOS NA CIDADE"]  // Ignorar esse valor
-                   }, */
+                   },
             },
             order: [['codAtividade', 'ASC']],
             /*  limit,
