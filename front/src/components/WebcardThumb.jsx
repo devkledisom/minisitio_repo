@@ -93,26 +93,34 @@ function WebcardThumb(props) {
             return false;
         }
     }
+    var partner = (img) => {
+        console.log(img)
+        if(img != false && img != 'null' && img != 'undefined') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     return (
         <div className="WebcardThumb">
 
             <div className='container my-2 p-0' >
                 <div className='cartao'>
-                {listaIds.descricao != "valor padrao" && listaIds.descImagem != "" &&
+                {listaIds.descricao != "valor padrao" && listaIds.descImagem != "" && listaIds.descImagem != "null" &&
                     <div className="apoio">
                         <div>
-                            {listaIds.descImagem != "" &&
+                            {partner(listaIds.descImagem) &&
                                 <a href={listaIds.descLink} target="_blank" rel="noopener noreferrer">
                                     <img src={`${masterPath.url}/files/${listaIds.descImagem}`} alt="" />
                                 </a>
                             }
-                            {listaIds.descImagem2 != "" &&
+                            {partner(listaIds.descImagem2) != "" &&
                                 <a href={listaIds.descLink2} target="_blank" rel="noopener noreferrer">
                                     <img src={`${masterPath.url}/files/${listaIds.descImagem2}`} alt="" />
                                 </a>
                             }
-                            {listaIds.descImagem3 != "" &&
+                            {partner(listaIds.descImagem3) != "" &&
                                 <a href={listaIds.descLink3} target="_blank" rel="noopener noreferrer">
                                     <img src={`${masterPath.url}/files/${listaIds.descImagem3}`} alt="" />
                                 </a>
