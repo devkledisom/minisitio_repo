@@ -334,6 +334,12 @@ const Anuncio = database.define('anuncio', {
         unique: false
     },
 
+    linkPromo: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
+    },
+
     promocaoData: {
         type: Sequelize.TEXT,
         allowNull: true,

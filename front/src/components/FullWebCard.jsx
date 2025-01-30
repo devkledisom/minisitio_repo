@@ -56,6 +56,17 @@ function FullWebCard(props) {
 
     const fullUrl = window.location.href;
 
+    const promoChange = (param) => {
+        console.log(param)
+        if(!param) return false;
+
+        if(param.includes("http")) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     return (
         <div className="FullWebCard">
             <div className="container">
@@ -165,10 +176,15 @@ function FullWebCard(props) {
                             <div className='py-3'>
                                 <i className='link-cinza'>
                                     {
-                                        result.logoPromocao != null ?
+                                        promoChange(result.linkPromo) && <a href={result.linkPromo}><img src="../assets/img/link_promocao.png" alt="icone" width={60} /></a>
+                                    }
+                                    {
+                                        !promoChange(result.linkPromo) ?
+                                        (result.logoPromocao != null && !promoChange(result.linkPromo)) ?
                                             <img src="../assets/img/link_promocao.png" data-bs-toggle="modal"
                                                 data-bs-target="#myModal" alt="icone" width={60} /> :
                                             <img src="../assets/img/link_promocao.png" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)"}} alt="icone" width={60} />
+                                            : null
                                     }
 
                                 </i>

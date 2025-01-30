@@ -109,18 +109,18 @@ function Editar(props) {
         console.log(err)
       })
 
-   fetch(`${masterPath.url}/cadernos`)
+    fetch(`${masterPath.url}/cadernos`)
       .then((x) => x.json())
       .then((res) => {
         setCaderno(res);
         //console.log(res)
-      }); 
+      });
     fetch(`${masterPath.url}/ufs`)
       .then((x) => x.json())
       .then((res) => {
         setUfs(res);
         //console.log(res)
-      }); 
+      });
     fetch(`${masterPath.url}/pa`)
       .then((x) => x.json())
       .then((res) => {
@@ -133,7 +133,7 @@ function Editar(props) {
         setAtividades(res);
         //console.log(res)
         //decodificar()
-      }); 
+      });
   }, []);
 
 
@@ -327,7 +327,7 @@ function Editar(props) {
       headers: {
         "Content-Type": "application/json",
         "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
-    },
+      },
       body: JSON.stringify(minisitio)
     };
 
@@ -656,6 +656,20 @@ function Editar(props) {
 
               }
 
+              <p style={{fontSize: '12px'}}>*Atenção! escolha a imagem ou o link</p>
+              <div className="input-icon margin-top-10">
+                <i className="fa fa-link"></i>
+                <input
+                  type="text"
+                  name="linkPromo"
+                  id="linkPromo"
+                  className="form-control"
+                  placeholder="Adicione um link promocional"
+                  value={minisitio.linkPromo}
+                  onChange={handleSelectChange}
+                />
+              </div>
+
               <p>Data de validade da promoção:</p>
               <div className="input-icon margin-top-10">
                 <i className="fa fa-calendar"></i>
@@ -696,16 +710,16 @@ function Editar(props) {
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} 
-                 origin={'promocao'}
-                 largura={"w-100 py-4"}
-                 preview={false}
-                 patrocinador={8}
-                 codImg={minisitio.descParceiro}
-                 miniPreview={false}
-                 msg={"Anexar logo da parceria"}
-                 minisitio={minisitio}
-                 data={setMinisitio}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser}
+                origin={'promocao'}
+                largura={"w-100 py-4"}
+                preview={false}
+                patrocinador={8}
+                codImg={minisitio.descParceiro}
+                miniPreview={false}
+                msg={"Anexar logo da parceria"}
+                minisitio={minisitio}
+                data={setMinisitio}
               />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
