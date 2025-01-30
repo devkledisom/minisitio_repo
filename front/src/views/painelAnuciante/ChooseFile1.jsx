@@ -83,15 +83,15 @@ function UploadImage(props) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const limparInputImg = () => {
-
-    props.data({
+console.log(props.minisitio)
+     props.data({
       ...props.minisitio,
       ['descParceiro']: "",
 
     });
 
     if (props.preview == true) {
-     /*      */
+     
     } else {
       setImagem(false);
       setMostrarLabel(true);
