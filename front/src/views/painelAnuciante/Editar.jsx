@@ -748,6 +748,7 @@ function Editar(props) {
                 codImg={minisitio.certificado_logo}
                 miniPreview={false}
                 msg={"Anexar logo do certificado"}
+                minisitio={minisitio}
                 data={setMinisitio} />
               }
               <div className="input-icon margin-top-10">
@@ -780,6 +781,7 @@ function Editar(props) {
                 codImg={minisitio.certificado_imagem}
                 miniPreview={false}
                 msg={"Anexar imagem do certificado"}
+                minisitio={minisitio}
                 data={setMinisitio} />}
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
