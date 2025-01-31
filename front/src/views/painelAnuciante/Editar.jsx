@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { masterPath } from "../../config/config";
 import he from 'he';
@@ -58,7 +58,7 @@ function Editar(props) {
   };
 
   useEffect(() => {
-
+console.log('kledisom')
     let codId = minisitio.hash;
     const formatoValido = /^\d{2}\.\d{4}\.\d{4}$/;
     //console.log(formatoValido.test(codId))
@@ -278,9 +278,13 @@ function Editar(props) {
     handleChange(e);
     executarSelecao();
   };
-
-  function editID(e) {
-    aplicarCupom(e);
+  
+  console.log("dsadas");
+  function editIDP(e) {
+    //aplicarCupom(e);
+/*     alert("dasd")
+    console.log("dsadas", e);
+    return; */
 
     if (minisitio.codTipoAnuncio == 3 && descontoAtivado == false && e.target.value.length) {
       console.log(descontoAtivado, minisitio.codTipoAnuncio);
@@ -295,7 +299,7 @@ function Editar(props) {
     minisitio.certificado_imagem = localStorage.getItem("imgname6");
 
 
-    var validation = false;
+    var validation = true;
     //setShowSpinner(true);
 
     document.querySelectorAll('[name="pwd"]').forEach((item) => {
@@ -335,7 +339,9 @@ function Editar(props) {
       fetch(`${masterPath.url}/admin/anuncio/update?id=${props.espacoId}`, config)
         .then((x) => x.json())
         .then((res) => {
+
           if (res.success) {
+            
             //setShowSpinner(false);
             alert("anuncio Atualizado!");
             if (descontoAtivado == false && minisitio.codTipoAnuncio == 3) {
@@ -345,6 +351,7 @@ function Editar(props) {
 
           } else {
             alert(res.message);
+            console.log(res.message)
           }
         })
     }
@@ -681,7 +688,7 @@ function Editar(props) {
                   placeholder="Digite o vídeo"
                   value={minisitio.promocaoData}
                   onChange={handleSelectChange}
-                />
+                /> 
               </div>
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
@@ -1310,7 +1317,7 @@ function Editar(props) {
                         className="btn-block formulario-de-cadastro btn btn-primary"
                         id="anunciar"
                         /* data-bs-toggle="modal" data-bs-target="#myModal"*/
-                        onClick={editID}
+                        onClick={editIDP}
                       >
                         ATUALIZAR
                       </button>

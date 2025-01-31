@@ -4431,8 +4431,8 @@ module.exports = {
             "descLng": 0,
             "formaPagamento": 0,
             "logoPromocao": logoPromocao,
-            "linkPromo": linkPromo,
-            "promocaoData": promocaoData,
+            "linkPromo": linkPromo || 'null',
+            //"promocaoData": promocaoData,
             "descContrato": 0,
             "descAndroid": descAndroid,
             "descApple": descApple,
@@ -4458,8 +4458,7 @@ module.exports = {
             "descChavePix": descChavePix,
             "periodo": periodo
         };
-
-
+console.log(dadosAnuncio)
 
         try {
             const listaAnuncios = await Anuncio.update(dadosAnuncio, {
@@ -4468,9 +4467,11 @@ module.exports = {
                 }
             });
 
+            
 
-            res.json({ success: true, message: codAtividade })
+            res.json({ success: true, message: listaAnuncios })
         } catch (err) {
+            console.log(err)
             res.json({ success: false, message: err })
         }
     },
