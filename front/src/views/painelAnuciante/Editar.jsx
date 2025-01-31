@@ -747,7 +747,8 @@ function Editar(props) {
                 patrocinador={5}
                 codImg={minisitio.certificado_logo}
                 miniPreview={false}
-                msg={"Anexar logo do certificado"} />
+                msg={"Anexar logo do certificado"}
+                data={setMinisitio} />
               }
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
@@ -778,7 +779,8 @@ function Editar(props) {
                 patrocinador={6}
                 codImg={minisitio.certificado_imagem}
                 miniPreview={false}
-                msg={"Anexar imagem do certificado"} />}
+                msg={"Anexar imagem do certificado"}
+                data={setMinisitio} />}
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
               <h2>CashBack</h2>
