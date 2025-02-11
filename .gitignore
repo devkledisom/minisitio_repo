@@ -1,0 +1,5 @@
+back/config/config.js
+back/config/db.js
+back/config/smtp.js
+**/node_modules
+front/src/config/config.js
