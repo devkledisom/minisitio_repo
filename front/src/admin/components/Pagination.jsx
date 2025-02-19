@@ -38,7 +38,7 @@ const Pagination = ({ totalPages, paginaAtual, totalItem, table, busca }) => {
         <div className='container-fluid'>
             <div className="row px-4">
                 <div className="pagination w-50 p-0 d-flex justify-content-start">
-                    <div>Página {paginaAtual}/{totalPages} (Total: {totalItem})</div>
+                    <div>Página {paginaAtual}/{totalPages} (Total: {parseFloat(totalItem).toLocaleString('pt-BR')})</div>
                 </div>
                 <ul className="pagination p-0 d-flex justify-content-end">
                     <li className="page-item"><a className="page-link" href="#" onClick={() => handlePageChange(Math.max(1, currentPage - 1))}>Anterior</a></li>

@@ -321,8 +321,21 @@ Para 100000 linhas: 312500ms
                 },
                 body: JSON.stringify(anuncios.message.anuncios)
             })
-                .then(x => x.json())
+                .then(x => x.blob())
                 .then(res => {
+                    const url = window.URL.createObjectURL(res);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "planilha.xlsx"; // Define o nome do arquivo
+                    document.body.appendChild(a);
+                    a.click(); // Força o clique para baixar
+                    document.body.removeChild(a); // Remove o elemento depois do clique
+                    window.URL.revokeObjectURL(url); // Libera memória
+
+                    setShowSpinner(false);
+                    setProgressExport(0);
+                    clearInterval(intervalId);
+
                     if (res.success) {
                         //console.log(res);
                         setShowSpinner(false);

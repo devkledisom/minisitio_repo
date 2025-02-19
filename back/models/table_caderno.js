@@ -95,6 +95,21 @@ const Caderno = database.define('caderno', {
     legenda: {
         type: Sequelize.TEXT,
         allowNull: true
+    },
+
+    basico: {
+        type: Sequelize.TEXT,
+        allowNull: true
+    },
+
+    completo: {
+        type: Sequelize.TEXT,
+        allowNull: true
+    },
+
+    total: {
+        type: Sequelize.TEXT,
+        allowNull: true
     }
 },
     {

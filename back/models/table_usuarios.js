@@ -194,6 +194,10 @@ const Usuario = database.define('usuario', {
         {
           name: 'descCPFCNPJ',
           fields: ['descCPFCNPJ'], // O campo para o qual o índice será criado
+        },
+        {
+            name: 'idx_usuario_ordem',
+            fields: ['codCidade', 'dtCadastro', 'descNome']
         }
     ]
 }

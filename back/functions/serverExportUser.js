@@ -23,11 +23,11 @@ module.exports = async function expExcel(dados, res, hrnow, teste1) {
     let rowIndex = 2;
     dados.forEach((record, index) => {
 
-        if ((index + 1) % 5000 === 0) {
+     /*    if ((index + 1) % 5000 === 0) {
             sheetIndex++;
             ws = wb.addWorksheet(`Sheet${sheetIndex}`); // Cria uma nova aba
             rowIndex = 2; // Reseta a contagem de linhas para a nova aba
-        }
+        } */
 
 
         let columnIndex = 1;

@@ -27,7 +27,9 @@ const Users = () => {
     const [caderno, setCaderno] = useState([]);
     const [exportTodos, setExpotTodos] = useState(false);
     const [searchOptioncheck, setSearchOptioncheck] = useState(false);
-     const [progressExport, setProgressExport] = useState(0);
+    const [progressExport, setProgressExport] = useState(0);
+    const [optionSearch, setOptionSearch] = useState([]);
+    const [estadoSelecionado, setEstadoSelecionado] = useState(null);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -77,6 +79,21 @@ const Users = () => {
                         setUfs(res);
                     }) */
     }, [page, param]);
+
+    useEffect(() => {
+        fetch(`${masterPath.url}/ufs`)
+                    .then((x) => x.json())
+                    .then((res) => {
+                        setUfs(res);
+                    })
+
+        fetch(`${masterPath.url}/cadernos`)
+            .then((x) => x.json())
+            .then((res) => {
+                setCaderno(res);
+                console.log(res)
+            })
+    }, []);
 
 
     const navigator = useNavigate();
@@ -203,31 +220,31 @@ const Users = () => {
         const campoPesquisa = document.getElementById('buscar');
         setShowSpinner(true);
 
-                    // Valor máximo em milissegundos
-                    const maxTime = 312500;
+        // Valor máximo em milissegundos
+        const maxTime = 312500;
 
-                    // Atualiza o progresso a cada 10 ms (ajuste conforme necessário)
-                    const interval = 10;
-                    let currentTime = 0;
-        
-                    // Função para calcular e exibir o percentual
-                    const intervalId = setInterval(() => {
-                        currentTime += interval;
-        
-                        // Calcula o percentual
-                        const percent = Math.min((currentTime / maxTime) * 100, 100); // Garante que não ultrapasse 100%
-        
-                       // console.log(`Progresso: ${percent.toFixed(2)}%`);
-                        setProgressExport(percent.toFixed(2));
-                       
-        
-                        // Para quando alcançar o valor máximo
-                        if (currentTime >= maxTime) {
-                            clearInterval(intervalId);
-                            console.log("Requisição concluída.");
-                        }
-                    }, interval);
+        // Atualiza o progresso a cada 10 ms (ajuste conforme necessário)
+        const interval = 10;
+        let currentTime = 0;
 
+        // Função para calcular e exibir o percentual
+        const intervalId = setInterval(() => {
+            currentTime += interval;
+
+            // Calcula o percentual
+            const percent = Math.min((currentTime / maxTime) * 100, 100); // Garante que não ultrapasse 100%
+
+            // console.log(`Progresso: ${percent.toFixed(2)}%`);
+            setProgressExport(percent.toFixed(2));
+
+
+            // Para quando alcançar o valor máximo
+            if (currentTime >= maxTime) {
+                clearInterval(intervalId);
+                console.log("Requisição concluída.");
+            }
+        }, interval);
+        console.log(`${masterPath.url}/admin/usuario/export?exportAll=${exportTodos}&limit=5000&require=${searchOptioncheck}&id=${campoPesquisa.value}`)
         fetch(`${masterPath.url}/admin/usuario/export?exportAll=${exportTodos}&limit=5000&require=${searchOptioncheck}&id=${campoPesquisa.value}`, {
             method: "POST",
             headers: {
@@ -243,10 +260,21 @@ const Users = () => {
                     window.location.reload();
                     return Promise.reject('Sessão expirada');
                 }
-                return x.json();
+                return x.blob();
             })
             .then(res => {
+
+                const url = window.URL.createObjectURL(res);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "planilha.xlsx"; // Define o nome do arquivo
+                document.body.appendChild(a);
+                a.click(); // Força o clique para baixar
+                document.body.removeChild(a); // Remove o elemento depois do clique
+                window.URL.revokeObjectURL(url); // Libera memória
+
                 setProgressExport(0);
+                setShowSpinner(false);
                 if (res.success) {
                     console.log(res);
                     //window.location.href = res.downloadUrl;
@@ -267,6 +295,23 @@ const Users = () => {
             });
     };
 
+    function defineOptionsSearch(param) {
+
+        if(param === "uf") {
+
+            const estados = uf.map(item => item.sigla_uf)
+
+            setSearchOptioncheck('codUf')
+            setOptionSearch(estados)
+            console.log(uf)
+        } else if(param === "caderno") {
+            const cadernos = caderno.map(item => item.UF == estadoSelecionado)
+
+            setSearchOptioncheck('codCidade')
+            setOptionSearch(cadernos)
+        }
+       
+    };
 
     return (
         <div className="users app-users">
@@ -277,7 +322,7 @@ const Users = () => {
 
                 {/* {showSpinner && <Spinner progress={0} />} */}
 
-                {showSpinner && <Spinner progress={progressExport}/>}
+                {showSpinner && <Spinner progress={progressExport} />}
 
                 {showMsgBox && <MsgConfirm
                     title={"Atenção!"}
@@ -299,6 +344,12 @@ const Users = () => {
                             <div className='d-flex flex-column'>
                                 <div className="pull-right d-flex justify-content-center align-items-center">
                                     <input id="buscar" type="text" style={{ "width": "300px" }} placeholder="Nome, Email, CPF/CNPJ, UF, Cidade ou Tipo" />
+                                  {/*   <select name="" id="" style={{ "width": "300px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
+                                        <option>Selecione uma opção</option>
+                                        {optionSearch.map(item => (
+                                            <option value={item}>{item}</option>
+                                        ))}
+                                    </select> */}
                                     <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
                                         <i className="icon-search"></i>
                                     </button>
@@ -317,12 +368,12 @@ const Users = () => {
                                         <input type='radio' name="option" id="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')} />
                                         CNPJ
                                     </label>
-                                    <label htmlFor="uf" onClick={() => setSearchOptioncheck('codUf')}>
-                                        <input type='radio' name="option" id="uf" onClick={() => setSearchOptioncheck('codUf')} />
+                                    <label htmlFor="uf" onClick={() => defineOptionsSearch("uf")}>
+                                        <input type='radio' name="option" id="uf" onClick={() => defineOptionsSearch("uf")} />
                                         UF
                                     </label>
-                                    <label htmlFor="caderno" onClick={() => setSearchOptioncheck('codCidade')}>
-                                        <input type='radio' name="option" id="caderno" onClick={() => setSearchOptioncheck('codCidade')} />
+                                    <label htmlFor="caderno" onClick={() => defineOptionsSearch("caderno")}>
+                                        <input type='radio' name="option" id="caderno" onClick={() => defineOptionsSearch("caderno")} />
                                         CADERNO
                                     </label>
                                     <label htmlFor="tipo" onClick={() => setSearchOptioncheck('codDesconto')}>

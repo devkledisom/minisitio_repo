@@ -39,7 +39,7 @@ const Cadernos = () => {
 
     function buscarPerfisPorCaderno(registros) {
         
-        const arrRegistros = registros.map(item => item.nomeCaderno)
+/*         const arrRegistros = registros.map(item => item.nomeCaderno)
 
         fetch(`${masterPath.url}/admin/cadernos/count/perfis?uf=${registros[0].UF}`, {
             method: 'POST',
@@ -56,7 +56,7 @@ const Cadernos = () => {
                  setCountPerfis(res);
                  setStatusCount(true);
 
-             })  
+             })   */
      }
 
     useEffect(() => {
@@ -259,8 +259,17 @@ const Cadernos = () => {
             },
             body: JSON.stringify(cidadeBusca)
         })
-            .then(x => x.json())
+            .then(x => x.blob())
             .then(res => {
+                const url = window.URL.createObjectURL(res);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "planilha.xlsx"; // Define o nome do arquivo
+                document.body.appendChild(a);
+                a.click(); // Força o clique para baixar
+                document.body.removeChild(a); // Remove o elemento depois do clique
+                window.URL.revokeObjectURL(url); // Libera memória
+                setShowSpinner(false);
                 if (res.success) {
                     setShowSpinner(false);
                     console.log(res);
@@ -286,15 +295,15 @@ const Cadernos = () => {
                             <button type="button" className="btn custom-button" onClick={() => navigator('/admin/cadernos/cadastro')}>Adicionar</button>
                             <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/cadernos/editar?id=${selectId}`)}>Editar</button>
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarCaderno}>Apagar</button>
-                            <select title="selecionarLinhas" name="selecionarLinhas" id="selecionarLinhas"
+                            {/* <select title="selecionarLinhas" name="selecionarLinhas" id="selecionarLinhas"
                                 className="btn btn-success custom-button text-light mx-2"
                                 onChange={slecionarQuantidadeLinhas}>
                                 <option value="10">Ver 10 registros</option>
                                 <option value="50">Ver 50 registros</option>
                                 <option value="100">Ver 100 registros</option>
                                 <option value="5630">Ver todos registros</option>
-                            </select>
-                            <button type="button" className="btn custom-button" onClick={exportExcell}>Exportar</button>
+                            </select> */}
+                            <button type="button" className="btn custom-button mx-2" onClick={exportExcell}>Exportar</button>
                         </div>
                         <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
@@ -320,6 +329,7 @@ const Cadernos = () => {
                                         <th>CEP_FINAL</th>
                                         <th>BÁSICOS</th>
                                         <th>COMPLETOS</th>
+                                        <th>TOTAL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -331,8 +341,11 @@ const Cadernos = () => {
                                             {item.descImagem != '' ? <td key={item.id_uf}>SIM</td> : <td key={item.id_uf}>NÃO</td>}
                                             <td key={item.id_uf}>{item.cep_inicial}</td>
                                             <td key={item.id_uf}>{item.cep_final}</td>
-                                            <td key={item.id_uf}>{statusCount ? countPerfis.find(perfil => perfil.codCaderno == item.nomeCaderno).basico : "Calculando..."}</td>
-                                            <td key={item.id_uf}>{statusCount ? countPerfis.find(perfil => perfil.codCaderno == item.nomeCaderno).completo : "Calculando..."}</td> 
+                                            <td key={item.id_uf}>{item.basico}</td>
+                                            <td key={item.id_uf}>{item.completo}</td>
+                                            <td key={item.id_uf}>{item.total}</td>
+                                           {/*  <td key={item.id_uf}>{statusCount ? countPerfis.find(perfil => perfil.codCaderno == item.nomeCaderno).basico : "Calculando..."}</td>
+                                            <td key={item.id_uf}>{statusCount ? countPerfis.find(perfil => perfil.codCaderno == item.nomeCaderno).completo : "Calculando..."}</td>  */}
                                            {/*   <td key={item.id_uf}>{item.basico}</td>
                                             <td key={item.id_uf}>{item.completo}</td>  */}
                                         </tr>

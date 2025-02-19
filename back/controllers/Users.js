@@ -4,6 +4,7 @@ const DDD = require('../models/table_ddd');
 const Anuncio = require('../models/table_anuncio');
 const Descontos = require('../models/table_desconto');
 const Cadernos = require('../models/table_caderno');
+const Globals = require('../models/table_globals');
 
 //moduls
 const Sequelize = require('sequelize');
@@ -473,18 +474,64 @@ module.exports = {
                 return;
             }
 
+            //busca por caderno
+            if (requisito === "codCidade") {
+                console.time("teste")
+                const resultUser = await Users.findAll({
+                    where: {
+                        [requisito]: { [Op.like]: `${nu_doc}%` }
 
+                    },
+                    //order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+                    attributes: [
+                        //[Sequelize.literal('DISTINCT `descCPFCNPJ`'), 'descCPFCNPJ'],
+                        'codUsuario',
+                        'descCPFCNPJ',
+                        'descNome',
+                        'descEmail',
+                        'senha',
+                        'codTipoUsuario',
+                        'codUf',
+                        'codCidade',
+                        'dtCadastro',
+                        'ativo'
+                    ],
+                    limit: porPagina,
+                    offset: offset,
+                });
+                console.log(resultUser);
+
+                console.timeEnd("teste")
+                console.log("debug: ", resultUser.length);
+                if (resultUser.count < 1) {
+                    res.json({ success: false, message: "não encontrado" });
+                    return;
+                }
+
+                try {
+
+                } catch (err) {
+                    console.log(err)
+                }
+                const consultarRegistros = await Cadernos.findAll({
+                    where: {
+                        nomeCaderno: { [Op.like]: `${nu_doc}%` }
+                    },
+                    raw: true,
+                    attributes: ['total']
+                })
+
+
+                const totalItens = consultarRegistros[0].total;
+                const totalPaginas = Math.ceil(totalItens / porPagina);
+
+                return res.json({ success: true, usuarios: resultUser, totalItem: totalItens, totalPaginas: totalPaginas, paginaAtual: paginaAtual, });
+            }
 
             //Atividades
-            const resultAnuncio = await Users.findAndCountAll({
+            console.time("teste")
+            const resultUser = await Users.findAndCountAll({
                 where: {
-                    /*     [Op.or]: [
-                            { descNome: { [Op.like]: `%${nu_doc}%` } },
-                            { descEmail: nu_doc },
-                            { descCPFCNPJ: nu_doc },
-                            { codUf: { [Op.like]: `${nu_doc}%` } },
-                            { codCidade: { [Op.like]: `${nu_doc}%` } }
-                        ] */
                     [requisito]: { [Op.like]: `${nu_doc}%` }
 
                 },
@@ -505,94 +552,34 @@ module.exports = {
                 limit: porPagina,
                 offset: offset,
             });
+            console.log(resultUser);
 
-            console.log("debug: ", resultAnuncio.length);
-            if (resultAnuncio.count < 1) {
+            console.timeEnd("teste")
+            console.log("debug: ", resultUser.length);
+            if (resultUser.count < 1) {
                 res.json({ success: false, message: "não encontrado" });
                 return;
             }
 
-            if (resultAnuncio.length < 1) {
-                const resultAnuncio = await Cadernos.findAll({
-                    where: {
-                        [Op.or]: [
-                            { UF: nu_doc },
-                            { nomeCaderno: nu_doc }
-                        ]
-
-                    }
-                });
-
-                if (resultAnuncio < 1) {
-                    res.json({ success: false, usuarios: resultAnuncio });
-                    return;
-                }
-
-                /*                 console.log(resultAnuncio[0].dataValues.codUf);
-                 */
-
-                const resultAnuncio2 = await Users.findAll({
-                    where: {
-                        [Op.or]: [
-                            { codUf: { [Op.like]: `%${resultAnuncio[0].dataValues.codUf}%` } },
-                            { codCidade: { [Op.like]: `%${resultAnuncio[0].dataValues.codCaderno}%` } },
-                        ]
-
-                    },
-                    order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
-                });
-                const paginaAtual = req.query.page ? parseInt(req.query.page) : 1;
-
-                // Número total de itens
-                const totalItens = resultAnuncio2.length;
-                console.log("dasdads", totalItens)
-                // Número total de páginas
-                const totalPaginas = Math.ceil(totalItens / 10);
-
-                res.json({
-                    success: true, usuarios: resultAnuncio2, paginaAtual: paginaAtual,
-                    totalPaginas: totalPaginas, totalItem: totalItens
-                });
-                return;
-            }
-
-            //res.json({ success: true, usuarios: resultAnuncio });
-
-            const totalItens = resultAnuncio.count;
+            const totalItens = resultUser.count;
             const totalPaginas = Math.ceil(totalItens / porPagina);
 
-            res.json({ success: true, usuarios: resultAnuncio.rows, totalItem: totalItens, totalPaginas: totalPaginas, paginaAtual: paginaAtual, });
+            res.json({ success: true, usuarios: resultUser.rows, totalItem: totalItens, totalPaginas: totalPaginas, paginaAtual: paginaAtual, });
 
         } else {
             //Atividades
-            const resultAnuncio = await Users.findAll();
+            const resultUser = await Users.findAll();
 
-            if (resultAnuncio < 1) {
+            if (resultUser < 1) {
                 res.json({ success: false, message: "Usuario não encontrado" });
                 return;
             }
 
-            res.json({ success: true, usuarios: resultAnuncio });
+            res.json({ success: true, usuarios: resultUser });
         }
-        /* 
-                if(nu_doc == "formList") {
-                    const resultAnuncio = await Users.findAll({
-                        where: {
-                            [Op.or]: [
-                                { codUf: { [Op.like]: `%${resultAnuncio[0].dataValues.codUf}%` } },
-                                { codCidade: { [Op.like]: `%${resultAnuncio[0].dataValues.codCaderno}%` } },
-                            ]
-        
-                        },
-                        order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
-                    });
-        
-        
-                    res.json({ success: true, usuarios: resultAnuncio });
-                }
-         */
+
         async function buscarPorTipoUsuario(codigo) {
-            const resultAnuncio = await Users.findAndCountAll({
+            const resultUser = await Users.findAndCountAll({
                 where: {
                     [Op.or]: [
                         { codTipoUsuario: codigo },
@@ -614,10 +601,228 @@ module.exports = {
                 ],
             });
 
-            const totalItens = resultAnuncio.count;
+            const totalItens = resultUser.count;
             const totalPaginas = Math.ceil(totalItens / porPagina);
 
-            res.json({ success: true, usuarios: resultAnuncio.rows, totalItem: totalItens, totalPaginas: totalPaginas });
+            res.json({ success: true, usuarios: resultUser.rows, totalItem: totalItens, totalPaginas: totalPaginas });
+        }
+
+
+    },
+    buscarUsuarioIdold: async (req, res) => {
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+        const codigoCaderno = req.params.codCaderno;
+        const requisito = req.query.require;
+        console.log("dasdasd", requisito)
+
+        if (!requisito) {
+            res.json({ success: false, message: "não encontrado" });
+            return;
+        }
+
+        const offset = (paginaAtual - 1) * porPagina;
+        var nu_doc = req.params.id;
+
+        if (nu_doc != "all") {
+            console.log(nu_doc)
+
+            const arrTypes = ['super admin', 'master'];
+
+            if (arrTypes.includes(nu_doc.toLowerCase())) {
+
+
+                switch (nu_doc.toLowerCase()) {
+                    case "super admin":
+                        buscarPorTipoUsuario(1);
+                        break;
+                    case "master":
+                        buscarPorTipoUsuario(2);
+                        break;
+                    default:
+                        console.log("não localizado")
+                }
+
+                return;
+            }
+
+
+
+            //Atividades
+            console.time("teste")
+            const resultUser = await Users.findAndCountAll({
+                where: {
+                    /*   [Op.or]: [
+                         { descNome: { [Op.like]: `%${nu_doc}%` } },
+                         { descEmail: nu_doc },
+                         { descCPFCNPJ: nu_doc },
+                         { codUf: { [Op.like]: `${nu_doc}%` } },
+                         { codCidade: { [Op.like]: `${nu_doc}%` } }
+                     ]   */
+                    //[requisito]:  nu_doc 
+                    [requisito]: { [Op.like]: `${nu_doc}%` }
+
+                },
+                order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+                attributes: [
+                    //[Sequelize.literal('DISTINCT `descCPFCNPJ`'), 'descCPFCNPJ'],
+                    'codUsuario',
+                    'descCPFCNPJ', // Aplique DISTINCT diretamente aqui
+                    'descNome',
+                    'descEmail',
+                    'senha',
+                    'codTipoUsuario',
+                    'codUf',
+                    'codCidade',
+                    'dtCadastro',
+                    'ativo'
+                ],
+                limit: porPagina,
+                offset: offset,
+            });
+
+
+            /*      const resultUser = await database.query(`SELECT codUsuario, descCPFCNPJ, descNome, descEmail, senha, codTipoUsuario, 
+    codUf, codCidade, dtCadastro, ativo 
+    FROM usuario AS usuario 
+    FORCE INDEX (idx_usuario_ordem)
+    WHERE usuario.codCidade LIKE 'curitiba%' 
+    
+    LIMIT 0, 10
+                `, {
+                    replacements: { nu_doc: `${nu_doc}`, limit: porPagina, offset },
+                    type: Sequelize.QueryTypes.SELECT
+                }); */
+
+            console.log(resultUser);
+
+
+
+            console.timeEnd("teste")
+            console.log("debug: ", resultUser.length);
+            if (resultUser.count < 1) {
+                res.json({ success: false, message: "não encontrado" });
+                return;
+            }
+
+            if (resultUser.length < 1) {
+                const resultUser = await Cadernos.findAll({
+                    where: {
+                        [Op.or]: [
+                            { UF: nu_doc },
+                            { nomeCaderno: nu_doc }
+                        ]
+
+                    }
+                });
+
+                if (resultUser < 1) {
+                    res.json({ success: false, usuarios: resultUser });
+                    return;
+                }
+
+                /*                 console.log(resultUser[0].dataValues.codUf);
+                 */
+
+                const resultUser2 = await Users.findAll({
+                    where: {
+                        [Op.or]: [
+                            { codUf: { [Op.like]: `%${resultUser[0].dataValues.codUf}%` } },
+                            { codCidade: { [Op.like]: `%${resultUser[0].dataValues.codCaderno}%` } },
+                        ]
+
+                    },
+                    order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+                });
+                const paginaAtual = req.query.page ? parseInt(req.query.page) : 1;
+
+                // Número total de itens
+                const totalItens = resultUser2.length;
+                console.log("dasdads", totalItens)
+                // Número total de páginas
+                const totalPaginas = Math.ceil(totalItens / 10);
+
+                res.json({
+                    success: true, usuarios: resultUser2, paginaAtual: paginaAtual,
+                    totalPaginas: totalPaginas, totalItem: totalItens
+                });
+                return;
+            }
+
+            //res.json({ success: true, usuarios: resultUser });
+            /*  console.log(resultUser);
+             return; */
+
+            /*      const consultarRegistros = await Cadernos.findAll({
+                     where: {
+                         keyValue: "total_usuarios"
+                     },
+                     raw: true
+                 })
+     
+                 console.log(consultarRegistros)
+                 return; */
+
+            const totalItens = resultUser.count;
+            const totalPaginas = Math.ceil(totalItens / porPagina);
+
+            res.json({ success: true, usuarios: resultUser.rows, totalItem: totalItens, totalPaginas: totalPaginas, paginaAtual: paginaAtual, });
+
+        } else {
+            //Atividades
+            const resultUser = await Users.findAll();
+
+            if (resultUser < 1) {
+                res.json({ success: false, message: "Usuario não encontrado" });
+                return;
+            }
+
+            res.json({ success: true, usuarios: resultUser });
+        }
+        /* 
+                if(nu_doc == "formList") {
+                    const resultUser = await Users.findAll({
+                        where: {
+                            [Op.or]: [
+                                { codUf: { [Op.like]: `%${resultUser[0].dataValues.codUf}%` } },
+                                { codCidade: { [Op.like]: `%${resultUser[0].dataValues.codCaderno}%` } },
+                            ]
+        
+                        },
+                        order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
+                    });
+        
+        
+                    res.json({ success: true, usuarios: resultUser });
+                }
+         */
+        async function buscarPorTipoUsuario(codigo) {
+            const resultUser = await Users.findAndCountAll({
+                where: {
+                    [Op.or]: [
+                        { codTipoUsuario: codigo },
+                    ]
+
+                },
+                order: [['descNome', 'ASC']],//['dtCadastro', 'DESC'], 
+                attributes: [
+                    'codUsuario',
+                    'descCPFCNPJ',
+                    'descNome',
+                    'descEmail',
+                    'senha',
+                    'codTipoUsuario',
+                    'codUf',
+                    'codCidade',
+                    'dtCadastro',
+                    'ativo'
+                ],
+            });
+
+            const totalItens = resultUser.count;
+            const totalPaginas = Math.ceil(totalItens / porPagina);
+
+            res.json({ success: true, usuarios: resultUser.rows, totalItem: totalItens, totalPaginas: totalPaginas });
         }
 
 
