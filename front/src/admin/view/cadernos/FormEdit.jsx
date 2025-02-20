@@ -26,7 +26,7 @@ const FormCadastro = () => {
 
     const param = getParam.get('id') ? getParam.get('id') : 1;
 
-
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
     useEffect(() => {
         setShowSpinner(true);
@@ -63,7 +63,7 @@ const FormCadastro = () => {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
             body: JSON.stringify(caderno)
         };

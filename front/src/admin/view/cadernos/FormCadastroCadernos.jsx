@@ -31,7 +31,7 @@ const FormCadastro = () => {
 
     const param = getParam.get('page') ? getParam.get('page') : 1;
 
-
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
     useEffect(() => {
         setShowSpinner(true);
@@ -103,7 +103,7 @@ const FormCadastro = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
             body: JSON.stringify(data)
         };
