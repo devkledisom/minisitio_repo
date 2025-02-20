@@ -37,6 +37,8 @@ const Cadernos = () => {
     const param = getParam.get('page') ? getParam.get('page') : 1;
     const buscaParam = getParam.get('search')
 
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
+
     function buscarPerfisPorCaderno(registros) {
         
 /*         const arrRegistros = registros.map(item => item.nomeCaderno)
@@ -224,7 +226,7 @@ const Cadernos = () => {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
         })
             .then((x) => x.json())
