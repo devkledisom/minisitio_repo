@@ -4648,8 +4648,35 @@ console.time('espaco')
                 })
             }
 
-            console.log(listaAnuncios)
-            if (listaAnuncios) {
+            res.json({ success: true, message: listaAnuncios }); // Envia a resposta primeiro
+
+            // Executa a query em segundo plano
+            
+                try {
+                    const query = `UPDATE anuncio
+                        JOIN (
+                            SELECT codAnuncio, 
+                                CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
+                            FROM anuncio
+                            WHERE codUf = :estado AND codCaderno = :caderno
+                        ) AS temp
+                        ON anuncio.codAnuncio = temp.codAnuncio
+                        SET anuncio.page = temp.page_number
+                        WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
+                    `;
+            
+                    database.query(query, {
+                        replacements: { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno },
+                        type: Sequelize.QueryTypes.UPDATE,
+                    });
+            
+                    console.log(`Reorganização concluída para o estado:`, dadosAnuncio.codUf);
+                } catch (error) {
+                    console.error("Erro ao executar a reorganização:", error);
+                }
+          
+            
+          /*   if (listaAnuncios) {
                 const query = `UPDATE anuncio
                 JOIN (
                     SELECT codAnuncio, 
@@ -4671,7 +4698,7 @@ console.time('espaco')
 
 
 
-            res.json({ success: true, message: listaAnuncios })
+            res.json({ success: true, message: listaAnuncios }) */
         } catch (err) {
             console.log(err)
             res.json({ success: false, message: err, ter: codTipoAnuncio })

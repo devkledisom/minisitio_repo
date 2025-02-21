@@ -438,7 +438,7 @@ function Busca(props) {
                                 <div className='class="col-lg-9 col-md-8 col-sm-8 col-xs-12"'>
                                     <div className="form-group input-icon">
                                         <i className="fa fa-tags"></i>
-                                        <input id="inputBusca" name="inputBusca" type="text" className="form-control" placeholder="Digite nome, atividade, telefone ou CNPJ" />
+                                        <input id="inputBusca" name="inputBusca" type="text" className="form-control" placeholder="Digite nome ou atividade" />
                                     </div>
                                 </div>
                                 <div className="col-lg-3 col-md-4 col-sm-4 col-xs-5">

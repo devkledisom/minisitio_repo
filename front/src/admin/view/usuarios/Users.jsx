@@ -91,7 +91,6 @@ const Users = () => {
             .then((x) => x.json())
             .then((res) => {
                 setCaderno(res);
-                console.log(res)
             })
     }, []);
 

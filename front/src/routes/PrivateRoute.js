@@ -10,7 +10,7 @@ const PrivateRoute = ({ children }) => {
         const logged = sessionStorage.getItem('authTokenMN');
         const level = sessionStorage.getItem('userLogged');
 
-        if(isPublic && level == "ADMIN") {
+        if(!isPublic && level != "ADMIN") {
             return false;
         } else {
             return !!sessionStorage.getItem('authTokenMN');
