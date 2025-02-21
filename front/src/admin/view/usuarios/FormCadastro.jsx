@@ -87,7 +87,7 @@ const FormCadastro = () => {
             "CPFCNPJ": document.getElementById('nu_doc').value,
             "Nome": document.getElementById('nome').value,
             "Email": document.getElementById('email').value,
-            "senha": document.getElementById('senha').value,
+            //"senha": document.getElementById('senha').value,
             "hashCode": 0,
             "Value": 0,
             "TipoUsuario": document.getElementById('codTipoPerfil').value,
@@ -219,10 +219,10 @@ const FormCadastro = () => {
                             <label for="pwd" className="w-50 px-1">Email:</label>
                             <input type="text" className="form-control h-25 w-50" id="email" placeholder="" name="pwd" />
                         </div>
-                        <div className="form-group d-flex flex-column align-items-center py-3">
+{/*                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">Senha:</label>
                             <input type="password" className="form-control h-25 w-50" id="senha" placeholder="" name="pwd" />
-                        </div>
+                        </div> */}
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">Tipo usuário:</label>
                             <select name="codTipoPessoa" id="codTipoPerfil" className="w-50 py-1">

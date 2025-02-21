@@ -33,14 +33,21 @@ module.exports = {
             usuarioCod,
             dtCadastro2,
             dtAlteracao,
-            ativo } = req.body
+            ativo } = req.body;
+
+            const gerarSenha = () => {
+                const origem = CPFCNPJ.replace(/[.\-\/]/g, '');
+                return origem.slice(0, 5);
+            }
+
+            
 
         const dadosUsuario = {
             "codTipoPessoa": TipoPessoa,
             "descCPFCNPJ": CPFCNPJ,
             "descNome": Nome,
             "descEmail": Email,
-            "senha": senha,
+            "senha": gerarSenha(),
             "hashCode": hashCode,
             "descValue": Value,
             "codTipoUsuario": TipoUsuario,

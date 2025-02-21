@@ -92,13 +92,6 @@ module.exports = {
 
         }
 
-        /*   const [results] = await database.query(
-              "EXPLAIN SELECT * FROM anuncio WHERE descAnuncio LIKE 'MERCADODEUSEFIEL2015%'"
-            );
-            
-            console.log("kledisom: ", results); */
-
-
         const anuncios = await Anuncio.findAll({
             where: {
                 [Op.and]: [
@@ -109,8 +102,8 @@ module.exports = {
                             ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
                             { descAnuncio: { [Op.like]: `${atividade}%` } },
                             { codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
-                            { descTelefone: atividade },
-                            { descCPFCNPJ: atividade },
+                            //{ descTelefone: atividade },
+                            //{ descCPFCNPJ: atividade },
                             {
                                 tags: {
                                     [Op.like]: `%${atividade}%`
@@ -153,23 +146,6 @@ module.exports = {
                 //codAtividade: 6
             }
         });
-
-
-        //console.log('23y4238r934h8r734rhn34: ', anuncios)
-
-        /*  if (atividades.length > 0) {
-             console.log(atividades[0].id)
-         }; */
-
-  /*       const anuncio = anuncios.filter((item) => {
-            //var verificarCodAtividade = (atividades.length == 0) ? null : atividades[0].id;
-            return item.descAnuncio == atividade ||
-                item.descTelefone == atividade ||
-                item.descCPFCNPJ == atividade ||
-                item.codAtividade == atividade;
-        })
- */
-        console.log(anuncios)
 
         res.json(anuncios);
     },

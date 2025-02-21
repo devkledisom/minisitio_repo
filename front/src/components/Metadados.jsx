@@ -94,7 +94,7 @@ function Metadados(props) {
                     <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/icons8-meu-negócio-48.png" />
                         <h4>
-                            <a href="" target="_blank" data-toggle="tooltip" title="Skype">
+                            <a href={props.data.descSkype !== "0" ? props.data.descSkype : ""} target="_blank" data-toggle="tooltip" title="google-meu-negocio">
                             {props.data.descSkype !== "0" ? props.data.descSkype : ""}
                             </a>
                         </h4>
