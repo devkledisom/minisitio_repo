@@ -30,6 +30,7 @@ const Users = () => {
     const [progressExport, setProgressExport] = useState(0);
     const [optionSearch, setOptionSearch] = useState([]);
     const [estadoSelecionado, setEstadoSelecionado] = useState(null);
+    const [cadernoSelecionado, setCadernoSelecionado] = useState(null);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -171,7 +172,7 @@ const Users = () => {
             return;
         }
 
-        fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa.value}?require=${searchOptioncheck}`)
+        fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa.value}?require=${searchOptioncheck}?uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`)
             .then((x) => {
                 if (x.status == 401) {
                     alert("Sessão expirada, faça login para continuar.");
@@ -243,7 +244,6 @@ const Users = () => {
                 console.log("Requisição concluída.");
             }
         }, interval);
-        console.log(`${masterPath.url}/admin/usuario/export?exportAll=${exportTodos}&limit=5000&require=${searchOptioncheck}&id=${campoPesquisa.value}`)
         fetch(`${masterPath.url}/admin/usuario/export?exportAll=${exportTodos}&limit=5000&require=${searchOptioncheck}&id=${campoPesquisa.value}`, {
             method: "POST",
             headers: {
@@ -342,6 +342,20 @@ const Users = () => {
                         <div className="span6 col-md-6 d-flex flex-column align-items-end">
                             <div className='d-flex flex-column'>
                                 <div className="pull-right d-flex justify-content-center align-items-center">
+                                <select name="" id="" style={{ "width": "50px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
+                                        <option>UF</option>
+                                        {uf.map(item => (
+                                            <option value={item.sigla_uf}>{item.sigla_uf}</option>
+                                        ))}
+                                    </select>
+                                <select name="" id="" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)}>
+                                        <option>CADERNO</option>
+
+                                         {caderno.map(item => (
+                                                item.UF == estadoSelecionado && 
+                                            <option value={item.nomeCaderno}>{item.nomeCaderno}</option>
+                                        ))} 
+                                    </select>
                                     <input id="buscar" type="text" style={{ "width": "300px" }} placeholder="Nome, Email, CPF/CNPJ, UF, Cidade ou Tipo" />
                                   {/*   <select name="" id="" style={{ "width": "300px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
                                         <option>Selecione uma opção</option>
@@ -367,14 +381,14 @@ const Users = () => {
                                         <input type='radio' name="option" id="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')} />
                                         CNPJ
                                     </label>
-                                    <label htmlFor="uf" onClick={() => defineOptionsSearch("uf")}>
+                                   {/*  <label htmlFor="uf" onClick={() => defineOptionsSearch("uf")}>
                                         <input type='radio' name="option" id="uf" onClick={() => defineOptionsSearch("uf")} />
                                         UF
                                     </label>
                                     <label htmlFor="caderno" onClick={() => defineOptionsSearch("caderno")}>
                                         <input type='radio' name="option" id="caderno" onClick={() => defineOptionsSearch("caderno")} />
                                         CADERNO
-                                    </label>
+                                    </label> */}
                                     <label htmlFor="tipo" onClick={() => setSearchOptioncheck('codDesconto')}>
                                         <input type='radio' name="option" id="tipo" onClick={() => setSearchOptioncheck('codDesconto')} />
                                         TIPO

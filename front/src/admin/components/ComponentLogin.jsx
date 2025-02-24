@@ -44,7 +44,7 @@ function Login() {
                 if (res.success) {
                     if (res.type == 1) {
                         sessionStorage.setItem('authTokenMN', true);
-                        sessionStorage.setItem('userLogged', res.data);
+                        sessionStorage.setItem('userLogged', "ADMIN");
                         sessionStorage.setItem('userTokenAccess', res.accessToken);
     
                         navigate("/admin");
