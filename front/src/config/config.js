@@ -34,12 +34,15 @@ const port = 3032;
 
 let apiDomain;
 
-
 // Se for localhost, mantém localhost com a porta
 if (hostname === "localhost") {
     apiDomain = `${hostname}:${port}`;
 } else {
-    apiDomain = hostname // Obtém o domínio principal
+    if(!parts[1]) {
+        apiDomain = hostname // Obtém o domínio principal
+    } else {
+        apiDomain = `${parts[1]}.${parts[2]}` // Obtém o domínio principal
+    }
 }
 
 const apiUrl = `${apiProtocol}//${apiDomain}/api`; // Usa "//" corretamente
