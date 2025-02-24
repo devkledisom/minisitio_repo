@@ -12,7 +12,7 @@ export const masterPath = {
 
 
 
-export const masterPath = {
+/* export const masterPath = {
     //url: "http://localhost:3032/api", //LOCAL
     url: "https://minisitio.online/api", //HOMOLOGAÇÃO
     //url: "https://br.minisitio.net/api", //PRODUÇÃO
@@ -23,4 +23,34 @@ export const masterPath = {
 
 export const version = {
     version: "v2.0.39 homolog"
+} */
+
+
+const hostname = window.location.hostname;
+const parts = hostname.split('.');
+const subdomain = parts[0]; // Obtém o subdomínio
+const apiProtocol = window.location.protocol; // Obtém o protocolo (http: ou https:)
+const port = 3032;
+
+let apiDomain;
+
+
+// Se for localhost, mantém localhost com a porta
+if (hostname === "localhost") {
+    apiDomain = `${hostname}:${port}`;
+} else {
+    apiDomain = hostname // Obtém o domínio principal
 }
+
+const apiUrl = `${apiProtocol}//${apiDomain}/api`; // Usa "//" corretamente
+const domain = `${apiProtocol}//${apiDomain}`;
+
+export const masterPath = {
+    url: apiUrl,
+    domain: domain,
+    accessToken: sessionStorage.getItem('userTokenAccess')
+};
+
+export const version = {
+    version: 'v2.0.39'
+};

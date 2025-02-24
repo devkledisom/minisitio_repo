@@ -3549,6 +3549,15 @@ module.exports = {
             offset: offset
         });
 
+        const resultUser = await Usuarios.findAll({
+            where: {
+                descCPFCNPJ: nu_hash,
+                /* codUf: "AL" */
+            },
+            attributes: ['codTipoUsuario'],
+            raw: false
+        });
+
         console.table([1, "id", nu_hash])
 
         if (resultAnuncio.length > 0) {
@@ -3584,17 +3593,29 @@ module.exports = {
             res.json({
                 success: true,
                 message: {
-                    anuncios: resultAnuncio, // Itens da página atual
+                    anuncios: resultAnuncio,
+                    role: resultUser
+                    // Itens da página atual
                     /*   paginaAtual: paginaAtual,
                       totalPaginas: totalPaginas,
                       totalItem: totalItens */
-                }
+                },
+                
             });
 
         } else {
+            const resultUser = await Usuarios.findAll({
+                where: {
+                    descCPFCNPJ: nu_hash,
+                    /* codUf: "AL" */
+                },
+                attributes: ['codTipoUsuario'],
+                raw: false
+            });
+
             res.json({
                 success: false,
-                message: "não existe perfis publicados para este usuario"
+                message: {role: resultUser}
             });
         }
 

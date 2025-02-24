@@ -233,8 +233,7 @@ const FormCadastro = () => {
                                 <option value="1">Super Administrador</option>
                                 <option value="2">Master</option>
                                 <option value="3">Anunciante</option>
-
-
+                                <option value="5">Prefeitura</option>
                             </select>
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">

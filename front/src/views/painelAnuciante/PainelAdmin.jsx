@@ -44,6 +44,7 @@ function PainelAdmin() {
     const [action, setAction] = useState(1);
     const [espacoId, setEspacoId] = useState(null);
     const [userType, setUserType] = useState(null);
+    const [role, setRole] = useState(null);
 
     const location = useLocation();
 
@@ -95,10 +96,7 @@ function PainelAdmin() {
 
     useEffect(() => {
 
-
-       // buscarAnuncioId();
-
-        setUserType(sessionStorage.getItem('userLogged'))
+        setUserType(sessionStorage.getItem('userLogged'));
 
     }, []);
 
@@ -173,6 +171,18 @@ function PainelAdmin() {
         setEspacoId(e.target.parentNode.parentNode.id);
     };
 
+    const verifyRole = () => {
+        console.log(Object.keys(anunciosPainel).length)
+        if(Object.keys(anunciosPainel).length > 0) {
+            setRole(anunciosPainel.role[0].codTipoUsuario);
+        } else {
+            return null;
+        }
+    }
+
+    useEffect(() => {
+        verifyRole();
+    }, [anunciosPainel]);
 
     return (
         <div className="painel-admin">
@@ -221,8 +231,9 @@ function PainelAdmin() {
                                     }
                                     {!isMobile &&
                                         <ul class="list-inline pull-right">
-
-                                            <li><a href="#" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 5)}>Legenda</a></li>
+                                            {role == 5 &&
+                                                <li><a href="#" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 5)}>Legenda</a></li>
+                                            }
                                             <li><a href="#" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 3)}>Dados pessoais</a></li>
                                             <li><a href="/comprar-espaco-minisitio" class="btn cinza btnMenu">Criar anúncio</a></li>
                                             <li><a href="/12178481426/ver-anuncios" id="listar" class="btn cinza btnMenu" onClick={(e) => selectPage(e, 1)}>Listar Espaços</a></li>
@@ -234,7 +245,6 @@ function PainelAdmin() {
                                 </div>
                             </div>
                         </div>
-
                         {/* 
                         <div className="row lista">
                             <div class="col-md-12">
@@ -314,7 +324,8 @@ function PainelAdmin() {
                             <DadosPessoais espacoId={espacoId} selectPage={selectPage} />
                         }
                         {action === 5 &&
-                            <Legenda espacoId={espacoId} selectPage={selectPage} anuncios={anunciosPainel} />
+                        role == 5 &&
+                            <Legenda espacoId={espacoId} selectPage={selectPage} anuncios={anunciosPainel} />                        
                         }
 
 
