@@ -164,7 +164,7 @@ const Users = () => {
 
     function buscarUserId() {
         setShowSpinner(true);
-        const campoPesquisa = document.getElementById('buscar');
+        const campoPesquisa = document.getElementById('buscar').value != '' ? document.getElementById('buscar').value : "outer";
 
         if (!searchOptioncheck) {
             alert('Selecione um critério para a pesquisa');
@@ -172,7 +172,21 @@ const Users = () => {
             return;
         }
 
-        fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa.value}?require=${searchOptioncheck}?uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`)
+        console.log(searchOptioncheck)
+
+        if(document.getElementById('uf').value === "UF") {
+            alert('Selecione um Estado');
+            setShowSpinner(false);
+            return;
+        }
+
+        if(document.getElementById('caderno').value === "CADERNO" && searchOptioncheck !== "codUf") {
+            alert('Selecione um Caderno');
+            setShowSpinner(false);
+            return;
+        } 
+
+        fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa}?require=${searchOptioncheck}&uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`)
             .then((x) => {
                 if (x.status == 401) {
                     alert("Sessão expirada, faça login para continuar.");
@@ -184,6 +198,9 @@ const Users = () => {
             })
             .then((res) => {
                 if (res.success) {
+                    if(res.usuarios.length == 0) {
+                        alert('Caderno não possui master');
+                    }
                     setUsuarios(res);
                     setExpotTodos(true);
                     setShowSpinner(false);
@@ -342,13 +359,13 @@ const Users = () => {
                         <div className="span6 col-md-6 d-flex flex-column align-items-end">
                             <div className='d-flex flex-column'>
                                 <div className="pull-right d-flex justify-content-center align-items-center">
-                                <select name="" id="" style={{ "width": "50px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
-                                        <option>UF</option>
+                                <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
+                                        <option value="todos">UF</option>
                                         {uf.map(item => (
                                             <option value={item.sigla_uf}>{item.sigla_uf}</option>
                                         ))}
                                     </select>
-                                <select name="" id="" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)}>
+                                <select name="" id="caderno" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)}>
                                         <option>CADERNO</option>
 
                                          {caderno.map(item => (
@@ -381,16 +398,16 @@ const Users = () => {
                                         <input type='radio' name="option" id="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')} />
                                         CNPJ
                                     </label>
-                                   {/*  <label htmlFor="uf" onClick={() => defineOptionsSearch("uf")}>
+                                {/*    <label htmlFor="uf" onClick={() => defineOptionsSearch("uf")}>
                                         <input type='radio' name="option" id="uf" onClick={() => defineOptionsSearch("uf")} />
                                         UF
-                                    </label>
+                                    </label> */}
                                     <label htmlFor="caderno" onClick={() => defineOptionsSearch("caderno")}>
                                         <input type='radio' name="option" id="caderno" onClick={() => defineOptionsSearch("caderno")} />
                                         CADERNO
-                                    </label> */}
-                                    <label htmlFor="tipo" onClick={() => setSearchOptioncheck('codDesconto')}>
-                                        <input type='radio' name="option" id="tipo" onClick={() => setSearchOptioncheck('codDesconto')} />
+                                    </label>
+                                    <label htmlFor="tipo" onClick={() => setSearchOptioncheck('codTipoUsuario')}>
+                                        <input type='radio' name="option" id="tipo" onClick={() => setSearchOptioncheck('codTipoUsuario')} />
                                         TIPO
                                     </label>
                                 </div>

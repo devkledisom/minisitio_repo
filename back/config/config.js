@@ -4,6 +4,6 @@ module.exports = {
     //url: "https://minisitio.online/api",
     url: "https://br.minisitio.net/api", //PRODUÇÃO
     //domain: "https://minitest.minisitio.online",
-    domain: 'https://br.minisitio.net',
+    domain: 'https://minisitio.com.br',
     apiSecret: "@rfxzsklc_s+bg7t+@f6^obve=f!swr1%0838lctalor92vi"
 }

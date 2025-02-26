@@ -1,6 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { masterPath } from '../../config/config';
+
+import { AuthContext } from "../../context/AuthContext";
 
 import '../../assets/css/main.css';
 import '../assets/css/login.css';
@@ -17,6 +19,7 @@ function Login() {
     const loginValue = useRef(null);
     const passValue = useRef(null);
     const navigate = useNavigate();
+    const { user, login } = useContext(AuthContext);
 
     function teclaLogin(e) {
         if (e.key === "Enter") {
@@ -24,15 +27,37 @@ function Login() {
         }
     };
 
-    function entrar() {
+    async function entrar() {
+
+        setShowSpinner(true);
+
+        let loggin = await login(limparCPFouCNPJ(loginValue.current.value), passValue.current.value);
+
+        if(loggin.success) {
+            if (loggin.codTipoUsuario == 1) {
+                navigate("/admin");
+            } else {
+                navigate(`/ver-anuncios/${loggin.descCPFCNPJ.replace(/[.-]/g, '')}`);
+            }
+        } else {
+            alert("Login ou senha incorreto");
+            setShowSpinner(false);
+        }
+
+       
+
+
+        console.log(user)
+        return;
+
         setShowSpinner(true);
         fetch(`${masterPath.url}/entrar`, {
             method: "POST",
-            headers: { 
+            headers: {
                 "Content-Type": "application/json",
                 api_key: "keytesteProd",
                 secret_key: "secrettesteProd"
-             },
+            },
             body: JSON.stringify({
                 "descCPFCNPJ": limparCPFouCNPJ(loginValue.current.value),
                 "senha": passValue.current.value
@@ -41,30 +66,33 @@ function Login() {
             .then((x) => x.json())
             .then((res) => {
                 setShowSpinner(false);
+                console.log(res)
                 if (res.success) {
                     if (res.type == 1) {
                         sessionStorage.setItem('authTokenMN', true);
                         sessionStorage.setItem('userLogged', "ADMIN");
                         sessionStorage.setItem('userTokenAccess', res.accessToken);
-    
+
                         navigate("/admin");
                     }
-                    
+
                     let tipoUsuario = res.data.codTipoUsuario;
                     let nuDocumento = res.data.descCPFCNPJ;
-    
-                    if (tipoUsuario == 2 || tipoUsuario == 3 || tipoUsuario == 5 ) {
+                    console.log(tipoUsuario)
+
+                    if (tipoUsuario == 2 || tipoUsuario == 3 || tipoUsuario == 5) {
                         sessionStorage.setItem('authTokenMN', true);
                         //sessionStorage.setItem('userLogged', res.data);
-                        sessionStorage.setItem('userLogged', res.type);
+                        //sessionStorage.setItem('userLogged', res.type);
                         sessionStorage.setItem('userTokenAccess', res.accessToken);
 
                         navigate(`/ver-anuncios/${nuDocumento.replace(/[.-]/g, '')}`);
                     }
-                } else {console.log(res);
+                } else {
+                    console.log(res);
                     alert(res.message);
                 }
-              
+
 
             })
     };

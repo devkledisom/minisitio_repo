@@ -80,7 +80,7 @@ function Rotas() {
                         <Route path="sobre/:id" element={<OutroComponente />} />
                     </Route>
                     <Route path="admin" element={
-                        <PrivateRoute>
+                        <PrivateRoute role={1}>
                             <Administrator />
                         </PrivateRoute>}
                     />
