@@ -448,10 +448,11 @@ module.exports = {
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
         const codigoCaderno = req.params.codCaderno;
-        const requisito = req.query.require;
-        console.log("dasdasd", requisito)
+        const { require, uf, caderno } = req.query;
+        //const requisito = req.query.require;
+        console.log("dasdasd", require, uf, caderno)
 
-        if (!requisito) {
+        if (!require) {
             res.json({ success: false, message: "não encontrado" });
             return;
         }
@@ -482,11 +483,12 @@ module.exports = {
             }
 
             //busca por caderno
-            if (requisito === "codCidade") {
+            if (require === "codCidade") {
                 console.time("teste")
                 const resultUser = await Users.findAll({
                     where: {
-                        [requisito]: { [Op.like]: `${nu_doc}%` }
+                        //[require]: { [Op.like]: `${nu_doc}%` }
+                        [require]: caderno
 
                     },
                     //order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
@@ -522,7 +524,7 @@ module.exports = {
                 }
                 const consultarRegistros = await Cadernos.findAll({
                     where: {
-                        nomeCaderno: { [Op.like]: `${nu_doc}%` }
+                        nomeCaderno: caderno
                     },
                     raw: true,
                     attributes: ['total']
@@ -539,7 +541,9 @@ module.exports = {
             console.time("teste")
             const resultUser = await Users.findAndCountAll({
                 where: {
-                    [requisito]: { [Op.like]: `${nu_doc}%` }
+                    [require]: { [Op.like]: `${nu_doc}%` },
+                    codUf: uf,
+                    codCidade: caderno
 
                 },
                 order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
@@ -591,7 +595,6 @@ module.exports = {
                     [Op.or]: [
                         { codTipoUsuario: codigo },
                     ]
-
                 },
                 order: [['descNome', 'ASC']],//['dtCadastro', 'DESC'], 
                 attributes: [

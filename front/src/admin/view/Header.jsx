@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../assets/css/header.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
+import { AuthContext } from '../../context/AuthContext';
 
 function Header() {
+
+    const { user } = useContext(AuthContext);
 
     function sair() {
         sessionStorage.removeItem('authTokenMN');
@@ -85,7 +88,7 @@ function Header() {
                     </ul>
                     <div className="btn-group-header pull-right col-md-1">
                         <a href="#" data-toggle="dropdown" className="btn-quit dropdown-toggle">
-                            <i className="icon-user"></i> {usuarioLogado} <span className="caret"></span>
+                            <i className="icon-user"></i> {user.descNome} <span className="caret"></span>
                         </a>
                         <ul className="dropdown-menu">
                             <li><a href="/mdluser/auth/logout">Sair</a></li>

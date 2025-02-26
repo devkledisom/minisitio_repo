@@ -5276,11 +5276,11 @@ console.time('espaco')
         const totalConsulta = req.query.limit;
 
         console.time('exp');
-        const resultAnuncio = await Anuncio.findAll({
+        /* const resultAnuncio = await Anuncio.findAll({
             where: {
                 codCaderno: cadernoParam
             },
-            limit: 50000,
+            limit: 10000,
             //offset: offset,
             attributes: [
                 'codAnuncio',
@@ -5299,7 +5299,34 @@ console.time('espaco')
                 'codAtividade',
                 'periodo'
             ]
-        });
+        }); */
+/* 
+        const query = `
+    SELECT codAnuncio, codOrigem, codDuplicado, descCPFCNPJ, descAnuncio, codTipoAnuncio, codCaderno, codUf, activate, descPromocao, createdAt, dueDate, codDesconto, codAtividade, periodo
+    FROM anuncio
+    IGNORE INDEX (idx_anuncio_codCaderno_otimizado, idx_anuncio_codCaderno)
+    WHERE codCaderno = :caderno
+    LIMIT 50000;
+`; */
+        const query = `SELECT 
+    a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
+    a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
+    a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo,
+    u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
+FROM anuncio AS a 
+LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
+WHERE a.codCaderno = :caderno
+LIMIT 50000;
+`;
+//IGNORE INDEX (idx_anuncio_codCaderno_otimizado, idx_anuncio_codCaderno)
+
+
+
+const resultAnuncio = await database.query(query, {
+    replacements: { caderno: cadernoParam },
+    type: Sequelize.QueryTypes.SELECT
+});
+
         console.timeEnd('exp');
 
 /*         await Promise.all(
@@ -5360,25 +5387,44 @@ console.time('espaco')
 
             // Definir cabeçalhos
             worksheet.columns = [
-                { header: 'codAnuncio', key: 'id', width: 10 },
-                { header: 'codOrigem', key: 'tipo', width: 30 },
-                { header: 'codDuplicado', key: 'doc', width: 10 },
-                { header: 'descCPFCNPJ', key: 'nome', width: 10 },
-                { header: 'descAnuncio', key: 'email', width: 10 },
-                { header: 'codTipoAnuncio', key: 'senha', width: 10 },
-                { header: 'codCaderno', key: 'tipoUser', width: 10 },
-                { header: 'codUf', key: 'uf', width: 10 },
-                { header: 'activate', key: 'cidade', width: 10 },
-                { header: 'descPromocao', key: 'data', width: 10 },
-                { header: 'createdAt', key: 'status', width: 10 },
-                { header: 'dueDate', key: 'duedate', width: 10 },
-                { header: 'codDesconto', key: 'desconto', width: 10 },
-                { header: 'codAtividade', key: 'atividade', width: 10 },
-                { header: 'periodo', key: 'periodo', width: 10 },
+                { header: 'COD', key: 'id', width: 10 },
+                { header: 'COD_OR', key: 'tipo', width: 10 },
+                { header: 'DUPLI', key: 'doc', width: 10 },
+                { header: 'CNPJ', key: 'nome', width: 30 },
+                { header: 'NOME', key: 'email', width: 30 },
+                { header: 'TIPO', key: 'tipoPerfil', width: 30 },
+                { header: 'CADERNO', key: 'tipoUser', width: 10 },
+                { header: 'UF', key: 'uf', width: 10 },
+                { header: 'STATUS', key: 'status', width: 10 },
+                { header: 'DATA_PAG', key: 'dataPag', width: 10 },
+                { header: 'VALOR', key: 'cidade', width: 10 },
+                { header: 'DESCONTO', key: 'duedate', width: 10 },
+                { header: 'CAD. PARA CONF', key: 'cadParaConf', width: 10 },
+                { header: 'CONFIRMADO', key: 'atividade', width: 10 },
+                { header: 'DATA_FIM', key: 'atividade', width: 10 },
+                { header: 'TEMP. VALE PR. TIPO', key: 'tempValidade', width: 10 },
+                { header: 'ID', key: 'desconto', width: 10 },
+                { header: 'USUARIO/DECISOR', key: 'user', width: 30 },
+                { header: 'LOGIN', key: 'loginUser', width: 30 },
+                { header: 'SENHA', key: 'senhaUser', width: 10 },
+                { header: 'EMAIL', key: 'emailUser', width: 30 },
+                { header: 'CONTATO', key: 'contatoUser', width: 30 },
+                { header: 'LINK_PERFIL', key: 'linkPerfil', width: 30 },
+                { header: 'codAtividade', key: 'atividade', width: 30 },
             ];
 
 
             resultAnuncio.forEach(item => {
+
+                let tipPerfil = () => {
+                    if(item.codTipoAnuncio == 3) {
+                        return "ANUNCIANTE";
+                    } else if (item.codTipoAnuncio == 5) {
+                        return "PREFEITURA";
+                    } else {
+                        return "não informado"
+                    }
+                }
 
                 worksheet.addRow({
                     id: item.codAnuncio,
@@ -5386,17 +5432,23 @@ console.time('espaco')
                     doc: item.codDuplicado,
                     nome: item.descCPFCNPJ,
                     email: item.descAnuncio,
-                    senha: item.codTipoAnuncio,
+                    tipoPerfil: tipPerfil(), 
                     tipoUser: item.codCaderno,
                     uf: item.codUf,
-                    cidade: item.activate,
-                    data: item.descPromocao,
-                    status: item.createdAt,
+                    status: item.activate == 1 ? "ATIVO" : "DESATIVADO",
+                    dataPag: item.descPromocao,
+                    statu: item.createdAt,
                     duedate: item.dueDate,
                     desconto: item.codDesconto,
-                    atividade: item.codAtividade,
-                    periodo: item.periodo,
-                    teste: item.loginUser
+                    tempValidade: item.periodo, 
+                    //teste: item.loginUser,
+                    user: item.descNome,
+                    loginUser: item.descCPFCNPJ,
+                    senhaUser: item.senha,
+                    emailUser: item.descEmail,
+                    contatoUser: item.descTelefone,
+                    linkPerfil: `${masterPath.domain}/local/${encodeURIComponent(item.descAnuncio)}?id=${item.codAnuncio}`,
+                    atividade: item.codAtividade 
                 })
             })
 
