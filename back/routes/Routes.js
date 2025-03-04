@@ -8,6 +8,7 @@ const BemVindo = require('../controllers/BemVindo');
 const Buscador = require('../controllers/Buscador');
 const Admin = require('../controllers/Admin');
 const Login = require('../controllers/Login');
+const Rotinas = require('../controllers/Rotinas');
 const Users = require('../controllers/Users');
 const Upload = require('../controllers/Upload');
 const UserActions = require('../controllers/UserActions');
@@ -181,6 +182,9 @@ router.post('/api/fale-com-dono', upload.single('anexo'), async (req, res) => {
     }
 });
 
+
+//ROTINAS
+router.get('/api/rotina/repaginar', Rotinas.paginacaoDosCadernos);
 
 module.exports = router;
 

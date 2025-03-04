@@ -95,14 +95,21 @@ function Busca(props) {
 
     }, []);
 
-    /*     useEffect(() => {
-            if (location.pathname == '/') {
-                getUserLocation();
-            }
-        }, []) */
-
     const fetchAnuncios = async () => {
         setLoading(true);
+
+        //1º VALIDAÇÂO
+        let inputSearch = document.querySelector('#inputBusca').value;
+        let regex = /^(?=.*[A-Za-z])[A-Za-z0-9. ]+$/;
+        let searchValidator = regex.test(inputSearch);
+
+        if(!searchValidator) {
+            alert('Atenção! números não são permitidos no campo de busca');
+            setLoading(false);
+            document.querySelector('#inputBusca').value = "";
+            return;
+        }
+
 
         let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
         let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;
@@ -151,7 +158,7 @@ function Busca(props) {
             setResult(request);
             //console.log(request);
             setLoading(false);
-            navigate("/buscar");
+            navigate("/buscar", { state: {paramBusca: valor_da_busca} });
 
             /*  if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
                  navigate("/buscar");
@@ -218,7 +225,6 @@ function Busca(props) {
                 (position) => {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
-                    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
                     checkLocation(latitude, longitude);  // Verificar localização
                 },
                 (error) => {
@@ -327,7 +333,6 @@ function Busca(props) {
                     }
                 
                     if (component.types.includes("administrative_area_level_4")) {
-                        console.log("administrative_area_level_4");
                         city = component.short_name.toUpperCase();
                         setCodCaderno(component.short_name);
                         localStorage.setItem("caderno: ", component.short_name.toUpperCase());
@@ -335,7 +340,6 @@ function Busca(props) {
                 
                         break; // Interrompe o loop completamente
                     } else if (component.types.includes("administrative_area_level_2")) {
-                        console.log("administrative_area_level_2");
                         city = component.short_name.toUpperCase();
                         setCodCaderno(component.short_name);
                         localStorage.setItem("caderno: ", component.short_name.toUpperCase());

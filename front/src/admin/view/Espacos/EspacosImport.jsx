@@ -18,7 +18,7 @@ const Espacos = () => {
 
     const [progressValue, setProgressValue] = useState(null);
 
-   
+
 
 
     const style = {
@@ -36,56 +36,25 @@ const Espacos = () => {
     const [end, setEnd] = useState(null);
 
     useEffect(() => {
-        /*       const socket = io('https://br.minisitio.net', {
-                  path: '/socket.io', // Use o mesmo endpoint configurado no servidor
-              });
-      
-      
-      
-              // client-side
-              socket.on("connect", () => {
-                  console.log("adas", socket.id); // x8WIv7-mJelg7on_ALbx
-              });
-      
-              socket.on("progress", (data) => {
-                  setProgressValue(data.progress)
-                  console.log(`Progresso recebido do backend: ${data.progress}%`);
-              }); */
+        
+                    const progressImport = setInterval(() => {
+                        fetch(`${masterPath.url}/admin/anuncio/progress`)
+                            .then(x => x.json())
+                            .then(res => {
+                                setProgressValue(res.message.progress);
+                                setEnd(res.message.fim)
+                                console.log(res)
+                                if(res.message.endProccess) {
+                                    //clearInterval(progressImport);
+                                }
+                            })
+                    }, 1000)    
 
-        setInterval(() => {
-            fetch(`${masterPath.url}/admin/anuncio/progress`)
-                .then(x => x.json())
-                .then(res => {
-                    setProgressValue(res.message.progress);
-                    setEnd(res.message.fim)
-                    
-                })
-        }, 1000) 
-
-        /*      return () => {
-                 socket.disconnect(); // Desconecta ao desmontar o componente
-             }; */
     }, []);
 
 
+
     const location = useLocation();
-
-
-    const getParam = new URLSearchParams(location.search);
-
-    const param = getParam.get('page') ? getParam.get('page') : 1;
-
-    function exportExcell() {
-        fetch(`${masterPath.url}/admin/anuncio/export?limit=5000`)
-            .then(x => x.json())
-            .then(res => {
-                if (res.success) {
-                    console.log(res);
-                    window.location.href = res.downloadUrl;
-                }
-            })
-    };
-
 
     const handleFormSubmit = async (event) => {
         event.preventDefault(); // Evita o recarregamento da página
@@ -112,13 +81,27 @@ const Espacos = () => {
             const minutes = now.getMinutes(); // Minutos (0-59)
             const seconds = now.getSeconds(); // Segundos (0-59)
 
-            //console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
+            console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
 
             setStart(`${hours}:${minutes}:${seconds}`);
 
+            const progressImport = setInterval(() => {
+                fetch(`${masterPath.url}/admin/anuncio/progress`)
+                    .then(x => x.json())
+                    .then(res => {
+                        setProgressValue(res.message.progress);
+                        setEnd(res.message.fim)
+                        console.log(res)
+                        if (res.message.endProccess) {
+                            clearInterval(progressImport);
+                            Swal.fire("Sucesso!", "Processo de importação finalizado!", "success");
+                        }
+                    })
+            }, 1000)
+
             //setProgressValue(data.progress || null);
 
-            Swal.fire("Sucesso!", "Importação concluída com sucesso!", "success");
+            //Swal.fire("Sucesso!", "Arquivo enviado!", "success");
         } catch (error) {
             setShowSpinner(false);
             console.error(error);
@@ -135,7 +118,7 @@ const Espacos = () => {
 
                 {showSpinner && <Spinner />}
 
-                <h1 className="pt-4 px-4">Importar Anúncio</h1>
+                <h1 className="pt-4 px-4">Importar Perfil</h1>
                 {/*  action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" */}
                 <form onSubmit={handleFormSubmit} style={{ "marginTop": "20px", "marginLeft": "50px" }}>
                     Importar Espaços <br />
@@ -153,7 +136,7 @@ const Espacos = () => {
                     }
 
                     <button type="submit" className="btn custom-button" style={{ "marginRight": "10px" }}>Enviar</button>
-                    <a href="https://br.minisitio.net/resources/files/modelo_importacao_anuncios.xlsx">Download modelo</a>
+                    <a href={`${masterPath.url}/modelo/modelo_importacao_perfil.xlsx`}>Download modelo</a>
                 </form>
 
 

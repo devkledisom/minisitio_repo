@@ -2,6 +2,7 @@
   "name": "Jane Smith",
   "age": 30,
   "email": "johndoe@example.com",
-  "progress": 28090,
-  "fim": "4:50:32"
+  "fim": "12:48:1",
+  "endProccess": true,
+  "progress": 9
 }

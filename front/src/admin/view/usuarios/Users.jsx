@@ -39,7 +39,7 @@ const Users = () => {
 
     const param = getParam.get('page') ? getParam.get('page') : 1;
 
-    const tokenAuth = sessionStorage.getItem('userTokenAccess');
+    const tokenAuth = localStorage.getItem('token');
 
     useEffect(() => {
         setShowSpinner(true);
