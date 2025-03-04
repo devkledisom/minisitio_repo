@@ -270,6 +270,10 @@ const Espacos = () => {
     function exportExcell() {
         setShowSpinner(true);
 
+        let totalItens = anuncios.message.totalItem;
+        if(totalItens > 50000) {
+            alert("Atenção, esse caderno atingiu o limite de 50.000 registros. O limite de exportação é de 50.000 registros");
+        }
 
         /*
         Para 1000 linhas: 3125ms

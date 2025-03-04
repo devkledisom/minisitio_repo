@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 import '../assets/css/main.css';
@@ -16,7 +16,9 @@ function Resultados() {
     const [anuncio, setAnuncio] = useState([]);
     const { result, setResult } = useBusca();
 
+    const location = useLocation();
     const navigate = useNavigate();
+    const paramBusca = location.state?.paramBusca
 
     useEffect(() => {
         //console.log(result)
@@ -35,6 +37,8 @@ function Resultados() {
         "INFORMAÇÕES",
         "EVENTOS NA CIDADE"
         ]
+
+        if(result.length < 1) return;
 
         if(result.length == 1) {
 
@@ -60,7 +64,7 @@ function Resultados() {
             <div className="container p-5">
                 <div className='row text-start'>
 
-                    <h4>Exibindo resultados para:</h4>
+                    <h4>Exibindo resultados para: {paramBusca}</h4>
                     <h6>Foram encontrados {result.length} registros</h6>
                 </div>
                 <div className='row text-start mb-4'>

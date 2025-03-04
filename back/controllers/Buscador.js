@@ -147,12 +147,19 @@ module.exports = {
             }
         });
 
+        console.log(anuncios)
+
         res.json(anuncios);
     },
     buscarCaderno: async (req, res) => {
         await database.sync();
 
-        const cadernos = await Caderno.findAll();
+        const cadernos = await Caderno.findAll({
+            order: [
+                ['isCapital', 'ASC'],
+                ['nomeCaderno', 'ASC'],
+            ],
+        });
 
         res.json(cadernos);
     },
