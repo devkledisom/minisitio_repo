@@ -73,7 +73,7 @@ function Header() {
                             <Link className="nav-link" to="/admin/desconto" onClick={handleClick}>Gerenciar IDs</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Pagamentos</a>
+                            <Link className="nav-link" to="/admin/pagamentos" onClick={handleClick}>Pagamentos</Link>
                         </li>
                         {/*       <li className="nav-item">
                             <a className="nav-link" href="#">Relatórios Funil</a>

@@ -23,6 +23,7 @@ const Descontos = require('../models/table_desconto');
 const DDD = require('../models/table_ddd');
 const Pin = require('../models/table_pin');
 const Globals = require('../models/table_globals');
+const Pagamento = require('../models/table_pagamentos');
 
 
 
@@ -8081,6 +8082,16 @@ const resultAnuncio = await database.query(query, {
 
     },
 
+
+    //PAGAMENTOS
+    listarPagamentos: async (req, res) => {
+        const todosPagamentos = await Pagamento.findAll({
+            limit: 10,
+            raw: true
+        });
+
+        res.json({success: true, data: todosPagamentos})
+    }
 
 }
 

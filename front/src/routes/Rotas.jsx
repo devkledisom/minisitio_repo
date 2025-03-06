@@ -43,6 +43,8 @@ import AnuncioEditar from "../admin/view/Espacos/FormEdit";
 import AnuncioCadastro from "../views/ComprarAnuncio";//-------------
 import EspacosImport from "../admin/view/Espacos/EspacosImport";
 
+import Pagamentos from "../admin/view/Pagamentos/Pagamentos";
+
 import Pin from "../admin/view/Pin/Pin";
 import PinCadastro from "../admin/view/Pin/FormCadastro";
 import PinEditar from "../admin/view/Pin/FormEdit";
@@ -61,6 +63,9 @@ import Contato from "../views/infoPages/Contato";
 
 
 import { TemaProvider } from '../context/BuscaContext';
+
+//PAGINA 404
+import NotFound from '../views/NotFound';
 
 
 
@@ -104,6 +109,9 @@ function Rotas() {
                     <Route path="admin/anuncio/cadastro" element={<PrivateRoute><AnuncioCadastro isAdmin={true} /></PrivateRoute>} />
                     <Route path="admin/anuncio/editar" element={<PrivateRoute><AnuncioEditar /></PrivateRoute>} />
                     <Route path="admin/anuncio/import" element={<PrivateRoute><EspacosImport /></PrivateRoute>} />
+
+                    
+                    <Route path="admin/pagamentos" element={<PrivateRoute><Pagamentos /></PrivateRoute>} />
                     
                     {/*ROTAS MODULO PIN*/}
                     <Route path="admin/pin" element={<PrivateRoute><Pin /></PrivateRoute>} />
@@ -125,6 +133,8 @@ function Rotas() {
                     <Route path="institucional" element={<Institucional />} />
                     <Route path="contato" element={<Contato />} />
 
+                    {/* Rota para capturar páginas inexistentes */}
+                    <Route path="*" element={<NotFound />} />
 
                 </Routes>
             </TemaProvider>
