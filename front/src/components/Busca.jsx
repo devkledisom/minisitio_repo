@@ -103,13 +103,13 @@ function Busca(props) {
         let regex = /^(?=.*[A-Za-z])[A-Za-z0-9. ]+$/;
         let searchValidator = regex.test(inputSearch);
 
-        if(!searchValidator) {
+     /*    if(!searchValidator) {
             alert('Atenção! números não são permitidos no campo de busca');
             setLoading(false);
             document.querySelector('#inputBusca').value = "";
             return;
         }
-
+ */
 
         let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
         let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;

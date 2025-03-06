@@ -13,6 +13,7 @@ const Users = require('../controllers/Users');
 const Upload = require('../controllers/Upload');
 const UserActions = require('../controllers/UserActions');
 const Email = require('../controllers/Email');
+const WebHook = require('../controllers/WebHooks.js');
 
 //FUNCTIONS
 const saveImport = require('../functions/serverImport');
@@ -114,6 +115,9 @@ router.get('/api/admin/anuncio/classificado/especifico/:caderno/:uf', Admin.list
 router.get('/api/admin/anuncio/quantidade/uf', auth, Admin.quantidadeUf);
 router.get('/api/admin/lista/test/:caderno/:uf', Admin.listaTeste);
 
+//ROTAS MODULO PAGAMENTOS
+router.get('/api/admin/pagamentos/read', Admin.listarPagamentos);
+
 //ROTAS MODULO PIN
 router.get('/api/admin/pin/read', Admin.listarPin);
 router.post('/api/admin/pin/create', auth, Admin.criarPin);
@@ -185,6 +189,10 @@ router.post('/api/fale-com-dono', upload.single('anexo'), async (req, res) => {
 
 //ROTINAS
 router.get('/api/rotina/repaginar', Rotinas.paginacaoDosCadernos);
+
+//WEBHOOKS
+router.post('/api/webhook', WebHook.atualizarPagamentos);
+router.get('/api/paga/create', WebHook.criarPagamento);
 
 module.exports = router;
 
