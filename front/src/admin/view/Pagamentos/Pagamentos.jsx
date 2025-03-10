@@ -141,6 +141,7 @@ const Pagamentos = () => {
                                         <th>ID</th>
                                         <th>CLIENTE</th>
                                         <th>VALOR</th>
+                                        <th>STATUS</th>
                                         <th>DATA</th>
                                     </tr>
                                 </thead>
@@ -148,9 +149,10 @@ const Pagamentos = () => {
                                     {
                                         pagamentos != '' && pagamentos.map((item) => (
                                             <tr key={item.id} id={item.id} onClick={selecaoLinha}>
-                                                <td>{item.id}</td>
+                                                <td>{item.id_mp}</td>
                                                 <td>{item.cliente}</td>
                                                 <td>{item.valor}</td>
+                                                <td>{item.status}</td>
                                                 <td>{item.data.split("T")[0]}</td>
                                             </tr>
 

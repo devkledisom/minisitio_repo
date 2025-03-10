@@ -1307,8 +1307,8 @@ module.exports = {
                 patrocinador_ativo: req.body.patrocinador,
                 utilizar_saldo: req.body.saldoUtilizado,
                 saldo: req.body.saldo,
-                total_registros: 0
-
+                total_registros: 0,
+                is_capa: req.body.is_capa
             });
 
             res.json({ success: true, message: "ID criado com sucesso!" });
@@ -1438,7 +1438,8 @@ module.exports = {
                          { idDesconto: nu_hash }
                      ] */
 
-            }
+            },
+            attributes: ['desconto', 'descricao', 'is_capa']
         });
         if (resultAnuncio < 1 || resultAnuncio[0].hash == "00.000.0000") {
             res.json({ success: false, message: "ID não encontrado 0" });

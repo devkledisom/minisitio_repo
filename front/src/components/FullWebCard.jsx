@@ -57,7 +57,7 @@ function FullWebCard(props) {
     const fullUrl = window.location.href;
 
     const promoChange = (param) => {
-        console.log(param)
+        
         if(!param) return false;
 
         if(param.includes("http")) {

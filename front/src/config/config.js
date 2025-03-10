@@ -38,7 +38,7 @@ let apiDomain;
 if (hostname === "localhost") {
     apiDomain = `${hostname}:${port}`;
 } else {
-    if(!parts[1]) {
+    if(parts[1] !== "minisitio") {
         apiDomain = hostname // Obtém o domínio principal
     } else {
         apiDomain = `${parts[1]}.${parts[2]}` // Obtém o domínio principal
@@ -55,5 +55,5 @@ export const masterPath = {
 };
 
 export const version = {
-    version: 'v2.0.39'
+    version: 'v2.0.40'
 };

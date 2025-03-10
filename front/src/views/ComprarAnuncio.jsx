@@ -64,6 +64,10 @@ function ComprarAnuncio({ isAdmin }) {
   const [alert, setAlert] = useState(false);
   const [texto, setTexto] = useState(null);
 
+  //REFS
+  const customText = useRef(null);
+  const discountHash = useRef(null);
+
 
   const executarSelecao = (e) => {
     let codigoUf = e.target.value;
@@ -143,19 +147,40 @@ function ComprarAnuncio({ isAdmin }) {
   function aplicarCupom(e) {
     let codId = e.target.value;
 
-    if (codId.length == 11 || codId.length == 12) {
+    if (codId.length == 11) {
       fetch(`${masterPath.url}/admin/desconto/aplicar/${codId}`)
         .then((x) => x.json())
         .then((res) => {
           if (res.success) {
-            let valorDesconto = res.IdsValue[0].desconto;
-            let precoComDesconto = precoFixo - valorDesconto;
-            setPrecoFixo(precoComDesconto);
-            setDescValor(valorDesconto);
-            setDescontoAtivado(res.success);
-            setTexto(res.IdsValue[0].descricao);
+            if (res.IdsValue[0].is_capa && radioCheck == 4) {
+              let valorDesconto = res.IdsValue[0].desconto;
+              let precoComDesconto = precoFixo - valorDesconto;
+              setPrecoFixo(precoComDesconto);
+              setDescValor(valorDesconto);
+              setDescontoAtivado(res.success);
+              setTexto(res.IdsValue[0].descricao);
+
+
+              document.getElementById('anunciar').disabled = false;
+
+            } else if (!res.IdsValue[0].is_capa && radioCheck == 4) {
+              document.getElementById('anunciar').disabled = true;
+              setTexto("Este ID não está habilitado para capa!");
+              customText.current.style.color = "red";
+            } else {
+
+              let valorDesconto = res.IdsValue[0].desconto;
+              let precoComDesconto = precoFixo - valorDesconto;
+              setPrecoFixo(precoComDesconto);
+              setDescValor(valorDesconto);
+              setDescontoAtivado(res.success);
+              setTexto(res.IdsValue[0].descricao);
+            }
+
+
           } else {
             setDescontoAtivado(res.success);
+            document.getElementById('anunciar').disabled = true;
           }
 
         })
@@ -163,6 +188,8 @@ function ComprarAnuncio({ isAdmin }) {
       setPrecoFixo(10);
       setDescontoAtivado(false);
       setTexto(null);
+      document.getElementById('anunciar').disabled = true;
+      customText.current.style.color = "#000";
     }
 
 
@@ -237,6 +264,34 @@ function ComprarAnuncio({ isAdmin }) {
     return `${dia}/${mes}/${ano}`;
   }
 
+  function changeRadioCheck(e) {
+    let tipoPerfil = e.target.value;
+    setRadioCheck(e.target.value);
+
+    if (tipoPerfil == 1) {
+      setShowMap("none");
+    }
+
+    if (tipoPerfil == 4) {
+      document.getElementById('anunciar').disabled = true;
+    } else {
+      document.getElementById('anunciar').disabled = false;
+    }
+
+    if(customText.current) {
+      setTexto(null);
+      customText.current.style.color = "#000";
+      setPrecoFixo(10);
+      setDescontoAtivado(false);
+    }
+
+    if(discountHash.current) {
+      discountHash.current.value = '';
+    }
+  
+
+  };
+
   return (
     <div className="App">
       {isAdmin &&
@@ -291,9 +346,10 @@ function ComprarAnuncio({ isAdmin }) {
                       name="codTipoAnuncio"
                       id="codTipoAnuncio-1"
                       value="1"
-                      onClick={(e) => { setRadioCheck(e.target.value); setShowMap("none") }}
+                      onClick={(e) => changeRadioCheck(e)}
                       checked={radioCheck == 1}
                       className="mx-1"
+                      readOnly
                     />
                     Básico
                   </label>
@@ -314,26 +370,28 @@ function ComprarAnuncio({ isAdmin }) {
                       name="codTipoAnuncio"
                       id="codTipoAnuncio-3"
                       value="3"
-                      onClick={(e) => setRadioCheck(e.target.value)}
+                      onClick={(e) => changeRadioCheck(e)}
                       checked={radioCheck == 3}
                       className="mx-1"
+                      readOnly
                     />
                     Completo
                   </label>
-                 {/*  {isAdmin && */}
-                    <label className="prefeitura">
-                      <input
-                        type="radio"
-                        name="codTipoAnuncio"
-                        id="codTipoAnuncio-4"
-                        value="4"
-                        onClick={(e) => setRadioCheck(e.target.value)}
-                        checked={radioCheck == 4}
-                        className="mx-1"
-                      />
-                      Prefeitura
-                    </label>
-                 
+                  {/*  {isAdmin && */}
+                  <label className="prefeitura">
+                    <input
+                      type="radio"
+                      name="codTipoAnuncio"
+                      id="codTipoAnuncio-4"
+                      value="4"
+                      onClick={(e) => changeRadioCheck(e)}
+                      checked={radioCheck == 4}
+                      className="mx-1"
+                      readOnly
+                    />
+                    Capa
+                  </label>
+
                 </div>
               </div>
             </div>
@@ -353,6 +411,7 @@ function ComprarAnuncio({ isAdmin }) {
                   placeholder="Digite seu código"
                   style={{ backgroundColor: "#96d18b" }}
                   onChange={aplicarCupom}
+                  ref={discountHash}
                 />
                 <input
                   type="hidden"
@@ -361,17 +420,23 @@ function ComprarAnuncio({ isAdmin }) {
                   id="discountValue"
                 />
               </div>
-              {texto == null &&
+         {/*      {texto == null &&
                 <h5 className="text-start py-2">
                   Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)
                 </h5>
               }
 
               {texto &&
-                <h5 className="text-start py-2">
+                <h5 className="text-start py-2" ref={customText}>
                   {texto}
                 </h5>
-              }
+              } */}
+
+           
+                <h5 className="text-start py-2" ref={customText}>
+                  {texto ? texto : "Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)"}
+                </h5>
+              
 
 
             </div>}

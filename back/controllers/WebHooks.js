@@ -1,10 +1,10 @@
 const crypto = require('crypto');
 const config = require('../config/config');
-const { MercadoPagoConfig, Payment } = require('mercadopago');
+const { MercadoPagoConfig, Payment, PaymentMethods } = require('mercadopago');
 
 const Pagamento = require('../models/table_pagamentos');
 
-const client = new MercadoPagoConfig({ accessToken: config.MP_ACCESS_TOKEN_SANDBOX, options: { timeout: 5000, idempotencyKey: 'abc' } });
+const client = new MercadoPagoConfig({ accessToken: config.mp_prod.AccessToken, options: { timeout: 5000, idempotencyKey: 'abc' } });
 
 const payment = new Payment(client);
 
@@ -56,12 +56,16 @@ module.exports = {
         }
     },
     criarPagamento: async (req, res) => {
+
+
+
+        
         const body = {
             transaction_amount: parseFloat(0.02),
-            payment_method_id: "Visa",
             payer: {
                 email: "devkledisom@gmail.com"
             },
+            payment_method_id: "pix"
         };
 
 
@@ -69,37 +73,7 @@ module.exports = {
         payment.create({ body, requestOptions }).then(console.log).catch(console.log);
 
 
-
-
-        async function executarPagamento() {
-
-            let id = "" + Date.now();
-
-            const dados = {
-                items: [
-                    item = {
-                        id: id,
-                        description: "2x tesrt",
-                        quantity: 1,
-                        currency_id: 'BRL',
-                        unit_price: parseFloat(150)
-                    }
-                ],
-                payer: {
-                    email: "devkledisom@gmail.com"
-                },
-                external_reference: id
-            }
-
-            const pagamento = await MercadoPago.preferences.create(dados);
-            console.log(pagamento)
-
-        
-           
-        }
-        
-        // Executar a função
-        //executarPagamento();
+        res.status(200).send("pagamento processado com sucesso.");
         
     },
     criarPagamentoold: async (req, res) => {
@@ -179,9 +153,9 @@ module.exports = {
     }
 }
 
-function registrarPagamento(data) {
-    console.log(data)
-    if(data.action === 'payment.updated') {
+async function registrarPagamento(data) {
+    console.log(data, `https://api.mercadopago.com/v1/payments/${data.data.id}`)
+    if(data.action === 'payment.created') {
         fetch(`https://api.mercadopago.com/v1/payments/${data.data.id}`, {
             method: 'GET',
             headers: {
@@ -195,15 +169,62 @@ function registrarPagamento(data) {
             console.log(res)
             if(res.message === 'Payment not found') return;
 
-            const pagamento = await Pagamento.create({
-                id: res.id,
-                cliente: res.payer.identification.number,
-                valor: res.transaction_amount,
-                data: res.date_created
-            })
+            try {
+                const pagamento = await Pagamento.create({
+                    cliente: res.payer.identification.number || "não informado",
+                    valor: res.transaction_amount,
+                    data: res.date_created,
+                    status: res.status == "pending" ? "Pendente" : res.status,
+                    id_mp: data.data.id,
+                })
 
-            console.log(pagamento)
+                console.log(pagamento)
+
+            } catch (err) {
+                console.log(err)
+            }
+
+
+            
         })
+    }
+
+    if(data.action === 'payment.updated') {
+
+        fetch(`https://api.mercadopago.com/v1/payments/${data.data.id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${config.mp_prod.AccessToken}`
+            }
+        })
+        .then(x=>x.json())
+        .then(async res => {
+            
+            console.log(res)
+            if(res.message === 'Payment not found') return;
+
+            try {
+                const atualizarPagamento = await Pagamento.update({
+                    status: res.status
+                },{
+                    where: {
+                        id_mp: data.data.id,
+                    }
+                    
+                })
+                console.log(atualizarPagamento)
+
+            } catch (err) {
+                console.log(err)
+            }
+
+
+            
+        })
+
+       
+
     }
 };
 
@@ -308,6 +329,10 @@ const testoj = {
       }
     }
   }
+
+
+    
+
 
 /* {
     action: 'payment.updated',

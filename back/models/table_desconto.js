@@ -175,6 +175,16 @@ const Desconto = database.define('desconto', {
                 msg: "Esse campo não pode está vazio.."
             },
         } */
+    },
+    is_capa: {
+        type: Sequelize.BOOLEAN(),
+        allowNull: false,
+        unique: false,
+        /* validate: {
+            notEmpty: {
+                msg: "Esse campo não pode está vazio.."
+            },
+        } */
     }
 },
     {
