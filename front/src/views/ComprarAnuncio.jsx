@@ -63,6 +63,7 @@ function ComprarAnuncio({ isAdmin }) {
   const [showSpinner, setShowSpinner] = useState(false);
   const [alert, setAlert] = useState(false);
   const [texto, setTexto] = useState(null);
+  const [isCapa, setIsCapa] = useState(false);
 
   //REFS
   const customText = useRef(null);
@@ -159,6 +160,7 @@ function ComprarAnuncio({ isAdmin }) {
               setDescValor(valorDesconto);
               setDescontoAtivado(res.success);
               setTexto(res.IdsValue[0].descricao);
+              setIsCapa(true);
 
 
               document.getElementById('anunciar').disabled = false;
@@ -1021,7 +1023,7 @@ function ComprarAnuncio({ isAdmin }) {
                       className="btn-block formulario-de-cadastro btn btn-primary"
                       id="anunciar"
                       /* data-bs-toggle="modal" data-bs-target="#myModal" */
-                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor)}
+                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa)}
                     >
                       Confirmar
                     </button>

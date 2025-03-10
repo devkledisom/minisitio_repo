@@ -33,6 +33,8 @@ function Login() {
 
         let loggin = await login(limparCPFouCNPJ(loginValue.current.value), passValue.current.value);
 
+        if(!loggin) return;
+
         if(loggin.success) {
             if (loggin.codTipoUsuario == 1) {
                 navigate("/admin");

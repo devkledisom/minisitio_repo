@@ -839,7 +839,7 @@ module.exports = {
 
         const uf = req.params.uf;
         const caderno = req.params.caderno;
-        console.log()
+        console.log(uf, caderno)
 
         //Atividades
         const resultCaderno = await Cadernos.findAll({
@@ -868,6 +868,9 @@ module.exports = {
                 UF: uf
             }
         });
+
+        console.log(resultCaderno)
+
         res.json({ success: true, message: resultCaderno });
     },
     //atividades

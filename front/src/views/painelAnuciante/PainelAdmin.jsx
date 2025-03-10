@@ -172,7 +172,7 @@ function PainelAdmin() {
     };
 
     const verifyRole = () => {
-        console.log(Object.keys(anunciosPainel).length)
+        //console.log(anunciosPainel.role[0].codTipoUsuario)
         if(Object.keys(anunciosPainel).length > 0) {
             setRole(anunciosPainel.role[0].codTipoUsuario);
         } else {
