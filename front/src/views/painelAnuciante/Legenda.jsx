@@ -45,8 +45,9 @@ const DadosPessoais = (props) => {
     fetch(`${masterPath.url}/caderno/legenda/${uf}/${caderno}`)
       .then((x) => x.json())
       .then((res) => {
-        setLegenda(res[0].legenda);
-        console.log(res)
+        if(res.length) {
+          setLegenda(res[0].legenda);
+        }
       });
 
     /*   const doc = searchParams.get('cpf');

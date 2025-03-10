@@ -38,7 +38,7 @@ function Metadados(props) {
                     <div className="col-md-12">
                         <i className="fa fa-globe"></i>
                         <h4>
-                            <a href="" data-toggle="tooltip" title="Site">
+                            <a href={props.data.descSite !== "0" ? props.data.descSite : ""} data-toggle="tooltip" title="Site" target="_blank" rel="noopener  noreferrer">
                             {props.data.descSite !== "0" ? props.data.descSite : ""}
                             </a>
                         </h4>
@@ -46,7 +46,7 @@ function Metadados(props) {
                     <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/facebook.png" />
                         <h4>
-                            <a href={props.data.descFacebook !== "teste" ? props.data.descFacebook : ""} data-toggle="tooltip" title="Facebook">
+                            <a href={props.data.descFacebook !== "teste" ? props.data.descFacebook : ""} data-toggle="tooltip" title="Facebook" target="_blank" rel="noopener  noreferrer">
                             {props.data.descFacebook !== "teste" ? props.data.descFacebook : ""}
                             </a>
                         </h4>
@@ -54,7 +54,7 @@ function Metadados(props) {
                     <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/instagram.png" />
                         <h4>
-                            <a href={props.data.descInsta !== "0" ? props.data.descInsta : ""} data-toggle="tooltip" title="Instagram">
+                            <a href={props.data.descInsta !== "0" ? props.data.descInsta : ""} data-toggle="tooltip" title="Instagram" target="_blank" rel="noopener  noreferrer">
                             {props.data.descInsta !== "0" ? props.data.descInsta : ""}
                             </a>
                         </h4>
@@ -62,7 +62,7 @@ function Metadados(props) {
                     <div className="col-md-12 link-cinza">
                         <img src="../assets/img/redes/unnamed.webp" className="rounded" />
                         <h4>
-                            <a href="" data-toggle="tooltip" title="Twitter">
+                            <a href={props.data.descTweeter !== "teste" ? props.data.descTweeter : ""} data-toggle="tooltip" title="Twitter" target="_blank" rel="noopener  noreferrer">
                             {props.data.descTweeter !== "teste" ? props.data.descTweeter : ""}
                             </a>
                         </h4>
@@ -70,7 +70,7 @@ function Metadados(props) {
                     <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/linkedin.png" />
                         <h4>
-                            <a href="" data-toggle="tooltip" title="Linkedin">
+                            <a href= {props.data.descLinkedin !== "0" ? props.data.descLinkedin : ""} data-toggle="tooltip" title="Linkedin" target="_blank" rel="noopener  noreferrer">
                             {props.data.descLinkedin !== "0" ? props.data.descLinkedin : ""}
                             </a>
                         </h4>
@@ -78,7 +78,7 @@ function Metadados(props) {
                     <div className="col-md-12 ">
                         <img src="../assets/img/teste/whatsapp.png" />
                         <h4>
-                            <a href={`https://api.whatsapp.com/send?phone=55${props.data.descWhatsApp}`} target="_blank" data-toggle="tooltip" title="WhatsApp">
+                            <a href={`https://api.whatsapp.com/send?phone=55${props.data.descWhatsApp}`} target="_blank" data-toggle="tooltip" title="WhatsApp" rel="noopener  noreferrer">
                                 {props.data.descWhatsApp !== "0" ? props.data.descWhatsApp : "(xx) xxxxx-xxxx"}
                             </a>
                         </h4>
@@ -86,7 +86,7 @@ function Metadados(props) {
                     <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/telegram.png" />
                         <h4>
-                            <a href="https://telegram.me/55" target="_blank" data-toggle="tooltip" title="Telegram">
+                            <a href="https://telegram.me/55" target="_blank" data-toggle="tooltip" title="Telegram" rel="noopener  noreferrer">
                             {props.data.descTelegram !== "0" ? props.data.descTelegram : ""}
                             </a>
                         </h4>
@@ -94,7 +94,7 @@ function Metadados(props) {
                     <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/icons8-meu-negócio-48.png" />
                         <h4>
-                            <a href={props.data.descSkype !== "0" ? props.data.descSkype : ""} target="_blank" data-toggle="tooltip" title="google-meu-negocio">
+                            <a href={props.data.descSkype !== "0" ? props.data.descSkype : ""} target="_blank" data-toggle="tooltip" title="google-meu-negocio" rel="noopener  noreferrer">
                             {props.data.descSkype !== "0" ? props.data.descSkype : ""}
                             </a>
                         </h4>

@@ -3,7 +3,7 @@ import { masterPath } from "../../config/config";
 //LIBS
 import Swal from 'sweetalert2';
 
-export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor) {
+export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa) {
     setShowSpinner(true);
     document.querySelector('.form-create').style.filter = 'blur(2px)';
 
@@ -48,7 +48,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
             "senha": '12345',
             "hashCode": 0,
             "Value": 0,
-            "TipoUsuario": "3",
+            "TipoUsuario": isCapa ? "5" : "3",
             "Telefone": pegarElemento('#descTelefone'),
             "RepresentanteConvenio": "default",
             "Endereco": pegarElemento('#descEndereco'),

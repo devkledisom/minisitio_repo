@@ -285,4 +285,8 @@
         display: block;
     }
 
+    .FullWebCard .proximo {
+        font-size: 18px !important;
+    }
+
 }
