@@ -1,3 +1,50 @@
+const hostname = window.location.hostname;
+const parts = hostname.split('.');
+const subdomain = parts[0];
+const apiProtocol = window.location.protocol;
+const port = 3032;
+
+let apiDomain;
+
+//console.log(hostname);
+//console.log(parts);
+
+if (hostname === "localhost") {
+    apiDomain = `${hostname}:${port}`;
+} else {
+    // Obtém o domínio principal, independentemente do número de partes
+    if (hostname.includes('minisitio.com.br')) {
+        apiDomain = hostname;
+    } else {
+        if (hostname.includes('minisitio.online')) {
+          apiDomain = 'minisitio.online';
+        } else {
+          apiDomain =  `${parts[1]}.${parts[2]}`;
+        }
+
+    }
+}
+
+const apiUrl = `${apiProtocol}//${apiDomain}/api`;
+const domain = `${apiProtocol}//${apiDomain}`;
+
+//console.log(apiUrl);
+//console.log(domain);
+
+export const masterPath = {
+    url: apiUrl,
+    domain: domain,
+    accessToken: sessionStorage.getItem('userTokenAccess')
+};
+
+export const version = {
+    version: 'v2.0.40'
+};
+
+
+
+
+
 //import { apiSecret } from '../../../back/config/config';
 
 /* const dev = process.env.REACT_APP_ENV != 'production';
@@ -26,7 +73,7 @@ export const version = {
 } */
 
 
-const hostname = window.location.hostname;
+/* const hostname = window.location.hostname;
 const parts = hostname.split('.');
 const subdomain = parts[0]; // Obtém o subdomínio
 const apiProtocol = window.location.protocol; // Obtém o protocolo (http: ou https:)
@@ -56,4 +103,4 @@ export const masterPath = {
 
 export const version = {
     version: 'v2.0.40'
-};
+}; */
