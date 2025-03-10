@@ -29,6 +29,9 @@ const FormCadastro = () => {
     });
     const [value, setValue] = useState('');
 
+    //REFS
+    const isCapa = useRef(null);
+
 
     const location = useLocation();
 
@@ -43,14 +46,15 @@ const FormCadastro = () => {
         zIndex: "999"
     }
 
+    const tokenAuth = localStorage.getItem('token');
+
 
     useEffect(() => {
         setShowSpinner(true);
         fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
             .then((x) => x.json())
             .then((res) => {
-                if(res.success) {
-                    console.log(res)
+                if (res.success) {
                     setUsuarios(res.usuarios);
                     setShowSpinner(false);
                 } else {
@@ -108,7 +112,6 @@ const FormCadastro = () => {
 
         let valorDescontoString = value.replace(",", ".");
         let valorDescontoNumber = parseFloat(valorDescontoString).toFixed(2);
-        console.log(valorDescontoNumber);
 
         const data = {
             "usuario": document.getElementById('user').value,
@@ -123,14 +126,15 @@ const FormCadastro = () => {
             "descLink": links.link_1,
             "descLink2": links.link_2,
             "descLink3": links.link_3,
-            "saldo": document.getElementById('adicionar_saldo') ? document.getElementById('adicionar_saldo').value : 0
+            "saldo": document.getElementById('adicionar_saldo') ? document.getElementById('adicionar_saldo').value : 0,
+            "is_capa": isCapa.current.value
         };
 
         const config = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
             body: JSON.stringify(data)
         };
@@ -168,7 +172,7 @@ const FormCadastro = () => {
                             confirmButtonText: 'Entendi'
                         })
                         //}
-                        console.log(res.message);
+                        //console.log(res.message);
                     }
                 }).catch((err) => {
                     // console.log(err);
@@ -286,6 +290,13 @@ const FormCadastro = () => {
                             </div>
                         }
 
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="utilizar-saldo" className="w-50 px-1">Habilitar ID para Capa ?</label>
+                            <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1" ref={isCapa}>
+                                <option value={false}>Não</option>
+                                <option value={true}>Sim</option>
+                            </select>
+                        </div>
 
 
                         <div className="text-center py-3">

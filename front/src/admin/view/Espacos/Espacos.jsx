@@ -49,6 +49,8 @@ const Espacos = () => {
     const campoBusca = useRef(null);
     const codOriginFather = useRef(null);
 
+    const tokenAuth = localStorage.getItem('token');
+
     useEffect(() => {
         setShowSpinner(true);
 
@@ -142,7 +144,7 @@ const Espacos = () => {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
-                        "authorization": 'Bearer ' + masterPath.accessToken
+                        "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
                     },
                 })
                     .then((x) => x.json())
@@ -317,7 +319,6 @@ Para 100000 linhas: 312500ms
 
 
 
-            console.log(campoBusca.current.value)
             fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&caderno=${campoBusca.current.value}`, {
                 method: "POST",
                 headers: {

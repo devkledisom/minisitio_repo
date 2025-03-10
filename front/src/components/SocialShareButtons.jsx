@@ -29,10 +29,11 @@ const socialMap = {
 function SocialShareButtons({ url }) {
   return (
     <ul className='social-share'>
+      <li style={{fontSize: "14px"}}><strong>Compartilhar em:</strong></li>
       {
         Object.entries(socialMap).map((item, keySocial) => (
           <li key={keySocial}>
-            <a href={`${item[1].shareUrl}${url}`} target="_blank" rel='noopener noreferrer'>{
+            <a href={`${item[1].shareUrl}${encodeURIComponent(url)}`} target="_blank" rel='noopener noreferrer'>{
               <img src={`../assets/img/icon-share/${item[1].display}`} width={40} alt={item[1].alter} />
             }</a>
           </li>

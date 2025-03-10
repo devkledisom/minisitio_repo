@@ -6,7 +6,7 @@ module.exports = {
     //domain: "https://minitest.minisitio.online",
     domain: 'https://minisitio.com.br',
     apiSecret: "@rfxzsklc_s+bg7t+@f6^obve=f!swr1%0838lctalor92vi",
-    SECRET_KEY_WEBHOOK: '8c55ee5c104c5fc0f56d11dc6461a84cf29c6b0446d75b45d3e56418bf9ad010',//'08387c6cee5c06161ae3c5c0cbf09fcaa9e941192138de7d6e82509158d83f34'
+    SECRET_KEY_WEBHOOK: '8c55ee5c104c5fc0f56d11dc6461a84cf29c6b0446d75b45d3e56418bf9ad010',//'4483293bb6ba0090d77a9ea1abbe5d596d00e8f502a0d97900cb15a5c6aff576'
     MP_PUBLIC_KEY_SANDBOX: 'TEST-5e2f54bd-585e-4616-9066-5da3e9ef77b1',
     MP_ACCESS_TOKEN_SANDBOX: 'TEST-3820088477508275-012414-7ae9ad0ec7dbed5822ae4d0d1afc3db8-712696516',
     mp_prod: {

@@ -1,6 +1,7 @@
 import React from 'react';
 import '../assets/css/main.css';
 import { BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
+import { version } from '../config/config';
 
 function Footer(props) {
     return (
@@ -15,7 +16,7 @@ function Footer(props) {
                         {/* </ul> */}
                     </div>
                     <div className='col-md-6'>
-                        <h6 className='title-footer h-100 d-flex justify-content-center align-items-center'>© Copyright - My Card City - 2015-2024</h6>
+                        <h6 className='title-footer h-100 d-flex justify-content-center align-items-center'>© Copyright - My Card City - 2015-2025 ({version.version})</h6>
                     </div>
 
                 </div>

@@ -22,9 +22,8 @@ export const AuthProvider = ({ children }) => {
         });
 
         const data = await res.json();
-        console.log('kledisom', data)
         if (res.ok) {
-            localStorage.setItem("token", data.accessToken);
+            sessionStorage.setItem("userTokenAccess", data.accessToken);
             const payload = data.data;
             setUser(payload);
             return payload;
@@ -33,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("userTokenAccess");
         setUser(null);
     };
 
