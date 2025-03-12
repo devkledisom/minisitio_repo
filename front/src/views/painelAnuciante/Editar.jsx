@@ -345,7 +345,7 @@ console.log('kledisom')
             //setShowSpinner(false);
             alert("anuncio Atualizado!");
             if (descontoAtivado == false && minisitio.codTipoAnuncio == 3) {
-              //window.open(`https://mpago.la/1pWzL7A`, '_blank', 'noopener');
+              //window.open(`https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`, '_blank', 'noopener');
             }
             props.selectPage(e, 1);
 

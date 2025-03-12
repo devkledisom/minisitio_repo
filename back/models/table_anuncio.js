@@ -5,6 +5,7 @@ const Uf = require('./table_uf');
 const Usuario = require('./table_usuarios');
 const Desconto = require('./table_desconto');
 const Atividade = require('./table_atividade');
+const Pagamento = require('./table_pagamentos');
 
 const Anuncio = database.define('anuncio', {
     codAnuncio: {
@@ -607,5 +608,12 @@ Anuncio.belongsTo(Atividade, {
     foreignKey: 'codAtividade',
     targetKey: 'id'
 });
+
+// Definição da relação
+/* Anuncio.hasMany(Pagamento, { foreignKey: "cliente", as: "pagamentos" });
+Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", as: "anuncio" }); */
+Anuncio.hasMany(Pagamento, { foreignKey: "cliente", sourceKey: "descCPFCNPJ", as: "pagamentos" });
+Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", targetKey: "descCPFCNPJ", as: "anuncio" });
+
 
 module.exports = Anuncio;

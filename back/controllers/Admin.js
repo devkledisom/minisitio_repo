@@ -1849,7 +1849,12 @@ module.exports = {
                 'codDesconto',
                 'codAtividade',
                 'periodo'
-            ]
+            ],
+            include: {
+                model: Pagamento,
+                as: "pagamentos",  // Nome definido no `hasMany`
+                attributes: ["id", "valor", "status", "data"]
+            }
         });
 
         console.timeEnd("espaco")
@@ -3605,7 +3610,7 @@ module.exports = {
                       totalPaginas: totalPaginas,
                       totalItem: totalItens */
                 },
-                
+
             });
 
         } else {
@@ -3620,7 +3625,7 @@ module.exports = {
 
             res.json({
                 success: false,
-                message: {role: resultUser}
+                message: { role: resultUser }
             });
         }
 
@@ -3640,249 +3645,249 @@ module.exports = {
         if (!requisito) return;
 
 
-        if(requisito === 'codCaderno') {
+        if (requisito === 'codCaderno') {
             buscaPorCaderno();
         } else {
             buscaNormal();
         }
 
         //verificação
-/*         const contemNumero = () => /\d/.test(nu_hash);
-
-        const resultAnuncio = await Anuncio.findAll({
-            where: {
-                [requisito]: nu_hash
-            },
-            limit: porPagina,
-            offset: offset,
-            attributes: [
-                'codAnuncio',
-                'codOrigem',
-                'codDuplicado',
-                'descCPFCNPJ',
-                'descAnuncio',
-                'codTipoAnuncio',
-                'codCaderno',
-                'codUf',
-                'activate',
-                'descPromocao',
-                'createdAt',
-                'dueDate',
-                'codDesconto',
-                'codAtividade',
-                'periodo'
-            ]
-        });
-
-        console.table([1, "id", nu_hash])*/
+        /*         const contemNumero = () => /\d/.test(nu_hash);
+        
+                const resultAnuncio = await Anuncio.findAll({
+                    where: {
+                        [requisito]: nu_hash
+                    },
+                    limit: porPagina,
+                    offset: offset,
+                    attributes: [
+                        'codAnuncio',
+                        'codOrigem',
+                        'codDuplicado',
+                        'descCPFCNPJ',
+                        'descAnuncio',
+                        'codTipoAnuncio',
+                        'codCaderno',
+                        'codUf',
+                        'activate',
+                        'descPromocao',
+                        'createdAt',
+                        'dueDate',
+                        'codDesconto',
+                        'codAtividade',
+                        'periodo'
+                    ]
+                });
+        
+                console.table([1, "id", nu_hash])*/
 
         //if (resultAnuncio.length > 0) {
-         /*   await Promise.all(resultAnuncio.map(async (anun, i) => {
+        /*   await Promise.all(resultAnuncio.map(async (anun, i) => {
 
-                const cader = await anun.getCaderno();
-                anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+               const cader = await anun.getCaderno();
+               anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
 
-                //const estado = await anun.getUf();
-                //anun.codUf = estado.sigla_uf;
+               //const estado = await anun.getUf();
+               //anun.codUf = estado.sigla_uf;
 
-                const desconto = await anun.getDesconto();
-                anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+               const desconto = await anun.getDesconto();
+               anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
 
-                const user = await anun.getUsuario();
+               const user = await anun.getUsuario();
 
-                if (user) {
-                    anun.codUsuario = user.descNome;
-                    anun.dataValues.loginUser = user.descCPFCNPJ;
-                    anun.dataValues.loginPass = user.senha;
-                    anun.dataValues.loginEmail = user.descEmail;
-                    anun.dataValues.loginContato = user.descTelefone;
-                }
+               if (user) {
+                   anun.codUsuario = user.descNome;
+                   anun.dataValues.loginUser = user.descCPFCNPJ;
+                   anun.dataValues.loginPass = user.senha;
+                   anun.dataValues.loginEmail = user.descEmail;
+                   anun.dataValues.loginContato = user.descTelefone;
+               }
 
-            }));
+           }));
 
-            const resultAnuncioCount = await Anuncio.count({
+           const resultAnuncioCount = await Anuncio.count({
+               where: {
+                   [requisito]: nu_hash
+               },
+           });
+
+           const totalItens = resultAnuncioCount;
+           const totalPaginas = Math.ceil(totalItens / porPagina);
+
+           res.json({
+               success: true,
+               message: {
+                   anuncios: resultAnuncio, // Itens da página atual
+                   paginaAtual: paginaAtual,
+                   totalPaginas: totalPaginas,
+                   totalItem: totalItens
+               }
+           });
+           return; */
+
+        async function buscaPorCaderno() {
+            console.time('espaco')
+            const resultAnuncio = await Anuncio.findAll({
                 where: {
                     [requisito]: nu_hash
                 },
+                limit: porPagina,
+                offset: offset,
+                attributes: [
+                    'codAnuncio',
+                    'codOrigem',
+                    'codDuplicado',
+                    'descCPFCNPJ',
+                    'descAnuncio',
+                    'codTipoAnuncio',
+                    'codCaderno',
+                    'codUf',
+                    'activate',
+                    'descPromocao',
+                    'createdAt',
+                    'dueDate',
+                    'codDesconto',
+                    'codAtividade',
+                    'periodo'
+                ]
+            });
+            console.timeEnd("espaco")
+            console.table([1, "id", nu_hash])
+
+            if (resultAnuncio.length > 0) {
+                await Promise.all(resultAnuncio.map(async (anun, i) => {
+
+                    const cader = await anun.getCaderno();
+                    anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+                    //const estado = await anun.getUf();
+                    //anun.codUf = estado.sigla_uf;
+
+                    const desconto = await anun.getDesconto();
+                    anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+
+                    const user = await anun.getUsuario();
+
+                    if (user) {
+                        anun.codUsuario = user.descNome;
+                        anun.dataValues.loginUser = user.descCPFCNPJ;
+                        anun.dataValues.loginPass = user.senha;
+                        anun.dataValues.loginEmail = user.descEmail;
+                        anun.dataValues.loginContato = user.descTelefone;
+                    }
+
+                }));
+
+
+                const consultarRegistros = await Cadernos.findAll({
+                    where: {
+                        nomeCaderno: { [Op.like]: `${nu_hash}%` }
+                    },
+                    raw: true,
+                    attributes: ['total']
+                })
+
+                const totalItens = consultarRegistros[0].total;
+                const totalPaginas = Math.ceil(totalItens / porPagina);
+
+                res.json({
+                    success: true,
+                    message: {
+                        anuncios: resultAnuncio, // Itens da página atual
+                        paginaAtual: paginaAtual,
+                        totalPaginas: totalPaginas,
+                        totalItem: totalItens
+                    }
+                });
+                return;
+
+
+            }
+        }
+        async function buscaNormal() {
+
+            const resultAnuncio = await Anuncio.findAll({
+                where: {
+                    [requisito]: nu_hash
+                },
+                limit: porPagina,
+                offset: offset,
+                attributes: [
+                    'codAnuncio',
+                    'codOrigem',
+                    'codDuplicado',
+                    'descCPFCNPJ',
+                    'descAnuncio',
+                    'codTipoAnuncio',
+                    'codCaderno',
+                    'codUf',
+                    'activate',
+                    'descPromocao',
+                    'createdAt',
+                    'dueDate',
+                    'codDesconto',
+                    'codAtividade',
+                    'periodo'
+                ]
             });
 
-            const totalItens = resultAnuncioCount;
-            const totalPaginas = Math.ceil(totalItens / porPagina);
+            console.table([1, "id", nu_hash])
 
-            res.json({
-                success: true,
-                message: {
-                    anuncios: resultAnuncio, // Itens da página atual
-                    paginaAtual: paginaAtual,
-                    totalPaginas: totalPaginas,
-                    totalItem: totalItens
-                }
-            });
-            return; */
+            if (resultAnuncio.length > 0) {
+                await Promise.all(resultAnuncio.map(async (anun, i) => {
 
-            async function buscaPorCaderno() {
-console.time('espaco')
-                const resultAnuncio = await Anuncio.findAll({
+                    const cader = await anun.getCaderno();
+                    anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+                    //const estado = await anun.getUf();
+                    //anun.codUf = estado.sigla_uf;
+
+                    const desconto = await anun.getDesconto();
+                    anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+
+                    const user = await anun.getUsuario();
+
+                    if (user) {
+                        anun.codUsuario = user.descNome;
+                        anun.dataValues.loginUser = user.descCPFCNPJ;
+                        anun.dataValues.loginPass = user.senha;
+                        anun.dataValues.loginEmail = user.descEmail;
+                        anun.dataValues.loginContato = user.descTelefone;
+                    }
+
+                }));
+
+                const resultAnuncioCount = await Anuncio.count({
                     where: {
                         [requisito]: nu_hash
                     },
-                    limit: porPagina,
-                    offset: offset,
-                    attributes: [
-                        'codAnuncio',
-                        'codOrigem',
-                        'codDuplicado',
-                        'descCPFCNPJ',
-                        'descAnuncio',
-                        'codTipoAnuncio',
-                        'codCaderno',
-                        'codUf',
-                        'activate',
-                        'descPromocao',
-                        'createdAt',
-                        'dueDate',
-                        'codDesconto',
-                        'codAtividade',
-                        'periodo'
-                    ]
-                });
-                console.timeEnd("espaco")
-                console.table([1, "id", nu_hash])
-
-                if (resultAnuncio.length > 0) {
-                    await Promise.all(resultAnuncio.map(async (anun, i) => {
-
-                        const cader = await anun.getCaderno();
-                        anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
-
-                        //const estado = await anun.getUf();
-                        //anun.codUf = estado.sigla_uf;
-
-                        const desconto = await anun.getDesconto();
-                        anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
-
-                        const user = await anun.getUsuario();
-
-                        if (user) {
-                            anun.codUsuario = user.descNome;
-                            anun.dataValues.loginUser = user.descCPFCNPJ;
-                            anun.dataValues.loginPass = user.senha;
-                            anun.dataValues.loginEmail = user.descEmail;
-                            anun.dataValues.loginContato = user.descTelefone;
-                        }
-
-                    }));
-
-
-                    const consultarRegistros = await Cadernos.findAll({
-                        where: {
-                            nomeCaderno: { [Op.like]: `${nu_hash}%` }
-                        },
-                        raw: true,
-                        attributes: ['total']
-                    })
-
-                    const totalItens = consultarRegistros[0].total;
-                    const totalPaginas = Math.ceil(totalItens / porPagina);
-
-                    res.json({
-                        success: true,
-                        message: {
-                            anuncios: resultAnuncio, // Itens da página atual
-                            paginaAtual: paginaAtual,
-                            totalPaginas: totalPaginas,
-                            totalItem: totalItens
-                        }
-                    });
-                    return;
-
-
-                }
-            }
-            async function buscaNormal() {
-
-                const resultAnuncio = await Anuncio.findAll({
-                    where: {
-                        [requisito]: nu_hash
-                    },
-                    limit: porPagina,
-                    offset: offset,
-                    attributes: [
-                        'codAnuncio',
-                        'codOrigem',
-                        'codDuplicado',
-                        'descCPFCNPJ',
-                        'descAnuncio',
-                        'codTipoAnuncio',
-                        'codCaderno',
-                        'codUf',
-                        'activate',
-                        'descPromocao',
-                        'createdAt',
-                        'dueDate',
-                        'codDesconto',
-                        'codAtividade',
-                        'periodo'
-                    ]
                 });
 
-                console.table([1, "id", nu_hash])
+                const totalItens = resultAnuncioCount;
+                const totalPaginas = Math.ceil(totalItens / porPagina);
 
-                if (resultAnuncio.length > 0) {
-                    await Promise.all(resultAnuncio.map(async (anun, i) => {
-
-                        const cader = await anun.getCaderno();
-                        anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
-
-                        //const estado = await anun.getUf();
-                        //anun.codUf = estado.sigla_uf;
-
-                        const desconto = await anun.getDesconto();
-                        anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
-
-                        const user = await anun.getUsuario();
-
-                        if (user) {
-                            anun.codUsuario = user.descNome;
-                            anun.dataValues.loginUser = user.descCPFCNPJ;
-                            anun.dataValues.loginPass = user.senha;
-                            anun.dataValues.loginEmail = user.descEmail;
-                            anun.dataValues.loginContato = user.descTelefone;
-                        }
-
-                    }));
-
-                    const resultAnuncioCount = await Anuncio.count({
-                        where: {
-                            [requisito]: nu_hash
-                        },
-                    });
-
-                    const totalItens = resultAnuncioCount;
-                    const totalPaginas = Math.ceil(totalItens / porPagina);
-
-                    res.json({
-                        success: true,
-                        message: {
-                            anuncios: resultAnuncio, // Itens da página atual
-                            paginaAtual: paginaAtual,
-                            totalPaginas: totalPaginas,
-                            totalItem: totalItens
-                        }
-                    });
-                    return;
+                res.json({
+                    success: true,
+                    message: {
+                        anuncios: resultAnuncio, // Itens da página atual
+                        paginaAtual: paginaAtual,
+                        totalPaginas: totalPaginas,
+                        totalItem: totalItens
+                    }
+                });
+                return;
 
 
-                }
             }
-      /*   } else {
-            res.json({
-                success: false,
-                message: "não encontrado"
-            });
-        } */
+        }
+        /*   } else {
+              res.json({
+                  success: false,
+                  message: "não encontrado"
+              });
+          } */
         return;
-    
+
         //buscar por uf
         const resultEstado = await Uf.findAll({
             where: {
@@ -4677,9 +4682,9 @@ console.time('espaco')
             res.json({ success: true, message: listaAnuncios }); // Envia a resposta primeiro
 
             // Executa a query em segundo plano
-            
-                try {
-                    const query = `UPDATE anuncio
+
+            try {
+                const query = `UPDATE anuncio
                         JOIN (
                             SELECT codAnuncio, 
                                 CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
@@ -4690,41 +4695,41 @@ console.time('espaco')
                         SET anuncio.page = temp.page_number
                         WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
                     `;
-            
-                    database.query(query, {
-                        replacements: { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno },
-                        type: Sequelize.QueryTypes.UPDATE,
-                    });
-            
-                    console.log(`Reorganização concluída para o estado:`, dadosAnuncio.codUf);
-                } catch (error) {
-                    console.error("Erro ao executar a reorganização:", error);
-                }
-          
-            
-          /*   if (listaAnuncios) {
-                const query = `UPDATE anuncio
-                JOIN (
-                    SELECT codAnuncio, 
-                        CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
-                    FROM anuncio
-                    WHERE codUf = :estado AND codCaderno = :caderno
-                ) AS temp
-                ON anuncio.codAnuncio = temp.codAnuncio
-                SET anuncio.page = temp.page_number
-                WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
-             `;
 
-                await database.query(query, {
-                    replacements: { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno }, // Substitui o parâmetro :estado
-                    type: Sequelize.QueryTypes.UPDATE, // Define o tipo de query
+                database.query(query, {
+                    replacements: { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno },
+                    type: Sequelize.QueryTypes.UPDATE,
                 });
-                console.log(`Reorganização concluída para o estado:`);
+
+                console.log(`Reorganização concluída para o estado:`, dadosAnuncio.codUf);
+            } catch (error) {
+                console.error("Erro ao executar a reorganização:", error);
             }
 
 
-
-            res.json({ success: true, message: listaAnuncios }) */
+            /*   if (listaAnuncios) {
+                  const query = `UPDATE anuncio
+                  JOIN (
+                      SELECT codAnuncio, 
+                          CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
+                      FROM anuncio
+                      WHERE codUf = :estado AND codCaderno = :caderno
+                  ) AS temp
+                  ON anuncio.codAnuncio = temp.codAnuncio
+                  SET anuncio.page = temp.page_number
+                  WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
+               `;
+  
+                  await database.query(query, {
+                      replacements: { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno }, // Substitui o parâmetro :estado
+                      type: Sequelize.QueryTypes.UPDATE, // Define o tipo de query
+                  });
+                  console.log(`Reorganização concluída para o estado:`);
+              }
+  
+  
+  
+              res.json({ success: true, message: listaAnuncios }) */
         } catch (err) {
             console.log(err)
             res.json({ success: false, message: err, ter: codTipoAnuncio })
@@ -5305,14 +5310,14 @@ console.time('espaco')
                 'periodo'
             ]
         }); */
-/* 
-        const query = `
-    SELECT codAnuncio, codOrigem, codDuplicado, descCPFCNPJ, descAnuncio, codTipoAnuncio, codCaderno, codUf, activate, descPromocao, createdAt, dueDate, codDesconto, codAtividade, periodo
-    FROM anuncio
-    IGNORE INDEX (idx_anuncio_codCaderno_otimizado, idx_anuncio_codCaderno)
-    WHERE codCaderno = :caderno
-    LIMIT 50000;
-`; */
+        /* 
+                const query = `
+            SELECT codAnuncio, codOrigem, codDuplicado, descCPFCNPJ, descAnuncio, codTipoAnuncio, codCaderno, codUf, activate, descPromocao, createdAt, dueDate, codDesconto, codAtividade, periodo
+            FROM anuncio
+            IGNORE INDEX (idx_anuncio_codCaderno_otimizado, idx_anuncio_codCaderno)
+            WHERE codCaderno = :caderno
+            LIMIT 50000;
+        `; */
         const query = `SELECT 
     a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
     a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
@@ -5323,67 +5328,67 @@ LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
 WHERE a.codCaderno = :caderno
 LIMIT 50000;
 `;
-//IGNORE INDEX (idx_anuncio_codCaderno_otimizado, idx_anuncio_codCaderno)
+        //IGNORE INDEX (idx_anuncio_codCaderno_otimizado, idx_anuncio_codCaderno)
 
 
 
-const resultAnuncio = await database.query(query, {
-    replacements: { caderno: cadernoParam },
-    type: Sequelize.QueryTypes.SELECT
-});
+        const resultAnuncio = await database.query(query, {
+            replacements: { caderno: cadernoParam },
+            type: Sequelize.QueryTypes.SELECT
+        });
 
         console.timeEnd('exp');
 
-/*         await Promise.all(
-            resultAnuncio.map(async (anun) => {
-                try {
-                    //const user = usuarios.find(teste => teste.descCPFCNPJ == anun.dataValues.descCPFCNPJ);
-                    const user = await Usuarios.findAll({
-                        where: {
-                            descCPFCNPJ: anun.dataValues.descCPFCNPJ
-                        }
-                    });
-
-                    function dateformat(data) {
-                        const date = new Date(data);
-                        const formattedDate = date.toISOString().split('T')[0];
-
-                        return formattedDate;
-                    };
-
-
-                    if (user) {
-                        // Cria um novo objeto com as informações do usuário inseridas após 'codDesconto'
-                        const reorderedData = {};
-                        for (const key in anun.dataValues) {
-                            reorderedData[key] = anun.dataValues[key];
-                            if (key === 'codDesconto') {
-                                // Adiciona as propriedades do usuário após 'codDesconto'
-                                reorderedData.codUsuario = user.descNome;
-                                reorderedData.loginUser = user.descCPFCNPJ;
-                                reorderedData.loginPass = user.senha;
-                                reorderedData.loginEmail = user.descEmail;
-                                reorderedData.loginContato = user.descTelefone;
-                                reorderedData.link = `${masterPath.domain}/local/${encodeURIComponent(
-                                    anun.dataValues.descAnuncio
-                                )}?id=${anun.dataValues.codAnuncio}`;
-                                reorderedData.createdAt = dateformat(anun.dataValues.createdAt);
-                                reorderedData.dueDate = dateformat(anun.dataValues.dueDate);
+        /*         await Promise.all(
+                    resultAnuncio.map(async (anun) => {
+                        try {
+                            //const user = usuarios.find(teste => teste.descCPFCNPJ == anun.dataValues.descCPFCNPJ);
+                            const user = await Usuarios.findAll({
+                                where: {
+                                    descCPFCNPJ: anun.dataValues.descCPFCNPJ
+                                }
+                            });
+        
+                            function dateformat(data) {
+                                const date = new Date(data);
+                                const formattedDate = date.toISOString().split('T')[0];
+        
+                                return formattedDate;
+                            };
+        
+        
+                            if (user) {
+                                // Cria um novo objeto com as informações do usuário inseridas após 'codDesconto'
+                                const reorderedData = {};
+                                for (const key in anun.dataValues) {
+                                    reorderedData[key] = anun.dataValues[key];
+                                    if (key === 'codDesconto') {
+                                        // Adiciona as propriedades do usuário após 'codDesconto'
+                                        reorderedData.codUsuario = user.descNome;
+                                        reorderedData.loginUser = user.descCPFCNPJ;
+                                        reorderedData.loginPass = user.senha;
+                                        reorderedData.loginEmail = user.descEmail;
+                                        reorderedData.loginContato = user.descTelefone;
+                                        reorderedData.link = `${masterPath.domain}/local/${encodeURIComponent(
+                                            anun.dataValues.descAnuncio
+                                        )}?id=${anun.dataValues.codAnuncio}`;
+                                        reorderedData.createdAt = dateformat(anun.dataValues.createdAt);
+                                        reorderedData.dueDate = dateformat(anun.dataValues.dueDate);
+                                    }
+                                }
+                                anun.dataValues = reorderedData;
                             }
+        
+                            // Traduzindo valores específicos
+                            anun.dataValues.codTipoAnuncio =
+                                anun.dataValues.codTipoAnuncio == 3 ? "Completo" : anun.dataValues.codTipoAnuncio;
+                            anun.dataValues.activate = anun.dataValues.activate == 1 ? "Ativo" : "Inativo";
+                        } catch (error) {
+                            console.error(`Erro ao processar anúncio ${anun.dataValues.codAnuncio}:`, error);
                         }
-                        anun.dataValues = reorderedData;
-                    }
-
-                    // Traduzindo valores específicos
-                    anun.dataValues.codTipoAnuncio =
-                        anun.dataValues.codTipoAnuncio == 3 ? "Completo" : anun.dataValues.codTipoAnuncio;
-                    anun.dataValues.activate = anun.dataValues.activate == 1 ? "Ativo" : "Inativo";
-                } catch (error) {
-                    console.error(`Erro ao processar anúncio ${anun.dataValues.codAnuncio}:`, error);
-                }
-            })
-        );
- */
+                    })
+                );
+         */
         const ExcelJS = require('exceljs');
 
         async function createExcel() {
@@ -5422,7 +5427,7 @@ const resultAnuncio = await database.query(query, {
             resultAnuncio.forEach(item => {
 
                 let tipPerfil = () => {
-                    if(item.codTipoAnuncio == 3) {
+                    if (item.codTipoAnuncio == 3) {
                         return "ANUNCIANTE";
                     } else if (item.codTipoAnuncio == 5) {
                         return "PREFEITURA";
@@ -5437,7 +5442,7 @@ const resultAnuncio = await database.query(query, {
                     doc: item.codDuplicado,
                     nome: item.descCPFCNPJ,
                     email: item.descAnuncio,
-                    tipoPerfil: tipPerfil(), 
+                    tipoPerfil: tipPerfil(),
                     tipoUser: item.codCaderno,
                     uf: item.codUf,
                     status: item.activate == 1 ? "ATIVO" : "DESATIVADO",
@@ -5445,7 +5450,7 @@ const resultAnuncio = await database.query(query, {
                     statu: item.createdAt,
                     duedate: item.dueDate,
                     desconto: item.codDesconto,
-                    tempValidade: item.periodo, 
+                    tempValidade: item.periodo,
                     //teste: item.loginUser,
                     user: item.descNome,
                     loginUser: item.descCPFCNPJ,
@@ -5453,7 +5458,7 @@ const resultAnuncio = await database.query(query, {
                     emailUser: item.descEmail,
                     contatoUser: item.descTelefone,
                     linkPerfil: `${masterPath.domain}/local/${encodeURIComponent(item.descAnuncio)}?id=${item.codAnuncio}`,
-                    atividade: item.codAtividade 
+                    atividade: item.codAtividade
                 })
             })
 
@@ -6758,256 +6763,256 @@ const resultAnuncio = await database.query(query, {
         function processRowWithDelay(row, totalLinhas, callback) {
             setTimeout(() => {
                 //updateJsonName(filePath, false, totalLinhas);
-           
-              novaImportacao1(row, totalLinhas);
-              callback();
+
+                novaImportacao1(row, totalLinhas);
+                callback();
             }, delay);
-          }
+        }
 
-     /*    fs.createReadStream(arquivoImportado)
-        .pipe(csv())
-        .on('data', async (row) => {
-            if(totalLinhas == 0) {
-                updateJsonName(filePath, false, 0);
-            }
-
-
-                totalLinhas++
-                // console.log(row)
-              const test = await novaImportacao1(row, totalLinhas)
- 
-
-            
-        })
-        .on('end', () => {
-            console.log("Arquivo lido com sucesso!")
-            updateJsonName(filePath, true, totalLinhas);
-        })
- */
+        /*    fs.createReadStream(arquivoImportado)
+           .pipe(csv())
+           .on('data', async (row) => {
+               if(totalLinhas == 0) {
+                   updateJsonName(filePath, false, 0);
+               }
+   
+   
+                   totalLinhas++
+                   // console.log(row)
+                 const test = await novaImportacao1(row, totalLinhas)
+    
+   
+               
+           })
+           .on('end', () => {
+               console.log("Arquivo lido com sucesso!")
+               updateJsonName(filePath, true, totalLinhas);
+           })
+    */
 
 
         function delay(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
-        
+
         async function processRow(row) {
             if (totalLinhas === 0) {
                 updateJsonName(filePath, false, 0);
             }
-        
+
             totalLinhas++;
-            
+
             const test = await novaImportacao1(row, totalLinhas);
             await delay(1000); // Espera 1 segundo antes de processar a próxima linha
         }
-        
+
         async function processFile() {
             console.log("Iniciando leitura do arquivo...");
-        
+
             const stream = fs.createReadStream(arquivoImportado).pipe(csv());
-        
+
             for await (const row of stream) {
                 await processRow(row);
             }
-        
+
             console.log("Arquivo lido com sucesso!");
             updateJsonName(filePath, true, totalLinhas);
         }
-        
+
         processFile();
-        
 
 
 
 
-            const now = new Date();
-            const hours = now.getHours(); // Horas (0-23)
-            const minutes = now.getMinutes(); // Minutos (0-59)
-            const seconds = now.getSeconds(); // Segundos (0-59)
-    
-            //console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
-    
-    
-    
-            // Caminho do arquivo JSON
-            
-    
-            // Função para alterar a propriedade "name"
-            function updateJsonName(filePath, endProccess, newName) {
+
+        const now = new Date();
+        const hours = now.getHours(); // Horas (0-23)
+        const minutes = now.getMinutes(); // Minutos (0-59)
+        const seconds = now.getSeconds(); // Segundos (0-59)
+
+        //console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
+
+
+
+        // Caminho do arquivo JSON
+
+
+        // Função para alterar a propriedade "name"
+        function updateJsonName(filePath, endProccess, newName) {
+            try {
+                // 1. Ler o conteúdo do arquivo JSON
+                const jsonData = fs.readFileSync(filePath, 'utf8');
+                const data = JSON.parse(jsonData); // Converte o texto em um objeto JavaScript
+
+                // 2. Modificar a propriedade "name"
+                data.progress = newName;// ? newName : data.progress;
+                data.fim = `${hours}:${minutes}:${seconds}`;
+                data.endProccess = endProccess;
+
+                // 3. Escrever o conteúdo atualizado de volta no arquivo
+                fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8'); // null e 2 para formatar com indentação
+                console.log(`Propriedade "name" atualizada para: ${newName}`);
+            } catch (error) {
+                console.error('Erro ao atualizar a propriedade "name":', error);
+            }
+        }
+
+
+        async function novaImportacao1(result, index) {
+
+            //console.log(result, index, result[1])
+
+            const codTipoAnuncio = result['TIPO'];
+            const idDesconto = result['ID'];
+            const nomeAnuncio = result['NOMe'];
+            const telefone = result['TELEFONE'];
+            const cep = result['CEP'];
+            const estado = result['UF'];
+            const cidade = result['CIDADE'];
+            const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
+            const nuDocumento = result['CNPJ_CPF'];
+            const autorizante = result['AUTORIZANTE'];
+            const email = result['EMAIL'];
+            //const chavePix = result['PIX'];
+            //const login = result[9];
+            //const senha = 12345;
+
+
+            const verificarUserExists = await Usuarios.findAll({
+                where: {
+                    descCPFCNPJ: nuDocumento
+                }
+            });
+
+            if (verificarUserExists.length > 0) {
+                let codUser = verificarUserExists[0].dataValues.codUsuario;
+
+
+                let sucesso = await criarAnuncioImportado(codUser);
+                console.log("dsadhjakhdlajdkasd: ", sucesso)
+                return sucesso;
+            } else {
+
+                const dadosUsuario = {
+                    "codTipoPessoa": "pf",
+                    "descCPFCNPJ": nuDocumento,
+                    "descNome": nomeAnuncio || `import${index}`,
+                    "descEmail": email || "atualizar",
+                    "senha": senha,
+                    "codTipoUsuario": 3,
+                    "descTelefone": telefone || "atualizar",
+                    "codUf": estado,
+                    "codCidade": cidade,
+                    "dtCadastro": dataNow(),
+                    "usuarioCod": 0,
+                    "dtCadastro2": dataNow(),
+                    "dtAlteracao": dataNow(),
+                    "ativo": "1"
+                };
+
+
                 try {
-                    // 1. Ler o conteúdo do arquivo JSON
-                    const jsonData = fs.readFileSync(filePath, 'utf8');
-                    const data = JSON.parse(jsonData); // Converte o texto em um objeto JavaScript
-    
-                    // 2. Modificar a propriedade "name"
-                    data.progress = newName;// ? newName : data.progress;
-                    data.fim = `${hours}:${minutes}:${seconds}`;
-                    data.endProccess = endProccess;
-    
-                    // 3. Escrever o conteúdo atualizado de volta no arquivo
-                    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8'); // null e 2 para formatar com indentação
-                    console.log(`Propriedade "name" atualizada para: ${newName}`);
-                } catch (error) {
-                    console.error('Erro ao atualizar a propriedade "name":', error);
+                    const listaUsers = await Usuarios.create(dadosUsuario);
+
+                    let codUser = listaUsers.dataValues.codUsuario;
+
+
+                    //criarAnuncioImportado(codUser);
+
+                    let sucesso = await criarAnuncioImportado(codUser);
+                    return sucesso;
+
+                    //res.status(201).json({ success: true, message: listaUsers })
+
+
+                } catch (erro) {
+                    console.error(erro.message);
+                    //res.status(500).json({ success: false, message: erro.errors[0].message })
                 }
             }
-    
-    
-            async function novaImportacao1(result, index) {
-    
-                //console.log(result, index, result[1])
-    
-                const codTipoAnuncio = result['TIPO'];
-                const idDesconto = result['ID'];
-                const nomeAnuncio = result['NOMe'];
-                const telefone = result['TELEFONE'];
-                const cep = result['CEP'];
-                const estado = result['UF'];
-                const cidade = result['CIDADE'];
-                const tipoAtividade = result['ATIVIDADE_PRINCIPAL_CNAE'];
-                const nuDocumento = result['CNPJ_CPF'];
-                const autorizante = result['AUTORIZANTE'];
-                const email = result['EMAIL'];
-                //const chavePix = result['PIX'];
-                //const login = result[9];
-                //const senha = 12345;
-   
-    
-                const verificarUserExists = await Usuarios.findAll({
+
+
+
+            function dataNow() {
+                // Criar um novo objeto Date (representando a data e hora atuais)
+                var dataAtual = new Date();
+
+                // Extrair os componentes da data e hora
+                var ano = dataAtual.getFullYear();
+                var mes = dataAtual.getMonth() + 1; // Meses começam de 0, então adicionamos 1
+                var dia = dataAtual.getDate();
+                var hora = dataAtual.getHours();
+                var minutos = dataAtual.getMinutes();
+                var segundos = dataAtual.getSeconds();
+
+                // Formatar a data e hora
+                var dataFormatada = ano + '-' + mes + '-' + dia;
+                var horaFormatada = hora + ':' + minutos + ':' + segundos;
+
+                // Exibir a data e hora atual
+                console.log('Data atual:', dataFormatada);
+                console.log('Hora atual:', horaFormatada);
+
+                return dataFormatada + " " + horaFormatada;
+            };
+
+            async function criarAnuncioImportado(codUser) {
+
+                let codigoDeDesconto = await Descontos.findAll({
                     where: {
-                        descCPFCNPJ: nuDocumento
+                        hash: idDesconto
                     }
                 });
-    
-                if (verificarUserExists.length > 0) {
-                    let codUser = verificarUserExists[0].dataValues.codUsuario;
-    
-    
-                    let sucesso = await criarAnuncioImportado(codUser);
-                    console.log("dsadhjakhdlajdkasd: ", sucesso)
-                    return sucesso;
-                } else {
-    
-                    const dadosUsuario = {
-                        "codTipoPessoa": "pf",
-                        "descCPFCNPJ": nuDocumento,
-                        "descNome": nomeAnuncio || `import${index}`,
-                        "descEmail": email || "atualizar",
-                        "senha": senha,
-                        "codTipoUsuario": 3,
-                        "descTelefone": telefone || "atualizar",
-                        "codUf": estado,
-                        "codCidade": cidade,
-                        "dtCadastro": dataNow(),
-                        "usuarioCod": 0,
-                        "dtCadastro2": dataNow(),
-                        "dtAlteracao": dataNow(),
-                        "ativo": "1"
-                    };
-    
-    
-                    try {
-                        const listaUsers = await Usuarios.create(dadosUsuario);
-    
-                        let codUser = listaUsers.dataValues.codUsuario;
-    
-    
-                        //criarAnuncioImportado(codUser);
-    
-                        let sucesso = await criarAnuncioImportado(codUser);
-                        return sucesso;
-    
-                        //res.status(201).json({ success: true, message: listaUsers })
-    
-    
-                    } catch (erro) {
-                        console.error(erro.message);
-                        //res.status(500).json({ success: false, message: erro.errors[0].message })
-                    }
-                }
-    
-    
-    
-                function dataNow() {
-                    // Criar um novo objeto Date (representando a data e hora atuais)
-                    var dataAtual = new Date();
-    
-                    // Extrair os componentes da data e hora
-                    var ano = dataAtual.getFullYear();
-                    var mes = dataAtual.getMonth() + 1; // Meses começam de 0, então adicionamos 1
-                    var dia = dataAtual.getDate();
-                    var hora = dataAtual.getHours();
-                    var minutos = dataAtual.getMinutes();
-                    var segundos = dataAtual.getSeconds();
-    
-                    // Formatar a data e hora
-                    var dataFormatada = ano + '-' + mes + '-' + dia;
-                    var horaFormatada = hora + ':' + minutos + ':' + segundos;
-    
-                    // Exibir a data e hora atual
-                    console.log('Data atual:', dataFormatada);
-                    console.log('Hora atual:', horaFormatada);
-    
-                    return dataFormatada + " " + horaFormatada;
+
+                const dataObj = {
+                    "codUsuario": codUser,
+                    "codTipoAnuncio": codTipoAnuncio,
+                    "codAtividade": tipoAtividade, //await buscarAtividade(),
+                    "codCaderno": cidade,
+                    "codUf": estado,
+                    "codCidade": cidade,
+                    "descAnuncio": nomeAnuncio || `import${index}`,
+                    "descImagem": 0,
+                    "descEndereco": "atualizar",
+                    "descTelefone": telefone || "atualizar",
+                    "descCelular": 0,
+                    "descEmailComercial": 0,
+                    "descEmailRetorno": email,
+                    "descWhatsApp": 0,
+                    "descCEP": cep,
+                    "descTipoPessoa": "pf",
+                    "descCPFCNPJ": nuDocumento,
+                    "descNomeAutorizante": autorizante || `import${index}`,
+                    "descEmailAutorizante": 0,
+                    "codDesconto": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
+                    "descChavePix": 'chavePix',
+                    "qntVisualizacoes": 0,
+                    "codDuplicado": 0,
+                    "descPromocao": 0,
+                    "activate": 1,
+
                 };
-    
-                async function criarAnuncioImportado(codUser) {
-    
-                    let codigoDeDesconto = await Descontos.findAll({
-                        where: {
-                            hash: idDesconto
-                        }
-                    });
-    
-                    const dataObj = {
-                        "codUsuario": codUser,
-                        "codTipoAnuncio": codTipoAnuncio,
-                        "codAtividade": tipoAtividade, //await buscarAtividade(),
-                        "codCaderno": cidade,
-                        "codUf": estado,
-                        "codCidade": cidade,
-                        "descAnuncio": nomeAnuncio || `import${index}`,
-                        "descImagem": 0,
-                        "descEndereco": "atualizar",
-                        "descTelefone": telefone || "atualizar",
-                        "descCelular": 0,
-                        "descEmailComercial": 0,
-                        "descEmailRetorno": email,
-                        "descWhatsApp": 0,
-                        "descCEP": cep,
-                        "descTipoPessoa": "pf",
-                        "descCPFCNPJ": nuDocumento,
-                        "descNomeAutorizante": autorizante || `import${index}`,
-                        "descEmailAutorizante": 0,
-                        "codDesconto": codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
-                        "descChavePix": 'chavePix',
-                        "qntVisualizacoes": 0,
-                        "codDuplicado": 0,
-                        "descPromocao": 0,
-                        "activate": 1,
-    
-                    };
-    
-                    const criarAnuncios = await Anuncio.create(dataObj);
-                    updateJsonName(filePath, false, index);
-    
-                    console.log(criarAnuncios);
-                    const progress = index; // Progresso fictício
-                    console.log("laksljhasfasdfgafsdf: ", progress);
-                    // Atualizar o nome
-                    return true;
-    
-                };
-    
-                
-    
-            }
-        
+
+                const criarAnuncios = await Anuncio.create(dataObj);
+                updateJsonName(filePath, false, index);
+
+                console.log(criarAnuncios);
+                const progress = index; // Progresso fictício
+                console.log("laksljhasfasdfgafsdf: ", progress);
+                // Atualizar o nome
+                return true;
+
+            };
+
+
+
+        }
+
 
         return;
 
-            
-            updateJsonName(filePath, false, 0);
+
+        updateJsonName(filePath, false, 0);
 
         async function processExcelInChunks() {
 
@@ -7020,12 +7025,12 @@ const resultAnuncio = await database.query(query, {
             await database.query(`ALTER TABLE anuncio DISABLE KEYS;`, {
                 type: Sequelize.QueryTypes.RAW,
             });
-            
+
             await database.query(`ALTER TABLE usuario DISABLE KEYS;`, {
                 type: Sequelize.QueryTypes.RAW,
             });
-            
-            
+
+
             var index = 0;
             for await (const worksheet of workbook) {
                 console.log(`Processando planilha: ${worksheet.name}`, worksheet);
@@ -7036,11 +7041,11 @@ const resultAnuncio = await database.query(query, {
                     console.log(row.values[0]); // Processa cada linha aqui
                     //teste(row.values)
 
-                     if (row.values[1] != "TIPO") {
+                    if (row.values[1] != "TIPO") {
                         let novo = await novaImportacao(row.values, rowIndex)
                         rowIndex++; // Incrementa o índice
                         index++; // Incrementa o índice
-                    } 
+                    }
 
                 }
             }
@@ -7053,11 +7058,11 @@ const resultAnuncio = await database.query(query, {
             await database.query(`ALTER TABLE anuncio ENABLE KEYS;`, {
                 type: Sequelize.QueryTypes.RAW,
             });
-            
+
             await database.query(`ALTER TABLE usuario ENABLE KEYS;`, {
                 type: Sequelize.QueryTypes.RAW,
             });
-            
+
         }
 
         //processExcelInChunks().catch(console.error);
@@ -7072,37 +7077,37 @@ const resultAnuncio = await database.query(query, {
                  req.io.emit("progress", { progress }); // Envia progresso ao cliente conectado
              }, 2000); */
 
-/*         const now = new Date();
-        const hours = now.getHours(); // Horas (0-23)
-        const minutes = now.getMinutes(); // Minutos (0-59)
-        const seconds = now.getSeconds(); // Segundos (0-59) */
+        /*         const now = new Date();
+                const hours = now.getHours(); // Horas (0-23)
+                const minutes = now.getMinutes(); // Minutos (0-59)
+                const seconds = now.getSeconds(); // Segundos (0-59) */
 
         //console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
 
 
 
         // Caminho do arquivo JSON
-        
+
 
         // Função para alterar a propriedade "name"
-      /*   function updateJsonName(filePath, endProccess, newName) {
-            try {
-                // 1. Ler o conteúdo do arquivo JSON
-                const jsonData = fs.readFileSync(filePath, 'utf8');
-                const data = JSON.parse(jsonData); // Converte o texto em um objeto JavaScript
-
-                // 2. Modificar a propriedade "name"
-                data.progress = newName ? newName : data.progress;
-                data.fim = `${hours}:${minutes}:${seconds}`;
-                data.endProccess = endProccess;
-
-                // 3. Escrever o conteúdo atualizado de volta no arquivo
-                fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8'); // null e 2 para formatar com indentação
-                console.log(`Propriedade "name" atualizada para: ${newName}`);
-            } catch (error) {
-                console.error('Erro ao atualizar a propriedade "name":', error);
-            }
-        } */
+        /*   function updateJsonName(filePath, endProccess, newName) {
+              try {
+                  // 1. Ler o conteúdo do arquivo JSON
+                  const jsonData = fs.readFileSync(filePath, 'utf8');
+                  const data = JSON.parse(jsonData); // Converte o texto em um objeto JavaScript
+  
+                  // 2. Modificar a propriedade "name"
+                  data.progress = newName ? newName : data.progress;
+                  data.fim = `${hours}:${minutes}:${seconds}`;
+                  data.endProccess = endProccess;
+  
+                  // 3. Escrever o conteúdo atualizado de volta no arquivo
+                  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8'); // null e 2 para formatar com indentação
+                  console.log(`Propriedade "name" atualizada para: ${newName}`);
+              } catch (error) {
+                  console.error('Erro ao atualizar a propriedade "name":', error);
+              }
+          } */
 
 
         async function novaImportacao(result, index) {
@@ -8089,15 +8094,53 @@ const resultAnuncio = await database.query(query, {
 
     //PAGAMENTOS
     listarPagamentos: async (req, res) => {
+        const dataPaginacao = await paginador(req, 10);
+        console.log(dataPaginacao)
+
         const todosPagamentos = await Pagamento.findAll({
-            limit: 10,
+            limit: dataPaginacao.limit,
+            offset: dataPaginacao.offset,
+            order: [['data', 'DESC']],
             raw: true
         });
 
-        res.json({success: true, data: todosPagamentos})
+        res.json({
+            success: true,
+            data: todosPagamentos,
+            paginaAtual: dataPaginacao.paginaAtual,
+            totalPaginas: dataPaginacao.totalPaginas,
+            totalItem: dataPaginacao.totalItens
+        })
     }
 
 }
+
+async function paginador(req, limit) {
+    const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+    const porPagina = limit; // Número de itens por página
+    const offset = (paginaAtual - 1) * porPagina;
+
+    const consultarRegistros = await Globals.findAll({
+        where: {
+            keyValue: "total_pagamentos"
+        },
+        raw: true
+    })
+
+
+    // Número total de itens
+    const totalItens = consultarRegistros[0].value;
+    // Número total de páginas
+    const totalPaginas = Math.ceil(totalItens / porPagina);
+
+    return {
+        paginaAtual: paginaAtual,
+        totalPaginas: totalPaginas,
+        totalItens: totalItens,
+        limit: limit,
+        offset: offset
+    }
+};
 
 function dataNow() {
     // Criar um novo objeto Date (representando a data e hora atuais)

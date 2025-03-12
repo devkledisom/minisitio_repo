@@ -199,7 +199,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                 window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
                                 console.log("2");
                             } else {
-                                window.open(`https://mpago.la/1pWzL7A`, '_blank');
+                                window.open(`https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`, '_blank');
                                 console.log("3");
                             }
 
@@ -218,7 +218,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                 window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                                 console.log("2");
                             } else {
-                                window.location.href = `https://mpago.la/1pWzL7A`;
+                                window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
                                 console.log("3");
                             }
                         }
@@ -237,7 +237,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                              window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
                              console.log("2");
                          } else {
-                             window.open(`https://mpago.la/1pWzL7A`, '_blank');
+                             window.open(`https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`, '_blank');
                              console.log("3");
                          }
  
@@ -252,7 +252,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                          window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                          console.log("2");
                      } else {
-                         window.location.href = `https://mpago.la/1pWzL7A`;
+                         window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
                          console.log("3");
                      }
                  }, 5000); */

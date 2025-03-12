@@ -24,6 +24,7 @@ const Anuncio = require('../models/table_anuncio');
 
 //middleware
 const auth = require('../middlewares/authentication.js');
+const authVerification = require('../middlewares/authVerification.js');
 
 router.use(function timelog(req, res, next) {
     //auth();
@@ -52,6 +53,7 @@ router.get('/api/admin/usuario', Admin.listarUsuarios);
 //Login
 router.post('/api/entrar', Login.login);
 router.post('/api/test-connection', auth, (req, res) => res.json({success: true}));
+router.post('/api/is-auth', authVerification, Login.sessionVerification);
 
 //Admin
 router.post('/api/admin/usuario/create', Users.create);
