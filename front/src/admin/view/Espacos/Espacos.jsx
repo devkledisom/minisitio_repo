@@ -481,7 +481,6 @@ Para 100000 linhas: 312500ms
                                     </tr>
                                 </thead>
                                 <tbody>
-  
                                     {
 
 
@@ -501,13 +500,13 @@ Para 100000 linhas: 312500ms
                                                     <td>{item.codUf}</td>
                                                     {/*  <td>{item.activate ? "Ativado" : "Desativado"}</td> */}
                                                     <td><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"} /></td>
-                                                    <td>Isento</td>
-                                                    <td>Isento</td>
-                                                    <td>Isento</td>
+                                                    <td>{item.pagamentos.length > 0 ? item.pagamentos[0].status : "Isento"}</td>
+                                                    <td>{item.pagamentos.length > 0 ? formatData(item.pagamentos[0].data) : "Isento"}</td>
+                                                    <td>{item.pagamentos.length > 0 ? item.pagamentos[0].valor : "Isento"}</td>
 
                                                     <td>R$ {item.descPromocao},00</td>
                                                     <td>{formatData(item.createdAt)}</td>
-                                                    <td></td>
+                                                    <td>{item.pagamentos.length > 0 ? formatData(item.pagamentos[0].data) : "-"}</td>
                                                     <td>{dataExpiracao(item.dueDate)}</td>
                                                     <td>{item.periodo}</td>
                                                     <td>{item.codDesconto}</td>

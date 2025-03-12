@@ -1,5 +1,5 @@
 // components/OutroComponente.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 //import '../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -13,13 +13,16 @@ import Spinner from '../../../components/Spinner';
 
 const Pagamentos = () => {
 
-    const [paginasTotal, setPaginas] = useState();
+    const [paginas, setPaginas] = useState({});
     const [selectId, setSelectId] = useState();
     const [pagamentos, setPagamentos] = useState([]);
     const [showSpinner, setShowSpinner] = useState(true);
 
     const location = useLocation();
     const navigator = useNavigate();
+
+    //REFS
+    const statusColor = useRef(null);
 
 
     const getParam = new URLSearchParams(location.search);
@@ -31,12 +34,18 @@ const Pagamentos = () => {
         fetch(`${masterPath.url}/admin/pagamentos/read?page=${param}`)
             .then((x) => x.json())
             .then((res) => {
-                console.log(res)
                 //setCidade(res.message.anuncios);
                 setPagamentos(res.data)
-                //setPaginas(res.message.totalPaginas)
+                setPaginas(res)
                 setShowSpinner(false);
-                //console.log(res.message);
+
+                /*  const statusColorsMap = res.data.forEach(item => {
+                     console.log(item)
+                     if(item.status === "cancelled") {
+                         document.getElementById(item.id).childNodes[3].style.backgroundColor = "red"
+                     }
+                 })  */
+
             })
 
 
@@ -71,9 +80,9 @@ const Pagamentos = () => {
                         .then((x) => x.json())
                         .then((res) => {
                             //setCidade(res.message.anuncios);
-                        /*     setPagamentos(res.message.atividades)
-                            setPaginas(res.message.totalPaginas)
-                            setShowSpinner(false); */
+                            /*     setPagamentos(res.message.atividades)
+                                setPaginas(res.message.totalPaginas)
+                                setShowSpinner(false); */
                             //console.log(res.message);
                         })
                 }
@@ -104,6 +113,17 @@ const Pagamentos = () => {
         zIndex: "999"
     }
 
+    const selecionarCor = (status) => {
+        switch (status) {
+            case "cancelled":
+                return "red";
+            case "approved":
+                return "lime";
+            case "pending":
+                return "gold";
+        }
+    }
+
 
     return (
         <div className="Atividades">
@@ -115,7 +135,7 @@ const Pagamentos = () => {
 
                 <h1 className="pt-4 px-4">Pagamentos</h1>
                 <div className="container-fluid py-4 px-4">
-                   {/*  <div className="row margin-bottom-10">
+                    {/*  <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
                             <button type="button" className="btn custom-button" onClick={() => navigator('/atividades/cadastro')}>Adicionar</button>
                             <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/atividades/editar?id=${selectId}`)}>Editar</button>
@@ -152,7 +172,7 @@ const Pagamentos = () => {
                                                 <td>{item.id_mp}</td>
                                                 <td>{item.cliente}</td>
                                                 <td>{item.valor}</td>
-                                                <td>{item.status}</td>
+                                                <td style={{ backgroundColor: selecionarCor(item.status) }}>{item.status}</td>
                                                 <td>{item.data.split("T")[0]}</td>
                                             </tr>
 
@@ -163,7 +183,7 @@ const Pagamentos = () => {
                             </table>
                         </div>
                     </div>
-                    <Pagination totalPages={paginasTotal} table={"atividades"} />
+                    <Pagination totalPages={paginas.totalPaginas} paginaAtual={paginas.paginaAtual} totalItem={paginas.totalItem} table={"pagamentos"} />
 
                 </article>
                 <p className='w-100 text-center'>© MINISITIO</p>

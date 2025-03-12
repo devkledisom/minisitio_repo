@@ -148,6 +148,15 @@ function ComprarAnuncio({ isAdmin }) {
   function aplicarCupom(e) {
     let codId = e.target.value;
 
+/*     if(codId.length == 2) {
+      discountHash.current.value = codId + "."
+    }
+    if(codId.length == 8) {
+      //discountHash.current.value = codId + "."
+      const formatHash = codId.split(".")
+      console.log(formatHash)
+    }
+ */
     if (codId.length >= 11 && codId.length <= 12) {
       fetch(`${masterPath.url}/admin/desconto/aplicar/${codId}`)
         .then((x) => x.json())

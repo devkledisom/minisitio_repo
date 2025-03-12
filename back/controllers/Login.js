@@ -20,14 +20,14 @@ module.exports = {
                 descCPFCNPJ: descCPFCNPJ
             },
             raw: true,
-            attributes: ['descNome', 'descCPFCNPJ', 'senha', 'codTipoUsuario', 'ativo']
+            attributes: ['codUsuario', 'descNome', 'descCPFCNPJ', 'senha', 'codTipoUsuario', 'ativo']
         });
 
         if (!user || senha != user.senha) {
             return res.status(401).json({ success: false, message: "Credenciais inválidas" });
         }
 
-        const token = jwt.sign({ id: user.id, role: user.codTipoUsuario }, secretKey, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user.id, role: user.codTipoUsuario, uuid: user.codUsuario }, secretKey, { expiresIn: "1h" });
 
         user.success = true;
 
@@ -44,6 +44,17 @@ module.exports = {
             res.json({ success: false, message: "O usuário não está ativo, por favor fale com o suporte." })
         }
 
+    },
+    sessionVerification: async (req, res) => {
+        const user = await Usuarios.findOne({
+            where: {
+                codUsuario: req.userId
+            },
+            raw: true,
+            attributes: ['codUsuario', 'descNome', 'descCPFCNPJ', 'senha', 'codTipoUsuario', 'ativo']
+        });
+
+         res.json({success: true, data: user})
     },
     loginold: async (req, res) => {
         await database.sync();
@@ -95,7 +106,7 @@ async function execLogin(req, res, users) {
         if (credentialKey != undefined) {
             if (credentialKey.secret_key == secret_key) {
 
-                jwt.sign({ id: credentialKey.id, user: credentialKey.nome }, secretKey, { expiresIn: '1h' }, (err, token) => {
+                jwt.sign({ id: credentialKey.id, user: credentialKey.nome, uuid: users[0].codUsuario }, secretKey, { expiresIn: '1h' }, (err, token) => {
                     if (err) {
                         res.status(400);
                         res.json({ err: "falha interna" });
