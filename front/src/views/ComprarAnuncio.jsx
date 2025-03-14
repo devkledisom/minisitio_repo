@@ -200,7 +200,7 @@ function ComprarAnuncio({ isAdmin }) {
       setPrecoFixo(10);
       setDescontoAtivado(false);
       setTexto(null);
-      document.getElementById('anunciar').disabled = true;
+      document.getElementById('anunciar').disabled = false;
       customText.current.style.color = "#000";
     }
 
@@ -415,7 +415,7 @@ function ComprarAnuncio({ isAdmin }) {
               <h4 className="text-start">Código Promocional (ID):</h4>
               <div className="input-icon margin-top-10" id="codigoPromocional">
                 <i className="fa fa-credit-card"></i>
-                <input
+                <InputMask
                   type="text"
                   name="discountHash"
                   id="discountHash"
@@ -424,7 +424,8 @@ function ComprarAnuncio({ isAdmin }) {
                   style={{ backgroundColor: "#96d18b" }}
                   onChange={aplicarCupom}
                   ref={discountHash}
-                />
+                  mask="99.999.9999"
+                ></InputMask>
                 <input
                   type="hidden"
                   name="discountValue"
@@ -446,7 +447,7 @@ function ComprarAnuncio({ isAdmin }) {
 
            
                 <h5 className="text-start py-2" ref={customText}>
-                  {texto ? texto : "Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)"}
+                  {texto ? texto : ""}
                 </h5>
               
 
