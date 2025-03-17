@@ -68,7 +68,7 @@ function Adesivo() {
 
                 {/* Renderizar o QR Code com referência ao elemento */}
                 <div className="qr-code" ref={qrRef}>
-                    <QRCodeCanvas value={`https://minisitio.online/local/${encodeURIComponent(imgParam)}?id=${idParam}`} size={200} />
+                    <QRCodeCanvas value={`${masterPath.domain}/local/${encodeURIComponent(imgParam)}?id=${idParam}`} size={200} />
                     <img src="/assets/img/adesivo.jpg" width="650" alt="adesivo" />
                 </div>
 
