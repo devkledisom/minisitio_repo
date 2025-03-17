@@ -100,7 +100,7 @@ function UserActions(props) {
                     <img src="/assets/img/logo.png" />
                     QR CODE
                 </a>
-                <a href={`/adesivo?image=${props.data.descAnuncio}?id=${props.data.codAnuncio}`} class="btn btn-default margin-bottom-10" target="_blank">
+                <a href={`/adesivo?image=${props.data.descAnuncio}&id=${props.data.codAnuncio}`} class="btn btn-default margin-bottom-10" target="_blank">
                     <img src="/assets/img/logo.png" />
                     Adesivo
                 </a>
