@@ -50,7 +50,7 @@ function QRCodeGenerator() {
 
                 {/* Renderizar o QR Code com referência ao elemento */}
                 <div ref={qrRef}>
-                    <QRCodeCanvas value={`https://minisitio.online/local/${encodeURIComponent(imgParam)}?id=${idParam}`} size={420} />
+                    <QRCodeCanvas value={`${masterPath.domain}/local/${encodeURIComponent(imgParam)}?id=${idParam}`} size={420} />
                 </div>
 
                 {/* Botões de ação */}
