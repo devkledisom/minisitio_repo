@@ -5,31 +5,36 @@ const apiProtocol = window.location.protocol;
 const port = 3032;
 
 let apiDomain;
+let portalDomain;
 
 //console.log(hostname);
 //console.log(parts);
 
 if (hostname === "localhost") {
     apiDomain = `${hostname}:${port}`;
+    portalDomain = `${hostname}:3000`;
 } else {
     // Obtém o domínio principal, independentemente do número de partes
     if (hostname.includes('minisitio.com.br')) {
         apiDomain = hostname;
+        portalDomain = hostname;
     } else {
         if (hostname.includes('minisitio.online')) {
           apiDomain = 'minisitio.online';
+          portalDomain = 'minisitio.online';
         } else {
           apiDomain =  `${parts[1]}.${parts[2]}`;
+          portalDomain =  `${parts[1]}.${parts[2]}`;
         }
 
     }
 }
 
 const apiUrl = `${apiProtocol}//${apiDomain}/api`;
-const domain = `${apiProtocol}//${apiDomain}`;
+const domain = `${apiProtocol}//${portalDomain}`;
 
-//console.log(apiUrl);
-//console.log(domain);
+console.log(apiUrl);
+console.log(domain);
 
 export const masterPath = {
     url: apiUrl,
@@ -38,7 +43,7 @@ export const masterPath = {
 };
 
 export const version = {
-    version: 'v2.0.42'
+    version: 'v2.0.43'
 };
 
 
