@@ -21,7 +21,7 @@ if (hostname === "localhost") {
     } else {
         if (hostname.includes('minisitio.online')) {
           apiDomain = 'minisitio.online';
-          portalDomain = 'minisitio.online';
+          portalDomain = 'minitest.minisitio.online';
         } else {
           apiDomain =  `${parts[1]}.${parts[2]}`;
           portalDomain =  `${parts[1]}.${parts[2]}`;
