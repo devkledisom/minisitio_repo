@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             const payload = JSON.parse(atob(token.split(".")[1]));
             setUser(payload);
-            console.log(payload)
 
 
             fetch(`${masterPath.url}/is-auth`, {

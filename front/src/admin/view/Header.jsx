@@ -83,6 +83,23 @@ function Header() {
                             {/* <a className="nav-link" href="#">PINs</a> */}
                         </li>
                         <li className="nav-item">
+                            <div className="dropdown menu-mais">
+                                <button className="btn dropdown-toggle nav-link" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Mais
+                                    <i className="bi bi-chevron-down mx-1"></i>
+                                </button>
+                                <ul className="dropdown-menu lista-cart" aria-labelledby="dropdownMenuButton1">
+                                    <li>
+                                        <Link className="dropdown-item nav-link" to="/admin/calhau" onClick={handleClick}>
+                                        Calhau
+                                        <i className="bi bi-chevron-right mx-1"></i>
+                                        </Link>                                     
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li className="nav-item">
                             <a className="nav-link" href="/" onClick={sair}>Sair</a>
                         </li>
                     </ul>

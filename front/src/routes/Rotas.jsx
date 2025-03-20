@@ -45,9 +45,14 @@ import EspacosImport from "../admin/view/Espacos/EspacosImport";
 
 import Pagamentos from "../admin/view/Pagamentos/Pagamentos";
 
+//IMPORT PIN
 import Pin from "../admin/view/Pin/Pin";
 import PinCadastro from "../admin/view/Pin/FormCadastro";
 import PinEditar from "../admin/view/Pin/FormEdit";
+
+//IMPORT CALHAU
+import Calhau from "../admin/view/Calhau/Calhau";
+import CalhauCadastro from "../admin/view/Calhau/FormCadastro";
 
 //PAINEL ADMIN ANUNCIANTE
 import PainelAdmin from "../views/painelAnuciante/PainelAdmin";
@@ -117,6 +122,10 @@ function Rotas() {
                     <Route path="admin/pin" element={<PrivateRoute><Pin /></PrivateRoute>} />
                     <Route path="admin/pin/cadastro" element={<PrivateRoute><PinCadastro /></PrivateRoute>} />
                     <Route path="admin/pin/editar" element={<PrivateRoute><PinEditar /></PrivateRoute>} />
+                    
+                    {/*ROTAS MODULO CALHAU*/}
+                    <Route path="admin/calhau" element={<PrivateRoute><Calhau /></PrivateRoute>} />
+                    <Route path="admin/calhau/cadastro" element={<PrivateRoute><CalhauCadastro /></PrivateRoute>} />
 
 
                     <Route path="admin/cadernos/editar" element={<PrivateRoute><CadernosEdit /></PrivateRoute>} />

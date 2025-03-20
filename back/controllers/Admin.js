@@ -1815,13 +1815,14 @@ module.exports = {
     },
     listarEspacos: async (req, res) => {
 
-        await database.sync();
+        //await database.sync();
 
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
         const porPagina = 10; // Número de itens por página
 
         const offset = (paginaAtual - 1) * porPagina;
 
+        try {
         console.time("espaco")
         // Consulta para recuperar apenas os itens da página atual
         const anuncio = await Anuncio.findAll({
@@ -1871,7 +1872,7 @@ module.exports = {
         // Número total de páginas
         const totalPaginas = Math.ceil(totalItens / porPagina);
 
-        try {
+        
             await Promise.all(anuncio.map(async (anun, i) => {
                 const user = await anun.getUsuario();
                 //console.log("adjasldj",user)
@@ -3828,7 +3829,12 @@ module.exports = {
                     'codDesconto',
                     'codAtividade',
                     'periodo'
-                ]
+                ],
+                include: {
+                    model: Pagamento,
+                    as: "pagamentos",  // Nome definido no `hasMany`
+                    attributes: ["id", "valor", "status", "data"]
+                }
             });
 
             console.table([1, "id", nu_hash])

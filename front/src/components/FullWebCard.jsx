@@ -57,10 +57,10 @@ function FullWebCard(props) {
     const fullUrl = window.location.href;
 
     const promoChange = (param) => {
-        
-        if(!param) return false;
 
-        if(param.includes("http")) {
+        if (!param) return false;
+
+        if (param.includes("http")) {
             return true;
         } else {
             return false;
@@ -180,10 +180,10 @@ function FullWebCard(props) {
                                     }
                                     {
                                         !promoChange(result.linkPromo) ?
-                                        (result.logoPromocao != null && !promoChange(result.linkPromo)) ?
-                                            <img src="../assets/img/link_promocao.png" data-bs-toggle="modal"
-                                                data-bs-target="#myModal" alt="icone" width={60} /> :
-                                            <img src="../assets/img/link_promocao.png" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)"}} alt="icone" width={60} />
+                                            (result.logoPromocao != null && !promoChange(result.linkPromo)) ?
+                                                <img src="../assets/img/link_promocao.png" data-bs-toggle="modal"
+                                                    data-bs-target="#myModal" alt="icone" width={60} /> :
+                                                <img src="../assets/img/link_promocao.png" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="icone" width={60} />
                                             : null
                                     }
 
@@ -227,8 +227,21 @@ function FullWebCard(props) {
                                 CASHBACK
                             </h2>
                             <i className='link-cinza'>
-                                <img src="../assets/img/teste/cashback.jpg" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)"}} alt="" width={60} />
+                                <img src="../assets/img/teste/cashback.jpg" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="" width={60} />
                             </i>
+                        </div>
+                        <div className='border-cinza mb-4'>
+                            <h2 className='titulo-cinza'>
+                                PARCEIRO
+                            </h2>
+                            <a href={result.descParceiroLink !== "0" ? result.descParceiroLink : ""} target="_blank" data-toggle="tooltip" title="google-meu-negocio" rel="noopener  noreferrer">
+                                <i className='link-cinza'>
+                                    {result.descParceiro != null ?
+                                    <img src={`${masterPath.url}/files/2/${result.descParceiro}`} width={100} height={66} className='rounded my-1' alt="promoção" /> : <img src="../assets/img/teste/aperto-de-mao.png" width={100} height={66} />  
+                                    }
+                                    
+                                </i>
+                            </a>
                         </div>
                         <div className='mb-4'>
                             <h2 className='titulo-cinza'>
