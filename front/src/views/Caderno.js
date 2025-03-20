@@ -60,35 +60,35 @@ function Caderno() {
   const [cadernos, setCadernos] = useState([]);
   const [unique, setUnique] = useState(false);
 
-  
-  
+
+
   //const {data, isError, isLoading} = useQuery({ queryKey: 'users', queryFn: buscarAtividade });
 
 
- 
+
 
   async function buscarAtividade() {
     setLoading(true);
     try {
       const response = await fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}?page=${numberPage}&idd=${id}&unique=${unique}&index=${index}`);
       const res = await response.json();
-      
+
       if (res.success) {
         if (!unique) {
           setNumberPage(res.paginaLocalizada);
         }
-  
-      /*   setMinisitio({ anuncios: res.teste.rows });
-        setNomeAtividade(res.teste.rows); */
+
+        /*   setMinisitio({ anuncios: res.teste.rows });
+          setNomeAtividade(res.teste.rows); */
         setbtnNav(true);
         setLoading(false);
-       
+
       }
       return res;
     } catch (error) {
       console.error("Erro ao buscar atividade:", error);
     }
-    
+
   }
 
   const { data, isError, isLoading } = useQuery({
@@ -98,20 +98,23 @@ function Caderno() {
 
   useEffect(() => {
 
-  if(!isLoading) {
-    setLoading(false);
-  }
+    if (!isLoading) {
+      setLoading(false);
+    }
 
-  if(data) {
-    setMinisitio({ anuncios: data.teste.rows, totalPaginas: Math.ceil(data.qtdaConsulta / 10), paginaAtual: data.paginaLocalizada  });
-    setNomeAtividade(data.teste.rows);
-  }
+    if (data) {
+      setMinisitio({ anuncios: data.teste.rows, totalPaginas: Math.ceil(data.qtdaConsulta / 10), paginaAtual: data.paginaLocalizada });
+      setNomeAtividade(data.teste.rows);
+    }
 
     //paginaLocalizada
 
-//qtdaConsulta
+    //qtdaConsulta
 
-  },[data, numberPage])
+
+
+
+  }, [data, numberPage])
   //console.log("Dados recebidos no onSuccess fora:", data);
 
 
@@ -124,41 +127,41 @@ function Caderno() {
         console.log(res, res.teste.count)
         if (res.success) {
 
-          if(!unique) {
+          if (!unique) {
             setNumberPage(res.paginaLocalizada);
           }
 
-      /*     const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
-          const valores = [...new Set(codigosAtividades)];
-
-          const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
-          const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id)); */
+          /*     const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
+              const valores = [...new Set(codigosAtividades)];
+    
+              const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
+              const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id)); */
 
           //const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
 
-       /*    let result = res.teste.rows.filter(category =>
-            res.data.some(anuncio => category.id === anuncio.codAtividade)
-          ); */
+          /*    let result = res.teste.rows.filter(category =>
+               res.data.some(anuncio => category.id === anuncio.codAtividade)
+             ); */
 
           const arr = res.teste.rows;
-/* 
-          let result1 = res.teste.rows.map((category) => {
-            // Filtra os anúncios que correspondem à categoria atual
-            let teste = res.teste.rows.filter(anuncio => category.codAtividade.toLowerCase() == anuncio.codAtividade.toLowerCase());
-            //console.log(codAtividade)
-            // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
-            category.kledisom = teste;
-            teste.forEach((item) => {
-              console.log(item.codAtividade == category.atividade)
-              item.codAtividade = category.atividade; //adiciona as categorias
-              arr.push(item); //salva so os anuncios
-            });
-
-            //console.log(arr)
-
-            // Retorna o objeto category modificado
-            return category;
-          }); */
+          /* 
+                    let result1 = res.teste.rows.map((category) => {
+                      // Filtra os anúncios que correspondem à categoria atual
+                      let teste = res.teste.rows.filter(anuncio => category.codAtividade.toLowerCase() == anuncio.codAtividade.toLowerCase());
+                      //console.log(codAtividade)
+                      // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+                      category.kledisom = teste;
+                      teste.forEach((item) => {
+                        console.log(item.codAtividade == category.atividade)
+                        item.codAtividade = category.atividade; //adiciona as categorias
+                        arr.push(item); //salva so os anuncios
+                      });
+          
+                      //console.log(arr)
+          
+                      // Retorna o objeto category modificado
+                      return category;
+                    }); */
 
           //console.log(result1);
 
@@ -172,8 +175,8 @@ function Caderno() {
                 paginaAtual: pageNumber
               }); */
 
-             let totalPaginas = Math.ceil(res.qtdaConsulta / 10);
-            let paginaAtual = numberPage;
+          let totalPaginas = Math.ceil(res.qtdaConsulta / 10);
+          let paginaAtual = numberPage;
           if (pageNumberUnique) {
             console.log("arr", arr)
             arr.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
@@ -198,7 +201,7 @@ function Caderno() {
   }
 
   useEffect(() => {
-   
+
     fetch(`${masterPath.url}/cadernos`)
       .then((x) => x.json())
       .then((res) => {
@@ -252,41 +255,41 @@ function Caderno() {
           console.log(res, res.teste.count)
           if (res.success) {
 
-            if(!unique) {
+            if (!unique) {
               setNumberPage(res.paginaLocalizada);
             }
 
-        /*     const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
-            const valores = [...new Set(codigosAtividades)];
-
-            const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
-            const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id)); */
+            /*     const codigosAtividades = res.teste.rows.map((item) => item.codAtividade);
+                const valores = [...new Set(codigosAtividades)];
+    
+                const codigosTable = await fetch(`${masterPath.url}/atividade/6`).then(response => response.json());
+                const atividadesEncontradas = codigosTable.filter((item) => valores.includes(item.id)); */
 
             //const arrTeste = res.data.filter((category) => category.id == res.teste.rows[0].codAtividade);
 
-         /*    let result = res.teste.rows.filter(category =>
-              res.data.some(anuncio => category.id === anuncio.codAtividade)
-            ); */
+            /*    let result = res.teste.rows.filter(category =>
+                 res.data.some(anuncio => category.id === anuncio.codAtividade)
+               ); */
 
             const arr = res.teste.rows;
-/* 
-            let result1 = res.teste.rows.map((category) => {
-              // Filtra os anúncios que correspondem à categoria atual
-              let teste = res.teste.rows.filter(anuncio => category.codAtividade.toLowerCase() == anuncio.codAtividade.toLowerCase());
-              //console.log(codAtividade)
-              // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
-              category.kledisom = teste;
-              teste.forEach((item) => {
-                console.log(item.codAtividade == category.atividade)
-                item.codAtividade = category.atividade; //adiciona as categorias
-                arr.push(item); //salva so os anuncios
-              });
-
-              //console.log(arr)
-
-              // Retorna o objeto category modificado
-              return category;
-            }); */
+            /* 
+                        let result1 = res.teste.rows.map((category) => {
+                          // Filtra os anúncios que correspondem à categoria atual
+                          let teste = res.teste.rows.filter(anuncio => category.codAtividade.toLowerCase() == anuncio.codAtividade.toLowerCase());
+                          //console.log(codAtividade)
+                          // Adiciona a nova propriedade 'kledisom' com os anúncios correspondentes
+                          category.kledisom = teste;
+                          teste.forEach((item) => {
+                            console.log(item.codAtividade == category.atividade)
+                            item.codAtividade = category.atividade; //adiciona as categorias
+                            arr.push(item); //salva so os anuncios
+                          });
+            
+                          //console.log(arr)
+            
+                          // Retorna o objeto category modificado
+                          return category;
+                        }); */
 
             //console.log(result1);
 
@@ -300,8 +303,8 @@ function Caderno() {
                   paginaAtual: pageNumber
                 }); */
 
-               let totalPaginas = Math.ceil(res.qtdaConsulta / 10);
-              let paginaAtual = numberPage;
+            let totalPaginas = Math.ceil(res.qtdaConsulta / 10);
+            let paginaAtual = numberPage;
             if (pageNumberUnique) {
               console.log("arr", arr)
               arr.sort((a, b) => a.codAtividade.localeCompare(b.codAtividade));
@@ -554,10 +557,10 @@ function Caderno() {
 
     if (book != undefined && id != undefined) {
       //buscarAtividade();
-      console.log("primeiro")
+      //console.log("primeiro")
     } else {
       buscarTodosClassificado();
-      console.log("segundo")
+      //console.log("segundo")
     }
 
 
@@ -607,11 +610,11 @@ function Caderno() {
 
       //console.log(currentPageData)
       console.log("drama total: ", total)
-         setMinisitio({
-           anuncios: paginatedResult.data,
-           totalPaginas: total,
-           paginaAtual: atual
-         }); 
+      setMinisitio({
+        anuncios: paginatedResult.data,
+        totalPaginas: total,
+        paginaAtual: atual
+      });
 
       console.log('lsaflsjkdhfasdjklfsd: ', {
         anuncios: paginatedResult.data,
@@ -649,7 +652,7 @@ function Caderno() {
 
 
   useEffect(() => {
- 
+
     function buscarId() {
       fetch(`${masterPath.url}/admin/desconto/read/all`)
         .then((x) => x.json())
@@ -666,7 +669,7 @@ function Caderno() {
     };
 
     buscarId();
-  }, []) 
+  }, [])
 
 
   function buscarId(id) {
@@ -752,7 +755,7 @@ function Caderno() {
 
       var arrayParte1;
       var arrayParte2;
-//console.log("--------------------------->",  minisitio.anuncios)
+      //console.log("--------------------------->",  minisitio.anuncios)
 
       if (minisitio.anuncios.length == 5) {
         arrayParte1 = division < 5 ? removeDuplicate.slice(0, list) : removeDuplicate.slice(0, 6);
@@ -937,70 +940,14 @@ function Caderno() {
     }, 1000); // Intervalo de 1 segundo
   }
 
-  const testin2 = () => {
-
-    let col1Count = document.querySelectorAll('#col1 .atividade-title').length;
-    /*   if(document.querySelectorAll('#col1 .atividade-title')[col1Count - 1]) {
-        document.querySelectorAll('#col1 .atividade-title')[col1Count - 1].remove();
-      } */
-
-
-
-
-    return (
-
-      nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
-
-        (index >= limit)
-          ? (
-            <div id={item.id} key={item.id} className="atividade-title px-2" >
-              <h2 className='bg-yellow py-2'>
-                {item.codAtividade}
-              </h2>
-
-
-              {minisitio.anuncios.map((anuncio) => {
-                if (anuncio.codTipoAnuncio == 1) {
-                  // Renderiza o componente MiniWebCardSimples
-                  return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
-                } else if (anuncio.codAtividade == item.codAtividade) {
-                  // Renderiza o componente MiniWebCard se o codAtividade coincidir
-                  return (
-                    <MiniWebCard
-                      key={anuncio.codAnuncio}
-                      id={anuncio.codAnuncio}
-                      data={minisitio}
-                      codImg={anuncio.descImagem}
-                      ref={teste}
-                      empresa={anuncio.descAnuncio}
-                      endereco={anuncio.descEndereco}
-                      telefone={anuncio.descTelefone}
-                      celular={anuncio.descCelular}
-                      codDesconto={anuncio.codDesconto}
-                      ids={buscarId(90)}
-                    />
-
-                  )
-                }
-
-                return null; // Retorna null se nenhuma condição for atendida
-              })}
-
-              {/* Mensagem programada pode ser incluída aqui, caso necessário */}
-              {/* <MsgProgramada /> */}
-            </div>
-          )
-          : null
-      )))
-  }
-
-
-
+ 
   function nextPage() {
     if (numberPage >= minisitio.totalPaginas) {
       alert("Você está na última página!");
       return;
     }
+
+    //calhau()
 
     setNumberPage(Number(numberPage) + 1);
     setUnique(true);
@@ -1018,6 +965,7 @@ function Caderno() {
     setNumberPage(Number(numberPage) - 1);
     console.log(Number(numberPage) - 1);
 
+    //calhau()
 
     if (book != undefined && id != undefined) {
       setPageNumberUnique(false);
@@ -1025,8 +973,74 @@ function Caderno() {
     //setNomeAtividade([]);
   }
 
+  function calhau() {
+    
+    document.querySelectorAll('.card-calhau').forEach(item => item.remove())
+    let a = document.getElementById('col1')
+    let b = document.getElementById('col2')
 
 
+
+    if (a.clientHeight < b.clientHeight) {
+      let tamanho = b.clientHeight - a.clientHeight;
+
+      if(tamanho < 150) {
+        return;
+      }
+
+      const titulo = document.createElement("h2"); // Cria um elemento <h1>
+      titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
+      titulo.style.height = tamanho + "px";
+      titulo.style.backgroundColor = "#555";
+      titulo.className = "card-calhau";
+      titulo.style.color = "#FFFFFF";
+      titulo.innerText = getFraseAleatoria();
+
+      a.insertAdjacentElement("beforeend", titulo);
+
+
+    } else if (b.clientHeight < a.clientHeight) {
+      let tamanho = a.clientHeight - b.clientHeight
+
+      if(tamanho < 150) {
+        return;
+      }
+
+      const titulo = document.createElement("h2"); // Cria um elemento <h1>
+      titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
+      titulo.style.height = tamanho + "px";
+      titulo.style.backgroundColor = "#555";
+      titulo.className = "card-calhau";
+      titulo.style.color = "#FFFFFF";
+      titulo.innerText = getFraseAleatoria();
+
+      b.insertAdjacentElement("beforeend", titulo);
+    }
+  }
+
+  function getFraseAleatoria() {
+    const frasesNegociosOnline = [
+        {
+            id: 1,
+            texto: "Negócios online transformam ideias em oportunidades, quebram barreiras geográficas e funcionam 24/7 — o sucesso está na inovação e na constância."
+        },
+        {
+            id: 2,
+            texto: "O digital não é mais o futuro dos negócios, é o presente — adapte-se ou fique para trás."
+        },
+        {
+            id: 3,
+            texto: "No mundo online, quem entrega valor e constrói autoridade conquista clientes fiéis e crescimento contínuo."
+        },
+        {
+            id: 4,
+            texto: "A internet nivela o jogo: grandes resultados vêm para aqueles que sabem como conectar, engajar e vender."
+        }
+    ];
+
+    const indiceAleatorio = Math.floor(Math.random() * frasesNegociosOnline.length);
+    return frasesNegociosOnline[indiceAleatorio].texto;
+}
 
   return (
     <div className="App caderno">
@@ -1075,13 +1089,16 @@ function Caderno() {
                   {
                     //minisitio.anuncios
                     base1.map((anuncio, i) => {
-
+        
                       if (anuncio.title) {
                         return <h2 className='bg-yellow py-2'>
                           {anuncio.title}
                         </h2>
 
                       }
+
+
+
 
                       if (anuncio.codTipoAnuncio == 1) {
                         return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />

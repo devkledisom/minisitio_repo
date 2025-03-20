@@ -21,6 +21,7 @@ import AlertMsg from "./Alerts/AlertMsg";
 
 function ContactForm() {
     const [alert, setAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
     const location = useLocation();
 
     const pegarParam = new URLSearchParams(location.search);
@@ -30,31 +31,31 @@ function ContactForm() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-/*     const onSubmit = (data) => {
-        console.log(data);
-        const formData = new FormData();
-        formData.append("anexo", data.image[0]);
-
-        fetch(`${masterPath.url}/fale-com-dono`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(x => x.json())
-            .then(res => {
-                console.log(res)
+    /*     const onSubmit = (data) => {
+            console.log(data);
+            const formData = new FormData();
+            formData.append("anexo", data.image[0]);
+    
+            fetch(`${masterPath.url}/fale-com-dono`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
             })
-    }
- */
+                .then(x => x.json())
+                .then(res => {
+                    console.log(res)
+                })
+        }
+     */
 
     const onSubmit = (data) => {
-        console.log(data);
+        setLoading(true);
         const formData = new FormData();
-        
+
         formData.append("anexo", data.anexo[0]); // Adiciona o arquivo ao FormData
-    
+
         // Adiciona outros campos do formulário ao FormData
         formData.append("option", data.option);
         formData.append("nome", data.nome);
@@ -63,28 +64,37 @@ function ContactForm() {
         formData.append("telefone", data.telefone);
         formData.append("mensagem", data.mensagem);
         formData.append("id", data.id);
-    
+
         fetch(`${masterPath.url}/fale-com-dono`, {
             method: 'POST',
             body: formData // Envia o FormData diretamente
         })
-        .then(response => response.json())
-        .then(res => {
-            if(res.success) {
-                setAlert(true);
-                window.scrollTo(0, 0);
-                setTimeout(() => {setAlert(false)}, 3000)
-            }
+            .then(response => response.json())
+            .then(res => {
+                if (res.success) {
+                    setLoading(false);
+                    setAlert(true);
+                    window.scrollTo(0, 0);
+                    //setTimeout(() => { setAlert(false) }, 3000)
+                }
 
-        })
-        .catch(error => console.error("Erro:", error));
+            })
+            .catch(error => {
+                setLoading(false);
+                console.error("Erro:", error)
+            });
     }
-    
+
 
 
     return (
         <div className="ContactForm bg-cinza">
-            {alert && <AlertMsg message={"Email Enviado"}/>}
+            {loading &&
+                <button className="buttonload" style={{ display: "block" }}>
+                    <i class="fa fa-spinner fa-spin"></i>Carregando
+                </button>
+            }
+            {alert && <AlertMsg message={"AGRADECEMOS PELO CONTATO! SUA  MENSAGEM FOI ENVIADA, AGUARDE CONTATO PELO DONO DO PERFIL"} setAlert={setAlert}/>}
             <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data' >
                 <div className="d-flex p-3">
                     <img id="contact-logo" src="../assets/img/teste/falecomodono.png" alt="" />

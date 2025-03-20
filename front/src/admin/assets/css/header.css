@@ -63,6 +63,17 @@
     background-position: -168px 0;
 }
 
+.header-main .menu-mais {
+   color: #FFFFFF;
+}
+
+.header-main .menu-mais > ul {
+    background-color: #161616;
+}
+
+.header-main .menu-mais > ul > li {
+    background-color: #161616;
+}
 
 /* .btn:hover {
     color: #333333;

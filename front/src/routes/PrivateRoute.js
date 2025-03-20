@@ -14,9 +14,7 @@ const PrivateRoute = ({ children, role }) => {
     }, [loading]);
 
     if(!isLoading) {
-        console.log("mad", user, loading)
         if (!user) return <Navigate to="/login" />;
-        console.log(user.codTipoUsuario, role)
         if (role && user.codTipoUsuario !== role) return <Navigate to="/forbidden" />;
     
         return children;

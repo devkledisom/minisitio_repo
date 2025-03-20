@@ -67,11 +67,10 @@ async function faleComDono(data, emailAutorizante, filename) {
         <p>De: <strong>${data.nome}</strong> &lt;${data.email}&gt;</p>
         <p>Assunto: <strong>${data.option}</strong></p>
         
-        <p>Obrigado por entrar em contato!</p>
+        <p>Nova mensagem de contato!</p>
     
             <p>${data.mensagem}</p>
     
-        <p>Nossa equipe de suporte está pronta para ajudar caso você precise de alguma assistência. Entre em contato conosco pelo e-mail: <a href="mailto:${data.email}">${data.email}</a>.</p>
     
         <hr>
         <p>--</p>
@@ -103,11 +102,10 @@ async function faleComDono(data, emailAutorizante, filename) {
         <p>De: <strong>${data.nome}</strong> &lt;${data.email}&gt;</p>
         <p>Assunto: <strong>${data.option}</strong></p>
         
-        <p>Obrigado por entrar em contato!</p>
+        <p>Nova mensagem de contato!</p>
     
             <p>${data.mensagem}</p>
     
-        <p>Nossa equipe de suporte está pronta para ajudar caso você precise de alguma assistência. Entre em contato conosco pelo e-mail: <a href="mailto:${data.email}">${data.email}</a>.</p>
     
         <hr>
         <p>--</p>
@@ -246,4 +244,6 @@ module.exports = {
 };
 
 
+//<p>Nossa equipe de suporte está pronta para ajudar caso você precise de alguma assistência. Entre em contato conosco pelo e-mail: <a href="mailto:${data.email}">${data.email}</a>.</p>
+//<p>Nossa equipe de suporte está pronta para ajudar caso você precise de alguma assistência. Entre em contato conosco pelo e-mail: <a href="mailto:${data.email}">${data.email}</a>.</p>
 

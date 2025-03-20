@@ -180,7 +180,7 @@ router.post('/api/fale-com-dono', upload.single('anexo'), async (req, res) => {
     const filename = req.file ? req.file.filename : false
 
     const emailReturn = await faleComDono(req.body, anuncio.descEmailAutorizante, filename);
-    faleComDonoCliente(req.body);
+    //faleComDonoCliente(req.body);
     if (emailReturn) {
         res.json({ success: true, message: "email enviado" });
     } else {

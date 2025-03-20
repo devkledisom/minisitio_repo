@@ -105,6 +105,14 @@ function Metadados(props) {
                         {props.data.descChavePix}
                         </h4>
                     </div>
+                    {/* <div className="col-md-12 link-cinza">
+                        <img src="../assets/img/teste/aperto-de-mao.png" />
+                        <h4>
+                        <a href={props.data.descParceiroLink !== "0" ? props.data.descParceiroLink : ""} target="_blank" data-toggle="tooltip" title="google-meu-negocio" rel="noopener  noreferrer">
+                            {props.data.descParceiroLink !== "0" ? props.data.descParceiroLink : ""}
+                            </a>
+                        </h4>
+                    </div> */}
                 </div>
             </div>
         </div>
