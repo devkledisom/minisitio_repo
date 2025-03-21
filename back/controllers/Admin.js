@@ -3634,7 +3634,8 @@ module.exports = {
 
     },
     buscarAnuncioId: async (req, res) => {
-        await database.sync();
+
+        console.log(req.query.search, req.query.require)
         //const nu_hash = req.params.id;
         const nu_hash = req.query.search;
         const requisito = req.query.require;
@@ -3648,84 +3649,13 @@ module.exports = {
 
         if (requisito === 'codCaderno') {
             buscaPorCaderno();
+        } else if (requisito === 'descAnuncio') {
+            buscaPorNome();
         } else {
             buscaNormal();
         }
 
         //verificação
-        /*         const contemNumero = () => /\d/.test(nu_hash);
-        
-                const resultAnuncio = await Anuncio.findAll({
-                    where: {
-                        [requisito]: nu_hash
-                    },
-                    limit: porPagina,
-                    offset: offset,
-                    attributes: [
-                        'codAnuncio',
-                        'codOrigem',
-                        'codDuplicado',
-                        'descCPFCNPJ',
-                        'descAnuncio',
-                        'codTipoAnuncio',
-                        'codCaderno',
-                        'codUf',
-                        'activate',
-                        'descPromocao',
-                        'createdAt',
-                        'dueDate',
-                        'codDesconto',
-                        'codAtividade',
-                        'periodo'
-                    ]
-                });
-        
-                console.table([1, "id", nu_hash])*/
-
-        //if (resultAnuncio.length > 0) {
-        /*   await Promise.all(resultAnuncio.map(async (anun, i) => {
-
-               const cader = await anun.getCaderno();
-               anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
-
-               //const estado = await anun.getUf();
-               //anun.codUf = estado.sigla_uf;
-
-               const desconto = await anun.getDesconto();
-               anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
-
-               const user = await anun.getUsuario();
-
-               if (user) {
-                   anun.codUsuario = user.descNome;
-                   anun.dataValues.loginUser = user.descCPFCNPJ;
-                   anun.dataValues.loginPass = user.senha;
-                   anun.dataValues.loginEmail = user.descEmail;
-                   anun.dataValues.loginContato = user.descTelefone;
-               }
-
-           }));
-
-           const resultAnuncioCount = await Anuncio.count({
-               where: {
-                   [requisito]: nu_hash
-               },
-           });
-
-           const totalItens = resultAnuncioCount;
-           const totalPaginas = Math.ceil(totalItens / porPagina);
-
-           res.json({
-               success: true,
-               message: {
-                   anuncios: resultAnuncio, // Itens da página atual
-                   paginaAtual: paginaAtual,
-                   totalPaginas: totalPaginas,
-                   totalItem: totalItens
-               }
-           });
-           return; */
-
         async function buscaPorCaderno() {
             console.time('espaco')
             const resultAnuncio = await Anuncio.findAll({
@@ -3750,10 +3680,17 @@ module.exports = {
                     'codDesconto',
                     'codAtividade',
                     'periodo'
-                ]
+                ],
+                include: {
+                    model: Pagamento,
+                    as: "pagamentos",  // Nome definido no `hasMany`
+                    attributes: ["id", "valor", "status", "data"]
+                }
             });
             console.timeEnd("espaco")
             console.table([1, "id", nu_hash])
+
+            if(resultAnuncio.length < 1) return  res.json({ success: false, message: 'Não encontrado'});
 
             if (resultAnuncio.length > 0) {
                 await Promise.all(resultAnuncio.map(async (anun, i) => {
@@ -3805,11 +3742,11 @@ module.exports = {
 
             }
         }
-        async function buscaNormal() {
-
+        async function buscaPorNome() {
+    
             const resultAnuncio = await Anuncio.findAll({
                 where: {
-                    [requisito]: nu_hash
+                    [requisito]: {[Op.like]: `${nu_hash}%`}
                 },
                 limit: porPagina,
                 offset: offset,
@@ -3837,7 +3774,9 @@ module.exports = {
                 }
             });
 
-            console.table([1, "id", nu_hash])
+            console.table([1, "idnome", nu_hash])
+
+            if(resultAnuncio.length < 1) return  res.json({ success: false, message: 'Não encontrado'});
 
             if (resultAnuncio.length > 0) {
                 await Promise.all(resultAnuncio.map(async (anun, i) => {
@@ -3886,12 +3825,89 @@ module.exports = {
 
             }
         }
-        /*   } else {
-              res.json({
-                  success: false,
-                  message: "não encontrado"
-              });
-          } */
+        async function buscaNormal() {
+        
+            const resultAnuncio = await Anuncio.findAll({
+                where: {
+                    [requisito]: nu_hash
+                },
+                limit: porPagina,
+                offset: offset,
+                attributes: [
+                    'codAnuncio',
+                    'codOrigem',
+                    'codDuplicado',
+                    'descCPFCNPJ',
+                    'descAnuncio',
+                    'codTipoAnuncio',
+                    'codCaderno',
+                    'codUf',
+                    'activate',
+                    'descPromocao',
+                    'createdAt',
+                    'dueDate',
+                    'codDesconto',
+                    'codAtividade',
+                    'periodo'
+                ],
+                include: {
+                    model: Pagamento,
+                    as: "pagamentos",  // Nome definido no `hasMany`
+                    attributes: ["id", "valor", "status", "data"]
+                }
+            });
+
+            console.table([1, "id", nu_hash])
+            if(resultAnuncio.length < 1) return  res.json({ success: false, message: 'Não encontrado'});
+
+            if (resultAnuncio.length > 0) {
+                await Promise.all(resultAnuncio.map(async (anun, i) => {
+
+                    const cader = await anun.getCaderno();
+                    anun.codCaderno = cader ? cader.nomeCaderno : "não registrado";
+
+                    //const estado = await anun.getUf();
+                    //anun.codUf = estado.sigla_uf;
+
+                    const desconto = await anun.getDesconto();
+                    anun.codPA = desconto != undefined ? desconto.hash : "99.999.9999";
+
+                    const user = await anun.getUsuario();
+
+                    if (user) {
+                        anun.codUsuario = user.descNome;
+                        anun.dataValues.loginUser = user.descCPFCNPJ;
+                        anun.dataValues.loginPass = user.senha;
+                        anun.dataValues.loginEmail = user.descEmail;
+                        anun.dataValues.loginContato = user.descTelefone;
+                    }
+
+                }));
+
+                const resultAnuncioCount = await Anuncio.count({
+                    where: {
+                        [requisito]: nu_hash
+                    },
+                });
+
+                const totalItens = resultAnuncioCount;
+                const totalPaginas = Math.ceil(totalItens / porPagina);
+
+                res.json({
+                    success: true,
+                    message: {
+                        anuncios: resultAnuncio, // Itens da página atual
+                        paginaAtual: paginaAtual,
+                        totalPaginas: totalPaginas,
+                        totalItem: totalItens
+                    }
+                });
+                return;
+
+
+            }
+        }
+
         return;
 
         //buscar por uf
@@ -4119,36 +4135,7 @@ module.exports = {
 
 
 
-                /* const limit = 10; // Número de registros por lote
-                let offset = 0; // Início da consulta
-                let hasMore = true;
-              
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                try {
-                    while (hasMore) {
-                      const records = await Anuncio.findAll({
-                        where: {
-                            codUsuario: resultID[0].codUsuario
-                        },
-                        limit, // Busca 10 registros por vez
-                        offset, // Salta os registros já buscados
-                        raw: true, // Retorna objetos simples
-                      });
-                //console.log("asdfhsdfhsajdkfsaf: ", records)
-                      if (records.length > 0) {
-                        res.write(JSON.stringify(records)); // Envia o lote ao frontend
-                        offset += limit; // Move para o próximo lote
-                      } else {
-                        hasMore = false; // Finaliza se não houver mais registros
-                      }
-                    }
-                
-                    res.end(); // Finaliza o stream
-                  } catch (error) {
-                    console.error(error);
-                    res.status(500).send('Erro ao buscar os registros.');
-                  }
- */
+          
             }
         }
 

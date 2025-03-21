@@ -57,7 +57,7 @@ const Espacos = () => {
 
         if (campoBusca.current.value != '') {
             Promise.all([
-                fetch(`${masterPath.url}/admin/anuncio/buscar?search=${campoBusca.current.value}&page=${param}`).then((x) => x.json()),
+                fetch(`${masterPath.url}/admin/anuncio/buscar?search=${campoBusca.current.value}&page=${param}&require=${searchOptioncheck}`).then((x) => x.json()),
                 //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
             ])
                 .then(([resAnuncio]) => {
