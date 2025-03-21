@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
             })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.data) {
                     setUser(data.data);
                     setLoading(false);
