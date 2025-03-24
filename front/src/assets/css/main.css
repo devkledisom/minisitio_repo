@@ -132,6 +132,7 @@ i.fa.fa-tags {
 .nav-link:hover {
     background-color: #4f4f4f !important;
     color: #ffffff !important;
+    border-radius: 5px;
 }
 
 /*component mosaico*/

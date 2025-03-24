@@ -94,7 +94,6 @@ function WebcardThumb(props) {
         }
     }
     var partner = (img) => {
-        console.log(img)
         if(img != false && img != 'null' && img != 'undefined') {
             return true;
         } else {

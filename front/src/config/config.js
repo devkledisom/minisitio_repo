@@ -33,9 +33,6 @@ if (hostname === "localhost") {
 const apiUrl = `${apiProtocol}//${apiDomain}/api`;
 const domain = `${apiProtocol}//${portalDomain}`;
 
-console.log(apiUrl);
-console.log(domain);
-
 export const masterPath = {
     url: apiUrl,
     domain: domain,

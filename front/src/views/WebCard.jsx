@@ -19,9 +19,8 @@ function WebCard() {
     const [mosaicoImg, setMosaicoImg] = useState([]);
     const [codCaderno, setCodCaderno] = useState(null);
     const [codUf, setCodUf] = useState(null);
-    const [nmAnuncio, setNmAnuncio] = useState(null);
-    const [ufs, setUfs] = useState([]);
-    const [cadernos, setCadernos] = useState([]);
+    //const [ufs, setUfs] = useState([]);
+    //const [cadernos, setCadernos] = useState([]);
 
     useEffect(() => {
         //document.querySelector('.caderno').style.filter = "blur(3px)";
@@ -34,15 +33,11 @@ function WebCard() {
                 .then(x => x.json())
                 .then(res => {
                     if (res.success) {
-
                         setMosaicoImg(res.mosaico);
-                        //console.log("caderno geral", res);
-
                     }
-
                 })
         }
-
+/* 
         fetch(`${masterPath.url}/ufs`)
             .then((x) => x.json())
             .then((res) => {
@@ -53,15 +48,13 @@ function WebCard() {
         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
             .then((res) => {
-                setCadernos(res)
-                /* console.log(res) */
-                
-            })
+                setCadernos(res)                
+            }) */
 
 
     }, [codCaderno, codUf]);
 
-    const ufAtual = () => {
+/*     const ufAtual = () => {
        const ufLocalizada = ufs.find(uf => uf.sigla_uf == codUf);
        //console.log("daskjdafhadlfhdsklfghasdi", ufLocalizada)
        if(ufLocalizada) {
@@ -76,7 +69,7 @@ function WebCard() {
         return cadLocalizada.nomeCaderno;
        }
        
-    }
+    } */
 
     return (
         <div className="App">
@@ -86,10 +79,10 @@ function WebCard() {
             </header>
             <main>
                 <Busca />
-                <h1 id="title-caderno" className='py-2'>Caderno {cadAtual()} - {ufAtual()}</h1>
+                <h1 id="title-caderno" className='py-2'>Caderno {codCaderno} - {codUf}</h1>
                {/*  <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1> */}
                 <Navegacao />
-                <FullWebCard setCodCaderno={setCodCaderno} setCodUf={setCodUf} setNmAnuncio={setNmAnuncio} />
+                <FullWebCard setCodCaderno={setCodCaderno} setCodUf={setCodUf} />
             </main>
 
             <footer>

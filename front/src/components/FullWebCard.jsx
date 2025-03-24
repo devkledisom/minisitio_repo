@@ -32,18 +32,17 @@ function FullWebCard(props) {
 
     //params
     const [searchParams] = useSearchParams();
-    const idParam = searchParams.get('id');
-    const { nomeAnuncio } = useParams();
+    //const idParam = searchParams.get('id');
+    const { nomeAnuncio, codAnuncio } = useParams();
 
     useEffect(() => {
 
         async function buscarAnuncio() {
-            const request = await fetch(`${masterPath.url}/anuncio/${idParam}`).then((x) => x.json());
+            const request = await fetch(`${masterPath.url}/anuncio/${codAnuncio}`).then((x) => x.json());
             //console.log(request[0]);
             //console.log(result);
             props.setCodCaderno(request[0].codCaderno);
             props.setCodUf(request[0].codUf);
-            props.setNmAnuncio(nomeAnuncio);
             setResult(request[0]);
             //console.log(request[0])
         }
@@ -261,7 +260,7 @@ function FullWebCard(props) {
                     {/*  <Socialmidia /> */}
                     <SocialShareButtons url={fullUrl} />
                 </div>
-                <UserActions path={nomeAnuncio} id={idParam} doc={result.descCPFCNPJ} url={fullUrl} data={result} />
+                <UserActions path={nomeAnuncio} id={codAnuncio} doc={result.descCPFCNPJ} url={fullUrl} data={result} />
             </div>
         </div>
     );

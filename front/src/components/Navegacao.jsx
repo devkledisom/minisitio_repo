@@ -7,21 +7,21 @@ import '../assets/css/navegacao.css'
 import { Navbar, Nav, NavDropdown, Container } from 'bootstrap';
 import Breadcrumb from '../plugins/Breadcrumb';
 
-function Navegacao() {
+function Navegacao({anuncio}) {
 
     const [migalhas, setMigalhas] = useState([]);
     const [searchParams] = useSearchParams();
     const idParam = searchParams.get('id');
-    const { nomeAnuncio } = useParams();
+    const { codAnuncio } = useParams();
 
 
 
     async function buscarAnuncio() {
-        const request = await fetch(`${masterPath.url}/anuncio/${idParam}`).then((x) => x.json());
+        const request = await fetch(`${masterPath.url}/anuncio/${codAnuncio}`).then((x) => x.json());
         const breadcrumbItems = [
             { label: request[0].nomeCaderno },
             { label: request[0].nomeAtividade, /* url: '/categoria' */ },
-            { label: nomeAnuncio, /* url: '/categoria/subcategoria' */ },
+            { label: request[0].descAnuncio, /* url: '/categoria/subcategoria' */ },
         ];
 
         setMigalhas(breadcrumbItems);
@@ -29,7 +29,7 @@ function Navegacao() {
     }
 
     useEffect(() => {
-        buscarAnuncio()
+        buscarAnuncio();
     }, []);
 
 

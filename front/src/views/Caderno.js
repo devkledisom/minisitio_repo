@@ -21,6 +21,7 @@ import MsgProgramada from '../components/MsgProgramada';
 import MiniWebCardSimples from '../components/MiniWebCardSimples';
 import DistribuirAnuncios from './classificados/DistribuirAnuncios';
 import { use } from 'react';
+import Calhau from '../components/caderno/Calhau';
 
 function Caderno() {
 
@@ -30,6 +31,7 @@ function Caderno() {
   const [listaIds, setListaIds] = useState([]);
   const [btnNav, setbtnNav] = useState(false);
   const [contadorAds, setContadorAds] = useState(false);
+  const [frasesNegociosOnline, setFrasesNegociosOnline] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -669,6 +671,12 @@ function Caderno() {
     };
 
     buscarId();
+
+    fetch(`${masterPath.url}/admin/calhau/read`)
+    .then((x) => x.json())
+    .then((res) => {
+      setFrasesNegociosOnline(res.message.frases)
+    })
   }, [])
 
 
@@ -940,7 +948,65 @@ function Caderno() {
     }, 1000); // Intervalo de 1 segundo
   }
 
- 
+  const testin2 = () => {
+
+    let col1Count = document.querySelectorAll('#col1 .atividade-title').length;
+    /*   if(document.querySelectorAll('#col1 .atividade-title')[col1Count - 1]) {
+        document.querySelectorAll('#col1 .atividade-title')[col1Count - 1].remove();
+      } */
+
+
+
+
+    return (
+
+      nomeAtividade.length > 0 && nomeAtividade.map((item, index) => (
+
+        (index >= limit)
+          ? (
+            <div id={item.id} key={item.id} className="atividade-title px-2" >
+              <h2 className='bg-yellow py-2'>
+                {item.codAtividade}
+              </h2>
+
+
+              {minisitio.anuncios.map((anuncio) => {
+                if (anuncio.codTipoAnuncio == 1) {
+                  // Renderiza o componente MiniWebCardSimples
+                  return <MiniWebCardSimples key={anuncio.codAnuncio} id={anuncio.codAnuncio} data={anuncio} />
+                } else if (anuncio.codAtividade == item.codAtividade) {
+                  // Renderiza o componente MiniWebCard se o codAtividade coincidir
+                  return (
+                    <MiniWebCard
+                      key={anuncio.codAnuncio}
+                      id={anuncio.codAnuncio}
+                      data={minisitio}
+                      codImg={anuncio.descImagem}
+                      ref={teste}
+                      empresa={anuncio.descAnuncio}
+                      endereco={anuncio.descEndereco}
+                      telefone={anuncio.descTelefone}
+                      celular={anuncio.descCelular}
+                      codDesconto={anuncio.codDesconto}
+                      ids={buscarId(90)}
+                    />
+
+                  )
+                }
+
+                return null; // Retorna null se nenhuma condição for atendida
+              })}
+
+              {/* Mensagem programada pode ser incluída aqui, caso necessário */}
+              {/* <MsgProgramada /> */}
+            </div>
+          )
+          : null
+      )))
+  }
+
+
+
   function nextPage() {
     if (numberPage >= minisitio.totalPaginas) {
       alert("Você está na última página!");
@@ -996,8 +1062,9 @@ function Caderno() {
       titulo.style.color = "#FFFFFF";
       titulo.innerText = getFraseAleatoria();
 
-      a.insertAdjacentElement("beforeend", titulo);
+      
 
+      a.insertAdjacentElement("beforeend", titulo);
 
     } else if (b.clientHeight < a.clientHeight) {
       let tamanho = a.clientHeight - b.clientHeight
@@ -1019,7 +1086,7 @@ function Caderno() {
   }
 
   function getFraseAleatoria() {
-    const frasesNegociosOnline = [
+   /*  const frasesNegociosOnline = [
         {
             id: 1,
             texto: "Negócios online transformam ideias em oportunidades, quebram barreiras geográficas e funcionam 24/7 — o sucesso está na inovação e na constância."
@@ -1036,11 +1103,36 @@ function Caderno() {
             id: 4,
             texto: "A internet nivela o jogo: grandes resultados vêm para aqueles que sabem como conectar, engajar e vender."
         }
-    ];
+    ]; */
+
+    if(frasesNegociosOnline.length < 1) return;
 
     const indiceAleatorio = Math.floor(Math.random() * frasesNegociosOnline.length);
-    return frasesNegociosOnline[indiceAleatorio].texto;
+    return frasesNegociosOnline[indiceAleatorio].frase;
 }
+
+
+
+useEffect(() => {
+  const verifyCalhau = setTimeout(() => {
+
+    if(!document.getElementById('col1')) {
+      clearInterval(verifyCalhau);
+      return;
+    }
+
+    let colum1 = document.getElementById('col1').childNodes.length;
+    let colum2 = document.getElementById('col2').childNodes.length;
+    if(colum1 > 0 && colum2 > 0) {
+      calhau();
+    }
+
+   
+  }, 1000);
+});
+
+
+
 
   return (
     <div className="App caderno">

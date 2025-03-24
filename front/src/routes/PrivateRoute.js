@@ -7,7 +7,7 @@ const PrivateRoute = ({ children, role }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        console.log(loading)
+        //console.log(loading)
         if (loading === false) {
             setIsLoading(false);
         }
