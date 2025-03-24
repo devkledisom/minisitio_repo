@@ -13,6 +13,9 @@ import Footer from '../components/Footer';
 import Navegacao from '../components/Navegacao';
 import FullWebCard from '../components/FullWebCard';
 
+//LIB
+import { Helmet, HelmetProvider } from "react-helmet-async";
+
 
 
 function WebCard() {
@@ -37,59 +40,70 @@ function WebCard() {
                     }
                 })
         }
-/* 
-        fetch(`${masterPath.url}/ufs`)
-            .then((x) => x.json())
-            .then((res) => {
-                setUfs(res);
-               
-            })
-
-        fetch(`${masterPath.url}/cadernos`)
-            .then((x) => x.json())
-            .then((res) => {
-                setCadernos(res)                
-            }) */
+        /* 
+                fetch(`${masterPath.url}/ufs`)
+                    .then((x) => x.json())
+                    .then((res) => {
+                        setUfs(res);
+                       
+                    })
+        
+                fetch(`${masterPath.url}/cadernos`)
+                    .then((x) => x.json())
+                    .then((res) => {
+                        setCadernos(res)                
+                    }) */
 
 
     }, [codCaderno, codUf]);
 
-/*     const ufAtual = () => {
-       const ufLocalizada = ufs.find(uf => uf.sigla_uf == codUf);
-       //console.log("daskjdafhadlfhdsklfghasdi", ufLocalizada)
-       if(ufLocalizada) {
-        return ufLocalizada.sigla_uf;
-       }
-       
-    }
-    const cadAtual = () => {
-       const cadLocalizada = cadernos.find(cad => cad.nomeCaderno == codCaderno);
-       //console.log("daskjdafhadlfhdsklfghasdi", cadLocalizada, codCaderno);
-       if(cadLocalizada) {
-        return cadLocalizada.nomeCaderno;
-       }
-       
-    } */
+    /*     const ufAtual = () => {
+           const ufLocalizada = ufs.find(uf => uf.sigla_uf == codUf);
+           //console.log("daskjdafhadlfhdsklfghasdi", ufLocalizada)
+           if(ufLocalizada) {
+            return ufLocalizada.sigla_uf;
+           }
+           
+        }
+        const cadAtual = () => {
+           const cadLocalizada = cadernos.find(cad => cad.nomeCaderno == codCaderno);
+           //console.log("daskjdafhadlfhdsklfghasdi", cadLocalizada, codCaderno);
+           if(cadLocalizada) {
+            return cadLocalizada.nomeCaderno;
+           }
+           
+        } */
 
     return (
-        <div className="App">
-            <header>
-               <Mosaico logoTop={true} borda="none" mosaicoImg={true} />
-                {/* <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={nmAnuncio} /> */}
-            </header>
-            <main>
-                <Busca />
-                <h1 id="title-caderno" className='py-2'>Caderno {codCaderno} - {codUf}</h1>
-               {/*  <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1> */}
-                <Navegacao />
-                <FullWebCard setCodCaderno={setCodCaderno} setCodUf={setCodUf} />
-            </main>
+        <HelmetProvider>
+            <div className="App">
 
-            <footer>
-                <Nav styleClass="Nav" />
-                <Footer />
-            </footer>
-        </div >
+                <Helmet>
+                    <title>Meu Site - Página Inicial</title>
+                    <meta name="description" content="Esta é a descrição da minha página para SEO." />
+                    <meta property="og:title" content="Meu Site" />
+                    <meta property="og:description" content="Descrição otimizada para redes sociais." />
+                    <meta property="og:image" content="/logo192.png" />
+                </Helmet>
+
+                <header>
+                    <Mosaico logoTop={true} borda="none" mosaicoImg={true} />
+                    {/* <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={nmAnuncio} /> */}
+                </header>
+                <main>
+                    <Busca />
+                    <h1 id="title-caderno" className='py-2'>Caderno {codCaderno} - {codUf}</h1>
+                    {/*  <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1> */}
+                    <Navegacao />
+                    <FullWebCard setCodCaderno={setCodCaderno} setCodUf={setCodUf} />
+                </main>
+
+                <footer>
+                    <Nav styleClass="Nav" />
+                    <Footer />
+                </footer>
+            </div >
+        </HelmetProvider>
     );
 }
 
