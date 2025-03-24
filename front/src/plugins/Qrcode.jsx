@@ -40,7 +40,7 @@ function QRCodeGenerator() {
     };
 
     useEffect(() => {
-        console.log(`local/${encodeURIComponent(imgParam)}?id=${idParam}`)
+        //console.log(`local/${encodeURIComponent(imgParam)}?id=${idParam}`)
     }, [])
 
     return (
@@ -50,7 +50,8 @@ function QRCodeGenerator() {
 
                 {/* Renderizar o QR Code com referência ao elemento */}
                 <div ref={qrRef}>
-                    <QRCodeCanvas value={`${masterPath.domain}/local/${encodeURIComponent(imgParam)}?id=${idParam}`} size={420} />
+                    <QRCodeCanvas value={`${masterPath.domain}/local/${idParam}`} size={420} />
+                    {/* <QRCodeCanvas value={`${masterPath.domain}/local/${encodeURIComponent(imgParam)}?id=${idParam}`} size={420} /> */}
                 </div>
 
                 {/* Botões de ação */}

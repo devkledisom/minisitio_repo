@@ -24,7 +24,6 @@ function Letter(props) {
               .then((x) => x.json())
               .then((res) => {
                 setLegenda(res[0].legenda);
-                console.log(res)
               });
     }, [])
 

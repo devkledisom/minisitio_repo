@@ -30,7 +30,7 @@ function MiniWebCard(props) {
         const request = await fetch(`${masterPath.url}/anuncio/${props.id}`).then((x) => x.json());
         request.kledisom = "1q12314234"
         setResult(request[0]);
-        navigate(`/local/${props.empresa}?id=${props.id}&ids=${props.ids}`);
+        navigate(`/local/${props.id}`);//&ids=${props.ids}
     }
 
     useEffect(() => {
@@ -93,40 +93,6 @@ function MiniWebCard(props) {
                         </div>
                     ))
                 }
-
-
-                {/*   {(props.ids.descImagem != "" || props.ids.descImagem2 != "" || props.ids.descImagem3 != "") &&
-                    <div className="apoio kledisom">
-                        <div>
-                            <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
-                                <img src={`${masterPath.url}/files/${props.ids.descImagem}`} alt="" />
-                            </a>
-                            {props.ids.descImagem2 != "" &&
-                                <a href={props.ids.descLink2} target="_blank" rel="noopener noreferrer">
-                                    <img src={`${masterPath.url}/files/${props.ids.descImagem2}`} alt="" />
-                                </a>
-                            }
-                            {props.ids.descImagem3 != "" &&
-                                <a href={props.ids.descLink3} target="_blank" rel="noopener noreferrer">
-                                    <img src={`${masterPath.url}/files/${props.ids.descImagem3}`} alt="" />
-                                </a>
-                            }
-
-                        </div>
-                    </div> 
-                } */}
-                {/* <div>
-                         <a href={props.ids.descLink} target="_blank" rel="noopener noreferrer">
-                            <img src={`${masterPath.url}/files/${props.ids.descImagem}`} alt="" />
-                        </a>
-                        <a href={props.ids.descLink2} target="_blank" rel="noopener noreferrer">
-                            <img src={`${masterPath.url}/files/${props.ids.descImagem2}`} alt="" />
-                        </a>
-                        <a href={props.ids.descLink3} target="_blank" rel="noopener noreferrer">
-                            <img src={`${masterPath.url}/files/${props.ids.descImagem3}`} alt="" />
-                        </a> 
-                    </div>*/}
-
 
                 <div className='row display-flex justify-content-center' key={props.key} onClick={buscarAnuncio}>
 

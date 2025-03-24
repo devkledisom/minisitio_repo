@@ -96,10 +96,14 @@ function UserActions(props) {
                     <img src="/assets/img/logo.png" />
                     Renovar
                 </a>
-                <a href={`/qrcode?image=${props.path}&id=${props.id}`} class="btn btn-default margin-bottom-10" target="_blank">
+                <a href={`/qrcode?id=${props.id}`} class="btn btn-default margin-bottom-10" target="_blank">
                     <img src="/assets/img/logo.png" />
                     QR CODE
                 </a>
+            {/*     <a href={`/qrcode?image=${props.path}&id=${props.id}`} class="btn btn-default margin-bottom-10" target="_blank">
+                    <img src="/assets/img/logo.png" />
+                    QR CODE
+                </a> */}
                 <a href={`/adesivo?image=${props.data.descAnuncio}&id=${props.data.codAnuncio}`} class="btn btn-default margin-bottom-10" target="_blank">
                     <img src="/assets/img/logo.png" />
                     Adesivo

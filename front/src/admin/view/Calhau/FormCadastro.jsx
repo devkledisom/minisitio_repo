@@ -34,48 +34,34 @@ const FormCadastro = () => {
         zIndex: "999"
     };
 
-    function criarPin() {
+    function criarFrase() {
 
-        var validation = false;
         setShowSpinner(true);
 
-        document.querySelectorAll('[name="in"]').forEach((item) => {
-            if (item.value == "") {
-                item.style.border = "1px solid red";
-                validation = false;
-                setShowSpinner(false);
-                return;
-            } else {
-                item.style.border = "1px solid gray";
-                validation = true;
-            };
-        });
-
         const data = {
-            "codigo": document.getElementById('in-codigo').value,
-            "validade": document.getElementById('in-validade').value,
+            "frase": document.getElementById('frase').value,
         };
 
         const config = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
             },
             body: JSON.stringify(data)
         };
 
-        if (validation) {
-            fetch(`${masterPath.url}/admin/pin/create`, config)
+            fetch(`${masterPath.url}/admin/calhau/create`, config)
                 .then((x) => x.json())
                 .then((res) => {
                     if (res.success) {
                         setShowSpinner(false);
                        Swal.fire({
                         title: "Success!",
-                        text: "Novo Pin registrado!",
+                        text: "Nova frase registrada!",
                         icon: "success"
                        });
+                       navigate('/admin/calhau');
                     } else {
                         Swal.fire({
                             title: "Error!",
@@ -85,17 +71,12 @@ const FormCadastro = () => {
                         setShowSpinner(false);
                     }
                 })
-        }
+        
 
     };
 
 
-    //liberar campo select
-/*     document.querySelectorAll('select').forEach((item) => {
-        item.addEventListener("change", (event) => {
-            event.target.style.border = "1px solid gray";
-        })
-    }); */
+
     //liberar campo input
     document.querySelectorAll('[name="in"]').forEach((item) => {
         item.addEventListener("change", (event) => {
@@ -105,19 +86,6 @@ const FormCadastro = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-/* 
-        switch (event.target.id) {
-            case "in-codigo":
-                atividadeValue.atividade = value;
-                break;
-            case "in-validade":
-                atividadeValue.corTitulo = value;
-                break;
-            default:
-                console.log("não encontrou");
-                break;
-        } */
-
 
         setAtividade(prevState => ({
             ...prevState,
@@ -136,25 +104,19 @@ const FormCadastro = () => {
             {showSpinner && <Spinner />}
 
                 <div className="container">
-                    <h2 className="pt-4 px-5 text-center">Adicionar PIN</h2>
+                    <h2 className="pt-4 px-5 text-center">Adicionar Frase de Calhau</h2>
                     {/* <h2>Vertical (basic) form</h2> */}
                     <form action="/action_page.php">
                         <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label for="in-codigo" className="w-50 px-1">Código:</label>
-                            <input type="text" className="form-control h-25 w-50" id="in-codigo" placeholder="codigo pin promocional" name="in" />
-                        </div>
-                        <div className="form-group d-flex flex-column align-items-center py-3">
-                            <label for="in-validade" className="w-50 px-1">Válido até:</label>
-                            <InputMask mask={'99/99/9999'} type="text" className="form-control h-25 w-50" id="in-validade" placeholder="Data de validade do codigo" name="in"></InputMask>
-                           {/*  <input type="text" className="form-control h-25 w-50" id="in-validade" placeholder="" name="in" /> */}
-                        </div>
-                                          
+                            <label htmlFor="in-codigo" className="w-50 px-1">Digite aqui uma Frase:</label>
+                            <textarea name="frase" id='frase' className="form-control h-25 w-50" height={100} placeholder="Frase com até 145 caracteres" maxLength={145}></textarea>
+                        </div>                                          
                         <div className="text-center py-3">
                             <button type="button"
                                 className="btn btn-info custom-button mx-2 text-light"
-                                onClick={criarPin}
+                                onClick={criarFrase}
                             >Salvar</button>
-                            <button type="submit" className="btn custom-button" onClick={() => navigate('/admin/pin')}>Cancelar</button>
+                            <button type="submit" className="btn custom-button" onClick={() => navigate('/admin/calhau')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

@@ -85,7 +85,7 @@ function Rotas() {
                         <Route path="buscar" element={<Pesquisa />} />
                         <Route path="caderno/:atividade" element={<Caderno />} />
                         <Route path="caderno-geral/:caderno/:estado" element={<CadernoGeral />} />
-                        <Route path="local/:nomeAnuncio" element={<WebCard />} />
+                        <Route path="local/:codAnuncio" element={<WebCard />} />
                         <Route path="login" element={<Login />} />
                         <Route path="sobre/:id" element={<OutroComponente />} />
                     </Route>

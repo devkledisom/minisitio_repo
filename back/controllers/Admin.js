@@ -14,16 +14,17 @@ const masterPath = require('../config/config');
 const database = require('../config/db');
 const Anuncio = require('../models/table_anuncio');
 const Atividade = require('../models/table_atividade');
+const Caderno = require('../models/table_caderno');
+const Cadernos = require('../models/table_caderno');
+const Calhau = require('../models/table_calhau');
+const Descontos = require('../models/table_desconto');
+const DDD = require('../models/table_ddd');
+const Globals = require('../models/table_globals');
+const Pin = require('../models/table_pin');
+const Pagamento = require('../models/table_pagamentos');
 const Uf = require('../models/table_uf');
 const Usuarios = require('../models/table_usuarios');
 const Ufs = require('../models/table_uf');
-const Caderno = require('../models/table_caderno');
-const Cadernos = require('../models/table_caderno');
-const Descontos = require('../models/table_desconto');
-const DDD = require('../models/table_ddd');
-const Pin = require('../models/table_pin');
-const Globals = require('../models/table_globals');
-const Pagamento = require('../models/table_pagamentos');
 
 
 
@@ -7819,6 +7820,8 @@ LIMIT 50000;
         res.json({ success: true, message: 'Arquivo recebido com sucesso!' });
         //res.redirect("https://minitest.minisitio.online/admin/espacos");
     },
+
+    //MODULO PIN
     listarPin: async (req, res) => {
 
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
@@ -7905,6 +7908,67 @@ LIMIT 50000;
 
 
         res.json({ success: true, data: pin });
+    },
+
+    //MODULO CALHAU
+    listarCalhau: async (req, res) => {
+
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+        const codigoCaderno = req.params.codCaderno;
+
+        const offset = (paginaAtual - 1) * porPagina;
+
+        // Consulta para recuperar apenas os itens da página atual
+        const frases = await Calhau.findAll({
+            //order: [['createdAt', 'DESC']],
+            limit: porPagina,
+            offset: offset,
+            raw: true
+        });
+
+        // Número total de itens
+  /*       const totalItens = frases.count;
+        // Número total de páginas
+        const totalPaginas = Math.ceil(totalItens / porPagina); */
+
+        res.json({
+            success: true, message: {
+                frases: frases, // Itens da página atual
+             /*    paginaAtual: paginaAtual,
+                totalPaginas: totalPaginas */
+            }
+        })
+
+        //res.json({success: true, data: pin});
+
+    },
+    criarCalhau: async (req, res) => {
+        console.log(req.body)
+        await database.sync();
+
+        try {
+            const novoCalhau = await Calhau.create(req.body);
+            console.log(novoCalhau)
+            res.json({ success: true, data: novoCalhau });
+        } catch (err) {
+            console.log(err)
+            res.json({ success: false, err: "erro ao cadastrar" });
+        }
+
+
+    },
+    deletarCalhau: async (req, res) => {
+        let id = req.params.id;
+
+        const calhau = await Calhau.destroy({
+            where: {
+                id: id
+            }
+        });
+
+        res.json({ success: true, data: calhau });
+
     },
 
     //rota de exportar unica

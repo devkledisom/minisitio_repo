@@ -15,7 +15,7 @@ const Calhau = () => {
 
     const [paginasTotal, setPaginas] = useState();
     const [selectId, setSelectId] = useState();
-    const [pins, setPins] = useState([]);
+    const [calhaus, setCalhaus] = useState([]);
     const [showSpinner, setShowSpinner] = useState(true);
 
     const location = useLocation();
@@ -28,14 +28,12 @@ const Calhau = () => {
 
 
     useEffect(() => {
-        fetch(`${masterPath.url}/admin/pin/read?page=${param}`)
+        fetch(`${masterPath.url}/admin/calhau/read?page=${param}`)
             .then((x) => x.json())
             .then((res) => {
-                //setCidade(res.message.anuncios);
-                setPins(res.message.pins)
+                setCalhaus(res.message.frases)
                 setPaginas(res.message.totalPaginas)
                 setShowSpinner(false);
-                //console.log(res.message);
             })
 
 
@@ -59,22 +57,21 @@ const Calhau = () => {
 
 
     function apagarUser() {
-        fetch(`${masterPath.url}/admin/pin/delete/${selectId}`, {
+        fetch(`${masterPath.url}/admin/calhau/delete/${selectId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
             },
         })
             .then((x) => x.json())
             .then((res) => {
                 setShowSpinner(true);
                 if (res.success) {
-                    fetch(`${masterPath.url}/admin/pin/read?page=${param}`)
+                    fetch(`${masterPath.url}/admin/calhau/read?page=${param}`)
                         .then((x) => x.json())
                         .then((res) => {
-                            //setCidade(res.message.anuncios);
-                            setPins(res.message.pins)
+                            setCalhaus(res.message.frases)
                             setPaginas(res.message.totalPaginas)
                             setShowSpinner(false);
                             //console.log(res.message);
@@ -93,7 +90,7 @@ const Calhau = () => {
             .then((res) => {
                 if (res.success) {
                     console.log(res)
-                    setPins(res.message);
+                    setCalhaus(res.message);
                     setShowSpinner(false);
                 } else {
                     alert("Usuário não encontrado na base de dados");
@@ -108,6 +105,11 @@ const Calhau = () => {
         zIndex: "999"
     }
 
+    const formatdata = (param) => {
+        let data = param.split("T")[0];
+        let arrData = data.split("-");
+        return `${arrData[2]}/${arrData[1]}/${arrData[0]}`
+    }
 
     return (
         <div className="PIN">
@@ -121,18 +123,10 @@ const Calhau = () => {
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
-                            <button type="button" className="btn custom-button" onClick={() => navigator('/admin/pin/cadastro')}>Adicionar</button>
-                           <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/pin/editar?id=${selectId}`)}>Editar</button>
-                            <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarUser}>Apagar</button>
+                            <button type="button" className="btn custom-button" onClick={() => navigator('/admin/calhau/cadastro')}>Adicionar</button>
+                          {/*  <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/pin/editar?id=${selectId}`)}>Editar</button> */}
+                            <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarUser}>Apagar</button>
                         </div>
-                       {/*  <div className="span6 col-md-6">
-                            <div className="pull-right d-flex justify-content-center align-items-center">
-                                <input id="buscar" type="text" placeholder="Buscar" />
-                                <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
-                                    <i className="icon-search"></i>
-                                </button>
-                            </div>
-                        </div> */}
                     </div>
                 </div>
 
@@ -144,15 +138,16 @@ const Calhau = () => {
                                     <tr>
                                         <th>ID</th>
                                         <th>FRASE</th>
+                                        <th>DATA DE CRIAÇÃO</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        pins != '' && pins.map((item) => (
+                                        calhaus != '' && calhaus.map((item) => (
                                             <tr key={item.id} id={item.id} onClick={selecaoLinha}>
-                                                <td>{"1"}</td>
-                                                <td>{"testando calhau"}</td>
-                                             
+                                                <td>{item.id}</td>
+                                                <td>{item.frase}</td>
+                                                <td>{formatdata(item.createdAt)}</td>
                                             </tr>
 
                                         ))

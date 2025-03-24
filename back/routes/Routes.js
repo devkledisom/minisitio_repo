@@ -127,6 +127,11 @@ router.put('/api/admin/pin/update', auth, Admin.atualizarPin);
 router.delete('/api/admin/pin/delete/:id', auth, Admin.deletarPin);
 router.get('/api/admin/pin/edit/:id', Admin.listarPinId);
 
+//ROTAS MODULO CALHAU
+router.get('/api/admin/calhau/read', Admin.listarCalhau);
+router.post('/api/admin/calhau/create', auth, Admin.criarCalhau);
+router.delete('/api/admin/calhau/delete/:id', auth, Admin.deletarCalhau);
+
 //EXPORT OR IMPORT
 router.post('/api/admin/anuncio/export', Admin.export4excell);
 router.post('/api/admin/export/:modulo', Admin.exportPadrao);
