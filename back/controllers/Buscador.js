@@ -136,6 +136,8 @@ module.exports = {
 
         const ufs = await Uf.findAll();
 
+        console.log(ufs)
+
         res.json(ufs);
     },
     buscaGeralCadernoold: async (req, res) => {

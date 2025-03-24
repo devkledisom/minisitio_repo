@@ -4664,7 +4664,7 @@ module.exports = {
             if (codTipoAnuncio == 3) {
                 const idUtilizado = await Desconto.update({
                     //utilizar_saldo: codigoDeDesconto[0].utilizar_saldo + 1,
-                    saldo: codigoDeDesconto[0].saldo - 1
+                    saldo: Sequelize.literal('saldo - 1')//codigoDeDesconto[0].saldo - 1
 
                 }, {
                     where: {
