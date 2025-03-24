@@ -46,7 +46,7 @@ const FormCadastro = () => {
         zIndex: "999"
     }
 
-    const tokenAuth = localStorage.getItem('token');
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
 
     useEffect(() => {

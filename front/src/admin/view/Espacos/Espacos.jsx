@@ -49,7 +49,7 @@ const Espacos = () => {
     const campoBusca = useRef(null);
     const codOriginFather = useRef(null);
 
-    const tokenAuth = localStorage.getItem('token');
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
     useEffect(() => {
         setShowSpinner(true);

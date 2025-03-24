@@ -56,6 +56,8 @@ const FormEdit = () => {
         zIndex: "999"
     }
 
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
+
     useEffect(() => {
         setShowSpinner(true);
         fetch(`${masterPath.url}/admin/desconto/edit/${param}`)
@@ -196,7 +198,7 @@ const FormEdit = () => {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
             body: JSON.stringify(data)
         };

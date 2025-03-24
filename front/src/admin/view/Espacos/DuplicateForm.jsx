@@ -10,6 +10,8 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
   const [caderno, setCaderno] = useState([]);
   const [ufSelected, setUf] = useState(0);
 
+  const tokenAuth = sessionStorage.getItem('userTokenAccess');
+
   useEffect(() => {
     fetch(`${masterPath.url}/cadernos`)
       .then((x) => x.json())
@@ -66,7 +68,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
-      "authorization": 'Bearer ' + masterPath.accessToken
+      "authorization": 'Bearer ' + tokenAuth
   },
   })
       .then((x) => x.json())
@@ -90,7 +92,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
-        "authorization": 'Bearer ' + masterPath.accessToken
+        "authorization": 'Bearer ' + tokenAuth
     },
     })
     .then((x) => x.json())
@@ -115,7 +117,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
-        "authorization": 'Bearer ' + masterPath.accessToken
+        "authorization": 'Bearer ' + tokenAuth
     },
       body: JSON.stringify(city)
     })
