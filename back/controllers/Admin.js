@@ -4691,7 +4691,7 @@ module.exports = {
             "descPatrocinadorLink": 0,
             "qntVisualizacoes": 0,
             "activate": 0,
-            "dtCadastro": "dataNow()",
+            //"dtCadastro": dataNow(),
             "dtCadastro2": "2012-12-27T16:22:44.000Z",
             "dtAlteracao": "2020-11-30T23:59:59.000Z",
             "descLinkedin": "",
