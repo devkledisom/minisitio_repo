@@ -112,6 +112,7 @@ router.get('/api/admin/anuncio/visualizacoes', Admin.visualizacoes);
 router.post('/api/admin/anuncio/duplicate', auth, Admin.duplicar);
 router.get('/api/admin/anuncio/classificado/:caderno/:uf', Admin.listarClassificado);
 router.get('/api/admin/anuncio/classificado/geral/:caderno/:uf', Admin.listarClassificadoGeral);
+router.get('/api/admin/anuncio/classificado/todos/:caderno/:uf', Admin.listarTodosClassificados);
 router.get('/api/admin/anuncio/classificado/geral2', Admin.listarClassificadoGeral2);
 router.get('/api/admin/anuncio/classificado/especifico/:caderno/:uf', Admin.listarClassificadoEspecifico);
 router.get('/api/admin/anuncio/quantidade/uf', auth, Admin.quantidadeUf);

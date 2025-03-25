@@ -9,6 +9,7 @@ import PrivateRoute from "./PrivateRoute";
 import Home from '../views/Home';
 import Pesquisa from '../views/Pesquisa';
 import Caderno from '../views/Caderno';
+import TodosCaderno from '../views/cadernos/geral/Caderno';
 import CadernoGeral from '../views/CadernoGeral';
 import WebCard from '../views/WebCard';
 import Login from '../views/Login';
@@ -84,6 +85,7 @@ function Rotas() {
                         <Route index element={<Home />} />
                         <Route path="buscar" element={<Pesquisa />} />
                         <Route path="caderno/:atividade" element={<Caderno />} />
+                        <Route path="cadernos/:atividade" element={<TodosCaderno />} />
                         <Route path="caderno-geral/:caderno/:estado" element={<CadernoGeral />} />
                         <Route path="local/:codAnuncio" element={<WebCard />} />
                         <Route path="login" element={<Login />} />
