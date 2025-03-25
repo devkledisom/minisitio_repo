@@ -14,7 +14,7 @@ function CardClassificado(props) {
             {props.data != null && props.data.descImagem != null && props.data.descImagem != "teste" && props.data.descImagem != 0 ? (
                 <li className="cartao">
                     <div className="conteudo">
-                        <a href={`${masterPath.domain}/local/${encodeURIComponent(props.data.descAnuncio)}?id=${props.data.codAnuncio}`}>
+                        <a href={`${masterPath.domain}/local/${props.data.codAnuncio}`}>
                             <img src={`${masterPath.url}/files/${props.data.descImagem}`} alt={props.data.descAnuncio} />
                         </a>
                     </div>
@@ -22,7 +22,7 @@ function CardClassificado(props) {
                     <div className="links">
                         <ul className="list-inline">
                             <li className="pull-left">
-                                <a href={`${masterPath.domain}/local/${encodeURIComponent(props.data.descAnuncio)}?id=${props.data.codAnuncio}`} data-toggle="tooltip" title="Detalhes">
+                                <a href={`${masterPath.domain}/local/${props.data.codAnuncio}`} data-toggle="tooltip" title="Detalhes">
                                     <img src="/assets/img/miniwebcard/link_detalhe.png" />
                                 </a>
                             </li>

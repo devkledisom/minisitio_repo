@@ -33,6 +33,7 @@ function Caderno(props) {
   const [smoot, setSmoot] = useState(false);
   const [loading, setLoading] = useState(false);
   const [nmAnuncio, setNmAnuncio] = useState(null);
+  const [qtdaPerfil, setQtdaPerfil] = useState(0);
 
   const location = useLocation();
 
@@ -90,11 +91,28 @@ function Caderno(props) {
           //setClassificados(res.data);
           setPathImg(res.teste.rows);
           setMosaicoImg(res.mosaico);
+          setQtdaPerfil(res.totalRegistros);
           //setLoading(false);
           //document.querySelector('.caderno').style.filter = "none";
         }
 
       }) 
+      
+    /* fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
+      .then(x => x.json())
+      .then(res => {
+        //console.log(res)
+        if (res.success) {
+          //setClassificados(res.data);
+          setPathImg(res.teste.rows);
+          setMosaicoImg(res.mosaico);
+          //setLoading(false);
+          //document.querySelector('.caderno').style.filter = "none";
+        }
+
+      })  */
+
+
 
   }, []);
 
@@ -126,7 +144,6 @@ function Caderno(props) {
         setResult(res.anuncios);
         navigate("/caderno/maceio_27");
       })
-    console.log("very")
   };
 
   function definePage(param) {
@@ -241,7 +258,7 @@ function Caderno(props) {
             <div className='row py-3'>
               <div className="col-md-12 col-xs-12 text-center">
                 {/* <button onClick={buscarTodosClassificado}>Ver caderno classificado</button> */}
-                <a href={`/caderno/${caderno}_${estado}?caderno=${caderno}&estado=${estado}`} className="btn proximo btn-class" onClick={buscarTodosClassificado}><i className="fa fa-file-text"></i> Ver caderno classificado</a>
+                <a href={`/cadernos/${caderno}_${estado}?caderno=${caderno}&estado=${estado}`} className="btn proximo btn-class" onClick={buscarTodosClassificado}><i className="fa fa-file-text"></i> Ver caderno classificado</a>
               </div>
 
             </div>
@@ -251,6 +268,7 @@ function Caderno(props) {
               <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled sumario">
                 <li className="titulo">
                   <h2>Sumário do classificado</h2>
+                  <span>({qtdaPerfil} registros)</span>
                 </li>
                 <li className="classificado">
                   <ul className="list-unstyled">

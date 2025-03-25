@@ -449,7 +449,7 @@ function Caderno() {
         })
     };
     function buscarTodosClassificado() {
-      fetch(`${masterPath.url}/admin/anuncio/classificado/geral/${caderno}/${estado}`)
+      fetch(`${masterPath.url}/admin/anuncio/classificado/todos/${caderno}/${estado}`)
         .then(x => x.json())
         .then(async res => {
           if (res.success) {

@@ -1824,56 +1824,56 @@ module.exports = {
         const offset = (paginaAtual - 1) * porPagina;
 
         try {
-        console.time("espaco")
-        // Consulta para recuperar apenas os itens da página atual
-        const anuncio = await Anuncio.findAll({
-            order: [
-                //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
-                ['activate', 'ASC'],
-                ['createdAt', 'DESC'],
-                ['codDuplicado', 'ASC'],
-            ],
-            limit: porPagina,
-            offset: offset,
-            attributes: [
-                'codAnuncio',
-                'codOrigem',
-                'codDuplicado',
-                'descCPFCNPJ',
-                'descAnuncio',
-                'codTipoAnuncio',
-                'codCaderno',
-                'codUf',
-                'activate',
-                'descPromocao',
-                'createdAt',
-                'dueDate',
-                'codDesconto',
-                'codAtividade',
-                'periodo'
-            ],
-            include: {
-                model: Pagamento,
-                as: "pagamentos",  // Nome definido no `hasMany`
-                attributes: ["id", "valor", "status", "data"]
-            }
-        });
+            console.time("espaco")
+            // Consulta para recuperar apenas os itens da página atual
+            const anuncio = await Anuncio.findAll({
+                order: [
+                    //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                    ['activate', 'ASC'],
+                    ['createdAt', 'DESC'],
+                    ['codDuplicado', 'ASC'],
+                ],
+                limit: porPagina,
+                offset: offset,
+                attributes: [
+                    'codAnuncio',
+                    'codOrigem',
+                    'codDuplicado',
+                    'descCPFCNPJ',
+                    'descAnuncio',
+                    'codTipoAnuncio',
+                    'codCaderno',
+                    'codUf',
+                    'activate',
+                    'descPromocao',
+                    'createdAt',
+                    'dueDate',
+                    'codDesconto',
+                    'codAtividade',
+                    'periodo'
+                ],
+                include: {
+                    model: Pagamento,
+                    as: "pagamentos",  // Nome definido no `hasMany`
+                    attributes: ["id", "valor", "status", "data"]
+                }
+            });
 
-        console.timeEnd("espaco")
+            console.timeEnd("espaco")
 
-        const consultarRegistros = await Globals.findAll({
-            where: {
-                keyValue: "total_perfis"
-            },
-            raw: true
-        })
+            const consultarRegistros = await Globals.findAll({
+                where: {
+                    keyValue: "total_perfis"
+                },
+                raw: true
+            })
 
-        // Número total de itens
-        const totalItens = consultarRegistros[0].value;
-        // Número total de páginas
-        const totalPaginas = Math.ceil(totalItens / porPagina);
+            // Número total de itens
+            const totalItens = consultarRegistros[0].value;
+            // Número total de páginas
+            const totalPaginas = Math.ceil(totalItens / porPagina);
 
-        
+
             await Promise.all(anuncio.map(async (anun, i) => {
                 const user = await anun.getUsuario();
                 //console.log("adjasldj",user)
@@ -2077,13 +2077,19 @@ module.exports = {
                 }
             });
 
+            const contador = await Caderno.findOne({
+                where: { UF: req.params.uf, nomeCaderno: req.params.caderno },
+                raw: true
+            })
+
             res.json({
                 success: true,
                 //data: result.map(r => r.toJSON()),
                 teste: anuncioTeste,
                 //anuncio2: anuncio2,
                 mosaico: 0,
-                kledisom: 123
+                kledisom: 123,
+                totalRegistros: contador.total
             });
 
         } catch (error) {
@@ -2460,6 +2466,49 @@ module.exports = {
             teste: anuncioTeste,
             mosaico: 0,
             qtdaConsulta: contador,
+            paginaLocalizada: req.query.page,
+        });
+
+
+
+
+    },
+    listarTodosClassificados: async (req, res) => {
+
+        const page = req.query.page ? parseInt(req.query.page) : 1;
+        const limit = 10;
+        //const offset = (page - 1) * limit;
+        const offset = Math.max(0, (page - 1) * limit);
+
+
+        const anuncioTeste = await Anuncio.findAll({
+            where: {
+                [Op.and]: [
+                    { codUf: req.params.uf },
+                    { codCaderno: req.params.caderno },
+                    //{ page: req.query.page },
+                ],
+                codAtividade: {
+                    [Op.notIn]: ['ADMINISTRAÇÃO REGIONAL / PREFEITURA', "EMERGÊNCIA", "UTILIDADE PÚBLICA", "HOSPITAIS PÚBLICOS", "CÂMARA DE VEREADORES - CÂMARA DISTRITAL", "SECRETARIA DE TURISMO", "INFORMAÇÕES", "EVENTOS NA CIDADE"]  // Ignorar esse valor
+                },
+            },
+            order: [['codAtividade', 'ASC'], ['createdAt', 'DESC']],
+            limit: limit,
+            offset: offset,
+            attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page'],
+        });
+
+        const contador = await Caderno.findOne({
+            where: { UF: req.params.uf, nomeCaderno: req.params.caderno },
+            raw: true
+        })
+        console.log("daskdaklsdjalkj", contador)
+
+        res.json({
+            success: true,
+            teste: anuncioTeste,
+            mosaico: 0,
+            qtdaConsulta: contador.total,
             paginaLocalizada: req.query.page,
         });
 
@@ -3691,7 +3740,7 @@ module.exports = {
             console.timeEnd("espaco")
             console.table([1, "id", nu_hash])
 
-            if(resultAnuncio.length < 1) return  res.json({ success: false, message: 'Não encontrado'});
+            if (resultAnuncio.length < 1) return res.json({ success: false, message: 'Não encontrado' });
 
             if (resultAnuncio.length > 0) {
                 await Promise.all(resultAnuncio.map(async (anun, i) => {
@@ -3744,10 +3793,10 @@ module.exports = {
             }
         }
         async function buscaPorNome() {
-    
+
             const resultAnuncio = await Anuncio.findAll({
                 where: {
-                    [requisito]: {[Op.like]: `${nu_hash}%`}
+                    [requisito]: { [Op.like]: `${nu_hash}%` }
                 },
                 limit: porPagina,
                 offset: offset,
@@ -3777,7 +3826,7 @@ module.exports = {
 
             console.table([1, "idnome", nu_hash])
 
-            if(resultAnuncio.length < 1) return  res.json({ success: false, message: 'Não encontrado'});
+            if (resultAnuncio.length < 1) return res.json({ success: false, message: 'Não encontrado' });
 
             if (resultAnuncio.length > 0) {
                 await Promise.all(resultAnuncio.map(async (anun, i) => {
@@ -3827,7 +3876,7 @@ module.exports = {
             }
         }
         async function buscaNormal() {
-        
+
             const resultAnuncio = await Anuncio.findAll({
                 where: {
                     [requisito]: nu_hash
@@ -3859,7 +3908,7 @@ module.exports = {
             });
 
             console.table([1, "id", nu_hash])
-            if(resultAnuncio.length < 1) return  res.json({ success: false, message: 'Não encontrado'});
+            if (resultAnuncio.length < 1) return res.json({ success: false, message: 'Não encontrado' });
 
             if (resultAnuncio.length > 0) {
                 await Promise.all(resultAnuncio.map(async (anun, i) => {
@@ -4136,7 +4185,7 @@ module.exports = {
 
 
 
-          
+
             }
         }
 
@@ -4673,6 +4722,30 @@ module.exports = {
                 })
             }
 
+            
+            if (codTipoAnuncio == 1) {
+                await Caderno.increment('basico', {
+                    where: {
+                        UF: dadosAnuncio.codUf,
+                        nomeCaderno: dadosAnuncio.codCaderno
+                    }
+                });
+            } else if (codTipoAnuncio == 3) {
+                await Caderno.increment('completo', {
+                    where: {
+                        UF: uf,
+                        nomeCaderno: caderno
+                    }
+                });
+            }
+
+            await Caderno.increment('total', {
+                where: {
+                    UF: dadosAnuncio.codUf,
+                    nomeCaderno: dadosAnuncio.codCaderno
+                }
+            });
+
             res.json({ success: true, message: listaAnuncios }); // Envia a resposta primeiro
 
             // Executa a query em segundo plano
@@ -4922,27 +4995,59 @@ module.exports = {
         let registro = await Anuncio.findAll({
             where: {
                 codAnuncio: uuid
-            }
+            },
+            raw: true
         });
 
 
 
-        let codigoDeDesconto = await Descontos.findAll({
-            where: {
-                idDesconto: registro[0].codDesconto
-            }
-        });
+        /*     let codigoDeDesconto = await Descontos.findAll({
+                where: {
+                    idDesconto: registro[0].codDesconto
+                }
+            }); */
 
         ///console.log("dasfjdsfshdljh", codigoDeDesconto[0].hash)
 
         try {
-            //Atividades
+
+            const tipoAnuncio = registro[0].codTipoAnuncio;
+            const uf = registro[0].codUf;
+            const caderno = registro[0].codCaderno;
+
+
+            //Anuncios
             const deleteAnuncio = await Anuncio.destroy({
                 where: {
                     codAnuncio: uuid
                 }
 
             });
+
+            if (tipoAnuncio == 1) {
+                await Caderno.decrement('basico', {
+                    where: {
+                        UF: uf,
+                        nomeCaderno: caderno
+                    }
+                });
+            } else if (tipoAnuncio == 3) {
+                await Caderno.decrement('completo', {
+                    where: {
+                        UF: uf,
+                        nomeCaderno: caderno
+                    }
+                });
+            }
+
+            await Caderno.decrement('total', {
+                where: {
+                    UF: uf,
+                    nomeCaderno: caderno
+                }
+            });
+
+
             /* 
                         const idUtilizado = await Desconto.update({
                             utilizar_saldo: codigoDeDesconto[0].utilizar_saldo - 1,
@@ -7928,15 +8033,15 @@ LIMIT 50000;
         });
 
         // Número total de itens
-  /*       const totalItens = frases.count;
-        // Número total de páginas
-        const totalPaginas = Math.ceil(totalItens / porPagina); */
+        /*       const totalItens = frases.count;
+              // Número total de páginas
+              const totalPaginas = Math.ceil(totalItens / porPagina); */
 
         res.json({
             success: true, message: {
                 frases: frases, // Itens da página atual
-             /*    paginaAtual: paginaAtual,
-                totalPaginas: totalPaginas */
+                /*    paginaAtual: paginaAtual,
+                   totalPaginas: totalPaginas */
             }
         })
 
