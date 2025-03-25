@@ -4733,8 +4733,8 @@ module.exports = {
             } else if (codTipoAnuncio == 3) {
                 await Caderno.increment('completo', {
                     where: {
-                        UF: uf,
-                        nomeCaderno: caderno
+                        UF: dadosAnuncio.codUf,
+                        nomeCaderno: dadosAnuncio.codCaderno
                     }
                 });
             }
