@@ -232,7 +232,7 @@ function Listar(props) {
                                                                 <td>{`${item.codCaderno}/${item.codUf}`}</td>
                                                                 <td className='text-center ver-perfil'>
                                                                     <a
-                                                                        href={`/local/${item.descAnuncio}?id=${item.codAnuncio}`}
+                                                                        href={`/local/${item.codAnuncio}`}
                                                                         className='text-decoration-none'
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"

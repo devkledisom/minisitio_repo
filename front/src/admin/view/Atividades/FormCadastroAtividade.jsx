@@ -19,6 +19,7 @@ const FormCadastro = () => {
     const [page, setPage] = useState(1);
     const [showSpinner, setShowSpinner] = useState(false);
 
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
     const location = useLocation();
 
@@ -71,7 +72,7 @@ const FormCadastro = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
             body: JSON.stringify(data)
         };
