@@ -523,7 +523,7 @@ Para 100000 linhas: 312500ms
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                         >
-                                                            {`${masterPath.domain}/local/${encodeURIComponent(item.descAnuncio)}?id=${item.codAnuncio}`}
+                                                            {`${masterPath.domain}/local/${item.codAnuncio}`}
                                                             {/*   <i class="fa fa-eye"></i>
                                                             Ver */}
                                                         </a>
