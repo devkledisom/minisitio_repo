@@ -68,7 +68,7 @@ module.exports = {
         const valorDesconto = await Desconto.findOne({ where: { hash: perfilMinisitio.codDesconto }, raw: true, attributes: ['hash', 'desconto'] });
         console.log((10 - valorDesconto.desconto) * 12)
         const body = {
-            "notification_url": "https://minitest.minisitio.online/api/webhook",
+            "notification_url": "https://minisitio.online/api/webhook",
             //"notification_url": "https://minisitio.com.br/api/webhook",
             "external_reference": codigoReferenciaMp,
             "items": [
