@@ -83,7 +83,7 @@ function WebCard() {
                     <meta name="description" content="Esta é a descrição da minha página para SEO." />
                     <meta property="og:title" content="Meu Site" />
                     <meta property="og:description" content="Descrição otimizada para redes sociais." />
-                    <meta property="og:image" content={`${masterPath.domain}/old/react.png`} />
+                    <meta property="og:image" content={`https://minisitio.com.br/api/files/2060x1860minisitio.jpg`} />
                 </Helmet>
 
                 <header>
