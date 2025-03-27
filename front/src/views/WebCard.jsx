@@ -75,16 +75,16 @@ function WebCard() {
         } */
 
     return (
-        <HelmetProvider>
+        //<HelmetProvider>
             <div className="App">
 
-                <Helmet>
+      {/*           <Helmet>
                     <title>Meu Site - Página Inicial</title>
                     <meta name="description" content="Esta é a descrição da minha página para SEO." />
                     <meta property="og:title" content="Meu Site" />
                     <meta property="og:description" content="Descrição otimizada para redes sociais." />
                     <meta property="og:image" content={`https://minisitio.com.br/api/files/2060x1860minisitio.jpg`} />
-                </Helmet>
+                </Helmet> */}
 
                 <header>
                     <Mosaico logoTop={true} borda="none" mosaicoImg={true} />
@@ -103,7 +103,7 @@ function WebCard() {
                     <Footer />
                 </footer>
             </div >
-        </HelmetProvider>
+       // </HelmetProvider>
     );
 }
 
