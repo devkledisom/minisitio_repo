@@ -115,11 +115,11 @@ const Pagamentos = () => {
 
     const selecionarCor = (status) => {
         switch (status) {
-            case "cancelled":
+            case "Cancelado":
                 return "red";
-            case "approved":
+            case "Aprovado":
                 return "lime";
-            case "pending":
+            case "Pendente":
                 return "gold";
         }
     }
@@ -158,7 +158,8 @@ const Pagamentos = () => {
                             <table className="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>ID_MP</th>
+                                        <th>COD_ANUNCIO</th>
                                         <th>CLIENTE</th>
                                         <th>VALOR</th>
                                         <th>STATUS</th>
@@ -170,6 +171,7 @@ const Pagamentos = () => {
                                         pagamentos != '' && pagamentos.map((item) => (
                                             <tr key={item.id} id={item.id} onClick={selecaoLinha}>
                                                 <td>{item.id_mp}</td>
+                                                <td>{item.ref_mp_codAnuncio}</td>
                                                 <td>{item.cliente}</td>
                                                 <td>{item.valor}</td>
                                                 <td style={{ backgroundColor: selecionarCor(item.status) }}>{item.status}</td>

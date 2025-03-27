@@ -267,8 +267,8 @@ function Caderno(props) {
             <div className="row lista">
               <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled sumario">
                 <li className="titulo">
-                  <h2>Sumário do classificado</h2>
-                  <span>({qtdaPerfil} Perfis / Espaços)</span>
+                  <h2>Sumário do Classificado</h2>
+                  <span>({qtdaPerfil} - Perfis / Minisitios)</span>
                 </li>
                 <li className="classificado">
                   <ul className="list-unstyled">
