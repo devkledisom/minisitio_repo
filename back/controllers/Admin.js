@@ -759,7 +759,7 @@ module.exports = {
                 ]
             }
         });
-        console.log(countCadernos)
+        //console.log(countCadernos)
 
         // Número total de itens
         const totalItens = countCadernos;
@@ -840,7 +840,7 @@ module.exports = {
 
         const uf = req.params.uf;
         const caderno = req.params.caderno;
-        console.log(uf, caderno)
+        //console.log(uf, caderno)
 
         //Atividades
         const resultCaderno = await Cadernos.findAll({
