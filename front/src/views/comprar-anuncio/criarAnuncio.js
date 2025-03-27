@@ -198,17 +198,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                  .then((response) => {
                                      console.log(response)
                                  }) */
-                    fetch(`${masterPath.url}/admin/desconto/buscar/${codDesconto}`)
-                        .then((x) => x.json())
-                        .then((res) => {
-                            console.log(res)
-                            if(res.success) {
-                                if (res.IdsValue[0].desconto > 0) {
-                                    descontoAprovado = true
-                                }
-                            }
-                           
-                        })
+
 
                     if (result.isConfirmed) {
                         if (isAdmin) {
@@ -229,28 +219,41 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                         } else {
                             console.log("segundo dasdfaskhjfsdafhjasdbfnjaksdf", descontoAprovado)
 
-                            if (descontoAtivado && radioCheck == 4 && !descontoAprovado) {
-                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-                                console.log("1");
-                            } else if (descontoAtivado && radioCheck == 3 && !descontoAprovado) {
-                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-                                console.log("1");
-                            } else if (radioCheck == 1 && !descontoAprovado) {
-                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-                                console.log("2");
-                            } else {
-                                fetch(`${masterPath.url}/pagamento/create/${idPerfil}`)
-                                    .then((x) => x.json())
-                                    .then((response) => {
-                                        console.log(response)
-                                        window.location.href = response.url;
+                            fetch(`${masterPath.url}/admin/desconto/buscar/${codDesconto}`)
+                                .then((x) => x.json())
+                                .then((res) => {
+                                    console.log(res)
+                                    if (res.success) {
+                                        if (res.IdsValue[0].desconto > 0) {
+                                            descontoAprovado = true
+                                        }
+                                    }
 
-                                    })
-                                    .catch(err => console.log(err))
-                                //window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
+                                    if (descontoAtivado && radioCheck == 4 && !descontoAprovado) {
+                                        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                        console.log("1");
+                                    } else if (descontoAtivado && radioCheck == 3 && !descontoAprovado) {
+                                        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                        console.log("1");
+                                    } else if (radioCheck == 1 && !descontoAprovado) {
+                                        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                        console.log("2");
+                                    } else {
+                                        fetch(`${masterPath.url}/pagamento/create/${idPerfil}`)
+                                            .then((x) => x.json())
+                                            .then((response) => {
+                                                console.log(response)
+                                                window.location.href = response.url;
 
-                                console.log("3");
-                            }
+                                            })
+                                            .catch(err => console.log(err))
+                                        //window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
+
+                                        console.log("3");
+                                    }
+
+                                })
+
                         }
 
                     }
