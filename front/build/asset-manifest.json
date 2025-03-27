@@ -1,9 +1,9 @@
 {
   "files": {
     "main.css": "/static/css/main.9295e31f.css",
-    "main.js": "/static/js/main.f64f2722.js",
-    "static/js/213.6d705f01.chunk.js": "/static/js/213.6d705f01.chunk.js",
-    "static/js/732.642803b4.chunk.js": "/static/js/732.642803b4.chunk.js",
+    "main.js": "/static/js/main.d87f25b5.js",
+    "static/js/213.00da5807.chunk.js": "/static/js/213.00da5807.chunk.js",
+    "static/js/732.3a7cbfd7.chunk.js": "/static/js/732.3a7cbfd7.chunk.js",
     "static/js/453.a393c848.chunk.js": "/static/js/453.a393c848.chunk.js",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
     "static/media/bg-home.jpg": "/static/media/bg-home.4989417f6247fe6cf27b.jpg",
@@ -18,13 +18,13 @@
     "static/media/glyphicons-halflings.png": "/static/media/glyphicons-halflings.e54998a8fe454b8c4370.png",
     "index.html": "/index.html",
     "main.9295e31f.css.map": "/static/css/main.9295e31f.css.map",
-    "main.f64f2722.js.map": "/static/js/main.f64f2722.js.map",
-    "213.6d705f01.chunk.js.map": "/static/js/213.6d705f01.chunk.js.map",
-    "732.642803b4.chunk.js.map": "/static/js/732.642803b4.chunk.js.map",
+    "main.d87f25b5.js.map": "/static/js/main.d87f25b5.js.map",
+    "213.00da5807.chunk.js.map": "/static/js/213.00da5807.chunk.js.map",
+    "732.3a7cbfd7.chunk.js.map": "/static/js/732.3a7cbfd7.chunk.js.map",
     "453.a393c848.chunk.js.map": "/static/js/453.a393c848.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9295e31f.css",
-    "static/js/main.f64f2722.js"
+    "static/js/main.d87f25b5.js"
   ]
 }

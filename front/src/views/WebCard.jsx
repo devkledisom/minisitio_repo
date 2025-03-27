@@ -14,7 +14,8 @@ import Navegacao from '../components/Navegacao';
 import FullWebCard from '../components/FullWebCard';
 
 //LIB
-import { Helmet, HelmetProvider } from "react-helmet-async";
+//import { Helmet, HelmetProvider } from "react-helmet-async";
+import { useMetaTags } from 'react-metatags-hook';
 
 
 
@@ -24,6 +25,18 @@ function WebCard() {
     const [codUf, setCodUf] = useState(null);
     //const [ufs, setUfs] = useState([]);
     //const [cadernos, setCadernos] = useState([]);
+
+    useMetaTags({
+        title: 'Meu Título',
+        description: 'Minha descrição',
+        keywords: 'palavras-chave, exemplo',
+        canonical: 'https://www.meusite.com/minha-pagina',
+        openGraph: {
+            title: 'Page Title',
+            image: 'https://minisitio.com.br/api/files/imagem%20para%20GMN%20-%2002.png',
+            site_name: 'My Site',
+          }
+      });
 
     useEffect(() => {
         //document.querySelector('.caderno').style.filter = "blur(3px)";
@@ -75,16 +88,16 @@ function WebCard() {
         } */
 
     return (
-        <HelmetProvider>
+       // <HelmetProvider>
             <div className="App">
 
-                <Helmet>
+          {/*       <Helmet>
                     <title>Meu Site - Página Inicial</title>
                     <meta name="description" content="Esta é a descrição da minha página para SEO." />
                     <meta property="og:title" content="Meu Site" />
                     <meta property="og:description" content="Descrição otimizada para redes sociais." />
                     <meta property="og:image" content={`https://minisitio.com.br/api/files/imagem%20para%20GMN%20-%2002.png`} />
-                </Helmet>
+                </Helmet> */}
 
                 <header>
                     <Mosaico logoTop={true} borda="none" mosaicoImg={true} />
@@ -103,7 +116,7 @@ function WebCard() {
                     <Footer />
                 </footer>
             </div >
-        </HelmetProvider>
+        //</HelmetProvider>
     );
 }
 
