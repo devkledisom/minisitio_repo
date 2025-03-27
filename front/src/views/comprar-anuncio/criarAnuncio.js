@@ -81,7 +81,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                     console.log("Esse usuário já está cadastrado!");
                 }
                 console.log(res);
-                //setShowSpinner(false);
+                setShowSpinner(false);
             });
     }
 
@@ -177,7 +177,6 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                 //setShowSpinner(false);
                 // Remover um item do localStorage
                 localStorage.removeItem("imgname");
-                console.log(res)
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
 
@@ -187,9 +186,27 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                     text: "Você será redirecionado para página de login, para efetuar o login use o seu cnpj e a senha defenida no cadastro. Você também receberá as informações do acesso no email cadastrado.",
                     icon: "success",
                     didOpen: () => { setShowSpinner(false); }
-                }).then(res => {
-                    console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf", descontoAtivado, radioCheck)
-                    if (res.isConfirmed) {
+                }).then(result => {
+                    //console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf", descontoAtivado, radioCheck, res.message.codAnuncio)
+
+                    let idPerfil = res.message.codAnuncio;
+                    let codDesconto = res.message.codDesconto;
+                    let descontoAprovado = false;
+
+                    /*          fetch(`${masterPath.url}/pagamento/create/${idPerfil}`)
+                                 .then((x) => x.json())
+                                 .then((response) => {
+                                     console.log(response)
+                                 }) */
+                    fetch(`${masterPath.url}/admin/desconto/buscar/${codDesconto}`)
+                        .then((x) => x.json())
+                        .then((res) => {
+                            if (res.IdsValue[0].desconto > 0) {
+                                descontoAprovado = true
+                            }
+                        })
+
+                    if (result.isConfirmed) {
                         if (isAdmin) {
                             console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf")
                             if (descontoAtivado && radioCheck == 4) {
@@ -208,17 +225,24 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                         } else {
                             console.log("segundo dasdfaskhjfsdafhjasdbfnjaksdf")
 
-                            if (descontoAtivado && radioCheck == 4) {
+                            if (descontoAtivado && radioCheck == 4 && descontoAprovado) {
                                 window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                                 console.log("1");
-                            } else if (descontoAtivado && radioCheck == 3) {
+                            } else if (descontoAtivado && radioCheck == 3 && descontoAprovado) {
                                 window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                                 console.log("1");
-                            } else if (radioCheck == 1) {
+                            } else if (radioCheck == 1 && descontoAprovado) {
                                 window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                                 console.log("2");
                             } else {
-                                window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
+                                fetch(`${masterPath.url}/pagamento/create/${idPerfil}`)
+                                    .then((x) => x.json())
+                                    .then((response) => {
+                                        window.location.href = response.url;
+
+                                    })
+                                //window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
+
                                 console.log("3");
                             }
                         }
@@ -226,37 +250,6 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                     }
 
                 });
-
-                /*  setTimeout(() => {
-                     if (isAdmin) {
- 
-                         if (descontoAtivado && radioCheck == 3) {
-                             window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
-                             console.log("1");
-                         } else if (radioCheck == 1) {
-                             window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
-                             console.log("2");
-                         } else {
-                             window.open(`https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`, '_blank');
-                             console.log("3");
-                         }
- 
-                         return;
- 
-                     }
- 
-                     if (descontoAtivado && radioCheck == 3) {
-                         window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-                         console.log("1");
-                     } else if (radioCheck == 1) {
-                         window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-                         console.log("2");
-                     } else {
-                         window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
-                         console.log("3");
-                     }
-                 }, 5000); */
-
             });
     }
 

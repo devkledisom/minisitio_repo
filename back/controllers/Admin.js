@@ -8192,7 +8192,7 @@ LIMIT 50000;
 
                         // Supondo que você tenha o modelo 'Anuncio'
                         const resultados = await Anuncio.findAll({
-                            //where: {codCaderno: "PENEDO"},
+                            where: {codCaderno: "PENEDO"},
                             attributes: [
                                 'codCaderno', // Referência ao campo codCaderno
                                 [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],

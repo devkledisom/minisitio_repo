@@ -1,13 +1,16 @@
 const crypto = require('crypto');
 const config = require('../config/config');
-const { MercadoPagoConfig, Payment, PaymentMethods } = require('mercadopago');
+const { MercadoPagoConfig, Payment, PaymentMethods, Preference } = require('mercadopago');
 
 const Pagamento = require('../models/table_pagamentos');
 const Anuncio = require('../models/table_anuncio');
+const Desconto = require('../models/table_desconto');
 
-const client = new MercadoPagoConfig({ accessToken: config.mp_prod.AccessToken, options: { timeout: 5000, idempotencyKey: 'abc' } });
+const client = new MercadoPagoConfig({ accessToken: config.MP_ACCESS_TOKEN_SANDBOX, options: { timeout: 5000, idempotencyKey: 'abc' } });
+//const client = new MercadoPagoConfig({ accessToken: config.mp_prod.AccessToken, options: { timeout: 5000, idempotencyKey: 'abc' } });
 
 const payment = new Payment(client);
+const preference = new Preference(client);
 
 const requestOptions = {
     idempotencyKey: "" + Date.now(),
@@ -58,23 +61,49 @@ module.exports = {
     },
     criarPagamento: async (req, res) => {
 
+        let codigoReferenciaMp = req.params.id;
 
+        const perfilMinisitio = await Anuncio.findOne({ where: { codAnuncio: codigoReferenciaMp }, raw: true, attributes: ['codAnuncio', 'descAnuncio', 'codDesconto'] });
 
+        const valorDesconto = await Desconto.findOne({ where: { hash: perfilMinisitio.codDesconto }, raw: true, attributes: ['hash', 'desconto'] });
 
         const body = {
-            transaction_amount: parseFloat(0.02),
-            payer: {
-                email: "devkledisom@gmail.com"
-            },
-            payment_method_id: "pix"
+            "notification_url": "https://minitest.minisitio.online/api/webhook",
+            //"notification_url": "https://minisitio.com.br/api/webhook",
+            "external_reference": codigoReferenciaMp,
+            "items": [
+                {
+                    "title": "Assinatura Minisitio",
+                    "quantity": 1,
+                    "currency_id": "BRL",
+                    "unit_price": (10 - valorDesconto.desconto) * 12
+                }
+            ],
+            "back_urls": {
+                "success": "https://minisitio.com.br/login",
+                "pending": "https://minisitio.com.br/login"
+            }
         };
 
+        const gerarPreferencia = await preference.create({ body })
+            .then((data) => { console.log(data), res.status(200).json({ success: true, url: data.init_point }) })
+            .catch(console.log);
 
-
-        payment.create({ body, requestOptions }).then(console.log).catch(console.log);
-
-
-        res.status(200).send("pagamento processado com sucesso.");
+        /* 
+                const body = {
+                    transaction_amount: parseFloat(0.02),
+                    payer: {
+                        email: "devkledisom@gmail.com"
+                    },
+                    payment_method_id: "pix"
+                };
+        
+        
+        
+                payment.create({ body, requestOptions }).then(console.log).catch(console.log);
+        
+        
+                res.status(200).send("pagamento processado com sucesso."); */
 
     },
     criarPagamentoold: async (req, res) => {
@@ -155,28 +184,34 @@ module.exports = {
 }
 
 async function registrarPagamento(data) {
-    console.log(data, `https://api.mercadopago.com/v1/payments/${data.data.id}`)
+
     if (data.action === 'payment.created') {
         fetch(`https://api.mercadopago.com/v1/payments/${data.data.id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${config.mp_prod.AccessToken}`
+                'Authorization': `Bearer ${config.MP_ACCESS_TOKEN_SANDBOX}`
+                //'Authorization': `Bearer ${config.mp_prod.AccessToken}`
             }
         })
             .then(x => x.json())
             .then(async res => {
 
-                console.log(res)
+                console.log(res.external_reference)
                 if (res.message === 'Payment not found') return;
 
                 try {
+                    let codigoReferenciaMp = res.external_reference;
+
+                    const perfilMinisitio = await Anuncio.findOne({ where: { codAnuncio: codigoReferenciaMp }, raw: true, attributes: ['codAnuncio', 'descAnuncio'] });
+
                     const pagamento = await Pagamento.create({
-                        cliente: res.payer.identification.number || "não informado",
+                        cliente: perfilMinisitio.descAnuncio,
                         valor: res.transaction_amount,
                         data: res.date_created,
                         status: definirStatus(res.status),
                         id_mp: data.data.id,
+                        ref_mp_codAnuncio: codigoReferenciaMp
                     })
 
                     function definirStatus(status) {
@@ -192,11 +227,21 @@ async function registrarPagamento(data) {
                         }
                     };
 
-                   /*  const atualizarAnuncio = await Anuncio.update({}, {
-                        where: {
-                            codAnuncio: req.query.id
-                        }
-                    }); */
+                    if (res.status == "approved") {
+                        const perfilActivate = await Anuncio.update({
+                            "activate": 1
+                        }, {
+                            where: {
+                                codAnuncio: codigoReferenciaMp
+                            }
+                        });
+                    }
+
+                    /*  const atualizarAnuncio = await Anuncio.update({}, {
+                         where: {
+                             codAnuncio: req.query.id
+                         }
+                     }); */
 
 
                 } catch (err) {
@@ -214,7 +259,8 @@ async function registrarPagamento(data) {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${config.mp_prod.AccessToken}`
+                'Authorization': `Bearer ${config.MP_ACCESS_TOKEN_SANDBOX}`
+                //'Authorization': `Bearer ${config.mp_prod.AccessToken}`   
             }
         })
             .then(x => x.json())
@@ -222,6 +268,10 @@ async function registrarPagamento(data) {
 
                 console.log(res)
                 if (res.message === 'Payment not found') return;
+
+                let codigoReferenciaMp = res.external_reference;
+
+                const perfilMinisitio = await Anuncio.findOne({ where: { codAnuncio: codigoReferenciaMp }, raw: true, attributes: ['codAnuncio', 'descAnuncio'] });
 
                 try {
                     const atualizarPagamento = await Pagamento.update({
@@ -233,6 +283,17 @@ async function registrarPagamento(data) {
 
                     })
                     console.log(atualizarPagamento)
+
+                    if (res.status == "approved") {
+                        const perfilActivate = await Anuncio.update({
+                            "activate": 1
+                        }, {
+                            where: {
+                                codAnuncio: codigoReferenciaMp
+                            }
+                        });
+                    }
+
 
                 } catch (err) {
                     console.log(err)

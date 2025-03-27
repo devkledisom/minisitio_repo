@@ -61,6 +61,16 @@ const Pagamento = database.define('pagamento', {
                 msg: "Esse campo não pode está vazio.."
             },
         }
+    },
+
+    ref_mp_codAnuncio: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: "Esse campo não pode está vazio.."
+            },
+        }
     }
 },
     {

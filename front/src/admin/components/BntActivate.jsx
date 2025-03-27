@@ -8,6 +8,8 @@ const BtnActivate = (props) => {
     //#States
     const [status, setStatus] = useState();
 
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
+
     useEffect(() => {
         //console.log(props.data)
         if (props.data == 1) {
@@ -28,7 +30,7 @@ const BtnActivate = (props) => {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
             body: JSON.stringify(data)
         };
@@ -39,7 +41,6 @@ const BtnActivate = (props) => {
             .then((x) => x.json())
             .then((res) => {
                 //setShowSpinner(false);
-                console.log(res)
                 if (res.success) {
                     if (status == "Ativado") {
                         setStatus('Desativado');

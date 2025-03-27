@@ -200,7 +200,7 @@ router.get('/api/rotina/repaginar', Rotinas.paginacaoDosCadernos);
 
 //WEBHOOKS
 router.post('/api/webhook', WebHook.atualizarPagamentos);
-router.get('/api/paga/create', WebHook.criarPagamento);
+router.get('/api/pagamento/create/:id', WebHook.criarPagamento);
 
 module.exports = router;
 
