@@ -171,6 +171,7 @@ function ComprarAnuncio({ isAdmin }) {
               setTexto(res.IdsValue[0].descricao);
               setIsCapa(true);
 
+              
 
               document.getElementById('anunciar').disabled = false;
 
@@ -187,6 +188,7 @@ function ComprarAnuncio({ isAdmin }) {
               setDescontoAtivado(res.success);
               setTexto(res.IdsValue[0].descricao);
               document.getElementById('anunciar').disabled = false;
+
             }
 
 
