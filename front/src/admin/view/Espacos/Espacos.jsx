@@ -38,6 +38,12 @@ const Espacos = () => {
     const [busca, setBusca] = useState(false);
     const [searchOptioncheck, setSearchOptioncheck] = useState(false);
 
+    const [estadoSelecionado, setEstadoSelecionado] = useState(null);
+    const [cadernoSelecionado, setCadernoSelecionado] = useState(null);
+    const [uf, setUfs] = useState([]);
+    const [caderno, setCaderno] = useState([]);
+    const [mostrarInputBusca, setMostrarInputBusca] = useState(true);
+
 
     const location = useLocation();
 
@@ -57,7 +63,7 @@ const Espacos = () => {
 
         if (campoBusca.current.value != '') {
             Promise.all([
-                fetch(`${masterPath.url}/admin/anuncio/buscar?search=${campoBusca.current.value}&page=${param}&require=${searchOptioncheck}`).then((x) => x.json()),
+                fetch(`${masterPath.url}/admin/anuncio/buscar?search=${campoBusca.current.value}&page=${param}&require=${searchOptioncheck}&uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`).then((x) => x.json()),
                 //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
             ])
                 .then(([resAnuncio]) => {
@@ -89,6 +95,19 @@ const Espacos = () => {
 
     }, [param]);
 
+    useEffect(() => {
+        fetch(`${masterPath.url}/ufs`)
+            .then((x) => x.json())
+            .then((res) => {
+                setUfs(res);
+            })
+
+        fetch(`${masterPath.url}/cadernos`)
+            .then((x) => x.json())
+            .then((res) => {
+                setCaderno(res);
+            })
+    }, []);
 
 
 
@@ -193,42 +212,20 @@ const Espacos = () => {
             return;
         }
 
-        fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}&require=${searchOptioncheck}`)
+        fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}&require=${searchOptioncheck}&uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`)
             .then((x) => x.json())
             .then((res) => {
                 if (res.success) {
                     //alert("encontrado");
                     setAnucios(res);
                     setShowSpinner(false);
-                    console.log("usussss", res)
+                    //console.log("usussss", res)
                 } else {
                     alert("Perfil não encontrado na base de dados");
                     setShowSpinner(false);
                 }
 
             })
-        /* 
-                fetch(`${masterPath.url}/admin/anuncio/buscar/?search=${campoPesquisa}`)
-                    .then(response => {
-                        const reader = response.body.getReader();
-                        const decoder = new TextDecoder('utf-8');
-                        let jsonBuffer = '';
-        
-                        reader.read().then(function processChunk({ done, value }) {
-                            if (done) {
-                                console.log('Todos os registros foram recebidos.');
-                                return;
-                            }
-        
-                            jsonBuffer += decoder.decode(value); // Decodifica os dados recebidos
-                            const records = JSON.parse(decoder.decode(value)); // Transforma em JSON
-                            console.log('Registros recebidos:', records);
-        
-                            return reader.read().then(processChunk); // Continua lendo
-                        });
-                    })
-                    .catch(error => console.error('Erro ao receber registros:', error)); */
-
     };
 
     const formatData = (dataCompleta) => {
@@ -273,7 +270,7 @@ const Espacos = () => {
         setShowSpinner(true);
 
         let totalItens = anuncios.message.totalItem;
-        if(totalItens > 50000) {
+        if (totalItens > 50000) {
             alert("Atenção, esse caderno atingiu o limite de 50.000 registros. O limite de exportação é de 50.000 registros");
         }
 
@@ -382,6 +379,44 @@ Para 100000 linhas: 312500ms
 
     };
 
+    function definirCriterioBusca(criterio) {
+        setSearchOptioncheck(criterio)
+
+        if(criterio === 'codCaderno' || criterio === 'codUF') {
+             document.getElementById('buscar').value = ''
+        }
+
+        /*  switch(criterio) {
+            case 'codAnuncio':
+                setMostrarInputBusca(true);
+                break;
+            case 'descAnuncio':
+                setMostrarInputBusca(true);
+                break;
+            case 'codCaderno':
+                setMostrarInputBusca(false);
+                document.getElementById('buscar').style.visibility = 'hidden';
+                break;
+            case 'descCPFCNPJ':
+                setMostrarInputBusca(true);
+                break;
+            case 'codDesconto':
+                setMostrarInputBusca(true);
+                break;
+            case 'codUF':
+                setMostrarInputBusca(true);
+                break;
+            
+        }  */
+
+    };
+
+    function limparFiltro(param) {
+        if(param === 'todos') {
+            setCadernoSelecionado("todos")
+        }
+    }
+
     return (
         <div className="users app-espacos">
             <header style={style} className='w-100'>
@@ -389,7 +424,7 @@ Para 100000 linhas: 312500ms
             </header>
             <section className="pt-5">
 
-                {showSpinner && <Spinner progress={progressExport}/>}
+                {showSpinner && <Spinner progress={progressExport} />}
                 <h1 className="pt-4 px-4">Espaços</h1>
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
@@ -408,37 +443,60 @@ Para 100000 linhas: 312500ms
                         </div>
                         <div className="span6 col-md-6 d-flex flex-column align-items-end">
                             <div className='d-flex flex-column'>
-                                <div className="pull-right d-flex justify-content-center align-items-center">
+                                <div className="pull-right d-flex align-items-center">
+
+                                    <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => { setEstadoSelecionado(e.target.value); limparFiltro(e.target.value) }}>
+                                        <option value="todos">UF</option>
+                                        {uf.map(item => (
+                                            <option value={item.sigla_uf}>{item.sigla_uf}</option>
+                                        ))}
+                                    </select>
+                                    <select name="" id="caderno" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)}>
+                                        <option value="todos">CADERNO</option>
+
+                                        {caderno.map(item => (
+                                            item.UF == estadoSelecionado &&
+                                            <option value={item.nomeCaderno}>{item.nomeCaderno}</option>
+                                        ))}
+                                    </select>
                                     <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
+
+                                  {/*   {mostrarInputBusca &&
+                                        <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
+                                    } */}
                                     <button id="btnBuscar" className="" type="button" onClick={buscarAnuncioId} >
                                         <i className="icon-search"></i>
                                     </button>
                                 </div>
                                 <div className='SearchOption'>
 
-                                    <label htmlFor="codigo" onClick={() => setSearchOptioncheck('codAnuncio')}>
-                                        <input type='radio' name="option" id="codigo" onClick={() => setSearchOptioncheck('codAnuncio')} />
+                                    <label htmlFor="codigo" onClick={() => definirCriterioBusca('codAnuncio')}>
+                                        <input type='radio' name="option" id="codigo" onClick={() => definirCriterioBusca('codAnuncio')} />
                                         Código
                                     </label>
-                                    <label htmlFor="nome" onClick={() => setSearchOptioncheck('descAnuncio')}>
-                                        <input type='radio' name="option" id="nome" onClick={() => setSearchOptioncheck('descAnuncio')} />
+                                    <label htmlFor="nome" onClick={() => definirCriterioBusca('descAnuncio')}>
+                                        <input type='radio' name="option" id="nome" onClick={() => definirCriterioBusca('descAnuncio')} />
                                         Nome
                                     </label>
-                                    <label htmlFor="caderno" onClick={() => setSearchOptioncheck('codCaderno')}>
-                                        <input type='radio' name="option" id="caderno" onClick={() => setSearchOptioncheck('codCaderno')} />
+                                    <label htmlFor="ufCriterio" onClick={() => definirCriterioBusca('codUf')}>
+                                        <input type='radio' name="option" id="ufCriterio" onClick={() => definirCriterioBusca('codUf')} />
+                                        UF
+                                    </label>
+                                    <label htmlFor="cadernoCriterio" onClick={() => definirCriterioBusca('codCaderno')}>
+                                        <input type='radio' name="option" id="cadernoCriterio" onClick={() => definirCriterioBusca('codCaderno')} />
                                         Caderno
                                     </label>
-                                    <label htmlFor="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')}>
-                                        <input type='radio' name="option" id="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')} />
+                                    <label htmlFor="cnpj" onClick={() => definirCriterioBusca('descCPFCNPJ')}>
+                                        <input type='radio' name="option" id="cnpj" onClick={() => definirCriterioBusca('descCPFCNPJ')} />
                                         CNPJ
                                     </label>
-                                    <label htmlFor="id" onClick={() => setSearchOptioncheck('codDesconto')}>
-                                        <input type='radio' name="option" id="id" onClick={() => setSearchOptioncheck('codDesconto')} />
+                                    <label htmlFor="id" onClick={() => definirCriterioBusca('codDesconto')}>
+                                        <input type='radio' name="option" id="id" onClick={() => definirCriterioBusca('codDesconto')} />
                                         ID
                                     </label>
-                                    <label htmlFor="uf" onClick={() => setSearchOptioncheck('codUf')}>
-                                        <input type='radio' name="option" id="uf" onClick={() => setSearchOptioncheck('codUf')} />
-                                        UF
+                                    <label htmlFor="atividade" onClick={() => definirCriterioBusca('codAtividade')}>
+                                        <input type='radio' name="option" id="atividade" onClick={() => definirCriterioBusca('codAtividade')} />
+                                        Atividade
                                     </label>
 
                                 </div>

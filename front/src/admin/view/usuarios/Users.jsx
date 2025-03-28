@@ -83,10 +83,10 @@ const Users = () => {
 
     useEffect(() => {
         fetch(`${masterPath.url}/ufs`)
-                    .then((x) => x.json())
-                    .then((res) => {
-                        setUfs(res);
-                    })
+            .then((x) => x.json())
+            .then((res) => {
+                setUfs(res);
+            })
 
         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
@@ -174,17 +174,17 @@ const Users = () => {
 
         console.log(searchOptioncheck)
 
-        if(document.getElementById('uf').value === "UF") {
+        if (document.getElementById('uf').value === "UF") {
             alert('Selecione um Estado');
             setShowSpinner(false);
             return;
         }
 
-        if(document.getElementById('caderno').value === "CADERNO" && searchOptioncheck !== "codUf") {
+        if (document.getElementById('caderno').value === "CADERNO" && searchOptioncheck !== "codUf") {
             alert('Selecione um Caderno');
             setShowSpinner(false);
             return;
-        } 
+        }
 
         fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa}?require=${searchOptioncheck}&uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`)
             .then((x) => {
@@ -198,7 +198,7 @@ const Users = () => {
             })
             .then((res) => {
                 if (res.success) {
-                    if(res.usuarios.length == 0) {
+                    if (res.usuarios.length == 0) {
                         alert('Caderno não possui master');
                     }
                     setUsuarios(res);
@@ -313,20 +313,20 @@ const Users = () => {
 
     function defineOptionsSearch(param) {
 
-        if(param === "uf") {
+        if (param === "uf") {
 
             const estados = uf.map(item => item.sigla_uf)
 
             setSearchOptioncheck('codUf')
             setOptionSearch(estados)
             console.log(uf)
-        } else if(param === "caderno") {
+        } else if (param === "caderno") {
             const cadernos = caderno.map(item => item.UF == estadoSelecionado)
 
             setSearchOptioncheck('codCidade')
             setOptionSearch(cadernos)
         }
-       
+
     };
 
     return (
@@ -359,22 +359,22 @@ const Users = () => {
                         <div className="span6 col-md-6 d-flex flex-column align-items-end">
                             <div className='d-flex flex-column'>
                                 <div className="pull-right d-flex justify-content-center align-items-center">
-                                <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
+                                    <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
                                         <option value="todos">UF</option>
                                         {uf.map(item => (
                                             <option value={item.sigla_uf}>{item.sigla_uf}</option>
                                         ))}
                                     </select>
-                                <select name="" id="caderno" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)}>
+                                    <select name="" id="caderno" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)}>
                                         <option>CADERNO</option>
 
-                                         {caderno.map(item => (
-                                                item.UF == estadoSelecionado && 
+                                        {caderno.map(item => (
+                                            item.UF == estadoSelecionado &&
                                             <option value={item.nomeCaderno}>{item.nomeCaderno}</option>
-                                        ))} 
+                                        ))}
                                     </select>
                                     <input id="buscar" type="text" style={{ "width": "300px" }} placeholder="Nome, Email, CPF/CNPJ, UF, Cidade ou Tipo" />
-                                  {/*   <select name="" id="" style={{ "width": "300px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
+                                    {/*   <select name="" id="" style={{ "width": "300px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
                                         <option>Selecione uma opção</option>
                                         {optionSearch.map(item => (
                                             <option value={item}>{item}</option>
@@ -398,7 +398,7 @@ const Users = () => {
                                         <input type='radio' name="option" id="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')} />
                                         CNPJ
                                     </label>
-                                {/*    <label htmlFor="uf" onClick={() => defineOptionsSearch("uf")}>
+                                    {/*    <label htmlFor="uf" onClick={() => defineOptionsSearch("uf")}>
                                         <input type='radio' name="option" id="uf" onClick={() => defineOptionsSearch("uf")} />
                                         UF
                                     </label> */}
