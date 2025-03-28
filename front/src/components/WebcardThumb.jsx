@@ -20,7 +20,7 @@ function WebcardThumb(props) {
     const [listaIds, setListaIds] = useState([]);
     //const [dataCriacao, setDataCriacao] = useState(null);
 
-    //console.log(props.codImg)
+    
 
     useEffect(() => {
         if (props.codImg == 0 || props.codImg == "teste" || props.codImg == null) {
@@ -103,7 +103,7 @@ function WebcardThumb(props) {
 
     return (
         <div className="WebcardThumb">
-
+{console.log(listaIds.descricao, listaIds.descImagem, listaIds.descImagem)}
             <div className='container my-2 p-0' >
                 <div className='cartao'>
                 {listaIds.descricao != "valor padrao" && listaIds.descImagem != "" && listaIds.descImagem != "null" &&

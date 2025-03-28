@@ -189,8 +189,8 @@ const FormCadastro = () => {
                             <label htmlFor="isCapital" className="w-50 px-1">É Capital:</label>
                             {/*  <input type="password" className="form-control h-25 w-50" id="pwd" placeholder="" name="pwd" /> */}
                             <select name="isCapital" id="isCapital" className="w-50 py-1">
-                                <option value="1">Não</option>
-                                <option value="0">Sim</option>
+                                <option value="0">Não</option>
+                                <option value="1">Sim</option>
                             </select>
                         </div>
 

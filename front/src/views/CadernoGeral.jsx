@@ -160,7 +160,6 @@ function Caderno(props) {
    fetch(`${masterPath.url}/admin/lista/test/${caderno}/${estado}`)
     .then((x) => x.json())
     .then((res) => {
-      console.log(res)
       setClassificados(res.data);
       setLoading(false);
       document.querySelector('.caderno').style.filter = "none";
