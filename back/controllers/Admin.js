@@ -691,12 +691,12 @@ module.exports = {
             }
         });
 
-
+console.log(req.body)
         // Verificação e ajuste dos valores recebidos
 
         const mosaico = req.body.descImagem || 0;
-        const cepInicial = req.body.cepInicial || 0;
-        const cepFinal = req.body.cepFinal || 0;
+        const cepInicial = req.body.cep_inicial || 0;
+        const cepFinal = req.body.cep_final || 0;
         const capital = req.body.isCapital || 1;
         try {
             //Atividades
