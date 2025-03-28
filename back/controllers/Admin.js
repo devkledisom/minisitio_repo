@@ -1730,7 +1730,7 @@ module.exports = {
             }
         );
 
-        console.log('kledisom', allPerfil, "kledisom")
+        //console.log('kledisom', allPerfil, "kledisom")
         res.json({ success: true, data: allPerfil })
         return;
 
