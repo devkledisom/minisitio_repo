@@ -22,6 +22,8 @@ const DadosPessoais = (props) => {
   const [user, setUser] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const tokenAuth = sessionStorage.getItem('userTokenAccess');
+
   const navigate = useNavigate();
 
   //ref
@@ -144,7 +146,7 @@ const DadosPessoais = (props) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "authorization": 'Bearer ' + masterPath.accessToken
+          "authorization": 'Bearer ' + tokenAuth
       },
         body: JSON.stringify({legenda: legenda})
     };

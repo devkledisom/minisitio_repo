@@ -23,6 +23,7 @@ function Letter(props) {
             fetch(`${masterPath.url}/caderno/legenda/${props.estado}/${props.caderno}`)
               .then((x) => x.json())
               .then((res) => {
+                console.log(res)
                 setLegenda(res[0].legenda);
               });
     }, [])
