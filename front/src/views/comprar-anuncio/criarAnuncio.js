@@ -222,6 +222,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                             fetch(`${masterPath.url}/admin/desconto/buscar/${codDesconto}`)
                                 .then((x) => x.json())
                                 .then((res) => {
+                                    console.log(res)
                                     if (res.success) {
                                         if (res.IdsValue[0].desconto > 0) {
                                             descontoAprovado = true
@@ -250,6 +251,8 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
     
                                             console.log("3");
                                         }
+                                    } else {
+                                        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                                     }
                                 })
 
