@@ -88,7 +88,7 @@ async function faleComDono(data, emailAutorizante, filename) {
         const mailSentPT = await transporter.sendMail({
             //from: `${data.nome} <${data.email}>`,
             from: `kledisom <dev@ziiz.com.br>`,
-            to: ['dev@ziiz.com.br', emailAutorizante],
+            to: ['dev@ziiz.com.br', emailAutorizante, 'contatobr@mycardcity.net'],
             subject: `${data.option}`,
             text: `${data.option}`,
             html: `
@@ -221,7 +221,7 @@ async function novoUsuario(email, nome, doc) {
 <p>Seja bem Vindo(a) <strong>${nome}</strong></p>
 <p>segue abaixo o seu acesso para gerenciar o seu perfil Minisitio</p>
     <p>Login: <strong>${doc}</strong></p>
-    <p>Senha: <strong>12345</strong></p>
+    <p>Senha: <strong>${doc.substr(0, 5)}</strong></p>
 
     <hr>
     <p>-A nossa equipe está feliz por ter você na nossa plataforma-</p>

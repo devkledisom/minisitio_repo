@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { masterPath } from '../config/config';
 
@@ -27,6 +27,7 @@ function ContactForm() {
     const pegarParam = new URLSearchParams(location.search);
 
     const id = pegarParam.get('id');
+    const { idPerfil } = useParams();
 
 
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -169,7 +170,7 @@ function ContactForm() {
                 <div className="col-md-12 px-3 py-3 text-end">
                     <button type="submit" className="btn cinza btn-sendmessage"><i className="fa fa-arrow-right m-0"></i> enviar</button>
                 </div>
-                <input type="hidden" {...register('id')} value={id} />
+                <input type="hidden" {...register('id')} value={idPerfil} />
                 {/*  <div className="form-group d-flex">
                     <i class="fa fa-user"></i>
                     <input type="email" className="form-control" id="email" />
