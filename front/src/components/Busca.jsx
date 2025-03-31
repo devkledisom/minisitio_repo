@@ -153,7 +153,7 @@ function Busca(props) {
             };
 
             const request = await fetch(`${masterPath.url}/buscar`, options).then((x) => x.json())
-            //console.log(request)
+            console.log(request)
             //setAnuncio(request)
             setResult(request);
             //console.log(request);
@@ -379,7 +379,14 @@ function Busca(props) {
             };
 
         }
-    }, [uf, codCaderno])
+    }, [uf, codCaderno]);
+
+    function teclaLogin(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            fetchAnuncios()
+        }
+    };
 
     return (
         <div className='border-busca container-fluid formulario formulario-home'>
@@ -442,7 +449,7 @@ function Busca(props) {
                                 <div className='class="col-lg-9 col-md-8 col-sm-8 col-xs-12"'>
                                     <div className="form-group input-icon">
                                         <i className="fa fa-tags"></i>
-                                        <input id="inputBusca" name="inputBusca" type="text" className="form-control" placeholder="Digite nome ou atividade" />
+                                        <input id="inputBusca" name="inputBusca" type="text" className="form-control" placeholder="Digite nome ou atividade" onKeyDown={teclaLogin} />
                                     </div>
                                 </div>
                                 <div className="col-lg-3 col-md-4 col-sm-4 col-xs-5">
@@ -451,7 +458,8 @@ function Busca(props) {
                                         className="btn btn-block cinza btnBuscar target-start-search col-md-10 w-100"
                                         id="btnBuscar"
                                         title="Buscar"
-                                        onClick={() => fetchAnuncios()}>
+                                        onClick={() => fetchAnuncios()}
+                                        >
                                         <i className="fa fa-search"></i>
                                         Buscar
                                     </button>

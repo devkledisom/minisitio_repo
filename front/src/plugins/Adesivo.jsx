@@ -68,8 +68,8 @@ function Adesivo() {
 
                 {/* Renderizar o QR Code com referência ao elemento */}
                 <div className="qr-code" ref={qrRef}>
-                    <QRCodeCanvas value={`${masterPath.domain}/local/${idParam}`} size={175} />
-                    {/* <QRCodeCanvas value={`${masterPath.domain}/local/${encodeURIComponent(imgParam)}?id=${idParam}`} size={175} /> */}
+                    <QRCodeCanvas value={`${masterPath.domain}/perfil/${idParam}`} size={175} />
+                    {/* <QRCodeCanvas value={`${masterPath.domain}/perfil/${encodeURIComponent(imgParam)}?id=${idParam}`} size={175} /> */}
                     <img src="/assets/img/adesivo.jpg" width="650" alt="adesivo" />
                 </div>
 

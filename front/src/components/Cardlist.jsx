@@ -99,31 +99,54 @@ function Cardlist(props) {
               <div className="row text-start px-3">
                 <div className="col-md-12 col-xs-12 pesquisa-nome">
                   <h4 className="d-flex">{/* font-14 */}
-                    <i className="fa fa-map-marker"></i>
-                    <div class="endereco">{props.anuncio.descEndereco}</div>
-
-                    {caderno.map((item) => {
+                    <i className="fa fa-briefcase"></i>
+                    <div class="endereco">{props.anuncio.codAtividade}</div>
+                 
+                 {/*    {caderno.map((item) => {
                       if (item.codCaderno == props.codCity) {
                         //console.log(uf)
-                        /*  const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)*/
+                        //const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)
 
                         return <span>{item.descEndereco}</span>
-                        /* return <span>{item.nomeCaderno} - {item.UF} </span>  */
+                        
                       }
 
-                    })}
+                    })} */}
+                  </h4>
+                </div>{console.log(props.anuncio.descEndereco)}
+                <div className="col-md-12 col-xs-12 pesquisa-nome">
+                  <h4 className="d-flex">{/* font-14 */}
+                    <i className="fa fa-map-marker"></i>
+                    <div class="endereco">{ !props.anuncio.descEndereco ? "Endereço não informado" : props.anuncio.descEndereco }</div>
+                   {/*  <span>{props.anuncio.descEndereco}</span> */}
+                   {/*  {caderno.map((item) => {
+                      if (item.codCaderno == props.codCity) {
+                        //console.log(uf)
+                        //  const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)
+
+                        return <span>{item.descEndereco}</span>
+                        //return <span>{item.nomeCaderno} - {item.UF} </span>  
+                      } 
+
+                    })}*/}
                   </h4>
                 </div>
               </div>
               {/* row */}
               <div className="row area-btn">
                 <div className="col-md-12 d-flex justify-content-end btn-view-page">
-                  <button>
+                  <button className="mx-2">
                     <i className="fa fa-star"></i>{/*cadUf[1]*/}
                     <Link
                       to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&index=${props.anuncio.page}&caderno=${props.anuncio.codCaderno}&estado=${cadUf[0]}
 `}
                     >
+                      PÁGINA DO CADERNO
+                    </Link>
+                  </button>
+                  <button>
+                    <i className="fa fa-star"></i>{/*cadUf[1]*/}
+                    <Link to={`/perfil/${props.anuncio.codAnuncio}`}>
                       VER MINISITIO
                     </Link>
                   </button>

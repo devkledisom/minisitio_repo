@@ -69,9 +69,11 @@ import Contato from "../views/infoPages/Contato";
 
 
 import { TemaProvider } from '../context/BuscaContext';
+import { QrcodeCadernoProvider } from "../context/QrcodeCadernoContext";
 
 //PAGINA 404
 import NotFound from '../views/NotFound';
+import { io } from "socket.io-client";
 
 
 
@@ -84,10 +86,10 @@ function Rotas() {
                     <Route path="/">
                         <Route index element={<Home />} />
                         <Route path="buscar" element={<Pesquisa />} />
-                        <Route path="caderno/:atividade" element={<Caderno />} />
+                        <Route path="caderno/:atividade" element={<QrcodeCadernoProvider><Caderno /></QrcodeCadernoProvider>} />
                         <Route path="cadernos/:atividade" element={<TodosCaderno />} />
-                        <Route path="caderno-geral/:caderno/:estado" element={<CadernoGeral />} />
-                        <Route path="local/:codAnuncio" element={<WebCard />} />
+                        <Route path="caderno-geral/:caderno/:estado" element={<QrcodeCadernoProvider><CadernoGeral /></QrcodeCadernoProvider>} />
+                        <Route path="perfil/:codAnuncio" element={<WebCard />} />
                         <Route path="login" element={<Login />} />
                         <Route path="sobre/:id" element={<OutroComponente />} />
                     </Route>
@@ -117,14 +119,14 @@ function Rotas() {
                     <Route path="admin/anuncio/editar" element={<PrivateRoute><AnuncioEditar /></PrivateRoute>} />
                     <Route path="admin/anuncio/import" element={<PrivateRoute><EspacosImport /></PrivateRoute>} />
 
-                    
+
                     <Route path="admin/pagamentos" element={<PrivateRoute><Pagamentos /></PrivateRoute>} />
-                    
+
                     {/*ROTAS MODULO PIN*/}
                     <Route path="admin/pin" element={<PrivateRoute><Pin /></PrivateRoute>} />
                     <Route path="admin/pin/cadastro" element={<PrivateRoute><PinCadastro /></PrivateRoute>} />
                     <Route path="admin/pin/editar" element={<PrivateRoute><PinEditar /></PrivateRoute>} />
-                    
+
                     {/*ROTAS MODULO CALHAU*/}
                     <Route path="admin/calhau" element={<PrivateRoute><Calhau /></PrivateRoute>} />
                     <Route path="admin/calhau/cadastro" element={<PrivateRoute><CalhauCadastro /></PrivateRoute>} />
@@ -133,7 +135,7 @@ function Rotas() {
                     <Route path="admin/cadernos/editar" element={<PrivateRoute><CadernosEdit /></PrivateRoute>} />
 
                     {/* ROTAS PAINEL ADMIN DO ANUNCIANTE */}
-                    <Route path="ver-anuncios/:cpf" element={<PrivateRoute><PainelAdmin isPublic={true}/></PrivateRoute>} />
+                    <Route path="ver-anuncios/:cpf" element={<PrivateRoute><PainelAdmin isPublic={true} /></PrivateRoute>} />
 
                     {/* ROTAS AREA DO ASSINANTE */}
                     <Route path="criar-cadastro" element={<AssinanteCadastro />} />

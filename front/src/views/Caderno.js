@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import ReactDOM from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { masterPath } from '../config/config';
@@ -17,13 +17,16 @@ import Busca from '../components/Busca';
 import MiniWebCard from '../components/MiniWebCard';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import MsgProgramada from '../components/MsgProgramada';
 import MiniWebCardSimples from '../components/MiniWebCardSimples';
-import DistribuirAnuncios from './classificados/DistribuirAnuncios';
-import { use } from 'react';
-import Calhau from '../components/caderno/Calhau';
+import MosaicoWebCard from '../components/MosaicoWebCard';
+
+//CONTEXT
+import { QrcodeCadernoContext } from '../context/QrcodeCadernoContext';
 
 function Caderno() {
+
+   const { theme, toggleTheme } = useContext(QrcodeCadernoContext);
+   console.log("kledisom", theme)
 
   const [nomeAtividade, setNomeAtividade] = useState([]);
   const [minisitio, setMinisitio] = useState([]);
@@ -32,6 +35,7 @@ function Caderno() {
   const [btnNav, setbtnNav] = useState(false);
   const [contadorAds, setContadorAds] = useState(false);
   const [frasesNegociosOnline, setFrasesNegociosOnline] = useState([]);
+  const [mosaicoImg, setMosaicoImg] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -1138,7 +1142,8 @@ useEffect(() => {
     <div className="App caderno">
 
       <header>
-        <Mosaico logoTop={true} borda="none" />
+        <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} />
+      {/*   <Mosaico logoTop={true} borda="none" /> */}
       </header>
       <main>
 

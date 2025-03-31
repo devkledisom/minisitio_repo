@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { masterPath } from '../config/config';
 
@@ -17,12 +17,13 @@ import Letter from './classificados/Letter';
 
 //CONTEXT
 import { useBusca } from '../context/BuscaContext';
+import { QrcodeCadernoContext } from '../context/QrcodeCadernoContext';
 
 
 function Caderno(props) {
 
   //contexto
-  //const { tema, setTema } = useTema();
+  const { theme, toggleTheme } = useContext(QrcodeCadernoContext);
   const { result, setResult } = useBusca();
 
   const [nomeAtividade, setNomeAtividade] = useState([]);
@@ -245,7 +246,7 @@ function Caderno(props) {
 
       <header>
         {/* <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} /> */}
-        <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={window.location.href} />
+        <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} />
       </header>
       <main>
         <Busca paginaAtual={"caderno"} />

@@ -576,12 +576,12 @@ Para 100000 linhas: 312500ms
                                                     <td>{item.codAtividade}</td>
                                                     <td>
                                                         <a
-                                                            href={`/local/${item.descAnuncio}?id=${item.codAnuncio}`}
+                                                            href={`/perfil/${item.descAnuncio}?id=${item.codAnuncio}`}
                                                             className='text-decoration-none'
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                         >
-                                                            {`${masterPath.domain}/local/${item.codAnuncio}`}
+                                                            {`${masterPath.domain}/perfil/${item.codAnuncio}`}
                                                             {/*   <i class="fa fa-eye"></i>
                                                             Ver */}
                                                         </a>
