@@ -12,27 +12,9 @@ const { Op } = Sequelize;
 
 module.exports = {
     busca: async (req, res) => {
-        await database.sync();
 
         const { uf, cidade, atividade, name, telefone, nu_documento, codigoCaderno } = req.body;
         console.table([name, atividade, telefone, nu_documento, uf, codigoCaderno]);
-        /*        const result = await Caderno.findAll({
-                   where: {
-                       codUf: uf,
-                       nomeCaderno: cidade
-                   }
-               }); */
-
-
-        //Atividades
-        /*   const atividades = await Atividade.findAll({
-              where: {
-                  atividade: { [Op.like]: `%${atividade}%` }
-              }
-          }); */
-
-        //console.log("debug: ", atividades);
-        //console.log("debug: ", codigoCaderno, uf, atividades[0].id);
 
         let anunciosOld;
 

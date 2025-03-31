@@ -30,7 +30,7 @@ function MiniWebCard(props) {
         const request = await fetch(`${masterPath.url}/anuncio/${props.id}`).then((x) => x.json());
         request.kledisom = "1q12314234"
         setResult(request[0]);
-        navigate(`/local/${props.id}`);//&ids=${props.ids}
+        navigate(`/perfil/${props.id}`);//&ids=${props.ids}
     }
 
     useEffect(() => {
@@ -178,7 +178,7 @@ function MiniWebCard(props) {
 
                         </div>
                         <div className='col-md-6 px-2 d-flex justify-content-end align-items-center'>
-                            <button id="btn-detalhes" onClick={buscarAnuncio}>Ver Detalhes</button>
+                            <button id="btn-detalhes" onClick={buscarAnuncio}>Ver Minisitio</button>
                         </div>
 
                     </div>

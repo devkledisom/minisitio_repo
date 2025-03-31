@@ -52,7 +52,7 @@ function QrcodeMosaico(props) {
                 {/* Renderizar o QR Code com referência ao elemento */}
                 <div ref={qrRef} className='d-flex py-2'>
                     <QRCodeCanvas value={props.nmAnuncio} size={114} />
-                    {/* <QRCodeCanvas value={`https://minisitio.online/local/${encodeURIComponent(nomeAnuncio)}?id=${idParam}`} size={114} /> */}
+                    {/* <QRCodeCanvas value={`https://minisitio.online/perfil/${encodeURIComponent(nomeAnuncio)}?id=${idParam}`} size={114} /> */}
                 </div>
 
                 {/* Botões de ação */}

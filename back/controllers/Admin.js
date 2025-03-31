@@ -691,7 +691,6 @@ module.exports = {
             }
         });
 
-console.log(req.body)
         // Verificação e ajuste dos valores recebidos
 
         const mosaico = req.body.descImagem || 0;

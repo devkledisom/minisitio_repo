@@ -24,7 +24,7 @@ function MiniWebCardSimples(props) {
         qntVisualizacoes();
         const request = await fetch(`${masterPath.url}/anuncio/${props.id}`).then((x) => x.json());
         setResult(request[0]);
-        navigate(`/local/${props.data.descAnuncio}?id=${props.id}`);
+        navigate(`/perfil/${props.data.descAnuncio}?id=${props.id}`);
 
         //navigate("/local");
     }
@@ -99,7 +99,7 @@ function MiniWebCardSimples(props) {
                         </div>
 
                         <div className='col-md-12 px-2 d-flex justify-content-end align-items-center'>
-                            <button id="btn-detalhes" onClick={buscarAnuncio}>Ver Detalhes</button>
+                            <button id="btn-detalhes" onClick={buscarAnuncio}>Ver Minisitio</button>
                         </div>
 
                     </div>

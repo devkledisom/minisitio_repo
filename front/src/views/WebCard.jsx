@@ -26,7 +26,7 @@ function WebCard() {
     //const [ufs, setUfs] = useState([]);
     //const [cadernos, setCadernos] = useState([]);
 
-    useMetaTags({
+/*     useMetaTags({
         title: 'Meu Título',
         description: 'Minha descrição',
         keywords: 'palavras-chave, exemplo',
@@ -36,7 +36,7 @@ function WebCard() {
             image: 'https://minisitio.com.br/api/files/imagem%20para%20GMN%20-%2002.png',
             site_name: 'My Site',
           }
-      });
+      }); */
 
     useEffect(() => {
         //document.querySelector('.caderno').style.filter = "blur(3px)";
