@@ -30,7 +30,7 @@ function ContactForm() {
     const { idPerfil } = useParams();
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     /*     const onSubmit = (data) => {
             console.log(data);
@@ -76,6 +76,7 @@ function ContactForm() {
                     setLoading(false);
                     setAlert(true);
                     window.scrollTo(0, 0);
+                    reset();
                     //setTimeout(() => { setAlert(false) }, 3000)
                 }
 
