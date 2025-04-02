@@ -83,7 +83,7 @@ function Cardlist(props) {
             }
 
           </div>
-          <div className="col-md-10 col-6 py-1">
+          <div className="col-md-10 col-9 py-1">
             <div className="container w-100 p-0">
               {/* row */}
               <div className="row text-start">

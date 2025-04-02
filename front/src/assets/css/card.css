@@ -143,13 +143,18 @@ li#linkExterno {
 }
 
 @media (max-width: 768px) {
+
+    .card {
+       height: 100px;
+    }
+
     .card>.card-list {
         padding: 0;
         height: 60px;
     }
 
     .btn-view-page button {
-        height: 33px;
+        height: 26px;
         margin-bottom: 10px;
         font-size: 12px;
     }
@@ -160,8 +165,11 @@ li#linkExterno {
 
     .card-list>.thumb {
         /*  padding: 8px !important; */
-        width: 60px;
-        height: 100%;
+        /* width: 60px;
+        height: 100%; */
+        width: 65px;
+        height: 100px;
+        object-fit: cover;
     }
 
     .pesquisa-nome h4 {
@@ -172,8 +180,12 @@ li#linkExterno {
 
     .area-btn {
         position: absolute;
-        top: 12px;
+        top: 68px;
         right: 17px;
+    }
+
+    .area-btn a {
+        font-size: 9px;
     }
 
     .card span {
