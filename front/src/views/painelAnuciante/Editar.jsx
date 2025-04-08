@@ -279,7 +279,6 @@ console.log('kledisom')
     executarSelecao();
   };
   
-  console.log("dsadas");
   function editIDP(e) {
     //aplicarCupom(e);
 /*     alert("dasd")
@@ -718,7 +717,7 @@ console.log('kledisom')
               style={{ display: "block" }}
             >
               {radioCheck != 1 && <ChooseFile1 codigoUser={codUser}
-                origin={'promocao'}
+                origin={'descParceiro'}
                 largura={"w-100 py-4"}
                 preview={false}
                 patrocinador={8}
@@ -749,7 +748,7 @@ console.log('kledisom')
               style={{ display: "block" }}
             >
               {radioCheck != 1 && <ChooseFile1 codigoUser={codUser}
-                origin={'promocao'}
+                origin={'certificado_logo'}
                 largura={"w-100 py-4"} preview={false}
                 patrocinador={5}
                 codImg={minisitio.certificado_logo}
@@ -782,7 +781,7 @@ console.log('kledisom')
                 />
               </div>
               {radioCheck != 1 && <ChooseFile1 codigoUser={codUser}
-                origin={'promocao'}
+                origin={'certificado_imagem'}
                 largura={"w-100 py-4"} preview={false}
                 patrocinador={6}
                 codImg={minisitio.certificado_imagem}

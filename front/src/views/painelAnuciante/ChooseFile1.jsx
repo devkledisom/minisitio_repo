@@ -4,6 +4,9 @@ import { masterPath } from "../../config/config";
 
 import "../../assets/css/comprar-anuncio.css";
 
+//global functions
+import { validarDimensaoImagem } from '../../globalFunctions/functions';
+
 function UploadImage(props) {
   //state
   const [imagem, setImagem] = useState(false);
@@ -13,7 +16,7 @@ function UploadImage(props) {
   const [mostrarMiniPreview, setMostrarMiniPreview] = useState(props.miniPreview);
   const [ativarPreview, setPreview] = useState(props.preview);
   const [codImg, setCodImg] = useState(null);
-  
+
 
   //ref
   const inputImg = useRef();
@@ -21,77 +24,148 @@ function UploadImage(props) {
     if (!mostrarMiniPreview) {
       setMostrarLabel(false);
     }
-    console.log("asddashfa", props.codImg)
 
- if(props.codImg == 0 || props.codImg == "" || props.codImg == undefined) {
-  setMostrarMiniPreview(true);
-  setMostrarLabel(true);
- }
+    if (props.codImg == 0 || props.codImg == "" || props.codImg == undefined) {
+      setMostrarMiniPreview(true);
+      setMostrarLabel(true);
+    }
 
 
   }, []);
 
 
-  const onDrop = useCallback((acceptedFiles) => {
-    if (props.patrocinador >= 4) {
-      localStorage.setItem("imgname" + props.patrocinador, acceptedFiles[0].name);
-    } else {
-      localStorage.setItem("imgname", acceptedFiles[0].name);
-    }
+  const onDrop = useCallback((acceptedFiles, fileRejections) => {
 
-    console.log(acceptedFiles[0])
-    setImagem(acceptedFiles[0]);
-    setMostrarLabel(false);
-   
-
-    if (props.preview == true) {
-      document.querySelector('.comImagem img').src = URL.createObjectURL(acceptedFiles[0]);
-      document.querySelector('.semImagem').style.display = 'none';
-      document.querySelector('.comImagem').style.display = 'block';
-
-    }
-
-    const formData = new FormData();
-    formData.append('image', acceptedFiles[0]);
-
-    // Enviar a imagem para o servidor
-    fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}&local=promocao`, {
-      method: 'POST',
-      body: formData
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Erro ao enviar imagem para o servidor');
+    if (fileRejections.length > 0) {
+      if (fileRejections[0].errors) {
+        if (fileRejections[0].errors[0].code === "file-invalid-type") {
+          alert("Formato inválido! Apenas PNG e JPEG são permitidos.");
+          return;
+        } else if (fileRejections[0].errors[0].code === "file-too-large") {
+          alert("Imagem atingiu o limite, por favor insira uma imagem de até 2MB");
+          return;
         }
-        console.log('Imagem enviada com sucesso!');
+        console.log('very', fileRejections[0].errors[0].code)
+      }
+    }
 
-        props.data({
-          ...props.minisitio,
-          ['descParceiro']: acceptedFiles[0].name,
-    
-        });
 
-        setMostrarLabel(false);
-        setMostrarMiniPreview(true);
-      })
-      .catch(error => {
-        console.error('Erro ao enviar imagem:', error);
+    // Verifica as dimensões da imagem (100x100)
+    if (props.origin == 'descParceiro') {
+      
+      const file = acceptedFiles[0];
+      if (!file) return;
+
+      validarDimensaoImagem(file, 150, 58)
+      .then((aproved) => {
+        if(aproved) {
+          enviarImg();
+        } else {
+          alert("A imagem deve ter exatamente 150x58 pixels.");
+        }
       });
 
+     /*  const img = new Image();
+      img.onload = () => {
+        if (img.width !== 100 || img.height !== 100) {
+          alert("A imagem deve ter exatamente 100x100 pixels.");
+          return;
+        }
+
+        // ✅ Se passou nas validações, faz o que precisa (ex: setFile, enviar, etc.)
+        console.log("Imagem válida!");
+        enviarImg()
+        // setImagem(file); ou qualquer ação que você queira
+      };
+      img.onerror = () => {
+        alert("Erro ao carregar imagem.");
+      };
+      img.src = URL.createObjectURL(file); */
+    } else {
+      enviarImg();
+    }
+
+
+    
+
+
+    function enviarImg() {
+      if (props.patrocinador >= 4) {
+        localStorage.setItem("imgname" + props.patrocinador, acceptedFiles[0].name);
+      } else {
+        localStorage.setItem("imgname", acceptedFiles[0].name);
+      }
+
+      console.log(acceptedFiles[0])
+      setImagem(acceptedFiles[0]);
+      setMostrarLabel(false);
+
+
+      if (props.preview == true) {
+        document.querySelector('.comImagem img').src = URL.createObjectURL(acceptedFiles[0]);
+        document.querySelector('.semImagem').style.display = 'none';
+        document.querySelector('.comImagem').style.display = 'block';
+
+      }
+
+      const formData = new FormData();
+      formData.append('image', acceptedFiles[0]);
+
+      // Enviar a imagem para o servidor
+      fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}&local=promocao`, {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro ao enviar imagem para o servidor');
+          }
+          console.log('Imagem enviada com sucesso!');
+
+          props.data({
+            ...props.minisitio,
+            [props.origin]: acceptedFiles[0].name,
+            //['descParceiro']: acceptedFiles[0].name,
+
+          });
+
+          setMostrarLabel(false);
+          setMostrarMiniPreview(true);
+        })
+        .catch(error => {
+          console.error('Erro ao enviar imagem:', error);
+        });
+    }
+
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  /*   const { getRootProps, getInputProps, isDragActive, acceptedFiles, fileRejections } = useDropzone({ onDrop }, {
+      accept: {
+        "image/png": [],
+        "image/jpeg": [],
+        "image/webp": [],
+      }, // Permite apenas PNG, JPEG e WEBP
+      maxSize: 2 * 1024 * 1024, // Limite de 2MB
+    }); */
+
+  // Configuração do Dropzone
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: { "image/png": [], "image/jpeg": [] },
+    /* accept: { "image/png": [], "image/jpeg": [], "image/webp": [] }, */
+    maxSize: 2 * 1024 * 1024,
+  });
 
   const limparInputImg = () => {
-console.log(props.minisitio)
-     props.data({
+    props.data({
       ...props.minisitio,
-      ['descParceiro']: "",
+      [props.origin]: null,
+      //['descParceiro']: "",
 
     });
 
     if (props.preview == true) {
-     
+
     } else {
       setImagem(false);
       setMostrarLabel(true);

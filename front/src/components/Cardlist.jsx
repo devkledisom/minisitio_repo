@@ -12,6 +12,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 //controllers
 import controlCard from "../controllers/controllerCardlist";
 
+//global functions
+import { contadorVisualizacoes } from "../globalFunctions/functions";
+
 function Cardlist(props) {
   //console.log(props.codCity);
 
@@ -19,7 +22,7 @@ function Cardlist(props) {
   const [caderno, setCaderno] = useState([]);
   const [cadUf, setCadUf] = useState([]);
 
-  useEffect(() => {
+/*   useEffect(() => {
     fetch(`${masterPath.url}/cadernos`)
       .then((x) => x.json())
       .then((res) => {
@@ -35,7 +38,7 @@ function Cardlist(props) {
     let cadernoUf = sessionStorage.getItem("uf: ");
     let cadernoCidade = sessionStorage.getItem("caderno: ");
     setCadUf([cadernoUf, cadernoCidade]);
-  }, []);
+  }, []); */
 
   function urlTransform(url) {
     //const url = "http://localhost:3032/api/files/sefer7_logo_full (1).jpg";
@@ -44,12 +47,14 @@ function Cardlist(props) {
   }
 
   const cardListThumb = (imgName) => {
-    if(imgName !== "teste" && imgName !== "0" && imgName != null) {
+    if (imgName !== "teste" && imgName !== "0" && imgName != null) {
       return true;
     } else {
       return false;
     }
   }
+
+
 
   return (
     <div className="Cardlist" key={props.key}>
@@ -91,7 +96,7 @@ function Cardlist(props) {
                   <h4 className="d-flex font-20 border-bottom border-secondary p-2">
                     {/* <i className="fa fa-tags"></i> */}
                     <div class="endereco">{props.anuncio.descAnuncio}</div>
-                    
+
                   </h4>
                 </div>
               </div>
@@ -101,8 +106,8 @@ function Cardlist(props) {
                   <h4 className="d-flex">{/* font-14 */}
                     <i className="fa fa-briefcase"></i>
                     <div class="endereco">{props.anuncio.codAtividade}</div>
-                 
-                 {/*    {caderno.map((item) => {
+
+                    {/*    {caderno.map((item) => {
                       if (item.codCaderno == props.codCity) {
                         //console.log(uf)
                         //const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)
@@ -113,13 +118,13 @@ function Cardlist(props) {
 
                     })} */}
                   </h4>
-                </div>{console.log(props.anuncio.descEndereco)}
+                </div>
                 <div className="col-md-12 col-xs-12 pesquisa-nome">
                   <h4 className="d-flex">{/* font-14 */}
                     <i className="fa fa-map-marker"></i>
-                    <div class="endereco">{ !props.anuncio.descEndereco ? "Endereço não informado" : props.anuncio.descEndereco }</div>
-                   {/*  <span>{props.anuncio.descEndereco}</span> */}
-                   {/*  {caderno.map((item) => {
+                    <div class="endereco">{!props.anuncio.descEndereco ? "Endereço não informado" : props.anuncio.descEndereco}</div>
+                    {/*  <span>{props.anuncio.descEndereco}</span> */}
+                    {/*  {caderno.map((item) => {
                       if (item.codCaderno == props.codCity) {
                         //console.log(uf)
                         //  const estado = uf.find(estado => estado.id_uf == props.anuncio.codUf)
@@ -138,7 +143,7 @@ function Cardlist(props) {
                   <button className="mx-2">
                     <i className="fa fa-star"></i>{/*cadUf[1]*/}
                     <Link
-                      to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&index=${props.anuncio.page}&caderno=${props.anuncio.codCaderno}&estado=${cadUf[0]}
+                      to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&index=${props.anuncio.page}&caderno=${props.anuncio.codCaderno}&estado=${props.anuncio.codUf}
 `}
                     >
                       PÁGINA DO CADERNO
@@ -146,7 +151,7 @@ function Cardlist(props) {
                   </button>
                   <button>
                     <i className="fa fa-star"></i>{/*cadUf[1]*/}
-                    <Link to={`/perfil/${props.anuncio.codAnuncio}`}>
+                    <Link to={`/perfil/${props.anuncio.codAnuncio}`} onClick={() => contadorVisualizacoes(masterPath.url, props.anuncio.codAnuncio)}>
                       VER MINISITIO
                     </Link>
                   </button>

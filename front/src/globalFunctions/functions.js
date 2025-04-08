@@ -3,16 +3,16 @@ import html2canvas from "html2canvas";
 import '../assets/css/PdfGenerator.css';
 
 export function limparCPFouCNPJ(cpfOuCnpj) {
-    if(cpfOuCnpj) {
+    if (cpfOuCnpj) {
         return cpfOuCnpj.replace(/[.\-\/]/g, '');
     }
-   
+
 }
 
 export const generatePdf = () => {
     // Criar um elemento temporário para capturar o conteúdo
     const contentDiv = document.createElement("div");
-    contentDiv.innerHTML ='';
+    contentDiv.innerHTML = '';
 
     document.body.appendChild(contentDiv);
 
@@ -233,3 +233,29 @@ export const generatePdfold = (props) => {
         document.body.removeChild(contentDiv);
     });
 };
+
+export const contadorVisualizacoes = (url, id) => {
+    fetch(`${url}/admin/anuncio/visualizacoes?id=${id}`)
+        .then((x) => x.json())
+        .then((res) => {
+            //console.log(res)
+        })
+
+};
+
+export const validarDimensaoImagem = (file, largura, altura) => {
+    return new Promise((resolve, reject) => {
+      if (!file) return resolve(false);
+  
+      const img = new Image();
+      img.onload = () => {
+        const isValida = img.width === largura && img.height === altura;
+        URL.revokeObjectURL(img.src); // Limpeza
+        resolve(isValida);
+      };
+      img.onerror = () => {
+        reject(new Error("Erro ao carregar imagem."));
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  };

@@ -29,6 +29,7 @@ import TemplateModalPromo from "../components/Modal/TemplateModalPromo";
 
 function FullWebCard(props) {
     const { result, setResult } = useBusca();
+    const [ resultLocal, setResultLocal ] = useState([]);
 
     //params
     const [searchParams] = useSearchParams();
@@ -43,8 +44,9 @@ function FullWebCard(props) {
             //console.log(result);
             props.setCodCaderno(request[0].codCaderno);
             props.setCodUf(request[0].codUf);
-            setResult(request[0]);
-            //console.log(request[0])
+            //setResult(request[0]);
+            setResultLocal(request[0]);
+            console.log(request[0])
         }
 
         buscarAnuncio();
@@ -74,16 +76,16 @@ function FullWebCard(props) {
                 <div className="row p-3 full-title">
                     <section className="col-md-6 coluna-1">
                         <h2 className='titulo-cinza'>
-                            {result.descAnuncio}
+                            {resultLocal.descAnuncio}
                         </h2>
                         <div>
-                            <WebcardThumb codImg={result.descImagem} data={result} />
+                            <WebcardThumb codImg={resultLocal.descImagem} data={resultLocal} />
                         </div>
                         <div>
-                            <Metadados data={result} />
+                            <Metadados data={resultLocal} />
                         </div>
                         <div className="mt-3">
-                            <MapContainer cep={result.descCEP} address={result.descEndereco} />
+                            <MapContainer cep={resultLocal.descCEP} address={resultLocal.descEndereco} />
                         </div>
                     </section>
                     <section className="col-md-6 coluna-2">
@@ -95,23 +97,23 @@ function FullWebCard(props) {
                             <div className='container'>
                                 <div className="row">
                                     <div className='col-md-4'>
-                                        {(result.certificado_logo != null && result.certificado_logo != "") &&
-                                            <img src={`${masterPath.url}/files/2/${result.certificado_logo}`} className='rounded' height="50" alt="logo" />
+                                        {(resultLocal.certificado_logo != null && resultLocal.certificado_logo != "") &&
+                                            <img src={`${masterPath.url}/files/2/${resultLocal.certificado_logo}`} className='rounded' height="50" alt="logo" />
                                         }
-                                        {(result.certificado_logo == "" || result.certificado_logo == null) &&
+                                        {(resultLocal.certificado_logo == "" || resultLocal.certificado_logo == null) &&
                                             <p>LOGO</p>
                                         }
 
                                     </div>
-                                    <div className='col-md-4'>{result.certificado_texto ? result.certificado_texto : "TEXTO"}</div>
+                                    <div className='col-md-4'>{resultLocal.certificado_texto ? resultLocal.certificado_texto : "TEXTO"}</div>
                                     <div className='col-md-4'>
-                                        {result.certificado_link && (
-                                            <a href={result.certificado_link} target="_blank" rel="noopener noreferrer">
+                                        {resultLocal.certificado_link && (
+                                            <a href={resultLocal.certificado_link} target="_blank" rel="noopener noreferrer">
                                                 <i className="link-cinza">
                                                     <img
                                                         src={
-                                                            result.certificado_imagem
-                                                                ? `${masterPath.url}/files/2/${result.certificado_imagem}`
+                                                            resultLocal.certificado_imagem
+                                                                ? `${masterPath.url}/files/2/${resultLocal.certificado_imagem}`
                                                                 : "../assets/img/teste/diploma.png"
                                                         }
                                                         alt="Certificado"
@@ -122,10 +124,10 @@ function FullWebCard(props) {
                                             </a>
                                         )}
 
-                                        {!result.certificado_link && result.certificado_imagem && (
+                                        {!resultLocal.certificado_link && resultLocal.certificado_imagem && (
                                             <i className="link-cinza">
                                                 <img
-                                                    src={`${masterPath.url}/files/2/${result.certificado_imagem}`}
+                                                    src={`${masterPath.url}/files/2/${resultLocal.certificado_imagem}`}
                                                     alt="Certificado"
                                                     height={64}
                                                     className='rounded'
@@ -133,7 +135,7 @@ function FullWebCard(props) {
                                             </i>
                                         )}
 
-                                        {!result.certificado_link && !result.certificado_imagem && (
+                                        {!resultLocal.certificado_link && !resultLocal.certificado_imagem && (
                                             <i className="link-cinza">
                                                 <img
                                                     src="../assets/img/teste/diploma.png"
@@ -155,14 +157,14 @@ function FullWebCard(props) {
                                 COMPRAR
                             </h2>
                             <div className="text-center btn-comprar">
-                                {result.link_comprar != "" &&
-                                    <a href={result.link_comprar}
+                                {resultLocal.link_comprar != "" &&
+                                    <a href={resultLocal.link_comprar}
                                         className="btn proximo link-cinza d-flex justify-content-center align-items-center w-50"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >Compre agora</a>
                                 }
-                                {result.link_comprar == "" &&
+                                {resultLocal.link_comprar == "" &&
                                     <a href="#" className="btn proximo link-cinza d-flex justify-content-center align-items-center w-50">Compre agora</a>
                                 }
 
@@ -175,11 +177,11 @@ function FullWebCard(props) {
                             <div className='py-3'>
                                 <i className='link-cinza'>
                                     {
-                                        promoChange(result.linkPromo) && <a href={result.linkPromo}><img src="../assets/img/link_promocao.png" alt="icone" width={60} /></a>
+                                        promoChange(resultLocal.linkPromo) && <a href={resultLocal.linkPromo}><img src="../assets/img/link_promocao.png" alt="icone" width={60} /></a>
                                     }
                                     {
-                                        !promoChange(result.linkPromo) ?
-                                            (result.logoPromocao != null && !promoChange(result.linkPromo)) ?
+                                        !promoChange(resultLocal.linkPromo) ?
+                                            (resultLocal.logoPromocao != null && !promoChange(resultLocal.linkPromo)) ?
                                                 <img src="../assets/img/link_promocao.png" data-bs-toggle="modal"
                                                     data-bs-target="#myModal" alt="icone" width={60} /> :
                                                 <img src="../assets/img/link_promocao.png" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="icone" width={60} />
@@ -190,7 +192,7 @@ function FullWebCard(props) {
                             </div>
 
                         </div>
-                        <TemplateModalPromo path={result.logoPromocao} validade={result.promocaoData} />
+                        <TemplateModalPromo path={resultLocal.logoPromocao} validade={resultLocal.promocaoData} />
                         {/* <!-- Trigger the modal with a button --> */}
                         {/*                        <button
                             type="button"
@@ -233,10 +235,10 @@ function FullWebCard(props) {
                             <h2 className='titulo-cinza'>
                                 PARCEIRO
                             </h2>
-                            <a href={result.descParceiroLink !== "0" ? result.descParceiroLink : ""} target="_blank" data-toggle="tooltip" title="google-meu-negocio" rel="noopener  noreferrer">
+                            <a href={resultLocal.descParceiroLink !== "0" ? resultLocal.descParceiroLink : ""} target="_blank" data-toggle="tooltip" title="parceiro" rel="noopener  noreferrer">
                                 <i className='link-cinza'>
-                                    {result.descParceiro != null ?
-                                    <img src={`${masterPath.url}/files/2/${result.descParceiro}`} width={100} height={66} className='rounded my-1' alt="promoção" /> : <img src="../assets/img/teste/aperto-de-mao.png" width={100} height={66} />  
+                                    {resultLocal.descParceiro != null ?
+                                    <img src={`${masterPath.url}/files/2/${resultLocal.descParceiro}`} width={150} height={58} className='rounded my-1' alt="promoção" /> : <img src="../assets/img/teste/aperto-de-mao.png" width={100} height={66} />  
                                     }
                                     
                                 </i>
@@ -248,7 +250,7 @@ function FullWebCard(props) {
                                 Fale com o dono
                             </h2>
                             <ContactForm />
-                            <Video link={result.descYouTube} />
+                            <Video link={resultLocal.descYouTube} />
                         </div>
                         <div>
 
@@ -260,7 +262,7 @@ function FullWebCard(props) {
                     {/*  <Socialmidia /> */}
                     <SocialShareButtons url={fullUrl} />
                 </div>
-                <UserActions path={nomeAnuncio} id={codAnuncio} doc={result.descCPFCNPJ} url={fullUrl} data={result} />
+                <UserActions path={nomeAnuncio} id={codAnuncio} doc={resultLocal.descCPFCNPJ} url={fullUrl} data={resultLocal} />
             </div>
         </div>
     );

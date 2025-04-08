@@ -56,13 +56,18 @@ function Busca(props) {
     };
 
     useEffect(() => {
-
+       
 
         let ufSalva = sessionStorage.getItem("uf: ");
         let cadSalvo = sessionStorage.getItem("caderno: ");
+        let querySalvo = sessionStorage.getItem("querySearch");
         //console.log(ufSalva, cadSalvo)
         setCodUf(ufSalva);
         setCodCaderno(cadSalvo);
+
+        if(querySalvo) {
+            document.querySelector('#inputBusca').value = querySalvo;
+        }
 
         fetch(`${masterPath.url}/ufs`)
             .then((x) => x.json())
@@ -71,6 +76,8 @@ function Busca(props) {
                 setUf(ufSalva);
                 if (location.pathname == '/') {
                     getUserLocation();
+                    sessionStorage.removeItem("querySearch");
+                    document.querySelector('#inputBusca').value = "";
                 }
                 if (ufSalva != undefined) {
                     //document.querySelectorAll('#codUf2')[0].value = ufSalva;
@@ -82,15 +89,13 @@ function Busca(props) {
             .then((res) => {
                 setCaderno(res)
                 if (location.pathname == '/') {
-                    getUserLocation();
+                    ///getUserLocation();
                 }
                 if (cadSalvo != undefined) {
                     //document.querySelectorAll('#codUf3')[0].value = cadSalvo;
+                    
                 }
             })
-
-
-
 
 
     }, []);
@@ -113,6 +118,7 @@ function Busca(props) {
 
         let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
         let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;
+        
 
 
         if (cadernoUf === "UF") {
@@ -135,6 +141,8 @@ function Busca(props) {
                 setLoading(false);
                 return;
             }
+
+            sessionStorage.setItem("querySearch", valor_da_busca);
 
             const options = {
                 method: "POST",
