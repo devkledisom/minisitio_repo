@@ -14,7 +14,7 @@ import Cardlist from './Cardlist';
 function Resultados() {
 
     const [anuncio, setAnuncio] = useState([]);
-    const { result, setResult } = useBusca();
+    const { result, setResult } = useBusca([]);
 
     const location = useLocation();
     const navigate = useNavigate();

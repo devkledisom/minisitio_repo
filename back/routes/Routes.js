@@ -29,7 +29,7 @@ const authVerification = require('../middlewares/authVerification.js');
 router.use(function timelog(req, res, next) {
     //auth();
     //res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    console.log('Time: ', Date.now());
+    console.log('Time: ', Date.now(), req.path);
     next();
 });
 

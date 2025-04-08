@@ -102,8 +102,7 @@ module.exports = {
         res.json(anuncios);
     },
     buscarCaderno: async (req, res) => {
-        await database.sync();
-
+    
         const cadernos = await Caderno.findAll({
             order: [
                 ['isCapital', 'ASC'],
@@ -111,14 +110,11 @@ module.exports = {
             ],
         });
 
-        res.json(cadernos);
+        return res.json(cadernos);
     },
     buscarUf: async (req, res) => {
-        await database.sync();
 
         const ufs = await Uf.findAll();
-
-        console.log(ufs)
 
         res.json(ufs);
     },
