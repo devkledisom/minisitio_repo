@@ -56,14 +56,33 @@ function Busca(props) {
     };
 
     useEffect(() => {
+        if(props.uf && props.caderno) {
+            setUf(props.uf);
+            setCodUf(props.uf);
+            setCodCaderno(props.caderno);
+        } else {
+          /*   setCodUf(ufSalva);
+            setCodCaderno(cadSalvo); */
+        }
+    }, [props.uf])
+
+    useEffect(() => {
        
 
         let ufSalva = sessionStorage.getItem("uf: ");
         let cadSalvo = sessionStorage.getItem("caderno: ");
         let querySalvo = sessionStorage.getItem("querySearch");
         //console.log(ufSalva, cadSalvo)
-        setCodUf(ufSalva);
-        setCodCaderno(cadSalvo);
+        if(props.uf && props.caderno) {
+            console.log(props.uf, props.caderno)
+            setUf(props.uf);
+            setCodUf(props.uf);
+            setCodCaderno(props.caderno);
+        } else {
+          /*   setCodUf(ufSalva);
+            setCodCaderno(cadSalvo); */
+        }
+       
 
         if(querySalvo) {
             document.querySelector('#inputBusca').value = querySalvo;
@@ -73,7 +92,7 @@ function Busca(props) {
             .then((x) => x.json())
             .then((res) => {
                 setUfs(res);
-                setUf(ufSalva);
+                //setUf(ufSalva);
                 if (location.pathname == '/') {
                     getUserLocation();
                     sessionStorage.removeItem("querySearch");
@@ -166,7 +185,7 @@ function Busca(props) {
             setResult(request);
             //console.log(request);
             setLoading(false);
-            navigate("/buscar", { state: {paramBusca: valor_da_busca} });
+            navigate(`/buscar/${codigoCaderno}/${uf}`, { state: {paramBusca: valor_da_busca} });
 
             /*  if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
                  navigate("/buscar");

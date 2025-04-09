@@ -98,7 +98,7 @@ function Caderno(props) {
         }
 
       }) 
-      
+
     /* fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
       .then(x => x.json())
       .then(res => {
@@ -249,8 +249,8 @@ function Caderno(props) {
         <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} />
       </header>
       <main>
-        <Busca paginaAtual={"caderno"} />
-        <h1 id="title-caderno" className='py-2 title-caderno'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
+        <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
+        <h1 id="title-caderno" className='py-2 title-caderno'>Caderno {caderno} - {estado}</h1>
         {/*         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
         <div className='container caderno'>

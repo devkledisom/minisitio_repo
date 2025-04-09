@@ -104,7 +104,7 @@ function WebCard() {
                     {/* <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={nmAnuncio} /> */}
                 </header>
                 <main>
-                    <Busca />
+                    <Busca  uf={codUf} caderno={codCaderno} />
                     <h1 id="title-caderno" className='py-2'>Caderno {codCaderno} - {codUf}</h1>
                     {/*  <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1> */}
                     <Navegacao />

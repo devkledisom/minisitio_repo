@@ -18,6 +18,7 @@ const Caderno = require('../models/table_caderno');
 const Cadernos = require('../models/table_caderno');
 const Calhau = require('../models/table_calhau');
 const Descontos = require('../models/table_desconto');
+const Promocao = require('../models/table_promocao');
 const DDD = require('../models/table_ddd');
 const Globals = require('../models/table_globals');
 const Pin = require('../models/table_pin');
@@ -3702,7 +3703,7 @@ module.exports = {
             buscaPorCaderno();
         } else if (requisito === 'descAnuncio') {
             buscaPorNome();
-        } else if(requisito === 'codUf') {
+        } else if (requisito === 'codUf') {
             buscaUf();
         } else {
             buscaNormal();
@@ -3806,11 +3807,11 @@ module.exports = {
                 [requisito]: { [Op.like]: `${nu_hash}%` },
             }
 
-            if(estado != 'todos' && estado != 'null') {
+            if (estado != 'todos' && estado != 'null') {
                 whereClause.codUf = estado;
             }
 
-            if(caderno != 'todos' && caderno != 'null') {
+            if (caderno != 'todos' && caderno != 'null') {
                 whereClause.codCaderno = caderno;
             }
 
@@ -3903,11 +3904,11 @@ module.exports = {
                 [requisito]: nu_hash,
             }
 
-            if(estado != 'todos' && estado != 'null') {
+            if (estado != 'todos' && estado != 'null') {
                 whereClause.codUf = estado;
             }
 
-            if(caderno != 'todos' && caderno != 'null') {
+            if (caderno != 'todos' && caderno != 'null') {
                 whereClause.codCaderno = caderno;
             }
 
@@ -3988,7 +3989,7 @@ module.exports = {
 
 
             }
-        }    
+        }
         async function buscaUf() {
 
             const resultAnuncio = await Anuncio.findAll({
@@ -4073,7 +4074,7 @@ module.exports = {
 
 
             }
-        }    
+        }
 
     },
     buscarAnuncioIdold: async (req, res) => {
@@ -4758,7 +4759,7 @@ module.exports = {
                 })
             }
 
-            
+
             if (codTipoAnuncio == 1) {
                 await Caderno.increment('basico', {
                     where: {
@@ -4968,7 +4969,7 @@ module.exports = {
             "formaPagamento": 0,
             "logoPromocao": logoPromocao,
             "linkPromo": linkPromo || 'null',
-            //"promocaoData": promocaoData,
+            "promocaoData": promocaoData,
             "descContrato": 0,
             "descAndroid": descAndroid,
             "descApple": descApple,
@@ -4995,6 +4996,32 @@ module.exports = {
             "periodo": periodo
         };
         console.log(dadosAnuncio)
+
+        const idAnuncio = req.query.id;
+
+        console.log(idAnuncio,
+            logoPromocao,
+            linkPromo,
+            promocaoData)
+
+        const promocaoExistente = await Promocao.findOne({
+            where: {
+                codAnuncio: idAnuncio,
+                link_externo: linkPromo,
+                data_validade: promocaoData,
+            },
+        });
+
+        if(!promocaoExistente) {
+            const criarPromocao = await Promocao.create({
+                codAnuncio: idAnuncio,
+                banner: logoPromocao,
+                link_externo: linkPromo,
+                data_validade: promocaoData
+            });
+        }
+
+
 
         try {
             const listaAnuncios = await Anuncio.update(dadosAnuncio, {
@@ -8228,7 +8255,7 @@ LIMIT 50000;
 
                         // Supondo que você tenha o modelo 'Anuncio'
                         const resultados = await Anuncio.findAll({
-                            where: {codCaderno: "PENEDO"},
+                            where: { codCaderno: "PENEDO" },
                             attributes: [
                                 'codCaderno', // Referência ao campo codCaderno
                                 [Sequelize.literal('SUM(CASE WHEN codTipoAnuncio = 1 THEN 1 ELSE 0 END)'), 'basico'],

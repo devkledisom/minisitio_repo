@@ -8,12 +8,11 @@ import Resultados from '../components/Resultados';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 function Pesquisa() {
 
-
-
-
+  const { caderno, estado } = useParams();
 
   return (
     <div className="App">
@@ -21,7 +20,7 @@ function Pesquisa() {
         <Mosaico logoTop={true} borda="none" />
       </header>
       <main>
-        <Busca />
+        <Busca uf={estado} caderno={caderno} />
         <Resultados />
       </main>
 
