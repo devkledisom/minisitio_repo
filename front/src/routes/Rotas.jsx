@@ -85,7 +85,7 @@ function Rotas() {
                 <Routes>
                     <Route path="/">
                         <Route index element={<Home />} />
-                        <Route path="buscar" element={<Pesquisa />} />
+                        <Route path="buscar/:caderno/:estado" element={<Pesquisa />} />
                         <Route path="caderno/:atividade" element={<QrcodeCadernoProvider><Caderno /></QrcodeCadernoProvider>} />
                         <Route path="cadernos/:atividade" element={<TodosCaderno />} />
                         <Route path="caderno-geral/:caderno/:estado" element={<QrcodeCadernoProvider><CadernoGeral /></QrcodeCadernoProvider>} />

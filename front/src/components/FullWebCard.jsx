@@ -105,10 +105,12 @@ function FullWebCard(props) {
                                         }
 
                                     </div>
+                                    {/* resultLocal.certificado_link */}
+                                    {console.log(resultLocal.certificado_link, resultLocal.certificado_imagem)}
                                     <div className='col-md-4'>{resultLocal.certificado_texto ? resultLocal.certificado_texto : "TEXTO"}</div>
                                     <div className='col-md-4'>
-                                        {resultLocal.certificado_link && (
-                                            <a href={resultLocal.certificado_link} target="_blank" rel="noopener noreferrer">
+                                        {(resultLocal.certificado_link || resultLocal.certificado_imagem) && (
+                                            <a href={resultLocal.certificado_imagem != '' ? `${masterPath.url}/files/2/${resultLocal.certificado_imagem}` : resultLocal.certificado_link} target="_blank" rel="noopener noreferrer">
                                                 <i className="link-cinza">
                                                     <img
                                                         src={
@@ -123,6 +125,23 @@ function FullWebCard(props) {
                                                 </i>
                                             </a>
                                         )}
+
+                                       {/*  {(!resultLocal.certificado_link && resultLocal.certificado_imagem) && (
+                                            <a href={`${masterPath.url}/files/2/${resultLocal.certificado_imagem}`} target="_blank" rel="noopener noreferrer">
+                                                <i className="link-cinza">
+                                                    <img
+                                                        src={
+                                                            resultLocal.certificado_imagem
+                                                                ? `${masterPath.url}/files/2/${resultLocal.certificado_imagem}`
+                                                                : "../assets/img/teste/diploma.png"
+                                                        }
+                                                        alt="Certificado"
+                                                        height={64}
+                                                        className='rounded'
+                                                    />
+                                                </i>
+                                            </a>
+                                        )} */}
 
                                         {!resultLocal.certificado_link && resultLocal.certificado_imagem && (
                                             <i className="link-cinza">

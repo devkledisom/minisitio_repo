@@ -264,6 +264,16 @@ console.log('kledisom')
   }
 
   const handleChange = (e) => {
+
+    if(e.target.name === 'promocaoData') {
+      let dataValidade = e.target.value;
+      
+      if(calcularDiferencaDias(dataValidade) > 90) {
+        alert("A data de validade da promoção informada não pode ultrapassar um prazo de 90 dias! a data escolhida tem um prazo de " + calcularDiferencaDias(dataValidade));
+        return;
+      }
+    }
+
     const { name, value } = e.target;
     setMinisitio({
       ...minisitio,
@@ -356,6 +366,24 @@ console.log('kledisom')
     }
 
   };
+
+
+  function calcularDiferencaDias(dataFutura) {
+    // Converte a data futura para um objeto Date
+    const dataFuturaDate = new Date(dataFutura);
+  
+    // Obtém a data de hoje
+    const hoje = new Date();
+  
+    // Calcula a diferença em milissegundos
+    const diferencaMs = dataFuturaDate.getTime() - hoje.getTime();
+  
+    // Converte a diferença de milissegundos para dias
+    const diferencaDias = Math.ceil(diferencaMs / (1000 * 60 * 60 * 24));
+  
+    return diferencaDias;
+  }
+  
 
   return (
     <div className="App">
@@ -651,7 +679,7 @@ console.log('kledisom')
               style={{ display: "block" }}
             >
               {radioCheck != 1 && <ChooseFile1 codigoUser={codUser}
-                origin={'promocao'}
+                origin={'logoPromocao'}
                 largura={"w-100 py-4"} preview={false}
                 patrocinador={4}
                 codImg={minisitio.logoPromocao}
@@ -671,7 +699,7 @@ console.log('kledisom')
                   id="linkPromo"
                   className="form-control"
                   placeholder="Adicione um link promocional"
-                  value={minisitio.linkPromo}
+                  value={minisitio.linkPromo == 'null' ? "" : minisitio.linkPromo}
                   onChange={handleSelectChange}
                 />
               </div>
@@ -684,7 +712,7 @@ console.log('kledisom')
                   name="promocaoData"
                   id="promocaoData"
                   className="form-control"
-                  placeholder="Digite o vídeo"
+                  placeholder="Digite a validade"
                   value={minisitio.promocaoData}
                   onChange={handleSelectChange}
                 /> 
@@ -698,7 +726,7 @@ console.log('kledisom')
               style={{ display: "block" }}
             >
               {radioCheck != 1 && <ChooseFilePdf codigoUser={codUser}
-                origin={'promocao'}
+                origin={'cartao_digital'}
                 largura={"w-100 py-4"}
                 preview={false}
                 patrocinador={7}
@@ -758,16 +786,7 @@ console.log('kledisom')
                 data={setMinisitio} />
               }
               <div className="input-icon margin-top-10">
-                <i className="fa fa-globe"></i>
-                <input
-                  type="text"
-                  name="certificado_link"
-                  id="certificado_link"
-                  className="form-control"
-                  placeholder="Digite o link"
-                  value={minisitio.certificado_link}
-                  onChange={handleSelectChange}
-                />
+               
                 <i className="fa fa-tag"></i>
                 <input
                   type="text"
@@ -789,6 +808,18 @@ console.log('kledisom')
                 msg={"Anexar imagem do certificado"}
                 minisitio={minisitio}
                 data={setMinisitio} />}
+                <div className="input-icon margin-top-10">
+                 <i className="fa fa-globe"></i>
+                <input
+                  type="text"
+                  name="certificado_link"
+                  id="certificado_link"
+                  className="form-control"
+                  placeholder="Digite um link"
+                  value={minisitio.certificado_link}
+                  onChange={handleSelectChange}
+                />
+                </div>
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
               <h2>CashBack</h2>

@@ -200,9 +200,6 @@ async function contato(data) {
 };
 
 async function novoUsuario(email, nome, doc) {
-
-    //variaveis do corpo de envio do email com variação de idiomas para o novo aluno
-
     const mailSentPT = await transporter.sendMail({
         //from: `${data.nome} <${data.email}>`,
         from: `kledisom <dev@ziiz.com.br>`,
@@ -229,7 +226,6 @@ async function novoUsuario(email, nome, doc) {
         `
     });
     return true;
-    //---------------------------------------------------------------------------------->
 
 };
 
