@@ -14,15 +14,15 @@ const http = require("http");
 const options = {
     key: fs.readFileSync("./certificados/code.key"),
     cert: fs.readFileSync("./certificados/code.crt"),
-  };
+};
 
 const server = http.createServer(app);
 //const io = new Server(server);
 var io = require("socket.io")(server, {
     cors: {
-      origin: '*',
+        origin: '*',
     }
-  });
+});
 
 app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
@@ -59,13 +59,26 @@ app.use('/api/files/3', express.static(path.resolve(__dirname, "public", "cartao
 app.use('/api/files/og', express.static(path.resolve(__dirname, "public", "OG")));
 
 
+app.get('/api/files/2/download/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.resolve(__dirname, "public", "upload", "img", "promocao", filename);
+
+    res.download(filePath, filename, (err) => {
+        if (err) {
+            console.error('Erro ao forçar o download:', err);
+            res.status(404).send('Arquivo não encontrado');
+        }
+    });
+});
+
+
 app.get('/outapi', (req, res) => {
     console.log(req)
     res.json({})
 });
 
 // WebSocket
- io.on("connection", (socket) => {
+io.on("connection", (socket) => {
     //console.log("Cliente conectado.", socket.id);
     socket.on("boa", (data) => {
         console.log("Cliente conectado.", data);
@@ -76,16 +89,16 @@ app.get('/outapi', (req, res) => {
         socket.emit("progress", data);
     });
 
-  
 
-}); 
+
+});
 
 /* const Admin = require('./controllers/Admin');
 const saveImport = require('./functions/serverImport');
 app.post('/api/admin/anuncio/import', saveImport().single('uploadedfile'), (req, res) => Admin.import4excellindex(req, res, io)); */
 
 app.get("/as", (req, res) => {
-    io.emit("progress", { a:1 });
+    io.emit("progress", { a: 1 });
 })
 
 

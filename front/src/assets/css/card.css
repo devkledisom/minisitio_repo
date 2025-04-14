@@ -142,6 +142,19 @@ li#linkExterno {
     gap: 5px;
 }
 
+.Cardlist .descTitle {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.Cardlist .label-ativity {
+    font-size: 20px;
+}
+
+.Cardlist .label-address {
+    font-size: 18px;
+}
+
 @media (max-width: 768px) {
 
     .card {

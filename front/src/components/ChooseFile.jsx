@@ -24,6 +24,10 @@ function UploadImage(props) {
       setMostrarLabel(false);
 
     }
+     if(props.codImg == '') {
+      setMostrarLabel(true);
+      setMostrarMiniPreview(true);
+    } 
   }, []);
 
 
@@ -80,8 +84,8 @@ function UploadImage(props) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const limparInputImg = () => {
-    //console.log(props.codigoUser)
+  const limparInputImg = (e) => {
+    console.log(e.target)
     if (props.preview == true) {
       document.querySelector('.semImagem').style.display = 'block';
       document.querySelector('.comImagem').style.display = 'none';
@@ -89,8 +93,16 @@ function UploadImage(props) {
       setImagem(false);
       setMostrarLabel(true);
       setMostrarMiniPreview(true);
-      //document.querySelector(".descImagem").style.display = 'none';
-      localStorage.setItem("imgname", "")
+      
+      if(props.patrocinador == 2) {
+        localStorage.setItem("imgname2", "")
+      } else if(props.patrocinador == 3) {
+        localStorage.setItem("imgname3", "")
+      } else {
+        localStorage.setItem("imgname", "")
+      }
+
+      
     }
 
 
@@ -113,18 +125,18 @@ function UploadImage(props) {
 
             {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
             {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
-            {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
+            {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={(e) => limparInputImg(e)}><i class="fa fa-times-circle"></i></a>}
 
 
             {/*             {!props.preview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
             {!props.preview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {!props.preview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
  */}
-            {/* console.log(mostrarLabel) */}
+            {/* console.log(mostrarMiniPreview, props.codImg)  */}
             {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""}
             {imagem ? <a href={`${masterPath.url}/files/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {mostrarLabel && textLabel}
-            {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
+            {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={(e) => limparInputImg(e)}><i class="fa fa-times-circle"></i></a>}
 
           </span>
           <input {...getInputProps({ name: "imagem", title: "descImagem" })} />

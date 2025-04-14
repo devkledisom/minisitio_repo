@@ -67,6 +67,9 @@ import Adesivo from "../plugins/Adesivo";
 import Institucional from "../views/infoPages/Institucional";
 import Contato from "../views/infoPages/Contato";
 
+//PROMOCAO
+import Promocoes from "../views/promocao/Pesquisa";
+
 
 import { TemaProvider } from '../context/BuscaContext';
 import { QrcodeCadernoProvider } from "../context/QrcodeCadernoContext";
@@ -92,6 +95,7 @@ function Rotas() {
                         <Route path="perfil/:codAnuncio" element={<WebCard />} />
                         <Route path="login" element={<Login />} />
                         <Route path="sobre/:id" element={<OutroComponente />} />
+                        <Route path="promocoes/:caderno/:estado" element={<Promocoes />} />
                     </Route>
                     <Route path="admin" element={
                         <PrivateRoute role={1}>

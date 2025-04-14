@@ -7,6 +7,7 @@ import '../assets/css/caderno.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 import { masterPath } from '../config/config';
 
 import { useBusca } from '../context/BuscaContext';
@@ -30,10 +31,11 @@ import TemplateModalPromo from "../components/Modal/TemplateModalPromo";
 function FullWebCard(props) {
     const { result, setResult } = useBusca();
     const [ resultLocal, setResultLocal ] = useState([]);
+    const [ showState, setShowState ] = useState(false);
 
     //params
     const [searchParams] = useSearchParams();
-    //const idParam = searchParams.get('id');
+    const promocaoAtiva = searchParams.get('promocao');
     const { nomeAnuncio, codAnuncio } = useParams();
 
     useEffect(() => {
@@ -46,7 +48,19 @@ function FullWebCard(props) {
             props.setCodUf(request[0].codUf);
             //setResult(request[0]);
             setResultLocal(request[0]);
-            console.log(request[0])
+            
+            //console.log(request[0])
+
+            if(promocaoAtiva === "ativa") {
+               // document.querySelector('.promoModal').click();
+               setShowState(true)
+
+           /*      const modalElement = document.getElementById('myModal');
+                const modalInstance = new Modal(modalElement);
+                modalInstance.show(); */
+
+            }
+
         }
 
         buscarAnuncio();
@@ -106,7 +120,7 @@ function FullWebCard(props) {
 
                                     </div>
                                     {/* resultLocal.certificado_link */}
-                                    {console.log(resultLocal.certificado_link, resultLocal.certificado_imagem)}
+                                    {/* console.log(resultLocal.certificado_link, resultLocal.certificado_imagem) */}
                                     <div className='col-md-4'>{resultLocal.certificado_texto ? resultLocal.certificado_texto : "TEXTO"}</div>
                                     <div className='col-md-4'>
                                         {(resultLocal.certificado_link || resultLocal.certificado_imagem) && (
@@ -201,17 +215,18 @@ function FullWebCard(props) {
                                     {
                                         !promoChange(resultLocal.linkPromo) ?
                                             (resultLocal.logoPromocao != null && !promoChange(resultLocal.linkPromo)) ?
-                                                <img src="../assets/img/link_promocao.png" data-bs-toggle="modal"
-                                                    data-bs-target="#myModal" alt="icone" width={60} /> :
-                                                <img src="../assets/img/link_promocao.png" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="icone" width={60} />
+                                                <img src="../assets/img/link_promocao.png" className="promoModal"
+                                                    alt="icone" width={60} onClick={() => setShowState(true)} /> :
+                                                <img src="../assets/img/link_promocao.png" className="promoModal" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="icone" width={60} />
                                             : null
                                     }
-
+  {/*    <img src="../assets/img/link_promocao.png" className="promoModal" data-bs-toggle="modal"
+                                                    data-bs-target="#myModal" alt="icone" width={60} onClick={() => setShowState(true)} /> */}
                                 </i>
                             </div>
 
                         </div>
-                        <TemplateModalPromo path={resultLocal.logoPromocao} validade={resultLocal.promocaoData} />
+                        <TemplateModalPromo showState={showState} setShowState={setShowState} path={resultLocal.logoPromocao} validade={resultLocal.promocaoData} />
                         {/* <!-- Trigger the modal with a button --> */}
                         {/*                        <button
                             type="button"

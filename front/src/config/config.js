@@ -19,9 +19,9 @@ if (hostname === "localhost") {
         apiDomain = hostname;
         portalDomain = hostname;
     } else {
-        if (hostname.includes('minisitio.online')) {
-          apiDomain = 'minisitio.online';
-          portalDomain = 'minitest.minisitio.online';
+        if (hostname.includes('automaplay.com.br')) {
+          apiDomain = 'automaplay.com.br';
+          portalDomain = 'minitest.automaplay.com.br';
         } else {
           apiDomain =  `${parts[1]}.${parts[2]}`;
           portalDomain =  `${parts[1]}.${parts[2]}`;
@@ -40,7 +40,7 @@ export const masterPath = {
 };
 
 export const version = {
-    version: 'v2.0.54'
+    version: 'v2.0.55'
 };
 
 
@@ -63,9 +63,9 @@ export const masterPath = {
 
 /* export const masterPath = {
     //url: "http://localhost:3032/api", //LOCAL
-    url: "https://minisitio.online/api", //HOMOLOGAÇÃO
+    url: "https://automaplay.com.br/api", //HOMOLOGAÇÃO
     //url: "https://br.minisitio.net/api", //PRODUÇÃO
-    //domain: 'https://minitest.minisitio.online',
+    //domain: 'https://minitest.automaplay.com.br',
     domain: 'https://br.minisitio.net',
     accessToken: sessionStorage.getItem('userTokenAccess')
 }; 
