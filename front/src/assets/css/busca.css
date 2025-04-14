@@ -1,0 +1,15 @@
+.pulse-promotion {
+    animation: pulse-promo 1s infinite; /* Duração de 2 segundos, repete infinitamente */
+  }
+  
+  @keyframes pulse-promo {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1); 
+    }
+  }

@@ -1,6 +1,9 @@
 import React from "react";
 import { masterPath } from '../../config/config';
 
+//global functions
+import { contadorVisualizacoes } from "../../globalFunctions/functions";
+
 function CardClassificado(props) {
     //prefeitura_maceio_20180302_143719.jpg
     return (
@@ -13,7 +16,7 @@ function CardClassificado(props) {
 
             {props.data != null && props.data.descImagem != null && props.data.descImagem != "teste" && props.data.descImagem != 0 ? (
                 <li className="cartao">
-                    <div className="conteudo">
+                    <div className="conteudo" onClick={() => contadorVisualizacoes(masterPath.url, props.data.codAnuncio)}>
                         <a href={`${masterPath.domain}/perfil/${props.data.codAnuncio}`}>
                             <img src={`${masterPath.url}/files/${props.data.descImagem}`} alt={props.data.descAnuncio} />
                         </a>
@@ -22,7 +25,7 @@ function CardClassificado(props) {
                     <div className="links">
                         <ul className="list-inline">
                             <li className="pull-left">
-                                <a href={`${masterPath.domain}/perfil/${props.data.codAnuncio}`} data-toggle="tooltip" title="Detalhes">
+                                <a href={`${masterPath.domain}/perfil/${props.data.codAnuncio}`} data-toggle="tooltip" title="Detalhes" >
                                     <img src="/assets/img/miniwebcard/link_detalhe.png" />
                                 </a>
                             </li>

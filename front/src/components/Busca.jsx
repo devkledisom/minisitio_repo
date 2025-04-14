@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../assets/css/main.css';
 import '../assets/css/default.css';
+import '../assets/css/busca.css';
 
 import { masterPath } from '../config/config';
 import { useBusca } from '../context/BuscaContext';
@@ -17,10 +18,13 @@ function Busca(props) {
     const [codUf, setCodUf] = useState(null);
     const [codCaderno, setCodCaderno] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [ufLoc, setUfLoc] = useState(null);
+    const [promocao, setPromocao] = useState([]);
 
     //contexto
     const { result, setResult } = useBusca();
+
+    //REFS
+    const btnPromo = useRef();
 
     const location = useLocation();
 
@@ -60,6 +64,7 @@ function Busca(props) {
             setUf(props.uf);
             setCodUf(props.uf);
             setCodCaderno(props.caderno);
+            verificarPromocao();
         } else {
           /*   setCodUf(ufSalva);
             setCodCaderno(cadSalvo); */
@@ -74,7 +79,6 @@ function Busca(props) {
         let querySalvo = sessionStorage.getItem("querySearch");
         //console.log(ufSalva, cadSalvo)
         if(props.uf && props.caderno) {
-            console.log(props.uf, props.caderno)
             setUf(props.uf);
             setCodUf(props.uf);
             setCodCaderno(props.caderno);
@@ -106,7 +110,7 @@ function Busca(props) {
         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
             .then((res) => {
-                setCaderno(res)
+                setCaderno(res);
                 if (location.pathname == '/') {
                     ///getUserLocation();
                 }
@@ -116,8 +120,22 @@ function Busca(props) {
                 }
             })
 
-
+            verificarPromocao()
     }, []);
+    
+
+    function verificarPromocao() {
+        fetch(`${masterPath.url}/read/promocao/${props.caderno}/${props.uf}`)
+          .then(x => x.json())
+          .then(res => {
+            if (res.success) {
+                btnPromo.current.classList.add('pulse-promotion');
+                setPromocao(res.promocoes);
+            }
+    
+          })
+      }
+      
 
     const fetchAnuncios = async () => {
         setLoading(true);
@@ -415,6 +433,18 @@ function Busca(props) {
         }
     };
 
+    function abrirPromocao() {
+        let qtdePromocao = promocao.length;
+
+        if(qtdePromocao == 1) {
+            navigate(`/perfil/${promocao[0].codAnuncio}?promocao=ativa`);
+        } else {
+            const uf = document.querySelector('#codUf2').value;
+            const codigoCaderno = document.querySelector('#codUf3').value;
+            navigate(`/promocoes/${codigoCaderno}/${uf}`);
+        }
+    }
+
     return (
         <div className='border-busca container-fluid formulario formulario-home'>
             {loading &&
@@ -462,7 +492,7 @@ function Busca(props) {
                                                 className="btn proximo btnCaderno btn-3"
                                                 onClick={verClassificado}
                                                 title=" Ver Caderno"><i className="fa fa-file-text"></i> <span>Ver Caderno</span></button>
-                                            <button type="button" className="btn proximo btnGrupo btnPromocao" data-promocao="1" title="Promoção">
+                                            <button type="button" className="btn proximo btnGrupo btnPromocao" ref={btnPromo} data-promocao="1" title="Promoção" onClick={() => abrirPromocao()}>
                                                 <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
                                             </button>
                                         </div>

@@ -111,8 +111,7 @@ function Caderno(props) {
           //document.querySelector('.caderno').style.filter = "none";
         }
 
-      })  */
-
+      })  */ 
 
 
   }, []);
@@ -180,51 +179,6 @@ function Caderno(props) {
     ]
 
 
-    async function fetchDataInBatches(url) {
-      const response = await fetch(url);
-  
-      if (!response.ok) {
-          console.error("Erro ao buscar os dados:", response.status);
-          return;
-      }
-  
-      const reader = response.body.getReader(); // Ler os dados como stream
-      const decoder = new TextDecoder(); // Decodificar os chunks para texto
-      let receivedText = ''; // Armazenar o texto recebido
-      let isFirst = true;
-  
-      console.log("Iniciando recepção de dados...");
-  
-      while (true) {
-          const { value, done } = await reader.read(); // Lê o próximo chunk
-  
-          if (done) {
-              console.log("Fim da transmissão.");
-              break; // Interrompe quando não há mais dados
-          }
-  
-          receivedText += decoder.decode(value, { stream: true }); // Decodifica o chunk
-  
-          // Processa os lotes individualmente para exibir ou manipular no front
-          if (receivedText.includes(',')) {
-              const parts = receivedText.split(','); // Divide os objetos por vírgula
-              receivedText = parts.pop(); // Armazena o último pedaço que pode estar incompleto
-  
-              parts.forEach((item, index) => {
-                  const obj = JSON.parse(isFirst && index === 0 ? item.slice(1) : item); // Remove o `[` do primeiro item
-                  console.log(obj); // Faça o que for necessário com o objeto
-                  isFirst = false;
-              });
-          }
-      }
-  
-      // Trata o último pedaço se for necessário
-      if (receivedText) {
-          const lastObj = JSON.parse(receivedText.slice(0, -1)); // Remove o `]` do último item
-          console.log(lastObj);
-      }
-  }
-
   const selectCapa = (capa) => {
     let result = pathImg.find((item) => item.codAtividade == capa);
 
@@ -232,8 +186,9 @@ function Caderno(props) {
 
     return result;
   }
-  
 
+
+ 
   return (
     <div className="App caderno-geral">
 
@@ -298,7 +253,7 @@ function Caderno(props) {
                 <CardClassificado title={"INFORMAÇÕES"} pathImg={capa08} data={selectCapa("INFORMAÇÕES")} />
               </ul>
               <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled teste">
-                <CardClassificado title={"ADMINISTRAÇÃO REGIONAL / PREFEITURA"} pathImg={capa01} data={selectCapa("ADMINISTRAÇÃO REGIONAL / PREFEITURA")} />
+                <CardClassificado title={"ADMINISTRAÇÃO REGIONAL / PREFEITURA"} pathImg={capa01} data={selectCapa("ADMINISTRAÇÃO REGIONAL / PREFEITURA")}/>
                 <CardClassificado title={"EMERGÊNCIA"} pathImg={capa02} data={selectCapa("EMERGÊNCIA")} />
                 <CardClassificado title={"HOSPITAIS PÚBLICOS"} pathImg={capa03} data={selectCapa("HOSPITAIS PÚBLICOS")} />
                 <CardClassificado title={"SECRETARIA DE TURISMO"} pathImg={capa04} data={selectCapa("SECRETARIA DE TURISMO")} />

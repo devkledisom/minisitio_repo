@@ -5017,7 +5017,9 @@ module.exports = {
                 codAnuncio: idAnuncio,
                 banner: logoPromocao,
                 link_externo: linkPromo,
-                data_validade: promocaoData
+                data_validade: promocaoData,
+                uf: codUf,
+                caderno: codCaderno
             });
         }
 

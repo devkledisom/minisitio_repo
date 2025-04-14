@@ -3,6 +3,7 @@ const database = require('../config/db');
 const Caderno = require('../models/table_caderno');
 const Anuncio = require('../models/table_anuncio');
 const Atividade = require('../models/table_atividade');
+const Promocao = require('../models/table_promocao');
 const Uf = require('../models/table_uf');
 const path = require('path');
 const fs = require('fs');
@@ -283,5 +284,27 @@ module.exports = {
 
 
 
+    },
+    buscarPromocoes: async (req, res) => {
+        const { caderno, uf } = req.params;
+
+        const promocoes = await Promocao.findAll({
+            where: {
+                uf: uf,
+                caderno: caderno
+            },
+            include: {
+                model: Anuncio,
+                as: 'anuncio',
+                attributes: ['codAtividade', 'descEndereco']
+            }
+        });
+
+        if(promocoes.length < 1) {
+            res.json({success: false, message: 'não existe promoção para esse caderno'}).status(404)
+        } else {
+            res.json({success: true, promocoes: promocoes}).status(200)
+        }
+        
     }
 }
