@@ -57,6 +57,13 @@ function MiniWebCard(props) {
     };
 
     const isValid = (value) => value !== 'null' && value !== '';
+    const isValidPatrocinio = (value) => {
+        if(value) {
+            if(value.patrocinador_ativo === '1') {
+                return true;
+            }
+        }
+    };
 
 
     return (
@@ -68,8 +75,7 @@ function MiniWebCard(props) {
                 </button>
             }
             <div className='container cartao my-2 p-0' key={props.key}>
-
-                {parceiros && (
+                {parceiros && isValidPatrocinio(parceiros) && (
                         (isValid(props.ids.descImagem) ||
                         isValid(props.ids.descImagem2) ||
                         isValid(props.ids.descImagem3)) && (
