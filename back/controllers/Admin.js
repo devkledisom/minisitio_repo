@@ -5012,15 +5012,18 @@ module.exports = {
             },
         });
 
-        if(!promocaoExistente) {
-            const criarPromocao = await Promocao.create({
-                codAnuncio: idAnuncio,
-                banner: logoPromocao,
-                link_externo: linkPromo,
-                data_validade: promocaoData,
-                uf: codUf,
-                caderno: codCaderno
-            });
+        if (!promocaoExistente) {
+            if (logoPromocao != '' && promocaoData != '' || linkPromo != '' && promocaoData != '') {
+                const criarPromocao = await Promocao.create({
+                    codAnuncio: idAnuncio,
+                    banner: logoPromocao,
+                    link_externo: linkPromo,
+                    data_validade: promocaoData,
+                    uf: codUf,
+                    caderno: codCaderno
+                });
+            }
+
         }
 
 
