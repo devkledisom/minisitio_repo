@@ -5013,7 +5013,7 @@ module.exports = {
         });
 
         if (!promocaoExistente) {
-            if (logoPromocao != '' && promocaoData != '' || linkPromo != '' && promocaoData != '') {
+            if (logoPromocao != '' && promocaoData != '') {
                 const criarPromocao = await Promocao.create({
                     codAnuncio: idAnuncio,
                     banner: logoPromocao,
@@ -5023,6 +5023,16 @@ module.exports = {
                     caderno: codCaderno
                 });
             }
+/*             if (linkPromo != '' && promocaoData != '') {
+                const criarPromocao = await Promocao.create({
+                    codAnuncio: idAnuncio,
+                    banner: logoPromocao,
+                    link_externo: linkPromo,
+                    data_validade: promocaoData,
+                    uf: codUf,
+                    caderno: codCaderno
+                });
+            } */
 
         }
 
