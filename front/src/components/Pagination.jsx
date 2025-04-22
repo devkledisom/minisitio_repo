@@ -47,7 +47,7 @@ const Pagination = ({ totalPages, paginaAtual, totalItem, table, busca }) => {
 
     const renderPaginationNumbers = () => {
         const paginationNumbers = [];
-        const totalPagesToShow = 3;
+        const totalPagesToShow = 5;
 
         // Calcula os números de página para mostrar
         const startPage = Math.max(1, currentPage - Math.floor(totalPagesToShow / 2));
@@ -72,10 +72,10 @@ const Pagination = ({ totalPages, paginaAtual, totalItem, table, busca }) => {
     return (
         <div className='container-fluid'>
             <div className="row px-4">
-                <div className="pagination w-50 p-0 d-flex justify-content-start">
+            {/*     <div className="pagination w-50 p-0 d-flex justify-content-start">
                     <div>Página {paginaAtual}/{totalPages} (Total: {parseFloat(totalItem).toLocaleString('pt-BR')})</div>
-                </div>
-                <ul className="pagination p-0 d-flex justify-content-end">
+                </div> */}
+                <ul className="pagination p-0 d-flex justify-content-center">
                     <li className="page-item"><a className="page-link" href="#" onClick={() => handlePageChange(Math.max(1, currentPage - 1))}>Anterior</a></li>
                     {renderPaginationNumbers()}
                     <li className="page-item"><a className="page-link" href="#" onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}>Próxima</a></li>

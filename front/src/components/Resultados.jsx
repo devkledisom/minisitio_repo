@@ -77,8 +77,9 @@ function Resultados() {
                         <Cardlist anuncio={item} key={item.codAnuncio} caderno={cidade} codImg={item.descImagem} codCity={item.codCidade} />
                     ))}
                 </div>
+                <Pagination totalPages={result.totalPaginas} paginaAtual={result.paginaAtual} totalItem={result.totalItem} table={"users"} />
             </div>
-            <Pagination totalPages={result.totalPaginas} paginaAtual={result.paginaAtual} totalItem={result.totalItem} table={"users"} />
+           
         </div>
     );
 }
