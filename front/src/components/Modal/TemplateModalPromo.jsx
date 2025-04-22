@@ -3,6 +3,9 @@ import moment from 'moment';
 import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import { Modal, Button } from 'react-bootstrap';
 
+//CSS
+import '../../assets/css/templateModalPromo.css';
+
 //Components
 import ContentChildLogin from './ContentChildLogin';
 import ContentChildForm from './ContentChildForm';
@@ -33,24 +36,29 @@ const TemplateModalPromo = (props) => {
   };
 
   return (
-    <div className='template-modal'>
+    <div className='template-modal-promo'>
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>Promoção Ativa</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
+         
           <div className="modal-body" ref={contentPromo}>
+          <div className='title-promo-ms'>
+            <img src="../assets/img/logo50.png" className="logo-modal-promo" />
+            <h4>Promoção com minisitio</h4>
+          </div>
             <img src={`${masterPath.url}/files/2/${props.path}`} className='w-100' alt="promoção" />
           </div>
           <span>Validade da promoção: {moment(props.validade).format("DD/MM/YYYY")}</span>
         </Modal.Body>
         <Modal.Footer>
-        <button type="button" className="btn btn-primary" onClick={() => ReactToPrintFn()}>Imprimir</button>
+          <button type="button" className="btn btn-primary" onClick={() => ReactToPrintFn()}>Imprimir</button>
           <a href={`${masterPath.url}/files/2/download/${props.path}`}
-              download={`promocao_${props.anuncioId || 'img'}.jpg`}
-              className='btn btn-secondary'
+            download={`promocao_${props.anuncioId || 'img'}.jpg`}
+            className='btn btn-secondary'
           >
-          Baixar
+            Baixar
           </a>
           <Button variant="danger" onClick={handleClose}>
             Fechar

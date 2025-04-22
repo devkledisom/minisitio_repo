@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 
+
 import '../assets/css/main.css';
 import '../assets/css/default.css';
 import '../assets/css/card.css';
@@ -10,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 /* import 'font-awesome/css/font-awesome.min.css'; */
 import { useBusca } from '../context/BuscaContext';
 import Cardlist from './Cardlist';
+import Pagination from './Pagination';
 
 function Resultados() {
 
@@ -40,23 +42,25 @@ function Resultados() {
 
         if(result.length < 1) return;
 
-        if(result.length == 1) {
+        if(result.data.length < 1) return;
 
-            if(capas.includes(result[0].codAtividade)) {
-                navigate(`/caderno-geral/${encodeURIComponent(result[0].codCaderno)}/${cadernoUf}`);
+        if(result.data.length == 1) {
+
+            if(capas.includes(result.data[0].codAtividade)) {
+                navigate(`/caderno-geral/${encodeURIComponent(result.data[0].codCaderno)}/${cadernoUf}`);
             } else {
-                navigate(`/caderno/${result[0].descAnuncio}?page=1&book=${result[0].codCaderno}&id=${result[0].codAnuncio}&index=${result[0].page}&caderno=${result[0].codCaderno}&estado=${cadernoUf}`);
+                navigate(`/caderno/${result.data[0].descAnuncio}?page=1&book=${result.data[0].codCaderno}&id=${result.data[0].codAnuncio}&index=${result.data[0].page}&caderno=${result.data[0].codCaderno}&estado=${cadernoUf}`);
             }
 
 
         }
 
-        if(capas.includes(result[0].codAtividade)) {
-            navigate(`/caderno-geral/${encodeURIComponent(result[0].codCaderno)}/${cadernoUf}`);
+        if(capas.includes(result.data[0].codAtividade)) {
+            navigate(`/caderno-geral/${encodeURIComponent(result.data[0].codCaderno)}/${cadernoUf}`);
         } 
 
 
-    }, [])
+    }, [result])
 
     var cidade = document.querySelector('#codUf3');
     return (
@@ -68,11 +72,13 @@ function Resultados() {
                     <h6>Foram encontrados {result.length} registros</h6>
                 </div>
                 <div className='row text-start mb-4'>
-                    {result.map((item) => (
+                    {result.data &&
+                    result.data.map((item) => (
                         <Cardlist anuncio={item} key={item.codAnuncio} caderno={cidade} codImg={item.descImagem} codCity={item.codCidade} />
                     ))}
                 </div>
             </div>
+            <Pagination totalPages={result.totalPaginas} paginaAtual={result.paginaAtual} totalItem={result.totalItem} table={"users"} />
         </div>
     );
 }

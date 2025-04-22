@@ -249,7 +249,7 @@ export const validarDimensaoImagem = (file, largura, altura) => {
   
       const img = new Image();
       img.onload = () => {
-        const isValida = img.width === largura && img.height === altura;
+        const isValida = img.width <= largura && img.height <= altura;
         URL.revokeObjectURL(img.src); // Limpeza
         resolve(isValida);
       };

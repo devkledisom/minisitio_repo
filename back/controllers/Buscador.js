@@ -13,6 +13,10 @@ const { Op } = Sequelize;
 
 module.exports = {
     busca: async (req, res) => {
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+        const offset = (paginaAtual - 1) * porPagina;
+
 
         const { uf, cidade, atividade, name, telefone, nu_documento, codigoCaderno } = req.body;
         console.table([name, atividade, telefone, nu_documento, uf, codigoCaderno]);
@@ -76,6 +80,12 @@ module.exports = {
         }
 
         const anuncios = await Anuncio.findAll({
+            order: [
+                //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                ['activate', 'ASC'],
+                ['createdAt', 'DESC'],
+                ['codDuplicado', 'ASC'],
+            ],
             where: {
                 [Op.and]: [
                     { codCaderno: codigoCaderno },
@@ -95,15 +105,60 @@ module.exports = {
                         ]
                     }
                 ]
-            }
+            },
+            limit: porPagina,
+            offset: offset
         });
 
-        console.log(anuncios)
+        console.log(req.query)
 
-        res.json(anuncios);
+        if(req.query.totalPages > 0) {
+            console.log("dasdafasdfsfasfdasfasfasdfasdfa")
+            return res.json({
+                success: true, data: anuncios,
+                paginaAtual: req.query.paginaAtual,
+                totalPaginas: req.query.totalPaginas,
+                totalItem: req.query.totalItens
+            });
+        } else {
+            const resultAnuncioCount = await Anuncio.count({
+                where: {
+                    [Op.and]: [
+                        { codCaderno: codigoCaderno },
+                        { codUf: uf },
+                        {
+                            [Op.or]: [
+                                ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
+                                { descAnuncio: { [Op.like]: `${atividade}%` } },
+                                { codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
+                                //{ descTelefone: atividade },
+                                //{ descCPFCNPJ: atividade },
+                                {
+                                    tags: {
+                                        [Op.like]: `%${atividade}%`
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                attributes: ['codAnuncio']
+            });
+    
+            const totalItens = resultAnuncioCount;
+            const totalPaginas = Math.ceil(totalItens / porPagina);
+    
+            res.json({
+                success: true, data: anuncios, paginaAtual: paginaAtual,
+                totalPaginas: totalPaginas,
+                totalItem: totalItens
+            });
+        }
+
+        
     },
     buscarCaderno: async (req, res) => {
-    
+
         const cadernos = await Caderno.findAll({
             order: [
                 ['isCapital', 'ASC'],
@@ -207,7 +262,6 @@ module.exports = {
         });
     },
     buscaAtividade: async (req, res) => {
-        await database.sync();
 
         const codAtividade = req.params.codAtividade;
 
@@ -300,11 +354,11 @@ module.exports = {
             }
         });
 
-        if(promocoes.length < 1) {
-            res.json({success: false, message: 'não existe promoção para esse caderno'}).status(404)
+        if (promocoes.length < 1) {
+            res.json({ success: false, message: 'não existe promoção para esse caderno' }).status(404)
         } else {
-            res.json({success: true, promocoes: promocoes}).status(200)
+            res.json({ success: true, promocoes: promocoes }).status(200)
         }
-        
+
     }
 }
