@@ -591,6 +591,7 @@ console.log('kledisom')
                 {/* {radioCheck != 1 && <ChooseFile codigoUser={codUser} />} */}
                 {
                   radioCheck != 1 && <ChooseFile codigoUser={props.codigoUser}
+                    origin={"descImagem"}
                     largura={"w-100 py-4"} preview={true}
                     patrocinador={props.numeroPatrocinador}
                     codImg={minisitio.descImagem}

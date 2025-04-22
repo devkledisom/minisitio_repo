@@ -42,7 +42,7 @@ function UploadImage(props) {
           alert("Formato inválido! Apenas PNG e JPEG são permitidos.");
           return;
         } else if (fileRejections[0].errors[0].code === "file-too-large") {
-          alert("Imagem atingiu o limite, por favor insira uma imagem de até 2MB");
+          alert("Imagem atingiu o limite, por favor insira uma imagem de até 1MB");
           return;
         }
         console.log('very', fileRejections[0].errors[0].code)
@@ -153,7 +153,7 @@ function UploadImage(props) {
     onDrop,
     accept: { "image/png": [], "image/jpeg": [] },
     /* accept: { "image/png": [], "image/jpeg": [], "image/webp": [] }, */
-    maxSize: 2 * 1024 * 1024,
+    maxSize: 1 * 1024 * 1024,
   });
 
   const limparInputImg = () => {
