@@ -31,11 +31,12 @@ module.exports = {
 
     },
     uploadPdf: async (req, res) => {
-        console.log(req.query.cod)
+        console.log(req.query.cod, req.savedFileName)
         if (req.file) {
             return res.json({
-                erro: false,
-                mensagem: "Upload realizado com sucesso!"
+                erro: true,
+                mensagem: "Upload realizado com sucesso!",
+                name: req.savedFileName
             });
         }
 

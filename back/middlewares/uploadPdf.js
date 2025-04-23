@@ -8,7 +8,11 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, `${file.originalname}`); // Nome do arquivo salvo
+        const fileName = `${uniqueSuffix}.pdf`;
+        cb(null, fileName); // Nome do arquivo salvo
+
+        // Armazenar em uma propriedade customizada se quiser usar depois
+        req.savedFileName = fileName;
     }
 });
 
@@ -22,7 +26,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 // Configurar o middleware multer
-module.exports = (multer({ 
+module.exports = (multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: { fileSize: 5 * 1024 * 1024 } // Limite de 5MB por arquivo
