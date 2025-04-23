@@ -118,7 +118,7 @@ module.exports = {
                     ['createdAt', 'DESC'],
                     ['codDuplicado', 'ASC'],
                 ],
-                attributes: ['codAnuncio', 'codAtividade', 'descAnuncio']
+                //attributes: ['codAnuncio', 'codAtividade', 'descAnuncio']
             });
     
             //console.log(req.query, anuncios)
@@ -153,7 +153,7 @@ module.exports = {
                             }
                         ]
                     },
-                    attributes: ['codAnuncio']
+                    //attributes: ['codAnuncio']
                 });
         
                 const totalItens = resultAnuncioCount;
@@ -196,7 +196,7 @@ module.exports = {
                     ['createdAt', 'DESC'],
                     ['codDuplicado', 'ASC'],
                 ],
-                attributes: ['codAnuncio', 'codAtividade', 'descAnuncio']
+                //attributes: ['codAnuncio', 'codAtividade', 'descAnuncio']
             });
     
             console.log(req.query, anuncios)
@@ -231,7 +231,7 @@ module.exports = {
                             }
                         ]
                     },
-                    attributes: ['codAnuncio']
+                    //attributes: ['codAnuncio']
                 });
         
                 const totalItens = resultAnuncioCount;
