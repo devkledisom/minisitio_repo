@@ -198,7 +198,6 @@ function Busca(props) {
             };
 
             const request = await fetch(`${masterPath.url}/buscar`, options).then((x) => x.json())
-            console.log(request)
             //setAnuncio(request)
             setResult(request);
             //console.log(request);
@@ -452,6 +451,8 @@ function Busca(props) {
                     <i class="fa fa-spinner fa-spin"></i>Carregando
                 </button>
             }
+
+
             <div className='container'>
                 <div className="row">
                     <div className='col-md-offset-1 col-md-12'>

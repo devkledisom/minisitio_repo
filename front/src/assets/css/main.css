@@ -6,7 +6,7 @@
     position: relative;
     height: auto;
     padding: 50px 10px;
-    z-index: 0;
+    z-index: 1;
     background: #ffcc29 url(../img/bg-home.jpg) no-repeat fixed;
 }
 

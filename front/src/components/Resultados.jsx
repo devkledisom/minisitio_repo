@@ -16,7 +16,9 @@ import Pagination from './Pagination';
 function Resultados() {
 
     const [anuncio, setAnuncio] = useState([]);
+    const [ qtdaResult, setQtdaResult] = useState(0);
     const { result, setResult } = useBusca([]);
+
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -26,8 +28,6 @@ function Resultados() {
         //console.log(result)
         let cadernoUf = sessionStorage.getItem("uf: ");
         let cadernoCidade = sessionStorage.getItem("caderno: ");
-
-        console.log(result)
 
         const capas = [
         "ADMINISTRAÇÃO REGIONAL / PREFEITURA",
@@ -43,6 +43,8 @@ function Resultados() {
         if(result.length < 1) return;
 
         if(result.data.length < 1) return;
+
+        setQtdaResult(result.totalItem);
 
         if(result.data.length == 1) {
 
@@ -63,13 +65,17 @@ function Resultados() {
     }, [result])
 
     var cidade = document.querySelector('#codUf3');
+
+    
+
+
     return (
         <div className="resultados">
             <div className="container p-5">
                 <div className='row text-start'>
 
                     <h4>Exibindo resultados para: {paramBusca}</h4>
-                    <h6>Foram encontrados {result.length} registros</h6>
+                    <h6>Foram encontrados {qtdaResult} registros</h6>
                 </div>
                 <div className='row text-start mb-4'>
                     {result.data &&
@@ -77,7 +83,10 @@ function Resultados() {
                         <Cardlist anuncio={item} key={item.codAnuncio} caderno={cidade} codImg={item.descImagem} codCity={item.codCidade} />
                     ))}
                 </div>
-                <Pagination totalPages={result.totalPaginas} paginaAtual={result.paginaAtual} totalItem={result.totalItem} table={"users"} />
+                {qtdaResult > 0 &&
+                    <Pagination totalPages={result.totalPaginas} paginaAtual={result.paginaAtual} totalItem={result.totalItem} table={"results"} />
+
+                }
             </div>
            
         </div>
