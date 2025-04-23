@@ -79,49 +79,95 @@ module.exports = {
 
         }
 
-        const anuncios = await Anuncio.findAll({
-            order: [
-                //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
-                ['activate', 'ASC'],
-                ['createdAt', 'DESC'],
-                ['codDuplicado', 'ASC'],
-            ],
+
+        const verificarAtividade = await Atividade.findOne({
             where: {
-                [Op.and]: [
-                    { codCaderno: codigoCaderno },
-                    { codUf: uf },
-                    {
-                        [Op.or]: [
-                            ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
-                            { descAnuncio: { [Op.like]: `${atividade}%` } },
-                            { codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
-                            //{ descTelefone: atividade },
-                            //{ descCPFCNPJ: atividade },
-                            {
-                                tags: {
-                                    [Op.like]: `%${atividade}%`
-                                }
-                            }
-                        ]
-                    }
-                ]
+                atividade: { [Op.like]: `${atividade}%` }
             },
-            limit: porPagina,
-            offset: offset
+            raw: true
         });
 
-        console.log(req.query)
 
-        if(req.query.totalPages > 0) {
-            console.log("dasdafasdfsfasfdasfasfasdfasdfa")
-            return res.json({
-                success: true, data: anuncios,
-                paginaAtual: req.query.paginaAtual,
-                totalPaginas: req.query.totalPaginas,
-                totalItem: req.query.totalItens
+        if(verificarAtividade) {
+            const anuncios = await Anuncio.findAll({
+                where: {
+                    [Op.and]: [
+                        { codCaderno: codigoCaderno },
+                        { codUf: uf },
+                        {
+                            [Op.or]: [
+                                ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
+                                //{ descAnuncio: { [Op.like]: `${atividade}%` } },
+                                { codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
+                                //{ descTelefone: atividade },
+                                //{ descCPFCNPJ: atividade },
+                                /* {
+                                    tags: {
+                                        [Op.like]: `%${atividade}%`
+                                    }
+                                } */
+                            ]
+                        }
+                    ]
+                },
+                limit: porPagina,
+                offset: offset,
+                order: [
+                    //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                    ['activate', 'ASC'],
+                    ['createdAt', 'DESC'],
+                    ['codDuplicado', 'ASC'],
+                ],
+                attributes: ['codAnuncio', 'codAtividade', 'descAnuncio']
             });
+    
+            //console.log(req.query, anuncios)
+    
+            if(req.query.totalPages > 0) {
+                console.log("dasdafasdfsfasfdasfasfasdfasdfa")
+                return res.json({
+                    success: true, data: anuncios,
+                    paginaAtual: req.query.paginaAtual,
+                    totalPaginas: req.query.totalPaginas,
+                    totalItem: req.query.totalItens
+                });
+            } else {
+               const resultAnuncioCount = await Anuncio.count({
+                    where: {
+                        [Op.and]: [
+                            { codCaderno: codigoCaderno },
+                            { codUf: uf },
+                            {
+                                [Op.or]: [
+                                    ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
+                                    //{ descAnuncio: { [Op.like]: `${atividade}%` } },
+                                    { codAtividade: { [Op.like]: `%${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
+                                    //{ descTelefone: atividade },
+                                    //{ descCPFCNPJ: atividade },
+                                   /*  {
+                                        tags: {
+                                            [Op.like]: `%${atividade}%`
+                                        }
+                                    } */
+                                ]
+                            }
+                        ]
+                    },
+                    attributes: ['codAnuncio']
+                });
+        
+                const totalItens = resultAnuncioCount;
+                const totalPaginas = Math.ceil(totalItens / porPagina); 
+        
+                res.json({
+                    success: true, data: anuncios, 
+                     paginaAtual: paginaAtual,
+                    totalPaginas: totalPaginas,
+                    totalItem: totalItens 
+                });
+            }
         } else {
-            const resultAnuncioCount = await Anuncio.count({
+            const anuncios = await Anuncio.findAll({
                 where: {
                     [Op.and]: [
                         { codCaderno: codigoCaderno },
@@ -130,30 +176,79 @@ module.exports = {
                             [Op.or]: [
                                 ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
                                 { descAnuncio: { [Op.like]: `${atividade}%` } },
-                                { codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
+                                //{ codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
                                 //{ descTelefone: atividade },
                                 //{ descCPFCNPJ: atividade },
                                 {
                                     tags: {
-                                        [Op.like]: `%${atividade}%`
+                                        [Op.like]: `${atividade}%`
                                     }
                                 }
                             ]
                         }
                     ]
                 },
-                attributes: ['codAnuncio']
+                limit: porPagina,
+                offset: offset,
+                order: [
+                    //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
+                    ['activate', 'ASC'],
+                    ['createdAt', 'DESC'],
+                    ['codDuplicado', 'ASC'],
+                ],
+                attributes: ['codAnuncio', 'codAtividade', 'descAnuncio']
             });
     
-            const totalItens = resultAnuncioCount;
-            const totalPaginas = Math.ceil(totalItens / porPagina);
+            console.log(req.query, anuncios)
     
-            res.json({
-                success: true, data: anuncios, paginaAtual: paginaAtual,
-                totalPaginas: totalPaginas,
-                totalItem: totalItens
-            });
+            if(req.query.totalPages > 0) {
+                console.log("dasdafasdfsfasfdasfasfasdfasdfa")
+                return res.json({
+                    success: true, data: anuncios,
+                    paginaAtual: req.query.paginaAtual,
+                    totalPaginas: req.query.totalPaginas,
+                    totalItem: req.query.totalItens
+                });
+            } else {
+                 const resultAnuncioCount = await Anuncio.count({
+                    where: {
+                        [Op.and]: [
+                            { codCaderno: codigoCaderno },
+                            { codUf: uf },
+                            {
+                                [Op.or]: [
+                                    ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
+                                    { descAnuncio: { [Op.like]: `${atividade}%` } },
+                                    //{ codAtividade: { [Op.like]: `%${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
+                                    //{ descTelefone: atividade },
+                                    //{ descCPFCNPJ: atividade },
+                                    {
+                                        tags: {
+                                            [Op.like]: `%${atividade}%`
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    attributes: ['codAnuncio']
+                });
+        
+                const totalItens = resultAnuncioCount;
+                const totalPaginas = Math.ceil(totalItens / porPagina); 
+        
+                res.json({
+                    success: true, data: anuncios, 
+                    paginaAtual: paginaAtual,
+                    totalPaginas: totalPaginas,
+                    totalItem: totalItens 
+                });
+            }
         }
+
+
+
+      
 
         
     },
