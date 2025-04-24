@@ -127,6 +127,7 @@ router.post('/api/admin/pin/create', auth, Admin.criarPin);
 router.put('/api/admin/pin/update', auth, Admin.atualizarPin);
 router.delete('/api/admin/pin/delete/:id', auth, Admin.deletarPin);
 router.get('/api/admin/pin/edit/:id', Admin.listarPinId);
+router.get('/api/portal/pin/', Admin.listarPinPortal);
 
 //ROTAS MODULO CALHAU
 router.get('/api/admin/calhau/read', Admin.listarCalhau);

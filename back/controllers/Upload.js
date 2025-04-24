@@ -2,6 +2,7 @@ const database = require('../config/db');
 const Users = require('../models/table_user_login');
 const Anuncio = require('../models/table_anuncio');
 const path = require('path');
+const fs = require('node:fs/promises');
 
 module.exports = {
     uploadImg: async (req, res) => {
@@ -31,7 +32,24 @@ module.exports = {
 
     },
     uploadPdf: async (req, res) => {
-        console.log(req.query.cod, req.savedFileName)
+        console.log(req.query.cod, req.savedFileName, req.query.id)
+
+        const caminho = path.join(__dirname, '../public/cartaoDigital/' + req.query.id);
+
+        apagarPdfAntigo(caminho)
+
+        async function apagarPdfAntigo(caminho) {
+            try {
+                await fs.unlink(caminho);
+            } catch (err) {
+                if (err.code === "ENOENT") {
+                    console.error(`Erro: Arquivo "${caminho}" não encontrado.`);
+                } else {
+                    console.error(`Erro ao apagar o arquivo "${caminho}":`, err);
+                }
+            }
+        }
+
         if (req.file) {
             return res.json({
                 erro: true,

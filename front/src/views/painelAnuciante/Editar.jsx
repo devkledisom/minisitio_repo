@@ -58,7 +58,7 @@ function Editar(props) {
   };
 
   useEffect(() => {
-console.log('kledisom')
+    console.log('kledisom')
     let codId = minisitio.hash;
     const formatoValido = /^\d{2}\.\d{4}\.\d{4}$/;
     //console.log(formatoValido.test(codId))
@@ -265,10 +265,10 @@ console.log('kledisom')
 
   const handleChange = (e) => {
 
-    if(e.target.name === 'promocaoData') {
+    if (e.target.name === 'promocaoData') {
       let dataValidade = e.target.value;
-      
-      if(calcularDiferencaDias(dataValidade) > 90) {
+
+      if (calcularDiferencaDias(dataValidade) > 90) {
         alert("A data de validade da promoção informada não pode ultrapassar um prazo de 90 dias! a data escolhida tem um prazo de " + calcularDiferencaDias(dataValidade));
         return;
       }
@@ -288,12 +288,12 @@ console.log('kledisom')
     handleChange(e);
     executarSelecao();
   };
-  
+
   function editIDP(e) {
     //aplicarCupom(e);
-/*     alert("dasd")
-    console.log("dsadas", e);
-    return; */
+    /*     alert("dasd")
+        console.log("dsadas", e);
+        return; */
 
     if (minisitio.codTipoAnuncio == 3 && descontoAtivado == false && e.target.value.length) {
       console.log(descontoAtivado, minisitio.codTipoAnuncio);
@@ -350,7 +350,7 @@ console.log('kledisom')
         .then((res) => {
 
           if (res.success) {
-            
+
             //setShowSpinner(false);
             alert("anuncio Atualizado!");
             if (descontoAtivado == false && minisitio.codTipoAnuncio == 3) {
@@ -371,19 +371,19 @@ console.log('kledisom')
   function calcularDiferencaDias(dataFutura) {
     // Converte a data futura para um objeto Date
     const dataFuturaDate = new Date(dataFutura);
-  
+
     // Obtém a data de hoje
     const hoje = new Date();
-  
+
     // Calcula a diferença em milissegundos
     const diferencaMs = dataFuturaDate.getTime() - hoje.getTime();
-  
+
     // Converte a diferença de milissegundos para dias
     const diferencaDias = Math.ceil(diferencaMs / (1000 * 60 * 60 * 24));
-  
+
     return diferencaDias;
   }
-  
+
 
   return (
     <div className="App">
@@ -691,7 +691,7 @@ console.log('kledisom')
 
               }
 
-              <p style={{fontSize: '12px'}}>*Atenção! escolha a imagem ou o link</p>
+              <p style={{ fontSize: '12px' }}>*Atenção! escolha a imagem ou o link</p>
               <div className="input-icon margin-top-10">
                 <i className="fa fa-link"></i>
                 <input
@@ -716,7 +716,7 @@ console.log('kledisom')
                   placeholder="Digite a validade"
                   value={minisitio.promocaoData}
                   onChange={handleSelectChange}
-                /> 
+                />
               </div>
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
@@ -787,7 +787,7 @@ console.log('kledisom')
                 data={setMinisitio} />
               }
               <div className="input-icon margin-top-10">
-               
+
                 <i className="fa fa-tag"></i>
                 <input
                   type="text"
@@ -809,8 +809,8 @@ console.log('kledisom')
                 msg={"Anexar imagem do certificado"}
                 minisitio={minisitio}
                 data={setMinisitio} />}
-                <div className="input-icon margin-top-10">
-                 <i className="fa fa-globe"></i>
+              <div className="input-icon margin-top-10">
+                <i className="fa fa-globe"></i>
                 <input
                   type="text"
                   name="certificado_link"
@@ -820,8 +820,9 @@ console.log('kledisom')
                   value={minisitio.certificado_link}
                   onChange={handleSelectChange}
                 />
-                </div>
+              </div>
             </div>}
+
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
               <h2>CashBack</h2>
             </div>}
@@ -829,22 +830,29 @@ console.log('kledisom')
               className="codigo-promocional webcard"
               style={{ display: "block" }}
             >
-              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser} />}
+              {radioCheck != 1 && <ChooseFile1 codigoUser={codUser}
+                origin={'cashback_logo'}
+                largura={"w-100 py-4"} preview={false}
+                patrocinador={4}
+                codImg={minisitio.cashback_logo}
+                miniPreview={false}
+                msg={"Anexar logo do cashback"}
+                minisitio={minisitio}
+                data={setMinisitio}
+              />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
                   type="text"
-                  name="descVideo1"
-                  id="descVideo1"
+                  name="cashback_link"
+                  id="cashback_link"
                   className="form-control"
                   placeholder="Digite o link da parceria"
-                  value={minisitio.descVideo1}
+                  value={minisitio.cashback_link == 0 ? "" : minisitio.cashback_link}
                   onChange={handleSelectChange}
                 />
               </div>
             </div>}
-
-
 
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
               <h2>Detalhes do Perfil Minisitio</h2>

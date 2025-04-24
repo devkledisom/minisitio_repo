@@ -13,7 +13,9 @@ import Spinner from '../../../components/Spinner';
 
 const Pin = () => {
 
-    const [paginasTotal, setPaginas] = useState();
+    const [paginasTotal, setPaginas] = useState(0);
+    const [itensTotal, setItensTotal] = useState(0);
+    const [paginaAtual, setPaginaAtual] = useState(0);
     const [selectId, setSelectId] = useState();
     const [pins, setPins] = useState([]);
     const [showSpinner, setShowSpinner] = useState(true);
@@ -34,6 +36,8 @@ const Pin = () => {
                 //setCidade(res.message.anuncios);
                 setPins(res.message.pins)
                 setPaginas(res.message.totalPaginas)
+                setItensTotal(res.message.totalItens)
+                setPaginaAtual(res.message.paginaAtual)
                 setShowSpinner(false);
                 //console.log(res.message);
             })
@@ -57,13 +61,14 @@ const Pin = () => {
         return;
     };
 
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
     function apagarUser() {
         fetch(`${masterPath.url}/admin/pin/delete/${selectId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
         })
             .then((x) => x.json())
@@ -122,10 +127,10 @@ const Pin = () => {
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
                             <button type="button" className="btn custom-button" onClick={() => navigator('/admin/pin/cadastro')}>Adicionar</button>
-                           <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/pin/editar?id=${selectId}`)}>Editar</button>
+                            <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/pin/editar?id=${selectId}`)}>Editar</button>
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarUser}>Apagar</button>
                         </div>
-                       {/*  <div className="span6 col-md-6">
+                        {/*  <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
                                 <input id="buscar" type="text" placeholder="Buscar" />
                                 <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
@@ -152,7 +157,7 @@ const Pin = () => {
                                             <tr key={item.id} id={item.id} onClick={selecaoLinha}>
                                                 <td>{item.codigo}</td>
                                                 <td>{item.validade}</td>
-                                             
+
                                             </tr>
 
                                         ))
@@ -162,11 +167,12 @@ const Pin = () => {
                             </table>
                         </div>
                     </div>
-                    <Pagination totalPages={paginasTotal} table={"pin"} />
-
+                    {/*  <Pagination totalPages={paginasTotal} table={"pin"} /> */}
+                    <Pagination totalPages={paginasTotal} paginaAtual={paginaAtual} totalItem={itensTotal} table={"desconto"} />
                 </article>
                 <p className='w-100 text-center'>© MINISITIO - {version.version}</p>
             </section>
+
             {/*     <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
                 <p className='w-100 text-center'>© MINISITIO</p>
             </footer> */}

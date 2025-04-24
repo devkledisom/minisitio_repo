@@ -37,7 +37,6 @@ const FormCadastro = () => {
                 console.log(res)
                 if(!res.success) return; 
                 setAtividade(res.data[0]);
-                console.log(res);
             })
 
     }, [page, param]);
@@ -53,6 +52,8 @@ const FormCadastro = () => {
 
         var validation = false;
         setShowSpinner(true);
+
+        const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
         document.querySelectorAll('[name="in"]').forEach((item) => {
             if (item.value == "") {
@@ -75,7 +76,7 @@ const FormCadastro = () => {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
             body: JSON.stringify(data)
         };

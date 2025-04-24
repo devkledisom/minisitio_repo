@@ -81,6 +81,18 @@ function UploadImage(props) {
         alert("Erro ao carregar imagem.");
       };
       img.src = URL.createObjectURL(file); */
+    } else if (props.origin == 'cashback_logo') {
+      const file = acceptedFiles[0];
+      if (!file) return;
+
+      validarDimensaoImagem(file, 150, 58)
+      .then((aproved) => {
+        if(aproved) {
+          enviarImg();
+        } else {
+          alert("A imagem deve ter exatamente 150x58 pixels.");
+        }
+      });
     } else {
       enviarImg();
     }

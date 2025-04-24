@@ -4623,7 +4623,6 @@ module.exports = {
     },
     criarAnuncio: async (req, res) => {
 
-
         await database.sync();
         const { codAnuncio,
             codUsuario,
@@ -4737,8 +4736,8 @@ module.exports = {
             "certificado_texto": "",
             "certificado_imagem": "",
             "link_comprar": "",
-            "cashback_logo": 0,
-            "cashback_link": 0,
+            "cashback_logo": "",
+            "cashback_link": "",
             "certificado_link": "",
             "cartao_digital": "",
             "descYouTube": descYouTube,
@@ -4988,8 +4987,8 @@ module.exports = {
             "certificado_imagem": certificado_imagem,
             "descYouTube": descYouTube,
             "link_comprar": link_comprar,
-            "cashback_logo": 0,
-            "cashback_link": 0,
+            "cashback_logo": cashback_logo,
+            "cashback_link": cashback_link,
             "certificado_link": certificado_link,
             "cartao_digital": cartao_digital,
             "descChavePix": descChavePix,
@@ -8029,7 +8028,8 @@ LIMIT 50000;
             success: true, message: {
                 pins: pins.rows, // Itens da página atual
                 paginaAtual: paginaAtual,
-                totalPaginas: totalPaginas
+                totalPaginas: totalPaginas,
+                totalItens: totalItens
             }
         })
 
@@ -8091,6 +8091,19 @@ LIMIT 50000;
 
 
         res.json({ success: true, data: pin });
+    },
+    listarPinPortal: async (req, res) => {
+
+
+        const pin = await Pin.findOne({order: [['createdAt', 'DESC']]});
+
+        // Verifica se o resultado está vazio
+        if (pin.length === 0) {
+            return res.status(404).json({ message: 'Pin não encontrado' });
+        }
+
+
+        res.json({ success: true, pin: pin });
     },
 
     //MODULO CALHAU
