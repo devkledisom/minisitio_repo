@@ -53,7 +53,7 @@ function UploadImage(props) {
     const formData = new FormData();
     formData.append('file', acceptedFiles[0]);
 
-    fetch(`${masterPath.url}/upload-pdf?cod=${props.codigoUser}&local=promocao`, {
+    fetch(`${masterPath.url}/upload-pdf?cod=${props.codigoUser}&local=promocao&id=${props.minisitio['cartao_digital']}`, {
       method: 'POST',
       body: formData
     })

@@ -39,6 +39,8 @@ const FormCadastro = () => {
         var validation = false;
         setShowSpinner(true);
 
+        const tokenAuth = sessionStorage.getItem('userTokenAccess');
+
         document.querySelectorAll('[name="in"]').forEach((item) => {
             if (item.value == "") {
                 item.style.border = "1px solid red";
@@ -60,7 +62,7 @@ const FormCadastro = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
             body: JSON.stringify(data)
         };

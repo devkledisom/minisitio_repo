@@ -30,8 +30,8 @@ import TemplateModalPromo from "../components/Modal/TemplateModalPromo";
 
 function FullWebCard(props) {
     const { result, setResult } = useBusca();
-    const [ resultLocal, setResultLocal ] = useState([]);
-    const [ showState, setShowState ] = useState(false);
+    const [resultLocal, setResultLocal] = useState([]);
+    const [showState, setShowState] = useState(false);
 
     //params
     const [searchParams] = useSearchParams();
@@ -48,16 +48,16 @@ function FullWebCard(props) {
             props.setCodUf(request[0].codUf);
             //setResult(request[0]);
             setResultLocal(request[0]);
-            
+
             //console.log(request[0])
 
-            if(promocaoAtiva === "ativa") {
-               // document.querySelector('.promoModal').click();
-               setShowState(true)
+            if (promocaoAtiva === "ativa") {
+                // document.querySelector('.promoModal').click();
+                setShowState(true)
 
-           /*      const modalElement = document.getElementById('myModal');
-                const modalInstance = new Modal(modalElement);
-                modalInstance.show(); */
+                /*      const modalElement = document.getElementById('myModal');
+                     const modalInstance = new Modal(modalElement);
+                     modalInstance.show(); */
 
             }
 
@@ -79,6 +79,20 @@ function FullWebCard(props) {
             return true;
         } else {
             return false;
+        }
+    };
+
+    function cashbackCondicoes(logo, link) {
+        if (!logo && !link) {
+            return "condicao1";
+        }
+
+        if (logo && link) {
+            return "condicao2";
+        }
+
+        if (!logo && link) {
+            return "condicao3";
         }
     };
 
@@ -140,7 +154,7 @@ function FullWebCard(props) {
                                             </a>
                                         )}
 
-                                       {/*  {(!resultLocal.certificado_link && resultLocal.certificado_imagem) && (
+                                        {/*  {(!resultLocal.certificado_link && resultLocal.certificado_imagem) && (
                                             <a href={`${masterPath.url}/files/2/${resultLocal.certificado_imagem}`} target="_blank" rel="noopener noreferrer">
                                                 <i className="link-cinza">
                                                     <img
@@ -198,7 +212,7 @@ function FullWebCard(props) {
                                     >Compre agora</a>
                                 }
                                 {resultLocal.link_comprar == "" &&
-                                    <a href="#" className="btn proximo link-cinza d-flex justify-content-center align-items-center w-50">Compre agora</a>
+                                    <a href="#" className="btn proximo link-cinza d-flex justify-content-center align-items-center w-50" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }}>Compre agora</a>
                                 }
 
                             </div>
@@ -220,7 +234,7 @@ function FullWebCard(props) {
                                                 <img src="../assets/img/link_promocao.png" className="promoModal" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="icone" width={60} />
                                             : null
                                     }
-  {/*    <img src="../assets/img/link_promocao.png" className="promoModal" data-bs-toggle="modal"
+                                    {/*    <img src="../assets/img/link_promocao.png" className="promoModal" data-bs-toggle="modal"
                                                     data-bs-target="#myModal" alt="icone" width={60} onClick={() => setShowState(true)} /> */}
                                 </i>
                             </div>
@@ -261,9 +275,30 @@ function FullWebCard(props) {
                             <h2 className='titulo-cinza'>
                                 CASHBACK
                             </h2>
-                            <i className='link-cinza'>
-                                <img src="../assets/img/teste/cashback.jpg" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="" width={60} />
-                            </i>
+
+                            {cashbackCondicoes(resultLocal.cashback_logo, resultLocal.cashback_link) === "condicao1" &&
+                                <i className='link-cinza'>
+                                    <img src="../assets/img/teste/cashback.jpg" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} className='my-1' alt="cashback" width={80} />
+                                </i>
+                            }
+
+                            {cashbackCondicoes(resultLocal.cashback_logo, resultLocal.cashback_link) === "condicao2" &&
+                                <a href={resultLocal.cashback_link} target="_blank" rel="noopener  noreferrer">
+                                    <i className='link-cinza'>
+                                        <img src={`${masterPath.url}/files/2/${resultLocal.cashback_logo}`} className='rounded my-1' alt="cashback" />
+                                    </i>
+                                </a>
+                                
+                            }
+
+                            {cashbackCondicoes(resultLocal.cashback_logo, resultLocal.cashback_link) === "condicao3" &&
+                                <a href={resultLocal.cashback_link} target="_blank" rel="noopener  noreferrer">
+                                    <i className='link-cinza'>
+                                        <img src="../assets/img/teste/cashback.jpg" className='my-1' alt="cashback" width={80} />
+                                    </i>
+                                </a>
+                            }
+
                         </div>
                         <div className='border-cinza mb-4'>
                             <h2 className='titulo-cinza'>
@@ -272,9 +307,9 @@ function FullWebCard(props) {
                             <a href={resultLocal.descParceiroLink !== "0" ? resultLocal.descParceiroLink : ""} target="_blank" data-toggle="tooltip" title="parceiro" rel="noopener  noreferrer">
                                 <i className='link-cinza'>
                                     {resultLocal.descParceiro != null ?
-                                    <img src={`${masterPath.url}/files/2/${resultLocal.descParceiro}`} width={150} height={58} className='rounded my-1' alt="promoção" /> : <img src="../assets/img/teste/aperto-de-mao.png" width={100} height={66} />  
+                                        <img src={`${masterPath.url}/files/2/${resultLocal.descParceiro}`} width={150} height={58} className='rounded my-1' alt="parceiro" /> : <img src="../assets/img/teste/aperto-de-mao.png" width={100} height={66} />
                                     }
-                                    
+
                                 </i>
                             </a>
                         </div>
