@@ -9,6 +9,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 const ExcelJS = require('exceljs');
 const masterPath = require('../config/config');
+const moment = require('moment');
 
 //models
 const database = require('../config/db');
@@ -658,6 +659,25 @@ module.exports = {
                      }
                  }) 
    */
+    },
+    listarCadernosPortal: async (req, res) => {
+        const anuncios = await Cadernos.findAll({
+            order: [
+                ['UF', 'ASC'], // Ordena pelo campo 'name' em ordem ascendente (alfabética)
+                [Sequelize.literal('isCapital ASC')],
+                ['nomeCaderno', 'ASC']
+
+            ],
+            limit: porPagina,
+            offset: offset,
+            raw: true
+        });
+
+        res.json({
+            success: true, message: {
+                anuncios: anuncios
+            }
+        })
     },
     countPerfis: async (req, res) => {
 
@@ -5461,6 +5481,8 @@ module.exports = {
         const cadernoParam = req.query.caderno;
         const totalConsulta = req.query.limit;
 
+        console.log(cadernoParam)
+
         console.time('exp');
         /* const resultAnuncio = await Anuncio.findAll({
             where: {
@@ -5565,6 +5587,10 @@ LIMIT 50000;
                     })
                 );
          */
+
+
+
+
         const ExcelJS = require('exceljs');
 
         async function createExcel() {
@@ -8102,8 +8128,17 @@ LIMIT 50000;
             return res.status(404).json({ message: 'Pin não encontrado' });
         }
 
+    let hoje = moment();
+    let validade = moment(pin.validade, "DD/MM/YYYY");
+    console.log(hoje.isBefore(validade), pin.validade)
 
-        res.json({ success: true, pin: pin });
+        if(hoje.isBefore(validade)) {
+            res.json({ success: true, pin: pin});
+        } else {
+            res.json({ success: false, message: "pin vencido" });
+        }
+
+        
     },
 
     //MODULO CALHAU

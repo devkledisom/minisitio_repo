@@ -253,11 +253,16 @@ module.exports = {
         
     },
     buscarCaderno: async (req, res) => {
+        const uf = req.query.uf;
+        console.log(uf)
 
         const cadernos = await Caderno.findAll({
+            where: {
+                "UF": uf
+            }, 
             order: [
                 ['isCapital', 'ASC'],
-                ['nomeCaderno', 'ASC'],
+                ['nomeCaderno', 'ASC']
             ],
         });
 
