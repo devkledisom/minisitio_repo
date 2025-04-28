@@ -53,6 +53,7 @@ const Espacos = () => {
     const param = getParam.get('page') ? getParam.get('page') : 1;
 
     const campoBusca = useRef(null);
+    const campoCaderno = useRef(null);
     const codOriginFather = useRef(null);
 
     const tokenAuth = sessionStorage.getItem('userTokenAccess');
@@ -102,12 +103,20 @@ const Espacos = () => {
                 setUfs(res);
             })
 
-        fetch(`${masterPath.url}/cadernos`)
+/*         fetch(`${masterPath.url}/cadernos`)
+            .then((x) => x.json())
+            .then((res) => {
+                setCaderno(res);
+            }) */
+    }, []);
+
+/*     useEffect(() => {
+        fetch(`${masterPath.url}/cadernos?uf=${cadernoSelecionado}`)
             .then((x) => x.json())
             .then((res) => {
                 setCaderno(res);
             })
-    }, []);
+    }, [cadernoSelecionado]); */
 
 
 
@@ -265,7 +274,6 @@ const Espacos = () => {
                 return "Tipo desconhecido";
         }
     };
-
     function exportExcell() {
         setShowSpinner(true);
 
@@ -316,7 +324,7 @@ Para 100000 linhas: 312500ms
 
 
 
-            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&caderno=${campoBusca.current.value}`, {
+            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&caderno=${campoCaderno.current.value}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -347,7 +355,63 @@ Para 100000 linhas: 312500ms
                     }
                 })
         } else {
-            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000`, {
+             // Valor máximo em milissegundos
+             const maxTime = 312500;
+
+             // Atualiza o progresso a cada 10 ms (ajuste conforme necessário)
+             const interval = 10;
+             let currentTime = 0;
+ 
+             // Função para calcular e exibir o percentual
+             const intervalId = setInterval(() => {
+                 currentTime += interval;
+ 
+                 // Calcula o percentual
+                 const percent = Math.min((currentTime / maxTime) * 100, 100); // Garante que não ultrapasse 100%
+ 
+                 console.log(`Progresso: ${percent.toFixed(2)}%`);
+                 setProgressExport(percent.toFixed(2));
+ 
+                 // Para quando alcançar o valor máximo
+                 if (currentTime >= maxTime) {
+                     clearInterval(intervalId);
+                     console.log("Requisição concluída.");
+                 }
+             }, interval);
+ 
+ 
+ 
+             fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&caderno=${campoCaderno.current.value}`, {
+                 method: "POST",
+                 headers: {
+                     "Content-Type": "application/json"
+                 },
+                 body: JSON.stringify(anuncios.message.anuncios)
+             })
+                 .then(x => x.blob())
+                 .then(res => {
+                     const url = window.URL.createObjectURL(res);
+                     const a = document.createElement("a");
+                     a.href = url;
+                     a.download = "planilha.xlsx"; // Define o nome do arquivo
+                     document.body.appendChild(a);
+                     a.click(); // Força o clique para baixar
+                     document.body.removeChild(a); // Remove o elemento depois do clique
+                     window.URL.revokeObjectURL(url); // Libera memória
+ 
+                     setShowSpinner(false);
+                     setProgressExport(0);
+                     clearInterval(intervalId);
+ 
+                     if (res.success) {
+                         //console.log(res);
+                         setShowSpinner(false);
+                         setProgressExport(0);
+                         clearInterval(intervalId);
+                         window.location.href = res.downloadUrl;
+                     }
+                 })
+            /* fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000&caderno=${campoCaderno.current.value}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -361,7 +425,7 @@ Para 100000 linhas: 312500ms
                         setShowSpinner(false);
                         window.location.href = res.downloadUrl;
                     }
-                })
+                }) */
         }
 
     };
@@ -411,11 +475,24 @@ Para 100000 linhas: 312500ms
 
     };
 
+    function selecaoEstado(e) {
+        setEstadoSelecionado(e.target.value);
+        limparFiltro(e.target.value);
+
+        fetch(`${masterPath.url}/cadernos?uf=${e.target.value}`)
+        .then((x) => x.json())
+        .then((res) => {
+            setCaderno(res);
+        })
+    }
+
     function limparFiltro(param) {
         if(param === 'todos') {
             setCadernoSelecionado("todos")
         }
     }
+
+
 
     return (
         <div className="users app-espacos">
@@ -445,13 +522,13 @@ Para 100000 linhas: 312500ms
                             <div className='d-flex flex-column'>
                                 <div className="pull-right d-flex align-items-center">
 
-                                    <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => { setEstadoSelecionado(e.target.value); limparFiltro(e.target.value) }}>
+                                    <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => selecaoEstado(e)}>
                                         <option value="todos">UF</option>
                                         {uf.map(item => (
                                             <option value={item.sigla_uf}>{item.sigla_uf}</option>
                                         ))}
                                     </select>
-                                    <select name="" id="caderno" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)}>
+                                    <select name="" id="caderno" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)} ref={campoCaderno}>
                                         <option value="todos">CADERNO</option>
 
                                         {caderno.map(item => (

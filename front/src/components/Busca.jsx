@@ -37,6 +37,8 @@ function Busca(props) {
         setCadernoUf(teste.id_uf);
         setCodUf(codigoUf)
 
+        buscarListaEstados(e.target.value);
+
     };
     const definirCaderno = (e) => {
         let codigoCidade = document.querySelectorAll('#codUf3')[0].value;
@@ -65,6 +67,11 @@ function Busca(props) {
             setCodUf(props.uf);
             setCodCaderno(props.caderno);
             verificarPromocao();
+
+            buscarListaEstados(props.uf);
+
+            console.log(props.uf, props.caderno)
+
         } else {
           /*   setCodUf(ufSalva);
             setCodCaderno(cadSalvo); */
@@ -107,10 +114,11 @@ function Busca(props) {
                 }
             })
 
-        fetch(`${masterPath.url}/cadernos`)
+       /*  fetch(`${masterPath.url}/cadernos?uf=${ufSelected}`)
             .then((x) => x.json())
             .then((res) => {
                 setCaderno(res);
+                console.log(res)
                 if (location.pathname == '/') {
                     ///getUserLocation();
                 }
@@ -118,10 +126,22 @@ function Busca(props) {
                     //document.querySelectorAll('#codUf3')[0].value = cadSalvo;
                     
                 }
-            })
+            }) */
 
             verificarPromocao()
     }, []);
+
+    function buscarListaEstados(uf) {
+        fetch(`${masterPath.url}/cadernos?uf=${uf}`)
+        .then((x) => x.json())
+        .then((res) => {
+            
+            setCaderno(res);
+            if (location.pathname == '/') {
+                ///getUserLocation();
+            }
+        })
+    }
     
 
     function verificarPromocao() {

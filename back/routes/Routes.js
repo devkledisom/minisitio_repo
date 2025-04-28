@@ -65,6 +65,7 @@ router.get('/api/admin/usuario/buscar/:id', Users.buscarUsuarioId);
 router.post('/api/admin/usuario/export', auth, Admin.exportUser);
 
 router.get('/api/admin/cadernos', Admin.listarCadernos);
+router.get('/api/portal/cadernos', Admin.listarCadernosPortal);
 router.post('/api/admin/cadernos/count/perfis', Admin.countPerfis);
 router.get('/api/admin/cadernos/buscar/', Admin.buscarRegistroCaderno);
 router.post('/api/admin/cadernos/create', auth, Admin.criarCaderno);

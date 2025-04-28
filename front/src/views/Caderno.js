@@ -208,14 +208,14 @@ function Caderno() {
 
   useEffect(() => {
 
-    fetch(`${masterPath.url}/cadernos`)
+    /* fetch(`${masterPath.url}/cadernos`)
       .then((x) => x.json())
       .then((res) => {
 
         let nome = res.find((item) => item.nomeCaderno == caderno)
         setCadernos(nome.nomeCaderno);
         setUfs(nome.UF);
-      });
+      }); */
     /* fetch(`${masterPath.url}/ufs`)
       .then((x) => x.json())
       .then((res) => {
