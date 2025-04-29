@@ -88,11 +88,11 @@ const Users = () => {
                 setUfs(res);
             })
 
-        fetch(`${masterPath.url}/cadernos`)
+   /*      fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
             .then((res) => {
                 setCaderno(res);
-            })
+            }) */
     }, []);
 
 
@@ -329,6 +329,15 @@ const Users = () => {
 
     };
 
+    function changeUf(e) {
+        fetch(`${masterPath.url}/cadernos?uf=${e.target.value}`)
+        .then((x) => x.json())
+        .then((res) => {
+            setCaderno(res);
+        })
+        setEstadoSelecionado(e.target.value)
+    }
+
     return (
         <div className="users app-users">
             <header style={style} className='w-100'>
@@ -359,7 +368,7 @@ const Users = () => {
                         <div className="span6 col-md-6 d-flex flex-column align-items-end">
                             <div className='d-flex flex-column'>
                                 <div className="pull-right d-flex justify-content-center align-items-center">
-                                    <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
+                                    <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => changeUf(e)}>
                                         <option value="todos">UF</option>
                                         {uf.map(item => (
                                             <option value={item.sigla_uf}>{item.sigla_uf}</option>
