@@ -208,6 +208,29 @@ router.get('/api/pagamento/create/:id', WebHook.criarPagamento);
 //PORTAL
 router.get('/api/read/promocao/:caderno/:uf', Buscador.buscarPromocoes);
 
+//PORTAL COMPARTILHAMENTO
+router.get('/api/portal/share/:id', async (req, res) => {
+    const html = `
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8">
+      <title>kledisom</title>
+      <meta property="og:title" content="kledisom" />
+      <meta property="og:image" content="/teste.jpg" />
+      <meta property="og:type" content="website" />
+      <meta name="twitter:card" content="summary_large_image" />
+    </head>
+    <body>
+      <p>Redirecionando para o conteúdo...</p>
+    </body>
+    </html>
+  `;
+
+  res.send(html);
+});
+
+
 module.exports = router;
 
 
