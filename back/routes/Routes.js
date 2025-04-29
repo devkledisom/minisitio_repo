@@ -224,6 +224,9 @@ router.get('/api/portal/share/:id', async (req, res) => {
     </head>
     <body>
       <p>Redirecionando para o conteúdo...</p>
+      <script>
+        window.location.href = "https://minisitio.com.br/perfil/19444590"
+      </script>
     </body>
     </html>
   `;
