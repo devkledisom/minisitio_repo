@@ -105,6 +105,13 @@ function Editar(props) {
         localStorage.setItem("imgname5", res[0].certificado_logo);
         localStorage.setItem("imgname6", res[0].certificado_imagem);
 
+        fetch(`${masterPath.url}/cadernos?uf=${res[0].codUf}`)
+          .then((x) => x.json())
+          .then((res) => {
+            setCaderno(res);
+          })
+        setUf(res[0].codUf)
+
       }).catch((err) => {
         console.log(err)
       })
@@ -391,7 +398,7 @@ function Editar(props) {
       .then((res) => {
         setCaderno(res);
       })
-      setUf(e.target.value)
+    setUf(e.target.value)
   }
 
   return (
