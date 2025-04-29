@@ -322,9 +322,9 @@ Para 100000 linhas: 312500ms
                 }
             }, interval);
 
+            const campoPesquisa = document.getElementById('buscar').value;
 
-
-            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&caderno=${campoCaderno.current.value}`, {
+            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&uf=${estadoSelecionado}&caderno=${campoCaderno.current.value}&require=${searchOptioncheck}&search=${campoPesquisa}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -381,7 +381,7 @@ Para 100000 linhas: 312500ms
  
  
  
-             fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&caderno=${campoCaderno.current.value}`, {
+             fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&uf=${estadoSelecionado}&caderno=${campoCaderno.current.value}&require=${searchOptioncheck}`, {
                  method: "POST",
                  headers: {
                      "Content-Type": "application/json"

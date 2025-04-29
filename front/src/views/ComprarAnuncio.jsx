@@ -73,15 +73,23 @@ function ComprarAnuncio({ isAdmin }) {
   const executarSelecao = (e) => {
     let codigoUf = e.target.value;
     setUf(codigoUf);
+
+    fetch(`${masterPath.url}/cadernos?uf=${codigoUf}`)
+    .then((x) => x.json())
+    .then((res) => {
+      setCaderno(res);
+      //console.log(res)
+    });
+
   };
 
   useEffect(() => {
-    fetch(`${masterPath.url}/cadernos`)
+   /*  fetch(`${masterPath.url}/cadernos?uf=${uf}`)
       .then((x) => x.json())
       .then((res) => {
         setCaderno(res);
         //console.log(res)
-      });
+      }); */
     fetch(`${masterPath.url}/ufs`)
       .then((x) => x.json())
       .then((res) => {

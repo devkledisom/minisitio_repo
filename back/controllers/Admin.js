@@ -5042,16 +5042,16 @@ module.exports = {
                     caderno: codCaderno
                 });
             }
-/*             if (linkPromo != '' && promocaoData != '') {
-                const criarPromocao = await Promocao.create({
-                    codAnuncio: idAnuncio,
-                    banner: logoPromocao,
-                    link_externo: linkPromo,
-                    data_validade: promocaoData,
-                    uf: codUf,
-                    caderno: codCaderno
-                });
-            } */
+            /*             if (linkPromo != '' && promocaoData != '') {
+                            const criarPromocao = await Promocao.create({
+                                codAnuncio: idAnuncio,
+                                banner: logoPromocao,
+                                link_externo: linkPromo,
+                                data_validade: promocaoData,
+                                uf: codUf,
+                                caderno: codCaderno
+                            });
+                        } */
 
         }
 
@@ -5478,10 +5478,104 @@ module.exports = {
 
     },
     export4excell: async (req, res) => {
+        const ufParam = req.query.uf;
         const cadernoParam = req.query.caderno;
         const totalConsulta = req.query.limit;
+        const nomeFiltro = req.query.require;
+        const pesquisaValue = req.query.search;
+        var definirPesquisa;
 
-        console.log(cadernoParam)
+        var query = `SELECT 
+        a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
+        a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
+        a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo,
+        u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
+    FROM anuncio AS a 
+    LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
+    WHERE a.codCaderno = :caderno
+    LIMIT 50000;
+    `;
+
+
+        if (nomeFiltro === "codAtividade") {
+            query = `SELECT 
+                a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
+                a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
+                a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo, a.page,
+                u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
+            FROM anuncio AS a 
+            LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
+            WHERE a.codAtividade = :itemSearch AND a.codCaderno = :caderno
+            LIMIT 50000;
+            `
+            definirPesquisa = pesquisaValue;
+        } else if (nomeFiltro === "codAnuncio") {
+            query = `SELECT 
+                a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
+                a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
+                a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo, a.page,
+                u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
+            FROM anuncio AS a 
+            LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
+            WHERE a.codAnuncio = :itemSearch AND a.codCaderno = :caderno
+            LIMIT 50000;
+            `
+            definirPesquisa = pesquisaValue;
+        } else if (nomeFiltro === "descAnuncio") {
+            query = `SELECT 
+                a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
+                a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
+                a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo, a.page,
+                u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
+            FROM anuncio AS a 
+            LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
+            WHERE a.descAnuncio = :itemSearch AND a.codCaderno = :caderno
+            LIMIT 50000;
+            `
+            definirPesquisa = pesquisaValue;
+
+        } else if (nomeFiltro === "codUf") {
+            query = `SELECT 
+                a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
+                a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
+                a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo, a.page,
+                u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
+            FROM anuncio AS a 
+            LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
+            WHERE a.codUf = :itemSearch
+            LIMIT 50000;
+            `
+            definirPesquisa = ufParam;
+
+        } else if (nomeFiltro === "descCPFCNPJ") {
+            query = `SELECT 
+                a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
+                a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
+                a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo, a.page,
+                u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
+            FROM anuncio AS a 
+            LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
+            WHERE a.descCPFCNPJ = :itemSearch AND a.codCaderno = :caderno
+            LIMIT 50000;
+            `
+            definirPesquisa = pesquisaValue;
+
+        } else if (nomeFiltro === "codDesconto") {
+            query = `SELECT 
+                a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
+                a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
+                a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo, a.page,
+                u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
+            FROM anuncio AS a 
+            LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
+            WHERE a.codDesconto = :itemSearch AND a.codCaderno = :caderno
+            LIMIT 50000;
+            `
+            definirPesquisa = pesquisaValue;
+        }
+
+
+        //console.log(cadernoParam, nomeFiltro, pesquisaValue)
 
         console.time('exp');
         /* const resultAnuncio = await Anuncio.findAll({
@@ -5516,25 +5610,25 @@ module.exports = {
             WHERE codCaderno = :caderno
             LIMIT 50000;
         `; */
-        const query = `SELECT 
-    a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
-    a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
-    a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo,
-    u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
-FROM anuncio AS a 
-LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
-WHERE a.codCaderno = :caderno
-LIMIT 50000;
-`;
+        /*         const query = `SELECT 
+            a.codAnuncio, a.codOrigem, a.codDuplicado, a.descCPFCNPJ, a.descAnuncio, 
+            a.codTipoAnuncio, a.codCaderno, a.codUf, a.activate, a.descPromocao, 
+            a.createdAt, a.dueDate, a.codDesconto, a.codAtividade, a.periodo,
+            u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
+        FROM anuncio AS a 
+        LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
+        WHERE a.codCaderno = :caderno
+        LIMIT 50000;
+        `; */
         //IGNORE INDEX (idx_anuncio_codCaderno_otimizado, idx_anuncio_codCaderno)
 
 
 
         const resultAnuncio = await database.query(query, {
-            replacements: { caderno: cadernoParam },
+            replacements: { itemSearch: definirPesquisa, caderno: cadernoParam },
             type: Sequelize.QueryTypes.SELECT
         });
-
+        console.log(resultAnuncio.length)
         console.timeEnd('exp');
 
         /*         await Promise.all(
@@ -5623,6 +5717,7 @@ LIMIT 50000;
                 { header: 'CONTATO', key: 'contatoUser', width: 30 },
                 { header: 'LINK_PERFIL', key: 'linkPerfil', width: 30 },
                 { header: 'codAtividade', key: 'atividade', width: 30 },
+                { header: 'page', key: 'pagina', width: 30 },
             ];
 
 
@@ -5660,7 +5755,8 @@ LIMIT 50000;
                     emailUser: item.descEmail,
                     contatoUser: item.descTelefone,
                     linkPerfil: `${masterPath.domain}/local/${encodeURIComponent(item.descAnuncio)}?id=${item.codAnuncio}`,
-                    atividade: item.codAtividade
+                    atividade: item.codAtividade,
+                    pagina: item.page
                 })
             })
 
@@ -8121,24 +8217,24 @@ LIMIT 50000;
     listarPinPortal: async (req, res) => {
 
 
-        const pin = await Pin.findOne({order: [['createdAt', 'DESC']]});
+        const pin = await Pin.findOne({ order: [['createdAt', 'DESC']] });
 
         // Verifica se o resultado está vazio
         if (pin.length === 0) {
             return res.status(404).json({ message: 'Pin não encontrado' });
         }
 
-    let hoje = moment();
-    let validade = moment(pin.validade, "DD/MM/YYYY");
-    console.log(hoje.isBefore(validade), pin.validade)
+        let hoje = moment();
+        let validade = moment(pin.validade, "DD/MM/YYYY");
+        console.log(hoje.isBefore(validade), pin.validade)
 
-        if(hoje.isBefore(validade)) {
-            res.json({ success: true, pin: pin});
+        if (hoje.isBefore(validade)) {
+            res.json({ success: true, pin: pin });
         } else {
             res.json({ success: false, message: "pin vencido" });
         }
 
-        
+
     },
 
     //MODULO CALHAU
