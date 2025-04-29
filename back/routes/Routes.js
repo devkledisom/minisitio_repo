@@ -218,6 +218,7 @@ router.get('/api/portal/share/:id', async (req, res) => {
       <title>kledisom</title>
       <meta property="og:title" content="kledisom" />
       <meta property="og:image" content="http://automaplay.com.br/api/files/og/teste.jpg" />
+       <meta property="og:url" content="https://minisitio.com.br/perfil/19444590" />
       <meta property="og:type" content="website" />
       <meta name="twitter:card" content="summary_large_image" />
     </head>
