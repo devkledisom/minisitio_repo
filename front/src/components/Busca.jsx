@@ -394,6 +394,8 @@ function Busca(props) {
                 
                         localStorage.setItem("uf: ", component.short_name);
                         sessionStorage.setItem("uf: ", component.short_name);
+
+                        buscarListaEstados(component.short_name);
                     }
                 
                     if (component.types.includes("administrative_area_level_4")) {

@@ -109,12 +109,12 @@ function Editar(props) {
         console.log(err)
       })
 
-    fetch(`${masterPath.url}/cadernos`)
-      .then((x) => x.json())
-      .then((res) => {
-        setCaderno(res);
-        //console.log(res)
-      });
+    /*     fetch(`${masterPath.url}/cadernos`)
+          .then((x) => x.json())
+          .then((res) => {
+            setCaderno(res);
+            //console.log(res)
+          }); */
     fetch(`${masterPath.url}/ufs`)
       .then((x) => x.json())
       .then((res) => {
@@ -287,6 +287,7 @@ function Editar(props) {
     changePreview(e);
     handleChange(e);
     executarSelecao();
+    changeUf(e);
   };
 
   function editIDP(e) {
@@ -384,6 +385,14 @@ function Editar(props) {
     return diferencaDias;
   }
 
+  function changeUf(e) {
+    fetch(`${masterPath.url}/cadernos?uf=${e.target.value}`)
+      .then((x) => x.json())
+      .then((res) => {
+        setCaderno(res);
+      })
+      setUf(e.target.value)
+  }
 
   return (
     <div className="App">
