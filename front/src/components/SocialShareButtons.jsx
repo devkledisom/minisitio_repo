@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { masterPath } from '../config/config';
 import '../assets/css/SocialShareButtons.css';
 
@@ -27,6 +27,17 @@ const socialMap = {
 }
 
 function SocialShareButtons({ url }) {
+
+  const [copied, setCopied] = useState(false);
+  const shareLink = url;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(shareLink).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   return (
     <ul className='social-share'>
       <li style={{fontSize: "14px"}}><strong>Compartilhar em:</strong></li>
@@ -39,6 +50,29 @@ function SocialShareButtons({ url }) {
           </li>
         ))
       }
+       <li>
+      <button 
+        onClick={handleCopy}
+        style={{
+          backgroundColor: 'none',
+          background: 'none',
+          border: 'none',
+        }}
+       /*  style={{
+          padding: '10px 20px',
+          backgroundColor: '#4CAF50',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer'
+        }} */
+      >
+        <img src="../assets/img/icons/icons8-copiar.gif" alt="copiar"/>
+        {/* 📋 Copiar link */}
+        Copiar
+      </button>
+      {copied && <span style={{ marginLeft: '10px', color: 'green' }}>Link copiado!</span>}
+      </li>
     </ul>
   );
 }
