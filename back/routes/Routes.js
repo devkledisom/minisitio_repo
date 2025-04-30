@@ -242,7 +242,7 @@ router.get('/api/portal/share/:id', async (req, res) => {
     </html>
   `;
 
-  res.send(html);
+  res.send(html).status(200);
 });
 
 
