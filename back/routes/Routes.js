@@ -210,17 +210,28 @@ router.get('/api/read/promocao/:caderno/:uf', Buscador.buscarPromocoes);
 
 //PORTAL COMPARTILHAMENTO
 router.get('/api/portal/share/:id', async (req, res) => {
+    const url = req.headers.host;
+
+    const anuncio = await Anuncio.findOne({
+        where: {codAnuncio: req.params.id},
+        raw: true,
+        attributes: ['descImagem']
+    });
+    console.log(anuncio)
+
     const html = `
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
       <meta charset="UTF-8">
-      <title>kledisom</title>
-      <meta property="og:title" content="kledisom" />
-      <meta property="og:image" content="http://automaplay.com.br/api/files/og/teste.jpg" />
+      <title>MINISITIO</title>
+      <meta property="og:title" content="MINISITIO" />
+       <meta property="og:description" content="&#128274; Link Seguro" />
+      <meta property="og:image" content="https://${url}/api/files/${anuncio.descImagem}" />
        <meta property="og:url" content="https://minisitio.com.br/perfil/19444590" />
       <meta property="og:type" content="website" />
       <meta name="twitter:card" content="summary_large_image" />
+      <meta http-equiv="refresh" content="0; url="https://minisitio.com.br/perfil/19444590" />
     </head>
     <body>
       <p>Redirecionando para o conteúdo...</p>
