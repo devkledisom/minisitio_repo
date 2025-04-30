@@ -228,10 +228,10 @@ router.get('/api/portal/share/:id', async (req, res) => {
       <meta property="og:title" content="MINISITIO" />
        <meta property="og:description" content="&#128274; Link Seguro" />
       <meta property="og:image" content="https://${url}/api/files/${anuncio.descImagem}" />
-       <meta property="og:url" content="https://automaplay.com.br/api/portal/share/19444590" />
+       <meta property="og:url" content="https://minisitio.com.br/api/portal/share/${req.params.id}" />
       <meta property="og:type" content="website" />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta http-equiv="refresh" content="0; url="https://automaplay.com.br/api/portal/share/19444590" />
+      <meta http-equiv="refresh" content="0; url="https://minisitio.com.br/api/portal/share/${req.params.id}" />
     </head>
     <body>
       <p>Redirecionando para o conteúdo...</p>
