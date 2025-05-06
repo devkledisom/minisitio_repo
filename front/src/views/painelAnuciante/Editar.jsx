@@ -294,7 +294,7 @@ function Editar(props) {
     changePreview(e);
     handleChange(e);
     executarSelecao();
-    changeUf(e);
+    /* changeUf(e); */
   };
 
   function editIDP(e) {
@@ -865,7 +865,8 @@ function Editar(props) {
                   className="form-control"
                   placeholder="Digite o link da parceria"
                   value={minisitio.cashback_link == 0 ? "" : minisitio.cashback_link}
-                  onChange={handleSelectChange}
+                  /* onChange={(e) => handleChange(e)} */
+                   onChange={handleSelectChange}
                 />
               </div>
             </div>}
