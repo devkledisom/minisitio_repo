@@ -61,7 +61,7 @@ router.post('/api/admin/usuario/update/:id', auth, Users.update);
 router.put('/api/admin/usuario/status/:id', auth, Users.updateStatus);
 router.get('/api/admin/usuario/edit/:id', Users.buscarUsuario);
 router.delete('/api/admin/usuario/delete/:id', auth, Users.delete);
-router.get('/api/admin/usuario/buscar/:id', Users.buscarUsuarioId);
+router.get('/api/admin/usuario/buscar/:id', Users.consultarUsuarioPortal);
 router.post('/api/admin/usuario/export', auth, Admin.exportUser);
 
 router.get('/api/admin/cadernos', Admin.listarCadernos);
@@ -227,7 +227,7 @@ router.get('/api/portal/share/:id', async (req, res) => {
       <title>MINISITIO</title>
       <meta property="og:title" content="MINISITIO" />
        <meta property="og:description" content="&#128274; Link Seguro" />
-      <meta property="og:image" content="https://${url}/api/files/${anuncio.descImagem}" />
+      <meta property="og:image" content="https://minisitio.com.br/api/files/${anuncio.descImagem}" />
        <meta property="og:url" content="https://minisitio.com.br/api/portal/share/${req.params.id}" />
       <meta property="og:type" content="website" />
       <meta name="twitter:card" content="summary_large_image" />
