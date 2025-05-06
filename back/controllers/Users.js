@@ -10,6 +10,7 @@ const Globals = require('../models/table_globals');
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 const { novoUsuario } = require('../functions/sendMailer');
+const Usuario = require('../models/table_usuarios');
 
 
 module.exports = {
@@ -618,6 +619,24 @@ module.exports = {
         }
 
 
+    },
+    consultarUsuarioPortal: async (req, res) => {
+        const usuario = await Usuario.findOne({
+            where: {
+                descCPFCNPJ: req.params.id
+            },
+            attributes: ['codUsuario', 'descCPFCNPJ'],
+            raw: true
+        })
+        console.log(usuario)
+
+        if(usuario) {
+            res.json({success: true, usuario: usuario}).status(200)
+        } else {
+            res.json({success: false}).status(404)
+        }
+        
+       
     },
     buscarUsuarioIdold: async (req, res) => {
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1

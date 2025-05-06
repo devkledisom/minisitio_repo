@@ -28,14 +28,14 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
     fetch(`${masterPath.url}/admin/usuario/buscar/${pegarElemento('#descCPFCNPJ').replace(/[.\-\/]/g, '')}`)
         .then((x) => x.json())
         .then((res) => {
-            if (res.success) {
+         if (res.success) {
                 setShowSpinner(true);
 
                 cadastrarAnuncio(res.usuarios[0].codUsuario)
             } else {
                 setShowSpinner(true);
                 criarUsuario();
-            };
+            }; 
 
         })
 
