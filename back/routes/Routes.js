@@ -61,7 +61,8 @@ router.post('/api/admin/usuario/update/:id', auth, Users.update);
 router.put('/api/admin/usuario/status/:id', auth, Users.updateStatus);
 router.get('/api/admin/usuario/edit/:id', Users.buscarUsuario);
 router.delete('/api/admin/usuario/delete/:id', auth, Users.delete);
-router.get('/api/admin/usuario/buscar/:id', Users.consultarUsuarioPortal);
+router.get('/api/admin/usuario/buscar/:id', Users.buscarUsuarioId);
+router.get('/api/portal/usuario/buscar/:id', Users.consultarUsuarioPortal);
 router.post('/api/admin/usuario/export', auth, Admin.exportUser);
 
 router.get('/api/admin/cadernos', Admin.listarCadernos);

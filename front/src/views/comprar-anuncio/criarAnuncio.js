@@ -25,7 +25,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         return;
     };
 
-    fetch(`${masterPath.url}/admin/usuario/buscar/${pegarElemento('#descCPFCNPJ').replace(/[.\-\/]/g, '')}`)
+    fetch(`${masterPath.url}/portal/usuario/buscar/${pegarElemento('#descCPFCNPJ').replace(/[.\-\/]/g, '')}`)
         .then((x) => x.json())
         .then((res) => {
          if (res.success) {
