@@ -97,7 +97,7 @@ const FormEdit = () => {
             "tags": "atacado,som,musica",
             "periodo": null
         }
-        
+
     );
 
 
@@ -124,11 +124,18 @@ const FormEdit = () => {
                 setDescricaoId(res[0].descricao);
                 setDescontoId(res[0].desconto);
                 setHash(res[0].hash);
+                setUf(res[0].codUf);
+
+                fetch(`${masterPath.url}/cadernos?uf=${res[0].codUf}`)
+                    .then((x) => x.json())
+                    .then((res) => {
+                        setCaderno(res);
+                    })
 
             }).catch((err) => {
                 console.log(err)
             })
-       fetch(`${masterPath.url}/admin/usuario/buscar/all`)
+        fetch(`${masterPath.url}/admin/usuario/buscar/all`)
             .then((x) => x.json())
             .then((res) => {
                 setUsuarios(res.usuarios);
@@ -136,13 +143,13 @@ const FormEdit = () => {
             }).catch((err) => {
                 console.log(err);
                 setShowSpinner(false);
-            }) 
-
-        fetch(`${masterPath.url}/cadernos`)
-            .then((x) => x.json())
-            .then((res) => {
-                setCaderno(res)
             })
+
+        /*     fetch(`${masterPath.url}/cadernos`)
+                .then((x) => x.json())
+                .then((res) => {
+                    setCaderno(res)
+                }) */
         fetch(`${masterPath.url}/ufs`)
             .then((x) => x.json())
             .then((res) => {
@@ -251,12 +258,12 @@ const FormEdit = () => {
         setIds({
             ...ids,
             [name]: value,
-            
+
         });
 
-       /*  console.log("resressedsfasdfsf----------->", name, value)
-        console.log(ids.descCPFCNPJ.replace(/\D/g, '').length)
-        console.log(ids.descCPFCNPJ.replace(/\D/g, '')) */
+        /*  console.log("resressedsfasdfsf----------->", name, value)
+         console.log(ids.descCPFCNPJ.replace(/\D/g, '').length)
+         console.log(ids.descCPFCNPJ.replace(/\D/g, '')) */
 
     };
 
@@ -271,7 +278,18 @@ const FormEdit = () => {
     const mask = unmaskedValue.length == 14
         ? '99.999.999/9999-99' // CNPJ
         : '999.999.999-99';    // CPF
-    
+
+
+    function changeUf(e) {
+        fetch(`${masterPath.url}/cadernos?uf=${e.target.value}`)
+            .then((x) => x.json())
+            .then((res) => {
+                setCaderno(res);
+            })
+        //setEstadoSelecionado(e.target.value)
+        setUf(e.target.value);
+        console.log(e.target.value)
+    }
 
     return (
 
@@ -308,16 +326,16 @@ const FormEdit = () => {
                                 onChange={handleChange}
                             /> */}
 
-                            {console.log(ids)}
+                        
                             <select
                                 name="codAtividade"
                                 id="codAtividade"
                                 className="form-control h-25 w-50"
-                                onChange={handleChange} 
+                                onChange={handleChange}
                                 value={ids.codAtividade}
                                 required
                             >
-                                
+
                                 {/* <option value="">Selecione a atividade principal</option> */}
                                 {atividades &&
 
@@ -347,7 +365,7 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="codUf" className="w-50 px-1">UF:</label>
-                            <select name="codUf" id="coduf" onChange={handleSelectChange} className="w-50 py-1" value={ids.codUf || ''} >
+                            <select name="codUf" id="coduf" onChange={(e) => changeUf(e)} className="w-50 py-1" value={ufSelected} >
                                 <option value="" selected="selected">- Selecione um estado -</option>
                                 {
                                     uf.map((uf) => (
@@ -362,7 +380,7 @@ const FormEdit = () => {
                                 {/*  <option value="" selected="selected">- Selecione uma cidade -</option> */}
                                 {
                                     caderno.map((cidades) => (
-                                        cidades.UF == ids.codUf &&
+                                        cidades.UF == ufSelected &&
                                         <option value={cidades.nomeCaderno}>{cidades.nomeCaderno}</option>
                                     ))
                                     /*   caderno.map((cidades) => (
@@ -388,19 +406,19 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label className="w-50 px-1">Imagem:
-                            <Tooltip text={"Insira o cartão de visita que irá aparecer no card do anúncio"}><span className="help-span">?</span></Tooltip>
+                                <Tooltip text={"Insira o cartão de visita que irá aparecer no card do anúncio"}><span className="help-span">?</span></Tooltip>
 
                             </label>
-                            <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descImagem} preview={false} patrocinador={handleChange} miniPreview={true}/>
+                            <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descImagem} preview={false} patrocinador={handleChange} miniPreview={true} />
                         </div>
 
-                        
+
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label className="w-50 px-1">Promoção:
                             </label>
                             <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descPromocao} preview={false} />
                         </div>
-                        
+
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label className="w-50 px-1">Validade da promoção de desconto:</label>
@@ -409,7 +427,7 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label className="w-50 px-1">Imagem da Parceria:
-                            <Tooltip text={"Insira a logotipo do parceiro"}><span className="help-span">?</span></Tooltip>
+                                <Tooltip text={"Insira a logotipo do parceiro"}><span className="help-span">?</span></Tooltip>
                             </label>
                             <ChooseFile codigoUser={param} largura={"w-50"} codImg={ids.descPromocao} preview={false} />
                         </div>
@@ -456,13 +474,13 @@ const FormEdit = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="descTelefone" className="w-50 px-1">Telefone:</label>
                             <InputMask mask={'+55\\ (99) 9999-9999'}
-                            className="form-control h-25 w-50"
-                            id="nu_telefone"
-                            name="descTelefone"
-                            value={ids.descTelefone}
-                            onChange={handleChange}
+                                className="form-control h-25 w-50"
+                                id="nu_telefone"
+                                name="descTelefone"
+                                value={ids.descTelefone}
+                                onChange={handleChange}
                             ></InputMask>
-                    {/*         <input type="text"
+                            {/*         <input type="text"
                                 className="form-control h-25 w-50"
                                 id="nu_telefone"
                                 name="descTelefone"
@@ -470,20 +488,20 @@ const FormEdit = () => {
                                 onChange={handleChange}
                                 
                             /> */}
-                            
-                          
+
+
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="descCelular" className="w-50 px-1">Celular:</label>
                             <InputMask mask={'+55\\ (99) 9999-9999'}
-                           className="form-control h-25 w-50"
-                           id="nu_celular"
-                           name="descCelular"
-                           value={ids.descCelular}
-                           onChange={handleChange}
+                                className="form-control h-25 w-50"
+                                id="nu_celular"
+                                name="descCelular"
+                                value={ids.descCelular}
+                                onChange={handleChange}
                             ></InputMask>
-                       {/*      <input type="text"
+                            {/*      <input type="text"
                                 className="form-control h-25 w-50"
                                 id="nu_celular"
                                 name="descCelular"
@@ -600,12 +618,12 @@ const FormEdit = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="descWhatsApp" className="w-50 px-1">WhatsApp:</label>
                             <InputMask mask={'+55\\ (99) 9999-9999'}
-                            className="form-control h-25 w-50"
-                            id="nu_whatszap"
-                            name="descWhatsApp"
-                            value={ids.descWhatsApp}
-                            onChange={handleChange}></InputMask>
-               {/*              <input type="text"
+                                className="form-control h-25 w-50"
+                                id="nu_whatszap"
+                                name="descWhatsApp"
+                                value={ids.descWhatsApp}
+                                onChange={handleChange}></InputMask>
+                            {/*              <input type="text"
                                 className="form-control h-25 w-50"
                                 id="nu_whatszap"
                                 name="descWhatsApp"
@@ -649,7 +667,7 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="descCPFCNPJ" className="w-50 px-1">CPF/CNPJ:</label>
-                        {/*     <InputMask
+                            {/*     <InputMask
                             className="form-control h-25 w-50"
                             id="nu_documento"
                             name="descCPFCNPJ"
@@ -662,7 +680,7 @@ const FormEdit = () => {
                                 name="descCPFCNPJ"
                                 value={ids.descCPFCNPJ}
                                 onChange={handleChange}
-                            /> 
+                            />
                         </div>
 
                         <div className="form-group d-flex flex-column align-items-center py-3">

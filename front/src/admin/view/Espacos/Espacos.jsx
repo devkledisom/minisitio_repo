@@ -653,7 +653,7 @@ Para 100000 linhas: 312500ms
                                                     <td>{item.codAtividade}</td>
                                                     <td>
                                                         <a
-                                                            href={`/perfil/${item.descAnuncio}?id=${item.codAnuncio}`}
+                                                            href={`/perfil/${item.codAnuncio}`}
                                                             className='text-decoration-none'
                                                             target="_blank"
                                                             rel="noopener noreferrer"
