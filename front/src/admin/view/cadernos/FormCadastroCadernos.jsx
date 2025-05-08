@@ -42,11 +42,11 @@ const FormCadastro = () => {
                 console.log(usuarios);
             })
 
-        fetch(`${masterPath.url}/cadernos`)
+  /*       fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
             .then((res) => {
                 setCaderno(res)
-            })
+            }) */
         fetch(`${masterPath.url}/ufs`)
             .then((x) => x.json())
             .then((res) => {
@@ -155,6 +155,16 @@ const FormCadastro = () => {
         })
     });
 
+        function changeUf(e) {
+            fetch(`${masterPath.url}/cadernos?uf=${e.target.value}`)
+                .then((x) => x.json())
+                .then((res) => {
+                    console.log(res)
+                    setCaderno(res);
+                })
+            setUf(e.target.value);
+        }
+
     return (
         <div className="users">
             <header style={style} className='w-100'>
@@ -170,7 +180,7 @@ const FormCadastro = () => {
                     <form action="/action_page.php">
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="coduf" className="w-50 px-1">UF:</label>
-                            <select name="coduf" id="coduf" onChange={executarSelecao} className="w-50 py-1">
+                            <select name="coduf" id="coduf" onChange={(e) => changeUf(e)} className="w-50 py-1">
                                 <option value="" selected="selected">- Selecione um estado -</option>
                                 {
                                     uf.map((uf) => (

@@ -61,10 +61,10 @@
 }
 
 .social-share .pulse-effect {
-    animation: pulse 1s infinite alternate; /* 1 segundo de duração, repete infinitamente, alterna a direção */
+    animation: pulse-social-share 1s infinite alternate; 
   }
   
-  @keyframes pulse {
+  @keyframes pulse-social-share {
     0% {
       transform: scale(1);
       opacity: 1;

@@ -36,18 +36,26 @@ const FormCadastro = () => {
                 setUf(res.codUf);
                 console.log(res);
                 setShowSpinner(false);
-            })
 
+                    fetch(`${masterPath.url}/cadernos?uf=${res.codUf}`)
+                            .then((x) => x.json())
+                            .then((res) => {
+                                console.log(res)
+                                setCaderno(res);
+                            })
+            })
+/* 
         fetch(`${masterPath.url}/cadernos`)
             .then((x) => x.json())
             .then((res) => {
                 setCaderno(res)
-            })
+            }) */
         fetch(`${masterPath.url}/ufs`)
             .then((x) => x.json())
             .then((res) => {
                 setUfs(res);
             })
+            
     }, [page, param]);
 
     const style = {
@@ -234,7 +242,16 @@ const FormCadastro = () => {
     };
 
 
-
+    function changeUf(e) {
+        fetch(`${masterPath.url}/cadernos?uf=${e.target.value}`)
+            .then((x) => x.json())
+            .then((res) => {
+                setCaderno(res);
+            })
+        //setEstadoSelecionado(e.target.value)
+        setUf(e.target.value);
+        console.log(e.target.value)
+    }
 
     return (
         <div className="users">
@@ -344,7 +361,7 @@ const FormCadastro = () => {
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">UF:</label>
-                            <select name="uf" id="coduf" className="w-50 py-1" value={usuarios.codUf} onChange={handleChange}>
+                            <select name="uf" id="coduf" className="w-50 py-1" value={ufSelected} onChange={(e) => changeUf(e)}>
                                 <option value="" selected="selected">
                                     - Selecione um estado -
                                 </option>

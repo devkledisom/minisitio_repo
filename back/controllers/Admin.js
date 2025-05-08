@@ -5754,7 +5754,11 @@ module.exports = {
                     senhaUser: item.senha,
                     emailUser: item.descEmail,
                     contatoUser: item.descTelefone,
-                    linkPerfil: `${masterPath.domain}/local/${encodeURIComponent(item.descAnuncio)}?id=${item.codAnuncio}`,
+                    //linkPerfil: `${masterPath.domain}/perfil/${item.codAnuncio}`,
+                    linkPerfil: {
+                        text: `${masterPath.domain}/perfil/${item.codAnuncio}`,
+                        hyperlink: `${masterPath.domain}/perfil/${item.codAnuncio}`
+                    },
                     atividade: item.codAtividade,
                     pagina: item.page
                 })
