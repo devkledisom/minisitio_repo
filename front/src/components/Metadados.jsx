@@ -105,6 +105,33 @@ function Metadados(props) {
                         {props.data.descChavePix}
                         </h4>
                     </div>
+                    <div className="col-md-12 link-cinza">
+                        {console.log(props.data.descAndroid)}
+                        {(props.data.descAndroid != "0" && props.data.descAndroid != "") &&
+                        <a href={props.data.descAndroid !== "0" ? props.data.descAndroid : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
+                             <img src="../assets/img/icons/android.png" width={200} style={{ marginLeft: "-10px" }} />
+                        </a>
+                        }
+                        {(props.data.descAndroid == "0" || props.data.descAndroid == "") &&
+                        <a href={props.data.descAndroid !== "0" ? props.data.descAndroid : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
+                             <img src="../assets/img/icons/android.png" width={200} style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)", marginLeft: "-10px" }} alt='android'/>
+                        </a>
+                        }
+                    </div>
+                    <div className="col-md-12 link-cinza">
+                        {console.log(props.data.descApple)}
+                        {(props.data.descApple != "0" && props.data.descApple != "") &&
+                        <a href={props.data.descApple !== "0" ? props.data.descApple : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
+                             <img src="../assets/img/icons/ios.png" width={180} height={60}/>
+                        </a>
+                        }
+                        {(props.data.descApple == "0" || props.data.descApple == "") &&
+                        <a href={props.data.descApple !== "0" ? props.data.descApple : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
+                             <img src="../assets/img/icons/ios.png" width={180} height={60} style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt='android'/>
+                        </a>
+                        }
+                    </div>
+
                     {/* <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/aperto-de-mao.png" />
                         <h4>
