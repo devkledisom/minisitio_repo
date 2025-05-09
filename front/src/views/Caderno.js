@@ -1114,7 +1114,7 @@ function Caderno() {
         titulo.style.backgroundColor = "#555";
         titulo.className = "card-calhau";
         titulo.style.color = "#FFFFFF";
-        titulo.innerText = "Minisitio - 2025dasdasdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"//getFraseAleatoria();
+        titulo.innerText = "Minisitio - 2025"//getFraseAleatoria();
 
         b.insertAdjacentElement("beforeend", titulo);
 
