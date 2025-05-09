@@ -25,8 +25,8 @@ import { QrcodeCadernoContext } from '../context/QrcodeCadernoContext';
 
 function Caderno() {
 
-   const { theme, toggleTheme } = useContext(QrcodeCadernoContext);
-   console.log("kledisom", theme)
+  const { theme, toggleTheme } = useContext(QrcodeCadernoContext);
+  console.log("kledisom", theme)
 
   const [nomeAtividade, setNomeAtividade] = useState([]);
   const [minisitio, setMinisitio] = useState([]);
@@ -677,10 +677,10 @@ function Caderno() {
     buscarId();
 
     fetch(`${masterPath.url}/admin/calhau/read`)
-    .then((x) => x.json())
-    .then((res) => {
-      setFrasesNegociosOnline(res.message.frases)
-    })
+      .then((x) => x.json())
+      .then((res) => {
+        setFrasesNegociosOnline(res.message.frases)
+      })
   }, [])
 
 
@@ -1044,7 +1044,7 @@ function Caderno() {
   }
 
   function calhau() {
-    
+
     document.querySelectorAll('.card-calhau').forEach(item => item.remove())
     let a = document.getElementById('col1')
     let b = document.getElementById('col2')
@@ -1054,32 +1054,79 @@ function Caderno() {
     if (a.clientHeight < b.clientHeight) {
       let tamanho = b.clientHeight - a.clientHeight;
 
-      if(tamanho < 150) {
+
+      if(tamanho < 40) return; 
+
+      if (tamanho >= 40 && tamanho <= 150) {
+
+       /*  const div = document.createElement("div"); // Cria um elemento <h1>
+        const titulo = document.createElement("div"); // Cria um elemento <h1>
+        titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
+        titulo.style.display = "block";
+        titulo.style.height = (tamanho - 8) + "px";
+        titulo.style.backgroundColor = "#555";
+        titulo.style.textOverflow = "ellipsis";
+        titulo.style.overflow = "hidden";
+        titulo.style.whiteSpace = "nowrap";
+        titulo.className = "card-calhau";
+        titulo.style.fontSize = "20px";
+        titulo.style.color = "#FFFFFF";
+        titulo.style.padding = "5px";
+        titulo.innerText = getFraseAleatoria()//"Minisitio - 2025dasssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+
+        div.appendChild(titulo) */
+
+        const titulo = document.createElement("h2"); // Cria um elemento <h1>
+        titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
+        titulo.style.height = (tamanho - 8) + "px";
+        titulo.style.backgroundColor = "#555";
+        titulo.className = "card-calhau";
+        titulo.style.color = "#FFFFFF";
+        titulo.innerText = "Minisitio - 2025"//getFraseAleatoria();
+
+        a.insertAdjacentElement("beforeend", titulo);
+
         return;
-      }
+      } 
 
       const titulo = document.createElement("h2"); // Cria um elemento <h1>
       titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
-      titulo.style.height = tamanho + "px";
+      titulo.style.height = (tamanho - 8) + "px";
       titulo.style.backgroundColor = "#555";
       titulo.className = "card-calhau";
       titulo.style.color = "#FFFFFF";
       titulo.innerText = getFraseAleatoria();
 
-      
+
 
       a.insertAdjacentElement("beforeend", titulo);
 
     } else if (b.clientHeight < a.clientHeight) {
-      let tamanho = a.clientHeight - b.clientHeight
+      let tamanho = (a.clientHeight - b.clientHeight);
 
-      if(tamanho < 150) {
+      if(tamanho < 40) return; 
+
+      if (tamanho >= 40 && tamanho <= 150) {
+
+        const titulo = document.createElement("h2"); // Cria um elemento <h1>
+        titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
+        titulo.style.height = (tamanho - 8) + "px";
+        titulo.style.backgroundColor = "#555";
+        titulo.className = "card-calhau";
+        titulo.style.color = "#FFFFFF";
+        titulo.innerText = "Minisitio - 2025dasdasdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"//getFraseAleatoria();
+
+        b.insertAdjacentElement("beforeend", titulo);
+
         return;
-      }
+      } 
+
+
+      console.log(a.clientHeight, b.clientHeight, tamanho)
 
       const titulo = document.createElement("h2"); // Cria um elemento <h1>
       titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
-      titulo.style.height = tamanho + "px";
+      titulo.style.height = (tamanho - 8) + "px";
       titulo.style.backgroundColor = "#555";
       titulo.className = "card-calhau";
       titulo.style.color = "#FFFFFF";
@@ -1090,50 +1137,33 @@ function Caderno() {
   }
 
   function getFraseAleatoria() {
-   /*  const frasesNegociosOnline = [
-        {
-            id: 1,
-            texto: "Negócios online transformam ideias em oportunidades, quebram barreiras geográficas e funcionam 24/7 — o sucesso está na inovação e na constância."
-        },
-        {
-            id: 2,
-            texto: "O digital não é mais o futuro dos negócios, é o presente — adapte-se ou fique para trás."
-        },
-        {
-            id: 3,
-            texto: "No mundo online, quem entrega valor e constrói autoridade conquista clientes fiéis e crescimento contínuo."
-        },
-        {
-            id: 4,
-            texto: "A internet nivela o jogo: grandes resultados vêm para aqueles que sabem como conectar, engajar e vender."
-        }
-    ]; */
 
-    if(frasesNegociosOnline.length < 1) return;
+    if (frasesNegociosOnline.length < 1) return;
 
     const indiceAleatorio = Math.floor(Math.random() * frasesNegociosOnline.length);
     return frasesNegociosOnline[indiceAleatorio].frase;
-}
+  }
 
 
 
-useEffect(() => {
-  const verifyCalhau = setTimeout(() => {
+  useEffect(() => {
+    const verifyCalhau = setTimeout(() => {
 
-    if(!document.getElementById('col1')) {
-      clearInterval(verifyCalhau);
-      return;
-    }
+      if (!document.getElementById('col1')) {
+        clearInterval(verifyCalhau);
+        return;
+      }
 
-    let colum1 = document.getElementById('col1').childNodes.length;
-    let colum2 = document.getElementById('col2').childNodes.length;
-    if(colum1 > 0 && colum2 > 0) {
-      calhau();
-    }
+      let colum1 = document.getElementById('col1').childNodes.length;
+      let colum2 = document.getElementById('col2').childNodes.length;
+      if (colum1 > 0 && colum2 > 0) {
+        console.log("dasda")
+        calhau();
+      }
 
-   
-  }, 1000);
-});
+
+    }, 1000);
+  });
 
 
 
@@ -1143,7 +1173,7 @@ useEffect(() => {
 
       <header>
         <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} />
-      {/*   <Mosaico logoTop={true} borda="none" /> */}
+        {/*   <Mosaico logoTop={true} borda="none" /> */}
       </header>
       <main>
 
@@ -1154,8 +1184,8 @@ useEffect(() => {
         }
 
         <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
-        <h1 id="title-caderno" className='py-2'>Caderno {cadernos} - {ufs}</h1>
-        <h2 className='py-4 info-title'>Existem {minisitio.totalPaginas} páginas no Caderno {cadernos} - {ufs}. Você está vendo a página {minisitio.paginaAtual}.</h2>
+        <h1 id="title-caderno" className='py-2'>Caderno {caderno} - {estado}</h1>
+        <h2 className='py-4 info-title'>Existem {minisitio.totalPaginas} páginas no Caderno {caderno} - {estado}. Você está vendo a página {minisitio.paginaAtual}.</h2>
         {/*         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}        <div className="container">
@@ -1186,7 +1216,7 @@ useEffect(() => {
                   {
                     //minisitio.anuncios
                     base1.map((anuncio, i) => {
-        
+
                       if (anuncio.title) {
                         return <h2 className='bg-yellow py-2'>
                           {anuncio.title}

@@ -74,7 +74,7 @@ function MiniWebCard(props) {
                     <i class="fa fa-spinner fa-spin"></i>Carregando
                 </button>
             }
-            <div className='container cartao my-2 p-0' key={props.key}>
+            <div className='container cartao p-0' key={props.key}>
                 {parceiros && isValidPatrocinio(parceiros) && (
                         (isValid(props.ids.descImagem) ||
                         isValid(props.ids.descImagem2) ||
