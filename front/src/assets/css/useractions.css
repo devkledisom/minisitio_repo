@@ -194,10 +194,10 @@
     }
 
     .cart-digital-modal > a {
-        font-size: 10px;
+        /* font-size: 10px; */
     }
 
     .cart-digital-modal > a > img {
-        width: 40px !important;
+        /* width: 40px !important; */
     }
 }

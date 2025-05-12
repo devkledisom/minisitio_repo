@@ -11,6 +11,7 @@ import ShareButton from "./ShareButton";
 function UserActions(props) {
     const [docState, setDocState] = useState(props.doc);
     const [master, setMaster] = useState(null);
+    const [suportWebShare, setSuportWebShare] = useState(false);
 
     useEffect(() => {
         setDocState(props.doc);
@@ -30,6 +31,11 @@ function UserActions(props) {
             }).catch((err) => {
                 console.log(err)
             })
+
+        if (navigator.share) {
+            // Suportado
+            setSuportWebShare(true)
+        } 
 
     })
 
@@ -83,6 +89,94 @@ function UserActions(props) {
         });
     }
 
+    const handleCopy = () => {
+        navigator.clipboard.writeText(props.urlShare).then(() => {
+            Swal.fire({
+                toast: true,
+                position: "top-end",
+                icon: "success",
+                title: "Link copiado!",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            /*  setCopied(true);
+             setTimeout(() => setCopied(false), 2000); */
+        });
+    };
+
+    function openShareModalPerfil(e) {
+        //const link = `${masterPath.url}/files/3/${encodeURIComponent(props.data.cartao_digital)}`;
+        e.preventDefault();
+        const styles = {
+            display: "flex",
+            flexDirection: "column"
+        }
+
+        const link = props.urlShare;
+        Swal.fire({
+            title: 'Compartilhe Seu Minisitio',
+            html: `
+                      <div style="" class="cart-digital-modal py-3">
+                          <a href="https://api.whatsapp.com/send?text=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                              <img src="../assets/img/icon-share/share_whatsapp.svg" width="80" alt="whatsapp" />    
+                              Compartilhar no WhatsApp
+                          </a>
+                          <a href="https://www.facebook.com/sharer/sharer.php?u=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                              <img src="../assets/img/icon-share/share_facebook.svg" width="80" alt="facebook" />
+                              Compartilhar no Facebook
+                          </a>
+                          <a href="https://twitter.com/intent/tweet?url=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                              <img src="../assets/img/icon-share/share_x.svg" width="80" alt="x" />    
+                              Compartilhar no Twitter
+                          </a>
+                          <a href="https://www.linkedin.com/shareArticle?url=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                              <img src="../assets/img/icon-share/linkedin.png" width="80" alt="linkedin" style="border-radius: 100%;" />    
+                              Compartilhar no LinkedIn
+                          </a>
+                          <div class="mb-2 d-flex flex-column align-items-center" style="gap: 6px;">
+                             <button
+                                id="copyBtn"
+                                style="border-radius: 100%; padding: 10px"
+                                >
+                                <img src="../assets/img/icons/icons8-copiar.gif" alt="copiar" width="60" />
+              
+                               </button>
+                                Copiar
+                          </div>
+                         
+                      </div>
+                  `,
+            width: "50%",
+            showCloseButton: true,
+            showConfirmButton: false,
+            didOpen: () => {
+                document.getElementById('copyBtn')?.addEventListener('click', handleCopy);
+            }
+        });
+    }
+
+
+    const handleShare = async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Compartilhe seu Minisitio',
+                    text: 'Mostre a todos o seu perfil digital',
+                    url: props.urlShare,
+                });
+                //alert('Conteúdo compartilhado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao compartilhar:', error);
+            }
+        } /* else {
+            alert('A API de compartilhamento não é suportada neste dispositivo.');
+            navigator.clipboard.writeText({
+                title: 'Cartão Digital',
+                text: 'Descrição do conteúdo para compartilhar.',
+                url: `${masterPath.url}/files/3/${props.name}`,
+            });
+        } */
+    };
 
 
     return (
@@ -96,11 +190,23 @@ function UserActions(props) {
                     <img src="/assets/img/logo.png" />
                     Renovar
                 </a>
+                {suportWebShare &&
+                         <a href="#" class="btn btn-default margin-bottom-10" onClick={(e) => handleShare(e)}>
+                    <img src="/assets/img/logo.png" />
+                    Compartilhar
+                </a>
+                }
+                {!suportWebShare &&
+                         <a href="#" class="btn btn-default margin-bottom-10" onClick={(e) => openShareModalPerfil(e)}>
+                    <img src="/assets/img/logo.png" />
+                    Compartilhar
+                </a>
+                }
                 <a href={`/qrcode?id=${props.id}`} class="btn btn-default margin-bottom-10" target="_blank">
                     <img src="/assets/img/logo.png" />
                     QR CODE
                 </a>
-            {/*     <a href={`/qrcode?image=${props.path}&id=${props.id}`} class="btn btn-default margin-bottom-10" target="_blank">
+                {/*     <a href={`/qrcode?image=${props.path}&id=${props.id}`} class="btn btn-default margin-bottom-10" target="_blank">
                     <img src="/assets/img/logo.png" />
                     QR CODE
                 </a> */}
@@ -121,7 +227,7 @@ function UserActions(props) {
                         </button>
                         <ul class="dropdown-menu lista-cart" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href={`${masterPath.url}/files/3/${props.data.cartao_digital}`} target="_blank" rel="noopener noreferrer">Visualizar</a></li>
-                           {/*  <li><ShareButton showBtn={false} url={`${masterPath.url}/files/3/`} name={encodeURIComponent(props.data.cartao_digital)} /></li> */}
+                            {/*  <li><ShareButton showBtn={false} url={`${masterPath.url}/files/3/`} name={encodeURIComponent(props.data.cartao_digital)} /></li> */}
                             <li><button class="dropdown-item" onClick={openShareModal}>Compartilhar</button></li>
                         </ul>
                     </div>

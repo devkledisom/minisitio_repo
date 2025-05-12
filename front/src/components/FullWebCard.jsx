@@ -330,9 +330,9 @@ function FullWebCard(props) {
                 <div className="row">
                     {/*  <Socialmidia /> */}
                     {/* <SocialShareButtons url={fullUrl} /> */}
-                    <SocialShareButtons url={`${masterPath.url}/portal/share/${codAnuncio}`} />
+                    {/* <SocialShareButtons url={`${masterPath.url}/portal/share/${codAnuncio}`} /> */}
                 </div>
-                <UserActions path={nomeAnuncio} id={codAnuncio} doc={resultLocal.descCPFCNPJ} url={fullUrl} data={resultLocal} />
+                <UserActions path={nomeAnuncio} id={codAnuncio} doc={resultLocal.descCPFCNPJ} url={fullUrl} urlShare={`${masterPath.url}/portal/share/${codAnuncio}`} data={resultLocal} />
             </div>
         </div>
     );
