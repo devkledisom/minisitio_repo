@@ -61,7 +61,7 @@ function SocialShareButtons({ url }) {
     Swal.fire({
       title: 'Compartilhe Seu Minisitio',
       html: `
-                  <div style="display: flex; flex-direction: row; align-items: flex-start; justify-content: center; gap: 30px;" class="cart-digital-modal py-3">
+                  <div style="" class="cart-digital-modal py-3">
                       <a href="https://api.whatsapp.com/send?text=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
                           <img src="../assets/img/icon-share/share_whatsapp.svg" width="80" alt="whatsapp" />    
                           Compartilhar no WhatsApp
@@ -88,6 +88,7 @@ function SocialShareButtons({ url }) {
                            </button>
                             Copiar
                       </div>
+                     
                   </div>
               `,
       width: "50%",
@@ -139,6 +140,8 @@ function SocialShareButtons({ url }) {
           <img src="../assets/img/icons/icons8-compartilhar-48 (1).png" alt="" width={50} /> 
           
         </button>
+        
+
         {/* <span>compartilhar</span> */}
         
       </li>
