@@ -29,9 +29,10 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         .then((x) => x.json())
         .then((res) => {
          if (res.success) {
+            console.log(res)
                 setShowSpinner(true);
 
-                cadastrarAnuncio(res.usuarios[0].codUsuario)
+                cadastrarAnuncio(res.usuario.codUsuario)
             } else {
                 setShowSpinner(true);
                 criarUsuario();

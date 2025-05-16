@@ -21,74 +21,113 @@ module.exports = {
         const { uf, cidade, atividade, name, telefone, nu_documento, codigoCaderno } = req.body;
         console.table([name, atividade, telefone, nu_documento, uf, codigoCaderno]);
 
-        let anunciosOld;
-
         //anuncio
-        if (codigoCaderno != "TODO") {
-            /* anunciosOld = await Anuncio.findAll({
-                where: {
-                    [Op.or]: [
-                        {
-                            [Op.and]: [
-                                { codCaderno: codigoCaderno },
-                                { codUf: uf },
-                                {
-                                    [Op.or]: [
-                                        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                                        { codAtividade: atividades.length > 0 ? atividades[0].id : "" },
-                                        { descTelefone: atividade },
-                                        { descCPFCNPJ: atividade },
-                                        {
-                                            tags: {
-                                                [Op.like]: `%${atividade}%`
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ],
-                }
-            }); */
-        } else {
-            /*    anunciosOld = await Anuncio.findAll({
-                   where: {
-                       [Op.or]: [
-                           {
-                               [Op.and]: [
-                                   { codUf: uf },
-                                   {
-                                       [Op.or]: [
-                                           Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `%${atividade.toLowerCase()}%`),
-                                           { codAtividade: atividades.length > 0 ? atividades[0].id : "" },
-                                           { descTelefone: atividade },
-                                           { descCPFCNPJ: atividade },
-                                           {
-                                               tags: {
-                                                   [Op.like]: `%${atividade}%`
-                                               }
-                                           }
-                                       ]
-                                   }
-                               ]
-                           }
-                       ],
-   
-                   }
-               }); */
+        const anuncios = await database.query(`
+  SELECT DISTINCT a.*
+  FROM anuncio a
+  LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
+  WHERE (
+    a.descAnuncio LIKE :termo OR 
+    a.codAtividade LIKE :termo OR 
+    t.tagValue LIKE :termo
+  )
+  AND a.codUf = :uf
+  AND a.codCaderno = :caderno
+  ORDER BY activate ASC, createdAt DESC, codDuplicado ASC
+  LIMIT :limit OFFSET :offset
+`, {
+            replacements: {
+                termo: `${atividade}%`,
+                uf: uf,
+                caderno: codigoCaderno,
+                limit: porPagina,
+                offset: offset
+            },
+            type: database.QueryTypes.SELECT,
+        });
 
+
+        console.log(req.query, anuncios)
+
+        if (req.query.totalPages > 0) {
+            console.log("dasdafasdfsfasfdasfasfasdfasdfa")
+            return res.json({
+                success: true, data: anuncios,
+                paginaAtual: req.query.paginaAtual,
+                totalPaginas: req.query.totalPaginas,
+                totalItem: req.query.totalItens
+            });
+        } else {
+            /*             const resultAnuncioCount = await Anuncio.count({
+                            where: {
+                                [Op.and]: [
+                                    { codCaderno: codigoCaderno },
+                                    { codUf: uf },
+                                    {
+                                        [Op.or]: [
+                                            ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
+                                            { descAnuncio: { [Op.like]: `${atividade}%` } },
+                                            //{ codAtividade: { [Op.like]: `%${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
+                                            //{ descTelefone: atividade },
+                                            //{ descCPFCNPJ: atividade },
+                                            {
+                                                tags: {
+                                                    [Op.like]: `%${atividade}%`
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            //attributes: ['codAnuncio']
+                        }); */
+
+
+            const [resultAnuncioCount] = await database.query(`
+  SELECT COUNT(DISTINCT a.codAnuncio) AS total
+  FROM anuncio a
+  LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
+  WHERE (
+    a.descAnuncio LIKE :termo OR
+    a.codAtividade LIKE :termo OR
+    t.tagValue LIKE :termo
+  )
+  AND a.codUf = :uf
+  AND a.codCaderno = :caderno
+`, {
+                replacements: {
+                    termo: 'abate de aves%',
+                    uf: 'AL',
+                    caderno: 'MACEIO'
+                },
+                type: database.QueryTypes.SELECT
+            });
+
+
+
+            const totalItens = resultAnuncioCount.total;
+            const totalPaginas = Math.ceil(totalItens / porPagina);
+
+            res.json({
+                success: true, data: anuncios,
+                paginaAtual: paginaAtual,
+                totalPaginas: totalPaginas,
+                totalItem: totalItens, teste: ""
+            });
         }
 
+        return;
 
         const verificarAtividade = await Atividade.findOne({
             where: {
-                atividade: { [Op.like]: `${atividade}%` }
+                atividade: { [Op.like]: `${atividade}` }
             },
             raw: true
         });
 
+        console.log("dasjdhasjkfhaskjfasdjfsas", verificarAtividade)
 
-        if(verificarAtividade) {
+        if (verificarAtividade) {
             const anuncios = await Anuncio.findAll({
                 where: {
                     [Op.and]: [
@@ -120,10 +159,10 @@ module.exports = {
                 ],
                 //attributes: ['codAnuncio', 'codAtividade', 'descAnuncio']
             });
-    
+
             //console.log(req.query, anuncios)
-    
-            if(req.query.totalPages > 0) {
+
+            if (req.query.totalPages > 0) {
                 console.log("dasdafasdfsfasfdasfasfasdfasdfa")
                 return res.json({
                     success: true, data: anuncios,
@@ -132,7 +171,7 @@ module.exports = {
                     totalItem: req.query.totalItens
                 });
             } else {
-               const resultAnuncioCount = await Anuncio.count({
+                const resultAnuncioCount = await Anuncio.count({
                     where: {
                         [Op.and]: [
                             { codCaderno: codigoCaderno },
@@ -144,113 +183,93 @@ module.exports = {
                                     { codAtividade: { [Op.like]: `%${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
                                     //{ descTelefone: atividade },
                                     //{ descCPFCNPJ: atividade },
-                                   /*  {
-                                        tags: {
-                                            [Op.like]: `%${atividade}%`
-                                        }
-                                    } */
+                                    /*  {
+                                         tags: {
+                                             [Op.like]: `%${atividade}%`
+                                         }
+                                     } */
                                 ]
                             }
                         ]
                     },
                     //attributes: ['codAnuncio']
                 });
-        
+
                 const totalItens = resultAnuncioCount;
-                const totalPaginas = Math.ceil(totalItens / porPagina); 
-        
+                const totalPaginas = Math.ceil(totalItens / porPagina);
+
                 res.json({
-                    success: true, data: anuncios, 
-                     paginaAtual: paginaAtual,
+                    success: true, data: anuncios,
+                    paginaAtual: paginaAtual,
                     totalPaginas: totalPaginas,
-                    totalItem: totalItens 
+                    totalItem: totalItens
                 });
             }
         } else {
-            const anuncios = await Anuncio.findAll({
-                where: {
-                    [Op.and]: [
-                        { codCaderno: codigoCaderno },
-                        { codUf: uf },
-                        {
-                            [Op.or]: [
-                                ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
-                                { descAnuncio: { [Op.like]: `${atividade}%` } },
-                                //{ codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
-                                //{ descTelefone: atividade },
-                                //{ descCPFCNPJ: atividade },
-                                {
-                                    tags: {
-                                        [Op.like]: `${atividade}%`
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                },
-                limit: porPagina,
-                offset: offset,
-                order: [
-                    //[Sequelize.literal('CASE WHEN activate = 0 THEN 0 ELSE 1 END'), 'ASC'],
-                    ['activate', 'ASC'],
-                    ['createdAt', 'DESC'],
-                    ['codDuplicado', 'ASC'],
-                ],
-                //attributes: ['codAnuncio', 'codAtividade', 'descAnuncio']
-            });
-    
-            console.log(req.query, anuncios)
-    
-            if(req.query.totalPages > 0) {
-                console.log("dasdafasdfsfasfdasfasfasdfasdfa")
-                return res.json({
-                    success: true, data: anuncios,
-                    paginaAtual: req.query.paginaAtual,
-                    totalPaginas: req.query.totalPaginas,
-                    totalItem: req.query.totalItens
-                });
-            } else {
-                 const resultAnuncioCount = await Anuncio.count({
-                    where: {
-                        [Op.and]: [
-                            { codCaderno: codigoCaderno },
-                            { codUf: uf },
-                            {
-                                [Op.or]: [
-                                    ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
-                                    { descAnuncio: { [Op.like]: `${atividade}%` } },
-                                    //{ codAtividade: { [Op.like]: `%${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
-                                    //{ descTelefone: atividade },
-                                    //{ descCPFCNPJ: atividade },
-                                    {
-                                        tags: {
-                                            [Op.like]: `%${atividade}%`
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    //attributes: ['codAnuncio']
-                });
-        
-                const totalItens = resultAnuncioCount;
-                const totalPaginas = Math.ceil(totalItens / porPagina); 
-        
-                res.json({
-                    success: true, data: anuncios, 
-                    paginaAtual: paginaAtual,
-                    totalPaginas: totalPaginas,
-                    totalItem: totalItens 
-                });
-            }
+
+
+            /*  const anunciosold = await Anuncio.findAll({
+                 where: {
+                     codCaderno: 'ÁGUAS CLARAS',
+                     codUf: 'DF',
+ 
+                     [Op.and]: [
+                         { codCaderno: codigoCaderno },
+                         { codUf: uf },
+                         {
+                             [Op.or]: [
+                                 //Sequelize.literal(`MATCH(search_index) AGAINST('+bolos' IN BOOLEAN MODE)`),
+                                 ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
+                                 //{ descAnuncio: { [Op.like]: `${atividade}%` } },
+                                 //Sequelize.literal(`JSON_CONTAINS(tags, '"${atividade}"')`)
+                                 //{ codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
+                                 //{ descTelefone: atividade },
+                                 //{ descCPFCNPJ: atividade },
+                                 {
+                                     tags: {
+                                         [Op.like]: `${atividade}%`
+                                     }
+                                 },   
+                               
+                             ] 
+                         }
+                     ]
+                 },
+                 limit: porPagina,
+                 offset: offset,
+                 order: [
+                     ['activate', 'ASC'],
+                     ['createdAt', 'DESC'],
+                     ['codDuplicado', 'ASC'],
+                 ],
+             }); */
+
+
+
+            /*             const anuncios = await database.query(`
+              SELECT * FROM anuncio 
+              WHERE 
+                (descAnuncio LIKE :termo OR tags LIKE :termo OR codAtividade LIKE :termo) 
+                AND codUf = :uf 
+                AND codCaderno = :caderno
+            `, {
+                            replacements: {
+                                termo: `%${atividade}%`,
+                                uf: 'DF',
+                                caderno: 'ÁGUAS CLARAS'
+                            },
+                            type: database.QueryTypes.SELECT
+                        });  */
+
+
+
         }
 
 
 
-      
 
-        
+
+
     },
     buscarCaderno: async (req, res) => {
         const uf = req.query.uf;
@@ -259,7 +278,7 @@ module.exports = {
         const cadernos = await Caderno.findAll({
             where: {
                 "UF": uf
-            }, 
+            },
             order: [
                 ['isCapital', 'ASC'],
                 ['nomeCaderno', 'ASC']

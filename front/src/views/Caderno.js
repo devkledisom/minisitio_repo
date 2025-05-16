@@ -26,7 +26,7 @@ import { QrcodeCadernoContext } from '../context/QrcodeCadernoContext';
 function Caderno() {
 
   const { theme, toggleTheme } = useContext(QrcodeCadernoContext);
-  console.log("kledisom", theme)
+  //console.log("kledisom", theme)
 
   const [nomeAtividade, setNomeAtividade] = useState([]);
   const [minisitio, setMinisitio] = useState([]);
@@ -1157,7 +1157,6 @@ function Caderno() {
       let colum1 = document.getElementById('col1').childNodes.length;
       let colum2 = document.getElementById('col2').childNodes.length;
       if (colum1 > 0 && colum2 > 0) {
-        console.log("dasda")
         calhau();
       }
 

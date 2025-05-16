@@ -24,7 +24,7 @@ function Busca(props) {
     const { result, setResult } = useBusca();
 
     //REFS
-    const btnPromo = useRef();
+    const btnPromo = useRef(null);
 
     const location = useLocation();
 
@@ -149,7 +149,10 @@ function Busca(props) {
           .then(x => x.json())
           .then(res => {
             if (res.success) {
-                btnPromo.current.classList.add('pulse-promotion');
+                if(btnPromo.current) {
+                    btnPromo.current.classList.add('pulse-promotion');
+                }
+                
                 setPromocao(res.promocoes);
             }
     
@@ -220,7 +223,7 @@ function Busca(props) {
             const request = await fetch(`${masterPath.url}/buscar`, options).then((x) => x.json())
             //setAnuncio(request)
             setResult(request);
-            //console.log(request);
+            console.log(request);
             setLoading(false);
             navigate(`/buscar/${codigoCaderno}/${uf}`, { state: {paramBusca: valor_da_busca} });
 
