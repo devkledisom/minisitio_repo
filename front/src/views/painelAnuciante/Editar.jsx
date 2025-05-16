@@ -1063,6 +1063,18 @@ function Editar(props) {
                 <i><img src="/assets/img/teste/pix-2.png" height={25} style={{ borderRadius: "5px" }} /></i>
                 <input
                   type="text"
+                  name="descDonoPix"
+                  id="descDonoPix"
+                  className="form-control"
+                  placeholder="Digite o nome do proprietário da chave PIX"
+                  value={minisitio.descDonoPix}
+                  onChange={handleSelectChange}
+                />
+              </div>
+              <div className="input-icon margin-top-10">
+                <i><img src="/assets/img/teste/pix-2.png" height={25} style={{ borderRadius: "5px" }} /></i>
+                <input
+                  type="text"
                   name="descChavePix"
                   id="descChavePix"
                   className="form-control"

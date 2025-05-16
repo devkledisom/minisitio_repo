@@ -31,3 +31,9 @@
 .logo-pix {
     width: 100px !important;
 }
+
+.btnGerarPix {
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 18px;
+}

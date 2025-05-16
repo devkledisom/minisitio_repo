@@ -27,6 +27,7 @@ const Pagamento = require('../models/table_pagamentos');
 const Uf = require('../models/table_uf');
 const Usuarios = require('../models/table_usuarios');
 const Ufs = require('../models/table_uf');
+const Tags = require('../models/table_tags');
 
 
 
@@ -4763,8 +4764,23 @@ module.exports = {
             "descYouTube": descYouTube,
         };
 
+        function registarTags(id) {
+            console.log("chamando tags")
+            JSON.parse(tags).map(async item => {
+                console.log(item)
+                const createTags = await Tags.create({
+                    codAnuncio: id,
+                    tagValue: item
+                })
+
+            })
+        };
+
         try {
             const listaAnuncios = await Anuncio.create(dadosAnuncio);
+
+            registarTags(listaAnuncios.dataValues.codAnuncio)
+
             console.log(`Reorganização concluída para o estado:`, { estado: dadosAnuncio.codUf, caderno: dadosAnuncio.codCaderno });
             if (codTipoAnuncio == 3) {
                 const idUtilizado = await Desconto.update({
@@ -4944,6 +4960,7 @@ module.exports = {
             cashback_link,
             certificado_link,
             cartao_digital,
+            descDonoPix,
             descChavePix,
             descYouTube,
             periodo
@@ -5011,6 +5028,7 @@ module.exports = {
             "cashback_link": cashback_link,
             "certificado_link": certificado_link,
             "cartao_digital": cartao_digital,
+            "descDonoPix": descDonoPix,
             "descChavePix": descChavePix,
             "periodo": periodo
         };
@@ -5056,13 +5074,27 @@ module.exports = {
         }
 
 
-
         try {
             const listaAnuncios = await Anuncio.update(dadosAnuncio, {
                 where: {
                     codAnuncio: req.query.id
                 }
             });
+
+            const parsedTags = JSON.parse(tags);
+
+            // Remove tags antigas
+            await Tags.destroy({
+                where: { codAnuncio: req.query.id }
+            });
+
+            // Insere novas tags
+            const novaLista = parsedTags.map(tag => ({
+                codAnuncio: req.query.id,
+                tagValue: tag
+            }));
+
+            await Tags.bulkCreate(novaLista);
 
 
 

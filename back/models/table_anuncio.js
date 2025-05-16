@@ -502,8 +502,8 @@ const Anuncio = database.define('anuncio', {
         } */
     },
 
-    descChavePix: {
-        type: Sequelize.TEXT(255),
+    descDonoPix: {
+        type: Sequelize.TEXT,
         allowNull: true,
         unique: false
     },
@@ -524,6 +524,11 @@ const Anuncio = database.define('anuncio', {
         type: Sequelize.DATE,
         allowNull: true
     },
+ /*    search_index: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        unique: false
+    }, */
 },
     {
         freezeTableName: true,
@@ -531,47 +536,48 @@ const Anuncio = database.define('anuncio', {
     },
     {
         indexes: [
-          {
-            name: 'idx_descCPFCNPJ',
-            fields: ['descCPFCNPJ'], // O campo para o qual o índice será criado
-          },
-          {
-            name: 'idx_descAnuncio',
-            fields: ['descAnuncio'], // O campo para o qual o índice será criado
-          },
-          {
-            name: 'idx_descTelefone',
-            fields: ['descTelefone'], // O campo para o qual o índice será criado
-          },
-          {
-            name: 'idx_tags',
-            fields: ['descTelefone'], // O campo para o qual o índice será criado
-          },
-          {
-            name: 'idx_codUf',
-            fields: ['codUf'], // O campo para o qual o índice será criado
-          },
-          {
-            name: 'idx_codCaderno',
-            fields: ['codCaderno'], // O campo para o qual o índice será criado
-          },
-          {
-            name: 'idx_codDesconto',
-            fields: ['codDesconto'], // O campo para o qual o índice será criado
-          },
-          {
-            name: 'idx_activate',
-            fields: ['activate'], // O campo para o qual o índice será criado
-          },
-          {
-            name: 'idx_createdAt',
-            fields: ['createdAt'], // O campo para o qual o índice será criado
-          },
-          {
-            name: 'idx_codDuplicado ',
-            fields: ['codDuplicado '], // O campo para o qual o índice será criado
-          },
-        ]});
+            {
+                name: 'idx_descCPFCNPJ',
+                fields: ['descCPFCNPJ'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_descAnuncio',
+                fields: ['descAnuncio'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_descTelefone',
+                fields: ['descTelefone'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_tags',
+                fields: ['descTelefone'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_codUf',
+                fields: ['codUf'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_codCaderno',
+                fields: ['codCaderno'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_codDesconto',
+                fields: ['codDesconto'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_activate',
+                fields: ['activate'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_createdAt',
+                fields: ['createdAt'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_codDuplicado ',
+                fields: ['codDuplicado '], // O campo para o qual o índice será criado
+            },
+        ]
+    });
 
 Anuncio.beforeCreate((instance, options) => {
     const dueDate = new Date(instance.createdAt);
@@ -614,6 +620,15 @@ Anuncio.belongsTo(Atividade, {
 Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", as: "anuncio" }); */
 Anuncio.hasMany(Pagamento, { foreignKey: "cliente", sourceKey: "descCPFCNPJ", as: "pagamentos" });
 Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", targetKey: "descCPFCNPJ", as: "anuncio" });
+
+/* Anuncio.beforeCreate((anuncio, options) => {
+  anuncio.search_index = `${anuncio.descAnuncio} ${anuncio.codAtividade} ${(anuncio.tags || []).join(' ')}`.toLowerCase();
+});
+
+Anuncio.beforeUpdate((anuncio, options) => {
+  anuncio.search_index = `${anuncio.descAnuncio} ${anuncio.codAtividade} ${(anuncio.tags || []).join(' ')}`.toLowerCase();
+});
+ */
 
 
 module.exports = Anuncio;
