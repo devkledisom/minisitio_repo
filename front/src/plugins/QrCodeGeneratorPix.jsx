@@ -33,8 +33,8 @@ const QrCodeGeneratorPix = (props) => {
                     }}
                 />
             </div>
-            <span style={{fontSize: "25px"}}>Nome: {props.dono}</span>
-            <p>Chave: {props.chave}</p>
+           {/*  <span style={{fontSize: "25px"}}>Nome: {props.dono}</span>
+            <p>Chave: {props.chave}</p> */}
         </div>
     );
 };

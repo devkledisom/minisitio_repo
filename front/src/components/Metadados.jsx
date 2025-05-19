@@ -105,71 +105,96 @@ function Metadados(props) {
                             </a>
                         </h4>
                     </div>
-                    <div className="col-md-12 link-cinza">
-                        <img src="../assets/img/teste/facebook.png" />
-                        <h4>
-                            <a href={props.data.descFacebook !== "teste" ? props.data.descFacebook : ""} data-toggle="tooltip" title="Facebook" target="_blank" rel="noopener  noreferrer">
-                                {props.data.descFacebook !== "teste" ? props.data.descFacebook : ""}
-                            </a>
-                        </h4>
-                    </div>
-                    <div className="col-md-12 link-cinza">
-                        <img src="../assets/img/teste/instagram.png" />
-                        <h4>
-                            <a href={props.data.descInsta !== "0" ? props.data.descInsta : ""} data-toggle="tooltip" title="Instagram" target="_blank" rel="noopener  noreferrer">
-                                {props.data.descInsta !== "0" ? props.data.descInsta : ""}
-                            </a>
-                        </h4>
-                    </div>
-                    <div className="col-md-12 link-cinza">
-                        <img src="../assets/img/redes/unnamed.webp" className="rounded" />
-                        <h4>
-                            <a href={props.data.descTweeter !== "teste" ? props.data.descTweeter : ""} data-toggle="tooltip" title="Twitter" target="_blank" rel="noopener  noreferrer">
-                                {props.data.descTweeter !== "teste" ? props.data.descTweeter : ""}
-                            </a>
-                        </h4>
-                    </div>
-                    <div className="col-md-12 link-cinza">
-                        <img src="../assets/img/teste/linkedin.png" />
-                        <h4>
-                            <a href={props.data.descLinkedin !== "0" ? props.data.descLinkedin : ""} data-toggle="tooltip" title="Linkedin" target="_blank" rel="noopener  noreferrer">
-                                {props.data.descLinkedin !== "0" ? props.data.descLinkedin : ""}
-                            </a>
-                        </h4>
-                    </div>
-                    <div className="col-md-12 ">
-                        <img src="../assets/img/teste/whatsapp.png" />
-                        <h4>
-                            <a href={`https://api.whatsapp.com/send?phone=55${props.data.descWhatsApp}`} target="_blank" data-toggle="tooltip" title="WhatsApp" rel="noopener  noreferrer">
-                                {props.data.descWhatsApp !== "0" ? props.data.descWhatsApp : "(xx) xxxxx-xxxx"}
-                            </a>
-                        </h4>
-                    </div>
-                    <div className="col-md-12 link-cinza">
-                        <img src="../assets/img/teste/telegram.png" />
-                        <h4>
-                            <a href="https://telegram.me/55" target="_blank" data-toggle="tooltip" title="Telegram" rel="noopener  noreferrer">
-                                {props.data.descTelegram !== "0" ? props.data.descTelegram : ""}
-                            </a>
-                        </h4>
-                    </div>
-                    <div className="col-md-12 link-cinza">
-                        <img src="../assets/img/teste/icons8-meu-negócio-48.png" />
-                        <h4>
-                            <a href={props.data.descSkype !== "0" ? props.data.descSkype : ""} target="_blank" data-toggle="tooltip" title="google-meu-negocio" rel="noopener  noreferrer">
-                                {props.data.descSkype !== "0" ? props.data.descSkype : ""}
-                            </a>
-                        </h4>
-                    </div>
-                    <div className="col-md-12 link-cinza justify-content-between">
+                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                        <div className="col-md-12 link-cinza">
+                            <img src="../assets/img/teste/facebook.png" />
+                            <h4>
+                                <a href={props.data.descFacebook !== "teste" ? props.data.descFacebook : ""} data-toggle="tooltip" title="Facebook" target="_blank" rel="noopener  noreferrer">
+                                    {props.data.descFacebook !== "teste" ? props.data.descFacebook : ""}
+                                </a>
+                            </h4>
+                        </div>
+                    }
+
+                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                        <div className="col-md-12 link-cinza">
+                            <img src="../assets/img/teste/instagram.png" />
+                            <h4>
+                                <a href={props.data.descInsta !== "0" ? props.data.descInsta : ""} data-toggle="tooltip" title="Instagram" target="_blank" rel="noopener  noreferrer">
+                                    {props.data.descInsta !== "0" ? props.data.descInsta : ""}
+                                </a>
+                            </h4>
+                        </div>
+                    }
+
+                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                        <div className="col-md-12 link-cinza">
+                            <img src="../assets/img/redes/unnamed.webp" className="rounded" />
+                            <h4>
+                                <a href={props.data.descTweeter !== "teste" ? props.data.descTweeter : ""} data-toggle="tooltip" title="Twitter" target="_blank" rel="noopener  noreferrer">
+                                    {props.data.descTweeter !== "teste" ? props.data.descTweeter : ""}
+                                </a>
+                            </h4>
+                        </div>
+                    }
+
+                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                        <div className="col-md-12 link-cinza">
+                            <img src="../assets/img/teste/linkedin.png" />
+                            <h4>
+                                <a href={props.data.descLinkedin !== "0" ? props.data.descLinkedin : ""} data-toggle="tooltip" title="Linkedin" target="_blank" rel="noopener  noreferrer">
+                                    {props.data.descLinkedin !== "0" ? props.data.descLinkedin : ""}
+                                </a>
+                            </h4>
+                        </div>
+                    }
+
+                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                        <div className="col-md-12 ">
+                            <img src="../assets/img/teste/whatsapp.png" />
+                            <h4>
+                                <a href={`https://api.whatsapp.com/send?phone=55${props.data.descWhatsApp}`} target="_blank" data-toggle="tooltip" title="WhatsApp" rel="noopener  noreferrer">
+                                    {props.data.descWhatsApp !== "0" ? props.data.descWhatsApp : "(xx) xxxxx-xxxx"}
+                                </a>
+                            </h4>
+                        </div>
+                    }
+
+                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                        <div className="col-md-12 link-cinza">
+                            <img src="../assets/img/teste/telegram.png" />
+                            <h4>
+                                <a href="https://telegram.me/55" target="_blank" data-toggle="tooltip" title="Telegram" rel="noopener  noreferrer">
+                                    {props.data.descTelegram !== "0" ? props.data.descTelegram : ""}
+                                </a>
+                            </h4>
+                        </div>
+                    }
+
+                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                        <div className="col-md-12 link-cinza">
+                            <img src="../assets/img/teste/icons8-meu-negócio-48.png" />
+                            <h4>
+                                <a href={props.data.descSkype !== "0" ? props.data.descSkype : ""} target="_blank" data-toggle="tooltip" title="google-meu-negocio" rel="noopener  noreferrer">
+                                    {props.data.descSkype !== "0" ? props.data.descSkype : ""}
+                                </a>
+                            </h4>
+                        </div>
+                    }
+
+                    <div className="col-md-12 link-cinza justify-content-between align-items-center p-0">
                         <img src="../assets/img/teste/pix-bc.png" className='logo-pix' />
-                      {/*   <h4>
+                        <ul className='desc-pix'>
+                            <li><span>Chave: <input value={props.data.descChavePix} /></span></li>
+                            <li><span>Nome: {props.data.descDonoPix}</span></li>
+                        </ul>
+                        {/*   <h4>
                             {props.data.descChavePix}
                         </h4> */}
                         {props.data.descChavePix &&
-                            <button onClick={(e) => setShow(true)} className='btnGerarPix btn-success'>VER CHAVE PIX</button>
+                            <button onClick={(e) => setShow(true)} className='btnGerarPix btn-success'>QRCODE</button>
                         }
-                        
+
                     </div>
 
 
@@ -181,7 +206,7 @@ function Metadados(props) {
 
                             <div className="modal-body text-center">
                                 <div className='title-promo-ms text-center'>
-                                   {/*  <img src="../assets/img/logo50.png" className="logo-modal-promo" />
+                                    {/*  <img src="../assets/img/logo50.png" className="logo-modal-promo" />
                                     <h4>Promoção com minisitio</h4> */}
                                     <QrCodeGeneratorPix chave={props.data.descChavePix} dono={props.data.descDonoPix} />
                                 </div>
@@ -194,33 +219,38 @@ function Metadados(props) {
                         </Modal.Footer>
                     </Modal>
 
+                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                        <div className="col-md-12 link-cinza">
+                            {console.log(props.data.descAndroid)}
+                            {(props.data.descAndroid != "0" && props.data.descAndroid != "") &&
+                                <a href={props.data.descAndroid !== "0" ? props.data.descAndroid : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
+                                    <img src="../assets/img/icons/android.png" width={200} style={{ marginLeft: "-10px" }} />
+                                </a>
+                            }
+                            {(props.data.descAndroid == "0" || props.data.descAndroid == "") &&
+                                <a href={props.data.descAndroid !== "0" ? props.data.descAndroid : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
+                                    <img src="../assets/img/icons/android.png" width={200} style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)", marginLeft: "-10px" }} alt='android' />
+                                </a>
+                            }
+                        </div>
+                    }
 
-                    <div className="col-md-12 link-cinza">
-                        {console.log(props.data.descAndroid)}
-                        {(props.data.descAndroid != "0" && props.data.descAndroid != "") &&
-                            <a href={props.data.descAndroid !== "0" ? props.data.descAndroid : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
-                                <img src="../assets/img/icons/android.png" width={200} style={{ marginLeft: "-10px" }} />
-                            </a>
-                        }
-                        {(props.data.descAndroid == "0" || props.data.descAndroid == "") &&
-                            <a href={props.data.descAndroid !== "0" ? props.data.descAndroid : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
-                                <img src="../assets/img/icons/android.png" width={200} style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)", marginLeft: "-10px" }} alt='android' />
-                            </a>
-                        }
-                    </div>
-                    <div className="col-md-12 link-cinza">
-                        {console.log(props.data.descApple)}
-                        {(props.data.descApple != "0" && props.data.descApple != "") &&
-                            <a href={props.data.descApple !== "0" ? props.data.descApple : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
-                                <img src="../assets/img/icons/ios.png" width={180} height={60} />
-                            </a>
-                        }
-                        {(props.data.descApple == "0" || props.data.descApple == "") &&
-                            <a href={props.data.descApple !== "0" ? props.data.descApple : ""} target="_blank" data-toggle="tooltip" title="apple">
-                                <img src="../assets/img/icons/ios.png" width={180} height={60} style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt='android' />
-                            </a>
-                        }
-                    </div>
+                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                        <div className="col-md-12 link-cinza">
+                            {console.log(props.data.descApple)}
+                            {(props.data.descApple != "0" && props.data.descApple != "") &&
+                                <a href={props.data.descApple !== "0" ? props.data.descApple : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
+                                    <img src="../assets/img/icons/ios.png" width={180} height={60} />
+                                </a>
+                            }
+                            {(props.data.descApple == "0" || props.data.descApple == "") &&
+                                <a href={props.data.descApple !== "0" ? props.data.descApple : ""} target="_blank" data-toggle="tooltip" title="apple">
+                                    <img src="../assets/img/icons/ios.png" width={180} height={60} style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt='android' />
+                                </a>
+                            }
+                        </div>
+
+                    }
 
                     {/* <div className="col-md-12 link-cinza">
                         <img src="../assets/img/teste/aperto-de-mao.png" />
