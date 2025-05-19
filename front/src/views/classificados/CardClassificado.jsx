@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { masterPath } from '../../config/config';
 
 //global functions
@@ -10,35 +10,25 @@ function CardClassificado(props) {
     const [parceiros, setParceiros] = useState([]);
 
     useEffect(() => {
+    fetch(`${masterPath.url}/admin/desconto/read/all`)
+        .then((x) => x.json())
+        .then((res) => {
+            if (res.success) {
+                setListaIds(res.data);
+            } else {
+                console.error("Não encontrado na base de dados");
+            }
+        });
+}, []);
 
-   
-            fetch(`${masterPath.url}/admin/desconto/read/all`)
-                .then((x) => x.json())
-                .then((res) => {
-                    if (res.success) {
-                        setListaIds(res.data);
+useEffect(() => {
+    if (!props.data || listaIds.length === 0) return;
 
-                    } else {
-                        console.error("encontrado na base de dados")
-                    }
+    const id = String(props.data.codDesconto).trim();
+    const idEncontrado = listaIds.find(item => String(item.hash).trim() === id);
 
-                })
-  
-        
-
-                function buscarId() {
-                    if(!props.data) return;
-                    console.log(props.data.codDesconto)
-                  let id = props.data.codDesconto
-                const idEncontrado = listaIds.find(item => item.hash == id);
-                console.log("kleidsom", id, idEncontrado)
-                setParceiros(idEncontrado)
-                return idEncontrado; 
-              };
-
-              buscarId()
-
-    }, [props])
+    if (idEncontrado) setParceiros(idEncontrado);
+}, [props.data, listaIds]); // <-- Só executa quando ambos estiverem prontos
 
 
     const isValid = (value) => value !== 'null' && value !== '';
@@ -56,35 +46,36 @@ function CardClassificado(props) {
             <li className="titulo titulo-cinza">
                 <h2>{props.title}</h2>
             </li>
- 
-       
+
+
 
             {props.data != null && props.data.descImagem != null && props.data.descImagem != "teste" && props.data.descImagem != 0 ? (
+
                 <li className="cartao">
-                         {parceiros && isValidPatrocinio(parceiros) && (
-                (isValid(parceiros.descImagem) ||
-                    isValid(parceiros.descImagem2) ||
-                    isValid(parceiros.descImagem3)) && (
-                    <div className="apoio kledisom">
-                        <div>
-                            {[{ img: parceiros.descImagem, link: parceiros.descLink },
-                            { img: parceiros.descImagem2, link: parceiros.descLink2 },
-                            { img: parceiros.descImagem3, link: parceiros.descLink3 }]
-                                .filter(item => item.img) // Filtra itens com imagem válida
-                                .map((item, index) => (
-                                    <a
-                                        key={index}
-                                        href={item.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        <img src={`${masterPath.url}/files/${item.img}`} alt={`Parceiro ${index + 1}`} />
-                                    </a>
-                                ))}
-                        </div>
-                    </div>
-                ))
-            } 
+                    {parceiros && isValidPatrocinio(parceiros) && (
+                        (isValid(parceiros.descImagem) ||
+                            isValid(parceiros.descImagem2) ||
+                            isValid(parceiros.descImagem3)) && (
+                            <div className="apoio kledisom">
+                                <div>
+                                    {[{ img: parceiros.descImagem, link: parceiros.descLink },
+                                    { img: parceiros.descImagem2, link: parceiros.descLink2 },
+                                    { img: parceiros.descImagem3, link: parceiros.descLink3 }]
+                                        .filter(item => item.img) // Filtra itens com imagem válida
+                                        .map((item, index) => (
+                                            <a
+                                                key={index}
+                                                href={item.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img src={`${masterPath.url}/files/${item.img}`} alt={`Parceiro ${index + 1}`} />
+                                            </a>
+                                        ))}
+                                </div>
+                            </div>
+                        ))
+                    }
                     <div className="conteudo" onClick={() => contadorVisualizacoes(masterPath.url, props.data.codAnuncio)}>
                         <a href={`${masterPath.domain}/perfil/${props.data.codAnuncio}`}>
                             <img src={`${masterPath.url}/files/${props.data.descImagem}`} alt={props.data.descAnuncio} />
