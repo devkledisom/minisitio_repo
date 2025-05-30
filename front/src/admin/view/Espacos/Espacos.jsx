@@ -23,10 +23,7 @@ import EspacosImport from './EspacosImport';
 
 const Espacos = () => {
 
-    const style = {
-        position: "fixed",
-        zIndex: "999"
-    }
+
 
     const [ids, setIds] = useState([]);
     const [anuncios, setAnucios] = useState([]);
@@ -103,20 +100,20 @@ const Espacos = () => {
                 setUfs(res);
             })
 
-/*         fetch(`${masterPath.url}/cadernos`)
-            .then((x) => x.json())
-            .then((res) => {
-                setCaderno(res);
-            }) */
+        /*         fetch(`${masterPath.url}/cadernos`)
+                    .then((x) => x.json())
+                    .then((res) => {
+                        setCaderno(res);
+                    }) */
     }, []);
 
-/*     useEffect(() => {
-        fetch(`${masterPath.url}/cadernos?uf=${cadernoSelecionado}`)
-            .then((x) => x.json())
-            .then((res) => {
-                setCaderno(res);
-            })
-    }, [cadernoSelecionado]); */
+    /*     useEffect(() => {
+            fetch(`${masterPath.url}/cadernos?uf=${cadernoSelecionado}`)
+                .then((x) => x.json())
+                .then((res) => {
+                    setCaderno(res);
+                })
+        }, [cadernoSelecionado]); */
 
 
 
@@ -355,62 +352,62 @@ Para 100000 linhas: 312500ms
                     }
                 })
         } else {
-             // Valor máximo em milissegundos
-             const maxTime = 312500;
+            // Valor máximo em milissegundos
+            const maxTime = 312500;
 
-             // Atualiza o progresso a cada 10 ms (ajuste conforme necessário)
-             const interval = 10;
-             let currentTime = 0;
- 
-             // Função para calcular e exibir o percentual
-             const intervalId = setInterval(() => {
-                 currentTime += interval;
- 
-                 // Calcula o percentual
-                 const percent = Math.min((currentTime / maxTime) * 100, 100); // Garante que não ultrapasse 100%
- 
-                 console.log(`Progresso: ${percent.toFixed(2)}%`);
-                 setProgressExport(percent.toFixed(2));
- 
-                 // Para quando alcançar o valor máximo
-                 if (currentTime >= maxTime) {
-                     clearInterval(intervalId);
-                     console.log("Requisição concluída.");
-                 }
-             }, interval);
- 
- 
- 
-             fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&uf=${estadoSelecionado}&caderno=${campoCaderno.current.value}&require=${searchOptioncheck}`, {
-                 method: "POST",
-                 headers: {
-                     "Content-Type": "application/json"
-                 },
-                 body: JSON.stringify(anuncios.message.anuncios)
-             })
-                 .then(x => x.blob())
-                 .then(res => {
-                     const url = window.URL.createObjectURL(res);
-                     const a = document.createElement("a");
-                     a.href = url;
-                     a.download = "planilha.xlsx"; // Define o nome do arquivo
-                     document.body.appendChild(a);
-                     a.click(); // Força o clique para baixar
-                     document.body.removeChild(a); // Remove o elemento depois do clique
-                     window.URL.revokeObjectURL(url); // Libera memória
- 
-                     setShowSpinner(false);
-                     setProgressExport(0);
-                     clearInterval(intervalId);
- 
-                     if (res.success) {
-                         //console.log(res);
-                         setShowSpinner(false);
-                         setProgressExport(0);
-                         clearInterval(intervalId);
-                         window.location.href = res.downloadUrl;
-                     }
-                 })
+            // Atualiza o progresso a cada 10 ms (ajuste conforme necessário)
+            const interval = 10;
+            let currentTime = 0;
+
+            // Função para calcular e exibir o percentual
+            const intervalId = setInterval(() => {
+                currentTime += interval;
+
+                // Calcula o percentual
+                const percent = Math.min((currentTime / maxTime) * 100, 100); // Garante que não ultrapasse 100%
+
+                console.log(`Progresso: ${percent.toFixed(2)}%`);
+                setProgressExport(percent.toFixed(2));
+
+                // Para quando alcançar o valor máximo
+                if (currentTime >= maxTime) {
+                    clearInterval(intervalId);
+                    console.log("Requisição concluída.");
+                }
+            }, interval);
+
+
+
+            fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=${anuncios.message.totalItem}&export=full&uf=${estadoSelecionado}&caderno=${campoCaderno.current.value}&require=${searchOptioncheck}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(anuncios.message.anuncios)
+            })
+                .then(x => x.blob())
+                .then(res => {
+                    const url = window.URL.createObjectURL(res);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "planilha.xlsx"; // Define o nome do arquivo
+                    document.body.appendChild(a);
+                    a.click(); // Força o clique para baixar
+                    document.body.removeChild(a); // Remove o elemento depois do clique
+                    window.URL.revokeObjectURL(url); // Libera memória
+
+                    setShowSpinner(false);
+                    setProgressExport(0);
+                    clearInterval(intervalId);
+
+                    if (res.success) {
+                        //console.log(res);
+                        setShowSpinner(false);
+                        setProgressExport(0);
+                        clearInterval(intervalId);
+                        window.location.href = res.downloadUrl;
+                    }
+                })
             /* fetch(`${masterPath.url}/admin/anuncio/export?page=${param}&limit=5000&caderno=${campoCaderno.current.value}`, {
                 method: "POST",
                 headers: {
@@ -446,8 +443,8 @@ Para 100000 linhas: 312500ms
     function definirCriterioBusca(criterio) {
         setSearchOptioncheck(criterio)
 
-        if(criterio === 'codCaderno' || criterio === 'codUF') {
-             document.getElementById('buscar').value = ''
+        if (criterio === 'codCaderno' || criterio === 'codUF') {
+            document.getElementById('buscar').value = ''
         }
 
         /*  switch(criterio) {
@@ -480,19 +477,22 @@ Para 100000 linhas: 312500ms
         limparFiltro(e.target.value);
 
         fetch(`${masterPath.url}/cadernos?uf=${e.target.value}`)
-        .then((x) => x.json())
-        .then((res) => {
-            setCaderno(res);
-        })
+            .then((x) => x.json())
+            .then((res) => {
+                setCaderno(res);
+            })
     }
 
     function limparFiltro(param) {
-        if(param === 'todos') {
+        if (param === 'todos') {
             setCadernoSelecionado("todos")
         }
     }
 
-
+    const style = {
+        position: "fixed",
+        zIndex: "999"
+    }
 
     return (
         <div className="users app-espacos">
@@ -538,7 +538,7 @@ Para 100000 linhas: 312500ms
                                     </select>
                                     <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
 
-                                  {/*   {mostrarInputBusca &&
+                                    {/*   {mostrarInputBusca &&
                                         <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
                                     } */}
                                     <button id="btnBuscar" className="" type="button" onClick={buscarAnuncioId} >

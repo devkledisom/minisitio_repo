@@ -1,6 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 
+//FUNCTIONS
+import useIsMobile from '../admin/functions/useIsMobile';
+
 //GLOBAL FUNCTIONS
 import { limparCPFouCNPJ, generatePdf } from "../globalFunctions/functions";
 import PdfGenerator from "../plugins/PdfGenerator";
@@ -190,13 +193,14 @@ function UserActions(props) {
                     <img src="/assets/img/logo.png" />
                     Renovar
                 </a>
-                {suportWebShare &&
+                {console.log(useIsMobile())}
+                {useIsMobile() &&
                          <a href="#" class="btn btn-default margin-bottom-10" onClick={(e) => handleShare(e)}>
                     <img src="/assets/img/logo.png" />
                     Compartilhar
                 </a>
                 }
-                {!suportWebShare &&
+                {!useIsMobile() &&
                          <a href="#" class="btn btn-default margin-bottom-10" onClick={(e) => openShareModalPerfil(e)}>
                     <img src="/assets/img/logo.png" />
                     Compartilhar

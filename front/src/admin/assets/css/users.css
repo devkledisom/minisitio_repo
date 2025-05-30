@@ -93,7 +93,7 @@ tr {
 }
 
 .users table th {
-   /*  border: 1px solid #000000; */
+    /*  border: 1px solid #000000; */
     /* text-align: left; */
     padding: 8px;
     width: 100px !important;
@@ -101,8 +101,8 @@ tr {
 }
 
 .users table th:nth-child(6) {
-   /*  background-color: #ff0000;*/
-} 
+    /*  background-color: #ff0000;*/
+}
 
 .users table th:nth-child(8) {
     width: 50px !important;
@@ -137,4 +137,9 @@ tr {
 .app-users .SearchOption label {
     display: flex;
     gap: 1px;
+}
+
+.config-portal hr {
+    width: 50%;
+    margin-left: 25px;
 }

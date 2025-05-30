@@ -4,8 +4,7 @@ import { masterPath } from "../../config/config";
 import Swal from 'sweetalert2';
 
 export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa) {
-    setShowSpinner(true);
-    document.querySelector('.form-create').style.filter = 'blur(2px)';
+
 
     var validation = false;
     document.querySelectorAll('[required]').forEach((item) => {
@@ -25,18 +24,21 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         return;
     };
 
+    setShowSpinner(true);
+    document.querySelector('.form-create').style.filter = 'blur(2px)';
+
     fetch(`${masterPath.url}/portal/usuario/buscar/${pegarElemento('#descCPFCNPJ').replace(/[.\-\/]/g, '')}`)
         .then((x) => x.json())
         .then((res) => {
-         if (res.success) {
-            console.log(res)
+            if (res.success) {
+                console.log(res)
                 setShowSpinner(true);
 
                 cadastrarAnuncio(res.usuario.codUsuario)
             } else {
                 setShowSpinner(true);
                 criarUsuario();
-            }; 
+            };
 
         })
 
@@ -230,7 +232,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                         }
 
                                         let valorBruto = 10 - res.IdsValue[0].desconto;
-    
+
                                         if (descontoAtivado && radioCheck == 4 && valorBruto <= 0) {
                                             window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                                             console.log("1");
@@ -245,11 +247,11 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                                 .then((x) => x.json())
                                                 .then((response) => {
                                                     window.location.href = response.url;
-    
+
                                                 })
                                                 .catch(err => console.log(err))
                                             //window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
-    
+
                                             console.log("3");
                                         }
                                     } else {

@@ -76,6 +76,21 @@ function Metadados(props) {
         });
     }
 
+     const handleCopyPix = (chavePix) => {
+        navigator.clipboard.writeText(chavePix).then(() => {
+          Swal.fire({
+            toast: true,
+            position: "top-end",
+            icon: "success",
+            title: "Link copiado!",
+            showConfirmButton: false,
+            timer: 2000
+          });
+         /*  setCopied(true);
+          setTimeout(() => setCopied(false), 2000); */
+        });
+      };
+
     return (
         <div className="Metadados">
             <div className="container p-0">
@@ -105,7 +120,7 @@ function Metadados(props) {
                             </a>
                         </h4>
                     </div>
-                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                    {(props.data.descFacebook && props.data.descFacebook !== "teste") &&
                         <div className="col-md-12 link-cinza">
                             <img src="../assets/img/teste/facebook.png" />
                             <h4>
@@ -116,7 +131,7 @@ function Metadados(props) {
                         </div>
                     }
 
-                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                    {(props.data.descInsta && props.data.descInsta !== "teste") &&
                         <div className="col-md-12 link-cinza">
                             <img src="../assets/img/teste/instagram.png" />
                             <h4>
@@ -127,7 +142,7 @@ function Metadados(props) {
                         </div>
                     }
 
-                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                    {(props.data.descTweeter && props.data.descTweeter !== "teste") &&
                         <div className="col-md-12 link-cinza">
                             <img src="../assets/img/redes/unnamed.webp" className="rounded" />
                             <h4>
@@ -138,7 +153,7 @@ function Metadados(props) {
                         </div>
                     }
 
-                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                    {(props.data.descLinkedin && props.data.descLinkedin !== "teste") &&
                         <div className="col-md-12 link-cinza">
                             <img src="../assets/img/teste/linkedin.png" />
                             <h4>
@@ -149,7 +164,7 @@ function Metadados(props) {
                         </div>
                     }
 
-                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                    {(props.data.descWhatsApp && props.data.descWhatsApp !== "teste") &&
                         <div className="col-md-12 ">
                             <img src="../assets/img/teste/whatsapp.png" />
                             <h4>
@@ -160,7 +175,7 @@ function Metadados(props) {
                         </div>
                     }
 
-                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                    {(props.data.descTelegram && props.data.descTelegram !== "teste") &&
                         <div className="col-md-12 link-cinza">
                             <img src="../assets/img/teste/telegram.png" />
                             <h4>
@@ -171,7 +186,7 @@ function Metadados(props) {
                         </div>
                     }
 
-                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                    {(props.data.descSkype && props.data.descSkype !== "teste") &&
                         <div className="col-md-12 link-cinza">
                             <img src="../assets/img/teste/icons8-meu-negócio-48.png" />
                             <h4>
@@ -182,12 +197,19 @@ function Metadados(props) {
                         </div>
                     }
 
-                    <div className="col-md-12 link-cinza justify-content-between align-items-center p-0">
+                    <div className="col-md-12 link-cinza justify-content-between align-items-center p-0 area-pix-portal">
                         <img src="../assets/img/teste/pix-bc.png" className='logo-pix' />
+                        {(props.data.descChavePix && props.data.descChavePix !== "teste") && 
                         <ul className='desc-pix'>
-                            <li><span>Chave: <input value={props.data.descChavePix} /></span></li>
+                            <li>
+                                <span>
+                                    Chave: {props.data.descChavePix}
+                                </span>
+                                <img src="../assets/img/icons/icons8-copiar.gif" width={30} alt="copiar" onClick={() => handleCopyPix(props.data.descChavePix)} title="copiar" />
+                            </li>
                             <li><span>Nome: {props.data.descDonoPix}</span></li>
                         </ul>
+                        }
                         {/*   <h4>
                             {props.data.descChavePix}
                         </h4> */}
@@ -219,7 +241,7 @@ function Metadados(props) {
                         </Modal.Footer>
                     </Modal>
 
-                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                    {(props.data.descAndroid && props.data.descAndroid !== "teste") &&
                         <div className="col-md-12 link-cinza">
                             {console.log(props.data.descAndroid)}
                             {(props.data.descAndroid != "0" && props.data.descAndroid != "") &&
@@ -234,8 +256,7 @@ function Metadados(props) {
                             }
                         </div>
                     }
-
-                    {(props.data.descFacebook !== "teste" && props.data.descFacebook !== "") &&
+                    {(props.data.descApple && props.data.descApple !== "teste") &&
                         <div className="col-md-12 link-cinza">
                             {console.log(props.data.descApple)}
                             {(props.data.descApple != "0" && props.data.descApple != "") &&
