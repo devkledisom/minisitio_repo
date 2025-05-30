@@ -1,0 +1,24 @@
+.config-portal {
+    height: 100vh;
+}
+
+.config-portal hr {
+    width: 50%;
+    margin-left: 25px;
+}
+
+.config-portal .area-cards {
+    gap: 10px;
+}
+
+.config-portal section {
+    height: 100%;
+}
+
+.config-portal article {
+    height: 87%;
+}
+
+.config-portal article p {
+    bottom: 0;
+}

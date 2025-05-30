@@ -40,7 +40,7 @@ export const masterPath = {
 };
 
 export const version = {
-    version: 'v2.0.64'
+    version: 'v2.0.65'
 };
 
 

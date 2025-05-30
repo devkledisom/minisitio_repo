@@ -102,9 +102,9 @@ function ContactForm() {
                     <img id="contact-logo" src="../assets/img/teste/falecomodono.png" alt="" />
                     <span className='w-100 p-2'>
 
-                        <div className="contact-radios">
+                        <div className="contact-radios my-1">
                             <h6 className='text-start px-4'><strong>Assunto</strong></h6>
-                            <input type="radio" {...register('option')} id="visita" value="visita" />
+                            <input type="radio" {...register('option', { required: true })} id="visita" value="visita"/>
                             <label htmlFor="visita">Visita</label>
 
                             <input type="radio" {...register('option')} id="orcamento" value="orcamento" />
@@ -116,6 +116,7 @@ function ContactForm() {
                             <input type="radio" {...register('option')} id="contato" value="contato" />
                             <label htmlFor="contato">Contato</label>
                         </div>
+                        {errors.option && <span className='bg-danger text-light p-1 rounded'>*campo obrigatório</span>}
 
                     </span>
                 </div>
@@ -131,7 +132,7 @@ function ContactForm() {
                         <i className="fa fa-envelope"></i>
 
                         <input type="text" {...register('email', { required: true })} id="email" className="form-control" placeholder="Digite seu email" />
-                        {errors.email && <span>campo obrigatório</span>}
+                        {errors.email && <span className='text-danger'>*campo obrigatório</span>}
                     </div>
                 </div>
 
@@ -159,14 +160,14 @@ function ContactForm() {
                     </div>
                 </div>
 
-                <div className="col-md-12 px-3">
+            {/*     <div className="col-md-12 px-3">
                     <div className="input-icon mt-3">
                         <i className="fa fa-paperclip"></i>
 
                         <input type="hidden" name="MAX_FILE_SIZE" value="2097152" id="MAX_FILE_SIZE" />
                         <input type="file" {...register("anexo")} accept="image/*" id="anexo" className="form-control" />
                     </div>
-                </div>
+                </div> */}
 
                 <div className="col-md-12 px-3 py-3 text-end">
                     <button type="submit" className="btn cinza btn-sendmessage"><i className="fa fa-arrow-right m-0"></i> enviar</button>

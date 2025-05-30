@@ -89,9 +89,15 @@ function Header() {
                                     <i className="bi bi-chevron-down mx-1"></i>
                                 </button>
                                 <ul className="dropdown-menu lista-cart" aria-labelledby="dropdownMenuButton1">
-                                    <li>
+                                   {/*  <li>
                                         <Link className="dropdown-item nav-link" to="/admin/calhau" onClick={handleClick}>
                                         Calhau
+                                        <i className="bi bi-chevron-right mx-1"></i>
+                                        </Link>                                     
+                                    </li> */}
+                                    <li>
+                                        <Link className="dropdown-item nav-link" to="/admin/configuracoes" onClick={handleClick}>
+                                        Configuração
                                         <i className="bi bi-chevron-right mx-1"></i>
                                         </Link>                                     
                                     </li>

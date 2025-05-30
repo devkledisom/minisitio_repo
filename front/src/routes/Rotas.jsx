@@ -55,6 +55,11 @@ import PinEditar from "../admin/view/Pin/FormEdit";
 import Calhau from "../admin/view/Calhau/Calhau";
 import CalhauCadastro from "../admin/view/Calhau/FormCadastro";
 
+//IMPORT configuracoes do portal
+import ConfiguracoesPortal from "../admin/view/ConfiguracoesPortal/ConfiguracoesPortal";
+import AdminInstitucional from "../admin/view/ConfiguracoesPortal/Institucioanl/Institucional";
+import AdminContato from "../admin/view/ConfiguracoesPortal/Contato/index";
+
 //PAINEL ADMIN ANUNCIANTE
 import PainelAdmin from "../views/painelAnuciante/PainelAdmin";
 
@@ -76,7 +81,6 @@ import { QrcodeCadernoProvider } from "../context/QrcodeCadernoContext";
 
 //PAGINA 404
 import NotFound from '../views/NotFound';
-import { io } from "socket.io-client";
 
 
 
@@ -134,6 +138,11 @@ function Rotas() {
                     {/*ROTAS MODULO CALHAU*/}
                     <Route path="admin/calhau" element={<PrivateRoute><Calhau /></PrivateRoute>} />
                     <Route path="admin/calhau/cadastro" element={<PrivateRoute><CalhauCadastro /></PrivateRoute>} />
+
+                    {/*ROTAS MODULO CONFIGURACÕES DO PORTAL*/}
+                    <Route path="admin/configuracoes" element={<PrivateRoute><ConfiguracoesPortal /></PrivateRoute>} />
+                    <Route path="admin/institucional" element={<PrivateRoute><AdminInstitucional /></PrivateRoute>} />
+                    <Route path="admin/contato" element={<PrivateRoute><AdminContato /></PrivateRoute>} />
 
 
                     <Route path="admin/cadernos/editar" element={<PrivateRoute><CadernosEdit /></PrivateRoute>} />

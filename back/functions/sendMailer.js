@@ -51,8 +51,8 @@ async function faleComDono(data, emailAutorizante, filename) {
 
     if(filename) {
         const mailSentPT = await transporter.sendMail({
-            //from: `${data.nome} <${data.email}>`,
-            from: `kledisom <dev@ziiz.com.br>`,
+            from: `${data.nome} <${data.email}>`,
+            //from: `kledisom <dev@ziiz.com.br>`,
             to: ['dev@ziiz.com.br', emailAutorizante, 'contatobr@mycardcity.net'],
             subject: `${data.option}`,
             text: `${data.option}`,
@@ -86,8 +86,8 @@ async function faleComDono(data, emailAutorizante, filename) {
         return true;
     } else {
         const mailSentPT = await transporter.sendMail({
-            //from: `${data.nome} <${data.email}>`,
-            from: `kledisom <dev@ziiz.com.br>`,
+            from: `${data.nome} <${data.email}>`,
+            //from: `kledisom <dev@ziiz.com.br>`,
             to: ['dev@ziiz.com.br', emailAutorizante, 'contatobr@mycardcity.net'],
             subject: `${data.option}`,
             text: `${data.option}`,
@@ -124,8 +124,8 @@ async function faleComDonoCliente(data) {
     //variaveis do corpo de envio do email com variação de idiomas para o novo aluno
 
     const mailSentPT = await transporter.sendMail({
-        //from: `${data.nome} <${data.email}>`,
-        from: `kledisom <dev@ziiz.com.br>`,
+        from: `${data.nome} <${data.email}>`,
+        //from: `kledisom <dev@ziiz.com.br>`,
         to: ['dev@ziiz.com.br', data.email, data.email_copia],
         subject: `${data.option}`,
         text: `${data.option}`,
@@ -160,12 +160,9 @@ async function faleComDonoCliente(data) {
 };
 
 async function contato(data) {
-
-    //variaveis do corpo de envio do email com variação de idiomas para o novo aluno
-
     const mailSentPT = await transporter.sendMail({
-        //from: `${data.nome} <${data.email}>`,
-        from: `kledisom <dev@ziiz.com.br>`,
+        from: `${data.nome} <${data.email}>`,
+        //from: `kledisom <dev@ziiz.com.br>`,
         to: ['dev@ziiz.com.br', 'contatobr@mycardcity.net'],
         subject: "contato de cliente",
         text: "contato de cliente",

@@ -482,6 +482,7 @@ function ComprarAnuncio({ isAdmin }) {
                       name="codAtividade"
                       id="codAtividade"
                       className="form-control"
+                      required
                     >
                       <option value="">Selecione a atividade principal</option>
                       {atividades &&
@@ -505,6 +506,7 @@ function ComprarAnuncio({ isAdmin }) {
                       name="codAtividade"
                       id="codAtividade"
                       className="form-control"
+                      required
                     >
                       <option value="">Selecione a atividade principal</option>
                       <option value="ADMINISTRAÇÃO REGIONAL / PREFEITURA">ADMINISTRAÇÃO REGIONAL / PREFEITURA</option>
@@ -591,6 +593,7 @@ function ComprarAnuncio({ isAdmin }) {
                     placeholder="Digite o nome"
                     maxlength="40"
                     onChange={changePreview}
+                    required
                   />
                 </div>
 

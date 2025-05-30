@@ -20,9 +20,31 @@ import AlertMsg from "../../components/Alerts/AlertMsg";
 function Contato() {
 
     const [mosaicoImg, setMosaicoImg] = useState([]);
-    const [smoot, setSmoot] = useState(false);
+     const [data, setData] = useState({});
     const [showSpinner, setShowSpinner] = useState(false);
     const [alert, setAlert] = useState(false);
+
+        useEffect(() => {
+        buscarAlteracao();
+    }, []);
+
+    const navigate = useNavigate();
+
+
+    function buscarAlteracao() {
+        setShowSpinner(true);
+
+        fetch(`${masterPath.url}/admin/contato/read`)
+            .then((x) => x.json())
+            .then((res) => {
+                if (res.success) {
+                    setShowSpinner(false);
+                    setData(res.message);
+                } else {
+                    setShowSpinner(false);
+                }
+            })
+    };
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -113,20 +135,19 @@ function Contato() {
                             <div className="contato-bg" style={{ "overflow": "hidden" }}>
                                 <h2><i className="fa fa-star-o"></i> Fale conosco</h2>
                                 <div className="col-md-12 contato">
-                                    <i className="fa fa-phone"></i> <h4 className="contato-font"> <br /> +55 61 3255-1285</h4>
+                                    <i className="fa fa-phone"></i> <h4 className="contato-font"> <br /> {data.telefone}</h4>
                                 </div>
                                 <div className="col-md-12 contato">
-                                    <i className="fa fa-envelope"></i> <h4 className="contato-font"> <br /> contatobr@mycardcity.net</h4>
+                                    <i className="fa fa-envelope"></i> <h4 className="contato-font"> <br /> {data.email}</h4>
                                 </div>
                                 <div className="col-md-12 contato">
-                                    <i className="fa fa-map-marker"></i> <h4 className="contato-font"> <br /> SHN Quadra 01, Bloco A,
-                                        Edifício Le Quartier Bereau e Office, Sala 1414 - Asa Norte</h4>
+                                    <i className="fa fa-map-marker"></i> <h4 className="contato-font"> <br /> {data.endereco}</h4>
                                 </div>
                                 <div className="col-md-12 contato">
-                                    <i className="fa fa-facebook"></i> <h4 className="contato-font"> <br /> https://www.facebook.com/mycardcity1</h4>
+                                    <i className="fa fa-facebook"></i> <h4 className="contato-font"> <br /> {data.facebook}</h4>
                                 </div>
                                 <div className="col-md-12 contato">
-                                    <i className="fa fa-instagram"></i> <h4 className="contato-font"> <br /> https://www.instagram.com/mycardcity</h4>
+                                    <i className="fa fa-instagram"></i> <h4 className="contato-font"> <br /> {data.instagram}</h4>
                                 </div>
                             </div>
                             <div className="vantagens margin-bottom-20">&nbsp;</div>

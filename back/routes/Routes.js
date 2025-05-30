@@ -14,6 +14,8 @@ const Upload = require('../controllers/Upload');
 const UserActions = require('../controllers/UserActions');
 const Email = require('../controllers/Email');
 const WebHook = require('../controllers/WebHooks.js');
+const InstConfig = require('../controllers/admin/institucional-config/controller.js');
+const contatoConfig = require('../controllers/admin/contato-config/controller.js');
 
 //FUNCTIONS
 const saveImport = require('../functions/serverImport');
@@ -246,6 +248,13 @@ router.get('/api/portal/share/:id', async (req, res) => {
   res.send(html).status(200);
 });
 
+//SITE INSTITUCIONAL
+router.post('/api/admin/institucional/config', InstConfig.atualizarRegistro);
+router.get('/api/admin/institucional/read', InstConfig.lerRegistro);
+
+//SITE CONTATO
+router.post('/api/admin/contato/config', contatoConfig.atualizarContato);
+router.get('/api/admin/contato/read', contatoConfig.lerContato);
 
 module.exports = router;
 
