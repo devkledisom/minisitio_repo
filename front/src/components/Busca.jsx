@@ -4,8 +4,11 @@ import '../assets/css/main.css';
 import '../assets/css/default.css';
 import '../assets/css/busca.css';
 
+import Card from 'react-bootstrap/Card';
+
 import { masterPath } from '../config/config';
 import { useBusca } from '../context/BuscaContext';
+import { use } from 'react';
 
 function Busca(props) {
 
@@ -40,29 +43,36 @@ function Busca(props) {
         buscarListaEstados(e.target.value);
 
     };
+
+
     const definirCaderno = (e) => {
+
         let codigoCidade = document.querySelectorAll('#codUf3')[0].value;
-        const teste = caderno.find(cad => cad.nomeCaderno == codigoCidade);
+        // const teste = caderno.find(cad => cad.nomeCaderno == codigoCidade);
 
         if (codigoCidade != "TODO") {
-            localStorage.setItem("caderno: ", teste.nomeCaderno);
+            // localStorage.setItem("caderno: ", teste.nomeCaderno);
             sessionStorage.setItem("caderno: ", codigoCidade);
 
-            setCadernoUf(teste.UF);
-            console.log(teste.UF, codigoCidade)
+            // setCadernoUf(teste.UF);
+            // console.log(teste.UF, codigoCidade)
+
             //setCadernoCidade(teste.nomeCaderno);
             setCodCaderno(codigoCidade);
+            verClassificado(codUf, codigoCidade)
+
         } else {
             localStorage.setItem("caderno: ", "TODO");
             sessionStorage.setItem("caderno: ", codigoCidade);
 
-            setCodCaderno(codigoCidade);
+            //setCodCaderno(codigoCidade);
+
         }
 
     };
 
     useEffect(() => {
-        if(props.uf && props.caderno) {
+        if (props.uf && props.caderno) {
             setUf(props.uf);
             setCodUf(props.uf);
             setCodCaderno(props.caderno);
@@ -70,32 +80,31 @@ function Busca(props) {
 
             buscarListaEstados(props.uf);
 
-            console.log(props.uf, props.caderno)
 
         } else {
-          /*   setCodUf(ufSalva);
-            setCodCaderno(cadSalvo); */
+            /*   setCodUf(ufSalva);
+              setCodCaderno(cadSalvo); */
         }
     }, [props.uf])
 
     useEffect(() => {
-       
+
 
         let ufSalva = sessionStorage.getItem("uf: ");
         let cadSalvo = sessionStorage.getItem("caderno: ");
         let querySalvo = sessionStorage.getItem("querySearch");
         //console.log(ufSalva, cadSalvo)
-        if(props.uf && props.caderno) {
+        if (props.uf && props.caderno) {
             setUf(props.uf);
             setCodUf(props.uf);
             setCodCaderno(props.caderno);
         } else {
-          /*   setCodUf(ufSalva);
-            setCodCaderno(cadSalvo); */
+            /*   setCodUf(ufSalva);
+              setCodCaderno(cadSalvo); */
         }
-       
 
-        if(querySalvo) {
+
+        if (querySalvo) {
             document.querySelector('#inputBusca').value = querySalvo;
         }
 
@@ -114,51 +123,38 @@ function Busca(props) {
                 }
             })
 
-       /*  fetch(`${masterPath.url}/cadernos?uf=${ufSelected}`)
-            .then((x) => x.json())
-            .then((res) => {
-                setCaderno(res);
-                console.log(res)
-                if (location.pathname == '/') {
-                    ///getUserLocation();
-                }
-                if (cadSalvo != undefined) {
-                    //document.querySelectorAll('#codUf3')[0].value = cadSalvo;
-                    
-                }
-            }) */
 
-            verificarPromocao()
+        verificarPromocao()
     }, []);
 
     function buscarListaEstados(uf) {
         fetch(`${masterPath.url}/cadernos?uf=${uf}`)
-        .then((x) => x.json())
-        .then((res) => {
-            
-            setCaderno(res);
-            if (location.pathname == '/') {
-                ///getUserLocation();
-            }
-        })
+            .then((x) => x.json())
+            .then((res) => {
+
+                setCaderno(res);
+                if (location.pathname == '/') {
+                    ///getUserLocation();
+                }
+            })
     }
-    
+
 
     function verificarPromocao() {
         fetch(`${masterPath.url}/read/promocao/${props.caderno}/${props.uf}`)
-          .then(x => x.json())
-          .then(res => {
-            if (res.success) {
-                if(btnPromo.current) {
-                    btnPromo.current.classList.add('pulse-promotion');
+            .then(x => x.json())
+            .then(res => {
+                if (res.success) {
+                    if (btnPromo.current) {
+                        btnPromo.current.classList.add('pulse-promotion');
+                    }
+
+                    setPromocao(res.promocoes);
                 }
-                
-                setPromocao(res.promocoes);
-            }
-    
-          })
-      }
-      
+
+            })
+    }
+
 
     const fetchAnuncios = async () => {
         setLoading(true);
@@ -168,17 +164,17 @@ function Busca(props) {
         let regex = /^(?=.*[A-Za-z])[A-Za-z0-9. ]+$/;
         let searchValidator = regex.test(inputSearch);
 
-     /*    if(!searchValidator) {
-            alert('Atenção! números não são permitidos no campo de busca');
-            setLoading(false);
-            document.querySelector('#inputBusca').value = "";
-            return;
-        }
- */
+        /*    if(!searchValidator) {
+               alert('Atenção! números não são permitidos no campo de busca');
+               setLoading(false);
+               document.querySelector('#inputBusca').value = "";
+               return;
+           }
+    */
 
         let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
         let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;
-        
+
 
 
         if (cadernoUf === "UF") {
@@ -225,7 +221,7 @@ function Busca(props) {
             setResult(request);
             console.log(request);
             setLoading(false);
-            navigate(`/buscar/${codigoCaderno}/${uf}`, { state: {paramBusca: valor_da_busca} });
+            navigate(`/buscar/${codigoCaderno}/${uf}`, { state: { paramBusca: valor_da_busca } });
 
             /*  if (props.paginaAtual === "home" || props.paginaAtual === "caderno") {
                  navigate("/buscar");
@@ -238,32 +234,20 @@ function Busca(props) {
         }
     };
 
-    const verClassificado = () => {
+    const verClassificado = (uf, caderno) => {
         setLoading(true);
         let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
         let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;
 
         console.table([cadernoUf, cadernoCidade, codCaderno, codUf, cadernoCidade])
 
+
         if (cadernoUf === "UF") {
             alert("escolha um estado");
         } else if (cadernoCidade === "TODO") {
             alert("escolha uma cidade");
         } else {
-            window.location = `/caderno-geral/${codCaderno}/${codUf}`;
-            /* fetch(`${masterPath.url}/admin/anuncio/classificado/${codCaderno}/${codUf}`)
-                .then(x => x.json())
-                .then(res => {
-                    console.log(res)
-                    if (res.success) {
-                        setLoading(false)
-                        window.location = `/caderno-geral/${codCaderno}/${codUf}`;
-                    } else {
-                        alert("caderno não localizado")
-                    }
-
-                }) */
-
+            window.location.href = `/caderno-geral/${caderno}/${uf}`;
         }
     };
 
@@ -330,92 +314,41 @@ function Busca(props) {
                 const addressComponents = data.results[0].address_components;
                 let city = '';
                 let state = '';
-                //console.log(addressComponents)
-
-                /*                 state = addressComponents[4].short_name;
-                
-                                //document.querySelectorAll('#codUf2')[0].value = component.short_name;
-                                setCodUf(state)
-                                setUf(state);
-                
-                                localStorage.setItem("uf: ", state);
-                                sessionStorage.setItem("uf: ", state);
-                
-                                console.log(ufSelected)
-                                if(ufSelected != 0) {
-                                    city = addressComponents[2].short_name.toUpperCase();
-                                    setCodCaderno(city)
-                                    localStorage.setItem("caderno: ", city.toUpperCase());
-                                    sessionStorage.setItem("caderno: ", city.toUpperCase());
-                                    //console.log(city)
-                                }
-                 */
-
-
-                /* addressComponents.forEach(component => {
-
-                    if (component.types.includes('administrative_area_level_1')) {
-                        state = component.short_name;
-
-                        //document.querySelectorAll('#codUf2')[0].value = component.short_name;
-                        setCodUf(component.short_name)
-                        setUf(component.short_name);
-
-                        localStorage.setItem("uf: ", component.short_name);
-                        sessionStorage.setItem("uf: ", component.short_name);
-
-
-                    }
-
-
-                    if (component.types.includes("administrative_area_level_4")) {
-                        console.log("administrative_area_level_4")
-                        city = component.short_name.toUpperCase();
-                        setCodCaderno(component.short_name)
-                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
-
-                        return;
-
-                    } else if (component.types.includes("administrative_area_level_2")) {
-                        city = component.short_name.toUpperCase();
-                        setCodCaderno(component.short_name)
-                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                        console.log("administrative_area_level_2")
-
-                    }
-
-                }); */
 
                 for (const component of addressComponents) {
                     if (component.types.includes('administrative_area_level_1')) {
                         state = component.short_name;
-                
+
                         setCodUf(component.short_name);
-                        setUf(component.short_name);
-                
+                        //setUf(component.short_name);
+
                         localStorage.setItem("uf: ", component.short_name);
                         sessionStorage.setItem("uf: ", component.short_name);
 
                         buscarListaEstados(component.short_name);
+                        console.log("Estado encontrado:", component.short_name);
                     }
-                
+
                     if (component.types.includes("administrative_area_level_4")) {
                         city = component.short_name.toUpperCase();
                         setCodCaderno(component.short_name);
                         localStorage.setItem("caderno: ", component.short_name.toUpperCase());
                         sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                
+
                         break; // Interrompe o loop completamente
                     } else if (component.types.includes("administrative_area_level_2")) {
                         city = component.short_name.toUpperCase();
                         setCodCaderno(component.short_name);
                         localStorage.setItem("caderno: ", component.short_name.toUpperCase());
                         sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                        setTimeout(() => {
+                            verClassificado(state, city);
+                        }, 1000);
+
+
                     }
                 }
-                
+
 
 
 
@@ -460,7 +393,7 @@ function Busca(props) {
     function abrirPromocao() {
         let qtdePromocao = promocao.length;
 
-        if(qtdePromocao == 1) {
+        if (qtdePromocao == 1) {
             navigate(`/perfil/${promocao[0].codAnuncio}?promocao=ativa`);
         } else {
             const uf = document.querySelector('#codUf2').value;
@@ -470,20 +403,19 @@ function Busca(props) {
     }
 
     return (
-        <div className='border-busca container-fluid formulario formulario-home'>
+        <div className='border-busca container-fluid formulario formulario-home busca-caderno'>
             {loading &&
                 <button class="buttonload" style={{ display: "block" }}>
                     <i class="fa fa-spinner fa-spin"></i>Carregando
                 </button>
             }
 
-
             <div className='container'>
                 <div className="row">
                     <div className='col-md-offset-1 col-md-12'>
-                        <form id="buscador-home" name="buscador-home" className="d-flex justify-content-center flex-column" action="" method="post">
-                            <div className="row d-flex justify-content-center p-bottom">
-                                <div className="col-md-3 col-6 d-flex">
+                        <form id="buscador-home" name="buscador-home" className="d-flex justify-content-center flex-column position-relative" action="" method="post">
+                            <div className="row d-flex p-bottom">
+                                <div className="col-md-5 col-6 d-flex">
                                     <i className="fa fa-compass icone-form"></i>
                                     <div className="form-group w-100">
 
@@ -499,7 +431,7 @@ function Busca(props) {
                                 <div className="col-lg-5 col-md-5 col-sm-5 col-xs-8 col-6 d-flex">
                                     <i className="fa fa-map-marker icone-form"></i>
                                     <div className="form-group w-100">
-                                        
+
                                         <select name="codUf3" id="codUf3" className="form-control form-select" onChange={definirCaderno} value={codCaderno}>
                                             {/*  <option value="TODO">TODO</option> */}
                                             <option value="CIDADE">CIDADE</option>
@@ -512,30 +444,37 @@ function Busca(props) {
                                     </div>
                                 </div>
                                 {windowWidth >= 768 ? (
-                                    <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs">
+                                    <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs area-promo">
                                         <div className="btn-group" role="group">
-                                            <button type="button"
-                                                className="btn proximo btnCaderno btn-3"
-                                                onClick={verClassificado}
-                                                title=" Ver Caderno"><i className="fa fa-file-text"></i> <span>Ver Caderno</span></button>
                                             <button type="button" className="btn proximo btnGrupo btnPromocao" ref={btnPromo} data-promocao="1" title="Promoção" onClick={() => abrirPromocao()}>
                                                 <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
                                             </button>
                                         </div>
                                     </div>
+                                    /*  <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs">
+                                         <div className="btn-group" role="group">
+                                             <button type="button"
+                                                 className="btn proximo btnCaderno btn-3"
+                                                 onClick={verClassificado}
+                                                 title=" Ver Caderno"><i className="fa fa-file-text"></i> <span>Ver Caderno</span></button>
+                                             <button type="button" className="btn proximo btnGrupo btnPromocao" ref={btnPromo} data-promocao="1" title="Promoção" onClick={() => abrirPromocao()}>
+                                                 <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
+                                             </button>
+                                         </div>
+                                     </div> */
                                 ) : (
                                     ""
                                 )}
                             </div>
-                            <div className="row d-flex justify-content-center">
+                            <div className="row d-flex">
 
-                                <div className='class="col-lg-9 col-md-8 col-sm-8 col-xs-12"'>
+                                <div className='class="col-lg-9 col-md-10 col-sm-8 col-xs-12"'>
                                     <div className="form-group input-icon">
                                         <i className="fa fa-tags"></i>
                                         <input id="inputBusca" name="inputBusca" type="text" className="form-control" placeholder="Digite nome ou atividade" onKeyDown={teclaLogin} />
                                     </div>
                                 </div>
-                                <div className="col-lg-3 col-md-4 col-sm-4 col-xs-5">
+                                {/*  <div className="col-lg-3 col-md-4 col-sm-4 col-xs-5">
                                     <button
                                         type="button"
                                         className="btn btn-block cinza btnBuscar target-start-search col-md-10 w-100"
@@ -546,15 +485,27 @@ function Busca(props) {
                                         <i className="fa fa-search"></i>
                                         Buscar
                                     </button>
+                                </div> */}
+                            </div>
+                            <div className="row d-flex justify-content-center">
+                                <div className="col-lg-3 col-md-4 col-sm-4 col-xs-5">
+                                    <button
+                                        type="button"
+                                        className="btn btn-block cinza btnBuscar target-start-search col-md-10 w-100"
+                                        id="btnBuscar"
+                                        title="Buscar"
+                                        onClick={() => fetchAnuncios()}
+                                    >
+                                        <i className="fa fa-search"></i>
+                                        Buscar
+                                    </button>
                                 </div>
-
-
                             </div>
                             {windowWidth >= 768 ? (
                                 ""
                             ) : (
                                 <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs" style={{ paddingTop: "30px" }}>
-                                    <div className="btn-group" role="group">
+                                    {/*          <div className="btn-group" role="group">
                                         <button type="button"
                                             className="btn proximo btnCaderno btn-outline-dark rounded"
                                             onClick={verClassificado}
@@ -562,7 +513,13 @@ function Busca(props) {
                                         <button type="button" className="btn proximo btnGrupo btnPromocao" data-promocao="1" title="Promoção">
                                             <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
                                         </button>
-                                    </div>
+                                    </div> */}
+                                    <Card /* bg="warning" */ className='d-flex' style={{ height: '60px', background: '#FFCC29' }}>
+                                        <Card.Body className='d-flex align-items-center'>
+                                            <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
+                                            <Card.Title className='text-center px-2'>Promoção</Card.Title>
+                                        </Card.Body>
+                                    </Card>
                                 </div>
                             )}
                         </form>

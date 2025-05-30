@@ -55,7 +55,7 @@ function ContactForm() {
         setLoading(true);
         const formData = new FormData();
 
-        formData.append("anexo", data.anexo[0]); // Adiciona o arquivo ao FormData
+        //formData.append("anexo", data.anexo[0]); // Adiciona o arquivo ao FormData
 
         // Adiciona outros campos do formulário ao FormData
         formData.append("option", data.option);
