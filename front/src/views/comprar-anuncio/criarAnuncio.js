@@ -6,23 +6,26 @@ import Swal from 'sweetalert2';
 export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa) {
 
 
-    var validation = false;
+    let validation = true;
+
     document.querySelectorAll('[required]').forEach((item) => {
-        if (item.value == "") {
+        if (item.value.trim() === "") {
             item.style.border = "1px solid red";
             validation = false;
-            //setValidation(false);
-            return;
         } else {
             item.style.border = "1px solid gray";
-            validation = true;
-            //setValidation(true);
-        };
+        }
     });
 
     if (!validation) {
+        Swal.fire({
+            title: "Atenção",
+            text: "Preencha todos os campos obrigatórios!",
+            icon: "warning",
+            confirmButtonText: "OK"
+        });
         return;
-    };
+    }
 
     setShowSpinner(true);
     document.querySelector('.form-create').style.filter = 'blur(2px)';
@@ -83,7 +86,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                 } else {
                     console.log("Esse usuário já está cadastrado!");
                 }
-                console.log(res);
+                //console.log(res);
                 //setShowSpinner(false);
             });
     }

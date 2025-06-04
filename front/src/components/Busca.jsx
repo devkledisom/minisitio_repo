@@ -307,6 +307,7 @@ function Busca(props) {
     function checkLocation(latitude, longitude) {
         const apiKey = "AIzaSyBpuxjyShwHApt-FthqurSP4G0xx7nznl0";  // Substitua com sua chave API do Google
         const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+        //https://maps.googleapis.com/maps/api/geocode/json?latlng=-2355052,-46633309&key=AIzaSyBpuxjyShwHApt-FthqurSP4G0xx7nznl0
 
         fetch(url)
             .then(response => response.json())

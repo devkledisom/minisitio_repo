@@ -608,6 +608,7 @@ function ComprarAnuncio({ isAdmin }) {
                     className="form-control"
                     placeholder="Digite o endereço"
                     onChange={changePreview}
+                    required
                   />
                 </div>
                 {radioCheck != 1 && <div

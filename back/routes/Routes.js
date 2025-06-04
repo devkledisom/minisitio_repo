@@ -110,6 +110,7 @@ router.post('/api/admin/anuncio/create', Admin.criarAnuncio);
 router.put('/api/admin/anuncio/status/:id', auth, Admin.updateAnuncioStatus);
 router.delete('/api/admin/anuncio/delete/:id', auth, Admin.deleteAnuncio);
 router.put('/api/admin/anuncio/update', Admin.atualizarAnuncio);
+router.put('/api/admin/anuncio/update/tipo', Admin.atualizarTipoPerfil);
 router.get('/api/admin/anuncio/buscar', Admin.buscarAnuncioId);
 router.get('/api/admin/anuncio/public', Admin.buscarAnuncioIdpublic);
 router.get('/api/admin/anuncio/visualizacoes', Admin.visualizacoes);

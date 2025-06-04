@@ -189,7 +189,7 @@ function UserActions(props) {
                     <img src="/assets/img/logo.png" />
                     Atualizar
                 </a>
-                <a href="/area-assinante" class="btn btn-default margin-bottom-10">
+                <a href={`/renovar/perfil/${props.id}`} class="btn btn-default margin-bottom-10">
                     <img src="/assets/img/logo.png" />
                     Renovar
                 </a>
