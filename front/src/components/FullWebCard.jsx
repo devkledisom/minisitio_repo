@@ -96,6 +96,17 @@ function FullWebCard(props) {
         }
     };
 
+    const verificarLogoPromo = (param) => {
+
+        if (!param) return false;
+
+        if (param != null && param != "" && param != "0") {
+            return true;
+        }
+
+    };
+
+
     return (
         <div className="FullWebCard">
             <div className="container">
@@ -223,12 +234,13 @@ function FullWebCard(props) {
                             </h2>
                             <div className='py-3'>
                                 <i className='link-cinza'>
+                                    {console.log("dasd", resultLocal.logoPromocao)}
                                     {
                                         promoChange(resultLocal.linkPromo) && <a href={resultLocal.linkPromo}><img src="../assets/img/link_promocao.png" alt="icone" width={60} /></a>
                                     }
                                     {
                                         !promoChange(resultLocal.linkPromo) ?
-                                            (resultLocal.logoPromocao != null && !promoChange(resultLocal.linkPromo)) ?
+                                            (verificarLogoPromo(resultLocal.logoPromocao) && !promoChange(resultLocal.linkPromo)) ?
                                                 <img src="../assets/img/link_promocao.png" className="promoModal"
                                                     alt="icone" width={60} onClick={() => setShowState(true)} /> :
                                                 <img src="../assets/img/link_promocao.png" className="promoModal" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="icone" width={60} />
@@ -288,7 +300,7 @@ function FullWebCard(props) {
                                         <img src={`${masterPath.url}/files/2/${resultLocal.cashback_logo}`} className='rounded my-1' alt="cashback" />
                                     </i>
                                 </a>
-                                
+
                             }
 
                             {cashbackCondicoes(resultLocal.cashback_logo, resultLocal.cashback_link) === "condicao3" &&

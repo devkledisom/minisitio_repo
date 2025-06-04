@@ -5053,7 +5053,7 @@ module.exports = {
             if (logoPromocao != '' && promocaoData != '') {
                 const criarPromocao = await Promocao.create({
                     codAnuncio: idAnuncio,
-                    banner: logoPromocao,
+                    banner: logoPromocao || "",
                     link_externo: linkPromo,
                     data_validade: promocaoData,
                     uf: codUf,
@@ -5103,6 +5103,16 @@ module.exports = {
             console.log(err)
             res.json({ success: false, message: err })
         }
+    },
+    atualizarTipoPerfil: async (req, res) => {
+         const atualizarPerfil = await Anuncio.update(req.body, {
+                where: {
+                    codAnuncio: req.body.codAnuncio
+                },
+                raw: true
+            });
+
+            res.json({ success: true, message: atualizarPerfil });
     },
     deleteAnuncio: async (req, res) => {
         await database.sync();

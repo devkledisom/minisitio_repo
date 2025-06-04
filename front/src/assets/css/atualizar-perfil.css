@@ -1,0 +1,237 @@
+.atualizar-perfil .simulacao-do-anuncio {
+    background-color: #ffcc29;
+    padding-bottom: 5px;
+    padding-top: 1px;
+}
+
+.atualizar-perfil .formulario-de-cadastro-titulo {
+    background-color: #4f4f4f;
+    padding: 15px;
+    text-align: center;
+    
+
+    & h2 {
+        color: #fff !important;
+        font-size: 25px !important;
+    }
+
+
+}
+
+.atualizar-perfil .interna h1,
+.atualizar-perfil .interna h2 {
+    color: black;
+    font-weight: bold;
+    font-size: 35px;
+}
+
+.atualizar-perfil .anuncio {
+    background-color: #ffcc29;
+    margin-top: 15px;
+    padding-bottom: 10px;
+    overflow: hidden;
+}
+
+.atualizar-perfil .form-group {
+    margin-bottom: 15px;
+}
+
+.atualizar-perfil .tipo-de-anuncio {
+    padding-top: 15px;
+    font-weight: bold;
+    color: #4f4f4f;
+    text-align: center;
+    font-size: 16px;
+}
+
+.atualizar-perfil .anuncio-options {
+    padding-top: 9px;
+    padding-left: 3px;
+    color: #4f4f4f;
+}
+
+.atualizar-perfil .codigo-promocional {
+    background-color: #edecec;
+    padding: 15px;
+}
+
+.atualizar-perfil h2 {
+    font-size: 27px;
+}
+
+.atualizar-perfil .assinatura {
+    background-color: #ffcc29;
+    padding-top: 1px;
+    padding-bottom: 10px;
+    margin-top: 15px !important;
+    text-align: center;
+}
+
+.atualizar-perfil .tipo-de-anuncio {
+    padding-top: 15px;
+    font-weight: bold;
+    color: #4f4f4f;
+    text-align: center;
+    font-size: 16px;
+}
+
+.atualizar-perfil .anuncio-options {
+    padding-top: 9px;
+    padding-left: 3px;
+    color: #4f4f4f;
+}
+
+.atualizar-perfil .forma-de-pagamento i {
+    padding-top: 8px;
+    padding-left: 11px;
+}
+
+.atualizar-perfil .interna i {
+    font-size: 25px;
+}
+
+.atualizar-perfil .margin-top-20 {
+    margin-top: 20px !important;
+
+}
+
+.atualizar-perfil a {
+    color: #4f4f4f;
+    outline: 0;
+    text-decoration: none;
+}
+
+.atualizar-perfil a:hover {
+    text-decoration: underline;
+}
+
+.atualizar-perfil .list-inline {
+    & li {
+        padding-right: 5px;
+        padding-left: 1px;
+    }
+}
+
+.atualizar-perfil .simulacao .cartao {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    width: 100%;
+}
+
+.atualizar-perfil .caderno .cartao {
+    background-color: #edecec;
+    margin-bottom: 8px;
+}
+
+.assinatura .preco {
+    font-size: 40px;
+}
+
+.atualizar-perfil .formulario-de-cadastro {
+    background-color: #4f4f4f;
+    text-align: center;
+    padding: 6px;
+    color: #fff !important;
+    font-size: 27px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%
+}
+
+.atualizar-perfil .form-control {
+    opacity: 0.8;
+    height: 50px;
+    padding-left: 40px;
+    font-weight: bold;
+}
+
+.atualizar-perfil .interna i {
+    font-size: 25px;
+}
+
+.atualizar-perfil .botao-procurar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &button {
+        width: 100%
+    }
+}
+
+.atualizar-perfil .form-group div {
+    margin-top: 5px;
+}
+
+/* .webcard {
+    border: 1px solid red
+} */
+
+.atualizar-perfil .choose-main #btnDeleteImagem {
+    margin-top: 5px;
+    color: rgba(255, 0, 0, 0.61);
+}
+
+.atualizar-perfil .comImagem {
+     border: 5px solid black;
+   margin-bottom: 15px;
+}
+.atualizar-perfil .comImagem img {
+    width: 100%;
+    height: 245px;
+   
+}
+
+.atualizar-perfil .codigo-promocional h4 {
+    font-size: 17px;
+    font-weight: 500;
+}
+.atualizar-perfil .codigo-promocional h5 {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.atualizar-perfil  #btnDescImagem {
+    font-size: 22px;
+    padding: 5px;
+}
+
+.atualizar-perfil  .card-preview p {
+    padding-left: 20px;
+}
+
+.atualizar-perfil  #area-icons-actions i {
+    display: flex;
+}
+
+.atualizar-perfil  .swal2-confirm {
+    background-color: #4f4f4f;
+}
+
+.atualizar-perfil  .input-disabled {
+    background-color: #FFFFFF;
+}
+
+@media screen and (max-width: 768px) {
+    .atualizar-perfil .formulario-de-cadastro-titulo h2 {
+        font-size: 20px !important;
+    }
+
+    .atualizar-perfil .formulario-de-cadastro {
+        font-size: 20px;
+    }
+
+    .atualizar-perfil .assinatura .preco {
+        font-size: 30px;
+    }
+
+    .atualizar-perfil .interna h1,
+    .atualizar-perfil .interna h2 {
+        font-size: 25px;
+    }
+
+    .atualizar-perfil .container {
+        flex-direction: column;
+    }
+    
+}

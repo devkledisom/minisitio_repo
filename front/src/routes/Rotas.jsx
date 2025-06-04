@@ -65,6 +65,9 @@ import PainelAdmin from "../views/painelAnuciante/PainelAdmin";
 
 //AREA DO ASSINANTE
 import AssinanteCadastro from "../views/area-assinante/AssinanteCadastro";
+import AtualizarPerfil from "../views/comprar-anuncio/AtualizarPerfil";
+//IMPORTS PLUGINS
+
 import Qrcode from "../plugins/Qrcode";
 import Adesivo from "../plugins/Adesivo";
 
@@ -152,6 +155,9 @@ function Rotas() {
 
                     {/* ROTAS AREA DO ASSINANTE */}
                     <Route path="criar-cadastro" element={<AssinanteCadastro />} />
+                    <Route path="renovar/perfil/:codAnuncio" element={<AtualizarPerfil />} />
+
+
                     <Route path="qrcode" element={<Qrcode />} />
                     <Route path="adesivo" element={<Adesivo />} />
 

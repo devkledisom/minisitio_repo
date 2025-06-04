@@ -26,12 +26,7 @@ const Promocao = database.define('promocao', {
     banner: {
         type: Sequelize.STRING(255),
         allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        unique: false
     },
 
     link_externo: {
