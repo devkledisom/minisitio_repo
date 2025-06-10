@@ -206,7 +206,7 @@ function Caderno(props) {
       <main>
         <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
         <h1 id="title-caderno" className='py-2 title-caderno'>Capa do Caderno {caderno} - {estado}</h1>
-        {/*         <h2className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
+        {/*         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
         <div className='container caderno'>
           <div className='col-md-12'>
