@@ -393,13 +393,17 @@ module.exports = {
         await database.sync();
 
         const codigoAnuncio = req.params.codAnuncio;
-        console.log("dsadasd", codigoAnuncio)
 
-        //Atividades
+        //anuncio
         const resultAnuncio = await Anuncio.findAll({
             where: {
                 codAnuncio: codigoAnuncio
-            }
+            },
+            include: [{
+                model: Promocao,
+                as: 'promoc',
+                attributes: ['data_validade', 'banner']
+            }]
         });
 
         try {

@@ -7,7 +7,8 @@ const path = require('path');
 const fs = require('fs');
 //streams
 const http = require("http");
-//const { Server } = require("socket.io");
+const cron = require('node-cron');
+const { deletarPromocoesExpiradas } = require('./crons/promocao');
 
 
 // Carregar certificados
@@ -27,7 +28,23 @@ var io = require("socket.io")(server, {
 app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 
+const allowedOrigins = [
+    'https://meufrontend.com',
+    'https://admin.meufrontend.com'
+];
+
+/* app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+})); */
+
 app.use(cors());
+
 
 // Middleware para passar a instância `io` para as rotas
 function customMiddleware(io) {
@@ -94,15 +111,18 @@ io.on("connection", (socket) => {
 
 });
 
-/* const Admin = require('./controllers/Admin');
-const saveImport = require('./functions/serverImport');
-app.post('/api/admin/anuncio/import', saveImport().single('uploadedfile'), (req, res) => Admin.import4excellindex(req, res, io)); */
-
 app.get("/as", (req, res) => {
     io.emit("progress", { a: 1 });
 })
+
+cron.schedule('*/5 * * * *', () => {
+    console.log('Deletando promoções expiradas...');
+    deletarPromocoesExpiradas();
+});
 
 
 app.listen(port, () => {
     console.log("rodando na porta: ", port);
 });
+
+

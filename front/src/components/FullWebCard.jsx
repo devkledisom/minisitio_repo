@@ -73,9 +73,11 @@ function FullWebCard(props) {
 
     const promoChange = (param) => {
 
-        if (!param) return false;
+        if (!param.linkPromo) return false;
 
-        if (param.includes("http")) {
+        if (!param.promoc) return false;
+
+        if (param.linkPromo.includes("http")) {
             return true;
         } else {
             return false;
@@ -98,9 +100,10 @@ function FullWebCard(props) {
 
     const verificarLogoPromo = (param) => {
 
-        if (!param) return false;
+        if (!param.promoc) return false;
 
-        if (param != null && param != "" && param != "0") {
+
+        if (param.promoc.banner != null && param.promoc.banner != "" && param.promoc.banner != "0") {
             return true;
         }
 
@@ -234,13 +237,12 @@ function FullWebCard(props) {
                             </h2>
                             <div className='py-3'>
                                 <i className='link-cinza'>
-                                    {console.log("dasd", resultLocal.logoPromocao)}
                                     {
-                                        promoChange(resultLocal.linkPromo) && <a href={resultLocal.linkPromo}><img src="../assets/img/link_promocao.png" alt="icone" width={60} /></a>
+                                        promoChange(resultLocal) && <a href={resultLocal.linkPromo}><img src="../assets/img/link_promocao.png" alt="icone" width={60} /></a>
                                     }
                                     {
-                                        !promoChange(resultLocal.linkPromo) ?
-                                            (verificarLogoPromo(resultLocal.logoPromocao) && !promoChange(resultLocal.linkPromo)) ?
+                                        !promoChange(resultLocal) ?
+                                            (verificarLogoPromo(resultLocal) && !promoChange(resultLocal)) ?
                                                 <img src="../assets/img/link_promocao.png" className="promoModal"
                                                     alt="icone" width={60} onClick={() => setShowState(true)} /> :
                                                 <img src="../assets/img/link_promocao.png" className="promoModal" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="icone" width={60} />

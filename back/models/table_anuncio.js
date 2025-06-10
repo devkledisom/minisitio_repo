@@ -6,6 +6,7 @@ const Usuario = require('./table_usuarios');
 const Desconto = require('./table_desconto');
 const Atividade = require('./table_atividade');
 const Pagamento = require('./table_pagamentos');
+const Promocao = require('./table_promocao');
 
 const Anuncio = database.define('anuncio', {
     codAnuncio: {
@@ -524,11 +525,11 @@ const Anuncio = database.define('anuncio', {
         type: Sequelize.DATE,
         allowNull: true
     },
- /*    search_index: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-        unique: false
-    }, */
+    /*    search_index: {
+           type: Sequelize.TEXT,
+           allowNull: true,
+           unique: false
+       }, */
 },
     {
         freezeTableName: true,
@@ -618,8 +619,7 @@ Anuncio.belongsTo(Atividade, {
 // Definição da relação
 /* Anuncio.hasMany(Pagamento, { foreignKey: "cliente", as: "pagamentos" });
 Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", as: "anuncio" }); */
-Anuncio.hasMany(Pagamento, { foreignKey: "cliente", sourceKey: "descCPFCNPJ", as: "pagamentos" });
-Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", targetKey: "descCPFCNPJ", as: "anuncio" });
+
 
 /* Anuncio.beforeCreate((anuncio, options) => {
   anuncio.search_index = `${anuncio.descAnuncio} ${anuncio.codAtividade} ${(anuncio.tags || []).join(' ')}`.toLowerCase();
@@ -630,5 +630,11 @@ Anuncio.beforeUpdate((anuncio, options) => {
 });
  */
 
+//RELACOES
+Anuncio.hasMany(Pagamento, { foreignKey: "cliente", sourceKey: "descCPFCNPJ", as: "pagamentos" });
+Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", targetKey: "descCPFCNPJ", as: "anuncio" });
+
+Anuncio.hasOne(Promocao, { foreignKey: "codAnuncio", as: "promoc" });
+Promocao.belongsTo(Anuncio, { foreignKey: 'codAnuncio' });
 
 module.exports = Anuncio;
