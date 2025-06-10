@@ -38,7 +38,7 @@ function UserActions(props) {
         if (navigator.share) {
             // Suportado
             setSuportWebShare(true)
-        } 
+        }
 
     })
 
@@ -193,18 +193,18 @@ function UserActions(props) {
                     <img src="/assets/img/logo.png" />
                     Renovar
                 </a>
-                {console.log(useIsMobile())}
+                {/* console.log(useIsMobile()) */}
                 {useIsMobile() &&
-                         <a href="#" class="btn btn-default margin-bottom-10" onClick={(e) => handleShare(e)}>
-                    <img src="/assets/img/logo.png" />
-                    Compartilhar
-                </a>
+                    <a href="#" class="btn btn-default margin-bottom-10" onClick={(e) => handleShare(e)}>
+                        <img src="/assets/img/logo.png" />
+                        Compartilhar
+                    </a>
                 }
                 {!useIsMobile() &&
-                         <a href="#" class="btn btn-default margin-bottom-10" onClick={(e) => openShareModalPerfil(e)}>
-                    <img src="/assets/img/logo.png" />
-                    Compartilhar
-                </a>
+                    <a href="#" class="btn btn-default margin-bottom-10" onClick={(e) => openShareModalPerfil(e)}>
+                        <img src="/assets/img/logo.png" />
+                        Compartilhar
+                    </a>
                 }
                 <a href={`/qrcode?id=${props.id}`} class="btn btn-default margin-bottom-10" target="_blank">
                     <img src="/assets/img/logo.png" />

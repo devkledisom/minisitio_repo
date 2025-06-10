@@ -5044,10 +5044,20 @@ module.exports = {
         const promocaoExistente = await Promocao.findOne({
             where: {
                 codAnuncio: idAnuncio,
-                link_externo: linkPromo,
-                data_validade: promocaoData,
+                //link_externo: linkPromo,
+                //data_validade: promocaoData,
             },
         });
+
+        if (promocaoExistente) {
+            const atualizarPromocao = await Promocao.update({
+                data_validade: promocaoData,
+            }, {
+                where: {
+                    codAnuncio: idAnuncio
+                }
+            });
+        }
 
         if (!promocaoExistente) {
             if (logoPromocao != '' && promocaoData != '') {
@@ -5081,20 +5091,25 @@ module.exports = {
                 }
             });
 
-            const parsedTags = JSON.parse(tags);
+            try {
+                const parsedTags = JSON.parse(tags);
 
-            // Remove tags antigas
-            await Tags.destroy({
-                where: { codAnuncio: req.query.id }
-            });
+                // Remove tags antigas
+                await Tags.destroy({
+                    where: { codAnuncio: req.query.id }
+                });
 
-            // Insere novas tags
-            const novaLista = parsedTags.map(tag => ({
-                codAnuncio: req.query.id,
-                tagValue: tag
-            }));
+                // Insere novas tags
+                const novaLista = parsedTags.map(tag => ({
+                    codAnuncio: req.query.id,
+                    tagValue: tag
+                }));
 
-            await Tags.bulkCreate(novaLista);
+                await Tags.bulkCreate(novaLista);
+
+            } catch (err) {
+                console.log("Erro ao atualizar promoções", err)
+            }
 
 
 
@@ -5105,14 +5120,14 @@ module.exports = {
         }
     },
     atualizarTipoPerfil: async (req, res) => {
-         const atualizarPerfil = await Anuncio.update(req.body, {
-                where: {
-                    codAnuncio: req.body.codAnuncio
-                },
-                raw: true
-            });
+        const atualizarPerfil = await Anuncio.update(req.body, {
+            where: {
+                codAnuncio: req.body.codAnuncio
+            },
+            raw: true
+        });
 
-            res.json({ success: true, message: atualizarPerfil });
+        res.json({ success: true, message: atualizarPerfil });
     },
     deleteAnuncio: async (req, res) => {
         await database.sync();

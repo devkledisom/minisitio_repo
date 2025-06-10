@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 const database = require('../config/db');
-
-const Anuncio = require('./table_anuncio');
+const path = require('path');
 
 
 const Promocao = database.define('promocao', {
@@ -53,13 +52,13 @@ const Promocao = database.define('promocao', {
         type: Sequelize.DATE(),
         allowNull: true,
         unique: true,
-      
+
     },
     updatedAt: {
         type: Sequelize.DATE(),
         allowNull: true,
         unique: false,
-       
+
     }
 },
     {
@@ -67,10 +66,26 @@ const Promocao = database.define('promocao', {
         timestamps: false,
     });
 
-    // Obter todos os anúncios relacionados a uma promoção
-    Anuncio.hasMany(Promocao, { foreignKey: "codAnuncio", sourceKey: "codAnuncio", as: "promocoes" });
+// Obter todos os anúncios relacionados a uma promoção
+//Anuncio.hasMany(Promocao, { foreignKey: "codAnuncio", sourceKey: "codAnuncio", as: "promocoes" });
 
-    // Obter o anúncio ao qual uma promoção pertence
-    Promocao.belongsTo(Anuncio, { foreignKey: "codAnuncio", targetKey: "codAnuncio", as: "anuncio" });
+// Obter o anúncio ao qual uma promoção pertence
+//Promocao.belongsTo(Anuncio, { foreignKey: "codAnuncio", targetKey: "codAnuncio", as: "anuncio" });
+
+//RELACOES
+
+Promocao.addHook('beforeDestroy', async (promocao, options) => {
+    const imagePath = path.resolve(__dirname, '..', 'public', 'upload', 'img', 'promocao', promocao.banner);// campo no banco que guarda o caminho da imagem
+
+    try {
+        const fs = require('fs');
+        fs.unlinkSync(imagePath);
+        console.log(`Imagem ${imagePath} deletada com sucesso`);
+    } catch (err) {
+        console.error(`Erro ao deletar imagem: ${err}`);
+    }
+});
+
+
 
 module.exports = Promocao;

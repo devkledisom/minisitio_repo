@@ -1,23 +1,31 @@
-const cron = require('node-cron');
 const Promocao = require('../models/table_promocao');
+const Sequelize = require('sequelize');
+const { Op } = Sequelize;
 
-async function apagarPromocoesVencidas() {
+async function deletarPromocoesExpiradas() {
+
   try {
-    const deletedRows = await Promocao.destroy({
+    // Buscar promoções expiradas
+    const promocoes = await Promocao.findAll({
       where: {
-        data_validade: {
-          [Sequelize.Op.lt]: new Date(),
-        },
-      },
+        data_validade: { [Op.lt]: new Date() }
+      }
     });
 
-    console.log(`Registros apagados: ${deletedRows}`);
+    if (promocoes.length < 1) return;
+
+    // Para cada promoção, deletar com destroy()
+    for (const promocao of promocoes) {
+      await promocao.destroy();  // dispara os hooks para deletar imagem
+    }
+
+    console.log(`Deletadas ${promocoes.length} promoções expiradas.`);
   } catch (error) {
-    console.error('Erro ao apagar promoções vencidas:', error);
+    console.error('Erro ao deletar promoções expiradas:', error);
+    return;
   }
 }
 
-// Agendamento da rotina para executar todos os dias à meia-noite
-cron.schedule('* * * * *', apagarPromocoesVencidas);
-
-console.log('Rotina de apagar promoções vencidas agendada.');
+module.exports = {
+  deletarPromocoesExpiradas
+};

@@ -7,6 +7,10 @@ import './style.css';
 import InputMask from 'react-input-mask';
 import { FaFacebook, FaFacebookSquare, FaInstagramSquare, FaTwitter, FaLinkedin, FaYoutube } from "react-icons/fa";
 
+//BOOTSTRAP
+import Badge from 'react-bootstrap/Badge';
+import Stack from 'react-bootstrap/Stack';
+
 //lib
 import {
   BsShareFill,
@@ -19,6 +23,7 @@ import {
   BsSkype,
   BsHeadset,
 } from "react-icons/bs";
+import Swal from 'sweetalert2';
 
 import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../../assets/css/caderno.css";
@@ -50,6 +55,8 @@ function Editar(props) {
   const [descontoAtivado, setDescontoAtivado] = useState(false);
   const [minisitio, setMinisitio] = useState({});
   const [tagValue, setTagValue] = useState([]);
+
+  const campoPromocao = useRef(null)
 
 
   const executarSelecao = () => {
@@ -215,7 +222,6 @@ function Editar(props) {
 
 
 
-    console.log(codId);
   };
 
   //const [tipoPessoa, setTipoPessoa] = useState(null);
@@ -254,28 +260,12 @@ function Editar(props) {
 
   const [validation, setValidation] = useState();
 
-  function cadastrarAnuncio() {
-    var validation = true;
-    document.querySelectorAll('[required]').forEach((item) => {
-      if (item.value == "") {
-        item.style.border = "1px solid red";
-        validation = false;
-        setValidation(false);
-        return;
-      } else {
-        item.style.border = "1px solid gray";
-        validation = true;
-        setValidation(true);
-      };
-    });
-  }
-
   const handleChange = (e) => {
 
     if (e.target.name === 'promocaoData') {
       let dataValidade = e.target.value;
 
-      if (calcularDiferencaDias(dataValidade) > 90) {
+      if (calcularDiferencaDias(dataValidade) > 90 && calcularDiferencaDias(dataValidade) < 0) {
         alert("A data de validade da promoção informada não pode ultrapassar um prazo de 90 dias! a data escolhida tem um prazo de " + calcularDiferencaDias(dataValidade));
         return;
       }
@@ -285,6 +275,9 @@ function Editar(props) {
     setMinisitio({
       ...minisitio,
       [name]: value,
+      promoc: {
+        data_validade: campoPromocao.current.value,
+      }
 
     });
     setUf(minisitio.codUf);
@@ -298,10 +291,15 @@ function Editar(props) {
   };
 
   function editIDP(e) {
-    //aplicarCupom(e);
-    /*     alert("dasd")
-        console.log("dsadas", e);
-        return; */
+
+    if (calcularDiferencaDias(campoPromocao.current.value) > 90) {
+      alert("A data de validade da promoção informada não pode ultrapassar um prazo de 90 dias! A data escolhida tem um prazo de " + calcularDiferencaDias(campoPromocao.current.value) + " dias.");
+      return;
+    }
+    if (calcularDiferencaDias(campoPromocao.current.value) < 0) {
+      alert("A data de validade da promoção não pode ser anterior à data atual, por favor escolha uma data futura.");
+      return;
+    }
 
     if (minisitio.codTipoAnuncio == 3 && descontoAtivado == false && e.target.value.length) {
       console.log(descontoAtivado, minisitio.codTipoAnuncio);
@@ -342,6 +340,26 @@ function Editar(props) {
     });
 
 
+    document.querySelectorAll('[required]').forEach((item) => {
+      if (item.value.trim() === "") {
+        item.style.border = "1px solid red";
+        validation = false;
+      } else {
+        item.style.border = "1px solid gray";
+      }
+    });
+
+    if (!validation) {
+      Swal.fire({
+        title: "Atenção",
+        text: "Preencha todos os campos obrigatórios!",
+        icon: "warning",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
+
+
 
     const config = {
       method: "PUT",
@@ -356,7 +374,7 @@ function Editar(props) {
       fetch(`${masterPath.url}/admin/anuncio/update?id=${props.espacoId}`, config)
         .then((x) => x.json())
         .then((res) => {
-
+          console.log(res)
           if (res.success) {
 
             //setShowSpinner(false);
@@ -401,6 +419,8 @@ function Editar(props) {
     setUf(e.target.value)
   }
 
+
+
   return (
     <div className="App">
       <main>
@@ -424,6 +444,16 @@ function Editar(props) {
             </div>
             <div className="anuncio">
               <div className="form-group">
+                <label className="col-md-12 w-100 control-label tipo-de-anuncio">
+                  Tipo de perfil no minisitio:
+                </label>
+                <div className="col-md-12 anuncio-options">
+                  <Stack direction="horizontal" gap={2} className="justify-content-center">
+                    <Badge bg="success" style={{ fontSize: "18px" }}>{minisitio.codTipoAnuncio == 3 ? "Completo" : "Básico"}</Badge>
+                  </Stack>
+                </div>
+              </div>
+              {/*  <div className="form-group">
                 <label className="col-md-5 control-label tipo-de-anuncio">
                   Tipo de perfil no minisitio:
                 </label>
@@ -440,7 +470,7 @@ function Editar(props) {
                     />
                     Básico
                   </label>
-                  {/*        <label className="px-3">
+                          <label className="px-3">
                     <input
                       type="radio"
                       name="codTipoAnuncio"
@@ -450,7 +480,7 @@ function Editar(props) {
                       checked={radioCheck == 2}
                     />
                     Simples
-                  </label> */}
+                  </label> 
                   <label className="mx-3">
                     <input
                       type="radio"
@@ -464,7 +494,7 @@ function Editar(props) {
                     Completo
                   </label>
                 </div>
-              </div>
+              </div> */}
             </div>
             {/*dados para codigo promocional*/}
             {/*           {radioCheck != 1 && <div
@@ -699,7 +729,7 @@ function Editar(props) {
                 origin={'logoPromocao'}
                 largura={"w-100 py-4"} preview={false}
                 patrocinador={4}
-                codImg={minisitio.logoPromocao}
+                codImg={minisitio.promoc ? minisitio.promoc.banner : ""}
                 miniPreview={false}
                 msg={"Anexar imagem da promoção"}
                 minisitio={minisitio}
@@ -730,8 +760,10 @@ function Editar(props) {
                   id="promocaoData"
                   className="form-control"
                   placeholder="Digite a validade"
-                  value={minisitio.promocaoData}
+                  value={minisitio.promoc ? minisitio.promoc.data_validade : ""}
                   onChange={handleSelectChange}
+                  ref={campoPromocao}
+                  required
                 />
               </div>
             </div>}
@@ -866,7 +898,7 @@ function Editar(props) {
                   placeholder="Digite o link da parceria"
                   value={minisitio.cashback_link == 0 ? "" : minisitio.cashback_link}
                   /* onChange={(e) => handleChange(e)} */
-                   onChange={handleSelectChange}
+                  onChange={handleSelectChange}
                 />
               </div>
             </div>}

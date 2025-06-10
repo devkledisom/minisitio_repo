@@ -76,20 +76,20 @@ function Metadados(props) {
         });
     }
 
-     const handleCopyPix = (chavePix) => {
+    const handleCopyPix = (chavePix) => {
         navigator.clipboard.writeText(chavePix).then(() => {
-          Swal.fire({
-            toast: true,
-            position: "top-end",
-            icon: "success",
-            title: "Link copiado!",
-            showConfirmButton: false,
-            timer: 2000
-          });
-         /*  setCopied(true);
-          setTimeout(() => setCopied(false), 2000); */
+            Swal.fire({
+                toast: true,
+                position: "top-end",
+                icon: "success",
+                title: "Link copiado!",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            /*  setCopied(true);
+             setTimeout(() => setCopied(false), 2000); */
         });
-      };
+    };
 
     return (
         <div className="Metadados">
@@ -199,16 +199,16 @@ function Metadados(props) {
 
                     <div className="col-md-12 link-cinza justify-content-between align-items-center p-0 area-pix-portal">
                         <img src="../assets/img/teste/pix-bc.png" className='logo-pix' />
-                        {(props.data.descChavePix && props.data.descChavePix !== "teste") && 
-                        <ul className='desc-pix'>
-                            <li>
-                                <span>
-                                    Chave: {props.data.descChavePix}
-                                </span>
-                                <img src="../assets/img/icons/icons8-copiar.gif" width={30} alt="copiar" onClick={() => handleCopyPix(props.data.descChavePix)} title="copiar" />
-                            </li>
-                            <li><span>Nome: {props.data.descDonoPix}</span></li>
-                        </ul>
+                        {(props.data.descChavePix && props.data.descChavePix !== "teste") &&
+                            <ul className='desc-pix'>
+                                <li>
+                                    <span>
+                                        Chave: {props.data.descChavePix}
+                                    </span>
+                                    <img src="../assets/img/icons/icons8-copiar.gif" width={30} alt="copiar" onClick={() => handleCopyPix(props.data.descChavePix)} title="copiar" />
+                                </li>
+                                <li><span>Nome: {props.data.descDonoPix}</span></li>
+                            </ul>
                         }
                         {/*   <h4>
                             {props.data.descChavePix}
@@ -243,7 +243,6 @@ function Metadados(props) {
 
                     {(props.data.descAndroid && props.data.descAndroid !== "teste") &&
                         <div className="col-md-12 link-cinza">
-                            {console.log(props.data.descAndroid)}
                             {(props.data.descAndroid != "0" && props.data.descAndroid != "") &&
                                 <a href={props.data.descAndroid !== "0" ? props.data.descAndroid : ""} target="_blank" data-toggle="tooltip" title="android" rel="noopener  noreferrer">
                                     <img src="../assets/img/icons/android.png" width={200} style={{ marginLeft: "-10px" }} />

@@ -20,11 +20,11 @@ if (hostname === "localhost") {
         portalDomain = hostname;
     } else {
         if (hostname.includes('automaplay.com.br')) {
-          apiDomain = 'automaplay.com.br';
-          portalDomain = 'minitest.automaplay.com.br';
+            apiDomain = 'automaplay.com.br';
+            portalDomain = 'minitest.automaplay.com.br';
         } else {
-          apiDomain =  `${parts[1]}.${parts[2]}`;
-          portalDomain =  `${parts[1]}.${parts[2]}`;
+            apiDomain = `${parts[1]}.${parts[2]}`;
+            portalDomain = `${parts[1]}.${parts[2]}`;
         }
 
     }
@@ -40,7 +40,7 @@ export const masterPath = {
 };
 
 export const version = {
-    version: 'v2.0.67'
+    version: 'v2.0.68'
 };
 
 
