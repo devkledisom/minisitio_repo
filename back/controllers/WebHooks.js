@@ -230,7 +230,9 @@ async function registrarPagamento(data) {
                     if (res.status == "approved") {
                         const perfilActivate = await Anuncio.update({
                             "activate": 1,
-                            "codTipoAnuncio": "3"
+                            "codTipoAnuncio": "3",
+                            "dtCadastro2": Date.now(),
+                            "dueDate": moment(Date.now()).add(1, 'year').toISOString()
                         }, {
                             where: {
                                 codAnuncio: codigoReferenciaMp
@@ -276,7 +278,8 @@ async function registrarPagamento(data) {
 
                 try {
                     const atualizarPagamento = await Pagamento.update({
-                        status: res.status
+                        status: res.status,
+                        data: Date.now()
                     }, {
                         where: {
                             id_mp: data.data.id,
@@ -288,7 +291,9 @@ async function registrarPagamento(data) {
                     if (res.status == "approved") {
                         const perfilActivate = await Anuncio.update({
                             "activate": 1,
-                            "codTipoAnuncio": "3"
+                            "codTipoAnuncio": "3",
+                            "dtCadastro2": Date.now(),
+                            "dueDate": moment(Date.now()).add(1, 'year').toISOString()
                         }, {
                             where: {
                                 codAnuncio: codigoReferenciaMp

@@ -20,7 +20,7 @@ function WebcardThumb(props) {
     const [listaIds, setListaIds] = useState([]);
     //const [dataCriacao, setDataCriacao] = useState(null);
 
-    
+
 
     useEffect(() => {
         if (props.codImg == 0 || props.codImg == "teste" || props.codImg == null) {
@@ -87,14 +87,14 @@ function WebcardThumb(props) {
     };
 
     var thumb = (img) => {
-        if(img != false && img != 'files/null' && img != 'files/undefined') {
+        if (img != false && img != 'files/null' && img != 'files/undefined') {
             return true;
         } else {
             return false;
         }
     }
     var partner = (img) => {
-        if(img != false && img != 'null' && img != 'undefined') {
+        if (img != false && img != 'null' && img != 'undefined') {
             return true;
         } else {
             return false;
@@ -103,31 +103,31 @@ function WebcardThumb(props) {
 
     return (
         <div className="WebcardThumb">
-{/* {console.log(listaIds.descricao, listaIds.descImagem, listaIds.descImagem)} */}
+            {/* {console.log(listaIds.descricao, listaIds.descImagem, listaIds.descImagem)} */}
             <div className='container my-2 p-0' >
                 <div className='cartao'>
-                {listaIds.descricao != "valor padrao" && listaIds.descImagem != "" && listaIds.descImagem != "null" &&
-                    <div className="apoio">
-                        <div>
-                            {partner(listaIds.descImagem) &&
-                                <a href={listaIds.descLink} target="_blank" rel="noopener noreferrer">
-                                    <img src={`${masterPath.url}/files/${listaIds.descImagem}`} alt="" />
-                                </a>
-                            }
-                            {partner(listaIds.descImagem2) != "" &&
-                                <a href={listaIds.descLink2} target="_blank" rel="noopener noreferrer">
-                                    <img src={`${masterPath.url}/files/${listaIds.descImagem2}`} alt="" />
-                                </a>
-                            }
-                            {partner(listaIds.descImagem3) != "" &&
-                                <a href={listaIds.descLink3} target="_blank" rel="noopener noreferrer">
-                                    <img src={`${masterPath.url}/files/${listaIds.descImagem3}`} alt="" />
-                                </a>
-                            }
+                    {listaIds.descricao != "valor padrao" && listaIds.descImagem != "" && listaIds.descImagem != "null" &&
+                        <div className="apoio">
+                            <div>
+                                {partner(listaIds.descImagem) &&
+                                    <a href={listaIds.descLink} target="_blank" rel="noopener noreferrer">
+                                        <img src={`${masterPath.url}/files/${listaIds.descImagem}`} alt="" />
+                                    </a>
+                                }
+                                {partner(listaIds.descImagem2) != "" &&
+                                    <a href={listaIds.descLink2} target="_blank" rel="noopener noreferrer">
+                                        <img src={`${masterPath.url}/files/${listaIds.descImagem2}`} alt="" />
+                                    </a>
+                                }
+                                {partner(listaIds.descImagem3) != "" &&
+                                    <a href={listaIds.descLink3} target="_blank" rel="noopener noreferrer">
+                                        <img src={`${masterPath.url}/files/${listaIds.descImagem3}`} alt="" />
+                                    </a>
+                                }
+                            </div>
                         </div>
-                    </div>
-}
-                
+                    }
+
 
                     {/* {( listaIds.descImagem != "" && listaIds.length > 0 || listaIds.descImagem2 != "" && listaIds.length > 0 || listaIds.descImagem3 != "" && listaIds.length > 0) &&
                     <div className="apoio kledisom">
@@ -150,7 +150,7 @@ function WebcardThumb(props) {
                     </div>
                 } */}
                     <div className='row p-2'>
-                        
+
                         {/*  <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={200} /> */}
                         {thumb(imgDefault) && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
                     </div>
@@ -181,7 +181,6 @@ function WebcardThumb(props) {
                             </p>
                         </div>
                     }
-
                     <div className="row py-0 px-2 card-metadados">
                         <div className="container">
                             <div className="row">
@@ -195,8 +194,16 @@ function WebcardThumb(props) {
                                 <div className="col-md-6 col-6">
                                     <p className='text-end'>
                                         Desde: {formatData(props.data.createdAt)}<br />
-                                        Renovado em: {formatData(props.data.updatedAt)}<br />
-                                        Até: {formatData(props.data.dueDate)}
+                                        {props.data.dtCadastro2 &&
+                                            <span>
+                                                Renovado em: {formatData(props.data.dtCadastro2)}<br />
+                                            </span>
+                                        }
+                                        {props.data.dtCadastro2 &&
+                                            <span>
+                                                Até: {formatData(props.data.dueDate)}
+                                            </span>
+                                        }
                                     </p>
                                 </div>
                             </div>
