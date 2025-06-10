@@ -9,6 +9,7 @@ const path = require('path');
 const fs = require('fs');
 
 const Sequelize = require('sequelize');
+const Pagamento = require('../models/table_pagamentos');
 const { Op } = Sequelize;
 
 module.exports = {
@@ -403,6 +404,11 @@ module.exports = {
                 model: Promocao,
                 as: 'promoc',
                 attributes: ['data_validade', 'banner']
+            },
+            {
+                model: Pagamento,
+                as: 'dataPagamento',
+                attributes: ['data']
             }]
         });
 

@@ -1,4 +1,5 @@
 
+import moment from "moment";
 import { masterPath } from "../../../config/config";
 
 //LIBS
@@ -12,42 +13,42 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
         .then((x) => x.json())
         .then((res) => {
             minisitio.codTipoAnuncio = "3";
-           
+
             let descontoAprovado = false;
-              if (res.success) {
-                 if (res.IdsValue[0].desconto > 0) {
-                     descontoAprovado = true
-                 }
- 
-                 let valorBruto = 10 - res.IdsValue[0].desconto;
-                 console.log("valorBruto", valorBruto)
- 
-               if (descontoAtivado && radioCheck == 3 && valorBruto <= 0) {
+            if (res.success) {
+                if (res.IdsValue[0].desconto > 0) {
+                    descontoAprovado = true
+                }
+
+                let valorBruto = 10 - res.IdsValue[0].desconto;
+                console.log("valorBruto", valorBruto)
+
+                if (descontoAtivado && radioCheck == 3 && valorBruto <= 0) {
                     // window.location.href = `/ver-anuncios/${limparCPFouCNPJ(minisitio.descCPFCNPJ)}`;
-                     atualizarMinisitio()
-                     console.log("1");
-                 } else {
-                     fetch(`${masterPath.url}/pagamento/create/${minisitio.codAnuncio}`)
-                         .then((x) => x.json())
-                         .then((response) => {
-                             window.location.href = response.url;
- 
-                         })
-                         .catch(err => console.log(err))
-                     //window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
- 
-                     console.log("3");
-                 }
-             } else {
+                    atualizarMinisitio()
+                    console.log("1");
+                } else {
+                    fetch(`${masterPath.url}/pagamento/create/${minisitio.codAnuncio}`)
+                        .then((x) => x.json())
+                        .then((response) => {
+                            window.location.href = response.url;
+
+                        })
+                        .catch(err => console.log(err))
+                    //window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`;
+
+                    console.log("3");
+                }
+            } else {
                 fetch(`${masterPath.url}/pagamento/create/${minisitio.codAnuncio}`)
-                         .then((x) => x.json())
-                         .then((response) => {
-                             window.location.href = response.url;
- 
-                         })
-                         .catch(err => console.log(err)) 
-                 //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(minisitio.descCPFCNPJ)}`;
-             } 
+                    .then((x) => x.json())
+                    .then((response) => {
+                        window.location.href = response.url;
+
+                    })
+                    .catch(err => console.log(err))
+                //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(minisitio.descCPFCNPJ)}`;
+            }
         })
         .catch(err => {
             console.error("Erro ao buscar desconto:", err);
@@ -64,6 +65,10 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
     }
 
     function atualizarMinisitio() {
+
+        minisitio.dtCadastro2 = Date.now(); // Data de cadastro fixa para homologação
+        minisitio.dueDate = moment(Date.now()).add(1, 'year').toISOString(); // Data de vencimento fixa para homologação
+
         const config = {
             method: "PUT",
             headers: {

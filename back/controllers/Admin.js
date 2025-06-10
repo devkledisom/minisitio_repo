@@ -4749,8 +4749,8 @@ module.exports = {
             "qntVisualizacoes": 0,
             "activate": 0,
             //"dtCadastro": dataNow(),
-            "dtCadastro2": "2012-12-27T16:22:44.000Z",
-            "dtAlteracao": "2020-11-30T23:59:59.000Z",
+            "dtCadastro2": dtCadastro2,
+            "dtAlteracao": Date.now(),
             "descLinkedin": "",
             "descTelegram": "",
             "certificado_logo": "",
@@ -4963,7 +4963,8 @@ module.exports = {
             descDonoPix,
             descChavePix,
             descYouTube,
-            periodo
+            periodo,
+            dueDate
         } = req.body;
 
         const dadosAnuncio = {
@@ -5014,9 +5015,9 @@ module.exports = {
             "descPatrocinadorLink": 0,
             /* "qntVisualizacoes": 0, */
             "activate": 1,
-            "dtCadastro": dataNow(),
-            "dtCadastro2": "2012-12-27T16:22:44.000Z",
-            "dtAlteracao": "2020-11-30T23:59:59.000Z",
+            /*    "dtCadastro": dataNow(),
+               "dtCadastro2": "2012-12-27T16:22:44.000Z", */
+            "dtAlteracao": dataNow(),
             "descLinkedin": descLinkedin,
             "descTelegram": descTelegram,
             "certificado_logo": certificado_logo,
@@ -5030,7 +5031,8 @@ module.exports = {
             "cartao_digital": cartao_digital,
             "descDonoPix": descDonoPix,
             "descChavePix": descChavePix,
-            "periodo": periodo
+            "periodo": periodo,
+            "dueDate": dueDate || null
         };
         console.log(dadosAnuncio)
 

@@ -637,4 +637,7 @@ Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", targetKey: "descCPFCNPJ", 
 Anuncio.hasOne(Promocao, { foreignKey: "codAnuncio", as: "promoc" });
 Promocao.belongsTo(Anuncio, { foreignKey: 'codAnuncio' });
 
+Anuncio.hasOne(Pagamento, { foreignKey: "ref_mp_codAnuncio", as: "dataPagamento" });
+Pagamento.belongsTo(Anuncio, { foreignKey: "codAnuncio" });
+
 module.exports = Anuncio;
