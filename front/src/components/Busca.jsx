@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import '../assets/css/main.css';
 import '../assets/css/default.css';
 import '../assets/css/busca.css';
+import Cookies from "js-cookie";
+
 
 import Card from 'react-bootstrap/Card';
 
@@ -47,17 +49,19 @@ function Busca(props) {
 
     const definirCaderno = (e) => {
 
+        console.log("definirCaderno", e.target.value)
+
+        if (Cookies.get("consentimentoUsuario") === "true") {
+            Cookies.set("estadoEscolhido", codUf, { expires: 150 });
+            Cookies.set("cidadeEscolhida", e.target.value, { expires: 150 });
+        }
+
         let codigoCidade = document.querySelectorAll('#codUf3')[0].value;
         // const teste = caderno.find(cad => cad.nomeCaderno == codigoCidade);
 
         if (codigoCidade != "TODO") {
-            // localStorage.setItem("caderno: ", teste.nomeCaderno);
             sessionStorage.setItem("caderno: ", codigoCidade);
 
-            // setCadernoUf(teste.UF);
-            // console.log(teste.UF, codigoCidade)
-
-            //setCadernoCidade(teste.nomeCaderno);
             setCodCaderno(codigoCidade);
             verClassificado(codUf, codigoCidade)
 
@@ -65,11 +69,24 @@ function Busca(props) {
             localStorage.setItem("caderno: ", "TODO");
             sessionStorage.setItem("caderno: ", codigoCidade);
 
-            //setCodCaderno(codigoCidade);
-
         }
 
     };
+
+    useEffect(() => {
+        // Executa apenas se estiver na home (ou outra rota desejada)
+        if (location.pathname === "/") {
+            if (Cookies.get("consentimentoUsuario") === "true") {
+                const estadoSalvo = Cookies.get("estadoEscolhido");
+                const cidadeSalva = Cookies.get("cidadeEscolhida");
+
+                if (estadoSalvo && cidadeSalva) {
+                    window.location.href = `/caderno-geral/${cidadeSalva}/${estadoSalvo}`;
+                }
+            }
+        }
+    }, [location.pathname]);
+
 
     useEffect(() => {
         if (props.uf && props.caderno) {
@@ -81,9 +98,6 @@ function Busca(props) {
             buscarListaEstados(props.uf);
 
 
-        } else {
-            /*   setCodUf(ufSalva);
-              setCodCaderno(cadSalvo); */
         }
     }, [props.uf])
 
@@ -98,11 +112,7 @@ function Busca(props) {
             setUf(props.uf);
             setCodUf(props.uf);
             setCodCaderno(props.caderno);
-        } else {
-            /*   setCodUf(ufSalva);
-              setCodCaderno(cadSalvo); */
         }
-
 
         if (querySalvo) {
             document.querySelector('#inputBusca').value = querySalvo;
@@ -124,6 +134,8 @@ function Busca(props) {
             })
 
 
+
+
         verificarPromocao()
     }, []);
 
@@ -131,7 +143,6 @@ function Busca(props) {
         fetch(`${masterPath.url}/cadernos?uf=${uf}`)
             .then((x) => x.json())
             .then((res) => {
-
                 setCaderno(res);
                 if (location.pathname == '/') {
                     ///getUserLocation();
@@ -236,15 +247,15 @@ function Busca(props) {
 
     const verClassificado = (uf, caderno) => {
         setLoading(true);
-        let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
-        let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;
+        //let cadernoUf = document.querySelectorAll('#codUf2')[0].value;
+        //let cadernoCidade = document.querySelectorAll('#codUf3')[0].value;
 
-        console.table([cadernoUf, cadernoCidade, codCaderno, codUf, cadernoCidade])
+        //console.table([cadernoUf, cadernoCidade, codCaderno, codUf, cadernoCidade])
 
 
-        if (cadernoUf === "UF") {
+        if (uf === "UF") {
             alert("escolha um estado");
-        } else if (cadernoCidade === "TODO") {
+        } else if (caderno === "TODO") {
             alert("escolha uma cidade");
         } else {
             window.location.href = `/caderno-geral/${caderno}/${uf}`;
@@ -321,30 +332,30 @@ function Busca(props) {
                         state = component.short_name;
 
                         setCodUf(component.short_name);
+                        setUf(component.short_name);
                         //setUf(component.short_name);
 
                         localStorage.setItem("uf: ", component.short_name);
                         sessionStorage.setItem("uf: ", component.short_name);
 
                         buscarListaEstados(component.short_name);
-                        console.log("Estado encontrado:", component.short_name);
                     }
 
                     if (component.types.includes("administrative_area_level_4")) {
-                        city = component.short_name.toUpperCase();
-                        setCodCaderno(component.short_name);
-                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                        /*                   city = component.short_name.toUpperCase();
+                                          setCodCaderno(component.short_name);
+                                          localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                                          sessionStorage.setItem("caderno: ", component.short_name.toUpperCase()); */
 
-                        break; // Interrompe o loop completamente
+                        //break; // Interrompe o loop completamente
                     } else if (component.types.includes("administrative_area_level_2")) {
-                        city = component.short_name.toUpperCase();
-                        setCodCaderno(component.short_name);
-                        localStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                        sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                        setTimeout(() => {
-                            verClassificado(state, city);
-                        }, 1000);
+                        /*     city = component.short_name.toUpperCase();
+                            setCodCaderno(component.short_name);
+                            localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                            sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                            setTimeout(() => {
+                                verClassificado(state, city);
+                            }, 1000); */
 
 
                     }
