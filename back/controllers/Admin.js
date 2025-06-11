@@ -2108,7 +2108,7 @@ module.exports = {
                 //data: result.map(r => r.toJSON()),
                 teste: anuncioTeste,
                 //anuncio2: anuncio2,
-                mosaico: 0,
+                mosaico: contador.descImagem,
                 kledisom: 123,
                 totalRegistros: contador.total
             });
