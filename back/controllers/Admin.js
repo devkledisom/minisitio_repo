@@ -895,6 +895,7 @@ module.exports = {
 
         res.json({ success: true, message: resultCaderno });
     },
+
     //atividades
     listarAtividades: async (req, res) => {
 
@@ -912,7 +913,7 @@ module.exports = {
             order: [
                 [Sequelize.literal('corTitulo ASC')],
                 //[Sequelize.fn('LEFT', Sequelize.col('atividade'), 1), 'ASC'],
-                ['atividade', 'ASC'],
+                ['nomeAmigavel', 'ASC'],
                 ['createdAt', 'DESC'],
 
             ],
@@ -1064,6 +1065,7 @@ module.exports = {
         }
 
     },
+
     //gerenciar Ids
     listarIds: async (req, res) => {
 
