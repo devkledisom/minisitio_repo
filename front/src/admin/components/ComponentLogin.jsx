@@ -33,9 +33,9 @@ function Login() {
 
         let loggin = await login(limparCPFouCNPJ(loginValue.current.value), passValue.current.value);
 
-        if(!loggin) return;
+        if (!loggin) return;
 
-        if(loggin.success) {
+        if (loggin.success) {
             if (loggin.codTipoUsuario == 1) {
                 navigate("/admin");
             } else {
@@ -46,7 +46,7 @@ function Login() {
             setShowSpinner(false);
         }
 
-       
+
 
 
         console.log(user)
@@ -127,7 +127,7 @@ function Login() {
                                         </div>
                                     </div>
                                     <div className="col-md-6 col-sm-5 senha">
-                                        <a href="#" className="btn-forget-password">Esqueci minha senha</a>
+                                        {/* <a href="#" className="btn-forget-password">Esqueci minha senha</a> */}
                                     </div>
                                     <div className="col-md-6 col-sm-7 continuar">
                                         <button type="button" className="btn cinza btn-logar" onClick={entrar}><i className="fa fa-arrow-right"></i>Continuar</button>

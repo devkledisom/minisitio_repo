@@ -64,10 +64,10 @@ function Header() {
                             <Link className="nav-link" to="/info/cadernos">Informações de Cadernos</Link>
                         </li> */}
                         <li className="nav-item">
-                            <Link className="nav-link" to="/admin/atividades" onClick={handleClick}>Atividades</Link>
+                            <Link className="nav-link" id="modu-atividade" to="/admin/atividades" onClick={handleClick}>Atividades</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/admin/espacos" onClick={handleClick}>Espaços</Link>
+                            <Link className="nav-link espacos" to="/admin/espacos" onClick={handleClick}>Espaços</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/admin/desconto" onClick={handleClick}>Gerenciar IDs</Link>
@@ -89,7 +89,7 @@ function Header() {
                                     <i className="bi bi-chevron-down mx-1"></i>
                                 </button>
                                 <ul className="dropdown-menu lista-cart" aria-labelledby="dropdownMenuButton1">
-                                   {/*  <li>
+                                    {/*  <li>
                                         <Link className="dropdown-item nav-link" to="/admin/calhau" onClick={handleClick}>
                                         Calhau
                                         <i className="bi bi-chevron-right mx-1"></i>
@@ -97,9 +97,9 @@ function Header() {
                                     </li> */}
                                     <li>
                                         <Link className="dropdown-item nav-link" to="/admin/configuracoes" onClick={handleClick}>
-                                        Configuração
-                                        <i className="bi bi-chevron-right mx-1"></i>
-                                        </Link>                                     
+                                            Configuração
+                                            <i className="bi bi-chevron-right mx-1"></i>
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>

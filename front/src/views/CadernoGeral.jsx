@@ -218,14 +218,16 @@ function Caderno(props) {
                       capas.includes(item.codAtividade) ?
                         <li key={item.id}>
                           <a href="#">
+                            {console.log(item)}
                             <div>{item.codAtividade}</div>
                             <span>{item.quantidade} resultado</span>
                           </a>
                         </li>
                         :
                         <li key={item.id}>
+                          {console.log(item)}
                           <a href={`/caderno/${item.descAnuncio}_${item.codAnuncio}_${item.codUf}?page=1&book=${item.codCaderno}&id=${item.codAnuncio}&index=${item.page}&caderno=${item.codCaderno}&estado=${item.codUf}`} onClick={definePage}>
-                            <div>{item.codAtividade}</div>
+                            <div>{item.nomeAmigavel}</div>
                             <span>{item.quantidade} resultado</span>
                           </a>
                         </li>

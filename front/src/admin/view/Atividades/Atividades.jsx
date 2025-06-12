@@ -29,6 +29,7 @@ const Atividades = () => {
 
     const param = getParam.get('page') ? getParam.get('page') : 1;
 
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
     useEffect(() => {
         fetch(`${masterPath.url}/admin/atividades/read?page=${param}`)
@@ -68,7 +69,7 @@ const Atividades = () => {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + tokenAuth
             },
         })
             .then((x) => x.json())
@@ -97,7 +98,6 @@ const Atividades = () => {
             .then((x) => x.json())
             .then((res) => {
                 if (res.success) {
-                    console.log(res)
                     setAtividades(res.message);
                     setShowSpinner(false);
                 } else {
@@ -122,16 +122,16 @@ const Atividades = () => {
             },
             body: JSON.stringify(atividades)
         })
-        .then(x => x.json())
-        .then(res => {
-            if(res.success) {
-                setTimeout(() => {
-                    window.location.href = res.downloadUrl;
-                    setShowSpinner(false);
-                }, 2000)
-                
-            }
-        })
+            .then(x => x.json())
+            .then(res => {
+                if (res.success) {
+                    setTimeout(() => {
+                        window.location.href = res.downloadUrl;
+                        setShowSpinner(false);
+                    }, 2000)
+
+                }
+            })
     };
 
     return (
@@ -147,8 +147,8 @@ const Atividades = () => {
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
                             <button type="button" className="btn custom-button" onClick={() => navigator('/admin/atividades/cadastro')}>Adicionar</button>
-                           <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/atividades/editar?id=${selectId}`)}>Editar</button>
-                           <button type="button" className="btn custom-button" onClick={exportExcell}>Exportar</button>
+                            <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/admin/atividades/editar?id=${selectId}`)}>Editar</button>
+                            <button type="button" className="btn custom-button" onClick={exportExcell}>Exportar</button>
                             <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarUser}>Apagar</button>
                         </div>
                         <div className="span6 col-md-6">
@@ -168,18 +168,18 @@ const Atividades = () => {
                             <table className="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
+                                        {/* <th>Ativadade-CNAE</th> */}
                                         <th>Atividade</th>
                                         <th>Tipo</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
                                         atividades != '' && atividades.map((item) => (
                                             <tr key={item.id} id={item.id} onClick={selecaoLinha}>
-                                                <td>{item.atividade}</td>
+                                                {/* <td>{item.atividade}</td> */}
+                                                <td>{item.nomeAmigavel}</td>
                                                 <td>{item.corTitulo}</td>
-                                             
                                             </tr>
 
                                         ))

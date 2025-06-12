@@ -192,18 +192,35 @@ const Espacos = () => {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": 'Bearer ' + masterPath.accessToken
+                "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
             },
         })
             .then((x) => x.json())
             .then((res) => {
-                console.log(res)
                 if (res.success) {
                     setShowSpinner(false);
                     //alert("anuncio apagado")
                     //document.querySelector(".selecionada").remove();
+                    fetch(`${masterPath.url}/admin/espacos/read?page=${param}`)
+                        .then(x => x.json())
+                        .then((resAnuncio) => {
+                            setAnucios(resAnuncio);
+                            setShowSpinner(false);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
+                            setShowSpinner(false);
+                        });
                 }
 
+            }).catch((error) => {
+                setShowSpinner(false);
+                console.error('Error:', error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Não foi possível apagar o anúncio duplicado",
+                    icon: "error"
+                });
             })
     };
 
@@ -513,9 +530,9 @@ Para 100000 linhas: 312500ms
                             <button type="button" className="btn custom-button mx-2" onClick={() => navigator('/admin/anuncio/import')}>Importar</button>
                             <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarAnuncio}>Apagar</button>
                             <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarMultiplosAnucios}>Apagar Todos</button>
-                            {(campoBusca.current != null && campoBusca.current.value != '') &&
-                                <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarDup}>Apagar Duplicação</button>
-                            }
+                            {/* {(campoBusca.current != null && campoBusca.current.value != '') && */}
+                            <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarDup}>Apagar Duplicação</button>
+                            {/* } */}
                             <button type="button" className="btn btn-info custom-button text-light" onClick={editRow}>Editar</button>
                         </div>
                         <div className="span6 col-md-6 d-flex flex-column align-items-end">

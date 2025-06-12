@@ -33,9 +33,8 @@ const FormCadastro = () => {
         fetch(`${masterPath.url}/admin/atividade?id=${param}`)
             .then((x) => x.json())
             .then((res) => {
-                if(!res.success) return; 
+                if (!res.success) return;
                 setAtividade(res.message[0]);
-                console.log(res);
             })
 
     }, [page, param]);
@@ -85,7 +84,7 @@ const FormCadastro = () => {
                 "Content-Type": "application/json",
                 "authorization": 'Bearer ' + tokenAuth
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(atividadeValue)
         };
 
         if (validation) {
@@ -99,6 +98,7 @@ const FormCadastro = () => {
                             text: "Atividade atualizada!",
                             icon: "success"
                         })
+                        document.querySelector("#modu-atividade").click();
                     } else {
                         alert(res.message);
                     }
@@ -132,7 +132,6 @@ const FormCadastro = () => {
                 atividadeValue.corTitulo = value;
                 break;
             default:
-                console.log("não encontrou");
                 break;
         }
 
@@ -151,29 +150,39 @@ const FormCadastro = () => {
                 <Header />
             </header>
             <section className='py-5'>
-            {showSpinner && <Spinner />}
+                {showSpinner && <Spinner />}
 
                 <div className="container">
                     <h2 className="pt-4 px-5 text-center">Atualizar Atividade</h2>
                     {/* <h2>Vertical (basic) form</h2> */}
                     <form action="/action_page.php">
                         <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label for="atividade-cnae" className="w-50 px-1">Atividade CNAE:</label>
+                            <input type="text"
+                                className="form-control h-25 w-50"
+                                id="atividade-cnae"
+                                name="atividade-cnae"
+                                value={atividadeValue ? atividadeValue.atividade : ''}
+                                disabled
+                            />
+                        </div>
+                        <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="atividade" className="w-50 px-1">Atividade:</label>
                             <input type="atividade"
-                             className="form-control h-25 w-50" 
-                             id="in_atividade"
-                              name="atividade"
-                              value={atividadeValue ? atividadeValue.atividade : ''}
-                              onChange={handleChange}
-                               />
+                                className="form-control h-25 w-50"
+                                id="in_atividade"
+                                name="nomeAmigavel"
+                                value={atividadeValue ? atividadeValue.nomeAmigavel : ''}
+                                onChange={handleChange}
+                            />
                         </div>
-                    
+
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="corTitulo" className="w-50 px-1">Tipo Titulo:</label>
                             <select name="corTitulo"
-                             id="corTitulo" 
-                             className="w-50 py-1"
-                             value={atividadeValue.corTitulo} onChange={handleChange} >
+                                id="corTitulo"
+                                className="w-50 py-1"
+                                value={atividadeValue.corTitulo} onChange={handleChange} >
                                 <option value="">- Selecione o tipo de Titulo -</option>
                                 <option value="normal">Normal</option>
                                 <option value="principal">Principal</option>
@@ -181,7 +190,7 @@ const FormCadastro = () => {
                             </select>
                         </div>
 
-                      
+
                         <div className="text-center py-3">
                             <button type="button"
                                 className="btn btn-info custom-button mx-2 text-light"

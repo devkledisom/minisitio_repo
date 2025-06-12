@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 
 const FormCadastro = () => {
 
-  
+
     const [atividadeValue, setAtividade] = useState(false);
     const [page, setPage] = useState(1);
     const [showSpinner, setShowSpinner] = useState(false);
@@ -34,7 +34,7 @@ const FormCadastro = () => {
         zIndex: "999"
     }
 
-  
+
 
     function criarAtividade() {
 
@@ -83,13 +83,15 @@ const FormCadastro = () => {
                 .then((res) => {
                     if (res.success) {
                         setShowSpinner(false);
-                       Swal.fire({
-                        title: "Success!",
-                        text: "Nova atividade registrada!",
-                        icon: "success"
-                       });
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Nova atividade registrada!",
+                            icon: "success"
+                        });
+                        document.querySelector("#modu-atividade").click();
                     } else {
-                        alert(res.message);
+                        setShowSpinner(false);
+                        console.log(res.message);
                     }
                 })
         }
@@ -140,7 +142,7 @@ const FormCadastro = () => {
                 <Header />
             </header>
             <section className='py-5'>
-            {showSpinner && <Spinner />}
+                {showSpinner && <Spinner />}
 
                 <div className="container">
                     <h2 className="pt-4 px-5 text-center">Adicionar Atividade</h2>
@@ -148,7 +150,7 @@ const FormCadastro = () => {
                     <form action="/action_page.php">
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="in_atividade" className="w-50 px-1">Atividade:</label>
-                            <input type="text" className="form-control h-25 w-50" id="in_atividade" placeholder="" name="email" />
+                            <input type="text" className="form-control h-25 w-50" id="in_atividade" placeholder="" name="atividade" />
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="corTitulo" className="w-50 px-1">Tipo Titulo:</label>
@@ -160,7 +162,7 @@ const FormCadastro = () => {
                             </select>
                         </div>
 
-                      
+
                         <div className="text-center py-3">
                             <button type="button"
                                 className="btn btn-info custom-button mx-2 text-light"
