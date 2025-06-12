@@ -224,7 +224,7 @@
 }
 
 .caderno .btn-class {
-    padding: 10px 40px; 
+    padding: 10px 40px;
     filter: drop-shadow(2px 4px 6px black);
 }
 
@@ -316,6 +316,34 @@
 .btn-3 span:hover:after {
     width: 100%;
 }
+
+.caderno-geral .borda-verde {
+    background: green;
+    padding: 4px;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.caderno-geral .borda-amarela {
+    background: yellow;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.caderno-geral .borda-azul {
+    background: blue;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.caderno-geral .conteudo {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    /* ajuste conforme seu layout */
+}
+
 
 @media (max-width: 768px) {
     .caderno-geral .title-caderno {

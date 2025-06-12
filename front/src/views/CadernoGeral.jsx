@@ -190,67 +190,83 @@ function Caderno(props) {
       </header>
       <main>
         <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
-        <h1 id="title-caderno" className='py-2 title-caderno'>Capa do Caderno {caderno} - {estado}</h1>
+
         {/*         <h2className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
+
+
         <div className='container caderno'>
-          <div className='col-md-12'>
 
-            <div className='row py-3'>
-              <div className="col-md-12 col-xs-12 text-center">
-                {/* <button onClick={buscarTodosClassificado}>Ver caderno classificado</button> */}
-                <a href={`/cadernos/${caderno}_${estado}?caderno=${caderno}&estado=${estado}`} className="btn proximo btn-class" onClick={buscarTodosClassificado}><i className="fa fa-file-text"></i> Ver caderno classificado</a>
+          <div class="borda-verde">
+            <div class="borda-amarela">
+              <div class="borda-azul">
+                <div class="conteudo">
+                  <h1 id="title-caderno" className='py-2 title-caderno'>Capa do Caderno {caderno} - {estado}</h1>
+                  <div className='col-md-12'>
+                    <div className='row py-3'>
+                      <div className="col-md-12 col-xs-12 text-center">
+                        {/* <button onClick={buscarTodosClassificado}>Ver caderno classificado</button> */}
+                        <a href={`/cadernos/${caderno}_${estado}?caderno=${caderno}&estado=${estado}`} className="btn proximo btn-class" onClick={buscarTodosClassificado}><i className="fa fa-file-text"></i> Ver caderno classificado</a>
+                      </div>
+
+                    </div>
+
+
+                    <div className="row lista">
+                      <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled sumario">
+                        <li className="titulo">
+                          <h2>Sumário do Classificado</h2>
+                          <span>({qtdaPerfil} - Perfis / Minisitios)</span>
+                        </li>
+                        <li className="classificado">
+                          <ul className="list-unstyled">
+                            {classificados.map(item => (
+                              /* "/caderno/maceio/ziiz_569885_27" */
+                              capas.includes(item.codAtividade) ?
+                                <li key={item.id}>
+                                  <a href="#">
+                                    {console.log(item)}
+                                    <div>{item.codAtividade}</div>
+                                    <span>{item.quantidade} resultado</span>
+                                  </a>
+                                </li>
+                                :
+                                <li key={item.id}>
+                                  {console.log(item)}
+                                  <a href={`/caderno/${item.descAnuncio}_${item.codAnuncio}_${item.codUf}?page=1&book=${item.codCaderno}&id=${item.codAnuncio}&index=${item.page}&caderno=${item.codCaderno}&estado=${item.codUf}`} onClick={definePage}>
+                                    <div>{item.nomeAmigavel}</div>
+                                    <span>{item.quantidade} resultado</span>
+                                  </a>
+                                </li>
+
+                            ))}
+                          </ul>
+                        </li>
+                        <CardClassificado title={"UTILIDADE PÚBLICA"} pathImg={capa06} data={selectCapa("UTILIDADE PÚBLICA")} />
+                        <CardClassificado title={"CÂMARA DE VEREADORES/CÂMARA DISTRITAL"} pathImg={capa07} data={selectCapa("CÂMARA DE VEREADORES - CÂMARA DISTRITAL")} />
+                        <CardClassificado title={"INFORMAÇÕES"} pathImg={capa08} data={selectCapa("INFORMAÇÕES")} />
+                      </ul>
+                      <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled teste">
+                        <CardClassificado title={"ADMINISTRAÇÃO REGIONAL / PREFEITURA"} pathImg={capa01} data={selectCapa("ADMINISTRAÇÃO REGIONAL / PREFEITURA")} />
+                        <CardClassificado title={"EMERGÊNCIA"} pathImg={capa02} data={selectCapa("EMERGÊNCIA")} />
+                        <CardClassificado title={"HOSPITAIS PÚBLICOS"} pathImg={capa03} data={selectCapa("HOSPITAIS PÚBLICOS")} />
+                        <CardClassificado title={"SECRETARIA DE TURISMO"} pathImg={capa04} data={selectCapa("SECRETARIA DE TURISMO")} />
+                        <CardClassificado title={"EVENTOS NA CIDADE"} pathImg={capa05} data={selectCapa("EVENTOS NA CIDADE")} />
+                      </ul>
+
+                    </div>
+                    <Letter estado={estado} caderno={caderno} />
+                  </div>
+                </div>
+
               </div>
-
             </div>
-
-
-            <div className="row lista">
-              <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled sumario">
-                <li className="titulo">
-                  <h2>Sumário do Classificado</h2>
-                  <span>({qtdaPerfil} - Perfis / Minisitios)</span>
-                </li>
-                <li className="classificado">
-                  <ul className="list-unstyled">
-                    {classificados.map(item => (
-                      /* "/caderno/maceio/ziiz_569885_27" */
-                      capas.includes(item.codAtividade) ?
-                        <li key={item.id}>
-                          <a href="#">
-                            {console.log(item)}
-                            <div>{item.codAtividade}</div>
-                            <span>{item.quantidade} resultado</span>
-                          </a>
-                        </li>
-                        :
-                        <li key={item.id}>
-                          {console.log(item)}
-                          <a href={`/caderno/${item.descAnuncio}_${item.codAnuncio}_${item.codUf}?page=1&book=${item.codCaderno}&id=${item.codAnuncio}&index=${item.page}&caderno=${item.codCaderno}&estado=${item.codUf}`} onClick={definePage}>
-                            <div>{item.nomeAmigavel}</div>
-                            <span>{item.quantidade} resultado</span>
-                          </a>
-                        </li>
-
-                    ))}
-                  </ul>
-                </li>
-                <CardClassificado title={"UTILIDADE PÚBLICA"} pathImg={capa06} data={selectCapa("UTILIDADE PÚBLICA")} />
-                <CardClassificado title={"CÂMARA DE VEREADORES/CÂMARA DISTRITAL"} pathImg={capa07} data={selectCapa("CÂMARA DE VEREADORES - CÂMARA DISTRITAL")} />
-                <CardClassificado title={"INFORMAÇÕES"} pathImg={capa08} data={selectCapa("INFORMAÇÕES")} />
-              </ul>
-              <ul className="col-md-6 col-sm-6 col-xs-12 list-unstyled teste">
-                <CardClassificado title={"ADMINISTRAÇÃO REGIONAL / PREFEITURA"} pathImg={capa01} data={selectCapa("ADMINISTRAÇÃO REGIONAL / PREFEITURA")} />
-                <CardClassificado title={"EMERGÊNCIA"} pathImg={capa02} data={selectCapa("EMERGÊNCIA")} />
-                <CardClassificado title={"HOSPITAIS PÚBLICOS"} pathImg={capa03} data={selectCapa("HOSPITAIS PÚBLICOS")} />
-                <CardClassificado title={"SECRETARIA DE TURISMO"} pathImg={capa04} data={selectCapa("SECRETARIA DE TURISMO")} />
-                <CardClassificado title={"EVENTOS NA CIDADE"} pathImg={capa05} data={selectCapa("EVENTOS NA CIDADE")} />
-              </ul>
-
-            </div>
-            <Letter estado={estado} caderno={caderno} />
           </div>
         </div>
+
+
+
+
 
 
 
