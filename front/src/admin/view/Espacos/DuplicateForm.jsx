@@ -13,7 +13,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
   const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
   useEffect(() => {
-    fetch(`${masterPath.url}/cadernos`)
+    fetch(`${masterPath.url}/cadernos?uf=${ufSelected}`)
       .then((x) => x.json())
       .then((res) => {
         setCaderno(res)
@@ -23,7 +23,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
       .then((res) => {
         setUfs(res);
       })
-  }, []);
+  }, [ufSelected]);
 
   const executarSelecao = (event) => {
     setUf(event.target.value);
@@ -40,9 +40,8 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
     event.preventDefault();
     Swal.showLoading();
 
-    console.log(event.target.option)
 
-     switch(Number(option)) {
+    switch (Number(option)) {
       case 1:
         todosCadernos();
         break;
@@ -59,21 +58,21 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
           icon: 'error',
           confirmButtonText: 'Entendi'
         })
-    }; 
+    };
 
   };
 
   function todosCadernos() {
-   fetch(`${masterPath.url}/admin/anuncio/duplicate?id=${selectId}&duplicationType=1`, {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json",
-      "authorization": 'Bearer ' + tokenAuth
-  },
-  })
+    fetch(`${masterPath.url}/admin/anuncio/duplicate?id=${selectId}&duplicationType=1`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": 'Bearer ' + tokenAuth
+      },
+    })
       .then((x) => x.json())
       .then((res) => {
-        if(res.success) {
+        if (res.success) {
           Swal.fire({
             title: 'success!',
             text: `O anuncio foi duplicado em ${res.qtdeDup} cadernos`,
@@ -82,33 +81,35 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
           });
           setOption(0);
           onClose();
+          document.querySelector(".espacos").click();
         }
-        
-      }) 
+
+      })
   };
-  
+
   function todosEstados() {
     fetch(`${masterPath.url}/admin/anuncio/duplicate?id=${selectId}&duplicationType=2&uf=${ufSelected}`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
         "authorization": 'Bearer ' + tokenAuth
-    },
+      },
     })
-    .then((x) => x.json())
-    .then((res) => {
-      if(res.success) {
-        Swal.fire({
-          title: 'success!',
-          text: `O anuncio foi duplicado em ${res.qtdeDup} cadernos`,
-          icon: 'success',
-          //confirmButtonText: 'Entendi'
-        });
-        setOption(0);
-        onClose();
-      }
-      
-    }) 
+      .then((x) => x.json())
+      .then((res) => {
+        if (res.success) {
+          Swal.fire({
+            title: 'success!',
+            text: `O anuncio foi duplicado em ${res.qtdeDup} cadernos`,
+            icon: 'success',
+            //confirmButtonText: 'Entendi'
+          });
+          setOption(0);
+          onClose();
+          document.querySelector(".espacos").click();
+        }
+
+      })
   };
 
   function todosCidades() {
@@ -118,23 +119,24 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
       headers: {
         "Content-Type": "application/json",
         "authorization": 'Bearer ' + tokenAuth
-    },
+      },
       body: JSON.stringify(city)
     })
-    .then((x) => x.json())
-    .then((res) => {
-      if(res.success) {
-        Swal.fire({
-          title: 'success!',
-          text: `O anuncio foi duplicado em ${res.qtdeDup} cadernos`,
-          icon: 'success',
-          //confirmButtonText: 'Entendi'
-        });
-        setOption(0);
-        onClose();
-      }
-      
-    }) 
+      .then((x) => x.json())
+      .then((res) => {
+        if (res.success) {
+          Swal.fire({
+            title: 'success!',
+            text: `O anuncio foi duplicado em ${res.qtdeDup} cadernos`,
+            icon: 'success',
+            //confirmButtonText: 'Entendi'
+          });
+          setOption(0);
+          onClose();
+          document.querySelector(".espacos").click();
+        }
+
+      })
   };
 
   return (
@@ -166,7 +168,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
         {option == 3 && <select id="md-duplicate-select-2" className="md-duplicate-select" size="5" onChange={executarSelecao}>
           {
             uf.map((uf, i) => (
-              <option key={i} value={uf.id_uf}>{uf.sigla_uf}</option>
+              <option key={i} value={uf.sigla_uf}>{uf.sigla_uf}</option>
             ))
           }
         </select>}
@@ -176,7 +178,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
         {option == 3 && <select id="md-duplicate-select-3" className="md-duplicate-select" size="5" onChange={executarSelecaoCity} multiple>
           {
             caderno.map((cidades) => (
-              cidades.codUf == ufSelected && (
+              cidades.UF == ufSelected && (
                 <option key={cidades.codCaderno} value={cidades.codCaderno}>{cidades.nomeCaderno}</option>
               )
             ))

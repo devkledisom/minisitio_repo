@@ -341,24 +341,26 @@ function Busca(props) {
                         buscarListaEstados(component.short_name);
                     }
 
-                    if (component.types.includes("administrative_area_level_4")) {
-                        /*                   city = component.short_name.toUpperCase();
-                                          setCodCaderno(component.short_name);
-                                          localStorage.setItem("caderno: ", component.short_name.toUpperCase());
-                                          sessionStorage.setItem("caderno: ", component.short_name.toUpperCase()); */
+                    if (!Cookies.get("consentimentoUsuario") || Cookies.get("consentimentoUsuario") === "false") {
+                        if (component.types.includes("administrative_area_level_4")) {
+                            city = component.short_name.toUpperCase();
+                            setCodCaderno(component.short_name);
+                            localStorage.setItem("caderno: ", component.short_name.toUpperCase());
+                            sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
 
-                        //break; // Interrompe o loop completamente
-                    } else if (component.types.includes("administrative_area_level_2")) {
-                        /*     city = component.short_name.toUpperCase();
+                            break; // Interrompe o loop completamente
+                        } else if (component.types.includes("administrative_area_level_2")) {
+                            city = component.short_name.toUpperCase();
                             setCodCaderno(component.short_name);
                             localStorage.setItem("caderno: ", component.short_name.toUpperCase());
                             sessionStorage.setItem("caderno: ", component.short_name.toUpperCase());
                             setTimeout(() => {
                                 verClassificado(state, city);
-                            }, 1000); */
+                            }, 1000);
 
-
+                        }
                     }
+
                 }
 
 

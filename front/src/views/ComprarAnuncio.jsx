@@ -75,21 +75,21 @@ function ComprarAnuncio({ isAdmin }) {
     setUf(codigoUf);
 
     fetch(`${masterPath.url}/cadernos?uf=${codigoUf}`)
-    .then((x) => x.json())
-    .then((res) => {
-      setCaderno(res);
-      //console.log(res)
-    });
-
-  };
-
-  useEffect(() => {
-   /*  fetch(`${masterPath.url}/cadernos?uf=${uf}`)
       .then((x) => x.json())
       .then((res) => {
         setCaderno(res);
         //console.log(res)
-      }); */
+      });
+
+  };
+
+  useEffect(() => {
+    /*  fetch(`${masterPath.url}/cadernos?uf=${uf}`)
+       .then((x) => x.json())
+       .then((res) => {
+         setCaderno(res);
+         //console.log(res)
+       }); */
     fetch(`${masterPath.url}/ufs`)
       .then((x) => x.json())
       .then((res) => {
@@ -156,15 +156,15 @@ function ComprarAnuncio({ isAdmin }) {
   function aplicarCupom(e) {
     let codId = e.target.value;
 
-/*     if(codId.length == 2) {
-      discountHash.current.value = codId + "."
-    }
-    if(codId.length == 8) {
-      //discountHash.current.value = codId + "."
-      const formatHash = codId.split(".")
-      console.log(formatHash)
-    }
- */
+    /*     if(codId.length == 2) {
+          discountHash.current.value = codId + "."
+        }
+        if(codId.length == 8) {
+          //discountHash.current.value = codId + "."
+          const formatHash = codId.split(".")
+          console.log(formatHash)
+        }
+     */
     if (codId.length >= 11 && codId.length <= 12) {
       fetch(`${masterPath.url}/admin/desconto/aplicar/${codId}`)
         .then((x) => x.json())
@@ -179,7 +179,7 @@ function ComprarAnuncio({ isAdmin }) {
               setTexto(res.IdsValue[0].descricao);
               setIsCapa(true);
 
-              
+
 
               document.getElementById('anunciar').disabled = false;
 
@@ -300,17 +300,17 @@ function ComprarAnuncio({ isAdmin }) {
       document.getElementById('anunciar').disabled = false;
     }
 
-    if(customText.current) {
+    if (customText.current) {
       setTexto(null);
       customText.current.style.color = "#000";
       setPrecoFixo(10);
       setDescontoAtivado(false);
     }
 
-    if(discountHash.current) {
+    if (discountHash.current) {
       discountHash.current.value = '';
     }
-  
+
 
   };
 
@@ -443,7 +443,7 @@ function ComprarAnuncio({ isAdmin }) {
                   id="discountValue"
                 />
               </div>
-         {/*      {texto == null &&
+              {/*      {texto == null &&
                 <h5 className="text-start py-2">
                   Ao inserir o código não esqueça dos pontos. (Ex: 99.1234.9874)
                 </h5>
@@ -455,11 +455,11 @@ function ComprarAnuncio({ isAdmin }) {
                 </h5>
               } */}
 
-           
-                <h5 className="text-start py-2" ref={customText}>
-                  {texto ? texto : ""}
-                </h5>
-              
+
+              <h5 className="text-start py-2" ref={customText}>
+                {texto ? texto : ""}
+              </h5>
+
 
 
             </div>}
@@ -493,7 +493,7 @@ function ComprarAnuncio({ isAdmin }) {
                               key={item.id}
                               value={item.atividade}
                             >
-                              {item.atividade}
+                              {item.nomeAmigavel}
                             </option> : ""
 
 

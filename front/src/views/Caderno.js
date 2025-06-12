@@ -700,22 +700,6 @@ function Caderno() {
     setCounter(counter + 1); // Incrementa o contador
   };
 
-  // Função para verificar se a primeira coluna está cheia
-  const isColumnFullold = (columnRef) => {
-    if (columnRef.current) {
-      console.log(columnRef.current.scrollHeight, columnRef.current.clientHeight)
-      return columnRef.current.scrollHeight > columnRef.current.clientHeight;
-    }
-    return false;
-  };
-
-  const isColumnFull = (columnRef) => {
-    if (columnRef.current) {
-      /* console.log(columnRef.current.scrollHeight, columnRef.current.clientHeight) */
-      return columnRef.current.scrollHeight > columnRef.current.clientHeight;
-    }
-    return false;
-  };
 
   const debug = "mensagem debug: ";
   useEffect(() => {
@@ -731,11 +715,6 @@ function Caderno() {
 
     const categorias = nomeAtividade;
 
-
-
-
-
-
     if (nomeAtividade.length < 1) {
       return;
     }
@@ -743,9 +722,9 @@ function Caderno() {
     const arrObj = [];
     let title;
     minisitio.anuncios.map((anuncio, i) => {
-      //console.log(anuncio.codAtividade, minisitio.anuncios[i-1].codAtividade)
       if (anuncio.codAtividade) {
-        arrObj.push({ title: anuncio.codAtividade });
+        arrObj.push({ title: anuncio.atividadeAmigavel.nomeAmigavel });
+        //arrObj.push({ title: anuncio.codAtividade });
       }
       arrObj.push(anuncio);
 
@@ -1055,26 +1034,26 @@ function Caderno() {
       let tamanho = b.clientHeight - a.clientHeight;
 
 
-      if(tamanho < 40) return; 
+      if (tamanho < 40) return;
 
       if (tamanho >= 40 && tamanho <= 150) {
 
-       /*  const div = document.createElement("div"); // Cria um elemento <h1>
-        const titulo = document.createElement("div"); // Cria um elemento <h1>
-        titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
-        titulo.style.display = "block";
-        titulo.style.height = (tamanho - 8) + "px";
-        titulo.style.backgroundColor = "#555";
-        titulo.style.textOverflow = "ellipsis";
-        titulo.style.overflow = "hidden";
-        titulo.style.whiteSpace = "nowrap";
-        titulo.className = "card-calhau";
-        titulo.style.fontSize = "20px";
-        titulo.style.color = "#FFFFFF";
-        titulo.style.padding = "5px";
-        titulo.innerText = getFraseAleatoria()//"Minisitio - 2025dasssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
-
-        div.appendChild(titulo) */
+        /*  const div = document.createElement("div"); // Cria um elemento <h1>
+         const titulo = document.createElement("div"); // Cria um elemento <h1>
+         titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
+         titulo.style.display = "block";
+         titulo.style.height = (tamanho - 8) + "px";
+         titulo.style.backgroundColor = "#555";
+         titulo.style.textOverflow = "ellipsis";
+         titulo.style.overflow = "hidden";
+         titulo.style.whiteSpace = "nowrap";
+         titulo.className = "card-calhau";
+         titulo.style.fontSize = "20px";
+         titulo.style.color = "#FFFFFF";
+         titulo.style.padding = "5px";
+         titulo.innerText = getFraseAleatoria()//"Minisitio - 2025dasssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+ 
+         div.appendChild(titulo) */
 
         const titulo = document.createElement("h2"); // Cria um elemento <h1>
         titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
@@ -1087,7 +1066,7 @@ function Caderno() {
         a.insertAdjacentElement("beforeend", titulo);
 
         return;
-      } 
+      }
 
       const titulo = document.createElement("h2"); // Cria um elemento <h1>
       titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>
@@ -1104,7 +1083,7 @@ function Caderno() {
     } else if (b.clientHeight < a.clientHeight) {
       let tamanho = (a.clientHeight - b.clientHeight);
 
-      if(tamanho < 40) return; 
+      if (tamanho < 40) return;
 
       if (tamanho >= 40 && tamanho <= 150) {
 
@@ -1119,7 +1098,7 @@ function Caderno() {
         b.insertAdjacentElement("beforeend", titulo);
 
         return;
-      } 
+      }
 
 
       console.log(a.clientHeight, b.clientHeight, tamanho)
@@ -1215,7 +1194,6 @@ function Caderno() {
                   {
                     //minisitio.anuncios
                     base1.map((anuncio, i) => {
-
                       if (anuncio.title) {
                         return <h2 className='bg-yellow py-2'>
                           {anuncio.title}

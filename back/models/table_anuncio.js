@@ -65,13 +65,13 @@ const Anuncio = database.define('anuncio', {
     },
 
     codOrigem: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: true,
         unique: false
     },
 
     codDuplicado: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: false,
         unique: false,
         validate: {
@@ -639,5 +639,12 @@ Promocao.belongsTo(Anuncio, { foreignKey: 'codAnuncio' });
 
 Anuncio.hasOne(Pagamento, { foreignKey: "ref_mp_codAnuncio", as: "dataPagamento" });
 Pagamento.belongsTo(Anuncio, { foreignKey: "codAnuncio" });
+
+// Um Anuncio pertence a uma Atividade
+Anuncio.belongsTo(Atividade, {
+    foreignKey: 'codAtividade',
+    targetKey: 'atividade',
+    as: 'atividadeAmigavel'
+});
 
 module.exports = Anuncio;

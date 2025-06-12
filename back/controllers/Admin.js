@@ -999,23 +999,10 @@ module.exports = {
 
         });
 
-        // Importe a biblioteca 'iconv-lite'
-        const iconv = require('iconv-lite');
-
-        // Função para corrigir caracteres codificados incorretamente
-        /*  function corrigirCaracteres(cadeiaCodificada) {
-             // Decodifica a cadeia usando UTF-8
-             const buffer = Buffer.from(cadeiaCodificada, 'binary');
-             const cadeiaCorrigida = iconv.decode(buffer, 'utf-8');
- 
-             return cadeiaCorrigida;
-         }
- 
- 
-         atividades.map(item => {
-             console.log(item.dataValues.atividade);
-             item.dataValues.atividade = corrigirCaracteres(item.dataValues.atividade)
-         }) */
+        if (atividades.length < 1) {
+            res.json({ success: false, message: "Registro não encontrado" });
+            return;
+        }
 
         res.json({
             success: true, message: atividades
@@ -1024,10 +1011,10 @@ module.exports = {
 
     },
     atualizarAtividades: async (req, res) => {
-
         // Consulta para recuperar apenas os itens da página atual
         const atividades = await Atividade.update({
-            atividade: req.body.atividade,
+            //atividade: req.body.atividade,
+            nomeAmigavel: req.body.nomeAmigavel,
             corTitulo: req.body.corTitulo
         }, {
             where: {
@@ -1062,11 +1049,10 @@ module.exports = {
 
     },
     criarAtividade: async (req, res) => {
-
         try {
             //Atividades
             const atividadeCriada = await Atividade.create({
-
+                nomeAmigavel: req.body.atividade,
                 atividade: req.body.atividade,
                 corTitulo: req.body.corTitulo
 
@@ -1733,23 +1719,57 @@ module.exports = {
                   },
                   attributes: ['codAtividade', 'codCaderno', 'codAnuncio', 'codUf', 'descAnuncio']
               }); */
-
         const allPerfil = await database.query(
             `
-                SELECT 
-                    codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, page,
-                    COUNT(codAtividade) AS quantidade
-                FROM anuncio
-                WHERE codUf = :codUf
-                  AND codCaderno = :codCaderno
-                GROUP BY codAtividade
-                ORDER BY codAtividade ASC;
-                `,
+    SELECT 
+      a.codAtividade,
+      a.codCaderno,
+      a.codAnuncio,
+      a.codUf,
+      a.descAnuncio,
+      a.page,
+      COUNT(a.codAtividade) AS quantidade,
+      b.nomeAmigavel
+    FROM anuncio AS a
+    LEFT JOIN atividade AS b ON a.codAtividade = b.atividade
+    WHERE a.codUf = :codUf
+      AND a.codCaderno = :codCaderno
+    GROUP BY a.codAtividade
+    ORDER BY a.codAtividade ASC;
+  `,
             {
-                replacements: { codUf: req.params.uf, codCaderno: req.params.caderno }, // Substitua por variáveis dinâmicas, req.params.caderno
+                replacements: {
+                    codUf: req.params.uf,
+                    codCaderno: req.params.caderno
+                },
                 type: Sequelize.QueryTypes.SELECT
             }
         );
+
+        /* funcional
+                const allPerfil = await database.query(
+                    `
+                        SELECT 
+                            codAtividade, codCaderno, codAnuncio, codUf, descAnuncio, page,
+                            COUNT(codAtividade) AS quantidade
+                        FROM anuncio
+                        WHERE codUf = :codUf
+                          AND codCaderno = :codCaderno
+                        GROUP BY codAtividade
+                        ORDER BY codAtividade ASC;
+                        `,
+                    {
+                        replacements: { codUf: req.params.uf, codCaderno: req.params.caderno }, // Substitua por variáveis dinâmicas, req.params.caderno
+                        type: Sequelize.QueryTypes.SELECT,
+                        include: [
+                            {
+                                model: Atividade,
+                                attributes: ['nomeAmigavel'],
+                                as: 'atividadeAmigavel',
+                            }
+                        ]
+                    }
+                ); */
 
         //console.log('kledisom', allPerfil, "kledisom")
         res.json({ success: true, data: allPerfil })
@@ -2436,29 +2456,8 @@ module.exports = {
 
         const page = req.query.page ? parseInt(req.query.page) : 1;
         const limit = 10;
-        //const offset = (page - 1) * limit;
         const offset = Math.max(0, (page - 1) * limit);
 
-        /*      const [quantidadeGeral, anuncioIdd] = await Promise.all([
-                 Anuncio.count({
-                     where: { codUf: req.params.uf, codCaderno: req.params.caderno },
-                 }),
-                 req.query.unique == 'false'
-                     ? Anuncio.findOne({
-                         where: {
-                             codUf: req.params.uf,
-                             codCaderno: req.params.caderno,
-                             codAnuncio: req.query.idd,
-                         },
-                         attributes: ['page'],
-                         raw: true,
-                     })
-                     : null,
-             ]);
-     
-             const pageToQuery = req.query.unique == 'false' && anuncioIdd ? anuncioIdd.page : page; */
-
-        //console.log("daskdaklsdjalkj", anuncioIdd, page, pageToQuery)
 
         const anuncioTeste = await Anuncio.findAndCountAll({
             where: {
@@ -2475,6 +2474,13 @@ module.exports = {
             /*  limit,
              offset, */
             attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page'],
+            include: [
+                {
+                    model: Atividade,
+                    attributes: ['nomeAmigavel'],
+                    as: 'atividadeAmigavel',
+                }
+            ]
         });
 
         const contador = await Anuncio.count({
@@ -5132,19 +5138,52 @@ module.exports = {
         res.json({ success: true, message: atualizarPerfil });
     },
     deleteAnuncio: async (req, res) => {
-        await database.sync();
-
         const uuid = req.params.id;
         const type = req.query.type;
 
         if (type == "dup") {
-            const deleteAnuncio = await Anuncio.destroy({
+            const ufAnuncio = await Anuncio.findAll({
                 where: {
-                    codOrigem: uuid
-                }
+                    codAnuncio: uuid
+                },
+                attributes: ['codUf', 'codCaderno', 'descAnuncio'],
+                raw: true
+            })
 
+            console.log(ufAnuncio)
+
+            /*         const result = await database.query(
+                        `
+                    DELETE FROM anuncio 
+                    WHERE CAST(codDuplicado AS UNSIGNED) > 0 
+                      AND descAnuncio = 'empresa 13'
+                  `,
+                        {
+                            type: Sequelize.QueryTypes.DELETE,
+                            replacements: { descAnuncio: ufAnuncio[0].descAnuncio }
+                        }
+                    );
+                    //res.json({ success: true, message: uuid });
+                    console.log(result)
+        
+                    if (result && result.affectedRows > 0) {
+                        // MySQL/MariaDB
+                        res.json({ success: true, message: `${result.affectedRows} anúncio(s) deletado(s)` });
+                    } */
+
+            const deletedCount = await Anuncio.destroy({
+                where: {
+                    codDuplicado: {
+                        [Sequelize.Op.gt]: 0
+                    },
+                    descAnuncio: ufAnuncio[0].descAnuncio
+                }
             });
-            res.json({ success: true, message: uuid });
+
+            console.log(`Registros deletados: ${deletedCount}`);
+            res.json({ success: true, message: `${deletedCount} perfil(s) deletado(s)` });
+
+
             return;
         }
 
@@ -5378,6 +5417,7 @@ module.exports = {
         res.json({ success: true, message: arr }) */
 
     },
+
     //ESPAÇOS DUPLICADOS
     duplicar: async (req, res) => {
 
@@ -5393,6 +5433,8 @@ module.exports = {
 
         let duplicateType = req.query.duplicationType;
         let idAnuncio = req.query.id;
+        console.log("duplicar", duplicateType, idAnuncio);
+
 
 
         const anuncio = await Anuncio.findAll({
@@ -5423,8 +5465,8 @@ module.exports = {
             const cadernos = await Cadernos.findAll();
             cadernos.map(async (item, index) => {
                 let codAnuncio = anuncioObj.codAnuncio;
-                let codCaderno = item.dataValues.codCaderno;
-                let codUf = item.dataValues.codUf;
+                let codCaderno = item.dataValues.nomeCaderno;
+                let codUf = item.dataValues.UF;
 
                 anuncioObj.codOrigem = idAnuncio;
                 anuncioObj.codDuplicado = index + 1;
@@ -5460,8 +5502,8 @@ module.exports = {
             });
 
             cadernos.map(async (item, index) => {
-                let codCaderno = item.dataValues.codCaderno;
-                let codUf = item.dataValues.codUf;
+                let codCaderno = item.dataValues.nomeCaderno;
+                let codUf = item.dataValues.UF;
 
                 anuncioObj.codOrigem = idAnuncio;
                 anuncioObj.codDuplicado = index + 1;//`${String(idAnuncio)}.${String(index + 1)}`;
@@ -5469,8 +5511,9 @@ module.exports = {
                 anuncioObj.codCidade = codCaderno;
                 anuncioObj.codUf = codUf;
 
-                //console.log(anuncioObj.codDuplicado);
+                //console.log(anuncioObj.codOrigem);
                 //console.log(typeof(idAnuncio), typeof(index));
+                console.log(anuncioObj);
 
                 //Remover a propriedade codAnuncio
                 delete anuncioObj.codAnuncio;
@@ -5498,8 +5541,8 @@ module.exports = {
             });
 
             cidades.map(async (item, index) => {
-                let codCaderno = item.dataValues.codCaderno;
-                let codUf = item.dataValues.codUf;
+                let codCaderno = item.dataValues.nomeCaderno;
+                let codUf = item.dataValues.UF;
 
                 anuncioObj.codOrigem = idAnuncio;
                 anuncioObj.codDuplicado = index + 1;

@@ -20,6 +20,17 @@ const Atividade = database.define('atividade', {
         }
     },
 
+    nomeAmigavel: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+        unique: false,
+        validate: {
+            notEmpty: {
+                msg: "Esse campo não pode está vazio.."
+            },
+        }
+    },
+
     corTitulo: {
         type: Sequelize.TEXT,
         allowNull: false,

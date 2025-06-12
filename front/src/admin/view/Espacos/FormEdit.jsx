@@ -117,6 +117,15 @@ const FormEdit = () => {
 
     useEffect(() => {
         setShowSpinner(true);
+
+        fetch(`${masterPath.url}/atividade/:codAtividade`)
+            .then((x) => x.json())
+            .then((res) => {
+                setAtividades(res);
+                //console.log(res)
+                //decodificar()
+            });
+
         fetch(`${masterPath.url}/admin/anuncio/edit/${param}`)
             .then((x) => x.json())
             .then((res) => {
@@ -155,13 +164,7 @@ const FormEdit = () => {
             .then((res) => {
                 setUfs(res);
             })
-        fetch(`${masterPath.url}/atividade/:codAtividade`)
-            .then((x) => x.json())
-            .then((res) => {
-                setAtividades(res);
-                //console.log(res)
-                //decodificar()
-            });
+
     }, []);
 
 
@@ -214,6 +217,7 @@ const FormEdit = () => {
                     if (res.success) {
                         setShowSpinner(false);
                         alert("anuncio Atualizado!");
+                        document.querySelector(".espacos").click();
                     } else {
                         alert(res.message);
                     }
@@ -318,38 +322,26 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="codAtividade" className="w-50 px-1">Atividade: (Digite o nome)</label>
-                            {/*     <input type="text"
-                                className="form-control h-25 w-50"
-                                id="descAtividade"
-                                name="codAtividade"
-                                value={ids.codAtividade}
-                                onChange={handleChange}
-                            /> */}
-
-                        
                             <select
                                 name="codAtividade"
                                 id="codAtividade"
-                                className="form-control h-25 w-50"
+                                className="w-50"
+                                style={{ 'height': '30px' }}
                                 onChange={handleChange}
                                 value={ids.codAtividade}
                                 required
                             >
 
-                                {/* <option value="">Selecione a atividade principal</option> */}
                                 {atividades &&
 
                                     atividades.map(
-                                        (item) =>
-
-                                            <option
-                                                key={item.id}
-                                                value={item.id}
-                                            >
-                                                {item.atividade}
+                                        (item) => (
+                                            <option key={item.id} value={item.atividade}>
+                                                {item.nomeAmigavel}
                                             </option>
-
-                                    )}
+                                        )
+                                    )
+                                }
                             </select>
                         </div>
 
