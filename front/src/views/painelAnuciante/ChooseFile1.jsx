@@ -52,53 +52,53 @@ function UploadImage(props) {
 
     // Verifica as dimensões da imagem (100x100)
     if (props.origin == 'descParceiro') {
-      
+
       const file = acceptedFiles[0];
       if (!file) return;
 
       validarDimensaoImagem(file, 150, 58)
-      .then((aproved) => {
-        if(aproved) {
-          enviarImg();
-        } else {
-          alert("A imagem deve ter exatamente 150x58 pixels.");
-        }
-      });
+        .then((aproved) => {
+          if (aproved) {
+            enviarImg();
+          } else {
+            alert("A imagem deve ter exatamente 150x58 pixels.");
+          }
+        });
 
-     /*  const img = new Image();
-      img.onload = () => {
-        if (img.width !== 100 || img.height !== 100) {
-          alert("A imagem deve ter exatamente 100x100 pixels.");
-          return;
-        }
-
-        // ✅ Se passou nas validações, faz o que precisa (ex: setFile, enviar, etc.)
-        console.log("Imagem válida!");
-        enviarImg()
-        // setImagem(file); ou qualquer ação que você queira
-      };
-      img.onerror = () => {
-        alert("Erro ao carregar imagem.");
-      };
-      img.src = URL.createObjectURL(file); */
+      /*  const img = new Image();
+       img.onload = () => {
+         if (img.width !== 100 || img.height !== 100) {
+           alert("A imagem deve ter exatamente 100x100 pixels.");
+           return;
+         }
+ 
+         // ✅ Se passou nas validações, faz o que precisa (ex: setFile, enviar, etc.)
+         console.log("Imagem válida!");
+         enviarImg()
+         // setImagem(file); ou qualquer ação que você queira
+       };
+       img.onerror = () => {
+         alert("Erro ao carregar imagem.");
+       };
+       img.src = URL.createObjectURL(file); */
     } else if (props.origin == 'cashback_logo') {
       const file = acceptedFiles[0];
       if (!file) return;
 
       validarDimensaoImagem(file, 150, 58)
-      .then((aproved) => {
-        if(aproved) {
-          enviarImg();
-        } else {
-          alert("A imagem deve ter exatamente 150x58 pixels.");
-        }
-      });
+        .then((aproved) => {
+          if (aproved) {
+            enviarImg();
+          } else {
+            alert("A imagem deve ter exatamente 150x58 pixels.");
+          }
+        });
     } else {
       enviarImg();
     }
 
 
-    
+
 
 
     function enviarImg() {
@@ -137,6 +137,7 @@ function UploadImage(props) {
           props.data({
             ...props.minisitio,
             [props.origin]: acceptedFiles[0].name,
+            promoc: { banner: acceptedFiles[0].name }
             //['descParceiro']: acceptedFiles[0].name,
 
           });

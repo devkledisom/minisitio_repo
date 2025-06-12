@@ -4620,7 +4620,14 @@ module.exports = {
         const resultAnuncio = await Anuncio.findAll({
             where: {
                 codAnuncio: uuid
-            }
+            },
+            include: [
+                {
+                    model: Promocao,
+                    as: 'promoc',
+                    attributes: ['data_validade', 'banner']
+                }
+            ]
         });
 
         // Verifica se o resultado está vazio

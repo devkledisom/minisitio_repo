@@ -49,12 +49,12 @@ function Editar(props) {
   const [radioCheck, setRadioCheck] = useState(1);
   const [personType, setPersonType] = useState("pf");
   const [cep, setCep] = useState(null);
-  const [showMap, setShowMap] = useState("none");
   const [precoFixo, setPrecoFixo] = useState(5);
   const [cpfCnpjValue, setcpfCnpjValue] = useState(null);
   const [descontoAtivado, setDescontoAtivado] = useState(false);
   const [minisitio, setMinisitio] = useState({});
   const [tagValue, setTagValue] = useState([]);
+
 
   const campoPromocao = useRef(null)
 
@@ -763,7 +763,7 @@ function Editar(props) {
                   value={minisitio.promoc ? minisitio.promoc.data_validade : ""}
                   onChange={handleSelectChange}
                   ref={campoPromocao}
-                  required
+                  required={!!minisitio?.promoc?.banner}
                 />
               </div>
             </div>}
