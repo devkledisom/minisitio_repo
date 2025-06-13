@@ -35,22 +35,24 @@ const Espacos = () => {
     const [start, setStart] = useState(null);
     const [end, setEnd] = useState(null);
 
-    useEffect(() => {
-        
-                    const progressImport = setInterval(() => {
-                        fetch(`${masterPath.url}/admin/anuncio/progress`)
-                            .then(x => x.json())
-                            .then(res => {
-                                setProgressValue(res.message.progress);
-                                setEnd(res.message.fim)
-                                console.log(res)
-                                if(res.message.endProccess) {
-                                    //clearInterval(progressImport);
-                                }
-                            })
-                    }, 1000)    
-
-    }, []);
+    /*     useEffect(() => {
+    
+            const progressImport = setInterval(() => {
+                fetch(`${masterPath.url}/admin/anuncio/progress`)
+                    .then(x => x.json())
+                    .then(res => {
+                        setProgressValue(res.message.progress);
+                        setEnd(res.message.fim)
+                        console.log(res.message.endProccess)
+                        if (res.message.endProccess) {
+                            setShowSpinner(false);
+                            clearInterval(progressImport);
+    
+                        }
+                    })
+            }, 1000)
+    
+        }, []); */
 
 
 
@@ -81,23 +83,31 @@ const Espacos = () => {
             const minutes = now.getMinutes(); // Minutos (0-59)
             const seconds = now.getSeconds(); // Segundos (0-59)
 
-            console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
+            //console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
+            Swal.fire("Sucesso!", "Arquivo enviado!", "success")
+                .then((resposta) => {
+                    if (resposta.isConfirmed) {
+                        document.querySelector('.espacos').click()
+                    }
+                });
+
+
 
             setStart(`${hours}:${minutes}:${seconds}`);
 
-            const progressImport = setInterval(() => {
-                fetch(`${masterPath.url}/admin/anuncio/progress`)
-                    .then(x => x.json())
-                    .then(res => {
-                        setProgressValue(res.message.progress);
-                        setEnd(res.message.fim)
-                        console.log(res)
-                        if (res.message.endProccess) {
-                            clearInterval(progressImport);
-                            Swal.fire("Sucesso!", "Processo de importação finalizado!", "success");
-                        }
-                    })
-            }, 1000)
+            /*        const progressImport = setInterval(() => {
+                       fetch(`${masterPath.url}/admin/anuncio/progress`)
+                           .then(x => x.json())
+                           .then(res => {
+                               setProgressValue(res.message.progress);
+                               setEnd(res.message.fim)
+                               console.log(res)
+                               if (res.message.endProccess) {
+                                   clearInterval(progressImport);
+                                   Swal.fire("Sucesso!", "Processo de importação finalizado!", "success");
+                               }
+                           })
+                   }, 1000) */
 
             //setProgressValue(data.progress || null);
 
