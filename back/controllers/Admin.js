@@ -10,6 +10,7 @@ const io = new Server(server);
 const ExcelJS = require('exceljs');
 const masterPath = require('../config/config');
 const moment = require('moment');
+const csv = require('csv-parser');
 
 //models
 const database = require('../config/db');
@@ -7166,11 +7167,167 @@ module.exports = {
 
         res.json(atividades)
     },
-    import4excell: async (req, res, io) => {
+    import4excell: async (req, res) => {
+        res.json({ success: true, message: "Importação" });
+
+        const filePath = path.join(__dirname, '../public/importLog.json');
+        const arquivoImportado = path.join(__dirname, '../public/import/uploadedfile.csv');
+        const DELAY_MS = 1000; // Delay configurável entre linhas
+
+        async function importarPerfis() {
+            let totalLinhas = 0;
+
+            function updateJsonName(filePath, endProccess, progress) {
+                try {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const seconds = now.getSeconds();
+
+                    const jsonData = fs.readFileSync(filePath, 'utf8');
+                    const data = JSON.parse(jsonData);
+
+                    data.progress = progress;
+                    data.fim = `${hours}:${minutes}:${seconds}`;
+                    data.endProccess = endProccess;
+
+                    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+                    console.log(`Progresso atualizado para: ${progress}`);
+                } catch (error) {
+                    console.error('Erro ao atualizar progresso:', error);
+                }
+            }
+
+            async function processRow(row, index) {
+                //console.log(`Processando linha ${index}:`, row);
+                //return;
+                try {
+                    if (index === 1) updateJsonName(filePath, false, 0);
+
+                    const codTipoAnuncio = row['TIPO'];
+                    const idDesconto = row['ID'];
+                    const nomeAnuncio = row['NOMe'];
+                    const telefone = row['TELEFONE'];
+                    const cep = row['CEP'];
+                    const estado = row['UF'];
+                    const cidade = row['CIDADE'];
+                    const tipoAtividade = row['ATIVIDADE_PRINCIPAL_CNAE'];
+                    const nuDocumento = row['CNPJ_CPF'];
+                    const autorizante = row['AUTORIZANTE'];
+                    const email = row['EMAIL'];
+                    const senha = 12345;
+
+                    const verificarUserExists = await Usuarios.findOne({
+                        where: { descCPFCNPJ: nuDocumento }
+                    });
+
+                    let codUser;
+                    if (verificarUserExists) {
+                        codUser = verificarUserExists.dataValues.codUsuario;
+                    } else {
+                        const dadosUsuario = {
+                            codTipoPessoa: "pf",
+                            descCPFCNPJ: nuDocumento,
+                            descNome: nomeAnuncio || `import${index}`,
+                            descEmail: email || "atualizar",
+                            senha,
+                            codTipoUsuario: 3,
+                            descTelefone: telefone || "atualizar",
+                            codUf: estado,
+                            codCidade: cidade,
+                            dtCadastro: dataNow(),
+                            usuarioCod: 0,
+                            dtCadastro2: dataNow(),
+                            dtAlteracao: dataNow(),
+                            ativo: "1"
+                        };
+                        const novoUsuario = await Usuarios.create(dadosUsuario);
+                        codUser = novoUsuario.dataValues.codUsuario;
+                    }
+
+                    let codigoDeDesconto = await Descontos.findOne({ where: { hash: idDesconto } });
+
+                    const dataObj = {
+                        codUsuario: codUser,
+                        codTipoAnuncio,
+                        codAtividade: tipoAtividade,
+                        codCaderno: cidade,
+                        codUf: estado,
+                        codCidade: cidade,
+                        descAnuncio: nomeAnuncio || `import${index}`,
+                        descImagem: 0,
+                        descEndereco: "atualizar",
+                        descTelefone: telefone || "atualizar",
+                        descCelular: 0,
+                        descEmailComercial: 0,
+                        descEmailRetorno: email,
+                        descWhatsApp: 0,
+                        descCEP: cep,
+                        descTipoPessoa: "pf",
+                        descCPFCNPJ: nuDocumento,
+                        descNomeAutorizante: autorizante || `import${index}`,
+                        descEmailAutorizante: 0,
+                        codDesconto: codigoDeDesconto ? codigoDeDesconto.idDesconto : '00.000.0000',
+                        descChavePix: 'chavePix',
+                        qntVisualizacoes: 0,
+                        codDuplicado: 0,
+                        descPromocao: 0,
+                        activate: 1,
+                    };
+
+                    await Anuncio.create(dataObj);
+                    updateJsonName(filePath, false, index);
+                    console.log(`Linha ${index} importada com sucesso.`);
+                } catch (error) {
+                    console.error(`Erro ao importar linha ${index}:`, error);
+                }
+            }
+
+            function dataNow() {
+                const dataAtual = new Date();
+                const ano = dataAtual.getFullYear();
+                const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
+                const dia = String(dataAtual.getDate()).padStart(2, '0');
+                const hora = String(dataAtual.getHours()).padStart(2, '0');
+                const minutos = String(dataAtual.getMinutes()).padStart(2, '0');
+                const segundos = String(dataAtual.getSeconds()).padStart(2, '0');
+                return `${ano}-${mes}-${dia} ${hora}:${minutos}:${segundos}`;
+            }
+
+            async function processFile() {
+                console.log("Iniciando leitura do arquivo...");
+                let index = 1;
+                const stream = fs.createReadStream(arquivoImportado).pipe(csv());
+
+                for await (const row of stream) {
+                    await processRow(row, index);
+                    await new Promise(resolve => setTimeout(resolve, DELAY_MS));
+                    index++;
+                }
+
+                console.log("Arquivo lido com sucesso!");
+                updateJsonName(filePath, false, index - 1);
+                // Zera o arquivo importLog.json após a última iteração
+                const logInicial = {
+                    progress: 0,
+                    //fim: "",
+                    endProccess: true
+                };
+                fs.writeFileSync(filePath, JSON.stringify(logInicial, null, 2), 'utf8');
+            }
+
+            await processFile();
+        }
+
+        // Para rodar a importação, basta chamar:
+        importarPerfis();
+    },
+
+    import4excell2: async (req, res, io) => {
 
         const filePath = path.join(__dirname, '../public/importLog.json');
         const csv = require('csv-parser');
-        const arquivoImportado = path.join(__dirname, '../public/import/modelo_importacao_perfil (1).csv');
+        const arquivoImportado = path.join(__dirname, '../public/import/uploadedfile.csv');
         let totalLinhas = 0;
 
         function processRowWithDelay(row, totalLinhas, callback) {
@@ -7182,26 +7339,7 @@ module.exports = {
             }, delay);
         }
 
-        /*    fs.createReadStream(arquivoImportado)
-           .pipe(csv())
-           .on('data', async (row) => {
-               if(totalLinhas == 0) {
-                   updateJsonName(filePath, false, 0);
-               }
-   
-   
-                   totalLinhas++
-                   // console.log(row)
-                 const test = await novaImportacao1(row, totalLinhas)
-    
-   
-               
-           })
-           .on('end', () => {
-               console.log("Arquivo lido com sucesso!")
-               updateJsonName(filePath, true, totalLinhas);
-           })
-    */
+
 
 
         function delay(ms) {
