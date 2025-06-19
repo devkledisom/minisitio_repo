@@ -19,7 +19,7 @@ const options = {
 };
  */
 const server = http.createServer(app);
-const BASE_PATH = "/repositories/minisitio_repo/back";
+const BASE_PATH = "/api";
 
 const options = {
     cors: {
