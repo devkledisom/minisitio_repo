@@ -16,7 +16,10 @@ import Spinner from '../../../components/Spinner';
 import { Input } from "../../../components/ui/input.tsx";
 import { Label } from "../../../components/ui/label.tsx"
 
-const socket = io(masterPath.ioUrl);
+//const socket = io(masterPath.ioUrl);
+const socket = io(masterPath.ioUrl, {
+    path: '/api/socket.io'
+});
 
 const Espacos = () => {
 
