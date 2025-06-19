@@ -13,6 +13,10 @@ import Swal from 'sweetalert2';
 //componente
 import Header from "../Header";
 import Spinner from '../../../components/Spinner';
+import { Input } from "../../../components/ui/input.tsx";
+import { Label } from "../../../components/ui/label.tsx"
+
+const socket = io(masterPath.ioUrl);
 
 const Espacos = () => {
 
@@ -35,26 +39,59 @@ const Espacos = () => {
     const [start, setStart] = useState(null);
     const [end, setEnd] = useState(null);
 
-    /*     useEffect(() => {
-    
-            const progressImport = setInterval(() => {
-                fetch(`${masterPath.url}/admin/anuncio/progress`)
-                    .then(x => x.json())
-                    .then(res => {
-                        setProgressValue(res.message.progress);
-                        setEnd(res.message.fim)
-                        console.log(res.message.endProccess)
-                        if (res.message.endProccess) {
-                            setShowSpinner(false);
-                            clearInterval(progressImport);
-    
-                        }
-                    })
-            }, 1000)
-    
-        }, []); */
 
 
+    /*     const [progress, setProgress] = useState(0);
+    
+        useEffect(() => {
+            socket.on('download-progress', (data) => {
+                setProgress(data.progress);
+            });
+    
+            socket.on('download-complete', () => {
+                alert('✅ Download concluído!');
+            });
+    
+            // Limpar eventos ao desmontar
+            return () => {
+                socket.off('download-progress');
+                socket.off('download-complete');
+            };
+        }, []);
+    
+        const handleStart = () => {
+            socket.emit('start-download');
+            console.log("dsdasd")
+        }; */
+
+    const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+        socket.on('download-progress', (data) => {
+            setProgress(data.progress);
+        });
+
+        socket.on('download-complete', () => {
+            alert('✅ Download concluído!');
+            setProgress(100);
+
+            document.querySelector('.espacos').click()
+
+        });
+
+        return () => {
+            socket.off('download-progress');
+            socket.off('download-complete');
+        };
+    }, []);
+
+    const handleStart = () => {
+        // Faz a chamada para sua rota que inicia o processo, passando o socket.id
+        fetch(`http://localhost:3032/start-download/${socket.id}`)
+            .then(res => res.text())
+            .then(text => console.log(text))
+            .catch(err => console.error(err));
+    };
 
     const location = useLocation();
 
@@ -65,7 +102,7 @@ const Espacos = () => {
         const formData = new FormData(event.target); // Captura os dados do formulário
 
         try {
-            const response = await fetch(`${masterPath.url}/admin/anuncio/import`, {
+            const response = await fetch(`${masterPath.url}/admin/anuncio/import/${socket.id}`, {
                 method: "POST",
                 body: formData,
             });
@@ -84,12 +121,12 @@ const Espacos = () => {
             const seconds = now.getSeconds(); // Segundos (0-59)
 
             //console.log(`Hora atual: ${hours}:${minutes}:${seconds}`);
-            Swal.fire("Sucesso!", "Arquivo enviado!", "success")
-                .then((resposta) => {
-                    if (resposta.isConfirmed) {
-                        document.querySelector('.espacos').click()
-                    }
-                });
+            /*    Swal.fire("Sucesso!", "Arquivo enviado!", "success")
+                   .then((resposta) => {
+                       if (resposta.isConfirmed) {
+                           document.querySelector('.espacos').click()
+                       }
+                   }); */
 
 
 
@@ -130,31 +167,30 @@ const Espacos = () => {
 
                 <h1 className="pt-4 px-4">Importar Perfil</h1>
                 {/*  action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" */}
-                <form onSubmit={handleFormSubmit} style={{ "marginTop": "20px", "marginLeft": "50px" }}>
+                <form onSubmit={handleFormSubmit} className='px-4' style={{ "marginTop": "20px", }}>
                     Importar Espaços <br />
 
                     <input type="hidden" name="MAX_FILE_SIZE" value="2097152" id="MAX_FILE_SIZE" />
-                    <input type="file" name="uploadedfile" id="uploadedfile" /><br /><br />
-                    {progressValue &&
-                        <div>
-                            <h2>Registros enviados: {progressValue}</h2>
-                            <h3>inicio: {start}</h3>
-                            <h3>fim: {end}</h3>
-                            {/* <h3>tempo: {end - start}</h3> */}
-                        </div>
+                    {/* <input type="file" name="uploadedfile" id="uploadedfile" /><br /><br />
+ */}
+                    <Label htmlFor="picture"></Label>
+                    <Input id="uploadedfile" name="uploadedfile" type="file" />
 
-                    }
-
-                    <button type="submit" className="btn custom-button" style={{ "marginRight": "10px" }}>Enviar</button>
-                    <a href={`${masterPath.url}/modelo/modelo_importacao_perfil.xlsx`}>Download modelo</a>
+                    <button type="submit" className="btn custom-button mt-2">Enviar</button>
+                    <a href={`${masterPath.url}/modelo/modelo_importacao_perfil.xlsx`} className='mx-2'>Download modelo</a>
                 </form>
+
+
+                <div className='px-4 my-5'>
+                    <h2>Progresso do Download: {progress}%</h2>
+                    <progress value={progress} max="100" style={{ width: '100%' }}></progress>
+                </div>
 
 
                 <p className='w-100 text-center'>© MINISITIO - {version.version}</p>
             </section>
-            {/*  <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
-                <p className='w-100 text-center'>© MINISITIO</p>
-            </footer> */}
+
+            {/* <button onClick={handleStart}>Iniciar Download</button> */}
         </div>
     );
 }

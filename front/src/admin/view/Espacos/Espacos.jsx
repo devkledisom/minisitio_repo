@@ -174,7 +174,6 @@ const Espacos = () => {
                 })
                     .then((x) => x.json())
                     .then((res) => {
-                        console.log(res)
                         if (res.success) {
                             setShowSpinner(false);
                             line.closest('tr').remove();
