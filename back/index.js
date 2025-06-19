@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
 const port = 3032;
-const route = require('./routes/Routes');
+
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 //streams
 const http = require("http");
+const { Server } = require('socket.io');
 const cron = require('node-cron');
 const { deletarPromocoesExpiradas } = require('./crons/promocao');
 
@@ -19,9 +20,10 @@ const options = {
 
 const server = http.createServer(app);
 //const io = new Server(server);
-var io = require("socket.io")(server, {
+const io = new Server(server, {
     cors: {
-        origin: '*',
+        origin: "*", // frontend React
+        methods: ["GET", "POST"]
     }
 });
 
@@ -46,17 +48,6 @@ const allowedOrigins = [
 app.use(cors());
 
 
-// Middleware para passar a instância `io` para as rotas
-function customMiddleware(io) {
-    return (req, res, next) => {
-        req.io = io;  // Passando a instância do `io` para `req`
-        next();
-    };
-}
-
-// Usando o middleware globalmente para todas as rotas
-app.use(customMiddleware(io));
-
 // Configurar EJS como motor de template
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'ejs'));
@@ -65,6 +56,7 @@ app.set('views', path.join(__dirname, 'ejs'));
 app.use(express.static(path.join(__dirname, 'ejs')));
 
 //rota principal
+const route = require('./routes/Routes')(io);
 app.use(route);
 
 app.use('/api', express.static('public'));
@@ -97,23 +89,20 @@ app.get('/outapi', (req, res) => {
 
 // WebSocket
 io.on("connection", (socket) => {
-    //console.log("Cliente conectado.", socket.id);
-    socket.on("boa", (data) => {
-        console.log("Cliente conectado.", data);
-    })
-
-    socket.on("progress", (data) => {
-        const progress = (1 / 1) * 100;
-        socket.emit("progress", data);
+    console.log("🔌 Cliente conectado.", socket.id);
+    socket.on('start-download', async () => {
+        for (let i = 0; i <= 100; i += 10) {
+            await new Promise(res => setTimeout(res, 500)); // Simula tempo
+            socket.emit('download-progress', { progress: i });
+        }
+        socket.emit('download-complete');
     });
 
 
 
 });
 
-app.get("/as", (req, res) => {
-    io.emit("progress", { a: 1 });
-})
+
 
 cron.schedule('*/5 * * * *', () => {
     console.log('Deletando promoções expiradas...');
@@ -121,7 +110,7 @@ cron.schedule('*/5 * * * *', () => {
 });
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log("rodando na porta: ", port);
 });
 

@@ -7170,9 +7170,17 @@ module.exports = {
     import4excell: async (req, res) => {
         res.json({ success: true, message: "Importação" });
 
+        const io = req.io;
+        const socketId = req.params.socketId;
+
+
         const filePath = path.join(__dirname, '../public/importLog.json');
         const arquivoImportado = path.join(__dirname, '../public/import/uploadedfile.csv');
         const DELAY_MS = 1000; // Delay configurável entre linhas
+        let qtdaBasico = 0;
+        let qtdaCompleto = 0;
+        let dataObjGeral;
+
 
         async function importarPerfis() {
             let totalLinhas = 0;
@@ -7198,7 +7206,7 @@ module.exports = {
                 }
             }
 
-            async function processRow(row, index) {
+            async function processRow(row, index, totalAtual) {
                 //console.log(`Processando linha ${index}:`, row);
                 //return;
                 try {
@@ -7275,9 +7283,26 @@ module.exports = {
                         activate: 1,
                     };
 
+                    dataObjGeral = dataObj;
+
+                    if (dataObj.codTipoAnuncio == 1) {
+                        qtdaBasico += 1
+                    }
+
+                    if (dataObj.codTipoAnuncio == 3) {
+                        qtdaCompleto += 1
+                    }
+
                     await Anuncio.create(dataObj);
                     updateJsonName(filePath, false, index);
                     console.log(`Linha ${index} importada com sucesso.`);
+
+                    const progress = Math.round((index / totalAtual._eventsCount) * 100);
+
+                    //console.log("progredindo", progress, index, totalAtual._eventsCount)
+                    io.to(socketId).emit('download-progress', { progress });
+
+
                 } catch (error) {
                     console.error(`Erro ao importar linha ${index}:`, error);
                 }
@@ -7300,7 +7325,7 @@ module.exports = {
                 const stream = fs.createReadStream(arquivoImportado).pipe(csv());
 
                 for await (const row of stream) {
-                    await processRow(row, index);
+                    await processRow(row, index, stream);
                     await new Promise(resolve => setTimeout(resolve, DELAY_MS));
                     index++;
                 }
@@ -7314,6 +7339,58 @@ module.exports = {
                     endProccess: true
                 };
                 fs.writeFileSync(filePath, JSON.stringify(logInicial, null, 2), 'utf8');
+
+
+
+                try {
+
+                    const cadernos = await Caderno.findOne({
+                        where: {
+                            UF: dataObjGeral.codUf,
+                            nomeCaderno: dataObjGeral.codCaderno
+                        },
+                        attributes: ['codCaderno', 'basico', 'completo', 'total']
+                    });
+
+
+                    if (dataObjGeral.codTipoAnuncio == 1) {
+                        cadernos.basico = cadernos.basico + qtdaBasico;
+                        cadernos.total = cadernos.total + (qtdaBasico + qtdaCompleto);
+
+                        await cadernos.save();
+                    }
+
+                    if (dataObjGeral.codTipoAnuncio == 3) {
+                        cadernos.completo = cadernos.completo + qtdaCompleto;
+                        cadernos.total = cadernos.total + (qtdaBasico + qtdaCompleto);
+
+                        await cadernos.save();
+                    }
+
+                    io.to(socketId).emit('download-complete');
+
+                    const query = `UPDATE anuncio
+                        JOIN (
+                            SELECT codAnuncio, 
+                                CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
+                            FROM anuncio
+                            WHERE codUf = :estado AND codCaderno = :caderno
+                        ) AS temp
+                        ON anuncio.codAnuncio = temp.codAnuncio
+                        SET anuncio.page = temp.page_number
+                        WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
+                    `;
+
+                    database.query(query, {
+                        replacements: { estado: dataObjGeral.codUf, caderno: dataObjGeral.codCaderno },
+                        type: Sequelize.QueryTypes.UPDATE,
+                    });
+
+                    console.log(`Reorganização concluída para o estado:`, dataObjGeral.codUf);
+                } catch (error) {
+                    console.error("Erro ao executar a reorganização:", error);
+                }
+
             }
 
             await processFile();

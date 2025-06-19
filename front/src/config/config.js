@@ -31,11 +31,13 @@ if (hostname === "localhost") {
 }
 
 const apiUrl = `${apiProtocol}//${apiDomain}/api`;
+const ioUrl = `${apiProtocol}//${apiDomain}`;
 const domain = `${apiProtocol}//${portalDomain}`;
 
 export const masterPath = {
     url: apiUrl,
     domain: domain,
+    ioUrl: ioUrl,
     accessToken: sessionStorage.getItem('userTokenAccess')
 };
 
