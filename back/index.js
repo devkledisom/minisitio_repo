@@ -12,23 +12,25 @@ const cron = require('node-cron');
 const { deletarPromocoesExpiradas } = require('./crons/promocao');
 
 
-// Carregar certificados
+/* // Carregar certificados
 const options = {
     key: fs.readFileSync("./certificados/code.key"),
     cert: fs.readFileSync("./certificados/code.crt"),
 };
-
+ */
 const server = http.createServer(app);
 const BASE_PATH = "/repositories/minisitio_repo/back";
 
-if (BASE_PATH) options['path'] = BASE_PATH + "/socket.io";
-//const io = new Server(server);
-const io = new Server(server, {
+const options = {
     cors: {
         origin: "*", // ou '*' para liberar geral (não recomendado em produção)
         methods: ["GET", "POST"]
     }
-});
+}
+
+if (BASE_PATH) options['path'] = BASE_PATH + "/socket.io";
+//const io = new Server(server);
+const io = new Server(server, options);
 
 app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
