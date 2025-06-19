@@ -22,8 +22,9 @@ const server = http.createServer(app);
 //const io = new Server(server);
 const io = new Server(server, {
     cors: {
-        origin: "*", // frontend React
-        methods: ["GET", "POST"]
+        origin: "https://minitest.automaplay.com.br", // ou '*' para liberar geral (não recomendado em produção)
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
