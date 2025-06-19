@@ -7172,6 +7172,7 @@ module.exports = {
 
         const io = req.io;
         const socketId = req.params.socketId;
+        const readline = require('readline');
 
 
         const filePath = path.join(__dirname, '../public/importLog.json');
@@ -7180,6 +7181,23 @@ module.exports = {
         let qtdaBasico = 0;
         let qtdaCompleto = 0;
         let dataObjGeral;
+
+
+
+        const fileStream = fs.createReadStream(arquivoImportado);
+        const rl = readline.createInterface({
+            input: fileStream,
+            crlfDelay: Infinity
+        });
+
+        let total = 0;
+
+        for await (const line of rl) {
+            if (line.trim() !== '') total++; // ignora linhas vazias
+        }
+
+        const totalLinhasCsv = total - 1;
+
 
 
         async function importarPerfis() {
@@ -7206,9 +7224,9 @@ module.exports = {
                 }
             }
 
-            async function processRow(row, index, totalAtual) {
-                //console.log(`Processando linha ${index}:`, row);
-                //return;
+            async function processRow(row, index) {
+                /*      console.log(`Processando linha ${index}:`, totalAtual.count);
+                     return; */
                 try {
                     if (index === 1) updateJsonName(filePath, false, 0);
 
@@ -7297,9 +7315,9 @@ module.exports = {
                     updateJsonName(filePath, false, index);
                     console.log(`Linha ${index} importada com sucesso.`);
 
-                    const progress = Math.round((index / totalAtual._eventsCount) * 100);
+                    const progress = Math.round((index / totalLinhasCsv) * 100);
 
-                    //console.log("progredindo", progress, index, totalAtual._eventsCount)
+                    //console.log("progredindo", progress, index, totalLinhasCsv)
                     io.to(socketId).emit('download-progress', { progress });
 
 
@@ -7325,7 +7343,7 @@ module.exports = {
                 const stream = fs.createReadStream(arquivoImportado).pipe(csv());
 
                 for await (const row of stream) {
-                    await processRow(row, index, stream);
+                    await processRow(row, index);
                     await new Promise(resolve => setTimeout(resolve, DELAY_MS));
                     index++;
                 }
@@ -7406,6 +7424,22 @@ module.exports = {
         const csv = require('csv-parser');
         const arquivoImportado = path.join(__dirname, '../public/import/uploadedfile.csv');
         let totalLinhas = 0;
+
+        const fileStream = fs.createReadStream(arquivoImportado);
+        const rl = readline.createInterface({
+            input: fileStream,
+            crlfDelay: Infinity
+        });
+
+        let total = 0;
+
+        for await (const line of rl) {
+            if (line.trim() !== '') total++; // ignora linhas vazias
+        }
+        console.log("dasds", total - 1)
+
+        return total - 1; // subtrai cabeçalho (se tiver)
+
 
         function processRowWithDelay(row, totalLinhas, callback) {
             setTimeout(() => {

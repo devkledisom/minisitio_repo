@@ -22,11 +22,7 @@ const socket = io(masterPath.ioUrl, {
 });
 
 const Espacos = () => {
-
     const [progressValue, setProgressValue] = useState(null);
-
-
-
 
     const style = {
         position: "fixed",
