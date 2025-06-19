@@ -49,7 +49,7 @@ async function faleComDono(data, emailAutorizante, filename) {
 
     //variaveis do corpo de envio do email com variação de idiomas para o novo aluno      
 
-    if(filename) {
+    if (filename) {
         const mailSentPT = await transporter.sendMail({
             from: `${data.nome} <${data.email}>`,
             //from: `kledisom <dev@ziiz.com.br>`,
@@ -76,12 +76,12 @@ async function faleComDono(data, emailAutorizante, filename) {
         <p>--</p>
     </body>
             `,
-                  attachments: [
-                      {
-                            filename: filename,
-                          path: path.join(__dirname, `../public/upload/anexoEmail/${filename}`)
-                      }
-                  ]
+            attachments: [
+                {
+                    filename: filename,
+                    path: path.join(__dirname, `../public/upload/anexoEmail/${filename}`)
+                }
+            ]
         });
         return true;
     } else {
@@ -226,6 +226,21 @@ async function novoUsuario(email, nome, doc) {
 
 };
 
+async function forgotPasswordEmail(email, resetLink) {
+    const mailSentPT = await transporter.sendMail({
+        //from: `${data.nome} <${data.email}>`,
+        from: `kledisom <dev@ziiz.com.br>`,
+        to: ['dev@ziiz.com.br', 'contatobr@mycardcity.net', email],
+        subject: "Recuperação de Senha",
+        html: `
+        <p>Você solicitou a recuperação de senha.</p>
+        <p>Clique no link abaixo para redefinir sua senha:</p>
+        <a href="${resetLink}">${resetLink}</a>
+         `
+    });
+
+    return "enviado";
+};
 
 
 module.exports = {
@@ -233,7 +248,8 @@ module.exports = {
     faleComDono,
     faleComDonoCliente,
     contato,
-    novoUsuario
+    novoUsuario,
+    forgotPasswordEmail
 };
 
 

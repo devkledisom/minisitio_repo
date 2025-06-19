@@ -182,6 +182,14 @@ const Usuario = database.define('usuario', {
                 msg: "Esse campo não pode está vazio.."
             },
         }
+    },
+    resetToken: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+    },
+    resetTokenExpires: {
+        type: Sequelize.DATE,
+        allowNull: true
     }
 },
     {
@@ -189,18 +197,18 @@ const Usuario = database.define('usuario', {
         timestamps: false,
     },
 
-{
-    indexes: [
-        {
-          name: 'descCPFCNPJ',
-          fields: ['descCPFCNPJ'], // O campo para o qual o índice será criado
-        },
-        {
-            name: 'idx_usuario_ordem',
-            fields: ['codCidade', 'dtCadastro', 'descNome']
-        }
-    ]
-}
+    {
+        indexes: [
+            {
+                name: 'descCPFCNPJ',
+                fields: ['descCPFCNPJ'], // O campo para o qual o índice será criado
+            },
+            {
+                name: 'idx_usuario_ordem',
+                fields: ['codCidade', 'dtCadastro', 'descNome']
+            }
+        ]
+    }
 );
 
 /* Usuario.belongsTo(DDD, {
