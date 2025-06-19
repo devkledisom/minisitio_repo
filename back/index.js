@@ -25,10 +25,11 @@ const options = {
     cors: {
         origin: "*", // ou '*' para liberar geral (não recomendado em produção)
         methods: ["GET", "POST"]
-    }
+    },
+    path: "/api/socket.io"
 }
 
-if (BASE_PATH) options['path'] = BASE_PATH + "/socket.io";
+//if (BASE_PATH) options['path'] = BASE_PATH + "/socket.io";
 //const io = new Server(server);
 const io = new Server(server, options);
 
