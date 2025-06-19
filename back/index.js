@@ -19,12 +19,14 @@ const options = {
 };
 
 const server = http.createServer(app);
+const BASE_PATH = "/repositories/minisitio_repo/back";
+
+if (BASE_PATH) options['path'] = BASE_PATH + "/socket.io";
 //const io = new Server(server);
 const io = new Server(server, {
     cors: {
-        origin: "https://minitest.automaplay.com.br", // ou '*' para liberar geral (não recomendado em produção)
-        methods: ["GET", "POST"],
-        credentials: true
+        origin: "*", // ou '*' para liberar geral (não recomendado em produção)
+        methods: ["GET", "POST"]
     }
 });
 
