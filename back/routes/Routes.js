@@ -37,6 +37,7 @@ router.use(function timelog(req, res, next) {
 
 const uploadUser = require('../middlewares/uploadImage');
 const uploadPdf = require('../middlewares/uploadPdf');
+const RecuperarSenha = require('../controllers/RecuperarSenha.js');
 
 
 router.get('/api/', BemVindo.bemvindo);
@@ -54,7 +55,7 @@ router.get('/api/admin/usuario', Admin.listarUsuarios);
 
 //Login
 router.post('/api/entrar', Login.login);
-router.post('/api/test-connection', auth, (req, res) => res.json({success: true}));
+router.post('/api/test-connection', auth, (req, res) => res.json({ success: true }));
 router.post('/api/is-auth', authVerification, Login.sessionVerification);
 
 //Admin
@@ -217,7 +218,7 @@ router.get('/api/portal/share/:id', async (req, res) => {
     const url = req.headers.host;
 
     const anuncio = await Anuncio.findOne({
-        where: {codAnuncio: req.params.id},
+        where: { codAnuncio: req.params.id },
         raw: true,
         attributes: ['descImagem']
     });
@@ -246,7 +247,7 @@ router.get('/api/portal/share/:id', async (req, res) => {
     </html>
   `;
 
-  res.send(html).status(200);
+    res.send(html).status(200);
 });
 
 //SITE INSTITUCIONAL
@@ -256,6 +257,10 @@ router.get('/api/admin/institucional/read', InstConfig.lerRegistro);
 //SITE CONTATO
 router.post('/api/admin/contato/config', contatoConfig.atualizarContato);
 router.get('/api/admin/contato/read', contatoConfig.lerContato);
+
+//RECUPERAÇÃO DE SENHAS
+router.post('/api/forgot-password', RecuperarSenha.forgotPassword);
+router.post('/api/reset-password', RecuperarSenha.resetPassword);
 
 module.exports = router;
 

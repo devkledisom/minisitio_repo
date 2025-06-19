@@ -7206,7 +7206,7 @@ module.exports = {
 
                     const codTipoAnuncio = row['TIPO'];
                     const idDesconto = row['ID'];
-                    const nomeAnuncio = row['NOMe'];
+                    const nomeAnuncio = row['NOME'];
                     const telefone = row['TELEFONE'];
                     const cep = row['CEP'];
                     const estado = row['UF'];

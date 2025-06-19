@@ -84,6 +84,8 @@ import { QrcodeCadernoProvider } from "../context/QrcodeCadernoContext";
 
 //PAGINA 404
 import NotFound from '../views/NotFound';
+import ForgotPassword from "../admin/components/ForgotPassword";
+import ResetPassword from "../admin/components/ResetPassword";
 
 
 
@@ -156,6 +158,8 @@ function Rotas() {
                     {/* ROTAS AREA DO ASSINANTE */}
                     <Route path="criar-cadastro" element={<AssinanteCadastro />} />
                     <Route path="renovar/perfil/:codAnuncio" element={<AtualizarPerfil />} />
+                    <Route path="forgot-password" element={<ForgotPassword />} />
+                    <Route path="reset-password" element={<ResetPassword />} />
 
 
                     <Route path="qrcode" element={<Qrcode />} />
