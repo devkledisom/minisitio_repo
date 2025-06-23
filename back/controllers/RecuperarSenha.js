@@ -8,8 +8,9 @@ module.exports = {
     forgotPassword: async (req, res) => {
         const { email } = req.body;
 
-        const user = await Usuario.findOne({ where: { descEmail: email } });
-        console.log(user)
+        const user = await Usuario.findAll({ where: { descEmail: email } });
+        //        console.log(user)
+
 
         if (!user)
             return res.status(404).json({ message: 'E-mail não encontrado.' });
@@ -19,16 +20,25 @@ module.exports = {
         const expiration = new Date(Date.now() + 3600000); // 1 hora
 
         // Atualiza o usuário
-        user.resetToken = token;
-        user.resetTokenExpires = expiration;
-        await user.save();
+        /*       user.resetToken = token;
+              user.resetTokenExpires = expiration;
+              await user.save(); */
+
+        await Usuario.update(
+            {
+                resetToken: token,
+                resetTokenExpires: expiration
+            },
+            { where: { descEmail: email } }
+        );
+
 
         // Link de redefinição
         const resetLink = `https://minitest.automaplay.com.br/reset-password?token=${token}`;
 
-        const emailRecuperacao = await forgotPasswordEmail(user.descEmail, resetLink);
+        const emailRecuperacao = await forgotPasswordEmail(user[0].descEmail, resetLink);
 
-        console.log(req.body, emailRecuperacao)
+        console.log(req.body, emailRecuperacao, user[0].descEmail)
         res.json({ success: true, messagem: "enviado" });
     },
     resetPassword: async (req, res) => {
@@ -61,10 +71,18 @@ module.exports = {
             const hashedPassword = password;
 
             // Atualiza e limpa os campos
-            user.senha = hashedPassword;
-            user.resetToken = null;
-            user.resetTokenExpires = null;
-            await user.save();
+            /*            user.senha = hashedPassword;
+                       user.resetToken = null;
+                       user.resetTokenExpires = null;
+                       await user.save(); */
+
+            await Usuario.update({
+                senha: hashedPassword,
+                resetToken: null,
+                resetTokenExpires: null
+            },
+                { where: { descEmail: user.descEmail } }
+            );
 
             res.status(200).json({ success: true, message: 'Senha atualizada com sucesso.' });
 
