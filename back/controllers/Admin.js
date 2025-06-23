@@ -7340,7 +7340,10 @@ module.exports = {
             async function processFile() {
                 console.log("Iniciando leitura do arquivo...");
                 let index = 1;
-                const stream = fs.createReadStream(arquivoImportado).pipe(csv());
+                const stream = fs.createReadStream(arquivoImportado).pipe(csv({
+                    separator: ';',
+                    quote: '"',
+                }));
 
                 for await (const row of stream) {
                     await processRow(row, index);
