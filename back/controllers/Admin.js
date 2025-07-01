@@ -7237,11 +7237,20 @@ module.exports = {
                     const cep = row['CEP'];
                     const estado = row['UF'];
                     const cidade = row['CIDADE'];
-                    const tipoAtividade = row['ATIVIDADE_PRINCIPAL_CNAE'];
+                    let tipoAtividade = row['ATIVIDADE_PRINCIPAL_CNAE'];
                     const nuDocumento = row['CNPJ_CPF'];
                     const autorizante = row['AUTORIZANTE'];
                     const email = row['EMAIL'];
                     const senha = 12345;
+
+                    const verificarAtividadeExists = await Atividade.findOne({
+                        where: { atividade: tipoAtividade }
+                    });
+
+                    if (!verificarAtividadeExists) {
+                        tipoAtividade = "Compras e Serviços";
+                    }
+                    console.log("very", tipoAtividade)
 
                     const verificarUserExists = await Usuarios.findOne({
                         where: { descCPFCNPJ: nuDocumento }
@@ -7341,7 +7350,10 @@ module.exports = {
             async function processFile() {
                 console.log("Iniciando leitura do arquivo...");
                 let index = 1;
-                const stream = fs.createReadStream(arquivoImportado).pipe(csv());
+                const stream = fs.createReadStream(arquivoImportado).pipe(csv({
+                    separator: ';',
+                    quote: '"',
+                }));
 
                 for await (const row of stream) {
                     await processRow(row, index);
