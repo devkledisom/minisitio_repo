@@ -229,7 +229,7 @@ async function novoUsuario(email, nome, doc) {
 async function forgotPasswordEmail(email, resetLink) {
     const mailSentPT = await transporter.sendMail({
         //from: `${data.nome} <${data.email}>`,
-        from: `kledisom <dev@ziiz.com.br>`,
+        from: `Minisitio <dev@ziiz.com.br>`,
         to: ['dev@ziiz.com.br', 'contatobr@mycardcity.net', email],
         subject: "Recuperação de Senha",
         html: `

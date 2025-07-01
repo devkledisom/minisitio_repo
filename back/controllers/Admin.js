@@ -7257,6 +7257,7 @@ module.exports = {
                             descNome: nomeAnuncio || `import${index}`,
                             descEmail: email || "atualizar",
                             senha,
+                            hashCode: "0",
                             codTipoUsuario: 3,
                             descTelefone: telefone || "atualizar",
                             codUf: estado,
