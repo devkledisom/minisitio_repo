@@ -173,7 +173,7 @@ const Espacos = () => {
                     {/* <input type="file" name="uploadedfile" id="uploadedfile" /><br /><br />
  */}
                     <Label htmlFor="picture"></Label>
-                    <Input id="uploadedfile" name="uploadedfile" type="file" />
+                    <Input id="uploadedfile" name="uploadedfile" type="file" style={{ cursor: "pointer" }} />
 
                     <button type="submit" className="btn custom-button mt-2">Enviar</button>
                     <a href={`${masterPath.url}/modelo/modelo_importacao_perfil.xlsx`} className='mx-2'>Download modelo</a>
