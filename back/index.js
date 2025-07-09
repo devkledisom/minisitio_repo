@@ -26,11 +26,10 @@ const options = {
         origin: "*", // ou '*' para liberar geral (não recomendado em produção)
         methods: ["GET", "POST"]
     },
-    path: "/api/socket.io"
+    path: "/socket.io"
 }
 
-//if (BASE_PATH) options['path'] = BASE_PATH + "/socket.io";
-//const io = new Server(server);
+
 const io = new Server(server, options);
 
 app.use(express.json());
@@ -107,6 +106,284 @@ io.on("connection", (socket) => {
 
 
 });
+
+const saveImport = require('./functions/serverImport');
+const csv = require('csv-parser');
+const Atividade = require('./models/table_atividade');
+const Usuarios = require('./models/table_usuarios');
+const Descontos = require('./models/table_desconto');
+const Anuncio = require('./models/table_anuncio');
+const Caderno = require('./models/table_caderno');
+const database = require('./config/db');
+const Sequelize = require('sequelize');
+const { Op } = Sequelize;
+
+app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfile'), async (req, res) => {
+        res.json({ success: true, message: "Importação" });
+
+       // const io = req.io;
+        const socketId = req.params.socketId;
+        const readline = require('readline');
+
+         console.log("🔌 Cliente conectado.", socketId);
+
+
+        const filePath = path.join(__dirname, './public/importLog.json');
+        const arquivoImportado = path.join(__dirname, './public/import/uploadedfile.csv');
+        const DELAY_MS = 1000; // Delay configurável entre linhas
+        let qtdaBasico = 0;
+        let qtdaCompleto = 0;
+        let dataObjGeral;
+
+
+
+        const fileStream = fs.createReadStream(arquivoImportado);
+        const rl = readline.createInterface({
+            input: fileStream,
+            crlfDelay: Infinity
+        });
+
+        let total = 0;
+
+        for await (const line of rl) {
+            if (line.trim() !== '') total++; // ignora linhas vazias
+        }
+
+        const totalLinhasCsv = total - 1;
+
+
+
+        async function importarPerfis() {
+            let totalLinhas = 0;
+
+            function updateJsonName(filePath, endProccess, progress) {
+                try {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const seconds = now.getSeconds();
+
+                    const jsonData = fs.readFileSync(filePath, 'utf8');
+                    const data = JSON.parse(jsonData);
+
+                    data.progress = progress;
+                    data.fim = `${hours}:${minutes}:${seconds}`;
+                    data.endProccess = endProccess;
+
+                    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+                    console.log(`Progresso atualizado para: ${progress}`);
+                } catch (error) {
+                    console.error('Erro ao atualizar progresso:', error);
+                }
+            }
+
+            async function processRow(row, index) {
+                /*      console.log(`Processando linha ${index}:`, totalAtual.count);
+                     return; */
+                try {
+                    if (index === 1) updateJsonName(filePath, false, 0);
+
+                    const codTipoAnuncio = row['TIPO'];
+                    const idDesconto = row['ID'];
+                    const nomeAnuncio = row['NOME'];
+                    const telefone = row['TELEFONE'];
+                    const cep = row['CEP'];
+                    const estado = row['UF'];
+                    const cidade = row['CIDADE'];
+                    let tipoAtividade = row['ATIVIDADE_PRINCIPAL_CNAE'];
+                    const nuDocumento = row['CNPJ_CPF'];
+                    const autorizante = row['AUTORIZANTE'];
+                    const email = row['EMAIL'];
+                    const senha = 12345;
+
+                    const verificarAtividadeExists = await Atividade.findOne({
+                        where: { atividade: tipoAtividade }
+                    });
+
+                    if (!verificarAtividadeExists) {
+                        tipoAtividade = "Compras e Serviços";
+                    }
+                    console.log("very", tipoAtividade)
+
+                    const verificarUserExists = await Usuarios.findOne({
+                        where: { descCPFCNPJ: nuDocumento }
+                    });
+
+                    let codUser;
+                    if (verificarUserExists) {
+                        codUser = verificarUserExists.dataValues.codUsuario;
+                    } else {
+                        const dadosUsuario = {
+                            codTipoPessoa: "pf",
+                            descCPFCNPJ: nuDocumento,
+                            descNome: nomeAnuncio || `import${index}`,
+                            descEmail: email || "atualizar",
+                            senha,
+                            hashCode: "0",
+                            codTipoUsuario: 3,
+                            descTelefone: telefone || "atualizar",
+                            codUf: estado,
+                            codCidade: cidade,
+                            dtCadastro: dataNow(),
+                            usuarioCod: 0,
+                            dtCadastro2: dataNow(),
+                            dtAlteracao: dataNow(),
+                            ativo: "1"
+                        };
+                        const novoUsuario = await Usuarios.create(dadosUsuario);
+                        codUser = novoUsuario.dataValues.codUsuario;
+                    }
+
+                    let codigoDeDesconto = await Descontos.findOne({ where: { hash: idDesconto } });
+
+                    const dataObj = {
+                        codUsuario: codUser,
+                        codTipoAnuncio,
+                        codAtividade: tipoAtividade,
+                        codCaderno: cidade,
+                        codUf: estado,
+                        codCidade: cidade,
+                        descAnuncio: nomeAnuncio || `import${index}`,
+                        descImagem: 0,
+                        descEndereco: "atualizar",
+                        descTelefone: telefone || "atualizar",
+                        descCelular: 0,
+                        descEmailComercial: 0,
+                        descEmailRetorno: email,
+                        descWhatsApp: 0,
+                        descCEP: cep,
+                        descTipoPessoa: "pf",
+                        descCPFCNPJ: nuDocumento,
+                        descNomeAutorizante: autorizante || `import${index}`,
+                        descEmailAutorizante: 0,
+                        codDesconto: codigoDeDesconto ? codigoDeDesconto.idDesconto : '00.000.0000',
+                        descChavePix: 'chavePix',
+                        qntVisualizacoes: 0,
+                        codDuplicado: 0,
+                        descPromocao: 0,
+                        activate: 1,
+                    };
+
+                    dataObjGeral = dataObj;
+
+                    if (dataObj.codTipoAnuncio == 1) {
+                        qtdaBasico += 1
+                    }
+
+                    if (dataObj.codTipoAnuncio == 3) {
+                        qtdaCompleto += 1
+                    }
+
+                    await Anuncio.create(dataObj);
+                    updateJsonName(filePath, false, index);
+                    console.log(`Linha ${index} importada com sucesso.`);
+
+                    const progress = Math.round((index / totalLinhasCsv) * 100);
+
+                    //console.log("progredindo", progress, index, totalLinhasCsv)
+                    io.to(socketId).emit('download-progress', { progress });
+
+
+                } catch (error) {
+                    console.error(`Erro ao importar linha ${index}:`, error);
+                }
+            }
+
+            function dataNow() {
+                const dataAtual = new Date();
+                const ano = dataAtual.getFullYear();
+                const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
+                const dia = String(dataAtual.getDate()).padStart(2, '0');
+                const hora = String(dataAtual.getHours()).padStart(2, '0');
+                const minutos = String(dataAtual.getMinutes()).padStart(2, '0');
+                const segundos = String(dataAtual.getSeconds()).padStart(2, '0');
+                return `${ano}-${mes}-${dia} ${hora}:${minutos}:${segundos}`;
+            }
+
+            async function processFile() {
+                console.log("Iniciando leitura do arquivo...");
+                let index = 1;
+                const stream = fs.createReadStream(arquivoImportado).pipe(csv({
+                    separator: ';',
+                    quote: '"',
+                }));
+
+                for await (const row of stream) {
+                    await processRow(row, index);
+                    await new Promise(resolve => setTimeout(resolve, DELAY_MS));
+                    index++;
+                }
+
+                console.log("Arquivo lido com sucesso!");
+                updateJsonName(filePath, false, index - 1);
+                // Zera o arquivo importLog.json após a última iteração
+                const logInicial = {
+                    progress: 0,
+                    //fim: "",
+                    endProccess: true
+                };
+                fs.writeFileSync(filePath, JSON.stringify(logInicial, null, 2), 'utf8');
+
+
+
+                try {
+
+                    const cadernos = await Caderno.findOne({
+                        where: {
+                            UF: dataObjGeral.codUf,
+                            nomeCaderno: dataObjGeral.codCaderno
+                        },
+                        attributes: ['codCaderno', 'basico', 'completo', 'total']
+                    });
+
+
+                    if (dataObjGeral.codTipoAnuncio == 1) {
+                        cadernos.basico = cadernos.basico + qtdaBasico;
+                        cadernos.total = cadernos.total + (qtdaBasico + qtdaCompleto);
+
+                        await cadernos.save();
+                    }
+
+                    if (dataObjGeral.codTipoAnuncio == 3) {
+                        cadernos.completo = cadernos.completo + qtdaCompleto;
+                        cadernos.total = cadernos.total + (qtdaBasico + qtdaCompleto);
+
+                        await cadernos.save();
+                    }
+
+                    io.to(socketId).emit('download-complete');
+
+                    const query = `UPDATE anuncio
+                        JOIN (
+                            SELECT codAnuncio, 
+                                CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
+                            FROM anuncio
+                            WHERE codUf = :estado AND codCaderno = :caderno
+                        ) AS temp
+                        ON anuncio.codAnuncio = temp.codAnuncio
+                        SET anuncio.page = temp.page_number
+                        WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
+                    `;
+
+                    database.query(query, {
+                        replacements: { estado: dataObjGeral.codUf, caderno: dataObjGeral.codCaderno },
+                        type: Sequelize.QueryTypes.UPDATE,
+                    });
+
+                    console.log(`Reorganização concluída para o estado:`, dataObjGeral.codUf);
+                } catch (error) {
+                    console.error("Erro ao executar a reorganização:", error);
+                }
+
+            }
+
+            await processFile();
+        }
+
+        // Para rodar a importação, basta chamar:
+        importarPerfis();
+    });
+
 
 
 

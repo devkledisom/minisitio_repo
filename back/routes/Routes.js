@@ -40,7 +40,6 @@ const RecuperarSenha = require('../controllers/RecuperarSenha.js');
 
 module.exports = (io) => {
     const router = express.Router();
-
     router.use(function timelog(req, res, next) {
         //auth();
         //res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -158,7 +157,7 @@ module.exports = (io) => {
         return Admin.import4excell(req, res, next);
     }
 
-    router.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfile'), importWithSocket);
+   // router.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfile'), importWithSocket);
     router.get('/api/admin/anuncio/progress', Buscador.progressImport);
 
     //site
