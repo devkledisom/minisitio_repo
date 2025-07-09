@@ -26,7 +26,7 @@ const options = {
         origin: "*", // ou '*' para liberar geral (não recomendado em produção)
         methods: ["GET", "POST"]
     },
-    path: "/socket.io"
+    path: "/api/socket.io"
 }
 
 

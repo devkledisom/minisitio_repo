@@ -24,8 +24,8 @@ import { Label } from "../../../components/ui/label.tsx"
 /*  const socket = io(masterPath.ioUrl, {
     path: '/socket.io'
 });  */
-const socket = io(masterPath.ioUrl, {
-    path: '/socket.io',
+const socket = io('https://minisitio.com.br', {
+    path: '/api/socket.io',
      transports: ['websocket'], // opcional, mas ajuda a forçar fallback
   withCredentials: true
 });
