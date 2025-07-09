@@ -36,15 +36,10 @@ module.exports = {
         // Link de redefinição
         const resetLink = `https://minitest.automaplay.com.br/reset-password?token=${token}`;
 
-<<<<<<< HEAD
-        const emailRecuperacao = await forgotPasswordEmail(user.descEmail, resetLink);
 
-        console.log(req.body, emailRecuperacao, user.descEmail)
-=======
         const emailRecuperacao = await forgotPasswordEmail(user[0].descEmail, resetLink);
 
         console.log(req.body, emailRecuperacao, user[0].descEmail)
->>>>>>> be22a495c78ac7807f39fadd07b9ad4e987d3068
         res.json({ success: true, messagem: "enviado" });
     },
     resetPassword: async (req, res) => {

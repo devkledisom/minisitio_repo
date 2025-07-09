@@ -139,6 +139,14 @@ const Espacos = () => {
 
 
     function apagarAnuncio() {
+        if(!selectId) {
+            Swal.fire({
+                title: "Error!",
+                text: "Selecione um anúncio para apagar, se você deseja apagar todos os anúncios, clique no botão 'Apagar Todos'",
+                icon: "error"
+            });
+            return;
+        }
         setShowSpinner(true);
         fetch(`${masterPath.url}/admin/anuncio/delete/${selectId}`, {
             method: "DELETE",
@@ -176,7 +184,18 @@ const Espacos = () => {
                     .then((res) => {
                         if (res.success) {
                             setShowSpinner(false);
-                            line.closest('tr').remove();
+                            //line.closest('tr').remove();
+
+                            fetch(`${masterPath.url}/admin/espacos/read?page=${param}`).then((x) => x.json())
+                                .then((resAnuncio) => {
+                                    //console.log(resAnuncio.message.anuncios)
+                                    setAnucios(resAnuncio);
+                                    setShowSpinner(false);
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching data:', error);
+                                    setShowSpinner(false);
+                                });
                         }
 
                     })
@@ -505,6 +524,13 @@ Para 100000 linhas: 312500ms
         }
     }
 
+    function selecionarTodos() {
+        const checkboxes = document.querySelectorAll('.chkChildren');
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = true;
+        });
+    };
+
     const style = {
         position: "fixed",
         zIndex: "999"
@@ -522,17 +548,18 @@ Para 100000 linhas: 312500ms
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
-                            <button type="button" className="btn custom-button" onClick={() => navigator('/admin/anuncio/cadastro')}>Adicionar</button>
+                            <button type="button" className="btn custom-button mt-2" onClick={() => navigator('/admin/anuncio/cadastro')}>Adicionar</button>
                             {/* <button type="button" className="btn custom-button mx-2">Duplicar</button> */}
-                            <Duplicate className="btn custom-button mx-2" selectId={selectId} />
-                            <button type="button" className="btn custom-button" onClick={exportExcell}>Exportar</button>
-                            <button type="button" className="btn custom-button mx-2" onClick={() => navigator('/admin/anuncio/import')}>Importar</button>
-                            <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarAnuncio}>Apagar</button>
-                            <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarMultiplosAnucios}>Apagar Todos</button>
+                            <Duplicate className="btn custom-button mx-2 mt-2" selectId={selectId} />
+                            <button type="button" className="btn custom-button mt-2" onClick={exportExcell}>Exportar</button>
+                            <button type="button" className="btn custom-button mx-2 mt-2" onClick={() => navigator('/admin/anuncio/import')}>Importar</button>
+                            <button type="button" className="btn custom-button mt-2" onClick={selecionarTodos}>Selecionar Todos</button>
+                            <button type="button" className="btn btn-danger custom-button text-light mx-2 mt-2" onClick={apagarAnuncio}>Apagar</button>
+                            <button type="button" className="btn btn-danger custom-button text-light mt-2" onClick={apagarMultiplosAnucios}>Apagar Todos</button>
                             {/* {(campoBusca.current != null && campoBusca.current.value != '') && */}
-                            <button type="button" className="btn btn-danger custom-button text-light mx-2" onClick={apagarDup}>Apagar Duplicação</button>
+                            <button type="button" className="btn btn-danger custom-button text-light mx-2 mt-2" onClick={apagarDup}>Apagar Duplicação</button>
                             {/* } */}
-                            <button type="button" className="btn btn-info custom-button text-light" onClick={editRow}>Editar</button>
+                            <button type="button" className="btn btn-info custom-button text-light mt-2" onClick={editRow}>Editar</button>
                         </div>
                         <div className="span6 col-md-6 d-flex flex-column align-items-end">
                             <div className='d-flex flex-column'>
@@ -684,9 +711,15 @@ Para 100000 linhas: 312500ms
                                         })
                                     }
                                 </tbody>
+                                {/*       <tfooter>
+                                    <tr style={{border: 'none'}}>
+                                        <td style={{border: 'none'}} className='text-center'>
+                                            <button>Selecionar</button>
+                                        </td>
+                                    </tr>
+                                </tfooter> */}
                             </table>
                         </div>
-
                     </div>
                     {/*          {busca &&
                         <Pagination totalPages={anuncios.message.totalPaginas} paginaAtual={anuncios.message.paginaAtual} totalItem={anuncios.message.totalItem} table={"espacos"} />

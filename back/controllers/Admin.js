@@ -7174,6 +7174,8 @@ module.exports = {
         const socketId = req.params.socketId;
         const readline = require('readline');
 
+         console.log("🔌 Cliente conectado.", socketId);
+
 
         const filePath = path.join(__dirname, '../public/importLog.json');
         const arquivoImportado = path.join(__dirname, '../public/import/uploadedfile.csv');

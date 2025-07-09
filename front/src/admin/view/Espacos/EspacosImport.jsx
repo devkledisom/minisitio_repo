@@ -17,9 +17,43 @@ import { Input } from "../../../components/ui/input.tsx";
 import { Label } from "../../../components/ui/label.tsx"
 
 //const socket = io(masterPath.ioUrl);
+/* const socket = io('https://minisitio.com.br', {
+    path: '/socket.io',
+    transports: ["websocket"],
+}); */
+/*  const socket = io(masterPath.ioUrl, {
+    path: '/socket.io'
+});  */
 const socket = io(masterPath.ioUrl, {
-    path: '/api/socket.io'
+    path: '/socket.io',
+     transports: ['websocket'], // opcional, mas ajuda a forçar fallback
+  withCredentials: true
 });
+
+
+
+/* const socket = io("https://minisitio.com.br", {
+  path: "/socket.io",
+  transports: ["websocket"],
+  rejectUnauthorized: false, // necessário se o cert for self-signed
+}); */
+
+/* socket.on("connect", () => {
+  console.log("✅ Conectado:", socket.id);
+  socket.emit("start-download");
+});
+
+socket.on("download-progress", (data) => {
+  console.log("📶 Progresso:", data.progress);
+});
+
+socket.on("download-complete", () => {
+  console.log("✅ Download finalizado");
+});
+
+socket.on("connect_error", (err) => {
+  console.error("❌ Erro de conexão:", err.message);
+}); */
 
 const Espacos = () => {
     const [progressValue, setProgressValue] = useState(null);
@@ -64,9 +98,36 @@ const Espacos = () => {
         }; */
 
     const [progress, setProgress] = useState(0);
-
     useEffect(() => {
+    if (!socket) return;
+
+    console.log("conectando ao socket", socket);
+
+    const handleProgress = (data) => {
+        console.log("progresso recuperado");
+        setProgress(data.progress);
+    };
+
+    const handleComplete = () => {
+        alert('✅ Download concluído!');
+        setProgress(100);
+        document.querySelector('.espacos')?.click();
+    };
+
+    socket.on('download-progress', handleProgress);
+    socket.on('download-complete', handleComplete);
+
+    return () => {
+        socket.off('download-progress', handleProgress);
+        socket.off('download-complete', handleComplete);
+    };
+}, [socket]); // <- importante: inclua `socket` nas dependências
+
+
+/*     useEffect(() => {
+        console.log("conectando ao socket", socket)
         socket.on('download-progress', (data) => {
+            console.log("progresso recuperado")
             setProgress(data.progress);
         });
 
@@ -74,7 +135,7 @@ const Espacos = () => {
             alert('✅ Download concluído!');
             setProgress(100);
 
-            document.querySelector('.espacos').click()
+            document.querySelector('.espacos').click();
 
         });
 
@@ -82,10 +143,12 @@ const Espacos = () => {
             socket.off('download-progress');
             socket.off('download-complete');
         };
-    }, []);
+
+    }, []); */
 
     const handleStart = () => {
         // Faz a chamada para sua rota que inicia o processo, passando o socket.id
+        console.log("Iniciando download com socket ID:", socket.id);
         fetch(`http://localhost:3032/start-download/${socket.id}`)
             .then(res => res.text())
             .then(text => console.log(text))
