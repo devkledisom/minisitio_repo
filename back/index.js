@@ -218,6 +218,7 @@ app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfil
                             descCPFCNPJ: nuDocumento,
                             descNome: nomeAnuncio || `import${index}`,
                             descEmail: email || "atualizar",
+                            descEndereco: "atualizar",
                             senha,
                             hashCode: "0",
                             codTipoUsuario: 3,
