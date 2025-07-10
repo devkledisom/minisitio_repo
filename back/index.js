@@ -26,7 +26,7 @@ const options = {
         origin: "*", // ou '*' para liberar geral (não recomendado em produção)
         methods: ["GET", "POST"]
     },
-    path: "/api/socket.io"
+    path: "/socket.io"
 }
 
 
@@ -93,7 +93,7 @@ app.get('/outapi', (req, res) => {
 });
 
 // WebSocket
-io.on("connection", (socket) => {
+/* io.on("connection", (socket) => {
     console.log("🔌 Cliente conectado.", socket.id);
     socket.on('start-download', async () => {
         for (let i = 0; i <= 100; i += 10) {
@@ -105,7 +105,7 @@ io.on("connection", (socket) => {
 
 
 
-});
+}); */
 
 const saveImport = require('./functions/serverImport');
 const csv = require('csv-parser');

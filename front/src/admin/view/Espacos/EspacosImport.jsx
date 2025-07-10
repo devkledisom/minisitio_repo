@@ -25,8 +25,8 @@ import { Label } from "../../../components/ui/label.tsx"
     path: '/socket.io'
 });  */
 const socket = io(masterPath.ioUrl, {
-    path: '/api/socket.io',
-     transports: ['websocket'], // opcional, mas ajuda a forçar fallback
+    path: '/socket.io',
+     transports: ['websocket'],
   withCredentials: true
 });
 
@@ -38,7 +38,7 @@ const socket = io(masterPath.ioUrl, {
   rejectUnauthorized: false, // necessário se o cert for self-signed
 }); */
 
-/* socket.on("connect", () => {
+ socket.on("connect", () => {
   console.log("✅ Conectado:", socket.id);
   socket.emit("start-download");
 });
@@ -53,7 +53,7 @@ socket.on("download-complete", () => {
 
 socket.on("connect_error", (err) => {
   console.error("❌ Erro de conexão:", err.message);
-}); */
+}); 
 
 const Espacos = () => {
     const [progressValue, setProgressValue] = useState(null);
