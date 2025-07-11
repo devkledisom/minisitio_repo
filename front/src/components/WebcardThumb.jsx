@@ -152,7 +152,7 @@ function WebcardThumb(props) {
                     <div className='row p-2'>
 
                         {/*  <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={200} /> */}
-                        {thumb(imgDefault) && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} height={300} />}
+                        {thumb(imgDefault) && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} style={{height: "300px"}} />}
                     </div>
 
                     {!thumb(imgDefault) &&
