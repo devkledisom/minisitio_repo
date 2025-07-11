@@ -214,7 +214,7 @@ function Metadados(props) {
                             {props.data.descChavePix}
                         </h4> */}
                         {props.data.descChavePix &&
-                            <button onClick={(e) => setShow(true)} className='btnGerarPix btn-success'>QRCODE</button>
+                            <button onClick={(e) => setShow(true)} className='btnGerarPix btn-success p-1'>QRCODE</button>
                         }
 
                     </div>
