@@ -187,7 +187,7 @@ function WebcardThumb(props) {
                                 <div className="col-md-6 col-6">
                                     <p className='text-start'>
                                         Anúncio visualizado: {props.data.qntVisualizacoes} vezes <br />
-                                        Última atualização: {formatData(props.data.updatedAt)}<br />
+                                        Última atualização: {formatData(props.data.dtAlteracao)}<br />
                                         Código: {props.data.codAnuncio}
                                     </p>
                                 </div>

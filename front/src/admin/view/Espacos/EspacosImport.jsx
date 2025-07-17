@@ -175,6 +175,7 @@ const Espacos = () => {
 
             const data = await response.json(); // Recebe a resposta da API
             setShowSpinner(false);
+            document.querySelector('#btn-import').disabled = true;
 
 
             const now = new Date();
@@ -238,7 +239,7 @@ const Espacos = () => {
                     <Label htmlFor="picture"></Label>
                     <Input id="uploadedfile" name="uploadedfile" type="file" style={{ cursor: "pointer" }} />
 
-                    <button type="submit" className="btn custom-button mt-2">Enviar</button>
+                    <button type="submit" id="btn-import" className="btn custom-button mt-2" >Enviar</button>
                     <a href={`${masterPath.url}/modelo/modelo_importacao_perfil.xlsx`} className='mx-2'>Download modelo</a>
                 </form>
 
