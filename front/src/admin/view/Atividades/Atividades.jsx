@@ -168,7 +168,7 @@ const Atividades = () => {
                             <table className="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        {/* <th>Ativadade-CNAE</th> */}
+                                        <th>Ativadade-CNAE</th>
                                         <th>Atividade</th>
                                         <th>Tipo</th>
                                     </tr>
@@ -177,7 +177,7 @@ const Atividades = () => {
                                     {
                                         atividades != '' && atividades.map((item) => (
                                             <tr key={item.id} id={item.id} onClick={selecaoLinha}>
-                                                {/* <td>{item.atividade}</td> */}
+                                                <td>{item.atividade}</td>
                                                 <td>{item.nomeAmigavel}</td>
                                                 <td>{item.corTitulo}</td>
                                             </tr>

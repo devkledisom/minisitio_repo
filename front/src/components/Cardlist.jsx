@@ -142,7 +142,7 @@ function Cardlist(props) {
                 {/* row */}
                 <div className="row area-btn">
                   <div className="col-md-12 d-flex justify-content-end btn-view-page">
-                    <button className="mx-2">
+                    <button className="mx-2 p-4">
                       <i className="fa fa-star"></i>{/*cadUf[1]*/}
                       <Link
                         to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&index=${props.anuncio.page}&caderno=${props.anuncio.codCaderno}&estado=${props.anuncio.codUf}
@@ -152,7 +152,7 @@ style={{ textDecoration: 'none' }}
                         PÁGINA DO CADERNO
                       </Link>
                     </button>
-                    <button className="mx-2">
+                    <button className="mx-2 p-4">
                       <i className="fa fa-star"></i>{/*cadUf[1]*/}
                       <Link to={`/perfil/${props.anuncio.codAnuncio}`} style={{ textDecoration: 'none' }} onClick={() => contadorVisualizacoes(masterPath.url, props.anuncio.codAnuncio)}>
                         VER MINISITIO
