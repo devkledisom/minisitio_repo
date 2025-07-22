@@ -722,8 +722,9 @@ function Caderno() {
     const arrObj = [];
     let title;
     minisitio.anuncios.map((anuncio, i) => {
+      console.log(anuncio)
       if (anuncio.codAtividade) {
-        arrObj.push({ title: anuncio.atividadeAmigavel.nomeAmigavel });
+        arrObj.push({ title: anuncio.atividadeAmigavel ? anuncio.atividadeAmigavel.nomeAmigavel : "teste" });
         //arrObj.push({ title: anuncio.codAtividade });
       }
       arrObj.push(anuncio);

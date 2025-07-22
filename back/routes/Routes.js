@@ -7,6 +7,7 @@ const path = require('path');
 const BemVindo = require('../controllers/BemVindo');
 const Buscador = require('../controllers/Buscador');
 const Admin = require('../controllers/Admin');
+const EspacosController = require('../controllers/admin/espacos/index.js');
 const Login = require('../controllers/Login');
 const Rotinas = require('../controllers/Rotinas');
 const Users = require('../controllers/Users');
@@ -112,24 +113,24 @@ module.exports = (io) => {
     router.get('/admin/desconto/ddd/:id', Admin.buscarDDD); */
 
     //ANUNCIOS
-    router.get('/api/admin/espacos/read', Admin.listarEspacos);
-    router.get('/api/admin/anuncio/edit/:id', Admin.listarAnuncioId);
-    router.post('/api/admin/anuncio/create', Admin.criarAnuncio);
-    router.put('/api/admin/anuncio/status/:id', auth, Admin.updateAnuncioStatus);
-    router.delete('/api/admin/anuncio/delete/:id', auth, Admin.deleteAnuncio);
-    router.put('/api/admin/anuncio/update', Admin.atualizarAnuncio);
-    router.put('/api/admin/anuncio/update/tipo', Admin.atualizarTipoPerfil);
-    router.get('/api/admin/anuncio/buscar', Admin.buscarAnuncioId);
-    router.get('/api/admin/anuncio/public', Admin.buscarAnuncioIdpublic);
-    router.get('/api/admin/anuncio/visualizacoes', Admin.visualizacoes);
-    router.post('/api/admin/anuncio/duplicate', auth, Admin.duplicar);
-    router.get('/api/admin/anuncio/classificado/:caderno/:uf', Admin.listarClassificado);
-    router.get('/api/admin/anuncio/classificado/geral/:caderno/:uf', Admin.listarClassificadoGeral);
-    router.get('/api/admin/anuncio/classificado/todos/:caderno/:uf', Admin.listarTodosClassificados);
-    router.get('/api/admin/anuncio/classificado/geral2', Admin.listarClassificadoGeral2);
-    router.get('/api/admin/anuncio/classificado/especifico/:caderno/:uf', Admin.listarClassificadoEspecifico);
-    router.get('/api/admin/anuncio/quantidade/uf', auth, Admin.quantidadeUf);
-    router.get('/api/admin/lista/test/:caderno/:uf', Admin.listaTeste);
+    router.get('/api/admin/espacos/read', EspacosController.listarEspacos);
+    router.get('/api/admin/anuncio/edit/:id', EspacosController.listarAnuncioId);
+    router.post('/api/admin/anuncio/create', EspacosController.criarAnuncio);
+    router.put('/api/admin/anuncio/status/:id', auth, EspacosController.updateAnuncioStatus);
+    router.delete('/api/admin/anuncio/delete/:id', auth, EspacosController.deleteAnuncio);
+    router.put('/api/admin/anuncio/update', EspacosController.atualizarAnuncio);
+    router.put('/api/admin/anuncio/update/tipo', EspacosController.atualizarTipoPerfil);
+    router.get('/api/admin/anuncio/buscar', EspacosController.buscarAnuncioId);
+    router.get('/api/admin/anuncio/public', EspacosController.buscarAnuncioIdpublic);
+    router.get('/api/admin/anuncio/visualizacoes', EspacosController.visualizacoes);
+    router.post('/api/admin/anuncio/duplicate', auth, EspacosController.duplicar);
+    router.get('/api/admin/anuncio/classificado/:caderno/:uf', EspacosController.listarClassificado);
+    router.get('/api/admin/anuncio/classificado/geral/:caderno/:uf', EspacosController.listarClassificadoGeral);
+    router.get('/api/admin/anuncio/classificado/todos/:caderno/:uf', EspacosController.listarTodosClassificados);
+    router.get('/api/admin/anuncio/classificado/geral2', EspacosController.listarClassificadoGeral2);
+    router.get('/api/admin/anuncio/classificado/especifico/:caderno/:uf', EspacosController.listarClassificadoEspecifico);
+    router.get('/api/admin/anuncio/quantidade/uf', auth, EspacosController.quantidadeUf);
+    router.get('/api/admin/lista/test/:caderno/:uf', EspacosController.listaTeste);
 
     //ROTAS MODULO PAGAMENTOS
     router.get('/api/admin/pagamentos/read', Admin.listarPagamentos);
@@ -148,7 +149,7 @@ module.exports = (io) => {
     router.delete('/api/admin/calhau/delete/:id', auth, Admin.deletarCalhau);
 
     //EXPORT OR IMPORT
-    router.post('/api/admin/anuncio/export', Admin.export4excell);
+    router.post('/api/admin/anuncio/export', EspacosController.export4excell);
     router.post('/api/admin/export/:modulo', Admin.exportPadrao);
 
     // Wrapper para passar o io
