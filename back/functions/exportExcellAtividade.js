@@ -10,6 +10,7 @@ module.exports = function expExcel(dados, res) {
     const headingColumnNames = [
         "id",
         "atividade",
+        "atividadeAmigavel",
         "corTitulo"
     ];
 

@@ -211,7 +211,6 @@ const Espacos = () => {
 
             //setProgressValue(data.progress || null);
 
-            //Swal.fire("Sucesso!", "Arquivo enviado!", "success");
         } catch (error) {
             setShowSpinner(false);
             console.error(error);
