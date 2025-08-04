@@ -1015,7 +1015,7 @@ module.exports = {
     atualizarAtividades: async (req, res) => {
         // Consulta para recuperar apenas os itens da página atual
         const atividades = await Atividade.update({
-            //atividade: req.body.atividade,
+            //atividade: req.body.nomeAmigavel,
             nomeAmigavel: req.body.nomeAmigavel,
             corTitulo: req.body.corTitulo
         }, {
@@ -1024,6 +1024,15 @@ module.exports = {
             },
 
         });
+
+  /*       const anuncios = await Anuncio.update({
+            codAtividade: req.body.nomeAmigavel
+        }, {
+            where: {
+                codAtividade: req.body.atividade,
+            },
+
+        }); */
 
         const cadernos = await Caderno.findAll({ raw: true });
 
