@@ -1,7 +1,7 @@
 
 module.exports = {
     //url: "http://localhost:3032/api",
-    url: "https://minitest.automaplay.com.br/api",
+    url: "https://automaplay.com.br/api",
     //url: "https://minisitio.net/api", //PRODUÇÃO
     //domain: "https://minitest.minisitio.online",
     domain: 'https://minisitio.com.br',
