@@ -152,7 +152,7 @@ function WebcardThumb(props) {
                     <div className='row p-2'>
 
                         {/*  <img src={`${masterPath.url}/files/${props.codImg}`} alt="" width={150} height={200} /> */}
-                        {thumb(imgDefault) && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} style={{height: "300px"}} />}
+                        {thumb(imgDefault) && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={150} style={{ height: "300px" }} />}
                     </div>
 
                     {!thumb(imgDefault) &&
@@ -194,15 +194,24 @@ function WebcardThumb(props) {
                                 <div className="col-md-6 col-6">
                                     <p className='text-end'>
                                         Desde: {formatData(props.data.createdAt)}<br />
-                                        {props.data.dtCadastro2 &&
+                                        {props.data.dtCadastro2 ?
                                             <span>
                                                 Renovado em: {formatData(props.data.dtCadastro2)}<br />
                                             </span>
+                                            :
+                                            <span>
+                                                Renovado em: <br />
+                                            </span>
                                         }
-                                        {props.data.dtCadastro2 &&
+                                        {props.data.dtCadastro2 ?
                                             <span>
                                                 Até: {formatData(props.data.dueDate)}
                                             </span>
+                                            :
+                                            <span>
+                                                Até: {formatData(props.data.dueDate)}
+                                            </span>
+
                                         }
                                     </p>
                                 </div>
