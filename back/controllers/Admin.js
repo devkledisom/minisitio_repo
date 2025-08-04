@@ -2041,6 +2041,7 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
                             [Sequelize.literal('corTitulo ASC')],
                             [Sequelize.fn('LEFT', Sequelize.col('atividade'), 1), 'ASC'],
                             ['createdAt', 'DESC'],
+                            ['nomeAmigavel', 'ASC'],
                         ],
                     });
                     const allAtividadesObj = allAtividades.map(registro => registro.get({ plain: true }));
