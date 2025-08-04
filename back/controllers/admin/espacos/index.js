@@ -6870,3 +6870,26 @@ module.exports = {
         //res.redirect("https://minitest.minisitio.online/admin/espacos");
     },
 }
+
+function dataNow() {
+    // Criar um novo objeto Date (representando a data e hora atuais)
+    var dataAtual = new Date();
+
+    // Extrair os componentes da data e hora
+    var ano = dataAtual.getFullYear();
+    var mes = dataAtual.getMonth() + 1; // Meses começam de 0, então adicionamos 1
+    var dia = dataAtual.getDate();
+    var hora = dataAtual.getHours();
+    var minutos = dataAtual.getMinutes();
+    var segundos = dataAtual.getSeconds();
+
+    // Formatar a data e hora
+    var dataFormatada = ano + '-' + mes + '-' + dia;
+    var horaFormatada = hora + ':' + minutos + ':' + segundos;
+
+    // Exibir a data e hora atual
+    console.log('Data atual:', dataFormatada);
+    console.log('Hora atual:', horaFormatada);
+
+    return dataFormatada + " " + horaFormatada;
+};

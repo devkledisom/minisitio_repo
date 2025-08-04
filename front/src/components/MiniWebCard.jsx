@@ -36,7 +36,7 @@ function MiniWebCard(props) {
     useEffect(() => {
         setParceiros(props.ids)
         props.data.anuncios.map(item => setImg(item.descImagem))
-
+//console.log(props.codImg)
 
         if (props.codImg == 0 || props.codImg == "teste" || props.codImg == null) {
             setImgDefault(false);
@@ -103,6 +103,7 @@ function MiniWebCard(props) {
                 <div className='row display-flex justify-content-center' key={props.key} onClick={buscarAnuncio}>
 
                     {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="" width={435} height={205} />}
+                 {/*    {console.log(`${masterPath.url}/${imgDefault}`)} */}
 
                     {imgDefault == false &&
                         <div className="conteudo semImagem" style={{ width: "415px" }}>
