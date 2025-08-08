@@ -15,6 +15,7 @@ const csv = require('csv-parser');
 //models
 const database = require('../../../config/db');
 const Anuncio = require('../../../models/table_anuncio');
+const importStage = require('../../../models/table_importStage');
 const Atividade = require('../../../models/table_atividade');
 const Caderno = require('../../../models/table_caderno');
 const Cadernos = require('../../../models/table_caderno');
@@ -863,7 +864,7 @@ module.exports = {
                     [Op.notIn]: ['ADMINISTRAÇÃO REGIONAL / PREFEITURA', "EMERGÊNCIA", "UTILIDADE PÚBLICA", "HOSPITAIS PÚBLICOS", "CÂMARA DE VEREADORES - CÂMARA DISTRITAL", "SECRETARIA DE TURISMO", "INFORMAÇÕES", "EVENTOS NA CIDADE"]  // Ignorar esse valor
                 },
             },
-            order: [['codAtividade', 'ASC']],
+            order: [['codAtividade', 'ASC'], [], []],
             /*  limit,
              offset, */
             attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page'],
@@ -3793,6 +3794,67 @@ module.exports = {
         res.json({ success: true, message: arr }) */
 
     },
+    importStage: async (req, res) => {
+
+
+
+        const resultados = await importStage.findAll({
+            /*  attributes: [
+             ], */
+            raw: true
+        });
+
+        const consultarQtdaImport = await Globals.findOne({
+            where: {
+                keyValue: "total_importacao"
+            },
+            raw: true
+        })
+
+        res.json({ success: true, data: resultados, totalImport: Number(consultarQtdaImport.value) });
+
+
+    },
+    finalizarImportStage: async (req, res) => {
+
+        await database.transaction(async (t) => {
+            await database.query(`
+    INSERT INTO anuncio (
+      codUsuario, codTipoAnuncio, codAtividade, codPA, codOrigem, codDuplicado, tags,
+      codCaderno, codUf, codCidade, descAnuncio, descAnuncioFriendly, descImagem, descEndereco,
+      descTelefone, descCelular, descDescricao, descSite, descSkype, descPromocao, descEmailComercial,
+      descEmailRetorno, descFacebook, descTweeter, descWhatsApp, descCEP, descTipoPessoa, descCPFCNPJ,
+      descNomeAutorizante, descEmailAutorizante, descParceiro, descParceiroLink, codDesconto, descLat,
+      descLng, formaPagamento, logoPromocao, linkPromo, promocaoData, descContrato, descAndroid,
+      descApple, descInsta, descPatrocinador, descPatrocinadorLink, qntVisualizacoes, activate,
+      dtCadastro, dtCadastro2, dtAlteracao, descLinkedin, descTelegram, certificado_logo, certificado_texto,
+      certificado_imagem, descYouTube, link_comprar, cashback_logo, cashback_link, certificado_link,
+      cartao_digital, descChavePix, descDonoPix, periodo, page, dueDate, createdAt, updatedAt
+    )
+    SELECT
+      codUsuario, codTipoAnuncio, codAtividade, codPA, codOrigem, codDuplicado, tags,
+      codCaderno, codUf, codCidade, descAnuncio, descAnuncioFriendly, descImagem, descEndereco,
+      descTelefone, descCelular, descDescricao, descSite, descSkype, descPromocao, descEmailComercial,
+      descEmailRetorno, descFacebook, descTweeter, descWhatsApp, descCEP, descTipoPessoa, descCPFCNPJ,
+      descNomeAutorizante, descEmailAutorizante, descParceiro, descParceiroLink, codDesconto, descLat,
+      descLng, formaPagamento, logoPromocao, linkPromo, promocaoData, descContrato, descAndroid,
+      descApple, descInsta, descPatrocinador, descPatrocinadorLink, qntVisualizacoes, activate,
+      dtCadastro, dtCadastro2, dtAlteracao, descLinkedin, descTelegram, certificado_logo, certificado_texto,
+      certificado_imagem, descYouTube, link_comprar, cashback_logo, cashback_link, certificado_link,
+      cartao_digital, descChavePix, descDonoPix, periodo, page, dueDate, createdAt, updatedAt
+    FROM importStage
+  `, { transaction: t });
+
+            await database.query(`
+    DELETE FROM importStage
+  `, { transaction: t });
+        });
+
+
+        res.json({ success: true });
+
+
+    },
 
     //ESPAÇOS DUPLICADOS
     duplicar: async (req, res) => {
@@ -5540,7 +5602,7 @@ module.exports = {
         const socketId = req.params.socketId;
         const readline = require('readline');
 
-         console.log("🔌 Cliente conectado.", socketId);
+        console.log("🔌 Cliente conectado.", socketId);
 
 
         const filePath = path.join(__dirname, '../public/importLog.json');
