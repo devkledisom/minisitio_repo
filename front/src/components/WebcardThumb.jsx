@@ -94,6 +94,7 @@ function WebcardThumb(props) {
         }
     }
     var partner = (img) => {
+        console.log(img)
         if (img != false && img != 'null' && img != 'undefined') {
             return true;
         } else {
@@ -103,10 +104,10 @@ function WebcardThumb(props) {
 
     return (
         <div className="WebcardThumb">
-            {/* {console.log(listaIds.descricao, listaIds.descImagem, listaIds.descImagem)} */}
+            {/* {console.log(listaIds.descricao, listaIds.descImagem, listaIds.descImagem)}  */}
             <div className='container my-2 p-0' >
                 <div className='cartao'>
-                    {listaIds.descricao != "valor padrao" && listaIds.descImagem != "" && listaIds.descImagem != "null" &&
+                    {listaIds.descricao != "valor padrao" && listaIds.descImagem != "" && listaIds.descImagem != "null" && listaIds.descImagem != null &&
                         <div className="apoio">
                             <div>
                                 {partner(listaIds.descImagem) &&

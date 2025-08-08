@@ -16,6 +16,9 @@ import Spinner from '../../../components/Spinner';
 import { Input } from "../../../components/ui/input.tsx";
 import { Label } from "../../../components/ui/label.tsx"
 
+
+
+
 //const socket = io(masterPath.ioUrl);
 /* const socket = io('https://minisitio.com.br', {
     path: '/socket.io',
@@ -26,8 +29,8 @@ import { Label } from "../../../components/ui/label.tsx"
 });  */
 const socket = io(masterPath.ioUrl, {
     path: '/socket.io',
-     transports: ['websocket'],
-  withCredentials: true
+    transports: ['websocket'],
+    withCredentials: true
 });
 
 
@@ -57,6 +60,8 @@ socket.on("connect_error", (err) => {
 
 const Espacos = () => {
     const [progressValue, setProgressValue] = useState(null);
+
+    const navigate = useNavigate();
 
     const style = {
         position: "fixed",
@@ -98,53 +103,53 @@ const Espacos = () => {
         }; */
 
     const [progress, setProgress] = useState(0);
-    useEffect(() => {
-    if (!socket) return;
+    /*     useEffect(() => {
+            if (!socket) return;
+    
+            console.log("conectando ao socket", socket);
+    
+            const handleProgress = (data) => {
+                console.log("progresso recuperado");
+                setProgress(data.progress);
+            };
+    
+            const handleComplete = () => {
+                alert('✅ Download concluído!');
+                setProgress(100);
+                document.querySelector('.espacos')?.click();
+            };
+    
+            socket.on('download-progress', handleProgress);
+            socket.on('download-complete', handleComplete);
+    
+            return () => {
+                socket.off('download-progress', handleProgress);
+                socket.off('download-complete', handleComplete);
+            };
+        }, [socket]);  */// <- importante: inclua `socket` nas dependências
 
-    console.log("conectando ao socket", socket);
 
-    const handleProgress = (data) => {
-        console.log("progresso recuperado");
-        setProgress(data.progress);
-    };
-
-    const handleComplete = () => {
-        alert('✅ Download concluído!');
-        setProgress(100);
-        document.querySelector('.espacos')?.click();
-    };
-
-    socket.on('download-progress', handleProgress);
-    socket.on('download-complete', handleComplete);
-
-    return () => {
-        socket.off('download-progress', handleProgress);
-        socket.off('download-complete', handleComplete);
-    };
-}, [socket]); // <- importante: inclua `socket` nas dependências
-
-
-/*     useEffect(() => {
-        console.log("conectando ao socket", socket)
-        socket.on('download-progress', (data) => {
-            console.log("progresso recuperado")
-            setProgress(data.progress);
-        });
-
-        socket.on('download-complete', () => {
-            alert('✅ Download concluído!');
-            setProgress(100);
-
-            document.querySelector('.espacos').click();
-
-        });
-
-        return () => {
-            socket.off('download-progress');
-            socket.off('download-complete');
-        };
-
-    }, []); */
+    /*     useEffect(() => {
+            console.log("conectando ao socket", socket)
+            socket.on('download-progress', (data) => {
+                console.log("progresso recuperado")
+                setProgress(data.progress);
+            });
+    
+            socket.on('download-complete', () => {
+                alert('✅ Download concluído!');
+                setProgress(100);
+    
+                document.querySelector('.espacos').click();
+    
+            });
+    
+            return () => {
+                socket.off('download-progress');
+                socket.off('download-complete');
+            };
+    
+        }, []); */
 
     const handleStart = () => {
         // Faz a chamada para sua rota que inicia o processo, passando o socket.id
@@ -217,6 +222,53 @@ const Espacos = () => {
             Swal.fire("Erro", "Ocorreu um erro ao importar os dados.", "error");
         }
     };
+
+    function handleDownload() {
+        // Faz a chamada para sua rota que inicia o download
+        fetch(`${masterPath.url}/admin/import/stage/finalizar`)
+             .then(x => x.json())
+            .then(text => {
+                console.log(text)
+
+            })
+            .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        setShowSpinner(true)
+        const progressImport = setInterval(() => {
+            fetch(`${masterPath.url}/admin/import/stage`)
+                .then(x => x.json())
+                .then(res => {
+                    let index = res.data.length
+
+                    setShowSpinner(false)
+
+                    const progressCount = Math.round((index / res.totalImport) * 100);
+
+                    if (progressCount) {
+                        setProgress(progressCount);
+                    }
+
+                    if (progressCount === 100) {
+                        clearInterval(progressImport);
+                        Swal.fire({
+                            title: "Atenção!",
+                            text: "Você deseja concluir o processo de importação?",
+                            showDenyButton: true,
+                            confirmButtonText: "Sim",
+                            denyButtonText: `Não`
+                        })
+                            .then((resposta) => {
+                                if (resposta.isConfirmed) {
+                                    handleDownload()
+                                    //navigate('/admin/espacos');
+                                }
+                            });
+                    }
+                })
+        }, 5000)
+    }, []);
 
     return (
         <div className="users">

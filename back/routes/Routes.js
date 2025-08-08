@@ -131,6 +131,8 @@ module.exports = (io) => {
     router.get('/api/admin/anuncio/classificado/especifico/:caderno/:uf', EspacosController.listarClassificadoEspecifico);
     router.get('/api/admin/anuncio/quantidade/uf', auth, EspacosController.quantidadeUf);
     router.get('/api/admin/lista/test/:caderno/:uf', EspacosController.listaTeste);
+    router.get('/api/admin/import/stage', EspacosController.importStage);
+    router.get('/api/admin/import/stage/finalizar', EspacosController.finalizarImportStage);
 
     //ROTAS MODULO PAGAMENTOS
     router.get('/api/admin/pagamentos/read', Admin.listarPagamentos);
