@@ -3817,8 +3817,9 @@ module.exports = {
     },
     finalizarImportStage: async (req, res) => {
 
-        await database.transaction(async (t) => {
-            await database.query(`
+        try {
+            await database.transaction(async (t) => {
+                await database.query(`
     INSERT INTO anuncio (
       codUsuario, codTipoAnuncio, codAtividade, codPA, codOrigem, codDuplicado, tags,
       codCaderno, codUf, codCidade, descAnuncio, descAnuncioFriendly, descImagem, descEndereco,
@@ -3845,13 +3846,29 @@ module.exports = {
     FROM importStage
   `, { transaction: t });
 
-            await database.query(`
+                await database.query(`
     DELETE FROM importStage
   `, { transaction: t });
-        });
+            });
 
 
-        res.json({ success: true });
+            const zerarGlobalsTotalImport = await Globals.update({
+                value: 0
+            }, {
+                where: {
+                    keyValue: "total_importacao"
+                }
+            })
+
+
+
+
+            res.json({ success: true });
+        } catch (err) {
+            res.json({ success: false, message: "Erro ao finalizar importação" })
+        }
+
+
 
 
     },

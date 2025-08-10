@@ -224,11 +224,20 @@ const Espacos = () => {
     };
 
     function handleDownload() {
-        // Faz a chamada para sua rota que inicia o download
+        // Faz a chamada para sua rota que finaliza o processo
+        setShowSpinner(true)
         fetch(`${masterPath.url}/admin/import/stage/finalizar`)
              .then(x => x.json())
             .then(text => {
-                console.log(text)
+                setShowSpinner(false)
+                if(text.success) {
+                    Swal.fire("Sucesso!", "Processo de importação finalizado!", "success")
+                        .then((resposta) => {
+                            if (resposta.isConfirmed) {
+                                navigate('/admin/espacos');
+                            }
+                        });
+                }
 
             })
             .catch(err => console.error(err));
