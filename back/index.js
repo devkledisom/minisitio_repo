@@ -377,7 +377,19 @@ app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfil
 
                 io.to(socketId).emit('download-complete');
 
-                const query = `UPDATE anuncio
+                const query = `UPDATE importStage
+                        JOIN (
+                            SELECT codAnuncio, 
+                                CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
+                            FROM importStage
+                            WHERE codUf = :estado AND codCaderno = :caderno
+                        ) AS temp
+                        ON importStage.codAnuncio = temp.codAnuncio
+                        SET importStage.page = temp.page_number
+                        WHERE importStage.codUf = :estado AND importStage.codCaderno = :caderno
+                    `;
+                
+               /*        const query = `UPDATE anuncio
                         JOIN (
                             SELECT codAnuncio, 
                                 CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
@@ -387,7 +399,7 @@ app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfil
                         ON anuncio.codAnuncio = temp.codAnuncio
                         SET anuncio.page = temp.page_number
                         WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
-                    `;
+                    `; */
 
                 database.query(query, {
                     replacements: { estado: dataObjGeral.codUf, caderno: dataObjGeral.codCaderno },

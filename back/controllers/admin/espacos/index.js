@@ -864,7 +864,7 @@ module.exports = {
                     [Op.notIn]: ['ADMINISTRAÇÃO REGIONAL / PREFEITURA', "EMERGÊNCIA", "UTILIDADE PÚBLICA", "HOSPITAIS PÚBLICOS", "CÂMARA DE VEREADORES - CÂMARA DISTRITAL", "SECRETARIA DE TURISMO", "INFORMAÇÕES", "EVENTOS NA CIDADE"]  // Ignorar esse valor
                 },
             },
-            order: [['codAtividade', 'ASC'], ['codTipoAnuncio', 'DESC'], ['createdAt', 'DESC'], ['descAnuncio', 'ASC']],
+            order: [['codAtividade', 'ASC'], ['codTipoAnuncio', 'DESC'], ['descAnuncio', 'ASC']],
             /*  limit,
              offset, */
             attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page'],
