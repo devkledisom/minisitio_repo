@@ -26,6 +26,7 @@ const DadosPessoais = (props) => {
 
   const navigate = useNavigate();
 
+
   //ref
   const loadingButton = useRef();
 
@@ -39,15 +40,15 @@ const DadosPessoais = (props) => {
   useEffect(() => {
     //loadingButton.current.style.display = "block";
 
-    let uf = document.querySelector("#codUf2").value;
-    let caderno = document.querySelector("#codUf3").value;
-/*     let uf = props.anuncios[0].codUf;
-    let caderno = props.anuncios[0].codCaderno; */
+    /*   let uf = document.querySelector("#codUf2").value;
+      let caderno = document.querySelector("#codUf3").value; */
+    let uf = props.anuncios.anuncios[0].codUf;
+    let caderno = props.anuncios.anuncios[0].codCaderno;
 
     fetch(`${masterPath.url}/caderno/legenda/${uf}/${caderno}`)
       .then((x) => x.json())
       .then((res) => {
-        if(res.length) {
+        if (res.length) {
           setLegenda(res[0].legenda);
         }
       });
@@ -56,13 +57,13 @@ const DadosPessoais = (props) => {
       console.log(doc)
       setCPF(doc); */
 
-/*     fetch(`${masterPath.url}/admin/usuario/buscar/${cpf}`)
-      .then((x) => x.json())
-      .then((res) => {
-        //loadingButton.current.style.display = "none";
-        setUser(res.usuarios[0]);
-        setUf(res.usuarios[0].codUf);
-      }); */
+    /*     fetch(`${masterPath.url}/admin/usuario/buscar/${cpf}`)
+          .then((x) => x.json())
+          .then((res) => {
+            //loadingButton.current.style.display = "none";
+            setUser(res.usuarios[0]);
+            setUf(res.usuarios[0].codUf);
+          }); */
 
 
 
@@ -134,41 +135,41 @@ const DadosPessoais = (props) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({
-        ...user,
-        [name]: value,
-        
+      ...user,
+      [name]: value,
+
     });
   }
 
   function atualizarLegenda(e) {
-  
+
     const config = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "authorization": 'Bearer ' + tokenAuth
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": 'Bearer ' + tokenAuth
       },
-        body: JSON.stringify({legenda: legenda})
+      body: JSON.stringify({ legenda: legenda })
     };
 
-    let uf = document.querySelector("#codUf2").value;
-    let caderno = document.querySelector("#codUf3").value;
+    let uf = props.anuncios.anuncios[0].codUf;
+    let caderno = props.anuncios.anuncios[0].codCaderno;
 
-        fetch(`${masterPath.url}/caderno/legenda/${uf}/${caderno}`, config)
-            .then((x) => x.json())
-            .then((res) => {
+    fetch(`${masterPath.url}/caderno/legenda/${uf}/${caderno}`, config)
+      .then((x) => x.json())
+      .then((res) => {
 
-              document.getElementById('listar').click();
-                
-            })
+        document.getElementById('listar').click();
 
-};
+      })
+
+  };
 
 
   return (
-    <div className="content-child-form py-5 d-flex flex-column align-items-center" style={{margin: "auto"}}>
+    <div className="content-child-form py-5 d-flex flex-column align-items-center" style={{ margin: "auto" }}>
       <p>1 - Nesse campo você pode editar o texto de rodapé da página do caderno.</p>
-      <textarea style={{width: '50%', height: '200px'}} value={legenda} onChange={(e) => setLegenda(e.target.value)}></textarea>
+      <textarea className="border border-dark" style={{ width: '50%', height: '200px' }} value={legenda} onChange={(e) => setLegenda(e.target.value)}></textarea>
       <button className="my-2 px-2 btn btn-secondary" onClick={atualizarLegenda}>Salvar</button>
     </div>
   );

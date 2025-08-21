@@ -34,13 +34,11 @@ const FormCadastro = () => {
             .then((res) => {
                 setUsuarios(res);
                 setUf(res.codUf);
-                console.log(res);
                 setShowSpinner(false);
 
                     fetch(`${masterPath.url}/cadernos?uf=${res.codUf}`)
                             .then((x) => x.json())
                             .then((res) => {
-                                console.log(res)
                                 setCaderno(res);
                             })
             })
@@ -122,7 +120,8 @@ const FormCadastro = () => {
         };
 
         if (validation) {
-            fetch(`${masterPath.url}/admin/usuario/update/${param}`, config)
+            let numberCPF = document.getElementById('nu_doc').value;
+            fetch(`${masterPath.url}/admin/usuario/update/${param}?doc=${numberCPF}`, config)
                 .then((x) => {
 
                     if (x.status == 401) {
@@ -138,6 +137,7 @@ const FormCadastro = () => {
                     console.log(res)
                     if (res.success) {
                         alert("Dados Atualizados!");
+                        window.location.reload();
 
                     } else {
                         alert(res.message);
@@ -323,7 +323,7 @@ const FormCadastro = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label for="pwd" className="w-50 px-1">Tipo usuário:</label>
                             <select
-                                name="codTipoPessoa"
+                                name="codTipoPerfil"
                                 id="codTipoPerfil"
                                 className="w-50 py-1"
                                 value={usuarios.codTipoUsuario}
@@ -335,6 +335,7 @@ const FormCadastro = () => {
                                 <option value="1">Super Administrador</option>
                                 <option value="2">Master</option>
                                 <option value="3">Anunciante</option>
+                                <option value="5">Capa</option>
 
 
                             </select>

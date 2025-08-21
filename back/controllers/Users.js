@@ -36,12 +36,12 @@ module.exports = {
             dtAlteracao,
             ativo } = req.body;
 
-            const gerarSenha = () => {
-                const origem = CPFCNPJ.replace(/[.\-\/]/g, '');
-                return origem.slice(0, 5);
-            }
+        const gerarSenha = () => {
+            const origem = CPFCNPJ.replace(/[.\-\/]/g, '');
+            return origem.slice(0, 5);
+        }
 
-            
+
 
         const dadosUsuario = {
             "codTipoPessoa": TipoPessoa,
@@ -106,6 +106,7 @@ module.exports = {
         await database.sync();
 
         const uuid = req.params.id;
+        const doc = req.query.doc;
 
         const { TipoPessoa,
             CPFCNPJ,
@@ -147,9 +148,16 @@ module.exports = {
         };
 
         try {
+            console.log(doc)
             const listaUsers = await Users.update(dadosUsuario, {
+                /*  where: {
+                     codUsuario: uuid,
+                 } */
                 where: {
-                    codUsuario: uuid
+                    [Op.or]: [
+                        { codUsuario: uuid },
+                        { descCPFCNPJ: doc }
+                    ]
                 }
             });
 
@@ -630,13 +638,13 @@ module.exports = {
         })
         console.log(usuario)
 
-        if(usuario) {
-            res.json({success: true, usuario: usuario}).status(200)
+        if (usuario) {
+            res.json({ success: true, usuario: usuario }).status(200)
         } else {
-            res.json({success: false}).status(404)
+            res.json({ success: false }).status(404)
         }
-        
-       
+
+
     },
     buscarUsuarioIdold: async (req, res) => {
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1

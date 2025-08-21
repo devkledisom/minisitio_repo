@@ -892,7 +892,7 @@ module.exports = {
             }
         });
 
-        console.log(resultCaderno)
+        console.log(resultCaderno, uf, caderno)
 
         res.json({ success: true, message: resultCaderno });
     },
