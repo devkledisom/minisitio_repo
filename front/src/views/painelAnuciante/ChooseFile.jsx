@@ -2,6 +2,14 @@ import React, { useEffect, useCallback, useState, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import { masterPath } from "../../config/config";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../components/ui/tooltip.tsx"
+
+
+
 import "../../assets/css/comprar-anuncio.css";
 
 //global functions
@@ -93,28 +101,28 @@ function UploadImage(props) {
       } else {
         localStorage.setItem("imgname", acceptedFiles[0].name);
       }
-  
+
       //console.log(acceptedFiles[0])
       setImagem(acceptedFiles[0]);
       setMostrarLabel(false);
       //setTextLabel(acceptedFiles[0].name);
       //localStorage.setItem("imgname", acceptedFiles[0].name);
-  
+
       /*   if(props.teste != undefined) {
           props.teste(acceptedFiles[0], true)
         }; */
-  
-  
+
+
       if (props.preview == true) {
         document.querySelector('.comImagem img').src = URL.createObjectURL(acceptedFiles[0]);
         document.querySelector('.semImagem').style.display = 'none';
         document.querySelector('.comImagem').style.display = 'block';
-  
+
       }
-  
+
       const formData = new FormData();
       formData.append('image', acceptedFiles[0]);
-  
+
       // Enviar a imagem para o servidor
       fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}`, {
         method: 'POST',
@@ -131,13 +139,13 @@ function UploadImage(props) {
         .catch(error => {
           console.error('Erro ao enviar imagem:', error);
         });
-  
-  
+
+
     }
 
   });
 
-  
+
 
   //const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   // Configuração do Dropzone
@@ -175,7 +183,7 @@ function UploadImage(props) {
         <div className="input-icon margin-top-10">
           <i className="fa fa-paperclip"></i>
           <span
-            className="form-control descImagem"
+            className="form-control descImagem  d-flex justify-content-between"
             style={{
               paddingTop: "5px",
               lineHeight: "38px",
@@ -183,6 +191,8 @@ function UploadImage(props) {
             }}
             onChange={(event) => alert()}
           >
+
+
 
             {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
             {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
@@ -203,6 +213,25 @@ function UploadImage(props) {
         <button type="button" className="btn cinza w-100" id="btnDescImagem">
           procurar
         </button>
+      </div>
+      <div className="text-left mt-2" style={{ fontSize: "12px", color: "#4f4f4f" }}>
+       
+          <Tooltip>
+            <TooltipTrigger>
+               <span className="border border-dark rounded-circle px-1 py-0 m-1 bg-gainsboro text-dark" style={{ fontSize: "12px", lineHeight: "12px", cursor: "pointer" }}>
+                ?
+               </span>
+              Atenção!
+              </TooltipTrigger>
+            <TooltipContent
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg border border-blue-400 max-w-xs break-words whitespace-normal"
+             align="center">
+              <p>A imagem deve ser no formato PNG, JPEG e ter no máximo 1MB, o nome da imagem não pode conter caracteres especiais ou espaços.</p>
+            </TooltipContent>
+          </Tooltip>
+         
+        
+         
       </div>
     </div>
   );
