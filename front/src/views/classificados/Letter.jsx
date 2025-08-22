@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { masterPath } from '../../config/config';
 import '../../assets/css/letter.css';
+import Marquee from "react-fast-marquee";
 
 function Letter(props) {
     const [legenda, setLegenda] = useState("carregando...");
@@ -15,16 +16,16 @@ function Letter(props) {
     const concatenatedText = arr.join(" | ");
 
     useEffect(() => {
-         let uf = document.querySelector("#codUf2").value;
-            let caderno = document.querySelector("#codUf3").value;
+        let uf = document.querySelector("#codUf2").value;
+        let caderno = document.querySelector("#codUf3").value;
         /*     let uf = props.anuncios[0].codUf;
             let caderno = props.anuncios[0].codCaderno; */
-        
-            fetch(`${masterPath.url}/caderno/legenda/${props.estado}/${props.caderno}`)
-              .then((x) => x.json())
-              .then((res) => {
+
+        fetch(`${masterPath.url}/caderno/legenda/${props.estado}/${props.caderno}`)
+            .then((x) => x.json())
+            .then((res) => {
                 setLegenda(res[0].legenda);
-              });
+            });
     }, [])
 
     /*   useEffect(() => {
@@ -39,12 +40,16 @@ function Letter(props) {
     return (
         <div className="letter">
             <div className="letter-div">
+                <Marquee speed={60}>
+                    {legenda}
+                </Marquee>
                 <div className="div-marquee marquee">
-                {/*     <span>{arr[0]}</span>
+                    {/*     <span>{arr[0]}</span>
                     <span>{arr[1]}</span> */}
-                    <span>{legenda}</span>
-                    <span>{legenda}</span>
+                    {/*   <span>{legenda}</span>
+                    <span>{legenda}</span> */}
                     {/* <span>{arr[1]}</span> */}
+
                 </div>
             </div>
         </div>
