@@ -8,6 +8,8 @@
     background-color: #4F4F4F;
     overflow: hidden;
     white-space: nowrap;
+    color: #FFFFFF;
+    font-size: 1.5rem;
 }
 
 .letter > .letter-div > span {
