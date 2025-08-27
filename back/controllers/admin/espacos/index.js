@@ -3632,6 +3632,28 @@ module.exports = {
                         }) */
 
 
+              
+                const query = `UPDATE anuncio
+                        JOIN (
+                            SELECT codAnuncio, 
+                                CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
+                            FROM anuncio
+                            WHERE codUf = :estado AND codCaderno = :caderno
+                        ) AS temp
+                        ON anuncio.codAnuncio = temp.codAnuncio
+                        SET anuncio.page = temp.page_number
+                        WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
+                    `;
+
+                database.query(query, {
+                    replacements: { estado: uf, caderno: caderno },
+                    type: Sequelize.QueryTypes.UPDATE,
+                });
+
+                console.log(`Reorganização concluída para o estado:`, uf);
+         
+
+
             res.json({ success: true, message: deleteAnuncio });
         } catch (err) {
             res.json({ success: false, message: "não foi possivel apagar o anuncio selecionado" });
