@@ -20,7 +20,7 @@ module.exports = {
 
 
         const { uf, cidade, atividade, name, telefone, nu_documento, codigoCaderno } = req.body;
-        console.table([name, atividade, telefone, nu_documento, uf, codigoCaderno]);
+        //console.table([name, atividade, telefone, nu_documento, uf, codigoCaderno]);
 
         //anuncio
         const anuncios = await database.query(`
@@ -51,7 +51,6 @@ module.exports = {
         console.log(req.query, anuncios)
 
         if (req.query.totalPages > 0) {
-            console.log("dasdafasdfsfasfdasfasfasdfasdfa")
             return res.json({
                 success: true, data: anuncios,
                 paginaAtual: req.query.paginaAtual,
@@ -97,9 +96,9 @@ module.exports = {
   AND a.codCaderno = :caderno
 `, {
                 replacements: {
-                    termo: 'abate de aves%',
-                    uf: 'AL',
-                    caderno: 'MACEIO'
+                    termo: `${atividade}%`,
+                    uf: uf,
+                    caderno: codigoCaderno
                 },
                 type: database.QueryTypes.SELECT
             });
@@ -126,7 +125,6 @@ module.exports = {
             raw: true
         });
 
-        console.log("dasjdhasjkfhaskjfasdjfsas", verificarAtividade)
 
         if (verificarAtividade) {
             const anuncios = await Anuncio.findAll({
@@ -206,71 +204,7 @@ module.exports = {
                     totalItem: totalItens
                 });
             }
-        } else {
-
-
-            /*  const anunciosold = await Anuncio.findAll({
-                 where: {
-                     codCaderno: 'ÁGUAS CLARAS',
-                     codUf: 'DF',
- 
-                     [Op.and]: [
-                         { codCaderno: codigoCaderno },
-                         { codUf: uf },
-                         {
-                             [Op.or]: [
-                                 //Sequelize.literal(`MATCH(search_index) AGAINST('+bolos' IN BOOLEAN MODE)`),
-                                 ///Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('descAnuncio')), 'LIKE', `${atividade.toLowerCase()}%`),
-                                 //{ descAnuncio: { [Op.like]: `${atividade}%` } },
-                                 //Sequelize.literal(`JSON_CONTAINS(tags, '"${atividade}"')`)
-                                 //{ codAtividade: { [Op.like]: `${atividade}%` } }, //atividades.length > 0 ? atividades[0].id : "" },
-                                 //{ descTelefone: atividade },
-                                 //{ descCPFCNPJ: atividade },
-                                 {
-                                     tags: {
-                                         [Op.like]: `${atividade}%`
-                                     }
-                                 },   
-                               
-                             ] 
-                         }
-                     ]
-                 },
-                 limit: porPagina,
-                 offset: offset,
-                 order: [
-                     ['activate', 'ASC'],
-                     ['createdAt', 'DESC'],
-                     ['codDuplicado', 'ASC'],
-                 ],
-             }); */
-
-
-
-            /*             const anuncios = await database.query(`
-              SELECT * FROM anuncio 
-              WHERE 
-                (descAnuncio LIKE :termo OR tags LIKE :termo OR codAtividade LIKE :termo) 
-                AND codUf = :uf 
-                AND codCaderno = :caderno
-            `, {
-                            replacements: {
-                                termo: `%${atividade}%`,
-                                uf: 'DF',
-                                caderno: 'ÁGUAS CLARAS'
-                            },
-                            type: database.QueryTypes.SELECT
-                        });  */
-
-
-
-        }
-
-
-
-
-
-
+        } 
     },
     buscarCaderno: async (req, res) => {
         const uf = req.query.uf;
