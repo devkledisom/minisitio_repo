@@ -90,7 +90,7 @@
     margin-bottom: 30px;
 }
 
-@keyframes pulse {
+@keyframes pulse-classificado {
     0% {
         box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
     }
@@ -101,7 +101,7 @@
 }
 
 .pulsating-border {
-   /*  animation: pulse 2s infinite; */
+    animation: pulse-classificado 2s infinite;
 }
 
 
