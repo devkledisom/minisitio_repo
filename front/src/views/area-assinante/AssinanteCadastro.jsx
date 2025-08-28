@@ -265,7 +265,6 @@ const AssinanteCadastro = (props) => {
   }
 
 
-
   return (
     <div className="content-child-form">
         <header>

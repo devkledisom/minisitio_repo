@@ -110,6 +110,7 @@ function ComprarAnuncio({ isAdmin }) {
         //decodificar()
       });
 
+      localStorage.removeItem('imgname');
 
   }, []);
 
