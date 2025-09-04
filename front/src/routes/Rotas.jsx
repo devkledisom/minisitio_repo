@@ -106,7 +106,7 @@ function Rotas() {
                         <Route path="login" element={<Login />} />
                         <Route path="sobre/:id" element={<OutroComponente />} />
                         <Route path="promocoes/:caderno/:estado" element={<Promocoes />} />
-                        <Route path="promocao" element={<Promocao />} />
+                        <Route path="promocao/:codAnuncio" element={<Promocao />} />
                     </Route>
                     <Route path="admin" element={
                         <PrivateRoute role={1}>
