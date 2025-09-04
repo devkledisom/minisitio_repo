@@ -86,6 +86,7 @@ import { QrcodeCadernoProvider } from "../context/QrcodeCadernoContext";
 import NotFound from '../views/NotFound';
 import ForgotPassword from "../admin/components/ForgotPassword";
 import ResetPassword from "../admin/components/ResetPassword";
+import Promocao from "../views/campanha/Promocao";
 
 
 
@@ -105,6 +106,7 @@ function Rotas() {
                         <Route path="login" element={<Login />} />
                         <Route path="sobre/:id" element={<OutroComponente />} />
                         <Route path="promocoes/:caderno/:estado" element={<Promocoes />} />
+                        <Route path="promocao" element={<Promocao />} />
                     </Route>
                     <Route path="admin" element={
                         <PrivateRoute role={1}>
