@@ -91,7 +91,7 @@ function FormAdesao({ isAdmin }) {
 
   useEffect(() => {
 
-    fetch(`${masterPath.url}/admin/anuncio/edit/${19444590}`)
+    fetch(`${masterPath.url}/admin/anuncio/edit/${codAnuncio}`)
       .then((x) => x.json())
       .then((res) => {
         setMinisitio(res[0]);
