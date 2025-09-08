@@ -69,10 +69,14 @@ function WebcardThumb(props) {
 
     const formatData = (dataCompleta) => {
         if (dataCompleta != undefined) {
-            let dataTempo = dataCompleta.split('T');
-            let dataOriginal = dataTempo[0].split('-');
+            const date = new Date(dataCompleta); // Z indica UTC
+            const formatted = date.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+            let dataTempo = formatted.split('T');
+            let dataPart1 = dataTempo[0].split('-');
+            let dataPart2 = dataPart1[0].split(',');
+            let dataOriginal = dataPart2[0].split('/');
 
-            return `${dataOriginal[2]}/${dataOriginal[1]}/${dataOriginal[0]}`;
+            return `${dataOriginal[0]}/${dataOriginal[1]}/${dataOriginal[2]}`;
         }
     };
 

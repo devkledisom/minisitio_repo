@@ -1,6 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 
+import { Share } from '@capacitor/share';
+import { Capacitor } from '@capacitor/core';
+
 //FUNCTIONS
 import useIsMobile from '../admin/functions/useIsMobile';
 
@@ -160,6 +163,21 @@ function UserActions(props) {
 
 
     const handleShare = async () => {
+        const shareData = {
+            title: 'Compartilhe seu Minisitio',
+            text: 'Mostre a todos o seu perfil digital',
+            url: props.urlShare
+        };
+
+        if (Capacitor.isNativePlatform()) {
+            // Rodando dentro do app (Capacitor)
+            await Share.share({
+                ...shareData,
+                dialogTitle: 'Compartilhar'
+            });
+        }
+
+
         if (navigator.share) {
             try {
                 await navigator.share({

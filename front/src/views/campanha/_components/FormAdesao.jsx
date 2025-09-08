@@ -279,10 +279,50 @@ function FormAdesao({ isAdmin }) {
     return `${dia}/${mes}/${ano}`;
   }
 
+  function calcularDiferencaDias(dataFutura) {
+    // Converte a data futura para um objeto Date
+    const dataFuturaDate = new Date(dataFutura);
+
+    // Obtém a data de hoje
+    const hoje = new Date();
+
+    // Calcula a diferença em milissegundos
+    const diferencaMs = dataFuturaDate.getTime() - hoje.getTime();
+
+    // Converte a diferença de milissegundos para dias
+    const diferencaDias = Math.ceil(diferencaMs / (1000 * 60 * 60 * 24));
+
+    return diferencaDias;
+  }
+    const campoPromocao = useRef(null)
+
+  const handleChange = (e) => {
+
+    if (e.target.name === 'promocaoData') {
+      let dataValidade = e.target.value;
+
+      if (calcularDiferencaDias(dataValidade) > 90 && calcularDiferencaDias(dataValidade) < 0) {
+        alert("A data de validade da promoção informada não pode ultrapassar um prazo de 90 dias! a data escolhida tem um prazo de " + calcularDiferencaDias(dataValidade));
+        return;
+      }
+    }
+
+    const { name, value } = e.target;
+    setMinisitio({
+      ...minisitio,
+      [name]: value,
+      promoc: {
+        data_validade: campoPromocao.current.value,
+      }
+
+    });
+    setUf(minisitio.codUf);
+  };
+
   const handleSelectChange = (e) => {
-    /*  changePreview(e);
-     handleChange(e);
-     executarSelecao(); */
+    //  changePreview(e);
+    //  handleChange(e);
+    //  executarSelecao(); 
     /* changeUf(e); */
   };
 

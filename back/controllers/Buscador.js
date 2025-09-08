@@ -34,7 +34,7 @@ module.exports = {
   )
   AND a.codUf = :uf
   AND a.codCaderno = :caderno
-  ORDER BY activate ASC, createdAt DESC, codDuplicado ASC
+  ORDER BY codAtividade ASC, codTipoAnuncio DESC, createdAt ASC, descAnuncio ASC
   LIMIT :limit OFFSET :offset
 `, {
             replacements: {
@@ -47,7 +47,7 @@ module.exports = {
             type: database.QueryTypes.SELECT,
         });
 
-
+//activate ASC, createdAt DESC, codDuplicado ASC
         console.log(req.query, anuncios)
 
         if (req.query.totalPages > 0) {
