@@ -215,3 +215,7 @@ a:hover {
 .swal2-confirm {
     background-color: #4f4f4f;
 }
+
+#area-icons-actions img {
+    height: 30px;
+}
