@@ -172,7 +172,7 @@ function UserActions(props) {
         // Fallback para WebView Android via bridge nativa
         if (window.AndroidShare && typeof window.AndroidShare.share === 'function') {
             window.AndroidShare.share(shareData.text, shareData.title, shareData.url);
-            return true;
+            return {ok: true, via: 'android'};
         }
 
 
