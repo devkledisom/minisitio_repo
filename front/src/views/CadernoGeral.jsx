@@ -9,6 +9,7 @@ import { masterPath } from '../config/config';
 import '../assets/css/cadernoClassificado.css';
 
 import MosaicoWebCard from '../components/MosaicoWebCard';
+import Mosaico from '../components/Mosaico';
 import Busca from '../components/Busca';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
@@ -185,7 +186,7 @@ function Caderno(props) {
 
 
       <header>
-        {/* <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} /> */}
+        {/*  <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} />  */}
         <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} />
       </header>
       <main>
@@ -194,7 +195,9 @@ function Caderno(props) {
         {/*         <h2className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
 
-
+     {/*    <div className='container text-center my-4'>
+          <img src="http://localhost:3032/api/files/MosaicogovernadorValadaresMG.jpeg" alt="" />
+        </div> */}
         <div className='container caderno'>
 
           <div class="borda-verde">
