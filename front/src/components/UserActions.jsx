@@ -168,9 +168,8 @@ function UserActions(props) {
             text: 'Mostre a todos o seu perfil digital',
             url: props.urlShare
         };
-
         // Fallback para WebView Android via bridge nativa
-        if (window.AndroidShare && typeof window.AndroidShare.share === 'function') {
+/*         if (window.AndroidShare && typeof window.AndroidShare.share === 'function') {
             window.AndroidShare.share(shareData.text, shareData.title, shareData.url);
             return { ok: true, via: 'android' };
         }
@@ -182,7 +181,7 @@ function UserActions(props) {
                 ...shareData,
                 dialogTitle: 'Compartilhar'
             });
-        }
+        } */
 
 
         if (navigator.share) {
@@ -210,27 +209,29 @@ function UserActions(props) {
                       <div style="" class="cart-digital-modal py-3">
                           <a href="https://api.whatsapp.com/send?text=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
                               <img src="../assets/img/icon-share/share_whatsapp.svg" width="80" alt="whatsapp" />    
-                              Compartilhar no WhatsApp
+                              WhatsApp
                           </a>
                           <a href="https://www.facebook.com/sharer/sharer.php?u=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
                               <img src="../assets/img/icon-share/share_facebook.svg" width="80" alt="facebook" />
-                              Compartilhar no Facebook
+                              Facebook
                           </a>
                           <a href="https://twitter.com/intent/tweet?url=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
                               <img src="../assets/img/icon-share/share_x.svg" width="80" alt="x" />    
-                              Compartilhar no Twitter
+                              Twitter
                           </a>
                           <a href="https://www.linkedin.com/shareArticle?url=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
                               <img src="../assets/img/icon-share/linkedin.png" width="80" alt="linkedin" style="border-radius: 100%;" />    
-                              Compartilhar no LinkedIn
+                              LinkedIn
                           </a>
-                          <div class="mb-2 d-flex flex-column align-items-center" style="gap: 6px;">
+                          <div class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
                              <button
                                 id="copyBtn"
-                                style="border-radius: 100%; padding: 10px"
+                                style="border-radius: 100%"
                                 >
-                                <img src="../assets/img/icons/icons8-copiar.gif" alt="copiar" width="60" />
-              
+                                <img src="../assets/img/icons/icons8-copiar.gif" alt="copiar" style="height: 60px; width: 60px; background-color: gold;
+    border-radius: inherit;
+    padding: 6px;" />
+
                                </button>
                                 Copiar
                           </div>
