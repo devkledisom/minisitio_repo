@@ -157,6 +157,15 @@ function ComprarAnuncio({ isAdmin }) {
   function aplicarCupom(e) {
     let codId = e.target.value;
 
+    if(codId === "__.___.____") {
+
+       setPrecoFixo(10);
+      setDescontoAtivado(false);
+      setTexto(null);
+      document.getElementById('anunciar').disabled = false;
+      customText.current.style.color = "#000";
+    }
+
     /*     if(codId.length == 2) {
           discountHash.current.value = codId + "."
         }
