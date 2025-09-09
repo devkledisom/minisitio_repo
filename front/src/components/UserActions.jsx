@@ -162,7 +162,7 @@ function UserActions(props) {
     }
 
 
-    const handleShare = async () => {
+    const handleShare = async (e) => {
         const shareData = {
             title: 'Compartilhe seu Minisitio',
             text: 'Mostre a todos o seu perfil digital',
@@ -172,7 +172,7 @@ function UserActions(props) {
         // Fallback para WebView Android via bridge nativa
         if (window.AndroidShare && typeof window.AndroidShare.share === 'function') {
             window.AndroidShare.share(shareData.text, shareData.title, shareData.url);
-            return {ok: true, via: 'android'};
+            return { ok: true, via: 'android' };
         }
 
 
@@ -196,14 +196,55 @@ function UserActions(props) {
             } catch (error) {
                 console.error('Erro ao compartilhar:', error);
             }
-        } /* else {
-            alert('A API de compartilhamento não é suportada neste dispositivo.');
-            navigator.clipboard.writeText({
-                title: 'Cartão Digital',
-                text: 'Descrição do conteúdo para compartilhar.',
-                url: `${masterPath.url}/files/3/${props.name}`,
+        } else {
+            e.preventDefault();
+            const styles = {
+                display: "flex",
+                flexDirection: "column"
+            }
+
+            const link = props.urlShare;
+            Swal.fire({
+                title: 'Compartilhe Seu Minisitio',
+                html: `
+                      <div style="" class="cart-digital-modal py-3">
+                          <a href="https://api.whatsapp.com/send?text=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                              <img src="../assets/img/icon-share/share_whatsapp.svg" width="80" alt="whatsapp" />    
+                              Compartilhar no WhatsApp
+                          </a>
+                          <a href="https://www.facebook.com/sharer/sharer.php?u=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                              <img src="../assets/img/icon-share/share_facebook.svg" width="80" alt="facebook" />
+                              Compartilhar no Facebook
+                          </a>
+                          <a href="https://twitter.com/intent/tweet?url=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                              <img src="../assets/img/icon-share/share_x.svg" width="80" alt="x" />    
+                              Compartilhar no Twitter
+                          </a>
+                          <a href="https://www.linkedin.com/shareArticle?url=${link}" target="_blank" class="mb-2 d-flex flex-column align-items-center" style="gap: 10px;">
+                              <img src="../assets/img/icon-share/linkedin.png" width="80" alt="linkedin" style="border-radius: 100%;" />    
+                              Compartilhar no LinkedIn
+                          </a>
+                          <div class="mb-2 d-flex flex-column align-items-center" style="gap: 6px;">
+                             <button
+                                id="copyBtn"
+                                style="border-radius: 100%; padding: 10px"
+                                >
+                                <img src="../assets/img/icons/icons8-copiar.gif" alt="copiar" width="60" />
+              
+                               </button>
+                                Copiar
+                          </div>
+                         
+                      </div>
+                  `,
+                width: "50%",
+                showCloseButton: true,
+                showConfirmButton: false,
+                didOpen: () => {
+                    document.getElementById('copyBtn')?.addEventListener('click', handleCopy);
+                }
             });
-        } */
+        }
     };
 
 
