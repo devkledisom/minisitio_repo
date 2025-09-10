@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:300|Montserrat:700,400);
+
 #btn-prev {
     background-color: #ffcc29;
     color: #000;
@@ -55,6 +57,18 @@
     height: 52px;
     /*    width: 319px;
     height: 52px; */
+}
+
+.fraseHeader {
+    font-family: Montserrat, Helvetica, Times, serif;
+    font-weight: bold;
+
+}
+
+.fraseHeader span {
+    border: 2px solid #ffcc29;
+    border-radius: 5px;
+
 }
 
 /* @media (min-width: 576px) {
@@ -416,7 +430,7 @@
         height: 40px;
     }
 
-      .area-btns-classificado a i {
+    .area-btns-classificado a i {
         font-size: 24px !important;
         margin-right: 6px !important;
     }
@@ -437,6 +451,12 @@
 
     .fraseHeader {
         font-size: 11px !important;
+        font-family: Montserrat, Helvetica, Times, serif;
+    }
+
+    .fraseHeader span {
+        padding: 0px !important;
+
     }
 
 }
