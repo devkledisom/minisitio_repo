@@ -186,8 +186,8 @@ function Caderno(props) {
 
 
       <header>
-        {/*  <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} />  */}
-        <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} />
+          <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} />  
+        {/* <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} /> */}
       </header>
       <main>
         <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
@@ -195,9 +195,9 @@ function Caderno(props) {
         {/*         <h2className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
 
-     {/*    <div className='container text-center my-4'>
+         <div className='container text-center my-4'>
           <img src="http://localhost:3032/api/files/MosaicogovernadorValadaresMG.jpeg" alt="" />
-        </div> */}
+        </div> 
         <div className='container caderno'>
 
           <div class="borda-verde">
