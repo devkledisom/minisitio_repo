@@ -15,6 +15,10 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import CardClassificado from './classificados/CardClassificado';
 import Letter from './classificados/Letter';
+import QrcodeMosaico from '../plugins/QrcodeMosaico';
+
+import { Modal, Button } from 'react-bootstrap';
+import { QrCode } from "lucide-react";
 
 //CONTEXT
 import { useBusca } from '../context/BuscaContext';
@@ -36,6 +40,7 @@ function Caderno(props) {
   const [loading, setLoading] = useState(false);
   const [nmAnuncio, setNmAnuncio] = useState(null);
   const [qtdaPerfil, setQtdaPerfil] = useState(0);
+  const [show, setShow] = useState(false);
 
   const location = useLocation();
 
@@ -174,6 +179,11 @@ function Caderno(props) {
   }
 
 
+  const handleClose = () => {
+    setShow(false);
+    //props.setShowState(false);
+  };
+
 
   return (
     <div className="App caderno-geral">
@@ -186,8 +196,8 @@ function Caderno(props) {
 
 
       <header>
-         {/*  <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} />   */}
-         <MosaicoWebCard logoTop={true} borda="flex" /* mosaicoImg={mosaicoImg} */ nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} /> 
+        <Mosaico logoTop={true} borda="flex" /* mosaicoImg={mosaicoImg} */ />
+        {/*  <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg}  nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} />  */}
       </header>
       <main>
         <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
@@ -195,9 +205,9 @@ function Caderno(props) {
         {/*         <h2className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
 
-         <div className='container text-center my-4'>
+        <div className='container text-center my-4 new-mosaico'>
           <img src={`https://automaplay.com.br/api/files/${mosaicoImg}`} alt="mosaico" />
-        </div> 
+        </div>
         <div className='container caderno'>
 
           <div class="borda-verde">
@@ -205,14 +215,28 @@ function Caderno(props) {
               <div class="borda-azul">
                 <div class="conteudo">
                   <h1 id="title-caderno" className='py-2 title-caderno'>Capa do Caderno {caderno} - {estado}</h1>
+
                   <div className='col-md-12'>
                     <div className='row py-3'>
-                      <div className="col-md-12 col-xs-12 text-center">
+                      <div className="col-md-12 col-xs-12 text-center d-flex justify-content-center area-btns-classificado">
                         {/* <button onClick={buscarTodosClassificado}>Ver caderno classificado</button> */}
-                        <a href={`/cadernos/${caderno}_${estado}?caderno=${caderno}&estado=${estado}`} className="btn proximo btn-class" onClick={buscarTodosClassificado}><i className="fa fa-file-text"></i> Ver caderno classificado</a>
+                        <a href={`/cadernos/${caderno}_${estado}?caderno=${caderno}&estado=${estado}`} className="btn proximo btn-class" onClick={buscarTodosClassificado}>
+                          <i className="fa fa-file-text mx-0"></i> Ver caderno classificado</a>
+                        <button className='btn btn-success mx-2 btn-qrcode' onClick={() => setShow(true)}><QrCode /><span className='mx-2'>Gerar qrcode</span></button>
                       </div>
 
                     </div>
+
+                    <Modal show={show} onHide={handleClose} size="lg" centered>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Capa do Caderno {caderno} - {estado}</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body className="text-center">
+                        <QrcodeMosaico nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} /> 
+                      </Modal.Body>
+                      <Modal.Footer>
+                      </Modal.Footer>
+                    </Modal>
 
 
                     <div className="row lista">
