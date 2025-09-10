@@ -186,8 +186,8 @@ function Caderno(props) {
 
 
       <header>
-          <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} />  
-        {/* <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} /> */}
+         {/*  <Mosaico logoTop={true} borda="flex" mosaicoImg={mosaicoImg} />   */}
+         <MosaicoWebCard logoTop={true} borda="flex" /* mosaicoImg={mosaicoImg} */ nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} /> 
       </header>
       <main>
         <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
@@ -196,7 +196,7 @@ function Caderno(props) {
  */}
 
          <div className='container text-center my-4'>
-          <img src="http://localhost:3032/api/files/MosaicogovernadorValadaresMG.jpeg" alt="" />
+          <img src={`https://automaplay.com.br/api/files/${mosaicoImg}`} alt="mosaico" />
         </div> 
         <div className='container caderno'>
 
