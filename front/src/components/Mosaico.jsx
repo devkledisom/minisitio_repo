@@ -37,11 +37,13 @@ function Mosaico(props) {
                 <div className="container header-new-mosaico" /* style={{ paddingTop: "45px" }} */>
                     <div className="row logo-new-mosaico" style={{ height: "110px" }}>
                         {/* <QrcodeMosaico /> */}
-                        <div className="col-4 col-md-4 col-sm-12 pull-right faixa-header d-flex justify-content-start align-items-center">
+                        <div className="col-4 col-md-3 col-sm-12 pull-right faixa-header d-flex justify-content-start align-items-center">
                             {props.logoTop ? <a href="/" className='h-100'><img src="/assets/img/logo.png" style={logoHeader} /></a> : ''}
                         </div>
-                        <div className="col-4 col-md-4 col-sm-12 pull-right faixa-header d-flex justify-content-center align-items-center fraseHeader" style={frase}>Apoiando o pequeno negócio</div>
-                        <div className="col-4 col-md-4 col-sm-12 pull-right faixa-header d-flex justify-content-end align-items-center">
+                        <div className="col-4 col-md-6 col-sm-12 pull-right faixa-header d-flex justify-content-center align-items-center fraseHeader" style={frase}>
+                            <span className='px-3'>Apoiando o pequeno negócio</span>
+                        </div>
+                        <div className="col-4 col-md-3 col-sm-12 pull-right faixa-header d-flex justify-content-end align-items-center">
                             <ul className="header-navigation p-0 h-100 d-flex justify-content-center align-items-center">
                                 <li /* className="assine" */><a href="/comprar-espaco-minisitio" style={assineAgora}>Assine Agora</a></li>
                                 <li className="dropdown dropdown-bandeira ml-3">
