@@ -233,7 +233,10 @@ function Caderno(props) {
                         <Modal.Title>Capa do Caderno {caderno} - {estado}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body className="text-center">
-                        <QrcodeMosaico nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} /> 
+                        <div className="area-qrcode-caderno">
+                          <QrcodeMosaico nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} />
+                          <img src="/assets/img/logo.png" alt="" />
+                        </div>
                       </Modal.Body>
                       <Modal.Footer>
                       </Modal.Footer>

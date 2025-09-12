@@ -1150,7 +1150,8 @@ function Caderno() {
     <div className="App caderno">
 
       <header>
-        <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} />
+        <Mosaico logoTop={true} borda="flex" /* mosaicoImg={mosaicoImg} */ />
+        {/* <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={`${masterPath.domain}/caderno-geral/${caderno}/${estado}`} /> */}
         {/*   <Mosaico logoTop={true} borda="none" /> */}
       </header>
       <main>
@@ -1211,6 +1212,7 @@ function Caderno() {
                         return <MiniWebCard key={anuncio.codAnuncio}
                           id={anuncio.codAnuncio}
                           data={minisitio}
+                          anuncio={anuncio}
                           codImg={anuncio.descImagem}
                           ref={teste}
                           empresa={anuncio.descAnuncio}
@@ -1306,6 +1308,7 @@ function Caderno() {
                         return <MiniWebCard key={anuncio.codAnuncio}
                           id={anuncio.codAnuncio}
                           data={minisitio}
+                          anuncio={anuncio}
                           codImg={anuncio.descImagem}
                           ref={teste}
                           empresa={anuncio.descAnuncio}
