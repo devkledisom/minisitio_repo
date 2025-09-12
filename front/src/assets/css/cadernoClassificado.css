@@ -231,7 +231,7 @@
 }
 
 .cartao>div {
-    overflow: hidden;
+    /* overflow: hidden; */
     padding: 5px 5px;
     gap: 10px;
 }
@@ -368,6 +368,18 @@
     padding: 20px;
     border-radius: 10px;
     /* ajuste conforme seu layout */
+}
+
+.area-qrcode-caderno {
+    position: relative;
+}
+
+.area-qrcode-caderno img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
 }
 
 

@@ -23,6 +23,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "font-awesome": "^4.7.0",
+    "framer-motion": "^12.23.12",
     "google-map-react": "^2.2.1",
     "he": "^1.2.0",
     "html2canvas": "^1.4.1",

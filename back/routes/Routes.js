@@ -160,7 +160,7 @@ module.exports = (io) => {
         return Admin.import4excell(req, res, next);
     }
 
-   // router.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfile'), importWithSocket);
+    // router.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfile'), importWithSocket);
     router.get('/api/admin/anuncio/progress', Buscador.progressImport);
 
     //site
@@ -250,6 +250,8 @@ module.exports = (io) => {
       <meta property="og:title" content="MINISITIO" />
        <meta property="og:description" content="&#128274; Link Seguro" />
       <meta property="og:image" content="https://minisitio.com.br/api/files/${anuncio.descImagem}" />
+      <meta property="og:image:width" content="300">
+<meta property="og:image:height" content="300">
        <meta property="og:url" content="https://minisitio.com.br/api/portal/share/${req.params.id}" />
       <meta property="og:type" content="website" />
       <meta name="twitter:card" content="summary_large_image" />

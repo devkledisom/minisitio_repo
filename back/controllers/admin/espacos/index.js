@@ -867,7 +867,7 @@ module.exports = {
             order: [['codAtividade', 'ASC'], ['codTipoAnuncio', 'DESC'], ['createdAt', 'ASC'], ['descAnuncio', 'ASC']],
             /*  limit,
              offset, */
-            attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page'],
+            attributes: ['codAnuncio', 'codAtividade', 'descAnuncio', 'descTelefone', 'descImagem', 'codDesconto', 'page', 'descInsta', 'descFacebook', 'descSite'],
             include: [
                 {
                     model: Atividade,
