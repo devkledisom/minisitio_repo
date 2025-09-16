@@ -132,9 +132,9 @@ li#linkExterno {
 }
 
 .pesquisa-nome .endereco {
-    white-space: nowrap; 
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
 }
 
 .pesquisa-nome h4 {
@@ -158,7 +158,7 @@ li#linkExterno {
 @media (max-width: 768px) {
 
     .card {
-       height: 100px;
+        height: 100px;
     }
 
     .card>.card-list {
@@ -205,4 +205,19 @@ li#linkExterno {
         /* white-space: nowrap; */
     }
 
+    .Cardlist .descTitle {
+        font-size: 15px;
+    }
+
+    .Cardlist .label-ativity {
+        font-size: 12px;
+    }
+
+    .Cardlist .label-address {
+        font-size: 12px;
+    }
+
+    .Cardlist .descAtividade {
+        height: 16px;
+    }
 }

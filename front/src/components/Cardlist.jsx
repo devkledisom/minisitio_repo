@@ -104,7 +104,7 @@ function Cardlist(props) {
                 </div>
                 {/* row */}
                 <div className="row text-start px-3">
-                  <div className="col-md-12 col-xs-12 pesquisa-nome">
+                  <div className="col-md-12 col-xs-12 pesquisa-nome descAtividade">
                     <h4 className="d-flex">{/* font-14 */}
                       <i className="fa fa-briefcase"></i>
                       <div className="endereco label-ativity">{props.anuncio.codAtividade}</div>
@@ -142,7 +142,7 @@ function Cardlist(props) {
                 {/* row */}
                 <div className="row area-btn">
                   <div className="col-md-12 d-flex justify-content-end btn-view-page">
-                    <button className="mx-2 p-4">
+                    <button className="mx-2 px-2">
                       <i className="fa fa-star"></i>{/*cadUf[1]*/}
                       <Link
                         to={`/caderno/${props.anuncio.descAnuncio}?page=1&book=${props.anuncio.codCaderno}&id=${props.anuncio.codAnuncio}&index=${props.anuncio.page}&caderno=${props.anuncio.codCaderno}&estado=${props.anuncio.codUf}
@@ -152,7 +152,7 @@ style={{ textDecoration: 'none' }}
                         PÁGINA DO CADERNO
                       </Link>
                     </button>
-                    <button className="mx-2 p-4">
+                    <button className="mx-2 px-2">
                       <i className="fa fa-star"></i>{/*cadUf[1]*/}
                       <Link to={`/perfil/${props.anuncio.codAnuncio}`} style={{ textDecoration: 'none' }} onClick={() => contadorVisualizacoes(masterPath.url, props.anuncio.codAnuncio)}>
                         VER MINISITIO

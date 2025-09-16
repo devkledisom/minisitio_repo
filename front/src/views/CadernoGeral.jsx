@@ -93,7 +93,6 @@ function Caderno(props) {
     fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
       .then(x => x.json())
       .then(res => {
-        //console.log(res)
         if (res.success) {
           //setClassificados(res.data);
           setPathImg(res.teste.rows);
@@ -206,8 +205,9 @@ function Caderno(props) {
         {/*         <h2className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
 
+{}
         <div className='container text-center my-4 new-mosaico'>
-          <img src={`https://automaplay.com.br/api/files/${mosaicoImg}`} alt="mosaico" />
+          <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" />
         </div>
         <div className='container caderno'>
 

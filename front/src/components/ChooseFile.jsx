@@ -63,8 +63,10 @@ function UploadImage(props) {
     const formData = new FormData();
     formData.append('image', acceptedFiles[0]);
 
+  
+
     // Enviar a imagem para o servidor
-    fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}`, {
+    fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}&local=${props.local}`, {
       method: 'POST',
       body: formData
     })
