@@ -318,20 +318,20 @@ function MiniWebCard(props) {
                     }
 
                     <div className="row">
-                     <div id="area-icons-actions" className='col-md-6'>
+                     <div id="area-icons-actions" className='col-md-6 col-8'>
                             <Tooltip text={"Mídias"}>
                                 <div className="dropdown">
                                     <button id="dropdown" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
                                         <i><BsShareFill /></i>
                                     </button>
                                     <ul id="dropdown-redes" className="dropdown-menu">
-                                        <a href="#" className="dropdown-item"><BsFacebook /> Facebook</a>
-                                        <a href="#" className="dropdown-item"><BsInstagram /> Instagram</a>
-                                        <a href="#" className="dropdown-item"><BsTwitter /> Tweet</a>
-                                        <a href="#" className="dropdown-item"><BsYoutube className='redes' /> Youtube</a>
-                                        <a href="#" className="dropdown-item"><BsWhatsapp /> Whatsapp</a>
-                                        <a href="#" className="dropdown-item"><BsSkype /> Skype</a>
-                                        <a href="#" className="dropdown-item"><BsHeadset /> Sac-Fale Comigo</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsFacebook /> Facebook</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsInstagram /> Instagram</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsTwitter /> Tweet</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsYoutube className='redes' /> Youtube</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsWhatsapp /> Whatsapp</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsSkype /> Skype</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsHeadset /> Sac-Fale Comigo</a>
                                     </ul>
                                 </div>
                             </Tooltip>
@@ -358,17 +358,17 @@ function MiniWebCard(props) {
                                         <i><BsFillSendFill /></i>
                                     </button>
                                     <ul id="dropdown-redes" className="dropdown-menu">
-                                        <a href="#" className="dropdown-item"><BsFacebook /> Facebook</a>
-                                        <a href="#" className="dropdown-item"><BsInstagram /> Instagram</a>
-                                        <a href="#" className="dropdown-item"><BsTwitter /> Tweet</a>
-                                        <a href="#" className="dropdown-item"><BsYoutube /> Youtube</a>
-                                        <a href="#" className="dropdown-item"><BsWhatsapp /> Whatsapp</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsFacebook /> Facebook</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsInstagram /> Instagram</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsTwitter /> Tweet</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsYoutube /> Youtube</a>
+                                        <a href="#" className="dropdown-item d-flex gap-2 align-items-center"><BsWhatsapp /> Whatsapp</a>
                                     </ul>
                                 </div>
                             </Tooltip>
 
                         </div>
-                        <div className='col-md-6 px-2 d-flex justify-content-end align-items-center'>
+                        <div className='col-md-6 col-4 px-2 d-flex justify-content-end align-items-center'>
                             <button id="btn-detalhes" onClick={buscarAnuncio}>Ver Minisitio</button>
                         </div> 
                        {/*  <Dock direction="middle">

@@ -104,7 +104,11 @@
         width: 100%;
     }
 
-    img {
+    #area-icons-actions img {
         height: 30px;
     }
+
+    #btn-detalhes {
+    font-size: 12px;
+}
 }
