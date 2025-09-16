@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef, useContext, use } from 'react';
 import ReactDOM from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { masterPath } from '../config/config';
@@ -70,7 +70,16 @@ function Caderno() {
 
   //const {data, isError, isLoading} = useQuery({ queryKey: 'users', queryFn: buscarAtividade });
 
+  useEffect(() => {
+    fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
+      .then(x => x.json())
+      .then(res => {
+        if (res.success) {
+          setMosaicoImg(res.mosaico);
+        }
 
+      })
+  }, []);
 
 
   async function buscarAtividade() {
@@ -1155,7 +1164,6 @@ function Caderno() {
         {/*   <Mosaico logoTop={true} borda="none" /> */}
       </header>
       <main>
-
         {loading &&
           <button className="buttonload" style={{ display: "block" }}>
             <i class="fa fa-spinner fa-spin"></i>Carregando
@@ -1164,10 +1172,17 @@ function Caderno() {
 
         <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
         <h1 id="title-caderno" className='py-2'>Caderno {caderno} - {estado}</h1>
+
+        <div className='container text-center my-4 new-mosaico'>
+          <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" />
+        </div>
+
         <h2 className='py-4 info-title'>Existem {minisitio.totalPaginas} páginas no Caderno {caderno} - {estado}. Você está vendo a página {minisitio.paginaAtual}.</h2>
         {/*         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
- */}        <div className="container">
+ */}
+
+        <div className="container">
           {btnNav &&
             <div className="row p-3 btn-nav">
               <div className="col-md-6 col-6 text-end area-prev">
