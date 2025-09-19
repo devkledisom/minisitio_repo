@@ -99,7 +99,6 @@ function FullWebCard(props) {
     };
 
     const verificarLogoPromo = (param) => {
-        console.log(param.promoc);
         if (!param.promoc) return false;
 
 

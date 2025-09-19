@@ -901,7 +901,6 @@ module.exports = {
         //const offset = (page - 1) * limit;
         const offset = Math.max(0, (page - 1) * limit);
 
-
         const anuncioTeste = await Anuncio.findAll({
             where: {
                 [Op.and]: [

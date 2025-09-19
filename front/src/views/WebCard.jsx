@@ -12,6 +12,8 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Navegacao from '../components/Navegacao';
 import FullWebCard from '../components/FullWebCard';
+import SafeImage from '../components/SafeMosaico';
+import ButtonCapa from '../components/ButtonCapa';
 
 //LIB
 //import { Helmet, HelmetProvider } from "react-helmet-async";
@@ -37,7 +39,7 @@ function WebCard() {
                 site_name: 'My Site',
               }
           }); */
-
+/* 
     useEffect(() => {
         fetch(`${masterPath.url}/admin/anuncio/classificado/${codCaderno}/${codUf}`)
             .then(x => x.json())
@@ -47,12 +49,12 @@ function WebCard() {
                 }
 
             })
-    }, []);
+    }, []); */
 
     useEffect(() => {
         //document.querySelector('.caderno').style.filter = "blur(3px)";
 
-        let caderno = codCaderno;
+       let caderno = codCaderno;
         let estado = codUf;
 
         if (caderno != null && estado != null) {
@@ -63,7 +65,7 @@ function WebCard() {
                         setMosaicoImg(res.mosaico);
                     }
                 })
-        }
+        } 
         /* 
                 fetch(`${masterPath.url}/ufs`)
                     .then((x) => x.json())
@@ -118,11 +120,26 @@ function WebCard() {
                 <Busca uf={codUf} caderno={codCaderno} />
 
                 <h1 id="title-caderno" className='py-2'>Caderno {codCaderno} - {codUf}</h1>
+
+                  <div className='container text-center my-4 new-mosaico'>
+                    {mosaicoImg.length > 0 && (
+                       <SafeImage
+                        src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
+                        alt="mosaico"
+                        fallback="/images/fallback.png"
+                    />
+                    )}
+                </div>
+
+
+
+                <ButtonCapa caderno={codCaderno} estado={codUf} />
+
                 {/*  <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1> */}
 
-                <div className='container text-center my-4 new-mosaico'>
-                    <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" />
-                </div>
+                {/* <div className='container text-center my-4 new-mosaico'> */}
+                    {/* <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" /> */}
+                {/* </div> */}
 
                 <Navegacao />
                 <FullWebCard setCodCaderno={setCodCaderno} setCodUf={setCodUf} />

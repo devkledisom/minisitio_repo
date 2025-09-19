@@ -18,6 +18,9 @@ import Nav from '../../../components/Nav';
 import Footer from '../../../components/Footer';
 import MiniWebCardSimples from '../../../components/MiniWebCardSimples';
 
+import SafeImage from '../../../components/SafeMosaico';
+import ButtonCapa from '../../../components/ButtonCapa';
+
 function Caderno() {
 
   const [nomeAtividade, setNomeAtividade] = useState([]);
@@ -27,6 +30,7 @@ function Caderno() {
   const [btnNav, setbtnNav] = useState(false);
   const [contadorAds, setContadorAds] = useState(false);
   const [frasesNegociosOnline, setFrasesNegociosOnline] = useState([]);
+    const [mosaicoImg, setMosaicoImg] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -87,7 +91,7 @@ function Caderno() {
     }
 
   }
- 
+
   const { data, isError, isLoading } = useQuery({
     queryKey: ['users', numberPage, unique],  // Use os parâmetros relevantes como a chave da query
     queryFn: buscarAtividade
@@ -105,7 +109,7 @@ function Caderno() {
     }
 
 
-  }, [data, numberPage]) 
+  }, [data, numberPage])
 
 
 
@@ -191,8 +195,19 @@ function Caderno() {
   }
 
   useEffect(() => {
+    fetch(`${masterPath.url}/admin/anuncio/classificado/${caderno}/${estado}`)
+      .then(x => x.json())
+      .then(res => {
+        if (res.success) {
+          setMosaicoImg(res.mosaico);
+        }
 
-    fetch(`${masterPath.url}/cadernos`)
+      })
+  }, []);
+
+  useEffect(() => {
+
+    fetch(`${masterPath.url}/cadernos?uf=${estado}`)
       .then((x) => x.json())
       .then((res) => {
 
@@ -443,9 +458,9 @@ function Caderno() {
 
             //const arrTeste = res.data.filter((category) => category.atividade == res.teste.rows[0].codAtividade);
 
-        /*     let result = res.teste.filter(category =>
-              res.data.some(anuncio => category.id === anuncio.codAtividade)
-            ); */
+            /*     let result = res.teste.filter(category =>
+                  res.data.some(anuncio => category.id === anuncio.codAtividade)
+                ); */
 
             const arr = [];
 
@@ -654,10 +669,10 @@ function Caderno() {
     buscarId();
 
     fetch(`${masterPath.url}/admin/calhau/read`)
-    .then((x) => x.json())
-    .then((res) => {
-      setFrasesNegociosOnline(res.message.frases)
-    })
+      .then((x) => x.json())
+      .then((res) => {
+        setFrasesNegociosOnline(res.message.frases)
+      })
   }, [])
 
 
@@ -1021,7 +1036,7 @@ function Caderno() {
   }
 
   function calhau() {
-    
+
     document.querySelectorAll('.card-calhau').forEach(item => item.remove())
     let a = document.getElementById('col1')
     let b = document.getElementById('col2')
@@ -1031,7 +1046,7 @@ function Caderno() {
     if (a.clientHeight < b.clientHeight) {
       let tamanho = b.clientHeight - a.clientHeight;
 
-      if(tamanho < 150) {
+      if (tamanho < 150) {
         return;
       }
 
@@ -1043,14 +1058,14 @@ function Caderno() {
       titulo.style.color = "#FFFFFF";
       titulo.innerText = getFraseAleatoria();
 
-      
+
 
       a.insertAdjacentElement("beforeend", titulo);
 
     } else if (b.clientHeight < a.clientHeight) {
       let tamanho = a.clientHeight - b.clientHeight
 
-      if(tamanho < 150) {
+      if (tamanho < 150) {
         return;
       }
 
@@ -1067,50 +1082,50 @@ function Caderno() {
   }
 
   function getFraseAleatoria() {
-   /*  const frasesNegociosOnline = [
-        {
-            id: 1,
-            texto: "Negócios online transformam ideias em oportunidades, quebram barreiras geográficas e funcionam 24/7 — o sucesso está na inovação e na constância."
-        },
-        {
-            id: 2,
-            texto: "O digital não é mais o futuro dos negócios, é o presente — adapte-se ou fique para trás."
-        },
-        {
-            id: 3,
-            texto: "No mundo online, quem entrega valor e constrói autoridade conquista clientes fiéis e crescimento contínuo."
-        },
-        {
-            id: 4,
-            texto: "A internet nivela o jogo: grandes resultados vêm para aqueles que sabem como conectar, engajar e vender."
-        }
-    ]; */
+    /*  const frasesNegociosOnline = [
+         {
+             id: 1,
+             texto: "Negócios online transformam ideias em oportunidades, quebram barreiras geográficas e funcionam 24/7 — o sucesso está na inovação e na constância."
+         },
+         {
+             id: 2,
+             texto: "O digital não é mais o futuro dos negócios, é o presente — adapte-se ou fique para trás."
+         },
+         {
+             id: 3,
+             texto: "No mundo online, quem entrega valor e constrói autoridade conquista clientes fiéis e crescimento contínuo."
+         },
+         {
+             id: 4,
+             texto: "A internet nivela o jogo: grandes resultados vêm para aqueles que sabem como conectar, engajar e vender."
+         }
+     ]; */
 
-    if(frasesNegociosOnline.length < 1) return;
+    if (frasesNegociosOnline.length < 1) return;
 
     const indiceAleatorio = Math.floor(Math.random() * frasesNegociosOnline.length);
     return frasesNegociosOnline[indiceAleatorio].frase;
-}
+  }
 
 
 
-useEffect(() => {
-  const verifyCalhau = setTimeout(() => {
+  useEffect(() => {
+    const verifyCalhau = setTimeout(() => {
 
-    if(!document.getElementById('col1')) {
-      clearInterval(verifyCalhau);
-      return;
-    }
+      if (!document.getElementById('col1')) {
+        clearInterval(verifyCalhau);
+        return;
+      }
 
-    let colum1 = document.getElementById('col1').childNodes.length;
-    let colum2 = document.getElementById('col2').childNodes.length;
-    if(colum1 > 0 && colum2 > 0) {
-      calhau();
-    }
+      let colum1 = document.getElementById('col1').childNodes.length;
+      let colum2 = document.getElementById('col2').childNodes.length;
+      if (colum1 > 0 && colum2 > 0) {
+        calhau();
+      }
 
-   
-  }, 1000);
-});
+
+    }, 1000);
+  });
 
 
 
@@ -1129,8 +1144,20 @@ useEffect(() => {
           </button>
         }
 
-        <Busca paginaAtual={"caderno"} />
+        <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
         <h1 id="title-caderno" className='py-2'>Caderno {cadernos} - {ufs}</h1>
+
+        <div className='container text-center my-4 new-mosaico'>
+          <SafeImage
+            src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
+            alt="mosaico"
+            fallback="/images/fallback.png"
+          />
+          {/*  <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" /> */}
+        </div>
+
+        <ButtonCapa caderno={caderno} estado={estado} />
+
         <h2 className='py-4 info-title'>Existem {minisitio.totalPaginas} páginas no Caderno {cadernos} - {ufs}. Você está vendo a página {minisitio.paginaAtual}.</h2>
         {/*         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
@@ -1162,7 +1189,7 @@ useEffect(() => {
                   {
                     //minisitio.anuncios
                     base1.map((anuncio, i) => {
-        
+
                       if (anuncio.title) {
                         return <h2 className='bg-yellow py-2'>
                           {anuncio.title}
