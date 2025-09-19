@@ -16,6 +16,8 @@ import Footer from '../components/Footer';
 import CardClassificado from './classificados/CardClassificado';
 import Letter from './classificados/Letter';
 import QrcodeMosaico from '../plugins/QrcodeMosaico';
+import SafeImage from '../components/SafeMosaico';
+import ButtonCapa from '../components/ButtonCapa';
 
 import { Modal, Button } from 'react-bootstrap';
 import { QrCode } from "lucide-react";
@@ -205,9 +207,22 @@ function Caderno(props) {
         {/*         <h2className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
 
-{}
+        { }
         <div className='container text-center my-4 new-mosaico'>
-          <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" />
+          {/*        <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico"
+            onError={(e) => {
+              console.log("erro ao carregar imagem do mosaico");
+              e.target.style.display = "none"; // esconde a imagem
+              // ou substitui:
+              // e.target.src = "/images/fallback.png";
+            }}
+          /> */}
+          <SafeImage
+            src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
+            alt="mosaico"
+            fallback="/images/fallback.png"
+          />
+
         </div>
         <div className='container caderno'>
 
@@ -219,16 +234,17 @@ function Caderno(props) {
 
                   <div className='col-md-12'>
                     <div className='row py-3'>
-                      <div className="col-md-12 col-xs-12 text-center d-flex justify-content-center area-btns-classificado">
-                        {/* <button onClick={buscarTodosClassificado}>Ver caderno classificado</button> */}
+                      <ButtonCapa caderno={caderno} estado={estado} buscarTodosClassificado={buscarTodosClassificado} />
+              {/*         <div className="col-md-12 col-xs-12 text-center d-flex justify-content-center area-btns-classificado">
+                      
                         <a href={`/cadernos/${caderno}_${estado}?caderno=${caderno}&estado=${estado}`} className="btn proximo btn-class" onClick={buscarTodosClassificado}>
                           <i className="fa fa-file-text mx-0"></i> Ver caderno classificado</a>
                         <button className='btn btn-success mx-2 btn-qrcode' onClick={() => setShow(true)}><QrCode /><span className='mx-2'>Gerar qrcode</span></button>
-                      </div>
+                      </div> */}
 
                     </div>
 
-                    <Modal show={show} onHide={handleClose} size="lg" centered>
+              {/*       <Modal show={show} onHide={handleClose} size="lg" centered>
                       <Modal.Header closeButton>
                         <Modal.Title>Capa do Caderno {caderno} - {estado}</Modal.Title>
                       </Modal.Header>
@@ -240,7 +256,7 @@ function Caderno(props) {
                       </Modal.Body>
                       <Modal.Footer>
                       </Modal.Footer>
-                    </Modal>
+                    </Modal> */}
 
 
                     <div className="row lista">

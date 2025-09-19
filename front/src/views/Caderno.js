@@ -19,6 +19,8 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import MiniWebCardSimples from '../components/MiniWebCardSimples';
 import MosaicoWebCard from '../components/MosaicoWebCard';
+import SafeImage from '../components/SafeMosaico';
+import ButtonCapa from '../components/ButtonCapa';
 
 //CONTEXT
 import { QrcodeCadernoContext } from '../context/QrcodeCadernoContext';
@@ -1174,8 +1176,15 @@ function Caderno() {
         <h1 id="title-caderno" className='py-2'>Caderno {caderno} - {estado}</h1>
 
         <div className='container text-center my-4 new-mosaico'>
-          <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" />
+          <SafeImage
+            src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
+            alt="mosaico"
+            fallback="/images/fallback.png"
+          />
+          {/*  <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" /> */}
         </div>
+
+        <ButtonCapa caderno={caderno} estado={estado} />
 
         <h2 className='py-4 info-title'>Existem {minisitio.totalPaginas} páginas no Caderno {caderno} - {estado}. Você está vendo a página {minisitio.paginaAtual}.</h2>
         {/*         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
