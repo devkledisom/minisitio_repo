@@ -1174,13 +1174,15 @@ function Caderno() {
 
         <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
         <h1 id="title-caderno" className='py-2'>Caderno {caderno} - {estado}</h1>
-
+        {console.log(`${masterPath.url}/files/mosaico/${mosaicoImg}`)}
         <div className='container text-center my-4 new-mosaico'>
-          <SafeImage
-            src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
-            alt="mosaico"
-            fallback="/images/fallback.png"
-          />
+          {mosaicoImg.length > 0 && (
+            <SafeImage
+              src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
+              alt="mosaico"
+              fallback="/images/fallback.png"
+            />
+          )}
           {/*  <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" /> */}
         </div>
 

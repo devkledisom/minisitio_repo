@@ -217,11 +217,14 @@ function Caderno(props) {
               // e.target.src = "/images/fallback.png";
             }}
           /> */}
-          <SafeImage
+          {mosaicoImg.length > 0 && (
+        <SafeImage
             src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
             alt="mosaico"
             fallback="/images/fallback.png"
           />
+          )}
+  
 
         </div>
         <div className='container caderno'>
