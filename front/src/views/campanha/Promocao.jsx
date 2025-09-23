@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Form, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Form, Link, useParams, useNavigate } from 'react-router-dom';
 import '../../styles/globais.css';
 import { masterPath } from '../../config/config.js';
 
@@ -21,6 +21,29 @@ function Promocao() {
     const [message, setMessage] = useState(false);
     const [messageError, setMessageError] = useState(false);
     const [loader, setLoader] = useState(false);
+
+    const { codAnuncio, hash } = useParams();
+
+    const navigate = useNavigate();
+
+    console.log(codAnuncio, hash);
+
+    useEffect(() => {
+        document.title = "Promoção Ativa - Minisitio";
+
+        fetch(`${masterPath.url}/admin/campanha/promocao/${codAnuncio}/${hash}`)
+            .then(x => x.json())
+            .then(res => {
+                if (res.success) {
+                    console.log(res);
+                } else {
+
+                    navigate('/token-invalido');
+
+                    console.log('Promoção inválida ou expirada.');
+                }
+            })
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

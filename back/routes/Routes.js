@@ -134,6 +134,10 @@ module.exports = (io) => {
     router.get('/api/admin/import/stage', EspacosController.importStage);
     router.get('/api/admin/import/stage/finalizar', EspacosController.finalizarImportStage);
 
+    //CAMPANHA PROMOÇÃO
+    router.get('/api/admin/campanha/promocao/:codAnuncio/:hash', Admin.verificarPromocao);
+    //router.post('/api/admin/anuncio/promocao/criar', Admin.criarPromocao);
+
     //ROTAS MODULO PAGAMENTOS
     router.get('/api/admin/pagamentos/read', Admin.listarPagamentos);
 

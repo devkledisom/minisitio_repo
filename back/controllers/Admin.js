@@ -29,6 +29,7 @@ const Uf = require('../models/table_uf');
 const Usuarios = require('../models/table_usuarios');
 const Ufs = require('../models/table_uf');
 const Tags = require('../models/table_tags');
+const TokensPromocao = require('../models/tokens_promocao');
 
 
 
@@ -2071,6 +2072,31 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
 
     },
 
+    //CAMPANHA PROMOÇÃO
+    verificarPromocao: async (req, res) => {
+        const { codAnuncio, hash } = req.params;
+
+        verificarPromocao = await TokensPromocao.findOne({
+            where: {
+                //codAnuncio: codAnuncio,
+                tokenPromocao: hash
+            }
+        });
+
+        if (verificarPromocao) {
+            const perfil = await Anuncio.findOne({
+                where: {
+                    codAnuncio: codAnuncio
+                },
+            });
+
+
+            res.json({ success: true, data: perfil, hash: verificarPromocao });
+        } else {
+            res.json({ success: false, message: "Promoção inválida ou expirada." });
+        }
+
+    },
 
     //PAGAMENTOS
     listarPagamentos: async (req, res) => {
