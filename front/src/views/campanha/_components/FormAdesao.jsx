@@ -43,7 +43,7 @@ import ChooseFilePdf from "../../painelAnuciante/ChooseFilePdf";
 //import TemplateModal from "../../components/Modal/TemplateModal";
 
 //FUNCTION EXTERNA
-import { checkoutUpdate } from "../../comprar-anuncio/_components/checkoutUpdate";
+import { checkoutUpdate } from "./checkoutUpdate";
 
 //LIBS
 import Swal from 'sweetalert2';
@@ -97,12 +97,13 @@ function FormAdesao({ isAdmin }) {
         setMinisitio(res[0]);
 
 
-        /*    fetch(`${masterPath.url}/cadernos?uf=${res[0].codUf}`)
+          fetch(`${masterPath.url}/cadernos?uf=${res[0].codUf}`)
              .then((x) => x.json())
              .then((res) => {
                setCaderno(res);
              })
-           setUf(res[0].codUf) */
+           setUf(res[0].codUf) 
+
         document.querySelector("#descAnuncio").focus();
 
       }).catch((err) => {
@@ -131,7 +132,9 @@ function FormAdesao({ isAdmin }) {
       });
 
 
+
   }, []);
+
 
 
   const [descAnuncio, setDescAnuncio] = useState(false);
@@ -294,7 +297,7 @@ function FormAdesao({ isAdmin }) {
 
     return diferencaDias;
   }
-    const campoPromocao = useRef(null)
+  const campoPromocao = useRef(null)
 
   const handleChange = (e) => {
 
@@ -311,18 +314,18 @@ function FormAdesao({ isAdmin }) {
     setMinisitio({
       ...minisitio,
       [name]: value,
-      promoc: {
+      /* promoc: {
         data_validade: campoPromocao.current.value,
-      }
+      } */
 
     });
     setUf(minisitio.codUf);
   };
 
   const handleSelectChange = (e) => {
-    //  changePreview(e);
-    //  handleChange(e);
-    //  executarSelecao(); 
+    changePreview(e);
+    handleChange(e);
+    executarSelecao(e);
     /* changeUf(e); */
   };
 
@@ -416,10 +419,12 @@ function FormAdesao({ isAdmin }) {
                       name="codAtividade"
                       id="codAtividade"
                       className="form-control"
+                      value={minisitio.codAtividade}
+                      onChange={handleChange}
                       required
                     >
-                      <option value={minisitio.codAtividade} selected>{minisitio.codAtividade}</option>
-                      {/*  {atividades &&
+                      {/*   <option value={minisitio.codAtividade} selected>{minisitio.codAtividade}</option> */}
+                      {atividades &&
 
                         atividades.map(
                           (item, i) =>
@@ -431,7 +436,7 @@ function FormAdesao({ isAdmin }) {
                             </option> : ""
 
 
-                        )} */}
+                        )}
                     </select>
                   }
                 </div>
@@ -446,14 +451,15 @@ function FormAdesao({ isAdmin }) {
                       <select
                         name="codUf"
                         id="codUf4"
-                        class="form-control"
-                        onChange={executarSelecao}
+                        className="form-control"
+                        onChange={handleSelectChange}
+                        value={minisitio.codUf}
                         required
                       >
-                        <option value={minisitio.codUf} selected>
+                        {/*  <option value={minisitio.codUf} selected>
                           {minisitio.codUf}
-                        </option>
-                        {/* {uf.map((item) => (
+                        </option> */}
+                        {uf.map((item) => (
                           <option
                             id={item.id_uf}
                             key={item.id_uf}
@@ -461,8 +467,8 @@ function FormAdesao({ isAdmin }) {
                           >
                             {item.sigla_uf}
                           </option>
-                        ))} */}
-                      </select>{" "}
+                        ))}
+                      </select>
                     </div>
                   </div>
 
@@ -473,21 +479,24 @@ function FormAdesao({ isAdmin }) {
                         name="codCaderno"
                         id="codUf5"
                         class="form-control"
+                        onChange={handleChange}
+                        value={minisitio.codCaderno}
                         required
                       >
-                        <option value={minisitio.codCaderno} selected>{minisitio.codCaderno}</option>
-                        {/*  {caderno.map(
+                        {/* <option value={minisitio.codCaderno} selected>{minisitio.codCaderno}</option> */}
+                        {caderno.map(
                           (item) =>
-                            item.UF == ufSelected && (
-                              <option
-                                id={item.codCaderno}
-                                key={item.codCaderno}
-                                value={item.nomeCaderno}
-                              >
-                                {item.nomeCaderno}
-                              </option>
-                            )
-                        )} */}
+                            /*  item.UF == ufSelected && (
+                      
+                             ) */
+                            <option
+                              id={item.codCaderno}
+                              key={item.codCaderno}
+                              value={item.nomeCaderno}
+                            >
+                              {item.nomeCaderno}
+                            </option>
+                        )}
                       </select>{" "}
                     </div>
                   </div>
@@ -502,9 +511,8 @@ function FormAdesao({ isAdmin }) {
                     className="form-control input-disabled"
                     placeholder="Digite o nome"
                     maxlength="40"
-                    onChange={changePreview}
+                    onChange={handleSelectChange}
                     value={minisitio.descAnuncio}
-                    disabled
                     required
                   />
                 </div>
@@ -528,9 +536,8 @@ function FormAdesao({ isAdmin }) {
                     id="descEndereco"
                     className="form-control input-disabled"
                     placeholder="Digite o endereço"
-                    onChange={changePreview}
+                    onChange={handleSelectChange}
                     value={minisitio.descEndereco}
-                    disabled
                     required
                   />
                 </div>
@@ -563,9 +570,8 @@ function FormAdesao({ isAdmin }) {
                     id="descTelefone"
                     className="form-control input-disabled"
                     placeholder="(99) 99999-9999"
-                    onChange={changePreview}
+                    onChange={handleSelectChange}
                     value={minisitio.descTelefone}
-                    disabled
                     required
                     mask={'(99) 99999-9999'}></InputMask>
                 </div>
@@ -971,7 +977,7 @@ function FormAdesao({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o e-mail (comercial)"
                   value={minisitio.descEmailComercial}
-                  disabled
+                  onChange={handleSelectChange}
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
@@ -983,7 +989,7 @@ function FormAdesao({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o e-mail (alternativo)"
                   value={minisitio.descEmailRetorno}
-                  disabled
+                  onChange={handleSelectChange}
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
@@ -995,7 +1001,7 @@ function FormAdesao({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o whatsapp"
                   value={minisitio.descWhatsApp}
-                  disabled
+                  onChange={handleSelectChange}
                 />{" "}
               </div>
             </div>}
@@ -1051,7 +1057,6 @@ function FormAdesao({ isAdmin }) {
                   placeholder="Digite um CPF ou CNPJ"
                   onChange={handleCpfCnpjChange}
                   value={minisitio.descCPFCNPJ}
-                  disabled
                   required
                 />{" "}
               </div>
@@ -1064,7 +1069,7 @@ function FormAdesao({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o seu nome"
                   value={minisitio.descNomeAutorizante}
-                  disabled
+onChange={handleSelectChange}
                   required
                 />{" "}
               </div>
@@ -1077,7 +1082,7 @@ function FormAdesao({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o seu e-mail"
                   value={minisitio.descEmailAutorizante}
-                  disabled
+                  onChange={handleSelectChange}
                   required
                 />{" "}
               </div>
