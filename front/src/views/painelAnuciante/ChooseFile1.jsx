@@ -7,6 +7,13 @@ import "../../assets/css/comprar-anuncio.css";
 //global functions
 import { validarDimensaoImagem } from '../../globalFunctions/functions';
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../components/ui/tooltip.tsx";
+import { InfoIcon } from "lucide-react";
+
 function UploadImage(props) {
   //state
   const [imagem, setImagem] = useState(false);
@@ -190,8 +197,68 @@ function UploadImage(props) {
   }
 
   return (
-    <div className={"row webcard choose-main" + " " + props.largura} >
-      <div className="col-md-8">
+    <div className={"webcard choose-main" + " " + props.largura} >
+      <div className="col-md-12">
+        <div className="d-flex justify-content-between align-items-center gap-2 input-icon margin-top-10 form-control descImagem pl-0" style={{ paddingLeft: "0px" }}>
+          <i className="fa fa-paperclip" style={{ position: "absolute", left: "0", marginTop: "unset" }}></i>
+          <span
+            className="cursor-pointer d-flex justify-content-around align-items-center"
+            style={{
+              marginLeft: "40px",
+              /*         paddingTop: "5px",
+                      lineHeight: "38px", */
+              color: "#4f4f4f!important"
+            }}
+            onChange={(event) => alert()}
+
+          >
+
+            {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
+            {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {/* {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>} */}
+
+
+            {/* console.log(mostrarLabel) */}
+            {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""}
+            {imagem ? <a href={`${masterPath.url}/files/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex mx-2" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {mostrarLabel && <span {...getRootProps()}>{textLabel}</span>}
+
+            {/*    {!mostrarLabel && 
+                             {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
+                 } */}
+
+
+
+          </span>
+
+          {!mostrarLabel && !mostrarMiniPreview && (
+            <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
+          )}
+
+          {!mostrarLabel && imagem && (
+            <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
+          )}
+
+          {mostrarLabel &&
+            <Tooltip>
+              <TooltipTrigger>
+                <InfoIcon />
+                {/*    <span className="border border-dark rounded-circle px-1 py-0 m-1 bg-gainsboro text-dark" style={{ fontSize: "12px", lineHeight: "12px", cursor: "pointer" }}>
+                i
+               </span> */}
+              </TooltipTrigger>
+              <TooltipContent
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg border border-blue-400 max-w-xs break-words whitespace-normal"
+                align="center">
+                <p>A imagem deve ser no formato PNG, JPEG e ter no máximo 1MB, o nome da imagem não pode conter caracteres especiais ou espaços.</p>
+              </TooltipContent>
+            </Tooltip>
+          }
+
+          <input {...getInputProps({ name: "imagem", title: "descImagem" })} />
+        </div>
+      </div>
+      {/*   <div className="col-md-8">
         <div className="input-icon margin-top-10">
           <i className="fa fa-paperclip"></i>
           <span
@@ -201,7 +268,6 @@ function UploadImage(props) {
               alignItems: "center",
               justifyContent: "space-between",
               paddingTop: "5px",
-              /* lineHeight: "38px", */
               color: "#4f4f4f!important",
               margin: "auto"
             }}
@@ -219,12 +285,12 @@ function UploadImage(props) {
           </span>
           <input {...getInputProps({ name: "imagem", title: "descImagem" })} />
         </div>
-      </div>
-      <div className="col-md-4 botao-procurar" {...getRootProps()}>
+      </div> */}
+      {/*       <div className="col-md-4 botao-procurar" {...getRootProps()}>
         <button type="button" className="btn cinza w-100" id="btnDescImagem">
           procurar
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

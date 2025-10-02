@@ -95,12 +95,19 @@ function Header() {
                                         <i className="bi bi-chevron-right mx-1"></i>
                                         </Link>                                     
                                     </li> */}
+                                        <li>
+                                        <Link className="dropdown-item nav-link" to="/admin/campanha" onClick={handleClick}>
+                                            Campanha
+                                            <i className="bi bi-chevron-right mx-1"></i>
+                                        </Link>
+                                    </li>
                                     <li>
                                         <Link className="dropdown-item nav-link" to="/admin/configuracoes" onClick={handleClick}>
                                             Configuração
                                             <i className="bi bi-chevron-right mx-1"></i>
                                         </Link>
                                     </li>
+                                
                                 </ul>
                             </div>
                         </li>

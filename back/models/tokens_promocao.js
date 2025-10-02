@@ -1,12 +1,19 @@
 const Sequelize = require('sequelize');
 const database = require('../config/db');
 
+const Anuncio = require('./table_anuncio');
+
 const TokensPromocao = database.define('tokens_promocao', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
+    },
+
+    codAnuncio: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
     },
 
     tokenPromocao: {
@@ -58,5 +65,17 @@ const TokensPromocao = database.define('tokens_promocao', {
     tableName: 'tokens_promocao'
 }
 );
+
+TokensPromocao.belongsTo(Anuncio, {
+  foreignKey: "codAnuncio",   // chave estrangeira em Campanha
+  targetKey: "codAnuncio",  // PK em Usuario
+  as: "promo"            // alias
+});
+
+Anuncio.hasMany(TokensPromocao, {
+    foreignKey: "codAnuncio",
+    sourceKey: "codAnuncio",
+    as: "tokens"
+});
 
 module.exports = TokensPromocao;

@@ -7,8 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../../components/ui/tooltip.tsx"
-
-
+import { InfoIcon } from "lucide-react";
 
 import "../../assets/css/comprar-anuncio.css";
 
@@ -20,7 +19,7 @@ function UploadImage(props) {
   //state
   const [imagem, setImagem] = useState(false);
   const [mostrarLabel, setMostrarLabel] = useState(true);
-  const [textLabel, setTextLabel] = useState("Anexar imagem");
+  const [textLabel, setTextLabel] = useState("Inserir arte do perfil (600x300)");
 
   const [mostrarMiniPreview, setMostrarMiniPreview] = useState(props.miniPreview);
   const [ativarPreview, setPreview] = useState(props.preview);
@@ -36,24 +35,27 @@ function UploadImage(props) {
 
 
   useEffect(() => {
+   
     if (!mostrarMiniPreview) {
       setMostrarLabel(false);
     }
     if (props.codImg == 0) {
+       console.log(props.codImg)
       setImagem(false);
       setMostrarLabel(true);
       setMostrarMiniPreview(true);
       return;
     }
-
-    if (!mostrarMiniPreview && props.codImg != 0) {
+console.log(props.codImg, !mostrarMiniPreview && props.codImg != 0)
+    if (!mostrarMiniPreview && props.codImg != 0 && props.codImg != null && props.codImg != undefined) {
+       
       //document.querySelector('.comImagem img').src = `${masterPath.url}/files/${props.codImg}`;
       document.querySelector('.semImagem').style.display = 'none';
       document.querySelector('.comImagem').style.display = 'block';
     }
 
 
-  }, []);
+  }, [props.codImg]);
 
 
 
@@ -178,50 +180,78 @@ function UploadImage(props) {
   }
 
   return (
-    <div className={"row webcard choose-main" + " " + props.largura} >
-      <div className="col-md-8">
-        <div className="input-icon margin-top-10">
-          <i className="fa fa-paperclip"></i>
+    <div className={"webcard choose-main" + " " + props.largura} >
+      <div className="col-md-12">
+        <div className="d-flex justify-content-between align-items-center gap-2 input-icon margin-top-10 form-control descImagem pl-0" style={{ paddingLeft: "0px" }}>
+          <i className="fa fa-paperclip" style={{ position: "absolute", left: "0",marginTop: "unset" }}></i>
           <span
-            className="form-control descImagem  d-flex justify-content-between"
+            className="cursor-pointer d-flex justify-content-around align-items-center"
             style={{
-              paddingTop: "5px",
-              lineHeight: "38px",
+              marginLeft: "40px",
+              /*         paddingTop: "5px",
+                      lineHeight: "38px", */
               color: "#4f4f4f!important"
             }}
             onChange={(event) => alert()}
+            
           >
-
-
 
             {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
             {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
-            {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
+            {/* {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>} */}
 
 
             {/* console.log(mostrarLabel) */}
             {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""}
-            {imagem ? <a href={`${masterPath.url}/files/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
-            {mostrarLabel && textLabel}
-            {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
+            {imagem ? <a href={`${masterPath.url}/files/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex mx-2" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {mostrarLabel && <span {...getRootProps()}>{textLabel}</span>}
+
+            {/*    {!mostrarLabel && 
+                             {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
+                 } */}
+
+
 
           </span>
+
+          {!mostrarLabel && !mostrarMiniPreview && (
+          <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
+          )}
+
+           {!mostrarLabel && imagem && (
+          <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
+          )}
+
+          {mostrarLabel &&
+            <Tooltip>
+              <TooltipTrigger>
+                <InfoIcon />
+                {/*    <span className="border border-dark rounded-circle px-1 py-0 m-1 bg-gainsboro text-dark" style={{ fontSize: "12px", lineHeight: "12px", cursor: "pointer" }}>
+                i
+               </span> */}
+              </TooltipTrigger>
+              <TooltipContent
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg border border-blue-400 max-w-xs break-words whitespace-normal"
+                align="center">
+                <p>A imagem deve ser no formato PNG, JPEG e ter no máximo 1MB, o nome da imagem não pode conter caracteres especiais ou espaços.</p>
+              </TooltipContent>
+            </Tooltip>
+          }
+
           <input {...getInputProps({ name: "imagem", title: "descImagem" })} />
         </div>
       </div>
-      <div className="col-md-4 botao-procurar" {...getRootProps()}>
+      {/*  <div className="col-md-4 botao-procurar" {...getRootProps()}>
         <button type="button" className="btn cinza w-100" id="btnDescImagem">
           procurar
         </button>
-      </div>
-      <div className="text-left mt-2" style={{ fontSize: "12px", color: "#4f4f4f" }}>
+      </div> */}
+      {/*  <div className="text-left mt-2" style={{ fontSize: "8px", color: "#4f4f4f" }}>
        
           <Tooltip>
             <TooltipTrigger>
-               <span className="border border-dark rounded-circle px-1 py-0 m-1 bg-gainsboro text-dark" style={{ fontSize: "12px", lineHeight: "12px", cursor: "pointer" }}>
-                ?
-               </span>
-              Atenção!
+              <InfoIcon />
+
               </TooltipTrigger>
             <TooltipContent
             className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg border border-blue-400 max-w-xs break-words whitespace-normal"
@@ -232,7 +262,7 @@ function UploadImage(props) {
          
         
          
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom';
+
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -46,10 +48,19 @@ function App() {
        });
    }, 300000) */
 
+  const location = useLocation();
+
+  // Rotas onde o Cookie não deve aparecer
+  const routesHiddenCookie = "promocao";
+
+  const shouldShowCookie = !location.pathname.includes(routesHiddenCookie);
+  console.log(shouldShowCookie, location.pathname)
+
   return (
     <div>
       <Rotas />
-      <CookieConsent
+      {shouldShowCookie && (
+              <CookieConsent
         location="bottom"
         buttonText="Aceitar"
         declineButtonText="Recusar"
@@ -73,6 +84,8 @@ function App() {
           Saiba mais
         </a> */}
       </CookieConsent>
+      )}
+
     </div>
 
     /*     <BrowserRouter>

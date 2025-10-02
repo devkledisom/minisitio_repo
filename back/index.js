@@ -73,6 +73,7 @@ app.use('/api/files/2', express.static(path.resolve(__dirname, "public", "upload
 app.use('/api/files/3', express.static(path.resolve(__dirname, "public", "cartaoDigital")));
 app.use('/api/files/institucional', express.static(path.resolve(__dirname, "public", "upload", "img", "adminInstitucional")));
 app.use('/api/files/og', express.static(path.resolve(__dirname, "public", "OG")));
+app.use('/api/files/campanha', express.static(path.resolve(__dirname, "public", "upload", "campanha")));
 
 
 app.get('/api/files/2/download/:filename', (req, res) => {
