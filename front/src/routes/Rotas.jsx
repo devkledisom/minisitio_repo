@@ -88,13 +88,14 @@ import ForgotPassword from "../admin/components/ForgotPassword";
 import ResetPassword from "../admin/components/ResetPassword";
 import Promocao from "../views/campanha/Promocao";
 import TokenInvalido from "../views/campanha/_components/404";
+import Campanha from "../admin/view/Campanha/Campanha";
 
 
 
 
 function Rotas() {
     return (
-        <BrowserRouter>
+       /*  <BrowserRouter> */
             <TemaProvider> {/* Movido o TemaProvider para fora de Routes */}
                 <Routes>
                     <Route path="/">
@@ -107,7 +108,7 @@ function Rotas() {
                         <Route path="login" element={<Login />} />
                         <Route path="sobre/:id" element={<OutroComponente />} />
                         <Route path="promocoes/:caderno/:estado" element={<Promocoes />} />
-                        <Route path="promocao/:codAnuncio/:hash" element={<Promocao />} />
+                        <Route path="promocao/:hash" element={<Promocao />} />
                         <Route path="token-invalido" element={<TokenInvalido />} />
                     </Route>
                     <Route path="admin" element={
@@ -153,6 +154,9 @@ function Rotas() {
                     <Route path="admin/institucional" element={<PrivateRoute><AdminInstitucional /></PrivateRoute>} />
                     <Route path="admin/contato" element={<PrivateRoute><AdminContato /></PrivateRoute>} />
 
+                    {/*ROTAS MODULO GERAR CAMPANHA*/}
+                    <Route path="admin/campanha" element={<PrivateRoute><Campanha /></PrivateRoute>} />
+
 
                     <Route path="admin/cadernos/editar" element={<PrivateRoute><CadernosEdit /></PrivateRoute>} />
 
@@ -178,7 +182,7 @@ function Rotas() {
 
                 </Routes>
             </TemaProvider>
-        </BrowserRouter>
+        /* </BrowserRouter> */
 
     );
 }

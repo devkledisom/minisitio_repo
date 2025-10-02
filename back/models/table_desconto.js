@@ -5,6 +5,7 @@ const Usuario = require('./table_usuarios');
 const Anuncio = require('./table_anuncio');
 
 
+
 const Desconto = database.define('desconto', {
     idDesconto: {
         type: Sequelize.INTEGER,
@@ -192,26 +193,29 @@ const Desconto = database.define('desconto', {
         timestamps: false,
     });
 
-    Desconto.belongsTo(Usuario, {
-        constraints: true,
-        foreignKey: 'idUsuario',
-        targetKey: 'codUsuario'
-    });
+Desconto.belongsTo(Usuario, {
+    constraints: true,
+    foreignKey: 'idUsuario',
+    targetKey: 'codUsuario'
+});
 
-    // models/Tabela1.js
- /*    Desconto.hasMany(Anuncio, { foreignKey: 'codDesconto', sourceKey: 'hash' });
-    Anuncio.belongsTo(Desconto, { foreignKey: 'codDesconto', targetKey: 'hash' }); */
-    
 
- /*    Desconto.belongsTo(Anuncio, {
-        constraints: true,
-        foreignKey: 'hash',
-        targetKey: 'codDesconto'
-    }); */
-  /*   Desconto.belongsTo(Usuario, {
-        constraints: true,
-        targetKey: 'codUsuario',  
-        foreignKey: 'idUsuario'
-    }); */
+
+
+// models/Tabela1.js
+/*    Desconto.hasMany(Anuncio, { foreignKey: 'codDesconto', sourceKey: 'hash' });
+   Anuncio.belongsTo(Desconto, { foreignKey: 'codDesconto', targetKey: 'hash' }); */
+
+
+/*    Desconto.belongsTo(Anuncio, {
+       constraints: true,
+       foreignKey: 'hash',
+       targetKey: 'codDesconto'
+   }); */
+/*   Desconto.belongsTo(Usuario, {
+      constraints: true,
+      targetKey: 'codUsuario',  
+      foreignKey: 'idUsuario'
+  }); */
 
 module.exports = Desconto;

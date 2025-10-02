@@ -1718,7 +1718,76 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
             }
         }
     },
-    //ESPACOS
+    //CAMPANHA
+    CampanhalistarIds: async (req, res) => {
+
+        const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
+        const porPagina = 10; // Número de itens por página
+        const codigoCaderno = req.params.codCaderno;
+
+        const offset = (paginaAtual - 1) * porPagina;
+
+        // Consulta para recuperar apenas os itens da página atual
+        const Ids = await Descontos.findAndCountAll({
+            order: [['dtCadastro', 'DESC']],
+          /*   limit: porPagina,
+            offset: offset */
+        });
+
+        /*         console.log(Ids.rows)
+        return; */
+        // Número total de itens
+        const totalItens = Ids.count;
+        // Número total de páginas
+        const totalPaginas = Math.ceil(totalItens / porPagina);
+
+
+
+        // Importe a biblioteca 'iconv-lite'
+        const iconv = require('iconv-lite');
+
+        // Função para corrigir caracteres codificados incorretamente
+        function corrigirCaracteres(cadeiaCodificada) {
+            // Decodifica a cadeia usando UTF-8
+            const buffer = Buffer.from(cadeiaCodificada, 'binary');
+            const cadeiaCorrigida = iconv.decode(buffer, 'utf-8');
+
+            return cadeiaCorrigida;
+        }
+
+
+        await Promise.all(
+            Ids.rows.map(async (item) => {
+                console.log(item.dataValues.descricao);
+
+                // Corrigir caracteres na descrição
+                item.dataValues.atividade = corrigirCaracteres(item.dataValues.descricao);
+
+                const user = await item.getUsuario();
+                //item.dataValues.nmUsuario = user.descNome;
+
+                if (user) {
+                    item.dataValues = {
+                        nmUsuario: user.descNome, // Adiciona a nova propriedade no início
+                        ...item.dataValues, // Mantém as demais propriedades
+                    };
+                }
+
+
+
+
+            })
+        );
+
+        res.json({
+            success: true, message: {
+                IdsValue: Ids.rows, 
+            }
+        })
+
+
+
+    },
 
 
     //MODULO PIN

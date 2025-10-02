@@ -8,6 +8,7 @@ const BemVindo = require('../controllers/BemVindo');
 const Buscador = require('../controllers/Buscador');
 const Admin = require('../controllers/Admin');
 const EspacosController = require('../controllers/admin/espacos/index.js');
+const CampanhaController = require('../controllers/admin/campanha/index.js');
 const Login = require('../controllers/Login');
 const Rotinas = require('../controllers/Rotinas');
 const Users = require('../controllers/Users');
@@ -136,6 +137,10 @@ module.exports = (io) => {
 
     //CAMPANHA PROMOÇÃO
     router.get('/api/admin/campanha/promocao/:codAnuncio/:hash', Admin.verificarPromocao);
+    router.get('/api/admin/campanha/desconto/read', Admin.CampanhalistarIds);
+    router.post('/api/admin/campanha/create', CampanhaController.gerarCampanha);
+    router.get('/api/admin/campanha/read', CampanhaController.listarCampanha);
+    router.get('/api/admin/campanha/read/:hash', CampanhaController.listarUserCampanha);
     //router.post('/api/admin/anuncio/promocao/criar', Admin.criarPromocao);
 
     //ROTAS MODULO PAGAMENTOS

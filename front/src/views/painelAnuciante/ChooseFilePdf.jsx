@@ -4,6 +4,13 @@ import { masterPath } from "../../config/config";
 
 import "../../assets/css/comprar-anuncio.css";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../components/ui/tooltip.tsx";
+import { InfoIcon } from "lucide-react";
+
 function UploadImage(props) {
   //state
   const [imagem, setImagem] = useState(false);
@@ -57,80 +64,146 @@ function UploadImage(props) {
       method: 'POST',
       body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Pdf enviado com sucesso!', data);
+      .then(response => response.json())
+      .then(data => {
+        console.log('Pdf enviado com sucesso!', data);
 
-      props.data({
-        ...props.minisitio,
-        ['cartao_digital']: data.name // ou como vier do backend
-      });
-
-
-      setImagem(data);
-      setMostrarLabel(false);
-      setMostrarMiniPreview(true);
-    })
+        props.data({
+          ...props.minisitio,
+          ['cartao_digital']: data.name // ou como vier do backend
+        });
 
 
-  // Enviar a imagem para o servidor
-  /*  fetch(`${masterPath.url}/upload-pdf?cod=${props.codigoUser}&local=promocao`, {
-     method: 'POST',
-     body: formData
-   })
-     .then(response => {
-       if (!response.ok) {
-         throw new Error('Erro ao enviar imagem para o servidor');
-       }
-       console.log('Pdf enviado com sucesso!');
-console.log(response)
-       //props.data.cartao_digital = acceptedFiles[0].name;
+        setImagem(data);
+        setMostrarLabel(false);
+        setMostrarMiniPreview(true);
+      })
 
-       props.data({
-         ...props.minisitio,
-         ['cartao_digital']: acceptedFiles[0].name,
-   
-       });
 
-       console.log(props.data.cartao_digital);
-       setMostrarLabel(false);
-       setMostrarMiniPreview(true);
+    // Enviar a imagem para o servidor
+    /*  fetch(`${masterPath.url}/upload-pdf?cod=${props.codigoUser}&local=promocao`, {
+       method: 'POST',
+       body: formData
      })
-     .catch(error => {
-       console.error('Erro ao enviar imagem:', error);
-     }); */
+       .then(response => {
+         if (!response.ok) {
+           throw new Error('Erro ao enviar imagem para o servidor');
+         }
+         console.log('Pdf enviado com sucesso!');
+  console.log(response)
+         //props.data.cartao_digital = acceptedFiles[0].name;
+  
+         props.data({
+           ...props.minisitio,
+           ['cartao_digital']: acceptedFiles[0].name,
+     
+         });
+  
+         console.log(props.data.cartao_digital);
+         setMostrarLabel(false);
+         setMostrarMiniPreview(true);
+       })
+       .catch(error => {
+         console.error('Erro ao enviar imagem:', error);
+       }); */
 
-}, []);
+  }, []);
 
-const { getRootProps, getInputProps, isDragActive } = useDropzone({
-  onDrop,
-  accept: { 'application/pdf': [] }, // Aceita apenas arquivos PDF
-  maxFiles: 1, // Limite de 1 arquivo
-  //maxSize: 5 * 1024 * 1024, // Limite de tamanho (5MB)
-});
-
-const limparInputImg = () => {
-  props.data({
-    ...props.minisitio,
-    ['cartao_digital']: "",
-
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { 'application/pdf': [] }, // Aceita apenas arquivos PDF
+    maxFiles: 1, // Limite de 1 arquivo
+    //maxSize: 5 * 1024 * 1024, // Limite de tamanho (5MB)
   });
-  if (props.preview == true) {
-    document.querySelector('.semImagem').style.display = 'block';
-    document.querySelector('.comImagem').style.display = 'none';
-  } else {
-    setImagem(false);
-    setMostrarLabel(true);
-    setMostrarMiniPreview(true);
-    localStorage.setItem("imgname" + props.patrocinador, "");
+
+  const limparInputImg = () => {
+    props.data({
+      ...props.minisitio,
+      ['cartao_digital']: "",
+
+    });
+    if (props.preview == true) {
+      document.querySelector('.semImagem').style.display = 'block';
+      document.querySelector('.comImagem').style.display = 'none';
+    } else {
+      setImagem(false);
+      setMostrarLabel(true);
+      setMostrarMiniPreview(true);
+      localStorage.setItem("imgname" + props.patrocinador, "");
+    }
+
+
   }
 
+  return (
+    <div className={"webcard choose-main" + " " + props.largura} >
 
-}
+      <div className="col-md-12">
+        <div className="d-flex justify-content-between align-items-center gap-2 input-icon margin-top-10 form-control descImagem pl-0" style={{ paddingLeft: "0px" }}>
+          <i className="fa fa-paperclip" style={{ position: "absolute", left: "0", marginTop: "unset" }}></i>
+          <span
+            className="cursor-pointer d-flex justify-content-around align-items-center"
+            style={{
+              marginLeft: "40px",
+              /*         paddingTop: "5px",
+                      lineHeight: "38px", */
+              color: "#4f4f4f!important"
+            }}
+            onChange={(event) => alert()}
 
-return (
-  <div className={"row webcard choose-main" + " " + props.largura} >
-    <div className="col-md-8">
+          >
+
+            {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/3/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver cartão digital</a> : ""}
+            {/*  {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>} */}
+
+
+            {/* console.log(mostrarLabel) */}
+            {imagem ? <a href={`${masterPath.url}/files/3/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver cartão digital</a> : ""}
+           {/*  {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>} */}
+            {mostrarLabel && <span {...getRootProps()}>{textLabel}</span>}
+
+            {/*    {!mostrarLabel && 
+                             {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
+                 } */}
+
+
+
+
+
+          </span>
+
+          {!mostrarLabel && !mostrarMiniPreview && (
+            <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
+          )}
+
+          {!mostrarLabel && imagem && (
+            <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
+          )}
+
+          {mostrarLabel &&
+            <Tooltip>
+              <TooltipTrigger>
+                <InfoIcon />
+                {/*    <span className="border border-dark rounded-circle px-1 py-0 m-1 bg-gainsboro text-dark" style={{ fontSize: "12px", lineHeight: "12px", cursor: "pointer" }}>
+                i
+               </span> */}
+              </TooltipTrigger>
+              <TooltipContent
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg border border-blue-400 max-w-xs break-words whitespace-normal"
+                align="center">
+                <p>A imagem deve ser no formato PNG, JPEG e ter no máximo 1MB, o nome da imagem não pode conter caracteres especiais ou espaços.</p>
+              </TooltipContent>
+            </Tooltip>
+          }
+
+          <input {...getInputProps({ name: "imagem", title: "descImagem" })} />
+        </div>
+      </div>
+
+
+
+
+      {/*   <div className="col-md-8">
       <div className="input-icon margin-top-10">
         <i className="fa fa-paperclip"></i>
         <span
@@ -145,11 +218,9 @@ return (
           }}
         >
 
-          {/*  {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/3/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""} */}
           {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/3/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver cartão digital</a> : ""}
           {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
 
-          {/*  {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""} */}
           {imagem ? <a href={`${masterPath.url}/files/3/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver cartão digital</a> : ""}
           {mostrarLabel && textLabel}
           {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
@@ -157,14 +228,14 @@ return (
         </span>
         <input {...getInputProps({ name: "imagem", title: "descImagem" })} />
       </div>
-    </div>
-    <div className="col-md-4 botao-procurar" {...getRootProps()}>
+    </div> */}
+      {/*   <div className="col-md-4 botao-procurar" {...getRootProps()}>
       <button type="button" className="btn cinza w-100" id="btnDescImagem">
         procurar
       </button>
+    </div> */}
     </div>
-  </div>
-);
+  );
 }
 
 const dropzoneStyles = {

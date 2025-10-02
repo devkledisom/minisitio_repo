@@ -69,12 +69,13 @@ function FormAdesao({ isAdmin }) {
   const [texto, setTexto] = useState(null);
   const [isCapa, setIsCapa] = useState(false);
   const [minisitio, setMinisitio] = useState([]);
+  const [codAnuncio, setCodAnuncio] = useState(null);
 
   //REFS
   const customText = useRef(null);
   const discountHash = useRef(null);
 
-  const { codAnuncio } = useParams();
+  const { hash } = useParams();
 
 
   const executarSelecao = (e) => {
@@ -90,25 +91,13 @@ function FormAdesao({ isAdmin }) {
   };
 
   useEffect(() => {
-
-    fetch(`${masterPath.url}/admin/anuncio/edit/${codAnuncio}`)
+    fetch(`${masterPath.url}/admin/campanha/read/${hash}`)
       .then((x) => x.json())
       .then((res) => {
-        setMinisitio(res[0]);
+        setCodAnuncio(res.data[0].codAnuncio);
+      });
 
 
-          fetch(`${masterPath.url}/cadernos?uf=${res[0].codUf}`)
-             .then((x) => x.json())
-             .then((res) => {
-               setCaderno(res);
-             })
-           setUf(res[0].codUf) 
-
-        document.querySelector("#descAnuncio").focus();
-
-      }).catch((err) => {
-        console.log(err)
-      })
 
 
     fetch(`${masterPath.url}/ufs`)
@@ -134,6 +123,28 @@ function FormAdesao({ isAdmin }) {
 
 
   }, []);
+
+  useEffect(() => {
+    if (!codAnuncio) return;
+    fetch(`${masterPath.url}/admin/anuncio/edit/${codAnuncio}`)
+      .then((x) => x.json())
+      .then((res) => {
+        setMinisitio(res[0]);
+
+
+        fetch(`${masterPath.url}/cadernos?uf=${res[0].codUf}`)
+          .then((x) => x.json())
+          .then((res) => {
+            setCaderno(res);
+          })
+        setUf(res[0].codUf)
+
+        document.querySelector("#descAnuncio").focus();
+
+      }).catch((err) => {
+        console.log(err)
+      })
+  }, [codAnuncio])
 
 
 
@@ -176,7 +187,15 @@ function FormAdesao({ isAdmin }) {
     }
   };
 
+  useEffect(() => {
+    if (minisitio.codDesconto) {
+      aplicarCupom({ target: { value: minisitio.codDesconto } });
+    }
+  }, [minisitio.codDesconto]);
+
   function aplicarCupom(e) {
+    if (precoFixo <= 0) return;
+
     let codId = e.target.value;
     setcodDescontoInserido(codId);
     if (codId.length >= 11 && codId.length <= 12) {
@@ -384,6 +403,8 @@ function FormAdesao({ isAdmin }) {
                   onChange={aplicarCupom}
                   ref={discountHash}
                   mask="99.999.9999"
+                  value={minisitio.codDesconto}
+                  readOnly
                 ></InputMask>
                 <input
                   type="hidden"
@@ -398,8 +419,38 @@ function FormAdesao({ isAdmin }) {
               </h5>
 
 
+              <div className="assinatura margin-top-20">
 
-            </div>}
+                {radioCheck != 1 && <h2 className="webcard">
+                  <span className="preco">R$ {precoFixo},00</span>/mês
+                </h2>}
+                {radioCheck == 1 && <h2 className="simples uppercase">
+                  Grátis
+                </h2>}
+              </div>
+              <div className="margin-top-20">
+                {radioCheck != 1 && <p className="webcard" style={{ display: "block" }}>
+                  *A duração da assinatura é de 12 meses, portanto válido até
+                  <span> {formatarData(proximoAno)}.</span>
+                </p>}
+
+                <button
+                  type="button"
+                  className="btn-block formulario-de-cadastro btn btn-primary"
+                  id="anunciar"
+                  onClick={() => checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescontoInserido)}
+                >
+                  Confirmar
+                </button>
+              </div>
+
+
+            </div>
+
+
+
+
+            }
 
             {/*dados para publicação*/}
             <div className="assinatura">
@@ -423,8 +474,8 @@ function FormAdesao({ isAdmin }) {
                       onChange={handleChange}
                       required
                     >
-                      {/*   <option value={minisitio.codAtividade} selected>{minisitio.codAtividade}</option> */}
-                      {atividades &&
+                      <option value={minisitio.codAtividade} selected>{minisitio.codAtividade}</option>
+                      {/*  {atividades &&
 
                         atividades.map(
                           (item, i) =>
@@ -436,7 +487,7 @@ function FormAdesao({ isAdmin }) {
                             </option> : ""
 
 
-                        )}
+                        )} */}
                     </select>
                   }
                 </div>
@@ -456,10 +507,10 @@ function FormAdesao({ isAdmin }) {
                         value={minisitio.codUf}
                         required
                       >
-                        {/*  <option value={minisitio.codUf} selected>
+                        <option value={minisitio.codUf} selected>
                           {minisitio.codUf}
-                        </option> */}
-                        {uf.map((item) => (
+                        </option>
+                        {/*    {uf.map((item) => (
                           <option
                             id={item.id_uf}
                             key={item.id_uf}
@@ -467,7 +518,7 @@ function FormAdesao({ isAdmin }) {
                           >
                             {item.sigla_uf}
                           </option>
-                        ))}
+                        ))} */}
                       </select>
                     </div>
                   </div>
@@ -483,12 +534,10 @@ function FormAdesao({ isAdmin }) {
                         value={minisitio.codCaderno}
                         required
                       >
-                        {/* <option value={minisitio.codCaderno} selected>{minisitio.codCaderno}</option> */}
-                        {caderno.map(
+                        <option value={minisitio.codCaderno} selected>{minisitio.codCaderno}</option>
+                        {/*   {caderno.map(
                           (item) =>
-                            /*  item.UF == ufSelected && (
-                      
-                             ) */
+       
                             <option
                               id={item.codCaderno}
                               key={item.codCaderno}
@@ -496,7 +545,7 @@ function FormAdesao({ isAdmin }) {
                             >
                               {item.nomeCaderno}
                             </option>
-                        )}
+                        )} */}
                       </select>{" "}
                     </div>
                   </div>
@@ -1069,7 +1118,7 @@ function FormAdesao({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o seu nome"
                   value={minisitio.descNomeAutorizante}
-onChange={handleSelectChange}
+                  onChange={handleSelectChange}
                   required
                 />{" "}
               </div>
@@ -1198,10 +1247,12 @@ onChange={handleSelectChange}
                         <span className="cel">{(minisitio.descCelular) ? minisitio.descCelular : "(xx) xxxxx-xxxx"}</span>
                       </p>}
                     </div>
-                    <div class="conteudo comImagem" style={{ display: "none" }}>
-                      <img src={`${masterPath.url}/files/${minisitio.descImagem}`} height={191} />
-                      {/* <img src="/resources/upload/istockphoto_1442417585_612x612_20240428_215703.jpg" height={191} /> */}
-                    </div>
+                    
+                      <div class="conteudo comImagem" style={{ display: "none" }}>
+                        <img src={`${masterPath.url}/files/${minisitio.descImagem}`} height={191} />
+                      </div>
+                    
+
                     {radioCheck != 1 && <div id="area-icons-actions" className="col-md-6">
                       <Tooltip text={"Mídias"}>
                         <div className="dropdown">
@@ -1301,7 +1352,7 @@ onChange={handleSelectChange}
                     </div>}
 
                   </div>
-                  <div className="assinatura margin-top-20">
+                  {/*  <div className="assinatura margin-top-20">
 
                     {radioCheck != 1 && <h2 className="webcard">
                       <span className="preco">R$ {precoFixo},00</span>/mês
@@ -1324,7 +1375,7 @@ onChange={handleSelectChange}
                     >
                       Confirmar
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

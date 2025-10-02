@@ -1,0 +1,195 @@
+const fs = require('fs');
+
+//streams
+const express = require('express');
+const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
+const server = http.createServer(app);
+const io = new Server(server);
+const ExcelJS = require('exceljs');
+const masterPath = require('../../../config/config');
+const moment = require('moment');
+const csv = require('csv-parser');
+
+//models
+const database = require('../../../config/db');
+const Anuncio = require('../../../models/table_anuncio');
+const importStage = require('../../../models/table_importStage');
+const Atividade = require('../../../models/table_atividade');
+const Caderno = require('../../../models/table_caderno');
+const Cadernos = require('../../../models/table_caderno');
+const Descontos = require('../../../models/table_desconto');
+const Promocao = require('../../../models/table_promocao');
+const Globals = require('../../../models/table_globals');
+const Pagamento = require('../../../models/table_pagamentos');
+const Uf = require('../../../models/table_uf');
+const Usuarios = require('../../../models/table_usuarios');
+const Campanha = require('../../../models/table_campanha');
+const TokensPromocao = require('../../../models/tokens_promocao');
+
+
+
+
+//Functions
+const exportExcell = require('../../../functions/server');
+
+//moduls
+const Sequelize = require('sequelize');
+const Desconto = require('../../../models/table_desconto');
+const { Op } = Sequelize;
+const readXlsxFile = require('read-excel-file/node');
+const path = require('path');
+
+
+
+
+module.exports = {
+    gerarCampanha: async (req, res) => {
+        const criarCampanha = await Campanha.create({
+            idPromocional: req.body.idPromocional,
+            dataFim: req.body.dataFim,
+            criador: req.body.criador,
+            uf: req.body.uf,
+            caderno: req.body.caderno,
+        }).then(async (resultCampanha) => {
+
+
+            /*           await database.query(`
+            INSERT IGNORE INTO tokens_promocao (codAnuncio, tokenPromocao, dataLimitePromocao, createdAt, updatedAt)
+            SELECT 
+                a.codAnuncio,
+                SHA1(CONCAT(a.descCPFCNPJ, 'PROMOCAO2025', a.codDesconto)) AS tokenPromocao,
+                DATE_ADD(NOW(), INTERVAL 30 DAY) AS dataLimitePromocao,
+                NOW(),
+                NOW()
+            FROM anuncio a
+            WHERE a.codUf = :uf
+              AND a.codCaderno = :caderno
+          `,
+                          {
+                              replacements: {
+                                  uf: req.body.uf,
+                                  caderno: req.body.caderno
+                              }
+                          }); */
+
+
+            const campanhas = await Campanha.findAll().then((result) => {
+
+                gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + resultCampanha.id + ".csv");
+                //return res.json({ success: true, data: result });
+            }).catch((error) => {
+                console.error("Erro ao listar campanhas:", error);
+                //return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });
+            });
+
+
+            return res.json({ success: true, message: "Campanha criada com sucesso!" });
+        }).catch((error) => {
+            console.error("Erro ao criar campanha:", error);
+            return res.status(500).json({ success: false, message: "Erro ao criar campanha." });
+        });
+    },
+    listarCampanha: async (req, res) => {
+        const campanhas = await Campanha.findAll(
+            {
+                include: [
+                    {
+                        model: Desconto,
+                        as: "desconto", // mesmo alias definido na associação
+                        //attributes: ["idDesconto"] // quais campos do usuário trazer
+                        include: [
+                            {
+                                model: Usuarios,
+                                as: "usuario", // alias da associação Desconto -> Usuario
+                                attributes: ["descNome"]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ).then((result) => {
+            return res.json({ success: true, data: result });
+        }).catch((error) => {
+            console.error("Erro ao listar campanhas:", error);
+            return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });
+        });
+    },
+    listarUserCampanha: async (req, res) => {
+        const registros = await TokensPromocao.findAll({
+            where: {
+                tokenPromocao: req.params.hash
+            },
+   /*          include: [
+                {
+                    model: Anuncio,
+                    as: "promo",
+                    //attributes: ["descAnuncio", "descCPFCNPJ", "descEmailRetorno"]
+                }
+            ], */
+            attributes: ["codAnuncio"],
+            raw: true
+        })
+        .then((result) => {
+                return res.json({ success: true, data: result });
+            }).catch((error) => {
+                console.error("Erro ao listar campanhas:", error);
+                return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });
+            });
+
+        console.log(registros);
+    },
+}
+
+
+const { Parser } = require("@json2csv/plainjs");
+
+//gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + 27 + ".csv");
+// Função para gerar CSV
+async function gerarCSV(model, filePath) {
+    try {
+        // 1. Buscar todos os registros da tabela
+        const registros = await model.findAll({
+            include: [
+                {
+                    model: Anuncio,
+                    as: "promo",
+                    attributes: ["descAnuncio", "descCPFCNPJ", "descEmailRetorno"]
+                }
+            ],
+            attributes: ["codAnuncio", "tokenPromocao", "dataLimitePromocao"],
+            raw: true
+        });
+
+        if (registros.length === 0) {
+            console.log("Nenhum dado encontrado.");
+            return;
+        }
+
+        // Defina os campos que você quer exportar e os nomes das colunas
+        const fields = [
+            { label: "Código do Anúncio", value: "codAnuncio" },
+            {
+                label: "url_perfil",
+                value: (row) => `${masterPath.urlPublic}/promocao/${row.tokenPromocao}`
+            },
+            { label: "Data Limite", value: "dataLimitePromocao" },
+            { label: "Nome Anúncio", value: "promo.descAnuncio" },
+            { label: "Documento", value: "promo.descCPFCNPJ" },
+            { label: "Email de Retorno", value: "promo.descEmailRetorno" },
+        ];
+
+        // 2. Converter para CSV
+        const json2csvParser = new Parser({ fields });
+        const csv = json2csvParser.parse(registros);
+
+        // 3. Salvar em arquivo
+        fs.writeFileSync(filePath, csv, "utf-8");
+        console.log(`CSV gerado com sucesso em: ${filePath}`);
+    } catch (error) {
+        console.error("Erro ao gerar CSV:", error);
+    }
+}
+
+

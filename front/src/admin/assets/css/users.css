@@ -140,6 +140,6 @@ tr {
 }
 
 .config-portal hr {
-    width: 50%;
+    /* width: 50%; */
     margin-left: 25px;
 }
