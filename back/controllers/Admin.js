@@ -51,6 +51,7 @@ const readXlsxFile = require('read-excel-file/node');
 const path = require('path');
 const { totalmem } = require('os');
 const Users = require('./Users');
+const { hash } = require('crypto');
 
 
 
@@ -1026,14 +1027,14 @@ module.exports = {
 
         });
 
-  /*       const anuncios = await Anuncio.update({
-            codAtividade: req.body.nomeAmigavel
-        }, {
-            where: {
-                codAtividade: req.body.atividade,
-            },
-
-        }); */
+        /*       const anuncios = await Anuncio.update({
+                  codAtividade: req.body.nomeAmigavel
+              }, {
+                  where: {
+                      codAtividade: req.body.atividade,
+                  },
+      
+              }); */
 
         const cadernos = await Caderno.findAll({ raw: true });
 
@@ -1728,10 +1729,17 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
         const offset = (paginaAtual - 1) * porPagina;
 
         // Consulta para recuperar apenas os itens da página atual
-        const Ids = await Descontos.findAndCountAll({
-            order: [['dtCadastro', 'DESC']],
-          /*   limit: porPagina,
-            offset: offset */
+        const Ids = await Descontos.findAll({
+            where: {
+                [Op.and]: [
+                    { hash: { [Op.ne]: "00.000.0000" } },
+                    { hash: { [Op.ne]: "0" } }
+                ]
+            },
+            order: [['hash', 'ASC']],
+            //order: [['dtCadastro', 'DESC']],
+            /*   limit: porPagina,
+              offset: offset */
         });
 
         /*         console.log(Ids.rows)
@@ -1757,8 +1765,8 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
 
 
         await Promise.all(
-            Ids.rows.map(async (item) => {
-                console.log(item.dataValues.descricao);
+            Ids.map(async (item) => {
+                //console.log(item.dataValues.descricao);
 
                 // Corrigir caracteres na descrição
                 item.dataValues.atividade = corrigirCaracteres(item.dataValues.descricao);
@@ -1781,7 +1789,7 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
 
         res.json({
             success: true, message: {
-                IdsValue: Ids.rows, 
+                IdsValue: Ids,
             }
         })
 

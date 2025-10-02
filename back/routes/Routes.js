@@ -141,6 +141,7 @@ module.exports = (io) => {
     router.post('/api/admin/campanha/create', CampanhaController.gerarCampanha);
     router.get('/api/admin/campanha/read', CampanhaController.listarCampanha);
     router.get('/api/admin/campanha/read/:hash', CampanhaController.listarUserCampanha);
+    router.delete('/api/admin/campanha/cancelar/:id', CampanhaController.cancelarCampanha);
     //router.post('/api/admin/anuncio/promocao/criar', Admin.criarPromocao);
 
     //ROTAS MODULO PAGAMENTOS

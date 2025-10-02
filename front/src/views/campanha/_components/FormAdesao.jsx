@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { masterPath } from "../../../config/config";
 import Badge from 'react-bootstrap/Badge';
 import Stack from 'react-bootstrap/Stack';
@@ -656,7 +656,7 @@ function FormAdesao({ isAdmin }) {
                 patrocinador={7}
                 codImg={minisitio.cartao_digital}
                 miniPreview={false}
-                msg={"Anexar imagem do cartão digital"}
+                msg={"Inserir PDF do cartão digital"}
                 minisitio={minisitio}
                 data={setMinisitio} />}
 
@@ -676,7 +676,7 @@ function FormAdesao({ isAdmin }) {
                 patrocinador={8}
                 codImg={minisitio.descParceiro}
                 miniPreview={false}
-                msg={"Anexar logo da parceria"}
+                msg={"Inserir logo da parceria (150x58)"}
                 minisitio={minisitio}
                 data={setMinisitio}
               />}
@@ -707,7 +707,7 @@ function FormAdesao({ isAdmin }) {
                 patrocinador={5}
                 codImg={minisitio.certificado_logo}
                 miniPreview={false}
-                msg={"Logo do certificado"}
+                msg={"Inserir logo do certificado (150x58)"}
                 minisitio={minisitio}
                 data={setMinisitio} />
               }
@@ -731,7 +731,7 @@ function FormAdesao({ isAdmin }) {
                 patrocinador={6}
                 codImg={minisitio.certificado_imagem}
                 miniPreview={false}
-                msg={"Imagem do certificado"}
+                msg={"Inserir imagem do certificado (816x1056)"}
                 minisitio={minisitio}
                 data={setMinisitio} />}
               <div className="input-icon margin-top-10">
@@ -761,7 +761,7 @@ function FormAdesao({ isAdmin }) {
                 patrocinador={4}
                 codImg={minisitio.cashback_logo}
                 miniPreview={false}
-                msg={"Anexar logo do cashback"}
+                msg={"Inserir logo do cashback (150x58)"}
                 minisitio={minisitio}
                 data={setMinisitio}
               />}
@@ -1247,11 +1247,11 @@ function FormAdesao({ isAdmin }) {
                         <span className="cel">{(minisitio.descCelular) ? minisitio.descCelular : "(xx) xxxxx-xxxx"}</span>
                       </p>}
                     </div>
-                    
-                      <div class="conteudo comImagem" style={{ display: "none" }}>
-                        <img src={`${masterPath.url}/files/${minisitio.descImagem}`} height={191} />
-                      </div>
-                    
+
+                    <div class="conteudo comImagem" style={{ display: "none" }}>
+                      <img src={`${masterPath.url}/files/${minisitio.descImagem}`} height={191} />
+                    </div>
+
 
                     {radioCheck != 1 && <div id="area-icons-actions" className="col-md-6">
                       <Tooltip text={"Mídias"}>
@@ -1376,6 +1376,21 @@ function FormAdesao({ isAdmin }) {
                       Confirmar
                     </button>
                   </div> */}
+                </div>
+                <div className="simulacao-do-anuncio mt-5">
+                  <h2 className="assinatura" style={{fontSize: "22px"}}>Demonstração Online</h2>
+                </div>
+                <div className="d-flex justify-content-center align-items-center flex-column codigo-promocional border border-danger p-3">
+                  <h2 style={{fontSize: "18px"}}>Antes</h2>
+                  <Link to="https://minisitio.com.br/api/portal/share/19913587" target="_blank" rel="noreferrer">
+                    <img src="../assets/img/antes.png" alt="antes" />
+                  </Link>
+
+                  <h2 className="mt-2" style={{fontSize: "18px"}}>Depois</h2>
+                  <Link to="https://minisitio.com.br/api/portal/share/19829425" target="_blank" rel="noreferrer">
+                    <img src="../assets/img/depois.png" alt="depois" />
+
+                  </Link>
                 </div>
               </div>
             </div>

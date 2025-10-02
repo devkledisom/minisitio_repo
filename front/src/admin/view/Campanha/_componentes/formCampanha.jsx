@@ -96,7 +96,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                 >
                     <option value="">Selecione</option>
                     {idsList.map((item, index) => (
-                        <option key={index} value={item.idDesconto}>{item.nmUsuario} - {item.hash}</option>
+                        <option key={index} value={item.idDesconto}>{item.hash} - {item.nmUsuario}</option>
                     ))}
                 </select>
             </div>

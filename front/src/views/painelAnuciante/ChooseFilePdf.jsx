@@ -191,7 +191,7 @@ function UploadImage(props) {
               <TooltipContent
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg border border-blue-400 max-w-xs break-words whitespace-normal"
                 align="center">
-                <p>A imagem deve ser no formato PNG, JPEG e ter no máximo 1MB, o nome da imagem não pode conter caracteres especiais ou espaços.</p>
+                <p> O CARTÃO DIGITAL INTERATIVO – PDF, deve ser no formato PDF e ter no máximo 2MB, o nome do arquivo não pode conter caracteres especiais ou espaços.</p>
               </TooltipContent>
             </Tooltip>
           }

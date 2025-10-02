@@ -54,7 +54,7 @@ function App() {
   const routesHiddenCookie = "promocao";
 
   const shouldShowCookie = !location.pathname.includes(routesHiddenCookie);
-  console.log(shouldShowCookie, location.pathname)
+  //console.log(shouldShowCookie, location.pathname)
 
   return (
     <div>

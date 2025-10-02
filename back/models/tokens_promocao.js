@@ -11,6 +11,11 @@ const TokensPromocao = database.define('tokens_promocao', {
         primaryKey: true
     },
 
+    campanhaId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+
     codAnuncio: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -61,15 +66,15 @@ const TokensPromocao = database.define('tokens_promocao', {
         unique: false
     }
 },
-{
-    tableName: 'tokens_promocao'
-}
+    {
+        tableName: 'tokens_promocao'
+    }
 );
 
 TokensPromocao.belongsTo(Anuncio, {
-  foreignKey: "codAnuncio",   // chave estrangeira em Campanha
-  targetKey: "codAnuncio",  // PK em Usuario
-  as: "promo"            // alias
+    foreignKey: "codAnuncio",   // chave estrangeira em Campanha
+    targetKey: "codAnuncio",  // PK em Usuario
+    as: "promo"            // alias
 });
 
 Anuncio.hasMany(TokensPromocao, {
