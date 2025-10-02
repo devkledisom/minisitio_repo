@@ -54,25 +54,44 @@ module.exports = {
             caderno: req.body.caderno,
         }).then(async (resultCampanha) => {
 
+            const idPromo = await Descontos.findOne({
+                where: {
+                    idDesconto: req.body.idPromocional
+                },
+                attributes: ['hash']
+            });
 
-            /*           await database.query(`
-            INSERT IGNORE INTO tokens_promocao (codAnuncio, tokenPromocao, dataLimitePromocao, createdAt, updatedAt)
+            let whereClause = "";
+
+            if (req.body.uf && req.body.caderno) {
+                // quando tem UF + Caderno
+                whereClause = "a.codUf = :uf AND a.codCaderno = :caderno";
+            } else if (idPromo.hash) {
+                // quando só tem idPromo
+                whereClause = "a.codDesconto = :idPromo";
+            }
+
+
+            await database.query(`
+            INSERT IGNORE INTO tokens_promocao (campanhaId, codAnuncio, tokenPromocao, dataLimitePromocao, createdAt, updatedAt)
             SELECT 
+                :campanhaId AS campanhaId,
                 a.codAnuncio,
                 SHA1(CONCAT(a.descCPFCNPJ, 'PROMOCAO2025', a.codDesconto)) AS tokenPromocao,
                 DATE_ADD(NOW(), INTERVAL 30 DAY) AS dataLimitePromocao,
                 NOW(),
                 NOW()
             FROM anuncio a
-            WHERE a.codUf = :uf
-              AND a.codCaderno = :caderno
+            WHERE ${whereClause}
           `,
-                          {
-                              replacements: {
-                                  uf: req.body.uf,
-                                  caderno: req.body.caderno
-                              }
-                          }); */
+                {
+                    replacements: {
+                        uf: req.body.uf,
+                        caderno: req.body.caderno,
+                        campanhaId: resultCampanha.id,
+                        idPromo: idPromo.hash
+                    }
+                });
 
 
             const campanhas = await Campanha.findAll().then((result) => {
@@ -121,17 +140,17 @@ module.exports = {
             where: {
                 tokenPromocao: req.params.hash
             },
-   /*          include: [
-                {
-                    model: Anuncio,
-                    as: "promo",
-                    //attributes: ["descAnuncio", "descCPFCNPJ", "descEmailRetorno"]
-                }
-            ], */
+            /*          include: [
+                         {
+                             model: Anuncio,
+                             as: "promo",
+                             //attributes: ["descAnuncio", "descCPFCNPJ", "descEmailRetorno"]
+                         }
+                     ], */
             attributes: ["codAnuncio"],
             raw: true
         })
-        .then((result) => {
+            .then((result) => {
                 return res.json({ success: true, data: result });
             }).catch((error) => {
                 console.error("Erro ao listar campanhas:", error);
@@ -139,6 +158,40 @@ module.exports = {
             });
 
         console.log(registros);
+    },
+    cancelarCampanha: async (req, res) => {
+
+        try {
+            // Apaga a campanha
+            const apagarCampanha = await Campanha.destroy({
+                where: { id: req.params.id }
+            });
+
+            // Apaga os tokens vinculados
+            const apagarTokens = await TokensPromocao.destroy({
+                where: { campanhaId: req.params.id }
+            });
+
+            fs.unlink("./public/upload/campanha/" + "campanha-" + req.params.id + ".csv", (err) => {
+                if (err) {
+                    console.error("Erro ao apagar CSV:", err);
+                    return;
+                }
+                console.log("CSV apagado com sucesso!");
+            });
+
+            return res.json({
+                success: true,
+                data: { apagarCampanha, apagarTokens }
+            });
+
+        } catch (error) {
+            console.error("Erro ao cancelar campanha:", error);
+            return res.status(500).json({
+                success: false,
+                message: "Erro ao cancelar campanha."
+            });
+        }
     },
 }
 

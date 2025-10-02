@@ -4,7 +4,7 @@ import { masterPath, version } from '../../../../config/config';
 import Swal from 'sweetalert2';
 
 import Table from 'react-bootstrap/Table';
-import { Link2 } from 'lucide-react';
+import { Link2, Trash2 } from 'lucide-react';
 import { Modal } from 'react-bootstrap';
 
 
@@ -21,6 +21,42 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
     setCampanhaSelecionada(null);
     setShow(false);
   };
+
+  function cancelarCampanha(campanha) {
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: `Você está prestes a cancelar a campanha do usuário ${campanha.desconto.usuario.descNome}. Esta ação não pode ser desfeita.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim, cancelar!',
+      cancelButtonText: 'Não, manter'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setShowSpinner(true);
+        fetch(`${masterPath.url}/admin/campanha/cancelar/${campanha.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(x => x.json())
+          .then(res => {
+            setShowSpinner(false);
+            if (res.success) {
+              Swal.fire(
+                'Cancelada!',
+                'A campanha foi cancelada com sucesso.',
+                'success'
+              ).then(() => {
+                window.location.reload();
+              });
+            }
+          });
+      }
+    });
+  }
 
   return (
     <div>
@@ -39,6 +75,7 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
               <th>Data de Criação</th>
               <th>Data de Fim</th>
               <th>Csv</th>
+              <th>Deletar</th>
             </tr>
           </thead>
           <tbody>
@@ -52,9 +89,14 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
                 <td>{campanha.criador}</td>
                 <td>{campanha.createdAt}</td>
                 <td>{campanha.dataFim}</td>
-                <td>
+                <td className='text-center'>
                   <button onClick={() => handleOpen(campanha)}>
                     <Link2 />
+                  </button>
+                </td>
+                <td className='text-center'>
+                  <button onClick={() => cancelarCampanha(campanha)}>
+                    <Trash2 color='red' size={20}/>
                   </button>
                 </td>
               </tr>

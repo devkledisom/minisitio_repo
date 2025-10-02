@@ -127,7 +127,6 @@ const Campanha = () => {
             .then((x) => x.json())
             .then((res) => {
                 setCampanhas(res.data);
-                console.log(res)
                 setShowSpinner(false)
                 //setIdsList(res.message.IdsValue)
             })

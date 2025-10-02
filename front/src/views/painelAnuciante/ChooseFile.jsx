@@ -46,7 +46,7 @@ function UploadImage(props) {
       setMostrarMiniPreview(true);
       return;
     }
-console.log(props.codImg, !mostrarMiniPreview && props.codImg != 0)
+//console.log(props.codImg, !mostrarMiniPreview && props.codImg != 0)
     if (!mostrarMiniPreview && props.codImg != 0 && props.codImg != null && props.codImg != undefined) {
        
       //document.querySelector('.comImagem img').src = `${masterPath.url}/files/${props.codImg}`;
