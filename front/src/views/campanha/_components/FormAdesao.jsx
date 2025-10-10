@@ -380,7 +380,7 @@ function FormAdesao({ isAdmin }) {
                 </label>
                 <div className="col-md-12 anuncio-options">
                   <Stack direction="horizontal" gap={2} className="justify-content-center">
-                    <Badge bg="success" style={{ fontSize: "18px" }}>{minisitio.codTipoAnuncio == 3 ? "Perfil COMPLETO POR 7 Dias" : "Básico"}</Badge>
+                    <Badge bg="white" style={{ fontSize: "18px", color: "blue" }}>{minisitio.codTipoAnuncio == 3 ? "Perfil COMPLETO GRÁTIS POR 7 Dias" : "Básico"}</Badge>
                   </Stack>
                 </div>
               </div>
@@ -436,11 +436,11 @@ function FormAdesao({ isAdmin }) {
 
                 <button
                   type="button"
-                  className="btn-block formulario-de-cadastro btn btn-primary"
+                  className="btn-block formulario-de-cadastro btn btn-info"
                   id="anunciar"
                   onClick={() => checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescontoInserido)}
                 >
-                  Confirmar
+                  Assinar
                 </button>
               </div>
 
@@ -975,7 +975,7 @@ function FormAdesao({ isAdmin }) {
                   name="descDonoPix"
                   id="descDonoPix"
                   className="form-control"
-                  placeholder="Digite o nome do proprietário da chave PIX"
+                  placeholder="Titular da chave PIX"
                   value={minisitio.descDonoPix}
                   onChange={handleSelectChange}
                 />
@@ -1377,10 +1377,10 @@ function FormAdesao({ isAdmin }) {
                     </button>
                   </div> */}
                 </div>
-                <div className="simulacao-do-anuncio mt-5">
+                <div className="simulacao-do-anuncio mt-4">
                   <h2 className="assinatura" style={{fontSize: "22px"}}>Demonstração Online</h2>
                 </div>
-                <div className="d-flex justify-content-center align-items-center flex-column codigo-promocional border border-danger p-3">
+                <div className="d-flex justify-content-center align-items-center flex-column codigo-promocional p-3">
                   <h2 style={{fontSize: "18px"}}>Antes</h2>
                   <Link to="https://minisitio.com.br/api/portal/share/19913587" target="_blank" rel="noreferrer">
                     <img src="../assets/img/antes.png" alt="antes" />

@@ -25,11 +25,14 @@ function UserActions(props) {
         fetch(`${masterPath.url}/admin/desconto/edit/${props.data.codDesconto}`)
             .then((x) => x.json())
             .then((res) => {
-                if (props.data.codDesconto > 0) {
+                if (res.length > 0) {
                     fetch(`${masterPath.url}/admin/usuario/edit/${res[0].idUsuario}`)
                         .then((x) => x.json())
                         .then((res) => {
-                            setMaster(res.descNome);
+                            if (res.codUsuario != 19) {
+                                setMaster(res.descNome);
+                            }
+
                         }).catch((err) => {
                             console.log(err);
                         })
@@ -43,7 +46,7 @@ function UserActions(props) {
             setSuportWebShare(true)
         }
 
-    })
+    }, [props.data.codDesconto])
 
     // Cria uma referência para o componente filho
     const pdfGeneratorRef = useRef();
@@ -169,19 +172,19 @@ function UserActions(props) {
             url: props.urlShare
         };
         // Fallback para WebView Android via bridge nativa
-/*         if (window.AndroidShare && typeof window.AndroidShare.share === 'function') {
-            window.AndroidShare.share(shareData.text, shareData.title, shareData.url);
-            return { ok: true, via: 'android' };
-        }
-
-
-        if (Capacitor.isNativePlatform()) {
-            // Rodando dentro do app (Capacitor)
-            await Share.share({
-                ...shareData,
-                dialogTitle: 'Compartilhar'
-            });
-        } */
+        /*         if (window.AndroidShare && typeof window.AndroidShare.share === 'function') {
+                    window.AndroidShare.share(shareData.text, shareData.title, shareData.url);
+                    return { ok: true, via: 'android' };
+                }
+        
+        
+                if (Capacitor.isNativePlatform()) {
+                    // Rodando dentro do app (Capacitor)
+                    await Share.share({
+                        ...shareData,
+                        dialogTitle: 'Compartilhar'
+                    });
+                } */
 
 
         if (navigator.share) {
@@ -320,13 +323,16 @@ function UserActions(props) {
                     Denúncia
                 </a>
                 <a href="javascript:;" class="btn btn-default area-master">
-                    <div class="master-icone">
-                        <span>Master:</span>
-                        <img src="/assets/img/logo.png" />
+                    <div className="w-100">
+                        <div className="master-icone d-flex flex-row">
+                            <span>Master:</span>
+                            <img src="/assets/img/logo.png" />
+                        </div>
+                        <div className="master-descricao">
+                            {master}
+                        </div>
                     </div>
-                    <div class="master-descricao">
-                        {master}
-                    </div>
+
                 </a>
             </div>
         </div>

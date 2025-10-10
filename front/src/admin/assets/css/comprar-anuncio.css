@@ -56,7 +56,7 @@
 }
 
 .posicao-preview {
-    position: sticky;
+    /* position: sticky; */
     top: 75px;
 }
 

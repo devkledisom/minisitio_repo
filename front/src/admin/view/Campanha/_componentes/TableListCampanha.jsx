@@ -124,7 +124,7 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
           <div className="flex justify-center gap-4">
             <button
               className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
-              onClick={() => window.open(`${masterPath.url}/files/campanha/campanha-${campanhaSelecionada.id}.csv`, "_blank")}
+              onClick={() => window.open(`${masterPath.url}/files/campanha/email-marketing-${campanhaSelecionada.id}.zip`, "_blank")}
             >
               Abrir em nova guia
             </button>
@@ -132,7 +132,7 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
             <button
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg shadow hover:bg-gray-300 transition"
               onClick={() => {
-                navigator.clipboard.writeText(`${masterPath.url}/files/campanha/campanha-${campanhaSelecionada.id}.csv`);
+                navigator.clipboard.writeText(`${masterPath.url}/files/campanha/email-marketing-${campanhaSelecionada.id}.zip`);
                 Swal.fire({
                   position: "top-end",
                   icon: "success",
