@@ -11,6 +11,7 @@ const ExcelJS = require('exceljs');
 const masterPath = require('../../../config/config');
 const moment = require('moment');
 const csv = require('csv-parser');
+const archiver = require("archiver");
 
 //models
 const database = require('../../../config/db');
@@ -93,15 +94,18 @@ module.exports = {
                     }
                 });
 
+gerarCSVGeral(TokensPromocao, resultCampanha.id);
+           /*  const campanhas = await Campanha.findAll().then((result) => {
 
-            const campanhas = await Campanha.findAll().then((result) => {
+                //gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + resultCampanha.id + ".csv", resultCampanha.id);
 
-                gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + resultCampanha.id + ".csv");
+                
+
                 //return res.json({ success: true, data: result });
             }).catch((error) => {
                 console.error("Erro ao listar campanhas:", error);
                 //return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });
-            });
+            }); */
 
 
             return res.json({ success: true, message: "Campanha criada com sucesso!" });
@@ -200,49 +204,101 @@ const { Parser } = require("@json2csv/plainjs");
 
 //gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + 27 + ".csv");
 // Função para gerar CSV
-async function gerarCSV(model, filePath) {
-    try {
-        // 1. Buscar todos os registros da tabela
-        const registros = await model.findAll({
-            include: [
-                {
-                    model: Anuncio,
-                    as: "promo",
-                    attributes: ["descAnuncio", "descCPFCNPJ", "descEmailRetorno"]
-                }
-            ],
-            attributes: ["codAnuncio", "tokenPromocao", "dataLimitePromocao"],
-            raw: true
-        });
 
-        if (registros.length === 0) {
-            console.log("Nenhum dado encontrado.");
-            return;
+async function gerarCSVGeral(model, idCampanha) {
+    const BATCH_SIZE = 100000; // número de registros por arquivo
+    let offset = 0;
+    let fileIndex = 1;
+    const tempDir = "./public/upload/campanha";
+    const zipFilePath = path.join(tempDir, `email-marketing-${idCampanha}.zip`);
+
+    const fields = [
+        { label: "Código do Anúncio", value: "codAnuncio" },
+        {
+            label: "url_perfil",
+            value: (row) => `${masterPath.urlPublic}/promocao/${row.tokenPromocao}`
+        },
+       /*  { label: "Data Limite", value: "dataLimitePromocao" }, */
+        { label: "Nome Anúncio", value: "promo.descAnuncio" },
+        /* { label: "Documento", value: "promo.descCPFCNPJ" }, */
+        { label: "Email de Retorno", value: "promo.descEmailRetorno" },
+    ];
+
+    const json2csvParser = new Parser({ fields, header: true });
+    const csvFiles = [];
+
+    try {
+        console.log("Iniciando exportação em lotes de 100 registros...");
+
+        while (true) {
+            const registros = await model.findAll({
+                include: [
+                    {
+                        model: Anuncio,
+                        as: "promo",
+                        attributes: ["descAnuncio", "descEmailRetorno"]
+                    }
+                ],
+                where: { campanhaId: idCampanha },
+                attributes: ["codAnuncio", "tokenPromocao"],
+                raw: true,
+                limit: BATCH_SIZE,
+                offset: offset,
+            });
+
+            if (registros.length === 0) {
+                console.log("Exportação concluída!");
+                break;
+            }
+
+            const fileName = `lote_${fileIndex}.csv`;
+            const outputPath = path.join(tempDir, fileName);
+
+            // Converter e salvar CSV
+            const csv = json2csvParser.parse(registros);
+            fs.writeFileSync(outputPath, csv, "utf8");
+
+            csvFiles.push(outputPath);
+            console.log(`Arquivo ${fileName} gerado (${registros.length} registros).`);
+
+            offset += BATCH_SIZE;
+            fileIndex++;
         }
 
-        // Defina os campos que você quer exportar e os nomes das colunas
-        const fields = [
-            { label: "Código do Anúncio", value: "codAnuncio" },
-            {
-                label: "url_perfil",
-                value: (row) => `${masterPath.urlPublic}/promocao/${row.tokenPromocao}`
-            },
-            { label: "Data Limite", value: "dataLimitePromocao" },
-            { label: "Nome Anúncio", value: "promo.descAnuncio" },
-            { label: "Documento", value: "promo.descCPFCNPJ" },
-            { label: "Email de Retorno", value: "promo.descEmailRetorno" },
-        ];
+        // === Cria o arquivo ZIP ===
+        console.log("Compactando arquivos CSV em um ZIP...");
+        const output = fs.createWriteStream(zipFilePath);
+        const archive = archiver("zip", { zlib: { level: 9 } });
 
-        // 2. Converter para CSV
-        const json2csvParser = new Parser({ fields });
-        const csv = json2csvParser.parse(registros);
+        archive.pipe(output);
 
-        // 3. Salvar em arquivo
-        fs.writeFileSync(filePath, csv, "utf-8");
-        console.log(`CSV gerado com sucesso em: ${filePath}`);
+        // Adiciona todos os CSVs ao ZIP
+        for (const filePath of csvFiles) {
+            archive.file(filePath, { name: path.basename(filePath) });
+        }
+
+        await archive.finalize();
+
+        // Espera a gravação do ZIP terminar
+        await new Promise((resolve, reject) => {
+            output.on("close", resolve);
+            archive.on("error", reject);
+        });
+
+        console.log(`ZIP gerado com sucesso: ${zipFilePath}`);
+
+        // === Remove arquivos CSV temporários ===
+        for (const filePath of csvFiles) {
+            fs.unlinkSync(filePath);
+        }
+        console.log("Arquivos CSV temporários removidos.");
+
+        return zipFilePath;
     } catch (error) {
         console.error("Erro ao gerar CSV:", error);
     }
 }
+
+
 
 

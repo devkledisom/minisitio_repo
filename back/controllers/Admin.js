@@ -1309,14 +1309,16 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
 
     },
     listarUserId: async (req, res) => {
-        await database.sync();
 
         const uuid = req.params.id;
 
         //Atividades
         const resultAnuncio = await Descontos.findAll({
             where: {
-                idDesconto: uuid
+                [Op.or]: {
+                    idDesconto: uuid,
+                    hash: uuid
+                }
             }
         });
 

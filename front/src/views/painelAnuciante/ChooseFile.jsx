@@ -40,7 +40,7 @@ function UploadImage(props) {
       setMostrarLabel(false);
     }
     if (props.codImg == 0) {
-       console.log(props.codImg)
+       //console.log(props.codImg)
       setImagem(false);
       setMostrarLabel(true);
       setMostrarMiniPreview(true);

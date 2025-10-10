@@ -225,7 +225,7 @@ function Listar(props) {
                                                                 </td>
                                                                 <td>{item.createdAt.split("T")[0]}</td>
                                                                 <td>{item.updatedAt.split("T")[0]}</td>
-                                                                <td>{item.dueDate.split("T")[0]}</td>
+                                                                <td>{item.dueDate ? item.dueDate.split("T")[0] : ''}</td>
                                                                 <td>0,00</td>
                                                                 <td>isento</td>
                                                                 <td>06/09/2024</td>
