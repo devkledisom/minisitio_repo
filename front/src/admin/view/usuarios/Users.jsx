@@ -343,7 +343,7 @@ const Users = () => {
             {/* <header style={style} className='w-100'>
                 <Header />
             </header> */}
-            <section className="w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-8">
+            <section className="w-full">
                 {/* {showSpinner && <Spinner progress={0} />} */}
                 {showSpinner && <Spinner progress={progressExport} />}
                 {showMsgBox && <MsgConfirm
