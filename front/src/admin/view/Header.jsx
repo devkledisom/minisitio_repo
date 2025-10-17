@@ -47,7 +47,8 @@ function Header() {
                 {/* <a className="brand" href="#">MINISITIO</a> */}
                 <div className="row col-md-12">
                     <Link className="nav-link brand col-md-1" to="/admin" >
-                        <a href="/"><img src="../../assets/img/logo.png" alt="MINISITIO" width="50" /></a>
+                    <img src="../../assets/img/logo.png" alt="MINISITIO" width="50" />
+                        {/* <a href="/"><img src="../../assets/img/logo.png" alt="MINISITIO" width="50" /></a> */}
                     </Link>
                     <ul className="nav col-md-10 d-flex justify-content-center" style={{
                         fontSize: '15px'

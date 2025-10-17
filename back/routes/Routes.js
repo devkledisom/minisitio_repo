@@ -136,12 +136,14 @@ module.exports = (io) => {
     router.get('/api/admin/import/stage/finalizar', EspacosController.finalizarImportStage);
 
     //CAMPANHA PROMOÇÃO
-    router.get('/api/admin/campanha/promocao/:codAnuncio/:hash', Admin.verificarPromocao);
+    router.get('/api/admin/campanha/promocao/:codAnuncio/:hash', CampanhaController.verificarPromocao);
     router.get('/api/admin/campanha/desconto/read', Admin.CampanhalistarIds);
     router.post('/api/admin/campanha/create', CampanhaController.gerarCampanha);
     router.get('/api/admin/campanha/read', CampanhaController.listarCampanha);
     router.get('/api/admin/campanha/read/:hash', CampanhaController.listarUserCampanha);
     router.delete('/api/admin/campanha/cancelar/:id', CampanhaController.cancelarCampanha);
+    
+    router.put('/api/admin/campanha/:hash', CampanhaController.dataAcesso);
     //router.post('/api/admin/anuncio/promocao/criar', Admin.criarPromocao);
 
     //ROTAS MODULO PAGAMENTOS

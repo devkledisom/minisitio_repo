@@ -2152,31 +2152,7 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
     },
 
     //CAMPANHA PROMOÇÃO
-    verificarPromocao: async (req, res) => {
-        const { codAnuncio, hash } = req.params;
-
-        verificarPromocao = await TokensPromocao.findOne({
-            where: {
-                //codAnuncio: codAnuncio,
-                tokenPromocao: hash
-            }
-        });
-
-        if (verificarPromocao) {
-            const perfil = await Anuncio.findOne({
-                where: {
-                    codAnuncio: codAnuncio
-                },
-            });
-
-
-            res.json({ success: true, data: perfil, hash: verificarPromocao });
-        } else {
-            res.json({ success: false, message: "Promoção inválida ou expirada." });
-        }
-
-    },
-
+   
     //PAGAMENTOS
     listarPagamentos: async (req, res) => {
         const dataPaginacao = await paginador(req, 10);

@@ -44,15 +44,23 @@ const TokensPromocao = database.define('tokens_promocao', {
     },
 
     dataAcessoToken: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.DATE,
         allowNull: false,
-        unique: false,
-        validate: {
-            notEmpty: {
-                msg: "Esse campo não pode está vazio.."
-            },
-        }
+        unique: false
     },
+
+    clicks: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: false
+    },
+
+    dataUltimoAcesso: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        unique: false
+    },
+
 
     createdAt: {
         type: Sequelize.DATE,

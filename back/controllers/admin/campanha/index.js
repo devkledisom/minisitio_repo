@@ -51,6 +51,7 @@ module.exports = {
             idPromocional: req.body.idPromocional,
             dataFim: req.body.dataFim,
             criador: req.body.criador,
+            status: "valid",
             uf: req.body.uf,
             caderno: req.body.caderno,
         }).then(async (resultCampanha) => {
@@ -94,18 +95,18 @@ module.exports = {
                     }
                 });
 
-gerarCSVGeral(TokensPromocao, resultCampanha.id);
-           /*  const campanhas = await Campanha.findAll().then((result) => {
-
-                //gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + resultCampanha.id + ".csv", resultCampanha.id);
-
-                
-
-                //return res.json({ success: true, data: result });
-            }).catch((error) => {
-                console.error("Erro ao listar campanhas:", error);
-                //return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });
-            }); */
+            gerarCSVGeral(TokensPromocao, resultCampanha.id);
+            /*  const campanhas = await Campanha.findAll().then((result) => {
+ 
+                 //gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + resultCampanha.id + ".csv", resultCampanha.id);
+ 
+                 
+ 
+                 //return res.json({ success: true, data: result });
+             }).catch((error) => {
+                 console.error("Erro ao listar campanhas:", error);
+                 //return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });
+             }); */
 
 
             return res.json({ success: true, message: "Campanha criada com sucesso!" });
@@ -133,6 +134,7 @@ gerarCSVGeral(TokensPromocao, resultCampanha.id);
                 ]
             }
         ).then((result) => {
+           
             return res.json({ success: true, data: result });
         }).catch((error) => {
             console.error("Erro ao listar campanhas:", error);
@@ -151,17 +153,26 @@ gerarCSVGeral(TokensPromocao, resultCampanha.id);
                              //attributes: ["descAnuncio", "descCPFCNPJ", "descEmailRetorno"]
                          }
                      ], */
-            attributes: ["codAnuncio"],
+            attributes: ["codAnuncio", "campanhaId"],
             raw: true
         })
-            .then((result) => {
-                return res.json({ success: true, data: result });
+            .then(async (result) => {
+                const verificarCampanha = await Campanha.findOne({
+                    where: { id: result[0].campanhaId },
+                    attributes: ['status']
+                });
+
+                if(verificarCampanha.status === "valid") {
+                    return res.json({ success: true, data: result });
+                }
+
+
+                return res.status(200).json({ success: false, message: "Campanha não encontrada ou inválida." });
             }).catch((error) => {
                 console.error("Erro ao listar campanhas:", error);
                 return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });
             });
 
-        console.log(registros);
     },
     cancelarCampanha: async (req, res) => {
 
@@ -197,6 +208,65 @@ gerarCSVGeral(TokensPromocao, resultCampanha.id);
             });
         }
     },
+    dataAcesso: async (req, res) => {
+        const hashPromoIndividual = await TokensPromocao.findOne({
+            where: { tokenPromocao: req.params.hash }
+        });
+
+        const dadosAtualizar = {
+            dataUltimoAcesso: moment().format('YYYY-MM-DD HH:mm:ss'),
+            clicks: hashPromoIndividual.clicks + 1
+        };
+
+        if (!hashPromoIndividual.dataAcessoToken) {
+            dadosAtualizar.dataAcessoToken = moment().format('YYYY-MM-DD HH:mm:ss');
+        };
+
+        const atualizarAcesso = await TokensPromocao.update(
+            { ...dadosAtualizar },
+            {
+                where: { tokenPromocao: req.params.hash }
+            }
+        ).then((result) => {
+            return res.json({ success: true, message: "Data de acesso atualizada com sucesso!" });
+        }).catch((error) => {
+            console.error("Erro ao atualizar data de acesso:", error);
+            return res.status(500).json({ success: false, message: "Erro ao atualizar data de acesso." });
+        });
+    },
+    verificarPromocao: async (req, res) => {
+        const { codAnuncio, hash } = req.params;
+
+        verificarPromocao = await TokensPromocao.findOne({
+            where: {
+                //codAnuncio: codAnuncio,
+                tokenPromocao: hash
+            }
+        });
+
+        verificarStatusCampanha = await Campanha.findOne({
+            where: {
+                id: verificarPromocao.campanhaId
+            },
+            attributes: ['status']
+        });      
+
+
+        if (verificarPromocao && verificarStatusCampanha.status === "valid") {
+            const perfil = await Anuncio.findOne({
+                where: {
+                    codAnuncio: codAnuncio
+                },
+            });
+
+
+            res.json({ success: true, data: perfil, hash: verificarPromocao });
+        } else {
+            res.json({ success: false, message: "Promoção inválida ou expirada." });
+        }
+
+    }
+
 }
 
 
@@ -213,14 +283,14 @@ async function gerarCSVGeral(model, idCampanha) {
     const zipFilePath = path.join(tempDir, `email-marketing-${idCampanha}.zip`);
 
     const fields = [
-        { label: "Código do Anúncio", value: "codAnuncio" },
+        //{ label: "Código do Anúncio", value: "codAnuncio" },
         {
             label: "url_perfil",
             value: (row) => `${masterPath.urlPublic}/promocao/${row.tokenPromocao}`
         },
-       /*  { label: "Data Limite", value: "dataLimitePromocao" }, */
+        //{ label: "Data Limite", value: "dataLimitePromocao" },
         { label: "Nome Anúncio", value: "promo.descAnuncio" },
-        /* { label: "Documento", value: "promo.descCPFCNPJ" }, */
+        //{ label: "Documento", value: "promo.descCPFCNPJ" },
         { label: "Email de Retorno", value: "promo.descEmailRetorno" },
     ];
 

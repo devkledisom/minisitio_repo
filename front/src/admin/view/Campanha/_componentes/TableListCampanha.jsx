@@ -4,8 +4,14 @@ import { masterPath, version } from '../../../../config/config';
 import Swal from 'sweetalert2';
 
 import Table from 'react-bootstrap/Table';
-import { Link2, Trash2 } from 'lucide-react';
+import { Link2, Link2Off, Trash2, InfoIcon } from 'lucide-react';
 import { Modal } from 'react-bootstrap';
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../../../components/ui/tooltip.tsx";
 
 
 export default function TableListCampanha({ campanhas, setShowSpinner }) {
@@ -90,13 +96,25 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
                 <td>{campanha.createdAt}</td>
                 <td>{campanha.dataFim}</td>
                 <td className='text-center'>
-                  <button onClick={() => handleOpen(campanha)}>
+                  {campanha.status === "valid" ? <button onClick={() => handleOpen(campanha)}>
                     <Link2 />
-                  </button>
+                  </button> :
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button><Link2Off color='red' /></button>
+                      </TooltipTrigger>
+                      <TooltipContent
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg border border-blue-400 max-w-xs break-words whitespace-normal"
+                        align="center">
+                        <p>Campanha expirada.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  }
+
                 </td>
                 <td className='text-center'>
                   <button onClick={() => cancelarCampanha(campanha)}>
-                    <Trash2 color='red' size={20}/>
+                    <Trash2 color='red' size={20} />
                   </button>
                 </td>
               </tr>
@@ -104,7 +122,6 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
           </tbody>
         </Table>
       }
-
 
       <Modal show={show} onHide={handleClose} size="lg" centered>
         <Modal.Header closeButton>

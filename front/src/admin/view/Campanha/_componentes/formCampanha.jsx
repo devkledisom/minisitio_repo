@@ -116,7 +116,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                         <option value="" selected="selected">- Selecione um estado -</option>
                         {
                             uf.map((uf) => (
-                                <option value={uf.sigla_uf}>{uf.sigla_uf}</option>
+                                <option key={uf.id_uf} value={uf.sigla_uf}>{uf.sigla_uf}</option>
                             ))
                         }
                     </select>
@@ -135,7 +135,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                         {
                             cadernos.map((cidades) => (
                                 cidades.UF == ufSelected &&
-                                <option value={cidades.nomeCaderno}>{cidades.nomeCaderno}</option>
+                                <option key={cidades.codCaderno} value={cidades.nomeCaderno}>{cidades.nomeCaderno}</option>
                             ))
                         }
                     </select>
