@@ -116,13 +116,13 @@ const ConfiguracoesPortal = () => {
 
     return (
         <div className="config-portal">
-            <header style={style} className='w-100'>
+            {/* <header style={style} className='w-100'>
                 <Header />
-            </header>
-            <section className="pt-5">
+            </header> */}
+            <section>
                 {showSpinner && <Spinner />}
 
-                <h2 className="pt-4 px-4" style={{ marginTop: "20px" }}>CONFIGURAÇÃO DO PORTAL</h2>
+                <h2 className="px-4" style={{ marginTop: "20px" }}>CONFIGURAÇÃO DO PORTAL</h2>
                 <hr />
 
                 <article className="pt-5">

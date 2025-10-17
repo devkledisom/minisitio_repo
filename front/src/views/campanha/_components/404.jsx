@@ -1,5 +1,5 @@
 import { Form, Link, useParams, useNavigate } from 'react-router-dom';
-import '../../../styles/globais.css';
+import '../../../styles/globals.css';
 
 
 function Promocao() {

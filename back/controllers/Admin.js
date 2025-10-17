@@ -2158,11 +2158,12 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
         const dataPaginacao = await paginador(req, 10);
         console.log(dataPaginacao)
 
-        const todosPagamentos = await Pagamento.findAll({
+       const todosPagamentos = await Pagamento.findAll({
             limit: dataPaginacao.limit,
             offset: dataPaginacao.offset,
             order: [['data', 'DESC']],
-            raw: true
+            raw: true,
+            attributes: ['id', 'cliente', 'valor', 'data', 'status', 'id_mp', 'ref_mp_codAnuncio']
         });
 
         res.json({
@@ -2171,7 +2172,7 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
             paginaAtual: dataPaginacao.paginaAtual,
             totalPaginas: dataPaginacao.totalPaginas,
             totalItem: dataPaginacao.totalItens
-        })
+        }) 
     }
 
 }

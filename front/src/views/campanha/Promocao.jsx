@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Form, Link, useParams, useNavigate } from 'react-router-dom';
-import '../../styles/globais.css';
+import '../../styles/globals.css';
 import { masterPath } from '../../config/config.js';
 
 import { Button } from '../../components/ui/button.tsx'

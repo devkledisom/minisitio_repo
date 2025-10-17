@@ -339,24 +339,20 @@ const Users = () => {
     }
 
     return (
-        <div className="users app-users">
-            <header style={style} className='w-100'>
+        <div className="users app-users w-full min-h-screen bg-background">
+            {/* <header style={style} className='w-100'>
                 <Header />
-            </header>
-            <section className="pt-5">
-
+            </header> */}
+            <section className="w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-8">
                 {/* {showSpinner && <Spinner progress={0} />} */}
-
                 {showSpinner && <Spinner progress={progressExport} />}
-
                 {showMsgBox && <MsgConfirm
                     title={"Atenção!"}
                     msg={"Ao apagar esse usuário todos o espaços ligados a ele serão deletados."}
                     btnTitle={"Apagar"}
                     funAction={apagarUser}
                     setShowMsgBox={setShowMsgBox} />}
-
-                <h1 className="pt-4 px-4">Usuários</h1>
+                <h1 className="px-4 text-xl font-bold">Usuários</h1>
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
@@ -367,69 +363,59 @@ const Users = () => {
                         </div>
                         <div className="span6 col-md-6 d-flex flex-column align-items-end">
                             <div className='d-flex flex-column'>
-                                <div className="pull-right d-flex justify-content-center align-items-center">
-                                    <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => changeUf(e)}>
+                                <div className="pull-right d-flex justify-content-center align-items-center flex-wrap gap-2">
+                                    <select name="" id="uf" className="w-16 h-8 border rounded" onChange={(e) => changeUf(e)}>
                                         <option value="todos">UF</option>
                                         {uf.map(item => (
                                             <option value={item.sigla_uf}>{item.sigla_uf}</option>
                                         ))}
                                     </select>
-                                    <select name="" id="caderno" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)}>
+                                    <select name="" id="caderno" className="w-28 h-8 border rounded" onChange={(e) => setCadernoSelecionado(e.target.value)}>
                                         <option>CADERNO</option>
-
                                         {caderno.map(item => (
                                             item.UF == estadoSelecionado &&
                                             <option value={item.nomeCaderno}>{item.nomeCaderno}</option>
                                         ))}
                                     </select>
-                                    <input id="buscar" type="text" style={{ "width": "300px" }} placeholder="Nome, Email, CPF/CNPJ, UF, Cidade ou Tipo" />
-                                    {/*   <select name="" id="" style={{ "width": "300px", "height": "30px" }} onChange={(e) => setEstadoSelecionado(e.target.value)}>
-                                        <option>Selecione uma opção</option>
-                                        {optionSearch.map(item => (
-                                            <option value={item}>{item}</option>
-                                        ))}
-                                    </select> */}
-                                    <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
+                                    <input id="buscar" type="text" className="w-72 border rounded px-2" placeholder="Nome, Email, CPF/CNPJ, UF, Cidade ou Tipo" />
+                                    <button id="btnBuscar" className="ml-2" type="button" onClick={buscarUserId}>
                                         <i className="icon-search"></i>
                                     </button>
                                 </div>
-                                <div className='SearchOption'>
-                                    <label htmlFor="nome" onClick={() => setSearchOptioncheck('descNome')}>
+                                <div className='SearchOption flex flex-wrap gap-2 mt-2'>
+                                    <label htmlFor="nome" onClick={() => setSearchOptioncheck('descNome')} className="flex items-center gap-1">
                                         <input type='radio' name="option" id="nome" onClick={() => setSearchOptioncheck('descNome')} />
                                         NOME
                                     </label>
-
-                                    <label htmlFor="email" onClick={() => setSearchOptioncheck('descEmail')}>
+                                    <label htmlFor="email" onClick={() => setSearchOptioncheck('descEmail')} className="flex items-center gap-1">
                                         <input type='radio' name="option" id="email" onClick={() => setSearchOptioncheck('descEmail')} />
                                         EMAIL
                                     </label>
-                                    <label htmlFor="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')}>
+                                    <label htmlFor="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')} className="flex items-center gap-1">
                                         <input type='radio' name="option" id="cnpj" onClick={() => setSearchOptioncheck('descCPFCNPJ')} />
                                         CNPJ
                                     </label>
-                                    {/*    <label htmlFor="uf" onClick={() => defineOptionsSearch("uf")}>
+                                    {/* <label htmlFor="uf" onClick={() => defineOptionsSearch("uf")} className="flex items-center gap-1">
                                         <input type='radio' name="option" id="uf" onClick={() => defineOptionsSearch("uf")} />
                                         UF
                                     </label> */}
-                                    <label htmlFor="caderno" onClick={() => defineOptionsSearch("caderno")}>
+                                    <label htmlFor="caderno" onClick={() => defineOptionsSearch("caderno")} className="flex items-center gap-1">
                                         <input type='radio' name="option" id="caderno" onClick={() => defineOptionsSearch("caderno")} />
                                         CADERNO
                                     </label>
-                                    <label htmlFor="tipo" onClick={() => setSearchOptioncheck('codTipoUsuario')}>
+                                    <label htmlFor="tipo" onClick={() => setSearchOptioncheck('codTipoUsuario')} className="flex items-center gap-1">
                                         <input type='radio' name="option" id="tipo" onClick={() => setSearchOptioncheck('codTipoUsuario')} />
                                         TIPO
                                     </label>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
                 <article>
                     <div className="container-fluid">
                         <div className='row px-4'>
-                            <table className="table table-bordered table-striped table-hover">
+                            <table className="table table-bordered table-striped table-hover w-full text-xs">
                                 <thead>
                                     <tr>
                                         <th>NOME</th>
@@ -484,11 +470,10 @@ const Users = () => {
 
                     </div>
                     <Pagination totalPages={usuarios.totalPaginas} paginaAtual={usuarios.paginaAtual} totalItem={usuarios.totalItem} table={"users"} />
-
                 </article>
-                <p className='w-100 text-center'>© MINISITIO - {version.version}</p>
+                <p className='w-full text-center mt-8'>© MINISITIO - {version.version}</p>
             </section>
-            {/*   <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
+            {/* <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
                 <p className='w-100 text-center'>© MINISITIO</p>
             </footer> */}
         </div>

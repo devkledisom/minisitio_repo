@@ -228,14 +228,14 @@ const GerenciarIds = () => {
 
     return (
         <div className="users">
-            <header style={style} className='w-100'>
+          {/*   <header style={style} className='w-100'>
                 <Header />
-            </header>
-            <section className="pt-5">
+            </header> */}
+            <section>
 
                 {showSpinner && <Spinner />}
 
-                <h1 className="pt-4 px-4">Gerenciar IDs</h1>
+                <h1 className="px-4">Gerenciar IDs</h1>
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6 d-flex">
@@ -267,7 +267,7 @@ const GerenciarIds = () => {
 
                 <article>
                     <div className="container-fluid">
-                        <div className='row px-4'>
+                        <div className='row px-4 table-responsive'>
                             <table className="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>

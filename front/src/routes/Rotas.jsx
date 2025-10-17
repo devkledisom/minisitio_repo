@@ -90,32 +90,37 @@ import Promocao from "../views/campanha/Promocao";
 import TokenInvalido from "../views/campanha/_components/404";
 import Campanha from "../admin/view/Campanha/Campanha";
 
-
+import Layout from "../layouts/Layout";
 
 
 function Rotas() {
     return (
-       /*  <BrowserRouter> */
-            <TemaProvider> {/* Movido o TemaProvider para fora de Routes */}
-                <Routes>
-                    <Route path="/">
-                        <Route index element={<Home />} />
-                        <Route path="buscar/:caderno/:estado" element={<Pesquisa />} />
-                        <Route path="caderno/:atividade" element={<QrcodeCadernoProvider><Caderno /></QrcodeCadernoProvider>} />
-                        <Route path="cadernos/:atividade" element={<TodosCaderno />} />
-                        <Route path="caderno-geral/:caderno/:estado" element={<QrcodeCadernoProvider><CadernoGeral /></QrcodeCadernoProvider>} />
-                        <Route path="perfil/:codAnuncio" element={<WebCard />} />
-                        <Route path="login" element={<Login />} />
-                        <Route path="sobre/:id" element={<OutroComponente />} />
-                        <Route path="promocoes/:caderno/:estado" element={<Promocoes />} />
-                        <Route path="promocao/:hash" element={<Promocao />} />
-                        <Route path="token-invalido" element={<TokenInvalido />} />
-                    </Route>
+        /*  <BrowserRouter>  */
+
+        <TemaProvider> {/* Movido o TemaProvider para fora de Routes */}
+            <Routes>
+                <Route path="/">
+                    <Route index element={<Home />} />
+                    <Route path="buscar/:caderno/:estado" element={<Pesquisa />} />
+                    <Route path="caderno/:atividade" element={<QrcodeCadernoProvider><Caderno /></QrcodeCadernoProvider>} />
+                    <Route path="cadernos/:atividade" element={<TodosCaderno />} />
+                    <Route path="caderno-geral/:caderno/:estado" element={<QrcodeCadernoProvider><CadernoGeral /></QrcodeCadernoProvider>} />
+                    <Route path="perfil/:codAnuncio" element={<WebCard />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="sobre/:id" element={<OutroComponente />} />
+                    <Route path="promocoes/:caderno/:estado" element={<Promocoes />} />
+                    <Route path="promocao/:hash" element={<Promocao />} />
+                    <Route path="token-invalido" element={<TokenInvalido />} />
+                     <Route path="/comprar-espaco-minisitio" element={<ComprarAnuncio />} />
+                </Route>
+
+                <Route element={<Layout />}>
                     <Route path="admin" element={
                         <PrivateRoute role={1}>
                             <Administrator />
                         </PrivateRoute>}
                     />
+
                     <Route path="admin/users" element={<PrivateRoute><Users /></PrivateRoute>} />
                     <Route path="admin/Cadernos" element={<PrivateRoute><Cadernos /></PrivateRoute>} />
                     <Route path="admin/info/Cadernos" element={<PrivateRoute><InfoCadernos /></PrivateRoute>} />
@@ -127,7 +132,7 @@ function Rotas() {
                     <Route path="admin/atividades/cadastro" element={<PrivateRoute><FormCadastroAtividade /></PrivateRoute>} />
                     <Route path="admin/atividades/editar" element={<PrivateRoute><FormEditAtividade /></PrivateRoute>} />
 
-                    <Route path="/comprar-espaco-minisitio" element={<ComprarAnuncio />} />
+                   
                     <Route path="admin/desconto" element={<PrivateRoute><GerenciarIds /></PrivateRoute>} />
                     <Route path="admin/desconto/cadastro" element={<PrivateRoute><GerenciarIdCadastro /></PrivateRoute>} />
                     <Route path="admin/desconto/editar" element={<PrivateRoute><GerenciarIdEditar /></PrivateRoute>} />
@@ -159,30 +164,34 @@ function Rotas() {
 
 
                     <Route path="admin/cadernos/editar" element={<PrivateRoute><CadernosEdit /></PrivateRoute>} />
-
-                    {/* ROTAS PAINEL ADMIN DO ANUNCIANTE */}
-                    <Route path="ver-anuncios/:cpf" element={<PrivateRoute><PainelAdmin isPublic={true} /></PrivateRoute>} />
-
-                    {/* ROTAS AREA DO ASSINANTE */}
-                    <Route path="criar-cadastro" element={<AssinanteCadastro />} />
-                    <Route path="renovar/perfil/:codAnuncio" element={<AtualizarPerfil />} />
-                    <Route path="forgot-password" element={<ForgotPassword />} />
-                    <Route path="reset-password" element={<ResetPassword />} />
+                </Route>
 
 
-                    <Route path="qrcode" element={<Qrcode />} />
-                    <Route path="adesivo" element={<Adesivo />} />
 
-                    {/* INFO PAGES */}
-                    <Route path="institucional" element={<Institucional />} />
-                    <Route path="contato" element={<Contato />} />
+                {/* ROTAS PAINEL ADMIN DO ANUNCIANTE */}
+                <Route path="ver-anuncios/:cpf" element={<PrivateRoute><PainelAdmin isPublic={true} /></PrivateRoute>} />
 
-                    {/* Rota para capturar páginas inexistentes */}
-                    <Route path="*" element={<NotFound />} />
+                {/* ROTAS AREA DO ASSINANTE */}
+                <Route path="criar-cadastro" element={<AssinanteCadastro />} />
+                <Route path="renovar/perfil/:codAnuncio" element={<AtualizarPerfil />} />
+                <Route path="forgot-password" element={<ForgotPassword />} />
+                <Route path="reset-password" element={<ResetPassword />} />
 
-                </Routes>
-            </TemaProvider>
-        /* </BrowserRouter> */
+
+                <Route path="qrcode" element={<Qrcode />} />
+                <Route path="adesivo" element={<Adesivo />} />
+
+                {/* INFO PAGES */}
+                <Route path="institucional" element={<Institucional />} />
+                <Route path="contato" element={<Contato />} />
+
+                {/* Rota para capturar páginas inexistentes */}
+                <Route path="*" element={<NotFound />} />
+
+            </Routes>
+        </TemaProvider>
+
+        /*  </BrowserRouter>  */
 
     );
 }

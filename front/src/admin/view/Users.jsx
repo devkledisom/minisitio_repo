@@ -111,9 +111,9 @@ const Users = () => {
 
     return (
         <div className="users">
-            <header style={style} className='w-100'>
+      {/*       <header style={style} className='w-100'>
                 <Header />
-            </header>
+            </header> */}
             <section className="pt-5">
 
                 {showSpinner && <Spinner />}

@@ -8,7 +8,7 @@ import { masterPath, version } from '../../../config/config';
 import { Link } from 'react-router-dom';
 
 
-import '../../../styles/globais.css';
+import '../../../styles/globals.css';
 
 
 
@@ -139,16 +139,13 @@ const Campanha = () => {
 
     return (
         <div className="config-portal">
-            <header style={style} className='w-100'>
-                <Header />
-            </header>
 
 
             <div className='container-fluid'>
-                <section className="pt-5">
+                <section>
                     {showSpinner && <Spinner />}
                     <div className="row">
-                        <div className="col-md-6 pt-4 px-4" style={{ marginTop: "20px" }}>
+                        <div className="col-md-6 px-4">
                             <h1><strong>Campanha</strong></h1>
                             <span>Gerencie suas campanhas de email marketing</span>
                         </div>

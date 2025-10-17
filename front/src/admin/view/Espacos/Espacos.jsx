@@ -538,13 +538,13 @@ Para 100000 linhas: 312500ms
 
     return (
         <div className="users app-espacos">
-            <header style={style} className='w-100'>
+         {/*    <header style={style} className='w-100'>
                 <Header />
-            </header>
-            <section className="pt-5">
+            </header> */}
+            <section>
 
                 {showSpinner && <Spinner progress={progressExport} />}
-                <h1 className="pt-4 px-4">Espaços</h1>
+                <h1 className="px-4">Espaços</h1>
                 <div className="container-fluid py-4 px-4">
                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
