@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../../styles/globais.css';
+import '../../styles/globals.css';
 import { masterPath } from '../../config/config';
 
 import { Button } from '../../components/ui/button.tsx'
