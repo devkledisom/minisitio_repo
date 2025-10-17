@@ -9,14 +9,11 @@ function Promocao() {
             {/* Header */}
             <header className="bg-white shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
+                    <div className="flex justify-between items-center h-24">
                         <div className="flex items-center">
-                            <div className="bg-yellow-400 rounded-full p-2 mr-3">
-                                <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
-                                    <span className="text-white text-xs font-bold">M</span>
-                                </div>
+                            <div className="rounded-full p-2 mr-3">
+                               <img src="../../assets/img/logo.png" alt="MINISITIO" width="100"></img>
                             </div>
-                            <span className="text-xl font-bold text-gray-800">MINISITIO</span>
                         </div>
                         <div className="flex items-center space-x-4 gap-2">
                            {/*  <Button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">ASSINE AGORA</Button> */}

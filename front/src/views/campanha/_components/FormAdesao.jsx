@@ -94,7 +94,10 @@ function FormAdesao({ isAdmin }) {
     fetch(`${masterPath.url}/admin/campanha/read/${hash}`)
       .then((x) => x.json())
       .then((res) => {
-        setCodAnuncio(res.data[0].codAnuncio);
+        if(res.success) {
+          setCodAnuncio(res.data[0].codAnuncio);
+        }
+        
       });
 
 
@@ -106,12 +109,11 @@ function FormAdesao({ isAdmin }) {
         setUfs(res);
         //console.log(res)
       });
-    fetch(`${masterPath.url}/pa`)
+/*     fetch(`${masterPath.url}/pa`)
       .then((x) => x.json())
       .then((res) => {
         setCodUser(res.message + 1);
-        //console.log(res.message + 1)
-      });
+      }); */
     fetch(`${masterPath.url}/atividade/:codAtividade`)
       .then((x) => x.json())
       .then((res) => {
@@ -130,6 +132,22 @@ function FormAdesao({ isAdmin }) {
       .then((x) => x.json())
       .then((res) => {
         setMinisitio(res[0]);
+
+        console.log(res[0], codAnuncio);
+
+        if(res.length > 0) {
+           fetch(`${masterPath.url}/admin/campanha/${hash}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              // Adicione os dados que você deseja atualizar aqui
+            })
+           })
+        }
+
+        
 
 
         fetch(`${masterPath.url}/cadernos?uf=${res[0].codUf}`)

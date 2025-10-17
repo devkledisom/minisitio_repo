@@ -31,12 +31,16 @@ const Campanha = database.define("Campanha", {
     type: Sequelize.STRING(100),
     allowNull: false,
   },
+  status: {
+    type: Sequelize.STRING(8),
+    allowNull: false,
+  },
   createdAt: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW,
 
   },
-    updatedAt: {
+  updatedAt: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW,
 
@@ -53,9 +57,9 @@ Campanha.belongsTo(Desconto, {
 });
 
 Desconto.hasMany(Campanha, {
-    foreignKey: "idPromocional",
-    sourceKey: "idDesconto",
-    as: "campanhas"
+  foreignKey: "idPromocional",
+  sourceKey: "idDesconto",
+  as: "campanhas"
 });
 
 

@@ -26,7 +26,7 @@ function Promocao() {
 
     const navigate = useNavigate();
 
-    console.log(codAnuncio, hash);
+    //console.log(codAnuncio, hash);
 
     useEffect(() => {
         document.title = "Promoção Ativa - Minisitio";
@@ -35,12 +35,12 @@ function Promocao() {
             .then(x => x.json())
             .then(res => {
                 if (res.success) {
-                    console.log(res);
+                   //console.log(res);
                 } else {
 
                     navigate('/token-invalido');
 
-                    console.log('Promoção inválida ou expirada.');
+                    //console.log('Promoção inválida ou expirada.');
                 }
             })
     }, []);
