@@ -819,6 +819,15 @@ module.exports = {
             }
         })
 
+        const atualizarUsuarios = await Anuncio.update({
+            codCidade: req.body.nomeCaderno,
+            codCaderno: req.body.nomeCaderno,
+        }, {
+            where: {
+                codCaderno: cadernoOldName.nomeCaderno,
+            }
+        })
+
 
         // Consulta para recuperar apenas os itens da página atual
         const cadernos = await Cadernos.update({
