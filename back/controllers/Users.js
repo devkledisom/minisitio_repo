@@ -546,15 +546,26 @@ module.exports = {
                 return res.json({ success: true, usuarios: resultUser, totalItem: totalItens, totalPaginas: totalPaginas, paginaAtual: paginaAtual, });
             }
 
+
+            const queryUsers = {
+                [require]: { [Op.like]: `${nu_doc}%` },
+            }
+
+            if (!uf && !caderno) {
+                queryUsers.codUf = uf
+                queryUsers.codCidade = caderno
+            }
+
             //Atividades
             console.time("teste")
             const resultUser = await Users.findAndCountAll({
-                where: {
+                where: queryUsers
+                /* {
                     [require]: { [Op.like]: `${nu_doc}%` },
                     codUf: uf,
                     codCidade: caderno
 
-                },
+                } */,
                 order: [['dtCadastro', 'DESC'], ['descNome', 'ASC']],
                 attributes: [
                     //[Sequelize.literal('DISTINCT `descCPFCNPJ`'), 'descCPFCNPJ'],

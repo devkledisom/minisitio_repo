@@ -180,11 +180,11 @@ const Users = () => {
             return;
         }
 
-        if (document.getElementById('caderno').value === "CADERNO" && searchOptioncheck !== "codUf") {
+  /*       if (document.getElementById('caderno').value === "CADERNO" && searchOptioncheck !== "codUf") {
             alert('Selecione um Caderno');
             setShowSpinner(false);
             return;
-        }
+        } */
 
         fetch(`${masterPath.url}/admin/usuario/buscar/${campoPesquisa}?require=${searchOptioncheck}&uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`)
             .then((x) => {
