@@ -819,12 +819,11 @@ module.exports = {
             }
         })
 
-        const atualizarUsuarios = await Anuncio.update({
+        const atualizarUsuarios = await Usuarios.update({
             codCidade: req.body.nomeCaderno,
-            codCaderno: req.body.nomeCaderno,
         }, {
             where: {
-                codCaderno: cadernoOldName.nomeCaderno,
+                codCidade: cadernoOldName.nomeCaderno,
             }
         })
 
