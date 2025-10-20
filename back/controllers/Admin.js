@@ -803,6 +803,23 @@ module.exports = {
     },
     atualizarCadernos: async (req, res) => {
 
+        const cadernoOldName = await Cadernos.findOne({
+            where: {
+                codCaderno: req.query.id
+            },
+            raw: true
+        });
+
+        const atualizarPerfis = await Anuncio.update({
+            codCidade: req.body.nomeCaderno,
+            codCaderno: req.body.nomeCaderno,
+        }, {
+            where: {
+                codCaderno: cadernoOldName.nomeCaderno,
+            }
+        })
+
+
         // Consulta para recuperar apenas os itens da página atual
         const cadernos = await Cadernos.update({
             codUf: req.body.codUf,
@@ -819,7 +836,6 @@ module.exports = {
             },
 
         });
-
 
         res.json({
             success: true, message: cadernos
@@ -2152,13 +2168,13 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
     },
 
     //CAMPANHA PROMOÇÃO
-   
+
     //PAGAMENTOS
     listarPagamentos: async (req, res) => {
         const dataPaginacao = await paginador(req, 10);
         console.log(dataPaginacao)
 
-       const todosPagamentos = await Pagamento.findAll({
+        const todosPagamentos = await Pagamento.findAll({
             limit: dataPaginacao.limit,
             offset: dataPaginacao.offset,
             order: [['data', 'DESC']],
@@ -2172,7 +2188,7 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
             paginaAtual: dataPaginacao.paginaAtual,
             totalPaginas: dataPaginacao.totalPaginas,
             totalItem: dataPaginacao.totalItens
-        }) 
+        })
     }
 
 }

@@ -203,19 +203,19 @@ Desconto.belongsTo(Usuario, {
 
 
 // models/Tabela1.js
-/*    Desconto.hasMany(Anuncio, { foreignKey: 'codDesconto', sourceKey: 'hash' });
-   Anuncio.belongsTo(Desconto, { foreignKey: 'codDesconto', targetKey: 'hash' }); */
+    Desconto.hasMany(Anuncio, { foreignKey: 'codDesconto', sourceKey: 'hash' });
+   Anuncio.belongsTo(Desconto, { foreignKey: 'codDesconto', targetKey: 'hash' }); 
 
 
-/*    Desconto.belongsTo(Anuncio, {
+   /*Desconto.belongsTo(Anuncio, {
        constraints: true,
        foreignKey: 'hash',
        targetKey: 'codDesconto'
-   }); */
-/*   Desconto.belongsTo(Usuario, {
+   });  */
+ /*   Desconto.belongsTo(Usuario, {
       constraints: true,
       targetKey: 'codUsuario',  
       foreignKey: 'idUsuario'
-  }); */
+  });  */
 
 module.exports = Desconto;
