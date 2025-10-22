@@ -135,21 +135,21 @@ const Pagamentos = () => {
 
                 <h1 className="px-4">Pagamentos</h1>
                 <div className="container-fluid py-4 px-4">
-                    {/*  <div className="row margin-bottom-10">
+                     <div className="row margin-bottom-10">
                         <div className="span6 col-md-6">
-                            <button type="button" className="btn custom-button" onClick={() => navigator('/atividades/cadastro')}>Adicionar</button>
-                            <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/atividades/editar?id=${selectId}`)}>Editar</button>
-                            <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarUser}>Apagar</button>
+                            <button type="button" className="btn btn-primary text-white custom-button" onClick={() => navigator('/admin/pagamento/config')}>Configuração</button>
+                    {/*         <button type="button" className="btn btn-info custom-button mx-2 text-light" onClick={() => navigator(`/atividades/editar?id=${selectId}`)}>Editar</button>
+                            <button type="button" className="btn btn-danger custom-button text-light" onClick={apagarUser}>Apagar</button> */}
                         </div>
-                        <div className="span6 col-md-6">
+                    {/*     <div className="span6 col-md-6">
                             <div className="pull-right d-flex justify-content-center align-items-center">
                                 <input id="buscar" type="text" placeholder="Buscar" />
                                 <button id="btnBuscar" className="" type="button" onClick={buscarUserId}>
                                     <i className="icon-search"></i>
                                 </button>
                             </div>
-                        </div>
-                    </div> */}
+                        </div>*/}
+                    </div> 
                 </div>
 
                 <article>
@@ -186,6 +186,7 @@ const Pagamentos = () => {
                         </div>
                     </div>
                     <Pagination totalPages={paginas.totalPaginas} paginaAtual={paginas.paginaAtual} totalItem={paginas.totalItem} table={"pagamentos"} />
+
 
                 </article>
                 <p className='w-100 text-center'>© MINISITIO</p>

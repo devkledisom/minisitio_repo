@@ -336,6 +336,19 @@ const FormEdit = () => {
                                 onChange={(e) => setDescricaoId(e.target.value)}
                             />
                         </div>
+                     {/*                  <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="valorDesconto" className="w-50 px-1">Valor base:</label>
+
+                          <input type="number"
+                                className="form-control h-25 w-50"
+                                id="valorDesconto"
+                                name="valorDesconto"
+                                value={`${parseFloat(descontoId).toFixed(2)}`}
+                                onChange={(e) => setDescontoId(`${parseFloat(e.target.value)}`)}
+                                placeholder="0,00"
+                            /> 
+
+                        </div> */}
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="valorDesconto" className="w-50 px-1">Valor do desconto:</label>
                          {/*         <input type="text"

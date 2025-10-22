@@ -144,10 +144,13 @@ module.exports = (io) => {
     router.delete('/api/admin/campanha/cancelar/:id', CampanhaController.cancelarCampanha);
     
     router.put('/api/admin/campanha/:hash', CampanhaController.dataAcesso);
+    router.put('/api/admin/campanha/status-link/:id', CampanhaController.ativarInativarLink);
     //router.post('/api/admin/anuncio/promocao/criar', Admin.criarPromocao);
 
     //ROTAS MODULO PAGAMENTOS
     router.get('/api/admin/pagamentos/read', Admin.listarPagamentos);
+    router.get('/api/admin/preco-base/read', Admin.listarValorBase);
+    router.put('/api/admin/preco-base', auth, Admin.atualizarValorBase);
 
     //ROTAS MODULO PIN
     router.get('/api/admin/pin/read', Admin.listarPin);
@@ -236,6 +239,7 @@ module.exports = (io) => {
 
     //WEBHOOKS
     router.post('/api/webhook', WebHook.atualizarPagamentos);
+    router.get('/api/pagamento/create/:id/:codDesconto', WebHook.criarPagamento);
     router.get('/api/pagamento/create/:id', WebHook.criarPagamento);
 
 

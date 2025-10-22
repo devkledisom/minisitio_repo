@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { masterPath, version } from '../../../../config/config';
 
+import "../../../../styles/globals.css"
+
 import Swal from 'sweetalert2';
 
 import Table from 'react-bootstrap/Table';
-import { Link2, Link2Off, Trash2, InfoIcon } from 'lucide-react';
+import { Link2, Link2Off, Trash2 } from 'lucide-react';
 import { Modal } from 'react-bootstrap';
 
 import {
@@ -12,9 +14,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../../../../components/ui/tooltip.tsx";
+import Button from 'react-bootstrap/Button';
 
 
-export default function TableListCampanha({ campanhas, setShowSpinner }) {
+export default function TableListCampanha({ campanhas, setShowSpinner, fetchCampanhas }) {
   const [show, setShow] = useState(false);
   const [campanhaSelecionada, setCampanhaSelecionada] = useState(null);
 
@@ -64,6 +67,28 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
     });
   }
 
+  function ativarInativarLink(campanha, status) {
+     fetch(`${masterPath.url}/admin/campanha/status-link/${campanha.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({statusLink: status})
+        })
+          .then(x => x.json())
+          .then(res => {
+            setShowSpinner(false);
+            if (res.success) {
+              fetchCampanhas();
+              Swal.fire(
+                'Link Inativado!',
+                'O link foi inativado com sucesso.',
+                'success'
+              )
+            }
+          });
+  }
+
   return (
     <div>
       {campanhas && campanhas.length === 0 ?
@@ -80,7 +105,8 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
               <th>Criador</th>
               <th>Data de Criação</th>
               <th>Data de Fim</th>
-              <th>Csv</th>
+              <th>Listar</th>
+              <th>Status do Link</th>
               <th>Deletar</th>
             </tr>
           </thead>
@@ -110,6 +136,20 @@ export default function TableListCampanha({ campanhas, setShowSpinner }) {
                       </TooltipContent>
                     </Tooltip>
                   }
+
+                </td>
+                <td className='text-center'>
+                  {campanha.statusLink === "ativo" &&
+                    <Button variant="success" size="sm" className="w-15" onClick={() => ativarInativarLink(campanha, "inativo")}>
+                      {campanha.statusLink}
+                    </Button>
+                  }
+                  {campanha.statusLink === "inativo" &&
+                    <Button variant="danger" size="sm" className="w-15" onClick={() => ativarInativarLink(campanha, "ativo")}>
+                      {campanha.statusLink}
+                    </Button>
+                  }
+
 
                 </td>
                 <td className='text-center'>

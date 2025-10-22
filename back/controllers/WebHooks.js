@@ -5,6 +5,7 @@ const { MercadoPagoConfig, Payment, PaymentMethods, Preference } = require('merc
 const Pagamento = require('../models/table_pagamentos');
 const Anuncio = require('../models/table_anuncio');
 const Desconto = require('../models/table_desconto');
+const Globals = require('../models/table_globals');
 
 const client = new MercadoPagoConfig({ accessToken: config.MP_ACCESS_TOKEN_SANDBOX, options: { timeout: 5000, idempotencyKey: 'abc' } });
 //const client = new MercadoPagoConfig({ accessToken: config.mp_prod.AccessToken, options: { timeout: 5000, idempotencyKey: 'abc' } });
@@ -62,10 +63,18 @@ module.exports = {
     criarPagamento: async (req, res) => {
 
         let codigoReferenciaMp = req.params.id;
+        let codDesconto = req.params.codDesconto;
 
         const perfilMinisitio = await Anuncio.findOne({ where: { codAnuncio: codigoReferenciaMp }, raw: true, attributes: ['codAnuncio', 'descAnuncio', 'codDesconto'] });
 
-        const valorDesconto = await Desconto.findOne({ where: { hash: perfilMinisitio.codDesconto }, raw: true, attributes: ['hash', 'desconto'] });
+        const valorDesconto = codDesconto ? await Desconto.findOne({ where: { hash: codDesconto }, raw: true, attributes: ['hash', 'desconto'] }) : null;
+
+        const valorBase = await Globals.findOne({
+            where: { keyValue: "precoBase" },
+            raw: true
+        });
+
+        let option1 = codDesconto ? ((valorBase.value / 12) - valorDesconto.desconto) * 12 : Number(valorBase.value);
 
         const body = {
             "notification_url": "https://minisitio.online/api/webhook",
@@ -76,7 +85,7 @@ module.exports = {
                     "title": "Assinatura Minisitio",
                     "quantity": 1,
                     "currency_id": "BRL",
-                    "unit_price": (10 - valorDesconto.desconto) * 12
+                    "unit_price": option1
                 }
             ],
             "back_urls": {
@@ -84,6 +93,9 @@ module.exports = {
                 "pending": "https://minisitio.com.br/login"
             }
         };
+
+     /*    console.log(body, valorDesconto, codDesconto)
+        return; */
 
         const gerarPreferencia = await preference.create({ body })
             .then((data) => { console.log(data), res.status(200).json({ success: true, url: data.init_point }) })

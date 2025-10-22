@@ -94,7 +94,7 @@ function ComprarAnuncio({ isAdmin }) {
                setCaderno(res);
              })
            setUf(res[0].codUf) */
-           document.querySelector("#descAnuncio").focus();
+        document.querySelector("#descAnuncio").focus();
 
       }).catch((err) => {
         console.log(err)
@@ -119,6 +119,12 @@ function ComprarAnuncio({ isAdmin }) {
         setAtividades(res);
         //console.log(res)
         //decodificar()
+      });
+
+    fetch(`${masterPath.url}/admin/preco-base/read`)
+      .then((x) => x.json())
+      .then((res) => {
+        setPrecoFixo(res.value / 12);
       });
 
 
@@ -175,11 +181,17 @@ function ComprarAnuncio({ isAdmin }) {
             if (res.IdsValue[0].is_capa && radioCheck == 4) {
               let valorDesconto = res.IdsValue[0].desconto;
               let precoComDesconto = precoFixo - valorDesconto;
-              setPrecoFixo(precoComDesconto);
-              setDescValor(valorDesconto);
-              setDescontoAtivado(res.success);
-              setTexto(res.IdsValue[0].descricao);
-              setIsCapa(true);
+              if (precoComDesconto >= 0) {
+                setPrecoFixo(precoComDesconto);
+                setDescValor(valorDesconto);
+                setDescontoAtivado(res.success);
+                setTexto(res.IdsValue[0].descricao);
+                setIsCapa(true);
+              } else {
+                setTexto("Não foi possível aplicar esse desconto");
+              customText.current.style.color = "red";
+              }
+
 
 
 
@@ -193,11 +205,18 @@ function ComprarAnuncio({ isAdmin }) {
 
               let valorDesconto = res.IdsValue[0].desconto;
               let precoComDesconto = precoFixo - valorDesconto;
-              setPrecoFixo(precoComDesconto);
-              setDescValor(valorDesconto);
-              setDescontoAtivado(res.success);
-              setTexto(res.IdsValue[0].descricao);
-              document.getElementById('anunciar').disabled = false;
+              console.log(precoComDesconto)
+              if (precoComDesconto >= 0) {
+                setPrecoFixo(precoComDesconto);
+                setDescValor(valorDesconto);
+                setDescontoAtivado(res.success);
+                setTexto(res.IdsValue[0].descricao);
+                document.getElementById('anunciar').disabled = false;
+              } else {
+                setTexto("Não foi possível aplicar esse desconto");
+              customText.current.style.color = "red";
+              }
+
 
             }
 
@@ -209,7 +228,7 @@ function ComprarAnuncio({ isAdmin }) {
 
         })
     } else {
-      setPrecoFixo(10);
+      //setPrecoFixo(10);
       setDescontoAtivado(false);
       setTexto(null);
       document.getElementById('anunciar').disabled = false;
@@ -381,7 +400,7 @@ function ComprarAnuncio({ isAdmin }) {
                       required
                     >
                       <option value={minisitio.codAtividade} selected>{minisitio.codAtividade}</option>
-                     {/*  {atividades &&
+                      {/*  {atividades &&
 
                         atividades.map(
                           (item, i) =>
@@ -435,7 +454,7 @@ function ComprarAnuncio({ isAdmin }) {
                         required
                       >
                         <option value={minisitio.codCaderno} selected>{minisitio.codCaderno}</option>
-                       {/*  {caderno.map(
+                        {/*  {caderno.map(
                           (item) =>
                             item.UF == ufSelected && (
                               <option
@@ -484,7 +503,7 @@ function ComprarAnuncio({ isAdmin }) {
                     required
                   />
                 </div>
-               {/*  {radioCheck != 1 && <div
+                {/*  {radioCheck != 1 && <div
                   className="input-icon margin-top-10 webcard"
                   style={{ display: "block" }}
                 >
@@ -566,7 +585,7 @@ function ComprarAnuncio({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o e-mail (comercial)"
                   value={minisitio.descEmailComercial}
-                    disabled
+                  disabled
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
@@ -578,7 +597,7 @@ function ComprarAnuncio({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o e-mail (alternativo)"
                   value={minisitio.descEmailRetorno}
-                    disabled
+                  disabled
                 />{" "}
               </div>
               <div className="input-icon margin-top-10">
@@ -590,7 +609,7 @@ function ComprarAnuncio({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o whatsapp"
                   value={minisitio.descWhatsApp}
-                    disabled
+                  disabled
                 />{" "}
               </div>
             </div>}
@@ -646,7 +665,7 @@ function ComprarAnuncio({ isAdmin }) {
                   placeholder="Digite um CPF ou CNPJ"
                   onChange={handleCpfCnpjChange}
                   value={minisitio.descCPFCNPJ}
-                    disabled
+                  disabled
                   required
                 />{" "}
               </div>
@@ -659,7 +678,7 @@ function ComprarAnuncio({ isAdmin }) {
                   className="form-control input-disabled"
                   placeholder="Digite o seu nome"
                   value={minisitio.descNomeAutorizante}
-                    disabled
+                  disabled
                   required
                 />{" "}
               </div>
@@ -671,8 +690,8 @@ function ComprarAnuncio({ isAdmin }) {
                   id="descEmailAutorizante"
                   className="form-control input-disabled"
                   placeholder="Digite o seu e-mail"
-                   value={minisitio.descEmailAutorizante}
-                    disabled
+                  value={minisitio.descEmailAutorizante}
+                  disabled
                   required
                 />{" "}
               </div>
@@ -904,14 +923,14 @@ function ComprarAnuncio({ isAdmin }) {
                       *A duração da assinatura é de 12 meses, portanto válido até
                       <span> {formatarData(proximoAno)}.</span>
                     </p>}
-                   
+
                     <button
                       type="button"
                       className="btn-block formulario-de-cadastro btn btn-primary"
                       id="anunciar"
-                      onClick={() => checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescontoInserido)}
+                      onClick={() => checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescontoInserido, precoFixo)}
                     >
-                      Confirmar
+                      Renovar
                     </button>
                   </div>
                 </div>
