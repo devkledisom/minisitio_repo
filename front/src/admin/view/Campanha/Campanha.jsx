@@ -176,7 +176,7 @@ const Campanha = () => {
 
                     <article className="pt-5">
                         <div className="container-fluid">
-                            <TableListCampanha campanhas={campanhas} setShowSpinner={setShowSpinner} />
+                            <TableListCampanha campanhas={campanhas} setShowSpinner={setShowSpinner} fetchCampanhas={fetchCampanhas} />
                         </div>
                         {/*  <Pagination totalPages={paginasTotal} table={"pin"} /> */}
 

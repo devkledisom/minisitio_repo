@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { masterPath } from "../../../config/config";
 import Badge from 'react-bootstrap/Badge';
 import Stack from 'react-bootstrap/Stack';
+import moment from 'moment'
 
 import InputMask from 'react-input-mask';
 
@@ -70,6 +71,7 @@ function FormAdesao({ isAdmin }) {
   const [isCapa, setIsCapa] = useState(false);
   const [minisitio, setMinisitio] = useState([]);
   const [codAnuncio, setCodAnuncio] = useState(null);
+  const [diasCampanha, setDiasCampanha] = useState(0);
 
   //REFS
   const customText = useRef(null);
@@ -94,10 +96,23 @@ function FormAdesao({ isAdmin }) {
     fetch(`${masterPath.url}/admin/campanha/read/${hash}`)
       .then((x) => x.json())
       .then((res) => {
-        if(res.success) {
+        if (res.success) {
           setCodAnuncio(res.data[0].codAnuncio);
         }
-        
+
+        // Sua data alvo
+        const dataAlvo = moment(res.data[0].dataLimitePromocao);
+
+        // Data atual
+        const hoje = moment();
+
+        // Diferença em dias
+        const diasRestantes = dataAlvo.diff(hoje, "days");
+
+        setDiasCampanha(diasRestantes)
+
+        //console.log(`Faltam ${diasRestantes} dias para ${dataAlvo.format("DD/MM/YYYY")}.`);
+
       });
 
 
@@ -109,11 +124,11 @@ function FormAdesao({ isAdmin }) {
         setUfs(res);
         //console.log(res)
       });
-/*     fetch(`${masterPath.url}/pa`)
-      .then((x) => x.json())
-      .then((res) => {
-        setCodUser(res.message + 1);
-      }); */
+    /*     fetch(`${masterPath.url}/pa`)
+          .then((x) => x.json())
+          .then((res) => {
+            setCodUser(res.message + 1);
+          }); */
     fetch(`${masterPath.url}/atividade/:codAtividade`)
       .then((x) => x.json())
       .then((res) => {
@@ -122,7 +137,11 @@ function FormAdesao({ isAdmin }) {
         //decodificar()
       });
 
-
+    fetch(`${masterPath.url}/admin/preco-base/read`)
+      .then((x) => x.json())
+      .then((res) => {
+        setPrecoFixo(res.value / 12);
+      });
 
   }, []);
 
@@ -133,10 +152,10 @@ function FormAdesao({ isAdmin }) {
       .then((res) => {
         setMinisitio(res[0]);
 
-        console.log(res[0], codAnuncio);
+        //console.log(res[0], codAnuncio);
 
-        if(res.length > 0) {
-           fetch(`${masterPath.url}/admin/campanha/${hash}`, {
+        if (res.length > 0) {
+          fetch(`${masterPath.url}/admin/campanha/${hash}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
@@ -144,10 +163,10 @@ function FormAdesao({ isAdmin }) {
             body: JSON.stringify({
               // Adicione os dados que você deseja atualizar aqui
             })
-           })
+          })
         }
 
-        
+
 
 
         fetch(`${masterPath.url}/cadernos?uf=${res[0].codUf}`)
@@ -224,15 +243,18 @@ function FormAdesao({ isAdmin }) {
             if (res.IdsValue[0].is_capa && radioCheck == 4) {
               let valorDesconto = res.IdsValue[0].desconto;
               let precoComDesconto = precoFixo - valorDesconto;
-              setPrecoFixo(precoComDesconto);
-              setDescValor(valorDesconto);
-              setDescontoAtivado(res.success);
-              setTexto(res.IdsValue[0].descricao);
-              setIsCapa(true);
+              if (precoComDesconto >= 0) {
+                setPrecoFixo(precoComDesconto);
+                setDescValor(valorDesconto);
+                setDescontoAtivado(res.success);
+                setTexto(res.IdsValue[0].descricao);
+                setIsCapa(true);
 
 
 
-              document.getElementById('anunciar').disabled = false;
+                document.getElementById('anunciar').disabled = false;
+              }
+
 
             } else if (!res.IdsValue[0].is_capa && radioCheck == 4) {
               document.getElementById('anunciar').disabled = true;
@@ -242,11 +264,14 @@ function FormAdesao({ isAdmin }) {
 
               let valorDesconto = res.IdsValue[0].desconto;
               let precoComDesconto = precoFixo - valorDesconto;
-              setPrecoFixo(precoComDesconto);
-              setDescValor(valorDesconto);
-              setDescontoAtivado(res.success);
-              setTexto(res.IdsValue[0].descricao);
-              document.getElementById('anunciar').disabled = false;
+              if (precoComDesconto >= 0) {
+                setPrecoFixo(precoComDesconto);
+                setDescValor(valorDesconto);
+                setDescontoAtivado(res.success);
+                setTexto(res.IdsValue[0].descricao);
+                document.getElementById('anunciar').disabled = false;
+              }
+
 
             }
 
@@ -258,7 +283,7 @@ function FormAdesao({ isAdmin }) {
 
         })
     } else {
-      setPrecoFixo(10);
+      //setPrecoFixo(10);
       setDescontoAtivado(false);
       setTexto(null);
       document.getElementById('anunciar').disabled = false;
@@ -398,7 +423,7 @@ function FormAdesao({ isAdmin }) {
                 </label>
                 <div className="col-md-12 anuncio-options">
                   <Stack direction="horizontal" gap={2} className="justify-content-center">
-                    <Badge bg="white" style={{ fontSize: "18px", color: "blue" }}>{minisitio.codTipoAnuncio == 3 ? "Perfil COMPLETO GRÁTIS POR 7 Dias" : "Básico"}</Badge>
+                    <Badge bg="white" style={{ fontSize: "18px", color: "blue" }}>{minisitio.codTipoAnuncio == 3 ? `Perfil COMPLETO GRÁTIS POR ${diasCampanha} Dias` : "Básico"}</Badge>
                   </Stack>
                 </div>
               </div>
@@ -456,7 +481,7 @@ function FormAdesao({ isAdmin }) {
                   type="button"
                   className="btn-block formulario-de-cadastro btn btn-info"
                   id="anunciar"
-                  onClick={() => checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescontoInserido)}
+                  onClick={() => checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescontoInserido, precoFixo)}
                 >
                   Assinar
                 </button>
@@ -1396,15 +1421,15 @@ function FormAdesao({ isAdmin }) {
                   </div> */}
                 </div>
                 <div className="simulacao-do-anuncio mt-4">
-                  <h2 className="assinatura" style={{fontSize: "22px"}}>Demonstração Online</h2>
+                  <h2 className="assinatura" style={{ fontSize: "22px" }}>Demonstração Online</h2>
                 </div>
                 <div className="d-flex justify-content-center align-items-center flex-column codigo-promocional p-3">
-                  <h2 style={{fontSize: "18px"}}>Antes</h2>
+                  <h2 style={{ fontSize: "18px" }}>Antes</h2>
                   <Link to="https://minisitio.com.br/api/portal/share/19913587" target="_blank" rel="noreferrer">
                     <img src="../assets/img/antes.png" alt="antes" />
                   </Link>
 
-                  <h2 className="mt-2" style={{fontSize: "18px"}}>Depois</h2>
+                  <h2 className="mt-2" style={{ fontSize: "18px" }}>Depois</h2>
                   <Link to="https://minisitio.com.br/api/portal/share/19829425" target="_blank" rel="noreferrer">
                     <img src="../assets/img/depois.png" alt="depois" />
 

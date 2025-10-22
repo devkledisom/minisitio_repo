@@ -5,7 +5,7 @@ import { masterPath } from "../../../config/config";
 //LIBS
 import Swal from 'sweetalert2';
 
-export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescontoInserido) {
+export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescontoInserido, precoFixo) {
 
 
 
@@ -20,15 +20,17 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
                     descontoAprovado = true
                 }
 
-                let valorBruto = 10 - res.IdsValue[0].desconto;
-                console.log("valorBruto", valorBruto)
+              /*   let valorBruto = 10 - res.IdsValue[0].desconto;
+                console.log("valorBruto", valorBruto) */
 
-                if (descontoAtivado && radioCheck == 3 && valorBruto <= 0) {
+                let valorBruto = precoFixo;
+
+                if (descontoAtivado && radioCheck == 3 && valorBruto <= 0 ) {
                     // window.location.href = `/ver-anuncios/${limparCPFouCNPJ(minisitio.descCPFCNPJ)}`;
                     atualizarMinisitio()
                     console.log("1");
                 } else {
-                    fetch(`${masterPath.url}/pagamento/create/${minisitio.codAnuncio}`)
+                    fetch(`${masterPath.url}/pagamento/create/${minisitio.codAnuncio}/${codDescontoInserido}`)
                         .then((x) => x.json())
                         .then((response) => {
                             window.location.href = response.url;

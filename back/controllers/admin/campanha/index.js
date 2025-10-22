@@ -34,6 +34,7 @@ const TokensPromocao = require('../../../models/tokens_promocao');
 
 //Functions
 const exportExcell = require('../../../functions/server');
+const moveAndRename = require('../../../functions/moveAndRename');
 
 //moduls
 const Sequelize = require('sequelize');
@@ -52,6 +53,7 @@ module.exports = {
             dataFim: req.body.dataFim,
             criador: req.body.criador,
             status: "valid",
+            statusLink: "ativo",
             uf: req.body.uf,
             caderno: req.body.caderno,
         }).then(async (resultCampanha) => {
@@ -134,8 +136,8 @@ module.exports = {
                 ]
             }
         ).then((result) => {
-           
-            return res.json({ success: true, data: result });
+
+            return res.json({ success: true, data: result, teste: 12 });
         }).catch((error) => {
             console.error("Erro ao listar campanhas:", error);
             return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });
@@ -153,7 +155,7 @@ module.exports = {
                              //attributes: ["descAnuncio", "descCPFCNPJ", "descEmailRetorno"]
                          }
                      ], */
-            attributes: ["codAnuncio", "campanhaId"],
+            attributes: ["codAnuncio", "campanhaId", "dataLimitePromocao"],
             raw: true
         })
             .then(async (result) => {
@@ -162,7 +164,7 @@ module.exports = {
                     attributes: ['status']
                 });
 
-                if(verificarCampanha.status === "valid") {
+                if (verificarCampanha.status === "valid") {
                     return res.json({ success: true, data: result });
                 }
 
@@ -249,7 +251,7 @@ module.exports = {
                 id: verificarPromocao.campanhaId
             },
             attributes: ['status']
-        });      
+        });
 
 
         if (verificarPromocao && verificarStatusCampanha.status === "valid") {
@@ -264,6 +266,33 @@ module.exports = {
         } else {
             res.json({ success: false, message: "Promoção inválida ou expirada." });
         }
+
+    },
+    ativarInativarLink: async (req, res) => {
+        const { id } = req.params;
+
+        console.log(req.body.statusLink)
+
+        verificarStatusCampanha = await Campanha.update({
+            statusLink: req.body.statusLink
+        }, {
+            where: {
+                id: id
+            }
+        });
+
+        const caminhoAntigo = `./public/upload/campanha/email-marketing-${id}.zip`;
+        const novoCaminho = `./public/upload/campanha/inativos/email-marketing-${id}.zip`;
+
+        if (req.body.statusLink === "ativo") {
+            moveAndRename(novoCaminho, caminhoAntigo);
+        } else if (req.body.statusLink === "inativo") {
+            moveAndRename(caminhoAntigo, novoCaminho);
+        }
+
+
+
+        res.json({ success: true });
 
     }
 

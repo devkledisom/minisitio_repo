@@ -640,6 +640,7 @@ Promocao.belongsTo(Anuncio, { foreignKey: 'codAnuncio' });
 Anuncio.hasOne(Pagamento, { foreignKey: "ref_mp_codAnuncio", as: "dataPagamento" });
 Pagamento.belongsTo(Anuncio, { foreignKey: "codAnuncio" });
 
+
 // Um Anuncio pertence a uma Atividade
 Anuncio.belongsTo(Atividade, {
     foreignKey: 'codAtividade',

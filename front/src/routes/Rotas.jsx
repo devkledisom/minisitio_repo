@@ -45,6 +45,7 @@ import AnuncioCadastro from "../views/ComprarAnuncio";//-------------
 import EspacosImport from "../admin/view/Espacos/EspacosImport";
 
 import Pagamentos from "../admin/view/Pagamentos/Pagamentos";
+import ConfigPay from "../admin/view/Pagamentos/ConfigPay";
 
 //IMPORT PIN
 import Pin from "../admin/view/Pin/Pin";
@@ -144,6 +145,7 @@ function Rotas() {
 
 
                     <Route path="admin/pagamentos" element={<PrivateRoute><Pagamentos /></PrivateRoute>} />
+                    <Route path="admin/pagamento/config" element={<PrivateRoute><ConfigPay /></PrivateRoute>} />
 
                     {/*ROTAS MODULO PIN*/}
                     <Route path="admin/pin" element={<PrivateRoute><Pin /></PrivateRoute>} />

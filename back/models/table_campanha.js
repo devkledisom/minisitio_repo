@@ -35,6 +35,10 @@ const Campanha = database.define("Campanha", {
     type: Sequelize.STRING(8),
     allowNull: false,
   },
+  statusLink: {
+    type: Sequelize.STRING(7),
+    allowNull: false,
+  },
   createdAt: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW,

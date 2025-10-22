@@ -52,6 +52,7 @@ const path = require('path');
 const { totalmem } = require('os');
 const Users = require('./Users');
 const { hash } = require('crypto');
+const Campanha = require('../models/table_campanha');
 
 
 
@@ -2197,6 +2198,24 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
             totalPaginas: dataPaginacao.totalPaginas,
             totalItem: dataPaginacao.totalItens
         })
+    },
+    listarValorBase: async (req, res) => {
+       const valorBase = await Globals.findOne({
+            where: {keyValue: "precoBase"},
+            raw: true
+        });    
+
+        //const prazoCampanha = await Campanha.
+
+        res.json({success: true, value: valorBase.value})
+    },
+     atualizarValorBase: async (req, res) => {
+       const valorBase = await Globals.update({value: req.body.novoValor}, {
+            where: {keyValue: "precoBase"},
+            raw: true
+        });    
+
+        res.json({success: true, value: valorBase.value, message: "Preço base atualizado!"})
     }
 
 }
