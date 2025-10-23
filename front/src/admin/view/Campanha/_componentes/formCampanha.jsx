@@ -86,11 +86,29 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
             {/* ID promocional */}
             <div className="flex flex-col">
                 <label htmlFor="id-promo" className="text-sm font-medium text-gray-700">
-                    ID promocional
+                    ID Origem
                 </label>
                 <select
                     id="id-promo"
                     {...register("idPromocional", { required: true })}
+                    className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Digite o ID"
+                >
+                    <option value="">Selecione</option>
+                    {idsList.map((item, index) => (
+                        <option key={index} value={item.idDesconto}>{item.hash} - {item.nmUsuario}</option>
+                    ))}
+                </select>
+            </div>
+
+
+              <div className="flex flex-col">
+                <label htmlFor="id-promo2" className="text-sm font-medium text-gray-700">
+                    ID promocional
+                </label>
+                <select
+                    id="id-promo2"
+                    {...register("idPromocional2", { required: true })}
                     className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     placeholder="Digite o ID"
                 >
@@ -121,6 +139,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                         }
                     </select>
                 </div>
+                
 
                 <div className="flex flex-col">
                     <label htmlFor="caderno" className="text-sm font-medium text-gray-700">
@@ -145,12 +164,27 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
             {/* Fim da campanha */}
             <div className="flex flex-col">
                 <label htmlFor="fim-campanha" className="text-sm font-medium text-gray-700">
-                    Fim da campanha
+                    Data limite de adesão
                 </label>
                 <input
                     id="fim-campanha"
                     type="date"
                     {...register("dataFim", { required: true })}
+                    className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+                {errors.dataFim && (
+                    <p className="text-red-500 text-sm mt-1">Campo obrigatório.</p>
+                )}
+            </div>
+
+            <div className="flex flex-col">
+                <label htmlFor="duracao-campanha" className="text-sm font-medium text-gray-700">
+                    Duração da campanha
+                </label>
+                <input
+                    id="fim-campanha"
+                    type="number"
+                    {...register("duracaoCampanha", { required: true })}
                     className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
                 {errors.dataFim && (

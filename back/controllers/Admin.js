@@ -1760,7 +1760,8 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
             where: {
                 [Op.and]: [
                     { hash: { [Op.ne]: "00.000.0000" } },
-                    { hash: { [Op.ne]: "0" } }
+                    { hash: { [Op.ne]: "0" } },
+                    { desconto: { [Op.gt]: 0 } },
                 ]
             },
             order: [['hash', 'ASC']],

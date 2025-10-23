@@ -48,8 +48,10 @@ const path = require('path');
 
 module.exports = {
     gerarCampanha: async (req, res) => {
+
         const criarCampanha = await Campanha.create({
-            idPromocional: req.body.idPromocional,
+            idOrigem: req.body.idPromocional,
+            idPromocional: req.body.idPromocional2,
             dataFim: req.body.dataFim,
             criador: req.body.criador,
             status: "valid",
@@ -57,6 +59,17 @@ module.exports = {
             uf: req.body.uf,
             caderno: req.body.caderno,
         }).then(async (resultCampanha) => {
+
+            /*            const ids = [req.body.idPromocional1, req.body.idPromocional2];
+           
+                       const descontos = await Descontos.findAll({
+                           where: {
+                               idDesconto: {
+                                   [Op.in]: ids
+                               }
+                           },
+                           attributes: ['idDesconto', 'hash']
+                       }); */
 
             const idPromo = await Descontos.findOne({
                 where: {
@@ -72,16 +85,17 @@ module.exports = {
                 whereClause = "a.codUf = :uf AND a.codCaderno = :caderno";
             } else if (idPromo.hash) {
                 // quando só tem idPromo
-                whereClause = "a.codDesconto = :idPromo";
+                whereClause = "a.codDesconto = :idOrigem";
             }
 
 
             await database.query(`
-            INSERT IGNORE INTO tokens_promocao (campanhaId, codAnuncio, tokenPromocao, dataLimitePromocao, createdAt, updatedAt)
+            INSERT IGNORE INTO tokens_promocao (campanhaId, codAnuncio, tokenPromocao, periodoEmDias, dataLimitePromocao, createdAt, updatedAt)
             SELECT 
                 :campanhaId AS campanhaId,
                 a.codAnuncio,
-                SHA1(CONCAT(a.descCPFCNPJ, 'PROMOCAO2025', a.codDesconto)) AS tokenPromocao,
+                SHA1(CONCAT(a.descCPFCNPJ, 'PROMOCAO2025', :idPromo)) AS tokenPromocao,
+                :duracaoCampanha,
                 DATE_ADD(NOW(), INTERVAL 30 DAY) AS dataLimitePromocao,
                 NOW(),
                 NOW()
@@ -93,11 +107,27 @@ module.exports = {
                         uf: req.body.uf,
                         caderno: req.body.caderno,
                         campanhaId: resultCampanha.id,
-                        idPromo: idPromo.hash
+                        idOrigem: idPromo.hash,
+                        idPromo: req.body.idPromocional2,
+                        duracaoCampanha: Number(req.body.duracaoCampanha)
                     }
                 });
 
             gerarCSVGeral(TokensPromocao, resultCampanha.id);
+
+            const idPromoNew = await Descontos.findOne({
+                where: {
+                    idDesconto: req.body.idPromocional2
+                },
+                attributes: ['hash']
+            });
+
+
+            const atualizarIdPerfil = await Anuncio.update({
+                codDesconto: idPromoNew.hash
+            }, {
+                where: { codDesconto: idPromo.hash }
+            });
             /*  const campanhas = await Campanha.findAll().then((result) => {
  
                  //gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + resultCampanha.id + ".csv", resultCampanha.id);
@@ -135,9 +165,17 @@ module.exports = {
                     }
                 ]
             }
-        ).then((result) => {
+        ).then(async (result) => {
 
-            return res.json({ success: true, data: result, teste: 12 });
+            const idPromo = await Descontos.findOne({
+                where: {
+                    idDesconto: result[0].idPromocional
+                },
+                attributes: ['hash']
+            });
+
+
+            return res.json({ success: true, data: result, newId: idPromo });
         }).catch((error) => {
             console.error("Erro ao listar campanhas:", error);
             return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });
@@ -211,6 +249,8 @@ module.exports = {
         }
     },
     dataAcesso: async (req, res) => {
+        const TRIAL_DAYS = 7; // período de teste em dias
+
         const hashPromoIndividual = await TokensPromocao.findOne({
             where: { tokenPromocao: req.params.hash }
         });
@@ -221,7 +261,11 @@ module.exports = {
         };
 
         if (!hashPromoIndividual.dataAcessoToken) {
-            dadosAtualizar.dataAcessoToken = moment().format('YYYY-MM-DD HH:mm:ss');
+            const startDate = moment().format('YYYY-MM-DD HH:mm:ss');
+            const endDate = moment(startDate).add(hashPromoIndividual.periodoEmDias, "days").toDate();
+
+            dadosAtualizar.dataAcessoToken = startDate;
+            dadosAtualizar.dataLimitePromocao = endDate;
         };
 
         const atualizarAcesso = await TokensPromocao.update(
@@ -246,6 +290,8 @@ module.exports = {
             }
         });
 
+        if(!verificarPromocao) return res.json({ success: false, message: "Promoção inválida ou expirada." });
+
         verificarStatusCampanha = await Campanha.findOne({
             where: {
                 id: verificarPromocao.campanhaId
@@ -253,8 +299,11 @@ module.exports = {
             attributes: ['status']
         });
 
+        // Verifica se o período de teste ainda é válido
+        const isTrialActive = new Date() <= new Date(verificarPromocao.dataLimitePromocao);
 
-        if (verificarPromocao && verificarStatusCampanha.status === "valid") {
+
+        if (verificarPromocao && verificarStatusCampanha.status === "valid" && isTrialActive) {
             const perfil = await Anuncio.findOne({
                 where: {
                     codAnuncio: codAnuncio

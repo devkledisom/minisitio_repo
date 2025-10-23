@@ -29,6 +29,8 @@ async function inativarCampanhasExpiradas() {
     return;
   }
 }
+
+
  
 module.exports = {
   inativarCampanhasExpiradas

@@ -98,18 +98,20 @@ function FormAdesao({ isAdmin }) {
       .then((res) => {
         if (res.success) {
           setCodAnuncio(res.data[0].codAnuncio);
+
+          // Sua data alvo
+          const dataAlvo = moment(res.data[0].dataLimitePromocao);
+
+          // Data atual
+          const hoje = moment();
+
+          // Diferença em dias
+          const diasRestantes = dataAlvo.diff(hoje, "days");
+
+          setDiasCampanha(diasRestantes)
         }
 
-        // Sua data alvo
-        const dataAlvo = moment(res.data[0].dataLimitePromocao);
 
-        // Data atual
-        const hoje = moment();
-
-        // Diferença em dias
-        const diasRestantes = dataAlvo.diff(hoje, "days");
-
-        setDiasCampanha(diasRestantes)
 
         //console.log(`Faltam ${diasRestantes} dias para ${dataAlvo.format("DD/MM/YYYY")}.`);
 
