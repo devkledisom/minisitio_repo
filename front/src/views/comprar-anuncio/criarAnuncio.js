@@ -3,7 +3,7 @@ import { masterPath } from "../../config/config";
 //LIBS
 import Swal from 'sweetalert2';
 
-export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa) {
+export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa, precoFixo) {
 
 
     let validation = true;
@@ -34,7 +34,6 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         .then((x) => x.json())
         .then((res) => {
             if (res.success) {
-                console.log(res)
                 setShowSpinner(true);
 
                 cadastrarAnuncio(res.usuario.codUsuario)
@@ -219,22 +218,25 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                 window.open(`https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`, '_blank');
                                 console.log("3");
                             }
-
+                            //console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf", descontoAprovado)
                             return;
 
                         } else {
-                            console.log("segundo dasdfaskhjfsdafhjasdbfnjaksdf", descontoAprovado)
+                            //console.log("segundo dasdfaskhjfsdafhjasdbfnjaksdf", descontoAprovado)
 
                             fetch(`${masterPath.url}/admin/desconto/buscar/${codDesconto}`)
                                 .then((x) => x.json())
                                 .then((res) => {
-                                    console.log(res)
+
                                     if (res.success) {
                                         if (res.IdsValue[0].desconto > 0) {
                                             descontoAprovado = true
                                         }
 
-                                        let valorBruto = 10 - res.IdsValue[0].desconto;
+
+                                        //let valorBruto = 10 - res.IdsValue[0].desconto;
+
+                                        let valorBruto = precoFixo;
 
                                         if (descontoAtivado && radioCheck == 4 && valorBruto <= 0) {
                                             window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
@@ -258,7 +260,18 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                             console.log("3");
                                         }
                                     } else {
-                                        window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                        if (radioCheck == 3) {
+                                            fetch(`${masterPath.url}/pagamento/create/${idPerfil}`)
+                                                .then((x) => x.json())
+                                                .then((response) => {
+                                                    window.location.href = response.url;
+
+                                                })
+                                                .catch(err => console.log(err))
+                                        } else {
+                                            window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+
+                                        }
                                     }
                                 })
 

@@ -110,7 +110,13 @@ function ComprarAnuncio({ isAdmin }) {
         //decodificar()
       });
 
-      localStorage.removeItem('imgname');
+    localStorage.removeItem('imgname');
+
+    fetch(`${masterPath.url}/admin/preco-base/read`)
+      .then((x) => x.json())
+      .then((res) => {
+        setPrecoFixo(res.value / 12);
+      });
 
   }, []);
 
@@ -157,9 +163,9 @@ function ComprarAnuncio({ isAdmin }) {
   function aplicarCupom(e) {
     let codId = e.target.value;
 
-    if(codId === "__.___.____") {
+    if (codId === "__.___.____") {
 
-       setPrecoFixo(10);
+      setPrecoFixo(10);
       setDescontoAtivado(false);
       setTexto(null);
       document.getElementById('anunciar').disabled = false;
@@ -1058,7 +1064,7 @@ function ComprarAnuncio({ isAdmin }) {
                       className="btn-block formulario-de-cadastro btn btn-primary"
                       id="anunciar"
                       /* data-bs-toggle="modal" data-bs-target="#myModal" */
-                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa)}
+                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa, precoFixo)}
                     >
                       Confirmar
                     </button>

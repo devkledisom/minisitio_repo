@@ -32,8 +32,14 @@ const TokensPromocao = database.define('tokens_promocao', {
         }
     },
 
+    periodoEmDias: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: false
+    },
+
     dataLimitePromocao: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.DATE,
         allowNull: false,
         unique: false,
         validate: {

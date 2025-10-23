@@ -9,6 +9,11 @@ const Campanha = database.define("Campanha", {
     autoIncrement: true,
     primaryKey: true,
   },
+  idOrigem: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    field: "id_origem", // mapeia para a coluna no banco
+  },
   idPromocional: {
     type: Sequelize.INTEGER,
     allowNull: false,

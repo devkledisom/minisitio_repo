@@ -126,8 +126,15 @@ const Campanha = () => {
         fetch(`${masterPath.url}/admin/campanha/read`)
             .then((x) => x.json())
             .then((res) => {
-                setCampanhas(res.data);
-                setShowSpinner(false)
+                if (res.success) {
+                    setCampanhas(res.data);
+                    setShowSpinner(false);
+
+                    return;
+                }
+
+                setShowSpinner(false);
+
                 //setIdsList(res.message.IdsValue)
             })
     }
