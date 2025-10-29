@@ -218,13 +218,13 @@ function Caderno(props) {
             }}
           /> */}
           {mosaicoImg.length > 0 && (
-        <SafeImage
-            src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
-            alt="mosaico"
-            fallback="/images/fallback.png"
-          />
+            <SafeImage
+              src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
+              alt="mosaico"
+              fallback="/images/fallback.png"
+            />
           )}
-  
+
 
         </div>
         <div className='container caderno'>
@@ -234,11 +234,14 @@ function Caderno(props) {
               <div class="borda-azul">
                 <div class="conteudo">
                   <h1 id="title-caderno" className='py-2 title-caderno'>Capa do Caderno {caderno} - {estado}</h1>
-
+                  {/*  <div className="area-qrcode-caderno">
+                        <QrcodeMosaico nmAnuncio={`${masterPath.domain}/caderno-geral/${props.caderno}/${props.estado}`} size={114}/>
+                        <img src="/assets/img/logo.png" alt="" />
+                    </div> */}
                   <div className='col-md-12'>
                     <div className='row py-3'>
                       <ButtonCapa caderno={caderno} estado={estado} buscarTodosClassificado={buscarTodosClassificado} />
-              {/*         <div className="col-md-12 col-xs-12 text-center d-flex justify-content-center area-btns-classificado">
+                      {/*         <div className="col-md-12 col-xs-12 text-center d-flex justify-content-center area-btns-classificado">
                       
                         <a href={`/cadernos/${caderno}_${estado}?caderno=${caderno}&estado=${estado}`} className="btn proximo btn-class" onClick={buscarTodosClassificado}>
                           <i className="fa fa-file-text mx-0"></i> Ver caderno classificado</a>
@@ -247,7 +250,7 @@ function Caderno(props) {
 
                     </div>
 
-              {/*       <Modal show={show} onHide={handleClose} size="lg" centered>
+                    {/*       <Modal show={show} onHide={handleClose} size="lg" centered>
                       <Modal.Header closeButton>
                         <Modal.Title>Capa do Caderno {caderno} - {estado}</Modal.Title>
                       </Modal.Header>
