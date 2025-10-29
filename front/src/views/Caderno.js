@@ -1174,7 +1174,6 @@ function Caderno() {
 
         <Busca paginaAtual={"caderno"} uf={estado} caderno={caderno} />
         <h1 id="title-caderno" className='py-2'>Caderno {caderno} - {estado}</h1>
-        {console.log(`${masterPath.url}/files/mosaico/${mosaicoImg}`)}
         <div className='container text-center my-4 new-mosaico'>
           {mosaicoImg.length > 0 && (
             <SafeImage
@@ -1186,13 +1185,13 @@ function Caderno() {
           {/*  <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" /> */}
         </div>
 
-        <ButtonCapa caderno={caderno} estado={estado} />
+        
 
         <h2 className='py-4 info-title'>Existem {minisitio.totalPaginas} páginas no Caderno {caderno} - {estado}. Você está vendo a página {minisitio.paginaAtual}.</h2>
         {/*         <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1>
         <h2 className='py-4'>Existem {minisitio.totalPaginas} páginas no Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}. Você está vendo a página {minisitio.paginaAtual}.</h2>
  */}
-
+<ButtonCapa caderno={caderno} estado={estado} />
         <div className="container">
           {btnNav &&
             <div className="row p-3 btn-nav">
