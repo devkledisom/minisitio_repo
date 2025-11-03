@@ -23,7 +23,20 @@ module.exports = {
         //console.table([name, atividade, telefone, nu_documento, uf, codigoCaderno]);
 
         //anuncio
-        const anuncios = await database.query(`
+        const anuncios = await database.query(`SELECT DISTINCT a.*
+FROM anuncio a
+LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
+LEFT JOIN atividade atv ON atv.atividade = a.codAtividade
+WHERE (
+  a.descAnuncio LIKE :termo OR 
+  atv.atividade LIKE :termo OR
+  atv.nomeAmigavel LIKE :termo OR 
+  t.tagValue LIKE :termo
+)
+AND a.codUf = :uf
+AND a.codCaderno = :caderno
+ORDER BY atv.atividade ASC, a.codTipoAnuncio DESC, a.createdAt ASC, a.descAnuncio ASC
+LIMIT :limit OFFSET :offset;`/* `
   SELECT DISTINCT a.*
   FROM anuncio a
   LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
@@ -36,7 +49,7 @@ module.exports = {
   AND a.codCaderno = :caderno
   ORDER BY codAtividade ASC, codTipoAnuncio DESC, createdAt ASC, descAnuncio ASC
   LIMIT :limit OFFSET :offset
-`, {
+` */, {
             replacements: {
                 termo: `${atividade}%`,
                 uf: uf,
@@ -49,6 +62,7 @@ module.exports = {
 
 //activate ASC, createdAt DESC, codDuplicado ASC
         console.log(req.query, anuncios)
+
 
         if (req.query.totalPages > 0) {
             return res.json({
@@ -83,7 +97,20 @@ module.exports = {
                         }); */
 
 
-            const [resultAnuncioCount] = await database.query(`
+            const [resultAnuncioCount] = await database.query(
+                `SELECT COUNT(DISTINCT a.codAnuncio) AS total
+FROM anuncio a
+LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
+LEFT JOIN atividade atv ON atv.atividade = a.codAtividade
+WHERE (
+  a.descAnuncio LIKE :termo OR 
+  atv.atividade LIKE :termo OR
+  atv.nomeAmigavel LIKE :termo OR 
+  t.tagValue LIKE :termo
+)
+AND a.codUf = :uf
+AND a.codCaderno = :caderno`
+                /* `
   SELECT COUNT(DISTINCT a.codAnuncio) AS total
   FROM anuncio a
   LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
@@ -94,7 +121,7 @@ module.exports = {
   )
   AND a.codUf = :uf
   AND a.codCaderno = :caderno
-`, {
+` */, {
                 replacements: {
                     termo: `${atividade}%`,
                     uf: uf,
