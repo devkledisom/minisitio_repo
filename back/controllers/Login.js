@@ -27,7 +27,7 @@ module.exports = {
             return res.status(401).json({ success: false, message: "Credenciais inválidas" });
         }
 
-        const token = jwt.sign({ id: user.id, role: user.codTipoUsuario, uuid: user.codUsuario }, secretKey, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user.id, role: user.codTipoUsuario, uuid: user.codUsuario, doc: user.descCPFCNPJ }, secretKey, { expiresIn: "1h" });
 
         user.success = true;
 

@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-const PrivateRoute = ({ children, role }) => {
+const PrivateRoute = ({ children, role, isAdmin }) => {
     const { user, loading } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -16,8 +16,10 @@ const PrivateRoute = ({ children, role }) => {
     if(!isLoading) {
         if (!user) return <Navigate to="/login" />;
         if (role && user.codTipoUsuario !== role) return <Navigate to="/forbidden" />;
-    
-        return children;
+
+        if (isAdmin && user.codTipoUsuario == 3) return <Navigate to="/login" />;
+
+       return children;
     }
 
 
