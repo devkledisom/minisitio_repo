@@ -1020,7 +1020,8 @@ module.exports = {
             where: {
                 [Op.or]: [
                     { id: req.query.id ? req.query.id : "" },
-                    { atividade: { [Op.like]: `%${req.query.nome}%` } }
+                    { atividade: { [Op.like]: `%${req.query.nome}%` } },
+                    { nomeAmigavel: { [Op.like]: `%${req.query.nome}%` } }
                     //req.query.nome ? req.query.nome : ""
                 ]
 
@@ -1052,23 +1053,57 @@ module.exports = {
 
         });
 
-        /*       const anuncios = await Anuncio.update({
-                  codAtividade: req.body.nomeAmigavel
-              }, {
-                  where: {
-                      codAtividade: req.body.atividade,
-                  },
-      
-              }); */
+        const nameAtividade = await Atividade.findOne({
+            where: {
+                id: req.query.id,
+            },
+            raw: true
+        });
 
-        const cadernos = await Caderno.findAll({ raw: true });
+        const anunciosAtividade = await Anuncio.findAll({
+            where: {
+                codAtividade: nameAtividade.atividade,
+            },
+            attributes: ['codUf', 'codCaderno'],
+            group: ['codUf', 'codCaderno'],
+            raw: true
+        });
+
+        //console.log("very", nameAtividade.atividade, anunciosAtividade)
 
         res.json({
             success: true, message: atividades
         })
 
+        for (let caderno of anunciosAtividade) {
+            try {
+                const query = `
+UPDATE anuncio
+JOIN (
+    SELECT a.codAnuncio, 
+           CEIL(ROW_NUMBER() OVER (ORDER BY b.nomeAmigavel ASC, a.createdAt DESC) / 10) AS page_number
+    FROM anuncio a
+    JOIN atividade b ON a.codAtividade = b.atividade
+    WHERE a.codUf = :estado AND a.codCaderno = :caderno
+) AS temp
+ON anuncio.codAnuncio = temp.codAnuncio
+SET anuncio.page = temp.page_number
+WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
+                            `;
 
-        for (let caderno of cadernos) {
+                await database.query(query, {
+                    replacements: { estado: caderno.codUf, caderno: caderno.codCaderno },
+                    type: Sequelize.QueryTypes.UPDATE,
+                });
+
+                console.log(`Reorganização concluída para o estado:`, caderno.codUf);
+            } catch (error) {
+                console.error("Erro ao executar a reorganização:", error);
+            }
+        }
+
+
+        /* for (let caderno of cadernos) {
             try {
                 const query = `
 UPDATE anuncio
@@ -1093,7 +1128,7 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
             } catch (error) {
                 console.error("Erro ao executar a reorganização:", error);
             }
-        }
+        } */
 
         /*         try {
                     const query = `
@@ -2201,22 +2236,22 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
         })
     },
     listarValorBase: async (req, res) => {
-       const valorBase = await Globals.findOne({
-            where: {keyValue: "precoBase"},
+        const valorBase = await Globals.findOne({
+            where: { keyValue: "precoBase" },
             raw: true
-        });    
+        });
 
         //const prazoCampanha = await Campanha.
 
-        res.json({success: true, value: valorBase.value})
+        res.json({ success: true, value: valorBase.value })
     },
-     atualizarValorBase: async (req, res) => {
-       const valorBase = await Globals.update({value: req.body.novoValor}, {
-            where: {keyValue: "precoBase"},
+    atualizarValorBase: async (req, res) => {
+        const valorBase = await Globals.update({ value: req.body.novoValor }, {
+            where: { keyValue: "precoBase" },
             raw: true
-        });    
+        });
 
-        res.json({success: true, value: valorBase.value, message: "Preço base atualizado!"})
+        res.json({ success: true, value: valorBase.value, message: "Preço base atualizado!" })
     }
 
 }

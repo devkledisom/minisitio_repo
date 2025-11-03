@@ -406,7 +406,7 @@ function FormAdesao({ isAdmin }) {
 
         {/*  */}
         <h1 id="title-caderno" className="py-2 text-center">
-          Formulário de Adesão
+          Formulário de Adesão/Renovação
         </h1>
         {/*  <h2 className="py-4">
           Preencha os campos abaixo para simular e incluir sua
