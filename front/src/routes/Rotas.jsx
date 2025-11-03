@@ -122,56 +122,56 @@ function Rotas() {
                         </PrivateRoute>}
                     />
 
-                    <Route path="admin/users" element={<PrivateRoute><Users /></PrivateRoute>} />
-                    <Route path="admin/Cadernos" element={<PrivateRoute><Cadernos /></PrivateRoute>} />
-                    <Route path="admin/info/Cadernos" element={<PrivateRoute><InfoCadernos /></PrivateRoute>} />
-                    <Route path="admin/atividades" element={<PrivateRoute><Atividades /></PrivateRoute>} />
-                    <Route path="admin/usuarios/cadastro" element={<PrivateRoute><FormCadastro /></PrivateRoute>} />
-                    <Route path="admin/usuarios/editar" element={<PrivateRoute><FormEditar /></PrivateRoute>} />
+                    <Route path="admin/users" element={<PrivateRoute isAdmin={true}><Users /></PrivateRoute>} />
+                    <Route path="admin/Cadernos" element={<PrivateRoute isAdmin={true}><Cadernos /></PrivateRoute>} />
+                    <Route path="admin/info/Cadernos" element={<PrivateRoute isAdmin={true}><InfoCadernos /></PrivateRoute>} />
+                    <Route path="admin/atividades" element={<PrivateRoute isAdmin={true}><Atividades /></PrivateRoute>} />
+                    <Route path="admin/usuarios/cadastro" element={<PrivateRoute isAdmin={true}><FormCadastro /></PrivateRoute>} />
+                    <Route path="admin/usuarios/editar" element={<PrivateRoute isAdmin={true}><FormEditar /></PrivateRoute>} />
 
-                    <Route path="admin/cadernos/cadastro" element={<PrivateRoute><FormCadernos /></PrivateRoute>} />
-                    <Route path="admin/atividades/cadastro" element={<PrivateRoute><FormCadastroAtividade /></PrivateRoute>} />
-                    <Route path="admin/atividades/editar" element={<PrivateRoute><FormEditAtividade /></PrivateRoute>} />
+                    <Route path="admin/cadernos/cadastro" element={<PrivateRoute isAdmin={true}><FormCadernos /></PrivateRoute>} />
+                    <Route path="admin/atividades/cadastro" element={<PrivateRoute isAdmin={true}><FormCadastroAtividade /></PrivateRoute>} />
+                    <Route path="admin/atividades/editar" element={<PrivateRoute isAdmin={true}><FormEditAtividade /></PrivateRoute>} />
 
                    
-                    <Route path="admin/desconto" element={<PrivateRoute><GerenciarIds /></PrivateRoute>} />
-                    <Route path="admin/desconto/cadastro" element={<PrivateRoute><GerenciarIdCadastro /></PrivateRoute>} />
-                    <Route path="admin/desconto/editar" element={<PrivateRoute><GerenciarIdEditar /></PrivateRoute>} />
+                    <Route path="admin/desconto" element={<PrivateRoute isAdmin={true}><GerenciarIds /></PrivateRoute>} />
+                    <Route path="admin/desconto/cadastro" element={<PrivateRoute isAdmin={true}><GerenciarIdCadastro /></PrivateRoute>} />
+                    <Route path="admin/desconto/editar" element={<PrivateRoute isAdmin={true}><GerenciarIdEditar /></PrivateRoute>} />
 
-                    <Route path="admin/espacos" element={<PrivateRoute><Espacos /></PrivateRoute>} />
-                    <Route path="admin/anuncio/cadastro" element={<PrivateRoute><AnuncioCadastro isAdmin={true} /></PrivateRoute>} />
-                    <Route path="admin/anuncio/editar" element={<PrivateRoute><AnuncioEditar /></PrivateRoute>} />
-                    <Route path="admin/anuncio/import" element={<PrivateRoute><EspacosImport /></PrivateRoute>} />
+                    <Route path="admin/espacos" element={<PrivateRoute isAdmin={true}><Espacos /></PrivateRoute>} />
+                    <Route path="admin/anuncio/cadastro" element={<PrivateRoute isAdmin={true} ><AnuncioCadastro isAdmin={true} /></PrivateRoute>} />
+                    <Route path="admin/anuncio/editar" element={<PrivateRoute isAdmin={true}><AnuncioEditar /></PrivateRoute>} />
+                    <Route path="admin/anuncio/import" element={<PrivateRoute isAdmin={true}><EspacosImport /></PrivateRoute>} />
 
 
-                    <Route path="admin/pagamentos" element={<PrivateRoute><Pagamentos /></PrivateRoute>} />
-                    <Route path="admin/pagamento/config" element={<PrivateRoute><ConfigPay /></PrivateRoute>} />
+                    <Route path="admin/pagamentos" element={<PrivateRoute isAdmin={true}><Pagamentos /></PrivateRoute>} />
+                    <Route path="admin/pagamento/config" element={<PrivateRoute isAdmin={true}><ConfigPay /></PrivateRoute>} />
 
                     {/*ROTAS MODULO PIN*/}
-                    <Route path="admin/pin" element={<PrivateRoute><Pin /></PrivateRoute>} />
-                    <Route path="admin/pin/cadastro" element={<PrivateRoute><PinCadastro /></PrivateRoute>} />
-                    <Route path="admin/pin/editar" element={<PrivateRoute><PinEditar /></PrivateRoute>} />
+                    <Route path="admin/pin" element={<PrivateRoute isAdmin={true}><Pin /></PrivateRoute>} />
+                    <Route path="admin/pin/cadastro" element={<PrivateRoute isAdmin={true}><PinCadastro /></PrivateRoute>} />
+                    <Route path="admin/pin/editar" element={<PrivateRoute isAdmin={true}><PinEditar /></PrivateRoute>} />
 
                     {/*ROTAS MODULO CALHAU*/}
-                    <Route path="admin/calhau" element={<PrivateRoute><Calhau /></PrivateRoute>} />
-                    <Route path="admin/calhau/cadastro" element={<PrivateRoute><CalhauCadastro /></PrivateRoute>} />
+                    <Route path="admin/calhau" element={<PrivateRoute isAdmin={true}><Calhau /></PrivateRoute>} />
+                    <Route path="admin/calhau/cadastro" element={<PrivateRoute isAdmin={true}><CalhauCadastro /></PrivateRoute>} />
 
                     {/*ROTAS MODULO CONFIGURACÕES DO PORTAL*/}
-                    <Route path="admin/configuracoes" element={<PrivateRoute><ConfiguracoesPortal /></PrivateRoute>} />
-                    <Route path="admin/institucional" element={<PrivateRoute><AdminInstitucional /></PrivateRoute>} />
-                    <Route path="admin/contato" element={<PrivateRoute><AdminContato /></PrivateRoute>} />
+                    <Route path="admin/configuracoes" element={<PrivateRoute isAdmin={true}><ConfiguracoesPortal /></PrivateRoute>} />
+                    <Route path="admin/institucional" element={<PrivateRoute isAdmin={true}><AdminInstitucional /></PrivateRoute>} />
+                    <Route path="admin/contato" element={<PrivateRoute isAdmin={true}><AdminContato /></PrivateRoute>} />
 
                     {/*ROTAS MODULO GERAR CAMPANHA*/}
-                    <Route path="admin/campanha" element={<PrivateRoute><Campanha /></PrivateRoute>} />
+                    <Route path="admin/campanha" element={<PrivateRoute isAdmin={true}><Campanha /></PrivateRoute>} />
 
 
-                    <Route path="admin/cadernos/editar" element={<PrivateRoute><CadernosEdit /></PrivateRoute>} />
+                    <Route path="admin/cadernos/editar" element={<PrivateRoute isAdmin={true}><CadernosEdit /></PrivateRoute>} />
                 </Route>
 
 
 
                 {/* ROTAS PAINEL ADMIN DO ANUNCIANTE */}
-                <Route path="ver-anuncios/:cpf" element={<PrivateRoute><PainelAdmin isPublic={true} /></PrivateRoute>} />
+                <Route path="ver-anuncios/:cpf" element={<PrivateRoute isAdmin={false}><PainelAdmin isPublic={true} /></PrivateRoute>} />
 
                 {/* ROTAS AREA DO ASSINANTE */}
                 <Route path="criar-cadastro" element={<AssinanteCadastro />} />

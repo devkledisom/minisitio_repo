@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { masterPath } from '../../config/config';
 
@@ -26,6 +26,8 @@ import Legenda from './Legenda';
 //FUNCTIONS
 import useIsMobile from '../../admin/functions/useIsMobile';
 
+import { AuthContext } from "../../context/AuthContext";
+
 
 function PainelAdmin() {
 
@@ -45,6 +47,9 @@ function PainelAdmin() {
     const [espacoId, setEspacoId] = useState(null);
     const [userType, setUserType] = useState(null);
     const [role, setRole] = useState(null);
+      const { user, logout } = useContext(AuthContext);
+
+   
 
     const location = useLocation();
 
@@ -53,6 +58,7 @@ function PainelAdmin() {
     const book = pegarParam.get('book');
     const id = pegarParam.get('id');
     const { cpf } = useParams();
+
 
     const navigate = useNavigate();
 
@@ -95,8 +101,14 @@ function PainelAdmin() {
     const teste = useRef(null)
 
     useEffect(() => {
+        if(user.descCPFCNPJ === cpf) {
+            setUserType(sessionStorage.getItem('userLogged'));
+        } else {
+            navigate("/login");
+            logout();
+        }
 
-        setUserType(sessionStorage.getItem('userLogged'));
+        
 
     }, []);
 
