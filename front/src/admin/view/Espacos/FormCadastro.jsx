@@ -333,9 +333,9 @@ function ComprarAnuncio() {
 
     return (
         <div className="App">
-            <header style={style} className='w-100'>
+           {/*  <header style={style} className='w-100'>
                 <Header />
-            </header>
+            </header> */}
             {showSpinner && <Spinner />}
             <main>
                 <h1 id="title-caderno">

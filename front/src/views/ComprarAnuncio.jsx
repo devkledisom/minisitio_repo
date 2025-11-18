@@ -332,11 +332,11 @@ function ComprarAnuncio({ isAdmin }) {
 
   return (
     <div className="App">
-      {isAdmin &&
+    {/*   {isAdmin &&
         <header style={{ position: "fixed", zIndex: "999" }} className='w-100'>
           <Header />
         </header>
-      }
+      } */}
 
       {!isAdmin &&
         <header>

@@ -90,54 +90,54 @@ const FormEdit = () => {
                     //console.log(res[0].descImagem);
                     //setPatrocinio(1)
                 }
-                
+
                 document.getElementById('user').value = res[0].idUsuario;
 
-           /*      fetch(`${masterPath.url}/admin/desconto/usuario/buscar/${res[0].idUsuario}`)
-                    .then((x) => x.json())
-                    .then((res) => {
-                        setUsuarios(res.usuarios);
-                        setShowSpinner(false);
-                    }).catch((err) => {
-                        console.log(err);
-                        setShowSpinner(false);
-                    }) */
+                /*      fetch(`${masterPath.url}/admin/desconto/usuario/buscar/${res[0].idUsuario}`)
+                         .then((x) => x.json())
+                         .then((res) => {
+                             setUsuarios(res.usuarios);
+                             setShowSpinner(false);
+                         }).catch((err) => {
+                             console.log(err);
+                             setShowSpinner(false);
+                         }) */
 
 
-                    /*  fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
-                                .then((x) => x.json())
-                                .then((res) => {
-                                    if(res.success) {
-                                        console.log(ids[0].idUsuario)
-                                        setUsuarios(res.usuarios);
-                                        setShowSpinner(false);
-                                        document.getElementById('user').value = ids[0].idUsuario;
-                                    } else {
-                                        console.log(res)
-                                        setUsuarios([]);
-                                        setShowSpinner(false);
-                                    }
-                    
-                                }).catch((err) => {
-                                    console.log(err);
+                /*  fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
+                            .then((x) => x.json())
+                            .then((res) => {
+                                if(res.success) {
+                                    console.log(ids[0].idUsuario)
+                                    setUsuarios(res.usuarios);
                                     setShowSpinner(false);
-                                }) */
+                                    document.getElementById('user').value = ids[0].idUsuario;
+                                } else {
+                                    console.log(res)
+                                    setUsuarios([]);
+                                    setShowSpinner(false);
+                                }
+                
+                            }).catch((err) => {
+                                console.log(err);
+                                setShowSpinner(false);
+                            }) */
 
 
             }).catch((err) => {
                 console.log(err)
             })
 
-            fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
+        fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
             .then((x) => x.json())
             .then((res) => {
-                if(res.success) {
+                if (res.success) {
                     //console.log(ids[0].idUsuario)
                     setUsuarios(res.usuarios);
                     setShowSpinner(false);
-                    
+
                 } else {
-                    console.log(res)
+                    //console.log(res)
                     setUsuarios([]);
                     setShowSpinner(false);
                 }
@@ -183,14 +183,18 @@ const FormEdit = () => {
             "valorDesconto": document.getElementById('valorDesconto').value,
             "patrocinador": document.getElementById('patrocinador').value,
             "saldoUtilizado": document.getElementById('utilizar-saldo').value,
-            "descImagem": localStorage.getItem("imgname"),
+            "descImagem": imgs.newImg_1 ? imgs.newImg_1 : imgs.img_1,
+            "descImagem2": imgs.newImg_2 ? imgs.newImg_2 : imgs.img_2,
+            "descImagem3": imgs.newImg_3 ? imgs.newImg_3 : imgs.img_3,
+            /* "descImagem": localStorage.getItem("imgname"),
             "descImagem2": localStorage.getItem("imgname2"),
-            "descImagem3": localStorage.getItem("imgname3"),
+            "descImagem3": localStorage.getItem("imgname3"), */
             "descLink": links.link_1,
             "descLink2": links.link_2,
             "descLink3": links.link_3,
             "utilizarSaldo": saldo,
-            "addSaldo": saldoValue//document.getElementById('add-saldo') ? document.getElementById('add-saldo').value : 0
+            "addSaldo": saldoValue, //document.getElementById('add-saldo') ? document.getElementById('add-saldo').value : 0
+            "imagens": imgs
         };
 
 
@@ -219,12 +223,15 @@ const FormEdit = () => {
                             text: 'ID Atualizado!',
                             icon: 'success',
                             confirmButtonText: 'Confirmar'
+                        }).then(() => {
+
+                            window.location.reload();
+
                         })
                     } else {
                         //alert(res.message);
-                        console.log(res.message);
-                       
-                        if(res.message == "Token inválido") {
+
+                        if (res.message == "Token inválido") {
                             alert("Sessão expirada, faça login para continuar.");
                             navigate('/login')
                         }
@@ -276,7 +283,7 @@ const FormEdit = () => {
         // Se já existe uma vírgula, impede a digitação de outra
         const parts = value.split(',');
 
-        value = parseFloat(value).toFixed(2); 
+        value = parseFloat(value).toFixed(2);
 
         if (value.length == 2) {
             //value = `${value},00`; // Mantém apenas 2 dígitos após a vírgula
@@ -288,21 +295,29 @@ const FormEdit = () => {
         }
 
         // Garante duas casas decimais ao final
-      /*   if (parts.length == 2) {
-            const [integer, decimal] = parts;
-            value = `${integer},${decimal.slice(0, 2)}`;
-        } */
+        /*   if (parts.length == 2) {
+              const [integer, decimal] = parts;
+              value = `${integer},${decimal.slice(0, 2)}`;
+          } */
 
-        console.log(value, parts)
 
         setDescontoId(value);
     };
 
+    const formatarReais = (valor) => {
+        valor = valor.replace(/\D/g, ""); // remove não números
+        valor = (valor / 100).toFixed(2) + "";
+        valor = valor.replace(".", ",");
+        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return valor;
+    };
+
+
     return (
         <div className="users">
-            <header style={style} className='w-100'>
+            {/*    <header style={style} className='w-100'>
                 <Header />
-            </header>
+            </header> */}
             <section className='py-5'>
                 {showSpinner && <Spinner />}
 
@@ -315,10 +330,10 @@ const FormEdit = () => {
                             {hash && <span>Código: {hash}</span>}
 
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
-                            <select name="user" id="user" className="w-50 py-1">
-                            <option value="0">- Carregando -</option>
+                            <select name="user" id="user" className="w-50 py-1 border border-dark rounded">
+                                <option value="0">- Carregando -</option>
                                 {
-                                    
+
                                     usuarios.map((user) => (
                                         <option key={user.codUsuario} value={user.codUsuario}>{/* teste(user.idUsuario) */user.descNome}</option>
                                     ))
@@ -336,7 +351,7 @@ const FormEdit = () => {
                                 onChange={(e) => setDescricaoId(e.target.value)}
                             />
                         </div>
-                     {/*                  <div className="form-group d-flex flex-column align-items-center py-3">
+                        {/*                  <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="valorDesconto" className="w-50 px-1">Valor base:</label>
 
                           <input type="number"
@@ -351,16 +366,19 @@ const FormEdit = () => {
                         </div> */}
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="valorDesconto" className="w-50 px-1">Valor do desconto:</label>
-                         {/*         <input type="text"
+
+                            <InputMask
+                                type="text"
                                 className="form-control h-25 w-50"
                                 id="valorDesconto"
                                 name="valorDesconto"
-                               value={parseFloat(descontoId).toFixed(2).replace('.', ',')}
-
-                                onChange={(e) => setDescontoId(`${parseFloat(e.target.value)}`)}
+                                value={descontoId}
+                                onChange={(e) => setDescontoId(formatarReais(e.target.value))}
+                                mask={null}
                                 placeholder="0,00"
-                            />  */}
-                            {/*           <InputMask
+                            />
+
+                            {/*          <InputMask
                                 type="text"
                                 className="form-control h-25 w-50"
                                 id="valorDesconto"
@@ -370,15 +388,15 @@ const FormEdit = () => {
                                 placeholder="0,00"
                                 mask={'99,99'}
                             ></InputMask> */}
-
-                          <input type="number"
+                            {/* 
+                            <input type="number"
                                 className="form-control h-25 w-50"
                                 id="valorDesconto"
                                 name="valorDesconto"
                                 value={`${parseFloat(descontoId).toFixed(2)}`}
                                 onChange={(e) => setDescontoId(`${parseFloat(e.target.value)}`)}
                                 placeholder="0,00"
-                            /> 
+                            /> */}
 
                             {/*  <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span> */}
                         </div>
@@ -395,9 +413,9 @@ const FormEdit = () => {
 
                         {patrocinio == 1 &&
                             <div className="form-group d-flex flex-column align-items-center py-3">
-                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink} codImg={descImagem.descImagem} miniPreview={false} valueLink={links.link_1} />
-                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink2} codImg={descImagem.descImagem2} miniPreview={false} valueLink={links.link_2} />
-                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink3} codImg={descImagem.descImagem3} miniPreview={false} valueLink={links.link_3} />
+                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink} codImg={descImagem.descImagem} miniPreview={false} valueLink={links.link_1} setImgs={setImgs} />
+                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink2} codImg={descImagem.descImagem2} miniPreview={false} valueLink={links.link_2} setImgs={setImgs} />
+                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} codigoUser={param} links={descImagem.descLink3} codImg={descImagem.descImagem3} miniPreview={false} valueLink={links.link_3} setImgs={setImgs} />
                             </div>
 
                         }

@@ -1388,6 +1388,8 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
     },
     atualizarIds: async (req, res) => {
 
+        let { img_1, img_2, img_3, newImg_1, newImg_2, newImg_3 } = req.body.imagens;
+
         // Consulta para recuperar apenas os itens da página atual
         const ids = await Descontos.update({
             idUsuario: req.body.usuario,
@@ -1409,6 +1411,36 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
 
         });
 
+        if (newImg_1 && newImg_1 != img_1) {
+            console.log("remover imagem antiga 1:", img_1)
+            fs.unlink(path.join(__dirname, `../public/upload/img/logoParceiro/${img_1}`), (err) => {
+                if (err) {
+                    console.error("Erro ao excluir o arquivo:", err);
+                    return;
+                }
+                console.log('Arquivo apagado com sucesso!');
+            });
+        }
+        if (newImg_2 && newImg_2 != img_2) {
+            console.log("remover imagem antiga 2:", img_2)
+            fs.unlink(path.join(__dirname, `../public/upload/img/logoParceiro/${img_2}`), (err) => {
+                if (err) {
+                    console.error("Erro ao excluir o arquivo:", err);
+                    return;
+                }
+                console.log('Arquivo apagado com sucesso!');
+            });
+        }
+        if (newImg_3 && newImg_3 != img_3) {
+            console.log("remover imagem antiga 3:", img_3)
+            fs.unlink(path.join(__dirname, `../public/upload/img/logoParceiro/${img_3}`), (err) => {
+                if (err) {
+                    console.error("Erro ao excluir o arquivo:", err);
+                    return;
+                }
+                console.log('Arquivo apagado com sucesso!');
+            });
+        }
 
         res.json({
             success: true, message: ids

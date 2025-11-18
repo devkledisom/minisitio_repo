@@ -3,7 +3,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import { masterPath } from '../../../config/config';
 
 import "../../assets/css/fieldset.css";
-import ChooseFile from "../../../components/ChooseFile";
+import ChooseFile from "./_components/ChooseFile";
 
 const FieldsetPatrocinador = (props) => {
 
@@ -13,10 +13,16 @@ const FieldsetPatrocinador = (props) => {
         <div className="app-patrocinador w-50">
             <fieldset className="border-bottom">
                 <legend className="">Patrocinador 0{props.numeroPatrocinador}</legend>
-                <div class="control-group" style={{ display: 'block' }}><label for="descImagem" class="control-label optional">IMAGEM DE PATROCINADOR: (148 x 46 pixels)</label>
+                <div class="control-group" style={{ display: 'block' }}><label for="descImagem" class="control-label optional">IMAGEM DE PATROCINADOR: (150 x 58 pixels)</label>
 
                 </div>
-                <ChooseFile codigoUser={props.codigoUser} largura={"w-100 py-4"} preview={false} patrocinador={props.numeroPatrocinador} codImg={props.codImg} miniPreview={props.miniPreview}/>
+                <ChooseFile
+                 codigoUser={props.codigoUser} 
+                 largura={"w-100 py-4"} preview={false} 
+                 patrocinador={props.numeroPatrocinador} 
+                 codImg={props.codImg} miniPreview={props.miniPreview}
+                 setImgs={props.setImgs}
+                 origin={"logo"}/>
 
                 <div class="control-group" style={{ display: 'block' }}><label for="descLink" class="control-label optional">LINK DE PATROCINADOR: </label>
                     <div class="controls mb-5">

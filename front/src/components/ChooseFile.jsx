@@ -28,6 +28,8 @@ function UploadImage(props) {
       setMostrarLabel(true);
       setMostrarMiniPreview(true);
     } 
+
+    console.log("very")
   }, []);
 
 

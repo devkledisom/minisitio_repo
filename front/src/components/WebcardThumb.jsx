@@ -115,17 +115,17 @@ function WebcardThumb(props) {
                             <div>
                                 {partner(listaIds.descImagem) &&
                                     <a href={listaIds.descLink} target="_blank" rel="noopener noreferrer">
-                                        <img src={`${masterPath.url}/files/${listaIds.descImagem}`} alt="" />
+                                        <img src={`${masterPath.url}/files/logoParceiro/${listaIds.descImagem}`} alt="" />
                                     </a>
                                 }
                                 {partner(listaIds.descImagem2) != "" &&
                                     <a href={listaIds.descLink2} target="_blank" rel="noopener noreferrer">
-                                        <img src={`${masterPath.url}/files/${listaIds.descImagem2}`} alt="" />
+                                        <img src={`${masterPath.url}/files/logoParceiro/${listaIds.descImagem2}`} alt="" />
                                     </a>
                                 }
                                 {partner(listaIds.descImagem3) != "" &&
                                     <a href={listaIds.descLink3} target="_blank" rel="noopener noreferrer">
-                                        <img src={`${masterPath.url}/files/${listaIds.descImagem3}`} alt="" />
+                                        <img src={`${masterPath.url}/files/logoParceiro/${listaIds.descImagem3}`} alt="" />
                                     </a>
                                 }
                             </div>

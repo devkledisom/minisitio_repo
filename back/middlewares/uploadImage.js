@@ -12,8 +12,22 @@ module.exports = (multer({
             
         },
         filename: (req, file, cb) => {
-            //cb(null, Date.now().toString() + "_" + file.originalname)  
-            cb(null, file.originalname)  
+            //cb(null, Date.now().toString() + "_" + file.originalname) 
+            
+            
+            if(req.query.local == 'logoParceiro'){
+                if(req.query.cod) {
+                     cb(null, req.query.cod + "_" + Date.now().toString() + path.extname(file.originalname));
+                } else {
+                    cb(null, "new_" + Date.now().toString() + path.extname(file.originalname));
+                }
+               
+            } else {
+                cb(null, file.originalname);
+            }
+            //cb(null, file.originalname) 
+            
+            
         }
     }),
     fileFilter: (req, file, cb) => {

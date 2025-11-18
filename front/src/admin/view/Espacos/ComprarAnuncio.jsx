@@ -224,9 +224,9 @@ function ComprarAnuncio() {
 
   return (
     <div className="App">
-      <header>
+{/*       <header>
         <Mosaico logoTop={true} borda="none" />
-      </header>
+      </header> */}
       <main>
         {/*      <TemplateModal
           descontoAtivado={descontoAtivado}

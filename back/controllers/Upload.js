@@ -20,7 +20,8 @@ module.exports = {
 
 
             return res.json({
-                erro: false,
+                success: true,
+                fileName: req.file.filename,
                 mensagem: "Upload realizado com sucesso!"
             });
         }
