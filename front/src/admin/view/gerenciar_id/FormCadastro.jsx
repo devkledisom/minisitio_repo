@@ -27,6 +27,11 @@ const FormCadastro = () => {
         link_2: null,
         link_3: null
     });
+    const [imgs, setImgs] = useState({
+        img_1: null,
+        img_2: null,
+        img_3: null
+    });
     const [value, setValue] = useState('');
 
     //REFS
@@ -58,7 +63,6 @@ const FormCadastro = () => {
                     setUsuarios(res.usuarios);
                     setShowSpinner(false);
                 } else {
-                    console.log(res)
                     setUsuarios([]);
                     setShowSpinner(false);
                 }
@@ -120,14 +124,18 @@ const FormCadastro = () => {
             "patrocinador": document.getElementById('patrocinador').value,
             "saldoUtilizado": document.getElementById('utilizar-saldo').value,
             "hash": hash,
-            "descImagem": localStorage.getItem("imgname"),
+            "descImagem": imgs.newImg_1 ? imgs.newImg_1 : null,
+            "descImagem2": imgs.newImg_2 ? imgs.newImg_2 : null,
+            "descImagem3": imgs.newImg_3 ? imgs.newImg_3 : null,
+           /*  "descImagem": localStorage.getItem("imgname"),
             "descImagem2": localStorage.getItem("imgname2"),
-            "descImagem3": localStorage.getItem("imgname3"),
+            "descImagem3": localStorage.getItem("imgname3"), */
             "descLink": links.link_1,
             "descLink2": links.link_2,
             "descLink3": links.link_3,
             "saldo": document.getElementById('adicionar_saldo') ? document.getElementById('adicionar_saldo').value : 0,
-            "is_capa": isCapa.current.value
+            "is_capa": isCapa.current.value,
+            "imagens": imgs
         };
 
         const config = {
@@ -143,7 +151,6 @@ const FormCadastro = () => {
             fetch(`${masterPath.url}/admin/desconto/create`, config)
                 .then((x) => x.json())
                 .then((res) => {
-                    console.log(res)
                     if (res.success) {
                         setShowSpinner(false);
                         //alert("Usuário Cadastrado!"); 
@@ -213,9 +220,9 @@ const FormCadastro = () => {
 
     return (
         <div className="users">
-            <header style={style} className='w-100'>
+            {/*     <header style={style} className='w-100'>
                 <Header />
-            </header>
+            </header> */}
             <section className='py-5'>
                 {showSpinner && <Spinner />}
 
@@ -226,7 +233,7 @@ const FormCadastro = () => {
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             {hash && <span className='codigoId'>Código: {hash}</span>}
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
-                            <select name="user" id="user" className="w-50 py-1" onChange={gerarIdMaster}>
+                            <select name="user" id="user" className="w-50 py-1 border border-dark rounded" onChange={gerarIdMaster}>
                                 <option>- Selecionar Usuário -</option>
                                 {
                                     usuarios.map((user) => (
@@ -261,9 +268,9 @@ const FormCadastro = () => {
                         </div>
                         {patrocinio == 1 &&
                             <div className="form-group d-flex flex-column align-items-center py-3">
-                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} miniPreview={true} />
-                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} miniPreview={true} />
-                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} miniPreview={true} />
+                                <FieldsetPatrocinador numeroPatrocinador={1} linkPatrocinio={handleChange} miniPreview={true} setImgs={setImgs} />
+                                <FieldsetPatrocinador numeroPatrocinador={2} linkPatrocinio={handleChange} miniPreview={true} setImgs={setImgs} />
+                                <FieldsetPatrocinador numeroPatrocinador={3} linkPatrocinio={handleChange} miniPreview={true} setImgs={setImgs} />
                                 {/*  <label className="w-50 px-1">Imagem:</label> */}
                                 {/*  <ChooseFile codigoUser={param} largura={"w-50"} preview={true} /> */}
                             </div>
