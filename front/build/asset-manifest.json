@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/static/css/main.3a71b2a5.css",
+    "main.js": "/static/js/main.ca00d9e5.js",
+    "static/js/213.00da5807.chunk.js": "/static/js/213.00da5807.chunk.js",
+    "static/js/455.5d6a8024.chunk.js": "/static/js/455.5d6a8024.chunk.js",
+    "static/js/851.63c840eb.chunk.js": "/static/js/851.63c840eb.chunk.js",
+    "static/js/453.a393c848.chunk.js": "/static/js/453.a393c848.chunk.js",
+    "static/media/fontawesome-webfont.svg?v=4.7.0": "/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
+    "static/media/bg-home.jpg": "/static/media/bg-home.4989417f6247fe6cf27b.jpg",
+    "static/media/bootstrap-icons.woff?": "/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+    "static/media/fontawesome-webfont.eot": "/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
+    "static/media/fontawesome-webfont.ttf?v=4.7.0": "/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
+    "static/media/bootstrap-icons.woff2?": "/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
+    "static/media/fontawesome-webfont.woff?v=4.7.0": "/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
+    "static/media/fontawesome-webfont.woff2?v=4.7.0": "/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
+    "static/media/twitter.png": "/static/media/twitter.70919ee0b2f82a98fbd9.png",
+    "static/media/facebook.png": "/static/media/facebook.c1a1ccd1d322e1ad692a.png",
+    "static/media/glyphicons-halflings.png": "/static/media/glyphicons-halflings.e54998a8fe454b8c4370.png",
+    "index.html": "/index.html",
+    "main.3a71b2a5.css.map": "/static/css/main.3a71b2a5.css.map",
+    "main.ca00d9e5.js.map": "/static/js/main.ca00d9e5.js.map",
+    "213.00da5807.chunk.js.map": "/static/js/213.00da5807.chunk.js.map",
+    "455.5d6a8024.chunk.js.map": "/static/js/455.5d6a8024.chunk.js.map",
+    "851.63c840eb.chunk.js.map": "/static/js/851.63c840eb.chunk.js.map",
+    "453.a393c848.chunk.js.map": "/static/js/453.a393c848.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3a71b2a5.css",
+    "static/js/main.ca00d9e5.js"
+  ]
+}
