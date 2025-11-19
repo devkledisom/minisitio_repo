@@ -173,12 +173,18 @@ const Espacos = () => {
                 method: "POST",
                 body: formData,
             });
-
+            const data = await response.json(); // Recebe a resposta da API
             if (!response.ok) {
-                throw new Error("Erro ao enviar o formulário");
+                if (response.status === 404) {
+                    alert("Erro:" + " " + data.message);
+                }
+                //throw new Error("Erro ao enviar o formulário");
             }
 
-            const data = await response.json(); // Recebe a resposta da API
+            //const data = await response.json(); // Recebe a resposta da API
+
+
+
             setShowSpinner(false);
             document.querySelector('#btn-import').disabled = true;
 
@@ -227,10 +233,10 @@ const Espacos = () => {
         // Faz a chamada para sua rota que finaliza o processo
         setShowSpinner(true)
         fetch(`${masterPath.url}/admin/import/stage/finalizar`)
-             .then(x => x.json())
+            .then(x => x.json())
             .then(text => {
                 setShowSpinner(false)
-                if(text.success) {
+                if (text.success) {
                     Swal.fire("Sucesso!", "Processo de importação finalizado!", "success")
                         .then((resposta) => {
                             if (resposta.isConfirmed) {
@@ -281,9 +287,9 @@ const Espacos = () => {
 
     return (
         <div className="users">
-            <header style={style} className='w-100'>
+            {/*<header style={style} className='w-100'>
                 <Header />
-            </header>
+            </header>*/}
             <section className="pt-5">
 
                 {showSpinner && <Spinner />}

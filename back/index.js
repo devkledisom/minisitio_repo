@@ -124,7 +124,7 @@ const Globals = require('./models/table_globals');
 const { Op } = Sequelize;
 
 app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfile'), async (req, res) => {
-    res.json({ success: true, message: "Importação" });
+    //res.json({ success: true, message: "Importação" });
 
 
     // const io = req.io;
@@ -283,7 +283,7 @@ app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfil
                     descCPFCNPJ: nuDocumento,
                     descNomeAutorizante: autorizante || `import${index}`,
                     descEmailAutorizante: 0,
-                    codDesconto: codigoDeDesconto ? codigoDeDesconto.idDesconto : '00.000.0000',
+                    codDesconto: codigoDeDesconto ? codigoDeDesconto.hash : '00.000.0000',
                     descChavePix: 'chavePix',
                     qntVisualizacoes: 0,
                     codDuplicado: 0,
@@ -336,12 +336,21 @@ app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfil
             }));
 
             for await (const row of stream) {
+
+
+                let codigoDeDesconto = await Descontos.findOne({ where: { hash: row["ID"] } });
+
+                if (!codigoDeDesconto) {
+                    console.log(`Processando linha ${row['ID']}:`);
+                    return res.status(404).json({ success: false, message: "O codigo de ID não foi encontrado. Por favor insira um ID válido no arquivo ou gere um novo ID e tente novamente." });
+                }
                 await processRow(row, index);
                 await new Promise(resolve => setTimeout(resolve, DELAY_MS));
                 index++;
             }
 
             console.log("Arquivo lido com sucesso!");
+            res.json({ success: true, message: "Importação" });
             updateJsonName(filePath, false, index - 1);
             // Zera o arquivo importLog.json após a última iteração
             const logInicial = {
@@ -391,18 +400,18 @@ app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfil
                         SET importStage.page = temp.page_number
                         WHERE importStage.codUf = :estado AND importStage.codCaderno = :caderno
                     `;
-                
-               /*        const query = `UPDATE anuncio
-                        JOIN (
-                            SELECT codAnuncio, 
-                                CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
-                            FROM anuncio
-                            WHERE codUf = :estado AND codCaderno = :caderno
-                        ) AS temp
-                        ON anuncio.codAnuncio = temp.codAnuncio
-                        SET anuncio.page = temp.page_number
-                        WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
-                    `; */
+
+                /*        const query = `UPDATE anuncio
+                         JOIN (
+                             SELECT codAnuncio, 
+                                 CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
+                             FROM anuncio
+                             WHERE codUf = :estado AND codCaderno = :caderno
+                         ) AS temp
+                         ON anuncio.codAnuncio = temp.codAnuncio
+                         SET anuncio.page = temp.page_number
+                         WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
+                     `; */
 
                 database.query(query, {
                     replacements: { estado: dataObjGeral.codUf, caderno: dataObjGeral.codCaderno },
@@ -410,14 +419,14 @@ app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfil
                 });
 
                 console.log(`Reorganização concluída para o estado:`, dataObjGeral.codUf);
-/* 
-                const zerarGlobalsTotalImport = await Globals.update({
-                    value: 0
-                }, {
-                    where: {
-                        keyValue: "total_importacao"
-                    }
-                }) */
+                /* 
+                                const zerarGlobalsTotalImport = await Globals.update({
+                                    value: 0
+                                }, {
+                                    where: {
+                                        keyValue: "total_importacao"
+                                    }
+                                }) */
 
             } catch (error) {
                 console.error("Erro ao executar a reorganização:", error);
@@ -438,6 +447,33 @@ app.post('/api/admin/anuncio/import/:socketId', saveImport().single('uploadedfil
 
 });
 
+function reorganizarAnuncios(codUf, codCaderno) {
+
+    try {
+        const query = `UPDATE anuncio
+                            JOIN (
+                                SELECT codAnuncio, 
+                                    CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
+                                FROM anuncio
+                                WHERE codUf = :estado AND codCaderno = :caderno
+                            ) AS temp
+                            ON anuncio.codAnuncio = temp.codAnuncio
+                            SET anuncio.page = temp.page_number
+                            WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
+                        `;
+
+        database.query(query, {
+            replacements: { estado: codUf, caderno: codCaderno },
+            type: Sequelize.QueryTypes.UPDATE,
+        });
+
+        console.log(`Reorganização concluída para o estado:`, codUf);
+    } catch (error) {
+        console.error("Erro ao executar a reorganização:", error);
+    }
+}
+
+//reorganizarAnuncios("DF", "SUDOESTE - OCTOGONAL")
 
 
 
@@ -449,7 +485,7 @@ cron.schedule('*/5 * * * *', () => {
 cron.schedule('0 5 * * *', () => {
     console.log('inativando campanhas expiradas...');
     inativarCampanhasExpiradas();
-}); 
+});
 
 
 server.listen(port, () => {
