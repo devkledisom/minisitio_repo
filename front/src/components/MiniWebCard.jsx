@@ -190,7 +190,7 @@ function MiniWebCard(props) {
         const styles = {
             display: "flex",
             flexDirection: "column"
-        };
+        }
 
         const link = props.urlShare;
         Swal.fire({
