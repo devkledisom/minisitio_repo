@@ -1,6 +1,21 @@
-idImport;TIPO;ID;NOME;TELEFONE;CEP;UF;CIDADE;ATIVIDADE_PRINCIPAL_CNAE;CNPJ_CPF;AUTORIZANTE;EMAIL
-1;3;61.9920.0055;VICTORIACRIISTINA8;61-95889473;72140080;AL;PENEDO;Atividades de estética e outros serviços de cuidados com a beleza;42413805000109;VICTORIACRIISTINA8;VICTORIACRIISTINA8@GMAIL.COM
-2;3;61.9920.0055;CAMILLACAPUTO;61-82822830;72016015;AL;PENEDO;Preparação de documentos e serviços especializados de apoio administrativo não especificados anteriormente;42413805000110;CAMILLACAPUTO;CAMILLACAPUTO@OUTLOOK.COM
-3;3;61.9920.0055;LUCASALEXMORAIS;61-96429014;72145760;AL;PENEDO;Reparação e manutenção de computadores e de equipamentos periféricos;42413805000111;LUCASALEXMORAIS;LUCASALEXMORAIS@GMAIL.COM
-4;3;61.9920.0055;CONTAX.BSB;61-83852535;72010020;AL;PENEDO;Outras atividades auxiliares dos transportes terrestres não especificadas anteriormente;42413805000112;CONTAX.BSB;CONTAX.BSB@GMAIL.COM
-5;3;61.9920.0055;ADVANCE TECNOLOGIA;61-98740692;72010010;AL;PENEDO;Treinamento em desenvolvimento profissional e gerencial;42413805000113;MILTONDSW;MILTONDSW@GMAIL.COM
+idImport;TIPO;ID;NOME;TELEFONE;CEP;UF;CIDADE;ATIVIDADE_PRINCIPAL_CNAE;CNPJ_CPF;AUTORIZANTE;EMAIL;PIX;DATA INICIO;LOGIN
+1;3;82.001.0076;EUDESOARES;61-998322621;70660685;DF;SUDOESTE - OCTOGONAL;Atividades de estética e outros serviços de cuidados com a beleza;15078246000153;EUDESOARES;quimas@mycardcity.net;;;
+2;3;82.001.0076;LOOHRANY31;61-998322621;70660049;DF;SUDOESTE - OCTOGONAL;Atividades de estética e outros serviços de cuidados com a beleza;57108087000132;LOOHRANY31;contatobr@mycardcity.net;;;
+3;3;82.001.0076;FABRICIO.IMSTUDIO;61-998322621;70660081;DF;SUDOESTE - OCTOGONAL;Obras de alvenaria;56961876000159;FABRICIO.IMSTUDIO;felipe.millar.alfonso@gmail.com;;;
+4;3;82.001.0076;CASA DOCE GELATERIA POR FABRICIO TONON;61-998322621;70660090;DF;SUDOESTE - OCTOGONAL;Padaria e confeitaria com predominância de revenda;18856735000268;CONTATO;walter@spolidoro.com.br;;;
+5;3;82.001.0076;DIAGNOPET;61-998322621;70660685;DF;SUDOESTE - OCTOGONAL;Atividades veterinárias;50411022000112;RADIOLOGIA.DIAGNOPET;danjefssp@hotmail.com;;;
+6;3;82.001.0076;BIOMUNDOGAMA;61-998322621;70660090;DF;SUDOESTE - OCTOGONAL;Comércio varejista de produtos alimentícios em geral ou especializado em produtos alimentícios não especificados anteriormente;29094478000100;BIOMUNDOGAMA;qualy.negócios@gmail.com;;;
+7;3;82.001.0076;LBR CONSULTORIA;61-998322621;70660090;DF;SUDOESTE - OCTOGONAL;Suporte técnico, manutenção e outros serviços em tecnologia da informação;5436252000181;diretoria;niltonnfn@gmail.com;;;
+8;3;82.001.0076;maciel.analima;61-998322621;70660082;DF;SUDOESTE - OCTOGONAL;Fabricação de bijuterias e artefatos semelhantes;27632815000140;maciel.analima;edmundo.braga@gmail.com;;;
+9;3;82.001.0076;DJULI7;61-998322621;70660021;DF;SUDOESTE - OCTOGONAL;Comércio varejista de cosméticos, produtos de perfumaria e de higiene pessoal;22051531000146;DJULI7;henriquematos@hotmail.com;;;
+10;3;82.001.0076;DULCESOARESALVES;61-998322621;70660045;DF;SUDOESTE - OCTOGONAL;Padaria e confeitaria com predominância de revenda;46915828000170;DULCESOARESALVES;pablo.quimas@gmail.com;;;
+11;3;82.001.0076;BRTWO;61-998322621;70660014;DF;SUDOESTE - OCTOGONAL;Reparação e manutenção de computadores e de equipamentos periféricos;49398458000130;STUDIO;simone.quimas@gmail.com;;;
+12;3;82.001.0076;VIANDELL PET;61-998322621;70660685;DF;SUDOESTE - OCTOGONAL;Atividades veterinárias;36684716000100;VIANDELLPETHOTEL;devkledisom@gmail.com;;;
+13;3;82.001.0076;GRUPOJBR;61-998322621;70660049;DF;SUDOESTE - OCTOGONAL;Casas de festas e eventos;48696727000181;GRUPOJBR;qualy.minisitio@gmail.com;;;
+14;3;82.001.0076;FABIO.A.MARQUES;61-998322621;70660049;DF;SUDOESTE - OCTOGONAL;Lanchonetes, casas de chá, de sucos e similares;28953279000147;FABIO.A.MARQUES;rubensbispo55@gmail.com;;;
+15;3;82.001.0076;BIANCAPLIMA;61-998322621;70660014;DF;SUDOESTE - OCTOGONAL;Edição de revistas;53684649000135;BIANCAPLIMA;quimas@mycardcity.net;;;
+16;3;82.001.0076;FERNANDAMACRI;61-998322621;70660072;DF;SUDOESTE - OCTOGONAL;Comércio varejista de cosméticos, produtos de perfumaria e de higiene pessoal;47112352000100;FERNANDAMACRI;walter@spolidoro.com.br;;;
+17;3;82.001.0076;IGORPINHEIROCRIACAO;61-998322621;70660086;DF;SUDOESTE - OCTOGONAL;Serviços de pré-impressão;37332955000156;IGORPINHEIROCRIACAO;embaixadatcheca@gmail.com;;;
+18;3;82.001.0076;CINTHIAMGM;61-998322621;70660072;DF;SUDOESTE - OCTOGONAL;Agências de viagens;55641592000112;CINTHIAMGM;quimas@mycardcity.net;;;
+19;3;82.001.0076;LETIII.AVANCINI;61-998322621;70660655;DF;SUDOESTE - OCTOGONAL;Promoção de vendas;50457491000172;LETIII.AVANCINI;quimas@mycardcity.net;;;
+20;3;82.001.0076;STUDIO DANIELA PANZA;61-998322621;70660900;DF;SUDOESTE - OCTOGONAL;Atividades de estética e outros serviços de cuidados com a beleza;23201232000103;danipanza;thaysdomarketing@gmail.com;;;

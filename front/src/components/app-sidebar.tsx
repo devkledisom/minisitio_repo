@@ -16,6 +16,7 @@ import {
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu.tsx"
 import { Separator } from "../components/ui/separator.tsx"
 import { Link } from "react-router-dom";
+import { Dropdown } from "react-bootstrap";
 
 
 const items = [
@@ -81,10 +82,12 @@ export function AppSidebar() {
         }
     }, [user]);
 
-        function sair() {
+    function sair() {
         sessionStorage.removeItem('authTokenMN');
         sessionStorage.removeItem('userLogged');
         sessionStorage.removeItem('userTokenAccess');
+
+        window.location.href = '/login';
     };
 
     return (
@@ -127,31 +130,54 @@ export function AppSidebar() {
             </SidebarContent>
             {/*  <Separator className="bg-[var(--muted-foreground)]"/> */}
             <SidebarFooter className="bg-sidebar text-sidebar-foreground">
-                <SidebarMenu className="p-0">
+                {/*  <SidebarMenu className="p-0">
                     <SidebarMenuItem>
-                        
+
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <button
-                                    type="button"
-                                    className="flex items-center justify-between w-full text-white p-2 rounded-md 
-                 hover:bg-sky-700 transition-colors duration-150"
-                                >
-                                    <User2 className="w-5 h-5" /> {userLoggedName}
+                            <DropdownMenuTrigger className="flex items-center justify-between w-full text-white p-2 rounded-md hover:bg-sky-700 transition-colors duration-150">
+                                <SidebarMenuButton asChild>
+                                    <span className="flex items-center gap-2">
+                                        <User2 className="w-5 h-5" /> {userLoggedName}
                                     <ChevronUp className="ml-auto w-4 h-4" />
-                                </button>
+                                    </span>
+                                    
+                                </SidebarMenuButton>
+
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
                                 side="top"
                                 className="bg-white text-sidebar-foreground"
                             >
-                                <DropdownMenuItem>
+                                <DropdownMenuItem asChild>
                                     <Link to="/login" onClick={sair}>Sair</Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </SidebarMenuItem>
                 </SidebarMenu>
+ */}
+
+                <Dropdown className="w-100">
+                    <Dropdown.Toggle
+                        variant="primary"
+                        className="flex items-center justify-between w-full !text-white p-2 rounded-md hover:bg-sky-700 transition-colors duration-150"
+                    >
+                        <span className="flex items-center gap-2 w-full">
+                            <User2 className="w-5 h-5" />
+                            {userLoggedName}
+                            <ChevronUp className="ml-auto w-4 h-4" />
+                        </span>
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className="w-full">
+                        <Dropdown.Item as="button" onClick={sair}>
+                            Sair
+                        </Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+
+
+
             </SidebarFooter>
         </Sidebar>
 

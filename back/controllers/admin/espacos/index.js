@@ -3050,7 +3050,7 @@ module.exports = {
     },
     criarAnuncio: async (req, res) => {
 
-        await database.sync();
+        //await database.sync();
         const { codAnuncio,
             codUsuario,
             codTipoAnuncio,

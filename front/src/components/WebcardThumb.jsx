@@ -98,7 +98,7 @@ function WebcardThumb(props) {
         }
     }
     var partner = (img) => {
-        if (img != false && img != 'null' && img != 'undefined') {
+        if (img != false && img != null && img != 'null' && img != 'undefined') {
             return true;
         } else {
             return false;

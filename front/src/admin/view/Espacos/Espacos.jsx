@@ -563,15 +563,15 @@ Para 100000 linhas: 312500ms
                         </div>
                         <div className="span6 col-md-6 d-flex flex-column align-items-end">
                             <div className='d-flex flex-column'>
-                                <div className="pull-right d-flex align-items-center">
+                                <div className="pull-right d-flex align-items-center gap-2">
 
-                                    <select name="" id="uf" style={{ "width": "50px", "height": "30px" }} onChange={(e) => selecaoEstado(e)}>
+                                    <select name="" id="uf" className="border border-dark rounded" style={{ "width": "50px", "height": "30px" }} onChange={(e) => selecaoEstado(e)}>
                                         <option value="todos">UF</option>
                                         {uf.map(item => (
                                             <option value={item.sigla_uf}>{item.sigla_uf}</option>
                                         ))}
                                     </select>
-                                    <select name="" id="caderno" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)} ref={campoCaderno}>
+                                    <select name="" id="caderno" className="border border-dark rounded" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)} ref={campoCaderno}>
                                         <option value="todos">CADERNO</option>
 
                                         {caderno.map(item => (
@@ -579,12 +579,12 @@ Para 100000 linhas: 312500ms
                                             <option value={item.nomeCaderno}>{item.nomeCaderno}</option>
                                         ))}
                                     </select>
-                                    <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
+                                    <input id="buscar" className="border border-dark rounded bg-light" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
 
                                     {/*   {mostrarInputBusca &&
                                         <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
                                     } */}
-                                    <button id="btnBuscar" className="" type="button" onClick={buscarAnuncioId} >
+                                    <button id="btnBuscar" className="border border-dark rounded bg-light" type="button" onClick={buscarAnuncioId} >
                                         <i className="icon-search"></i>
                                     </button>
                                 </div>
