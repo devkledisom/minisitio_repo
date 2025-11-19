@@ -276,7 +276,7 @@ function MiniWebCard(props) {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            {/*<img src={`${masterPath.url}/files/logoParceiro/${item.img}`} alt={`Parceiro ${index + 1}`} />*/}
+                                            <img src={`${masterPath.url}/files/logoParceiro/${item.img}`} alt={`Parceiro ${index + 1}`} />
                                         </a>
                                     ))}
                             </div>
