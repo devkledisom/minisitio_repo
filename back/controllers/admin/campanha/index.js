@@ -364,7 +364,7 @@ async function gerarCSVGeral(model, idCampanha) {
         //{ label: "Código do Anúncio", value: "codAnuncio" },
         {
             label: "url_perfil",
-            value: (row) => `${masterPath.urlPublic}/promocao/${row.tokenPromocao}`
+            value: (row) => `${masterPath.domain}/promocao/${row.tokenPromocao}`
         },
         //{ label: "Data Limite", value: "dataLimitePromocao" },
         { label: "Nome Anúncio", value: "promo.descAnuncio" },
