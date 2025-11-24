@@ -6,6 +6,8 @@ import 'font-awesome/css/font-awesome.min.css';
 import { masterPath } from '../../../config/config';
 import Swal from 'sweetalert2';
 
+import InputMask from 'react-input-mask';
+
 //componente
 import Header from "../Header";
 import Spinner from '../../../components/Spinner';
@@ -127,9 +129,9 @@ const FormCadastro = () => {
             "descImagem": imgs.newImg_1 ? imgs.newImg_1 : null,
             "descImagem2": imgs.newImg_2 ? imgs.newImg_2 : null,
             "descImagem3": imgs.newImg_3 ? imgs.newImg_3 : null,
-           /*  "descImagem": localStorage.getItem("imgname"),
-            "descImagem2": localStorage.getItem("imgname2"),
-            "descImagem3": localStorage.getItem("imgname3"), */
+            /*  "descImagem": localStorage.getItem("imgname"),
+             "descImagem2": localStorage.getItem("imgname2"),
+             "descImagem3": localStorage.getItem("imgname3"), */
             "descLink": links.link_1,
             "descLink2": links.link_2,
             "descLink3": links.link_3,
@@ -218,6 +220,14 @@ const FormCadastro = () => {
 
     };
 
+    const formatarReais = (valor) => {
+        valor = valor.replace(/\D/g, ""); // remove não números
+        valor = (valor / 100).toFixed(2) + "";
+        valor = valor.replace(".", ",");
+        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return valor;
+    };
+
     return (
         <div className="users">
             {/*     <header style={style} className='w-100'>
@@ -250,12 +260,23 @@ const FormCadastro = () => {
                         </div>
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="valorDesconto" className="w-50 px-1">Valor do desconto:</label>
-                            <input type="text" className="form-control h-25 w-50" id="valorDesconto" name="valorDesconto"
+                            <InputMask
+                                type="text"
+                                className="form-control h-25 w-50"
+                                id="valorDesconto"
+                                name="valorDesconto"
+                                value={formatarReais(value)}
+                                onChange={handleInputChange}
+                                mask={null}
+                                placeholder="0,00"
+                            />
+
+                            {/*  <input type="text" className="form-control h-25 w-50" id="valorDesconto" name="valorDesconto"
                                 value={value}
                                 onChange={handleInputChange}
                                 placeholder="0,00"
                             />
-                            <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span>
+                            <span>Para alterar o valor para negativo, clique no icone ao lado do campo</span> */}
                         </div>
 
 

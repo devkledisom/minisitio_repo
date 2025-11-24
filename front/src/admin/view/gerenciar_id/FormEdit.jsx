@@ -333,7 +333,6 @@ const FormEdit = () => {
                             <select name="user" id="user" className="w-50 py-1 border border-dark rounded">
                                 <option value="0">- Carregando -</option>
                                 {
-
                                     usuarios.map((user) => (
                                         <option key={user.codUsuario} value={user.codUsuario}>{/* teste(user.idUsuario) */user.descNome}</option>
                                     ))
