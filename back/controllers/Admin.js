@@ -1389,13 +1389,14 @@ WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno;
     atualizarIds: async (req, res) => {
 
         let { img_1, img_2, img_3, newImg_1, newImg_2, newImg_3 } = req.body.imagens;
+        const valor = req.body.valorDesconto.replace(",", ".");
 
         try {
             // Consulta para recuperar apenas os itens da página atual
             const ids = await Descontos.update({
                 idUsuario: req.body.usuario,
                 descricao: req.body.descricao,
-                desconto: req.body.valorDesconto,
+                desconto: parseFloat(valor),
                 patrocinador_ativo: req.body.patrocinador,
                 descImagem: req.body.descImagem,
                 descImagem2: req.body.descImagem2,
