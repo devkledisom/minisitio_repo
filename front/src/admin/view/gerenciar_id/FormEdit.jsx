@@ -331,14 +331,18 @@ const FormEdit = () => {
 
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
                             <select name="user" id="user" className="w-50 py-1 border border-dark rounded">
-                                <option value="0">- Carregando -</option>
-{console.log("usuarios", usuarios)}
-                                {
-                                
-                                    usuarios?.map((user) => (
-                                        <option key={user.codUsuario} value={user.codUsuario}>{/* teste(user.idUsuario) */user.descNome}</option>
-                                    ))
-                                }
+                                {usuarios.length === 0 ? (
+                                    <option value="">Carregando...</option>
+                                ) : (
+                                    <>
+                                        <option value="">Selecione um usuário</option>
+                                        {usuarios.map((user) => (
+                                            <option key={user.codUsuario} value={user.codUsuario}>
+                                                {user.descNome}
+                                            </option>
+                                        ))}
+                                    </>
+                                )}
                             </select>
                         </div>
 
