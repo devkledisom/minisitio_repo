@@ -91,39 +91,9 @@ const FormEdit = () => {
                     //setPatrocinio(1)
                 }
 
-                document.getElementById('user').value = res[0].idUsuario;
+               // document.getElementById('user').value = res[0].idUsuario;
 
-                /*      fetch(`${masterPath.url}/admin/desconto/usuario/buscar/${res[0].idUsuario}`)
-                         .then((x) => x.json())
-                         .then((res) => {
-                             setUsuarios(res.usuarios);
-                             setShowSpinner(false);
-                         }).catch((err) => {
-                             console.log(err);
-                             setShowSpinner(false);
-                         }) */
-
-
-                /*  fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
-                            .then((x) => x.json())
-                            .then((res) => {
-                                if(res.success) {
-                                    console.log(ids[0].idUsuario)
-                                    setUsuarios(res.usuarios);
-                                    setShowSpinner(false);
-                                    document.getElementById('user').value = ids[0].idUsuario;
-                                } else {
-                                    console.log(res)
-                                    setUsuarios([]);
-                                    setShowSpinner(false);
-                                }
-                
-                            }).catch((err) => {
-                                console.log(err);
-                                setShowSpinner(false);
-                            }) */
-
-
+  
             }).catch((err) => {
                 console.log(err)
             })
