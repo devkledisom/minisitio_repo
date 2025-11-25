@@ -1,5 +1,5 @@
 // components/OutroComponente.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/users.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -17,7 +17,7 @@ import FieldsetPatrocinador from './FieldsetPatrocinador';
 const FormEdit = () => {
 
 
-    const [ids, setIds] = useState([]);
+    const [ids, setIds] = useState({});
     const [usuarios, setUsuarios] = useState([]);
     const [atividadeValue, setAtividade] = useState(false);
     const [page, setPage] = useState(1);
@@ -63,7 +63,7 @@ const FormEdit = () => {
         fetch(`${masterPath.url}/admin/desconto/edit/${param}`)
             .then((x) => x.json())
             .then((res) => {
-                setIds(res);
+                setIds(res[0]);
                 setDescricaoId(res[0].descricao);
                 setDescontoId(String(`${res[0].desconto},00`));
                 setHash(res[0].hash);
@@ -135,7 +135,7 @@ const FormEdit = () => {
                     //console.log(ids[0].idUsuario)
                     setUsuarios(res.usuarios);
                     setShowSpinner(false);
-                    document.getElementById('user').value = res[0].idUsuario;
+                    
 
                 } else {
                     //console.log(res)
@@ -150,6 +150,9 @@ const FormEdit = () => {
 
     }, []);
 
+    useEffect(() => {
+                    document.getElementById('user').value = ids.idUsuario;
+    }, [ids]);
 
     function editID() {
 
