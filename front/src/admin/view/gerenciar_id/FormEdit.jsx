@@ -334,8 +334,8 @@ const FormEdit = () => {
                                 <option value="0">- Carregando -</option>
 {console.log("usuarios", usuarios)}
                                 {
-                                    usuarios.length > 0 &&
-                                    usuarios.map((user) => (
+                                
+                                    usuarios?.map((user) => (
                                         <option key={user.codUsuario} value={user.codUsuario}>{/* teste(user.idUsuario) */user.descNome}</option>
                                     ))
                                 }
