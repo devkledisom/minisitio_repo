@@ -135,6 +135,7 @@ const FormEdit = () => {
                     //console.log(ids[0].idUsuario)
                     setUsuarios(res.usuarios);
                     setShowSpinner(false);
+                    document.getElementById('user').value = res[0].idUsuario;
 
                 } else {
                     //console.log(res)
@@ -330,7 +331,7 @@ const FormEdit = () => {
                             {hash && <span>Código: {hash}</span>}
 
                             <label htmlFor="user" className="w-50 px-1">Usuário:</label>
-                            <select name="user" id="user" className="w-50 py-1 border border-dark rounded">
+                            <select name="user" id="user" className="w-50 py-1 border border-dark rounded" defaultValue="">
                                 {usuarios.length === 0 ? (
                                     <option value="">Carregando...</option>
                                 ) : (
