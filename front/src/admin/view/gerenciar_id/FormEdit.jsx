@@ -151,6 +151,7 @@ const FormEdit = () => {
     }, []);
 
     useEffect(() => {
+        console.log("ids -> ", ids);
                     document.getElementById('user').value = ids.idUsuario;
     }, [ids]);
 
