@@ -60,43 +60,7 @@ const FormEdit = () => {
 
     useEffect(() => {
         setShowSpinner(true);
-        fetch(`${masterPath.url}/admin/desconto/edit/${param}`)
-            .then((x) => x.json())
-            .then((res) => {
-                setIds(res[0]);
-                setDescricaoId(res[0].descricao);
-                setDescontoId(String(`${res[0].desconto},00`));
-                setHash(res[0].hash);
-                setLinks({
-                    link_1: res[0].descLink,
-                    link_2: res[0].descLink2,
-                    link_3: res[0].descLink3
-                });
-                setImgs({
-                    img_1: res[0].descImagem,
-                    img_2: res[0].descImagem2,
-                    img_3: res[0].descImagem3
-                });
-                setPatrocinio(res[0].patrocinador_ativo);
-                setSaldoValue(res[0].saldo);
-                setSaldo(res[0].utilizar_saldo);
 
-                localStorage.setItem("imgname", res[0].descImagem);
-                localStorage.setItem("imgname2", res[0].descImagem2);
-                localStorage.setItem("imgname3", res[0].descImagem3);
-
-                if (res[0].descImagem != null) {
-                    setDescImg(res[0]);
-                    //console.log(res[0].descImagem);
-                    //setPatrocinio(1)
-                }
-
-               // document.getElementById('user').value = res[0].idUsuario;
-
-  
-            }).catch((err) => {
-                console.log(err)
-            })
 
         fetch(`${masterPath.url}/admin/usuario/buscar/master?require=codTipoUsuario`)
             .then((x) => x.json())
@@ -105,7 +69,44 @@ const FormEdit = () => {
                     //console.log(ids[0].idUsuario)
                     setUsuarios(res.usuarios);
                     setShowSpinner(false);
-                    
+
+                    fetch(`${masterPath.url}/admin/desconto/edit/${param}`)
+                        .then((x) => x.json())
+                        .then((res) => {
+                            setIds(res[0]);
+                            setDescricaoId(res[0].descricao);
+                            setDescontoId(String(`${res[0].desconto},00`));
+                            setHash(res[0].hash);
+                            setLinks({
+                                link_1: res[0].descLink,
+                                link_2: res[0].descLink2,
+                                link_3: res[0].descLink3
+                            });
+                            setImgs({
+                                img_1: res[0].descImagem,
+                                img_2: res[0].descImagem2,
+                                img_3: res[0].descImagem3
+                            });
+                            setPatrocinio(res[0].patrocinador_ativo);
+                            setSaldoValue(res[0].saldo);
+                            setSaldo(res[0].utilizar_saldo);
+
+                            localStorage.setItem("imgname", res[0].descImagem);
+                            localStorage.setItem("imgname2", res[0].descImagem2);
+                            localStorage.setItem("imgname3", res[0].descImagem3);
+
+                            if (res[0].descImagem != null) {
+                                setDescImg(res[0]);
+                                //console.log(res[0].descImagem);
+                                //setPatrocinio(1)
+                            }
+
+                            document.getElementById('user').value = res[0].idUsuario;
+
+
+                        }).catch((err) => {
+                            console.log(err)
+                        })
 
                 } else {
                     //console.log(res)
@@ -120,10 +121,10 @@ const FormEdit = () => {
 
     }, []);
 
-    useEffect(() => {
+  /*   useEffect(() => {
         console.log("ids -> ", ids);
-                    document.getElementById('user').value = ids.idUsuario;
-    }, [ids]);
+        document.getElementById('user').value = ids.idUsuario;
+    }, [ids]); */
 
     function editID() {
 
