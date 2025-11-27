@@ -83,7 +83,7 @@ function Cardlist(props) {
               }
               {!cardListThumb(props.codImg) &&
                 <img
-                  src="../assets/img/placeholder.png"
+                  src="/assets/img/placeholder.png"
                   alt="Foto"
                   className="h-100 w-100"
                 />
