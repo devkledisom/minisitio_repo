@@ -123,11 +123,11 @@ module.exports = {
             });
 
 
-            const atualizarIdPerfil = await Anuncio.update({
+         /*    const atualizarIdPerfil = await Anuncio.update({
                 codDesconto: idPromoNew.hash
             }, {
                 where: { codDesconto: idPromo.hash }
-            });
+            }); */
             /*  const campanhas = await Campanha.findAll().then((result) => {
  
                  //gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + resultCampanha.id + ".csv", resultCampanha.id);

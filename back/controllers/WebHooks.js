@@ -6,9 +6,10 @@ const Pagamento = require('../models/table_pagamentos');
 const Anuncio = require('../models/table_anuncio');
 const Desconto = require('../models/table_desconto');
 const Globals = require('../models/table_globals');
+const Campanha = require('../models/table_campanha');
 
-const client = new MercadoPagoConfig({ accessToken: config.MP_ACCESS_TOKEN_SANDBOX, options: { timeout: 5000, idempotencyKey: 'abc' } });
-//const client = new MercadoPagoConfig({ accessToken: config.mp_prod.AccessToken, options: { timeout: 5000, idempotencyKey: 'abc' } });
+//const client = new MercadoPagoConfig({ accessToken: config.MP_ACCESS_TOKEN_SANDBOX, options: { timeout: 5000, idempotencyKey: 'abc' } });
+const client = new MercadoPagoConfig({ accessToken: config.mp_prod.AccessToken, options: { timeout: 5000, idempotencyKey: 'abc' } });
 
 const payment = new Payment(client);
 const preference = new Preference(client);
@@ -77,7 +78,7 @@ module.exports = {
         let option1 = codDesconto ? ((valorBase.value / 12) - valorDesconto.desconto) * 12 : Number(valorBase.value);
 
         const body = {
-            "notification_url": "https://minisitio.online/api/webhook",
+            "notification_url": "https://minisitio.com.br/api/webhook",
             //"notification_url": "https://minisitio.com.br/api/webhook",
             "external_reference": codigoReferenciaMp,
             "items": [
@@ -94,8 +95,8 @@ module.exports = {
             }
         };
 
-     /*    console.log(body, valorDesconto, codDesconto)
-        return; */
+        /*    console.log(body, valorDesconto, codDesconto)
+           return; */
 
         const gerarPreferencia = await preference.create({ body })
             .then((data) => { console.log(data), res.status(200).json({ success: true, url: data.init_point }) })
@@ -202,8 +203,8 @@ async function registrarPagamento(data) {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${config.MP_ACCESS_TOKEN_SANDBOX}`
-                //'Authorization': `Bearer ${config.mp_prod.AccessToken}`
+                //'Authorization': `Bearer ${config.MP_ACCESS_TOKEN_SANDBOX}`
+                'Authorization': `Bearer ${config.mp_prod.AccessToken}`
             }
         })
             .then(x => x.json())
@@ -240,7 +241,22 @@ async function registrarPagamento(data) {
                     };
 
                     if (res.status == "approved") {
+                        const perfil = await Anuncio.findOne({
+                            where: {
+                                codAnuncio: codigoReferenciaMp
+                            },
+                            raw: true
+                        });
+
+                        const idCampanha = await Campanha.findOne({
+                            where: {
+                                id_origem: perfil.codDesconto
+                            },
+                            raw: true
+                        })
+
                         const perfilActivate = await Anuncio.update({
+                            "codDesconto": idCampanha.id_promocional,
                             "activate": 1,
                             "codTipoAnuncio": "3",
                             "dtCadastro2": Date.now(),
@@ -274,8 +290,8 @@ async function registrarPagamento(data) {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${config.MP_ACCESS_TOKEN_SANDBOX}`
-                //'Authorization': `Bearer ${config.mp_prod.AccessToken}`   
+                //'Authorization': `Bearer ${config.MP_ACCESS_TOKEN_SANDBOX}`
+                'Authorization': `Bearer ${config.mp_prod.AccessToken}`   
             }
         })
             .then(x => x.json())
@@ -301,7 +317,22 @@ async function registrarPagamento(data) {
                     console.log(atualizarPagamento)
 
                     if (res.status == "approved") {
+                        const perfil = await Anuncio.findOne({
+                            where: {
+                                codAnuncio: codigoReferenciaMp
+                            },
+                            raw: true
+                        });
+
+                        const idCampanha = await Campanha.findOne({
+                            where: {
+                                id_origem: perfil.codDesconto
+                            },
+                            raw: true
+                        })
+
                         const perfilActivate = await Anuncio.update({
+                            "codDesconto": idCampanha.id_promocional,
                             "activate": 1,
                             "codTipoAnuncio": "3",
                             "dtCadastro2": Date.now(),
@@ -311,6 +342,7 @@ async function registrarPagamento(data) {
                                 codAnuncio: codigoReferenciaMp
                             }
                         });
+
                     }
 
 
