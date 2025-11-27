@@ -12,6 +12,14 @@ const Sequelize = require('sequelize');
 const Pagamento = require('../models/table_pagamentos');
 const { Op } = Sequelize;
 
+/* (
+  a.descAnuncio LIKE :termo AND a.activate = 1 OR 
+  atv.atividade LIKE :termo AND a.activate = 1 OR
+  atv.nomeAmigavel LIKE :termo OR 
+  t.tagValue LIKE :termo AND
+  a.activate = 1
+) */
+
 module.exports = {
     busca: async (req, res) => {
         const paginaAtual = req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão: 1
@@ -27,12 +35,13 @@ module.exports = {
 FROM anuncio a
 LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
 LEFT JOIN atividade atv ON atv.atividade = a.codAtividade
-WHERE (
-  a.descAnuncio LIKE :termo OR 
-  atv.atividade LIKE :termo OR
-  atv.nomeAmigavel LIKE :termo OR 
-  t.tagValue LIKE :termo
-)
+WHERE 
+    a.activate = 1 AND (
+    a.descAnuncio LIKE :termo OR 
+    atv.atividade LIKE :termo OR
+    atv.nomeAmigavel LIKE :termo OR 
+    t.tagValue LIKE :termo
+  )
 AND a.codUf = :uf
 AND a.codCaderno = :caderno
 ORDER BY atv.atividade ASC, a.codTipoAnuncio DESC, a.createdAt ASC, a.descAnuncio ASC
@@ -96,18 +105,26 @@ LIMIT :limit OFFSET :offset;`/* `
                             //attributes: ['codAnuncio']
                         }); */
 
+/*   (
+  a.descAnuncio LIKE :termo AND a.activate = 1 OR 
+  atv.atividade LIKE :termo AND a.activate = 1 OR
+  atv.nomeAmigavel LIKE :termo OR 
+  t.tagValue LIKE :termo
+  
+) */
 
             const [resultAnuncioCount] = await database.query(
                 `SELECT COUNT(DISTINCT a.codAnuncio) AS total
 FROM anuncio a
 LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
 LEFT JOIN atividade atv ON atv.atividade = a.codAtividade
-WHERE (
-  a.descAnuncio LIKE :termo OR 
-  atv.atividade LIKE :termo OR
-  atv.nomeAmigavel LIKE :termo OR 
-  t.tagValue LIKE :termo
-)
+WHERE 
+  a.activate = 1 AND (
+    a.descAnuncio LIKE :termo OR 
+    atv.atividade LIKE :termo OR
+    atv.nomeAmigavel LIKE :termo OR 
+    t.tagValue LIKE :termo
+  )
 AND a.codUf = :uf
 AND a.codCaderno = :caderno`
                 /* `

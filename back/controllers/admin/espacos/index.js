@@ -859,6 +859,7 @@ module.exports = {
                     { codUf: req.params.uf },
                     { codCaderno: req.params.caderno },
                     { page: req.query.page },
+                    {activate: 1}
                 ],
                 codAtividade: {
                     [Op.notIn]: ['ADMINISTRAÇÃO REGIONAL / PREFEITURA', "EMERGÊNCIA", "UTILIDADE PÚBLICA", "HOSPITAIS PÚBLICOS", "CÂMARA DE VEREADORES - CÂMARA DISTRITAL", "SECRETARIA DE TURISMO", "INFORMAÇÕES", "EVENTOS NA CIDADE"]  // Ignorar esse valor
@@ -906,6 +907,7 @@ module.exports = {
                 [Op.and]: [
                     { codUf: req.params.uf },
                     { codCaderno: req.params.caderno },
+                    {activate: 1}
                     //{ page: req.query.page },
                 ],
                 codAtividade: {
@@ -1922,7 +1924,8 @@ module.exports = {
             where: {
                 [Op.and]: [
                     { codUf: req.params.uf },
-                    { nomeCaderno: req.params.caderno }
+                    { nomeCaderno: req.params.caderno },
+                    //{activate: 1}
                 ]
             }
         });
