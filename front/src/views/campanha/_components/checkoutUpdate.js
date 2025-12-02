@@ -84,7 +84,7 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
         fetch(`${masterPath.url}/admin/anuncio/update/tipo?id=${minisitio.codAnuncio}`, config)
             .then((x) => x.json())
             .then((res) => {
-console.log(res)
+
                 if (res.success) {
 
                     //setShowSpinner(false);

@@ -3508,9 +3508,13 @@ module.exports = {
     },
     atualizarTipoPerfil: async (req, res) => {
         try {
-            const atualizarPerfil = await Anuncio.update(req.body, {
+            const data = req.body;
+
+            delete data.codUsuario;
+
+            const atualizarPerfil = await Anuncio.update(data, {
                 where: {
-                    codAnuncio: req.body.codAnuncio
+                    codAnuncio: data.codAnuncio
                 },
                 raw: true
             });

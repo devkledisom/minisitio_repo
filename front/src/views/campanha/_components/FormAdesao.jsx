@@ -384,6 +384,7 @@ function FormAdesao({ isAdmin }) {
 
     });
     setUf(minisitio.codUf);
+
   };
 
   const handleSelectChange = (e) => {
