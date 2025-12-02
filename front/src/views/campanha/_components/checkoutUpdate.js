@@ -24,6 +24,7 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
                 console.log("valorBruto", valorBruto) */
                 let valorBruto = precoFixo;
 
+
                 if (descontoAtivado && radioCheck == 3 && valorBruto <= 0) {
                     // window.location.href = `/ver-anuncios/${limparCPFouCNPJ(minisitio.descCPFCNPJ)}`;
                     atualizarMinisitio()
@@ -83,7 +84,7 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
         fetch(`${masterPath.url}/admin/anuncio/update/tipo?id=${minisitio.codAnuncio}`, config)
             .then((x) => x.json())
             .then((res) => {
-
+console.log(res)
                 if (res.success) {
 
                     //setShowSpinner(false);

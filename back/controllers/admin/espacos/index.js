@@ -859,7 +859,7 @@ module.exports = {
                     { codUf: req.params.uf },
                     { codCaderno: req.params.caderno },
                     { page: req.query.page },
-                    {activate: 1}
+                    { activate: 1 }
                 ],
                 codAtividade: {
                     [Op.notIn]: ['ADMINISTRAÇÃO REGIONAL / PREFEITURA', "EMERGÊNCIA", "UTILIDADE PÚBLICA", "HOSPITAIS PÚBLICOS", "CÂMARA DE VEREADORES - CÂMARA DISTRITAL", "SECRETARIA DE TURISMO", "INFORMAÇÕES", "EVENTOS NA CIDADE"]  // Ignorar esse valor
@@ -907,7 +907,7 @@ module.exports = {
                 [Op.and]: [
                     { codUf: req.params.uf },
                     { codCaderno: req.params.caderno },
-                    {activate: 1}
+                    { activate: 1 }
                     //{ page: req.query.page },
                 ],
                 codAtividade: {
@@ -3507,14 +3507,20 @@ module.exports = {
         }
     },
     atualizarTipoPerfil: async (req, res) => {
-        const atualizarPerfil = await Anuncio.update(req.body, {
-            where: {
-                codAnuncio: req.body.codAnuncio
-            },
-            raw: true
-        });
+        try {
+            const atualizarPerfil = await Anuncio.update(req.body, {
+                where: {
+                    codAnuncio: req.body.codAnuncio
+                },
+                raw: true
+            });
 
-        res.json({ success: true, message: atualizarPerfil });
+            res.json({ success: true, message: atualizarPerfil });
+        } catch (err) {
+            console.log(err.original)
+            res.json({ success: false, message: err })
+        }
+
     },
     deleteAnuncio: async (req, res) => {
         const uuid = req.params.id;
@@ -3634,8 +3640,8 @@ module.exports = {
                         }) */
 
 
-              
-                const query = `UPDATE anuncio
+
+            const query = `UPDATE anuncio
                         JOIN (
                             SELECT codAnuncio, 
                                 CEIL(ROW_NUMBER() OVER (ORDER BY codAtividade ASC, createdAt DESC) / 10) AS 'page_number'
@@ -3647,13 +3653,13 @@ module.exports = {
                         WHERE anuncio.codUf = :estado AND anuncio.codCaderno = :caderno
                     `;
 
-                database.query(query, {
-                    replacements: { estado: uf, caderno: caderno },
-                    type: Sequelize.QueryTypes.UPDATE,
-                });
+            database.query(query, {
+                replacements: { estado: uf, caderno: caderno },
+                type: Sequelize.QueryTypes.UPDATE,
+            });
 
-                console.log(`Reorganização concluída para o estado:`, uf);
-         
+            console.log(`Reorganização concluída para o estado:`, uf);
+
 
 
             res.json({ success: true, message: deleteAnuncio });

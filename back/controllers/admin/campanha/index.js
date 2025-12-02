@@ -88,7 +88,7 @@ module.exports = {
                 whereClause = "a.codDesconto = :idOrigem";
             }
 
-
+//DATE_ADD(NOW(), INTERVAL 30 DAY) AS dataLimitePromocao,
             await database.query(`
             INSERT IGNORE INTO tokens_promocao (campanhaId, codAnuncio, tokenPromocao, periodoEmDias, dataLimitePromocao, createdAt, updatedAt)
             SELECT 
@@ -96,7 +96,7 @@ module.exports = {
                 a.codAnuncio,
                 SHA1(CONCAT(a.descCPFCNPJ, 'PROMOCAO2025', :idPromo)) AS tokenPromocao,
                 :duracaoCampanha,
-                DATE_ADD(NOW(), INTERVAL 30 DAY) AS dataLimitePromocao,
+                :dataLimite AS dataLimitePromocao,
                 NOW(),
                 NOW()
             FROM anuncio a
@@ -109,7 +109,8 @@ module.exports = {
                         campanhaId: resultCampanha.id,
                         idOrigem: idPromo.hash,
                         idPromo: req.body.idPromocional2,
-                        duracaoCampanha: Number(req.body.duracaoCampanha)
+                        duracaoCampanha: Number(req.body.duracaoCampanha),
+                        dataLimite: moment(req.body.dataFim).format('YYYY-MM-DD HH:mm:ss')
                     }
                 });
 
@@ -193,7 +194,7 @@ module.exports = {
                              //attributes: ["descAnuncio", "descCPFCNPJ", "descEmailRetorno"]
                          }
                      ], */
-            attributes: ["codAnuncio", "campanhaId", "dataLimitePromocao"],
+            attributes: ["codAnuncio", "campanhaId", "dataLimitePromocao", "periodoEmDias"],
             raw: true
         })
             .then(async (result) => {

@@ -98,7 +98,7 @@ function FormAdesao({ isAdmin }) {
       .then((res) => {
         if (res.success) {
           setCodAnuncio(res.data[0].codAnuncio);
-
+          
           // Sua data alvo
           const dataAlvo = moment(res.data[0].dataLimitePromocao);
 
@@ -108,7 +108,7 @@ function FormAdesao({ isAdmin }) {
           // Diferença em dias
           const diasRestantes = dataAlvo.diff(hoje, "days");
 
-          setDiasCampanha(diasRestantes)
+          setDiasCampanha(res.data[0].periodoEmDias)
         }
 
 

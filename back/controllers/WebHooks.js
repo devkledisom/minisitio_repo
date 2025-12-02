@@ -75,7 +75,10 @@ module.exports = {
             raw: true
         });
 
+      
+
         let option1 = codDesconto ? ((valorBase.value / 12) - valorDesconto.desconto) * 12 : Number(valorBase.value);
+  
 
         const body = {
             "notification_url": "https://minisitio.com.br/api/webhook",
