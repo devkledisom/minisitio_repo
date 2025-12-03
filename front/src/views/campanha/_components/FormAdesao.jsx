@@ -230,7 +230,7 @@ function FormAdesao({ isAdmin }) {
 
   useEffect(() => {
     if (minisitio.codDesconto) {
-      aplicarCupom({ target: { value: minisitio.codDesconto } });
+      aplicarCupom({ target: { value: codDescontoPromo } });
     }
   }, [minisitio.codDesconto]);
 
