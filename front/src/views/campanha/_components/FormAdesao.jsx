@@ -72,6 +72,7 @@ function FormAdesao({ isAdmin }) {
   const [minisitio, setMinisitio] = useState([]);
   const [codAnuncio, setCodAnuncio] = useState(null);
   const [diasCampanha, setDiasCampanha] = useState(0);
+  const [codDescontoPromo, setCodDescontoPromo] = useState(null);
 
   //REFS
   const customText = useRef(null);
@@ -108,7 +109,8 @@ function FormAdesao({ isAdmin }) {
           // Diferença em dias
           const diasRestantes = dataAlvo.diff(hoje, "days");
 
-          setDiasCampanha(res.data[0].periodoEmDias)
+          setDiasCampanha(res.data[0].periodoEmDias);
+          setCodDescontoPromo(res.codDesconto.hash);
         }
 
 
@@ -449,7 +451,7 @@ function FormAdesao({ isAdmin }) {
                   onChange={aplicarCupom}
                   ref={discountHash}
                   mask="99.999.9999"
-                  value={minisitio.codDesconto}
+                  value={codDescontoPromo}
                   readOnly
                 ></InputMask>
                 <input

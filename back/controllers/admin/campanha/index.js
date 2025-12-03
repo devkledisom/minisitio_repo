@@ -200,11 +200,19 @@ module.exports = {
             .then(async (result) => {
                 const verificarCampanha = await Campanha.findOne({
                     where: { id: result[0].campanhaId },
-                    attributes: ['status']
+                    attributes: ['status', 'id_origem', 'id_promocional'],
+                    raw: true
+                });
+
+                const codDescontoPromo = await Descontos.findOne({
+                    where: {
+                        idDesconto: verificarCampanha.id_promocional
+                    },
+                    attributes: ['hash']
                 });
 
                 if (verificarCampanha.status === "valid") {
-                    return res.json({ success: true, data: result });
+                    return res.json({ success: true, data: result, codDesconto: codDescontoPromo });
                 }
 
 
