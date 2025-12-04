@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { masterPath } from "../../../config/config";
 import Badge from 'react-bootstrap/Badge';
 import Stack from 'react-bootstrap/Stack';
@@ -74,6 +74,8 @@ function FormAdesao({ isAdmin }) {
   const [diasCampanha, setDiasCampanha] = useState(0);
   const [codDescontoPromo, setCodDescontoPromo] = useState(null);
 
+  const navigate = useNavigate();
+
   //REFS
   const customText = useRef(null);
   const discountHash = useRef(null);
@@ -93,13 +95,40 @@ function FormAdesao({ isAdmin }) {
 
   };
 
+  function verificaDataPromocao(dataAcesso, peridoPromo) {
+    // Data do primeiro acesso (vinda do banco)
+    const primeiroAcesso = moment(dataAcesso);
+
+    // Dias que o cliente tem de promoção
+    const diasPromocao = peridoPromo;
+
+    // Data final da promoção
+    const dataFinal = primeiroAcesso.clone().add(diasPromocao, "days");
+
+    // Data atual
+    const hoje = moment();
+
+    // Quantos dias faltam
+    const diasRestantes = dataFinal.diff(hoje, "days");
+
+    setDiasCampanha(diasRestantes);
+
+    // Verificar se já expirou
+    if (diasRestantes <= 0) {
+      console.log("Promoção expirada");
+      //navigate('/contato');
+    } else {
+      //console.log(`Ainda faltam ${diasRestantes} dias`);
+    }
+  }
+
   useEffect(() => {
     fetch(`${masterPath.url}/admin/campanha/read/${hash}`)
       .then((x) => x.json())
       .then((res) => {
         if (res.success) {
           setCodAnuncio(res.data[0].codAnuncio);
-          
+
           // Sua data alvo
           const dataAlvo = moment(res.data[0].dataLimitePromocao);
 
@@ -109,7 +138,8 @@ function FormAdesao({ isAdmin }) {
           // Diferença em dias
           const diasRestantes = dataAlvo.diff(hoje, "days");
 
-          setDiasCampanha(res.data[0].periodoEmDias);
+          verificaDataPromocao(res.data[0].dataAcessoToken, res.data[0].periodoEmDias)
+
           setCodDescontoPromo(res.codDesconto.hash);
         }
 

@@ -3,6 +3,9 @@ import { Form, Link, useParams, useNavigate } from 'react-router-dom';
 import '../../styles/globals.css';
 import { masterPath } from '../../config/config.js';
 
+//LIBS
+import Swal from 'sweetalert2';
+
 import { Button } from '../../components/ui/button.tsx'
 import { Input } from "../../components/ui/input.tsx"
 import { Label } from "../../components/ui/label.tsx"
@@ -21,6 +24,7 @@ function Promocao() {
     const [message, setMessage] = useState(false);
     const [messageError, setMessageError] = useState(false);
     const [loader, setLoader] = useState(false);
+    const [promoIsValid, setPromoIsValid] = useState(false);
 
     const { codAnuncio, hash } = useParams();
 
@@ -35,10 +39,26 @@ function Promocao() {
             .then(x => x.json())
             .then(res => {
                 if (res.success) {
-                   //console.log(res);
+                    //console.log(res);
+                    setPromoIsValid(true);
                 } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Promoção inválida ou expirada',
+                        text: 'A promoção que você está tentando acessar não é válida ou já expirou. Entre em contato conosco para mais informações.',
+                        confirmButtonColor: '#ffcc29',
+                        confirmButtonText: 'Entendi'
+                    }).then(() => {
+                            navigate('/contato');                
+                    });
 
-                    navigate('/token-invalido');
+              /*       Swal.fire('Hey user!', 'You are the rockstar!', 'info');
+
+                    Swal.update({
+                        icon: 'success'
+                    }) */
+                    //navigate('/token-invalido');
+
 
                     //console.log('Promoção inválida ou expirada.');
                 }
@@ -85,12 +105,12 @@ function Promocao() {
                     <div className="flex justify-between items-center h-24">
                         <div className="flex items-center">
                             <div className="rounded-full p-2 mr-3">
-                               <img src="../../assets/img/logo.png" alt="MINISITIO" width="100"></img>
+                                <img src="../../assets/img/logo.png" alt="MINISITIO" width="100"></img>
                             </div>
-                          {/*   <span className="text-xl font-bold text-gray-800">MINISITIO</span> */}
+                            {/*   <span className="text-xl font-bold text-gray-800">MINISITIO</span> */}
                         </div>
                         <div className="flex items-center space-x-4 gap-2">
-                           {/*  <Button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">ASSINE AGORA</Button> */}
+                            {/*  <Button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">ASSINE AGORA</Button> */}
                             <div className="w-8 h-6 bg-green-500 rounded-sm flex items-center justify-center">
                                 <span className="text-white text-xs font-bold">BR</span>
                             </div>
@@ -110,7 +130,7 @@ function Promocao() {
             </div>
 
             {/* Main Content */}
-           {/*  <div className="max-w-md mx-auto -mt-8 px-4 pb-16">
+            {/*  <div className="max-w-md mx-auto -mt-8 px-4 pb-16">
                 <Card className="shadow-lg" style={{ paddingTop: 0 }}>
                     <CardHeader className="bg-gray-200 text-center rounded-t-xl">
                         <CardTitle className="text-gray-800 flex items-center justify-center gap-2 py-6">
@@ -173,7 +193,10 @@ function Promocao() {
                     </Alert>
                 }
             </div> */}
-            <FormAdesao />
+            {promoIsValid &&
+             <FormAdesao />
+            }
+           
 
             {/* Footer */}
             <footer className="bg-gray-600 text-white py-4">
