@@ -180,7 +180,7 @@ function FormAdesao({ isAdmin }) {
           })
         setUf(res[0].codUf)
 
-        document.querySelector("#descAnuncio").focus();
+        //document.querySelector("#descAnuncio").focus();
 
       }).catch((err) => {
         console.log(err)
