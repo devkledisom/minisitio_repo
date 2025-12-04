@@ -194,7 +194,7 @@ module.exports = {
                              //attributes: ["descAnuncio", "descCPFCNPJ", "descEmailRetorno"]
                          }
                      ], */
-            attributes: ["codAnuncio", "campanhaId", "dataLimitePromocao", "periodoEmDias"],
+            attributes: ["codAnuncio", "campanhaId", "dataLimitePromocao", "periodoEmDias", "dataAcessoToken"],
             raw: true
         })
             .then(async (result) => {
