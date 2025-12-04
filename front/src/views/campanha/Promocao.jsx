@@ -39,7 +39,19 @@ function Promocao() {
             .then(x => x.json())
             .then(res => {
                 if (res.success) {
-                    //console.log(res);
+                    if (res.message === "Promoção já utilizada.") {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Promoção já utilizada',
+                            text: 'A promoção que você está tentando acessar já foi utilizada. Entre em contato conosco para mais informações.',
+                            confirmButtonColor: '#ffcc29',
+                            confirmButtonText: 'Entendi'
+                        }).then(() => {
+                            navigate('/perfil/' + res.codAnuncio);
+                        });
+
+                        return;
+                    }
                     setPromoIsValid(true);
                 } else {
                     Swal.fire({
@@ -49,14 +61,14 @@ function Promocao() {
                         confirmButtonColor: '#ffcc29',
                         confirmButtonText: 'Entendi'
                     }).then(() => {
-                            navigate('/contato');                
+                        navigate('/contato');
                     });
 
-              /*       Swal.fire('Hey user!', 'You are the rockstar!', 'info');
-
-                    Swal.update({
-                        icon: 'success'
-                    }) */
+                    /*       Swal.fire('Hey user!', 'You are the rockstar!', 'info');
+      
+                          Swal.update({
+                              icon: 'success'
+                          }) */
                     //navigate('/token-invalido');
 
 
@@ -194,9 +206,9 @@ function Promocao() {
                 }
             </div> */}
             {promoIsValid &&
-             <FormAdesao />
+                <FormAdesao />
             }
-           
+
 
             {/* Footer */}
             <footer className="bg-gray-600 text-white py-4">

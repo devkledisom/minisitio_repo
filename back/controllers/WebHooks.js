@@ -86,7 +86,7 @@ module.exports = {
             "external_reference": codigoReferenciaMp,
             "items": [
                 {
-                    "title": "Assinatura Minisitio",
+                    "title": "Assinatura anual Minisitio",
                     "quantity": 1,
                     "currency_id": "BRL",
                     "unit_price": option1

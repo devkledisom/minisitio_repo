@@ -305,7 +305,7 @@ module.exports = {
             where: {
                 id: verificarPromocao.campanhaId
             },
-            attributes: ['status']
+            attributes: ['status', 'id_origem', 'id_promocional']
         });
 
         // Verifica se o período de teste ainda é válido
@@ -315,9 +315,21 @@ module.exports = {
         if (verificarPromocao && verificarStatusCampanha.status === "valid" && isTrialActive) {
             const perfil = await Anuncio.findOne({
                 where: {
-                    codAnuncio: codAnuncio
+                    codAnuncio: verificarPromocao.dataValues.codAnuncio
                 },
             });
+
+            const codDescontoAnuncio = perfil.dataValues.codDesconto;
+            const codDescontoCampanha = await Descontos.findOne({
+                where: {
+                    idDesconto: verificarStatusCampanha.dataValues.id_promocional
+                },
+                raw: true
+            });
+
+            if(codDescontoAnuncio == codDescontoCampanha.hash) {
+               return res.json({ success: true, message: "Promoção já utilizada.", codAnuncio: verificarPromocao.dataValues.codAnuncio});
+            };
 
 
             res.json({ success: true, data: perfil, hash: verificarPromocao });
