@@ -661,7 +661,6 @@ Para 100000 linhas: 312500ms
                                 <tbody>
                                     {
 
-
                                         anuncios != '' && anuncios.message.anuncios.map((item) => {
                                             return (
                                                 <tr key={item.codAnuncio} id={item.codAnuncio} onClick={selecaoLinha}>
@@ -677,7 +676,7 @@ Para 100000 linhas: 312500ms
                                                     <td>{item.codCaderno}</td>
                                                     <td>{item.codUf}</td>
                                                     {/*  <td>{item.activate ? "Ativado" : "Desativado"}</td> */}
-                                                    <td><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"} /></td>
+                                                    <td><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"} /></td>{/* status */}
                                                     <td>{item.pagamentos.length > 0 ? item.pagamentos[0].status : "Isento"}</td>
                                                     <td>{item.pagamentos.length > 0 ? formatData(item.pagamentos[0].data) : "Isento"}</td>
                                                     <td>{item.pagamentos.length > 0 ? item.pagamentos[0].valor : "Isento"}</td>

@@ -631,8 +631,21 @@ Anuncio.beforeUpdate((anuncio, options) => {
  */
 
 //RELACOES
-Anuncio.hasMany(Pagamento, { foreignKey: "cliente", sourceKey: "descCPFCNPJ", as: "pagamentos" });
-Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", targetKey: "descCPFCNPJ", as: "anuncio" });
+/* Anuncio.hasMany(Pagamento, { foreignKey: "cliente", sourceKey: "descCPFCNPJ", as: "pagamentos" });
+Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", targetKey: "descCPFCNPJ", as: "anuncio" }); */
+
+Anuncio.hasMany(Pagamento, {
+  foreignKey: "ref_mp_codAnuncio", // FK está em Pagamento
+  sourceKey: "codAnuncio",         // PK está em Anuncio
+  as: "pagamentos"
+});
+
+Pagamento.belongsTo(Anuncio, {
+  foreignKey: "ref_mp_codAnuncio", // FK em Pagamento
+  targetKey: "codAnuncio",         // PK em Anuncio
+  as: "anuncio"
+});
+
 
 Anuncio.hasOne(Promocao, { foreignKey: "codAnuncio", as: "promoc" });
 Promocao.belongsTo(Anuncio, { foreignKey: 'codAnuncio' });

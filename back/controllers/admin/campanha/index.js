@@ -78,6 +78,10 @@ module.exports = {
                 attributes: ['hash']
             });
 
+            if(idPromo) {
+                console.log("ID Promoção origem encontrada:", idPromo.hash);
+            }
+
             let whereClause = "";
 
             if (req.body.uf && req.body.caderno) {
@@ -113,6 +117,7 @@ module.exports = {
                         dataLimite: moment(req.body.dataFim).format('YYYY-MM-DD HH:mm:ss')
                     }
                 });
+
 
             gerarCSVGeral(TokensPromocao, resultCampanha.id);
 
