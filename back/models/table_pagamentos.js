@@ -56,6 +56,7 @@ const Pagamento = database.define('pagamento', {
     id_mp: {
         type: Sequelize.TEXT,
         allowNull: false,
+        unique: true,
         validate: {
             notEmpty: {
                 msg: "Esse campo não pode está vazio.."
