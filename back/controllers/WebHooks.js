@@ -36,7 +36,7 @@ module.exports = {
               } */
 
 
-            return;
+            return res.status(200).send("OK");
 
             if (objData.resource) {
                 const response = await fetch(`${objData.resource}?access_token=${config.MP_ACCESS_TOKEN_SANDBOX}`);
@@ -570,7 +570,7 @@ async function registrarPagamento(data, res) {
                             raw: true
                         })
 
-                        console.log("idCampanha", idCampanha, await getDescontoPorHash(idCampanha.idPromocional));
+                        console.log("idCampanha", idDesconto, idCampanha, await getDescontoPorHash(idCampanha.idPromocional));
 
                         const perfilActivate = await Anuncio.update({
                             "codDesconto": await getDescontoPorHash(idCampanha.idPromocional),
@@ -584,7 +584,7 @@ async function registrarPagamento(data, res) {
                             }
                         });
 
-                        res.status(200).send("OK");
+                        
 
                     }
 
