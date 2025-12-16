@@ -131,8 +131,8 @@ module.exports = {
 
 
         const body = {
-            //"notification_url": "https://minisitio.com.br/api/webhook",
-            "notification_url": "https://8d95d3b55340.ngrok-free.app/api/webhook",
+            "notification_url": "https://minisitio.com.br/api/webhook",
+            //"notification_url": "https://8d95d3b55340.ngrok-free.app/api/webhook",
             "external_reference": codigoReferenciaMp,
             "auto_return": "approved",
             "statement_descriptor": "MINISITIO",
@@ -141,7 +141,7 @@ module.exports = {
                     "title": "Assinatura anual Minisitio",
                     "quantity": 1,
                     "currency_id": "BRL",
-                    "unit_price": 5//option1
+                    "unit_price": option1
                 }
             ],
             "back_urls": {
