@@ -109,22 +109,34 @@ function Promocao() {
         }
     };
 
+    const frase = {
+        fontSize: "24px",
+    }
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
             <header className="bg-white shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-24">
+                    <div className="flex items-center justify-between h-24">
                         <div className="flex items-center">
                             <div className="rounded-full p-2 mr-3">
                                 <img src="../../assets/img/logo.png" alt="MINISITIO" width="100"></img>
                             </div>
                             {/*   <span className="text-xl font-bold text-gray-800">MINISITIO</span> */}
                         </div>
-                        <div className="flex items-center space-x-4 gap-2">
+                        <div className="flex items-center justify-center">
+                            <div className="col-10 col-md-12 col-sm-12 pull-right faixa-header d-flex justify-content-center align-items-center fraseHeader" style={frase}>
+                                <span className='px-3'>DESDE 2017, apoiando o pequeno negócio</span>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-end space-x-4 gap-2" style={{ width: '109px' }}>
                             {/*  <Button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">ASSINE AGORA</Button> */}
                             <div className="w-8 h-6 bg-green-500 rounded-sm flex items-center justify-center">
-                                <span className="text-white text-xs font-bold">BR</span>
+                                <span className="text-white text-xs font-bold">
+                                    <img src="../../assets/img/bandeiras/br.png" alt="Brasil" />
+                                </span>
                             </div>
                         </div>
                     </div>
