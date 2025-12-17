@@ -464,6 +464,7 @@
     .fraseHeader {
         font-size: 11px !important;
         font-family: Montserrat, Helvetica, Times, serif;
+        text-align: center;
     }
 
     .fraseHeader span {
