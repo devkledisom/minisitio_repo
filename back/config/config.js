@@ -4,7 +4,7 @@ module.exports = {
     url: "https://automaplay.com.br/api",
     //url: "https://minisitio.net/api", //PRODUÇÃO
     //domain: "https://minitest.minisitio.online",
-    domain: 'https://minitest.automaplay.com.br',
+    domain: 'http://localhost:3000',
     urlPublic: "https://minitest.automaplay.com.br",
     //urlPublic: "http://localhost:3000", //TESTE
     apiSecret: "@rfxzsklc_s+bg7t+@f6^obve=f!swr1%0838lctalor92vi",

@@ -5,21 +5,33 @@ function TagsInput(props) {
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    if(props.value != undefined && props.value.length > 0) {
-      setTags(props.value);
+    if (props.value != undefined && props.value.length > 0) {
+      setTags(JSON.parse(props.value));
     }
-  }, []);
+  }, [props.value]);
 
-  useEffect(() => {
-    props.tagValue(tags)
-  }, [tags]);
+/*   useEffect(() => {
+    if (!props.hasUserInteracted.current) return;
+    props.tagValue(tags);
+
+    if (tags.length > 0) {
+      props.setMinisitio({
+        ...props.minisitio,
+        tags: JSON.stringify(tags)
+      });
+
+      props.hasUserInteracted.current = true;
+      console.log(props.minisitio)
+    }
+
+  }, [tags]); */
 
   const handleInputChange = (e) => {
+    //props.hasUserInteracted.current = true;
     setInputValue(e.target.value);
   };
 
   const handleInputKeyDown = (e) => {
-    console.log(tags)
     props.tagValue(tags)
     if (e.key === 'Enter' && inputValue.trim() !== '') {
       e.preventDefault();
@@ -30,7 +42,7 @@ function TagsInput(props) {
       }
     } else if (e.key === 'Backspace' && !inputValue && tags.length) {
       setTags(tags.slice(0, -1));
-      
+
     }
   };
 
@@ -75,7 +87,7 @@ const containerStyle = {
 const tagsContainerStyle = {
   display: 'flex',
   flexWrap: 'wrap',
- /*  border: '1px solid #ccc', */
+  /*  border: '1px solid #ccc', */
   padding: '5px',
   borderRadius: '5px',
   maxWidth: '100%',

@@ -33,6 +33,7 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
                     fetch(`${masterPath.url}/pagamento/create/${minisitio.codAnuncio}/${codDescontoInserido}`)
                         .then((x) => x.json())
                         .then((response) => {
+                            
                             window.location.href = response.url;
 
                         })

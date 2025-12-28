@@ -78,7 +78,7 @@ module.exports = {
                 attributes: ['hash']
             });
 
-            if(idPromo) {
+            if (idPromo) {
                 console.log("ID Promoção origem encontrada:", idPromo.hash);
             }
 
@@ -92,7 +92,7 @@ module.exports = {
                 whereClause = "a.codDesconto = :idOrigem";
             }
 
-//DATE_ADD(NOW(), INTERVAL 30 DAY) AS dataLimitePromocao,
+            //DATE_ADD(NOW(), INTERVAL 30 DAY) AS dataLimitePromocao,
             await database.query(`
             INSERT IGNORE INTO tokens_promocao (campanhaId, codAnuncio, tokenPromocao, periodoEmDias, dataLimitePromocao, createdAt, updatedAt)
             SELECT 
@@ -129,11 +129,11 @@ module.exports = {
             });
 
 
-         /*    const atualizarIdPerfil = await Anuncio.update({
-                codDesconto: idPromoNew.hash
-            }, {
-                where: { codDesconto: idPromo.hash }
-            }); */
+            /*    const atualizarIdPerfil = await Anuncio.update({
+                   codDesconto: idPromoNew.hash
+               }, {
+                   where: { codDesconto: idPromo.hash }
+               }); */
             /*  const campanhas = await Campanha.findAll().then((result) => {
  
                  //gerarCSV(TokensPromocao, "./public/upload/campanha/" + "campanha-" + resultCampanha.id + ".csv", resultCampanha.id);
@@ -304,7 +304,7 @@ module.exports = {
             }
         });
 
-        if(!verificarPromocao) return res.json({ success: false, message: "Promoção inválida ou expirada." });
+        if (!verificarPromocao) return res.json({ success: false, message: "Promoção inválida ou expirada." });
 
         verificarStatusCampanha = await Campanha.findOne({
             where: {
@@ -324,17 +324,23 @@ module.exports = {
                 },
             });
 
-            const codDescontoAnuncio = perfil.dataValues.codDesconto;
-            const codDescontoCampanha = await Descontos.findOne({
-                where: {
-                    idDesconto: verificarStatusCampanha.dataValues.id_promocional
-                },
-                raw: true
-            });
-
-            if(codDescontoAnuncio == codDescontoCampanha.hash) {
-               return res.json({ success: true, message: "Promoção já utilizada.", codAnuncio: verificarPromocao.dataValues.codAnuncio});
+            //verifica se o id já foi utilizado
+            if (verificarPromocao.dataValues.statusPagamento === "pago") {
+                return res.json({ success: true, message: "Promoção já utilizada.", codAnuncio: verificarPromocao.dataValues.codAnuncio });
             };
+
+
+            /*           const codDescontoAnuncio = perfil.dataValues.codDesconto;
+                      const codDescontoCampanha = await Descontos.findOne({
+                          where: {
+                              idDesconto: verificarStatusCampanha.dataValues.id_promocional
+                          },
+                          raw: true
+                      });
+          
+                      if(codDescontoAnuncio == codDescontoCampanha.hash) {//verifica se o id já foi utilizado
+                         return res.json({ success: true, message: "Promoção já utilizada.", codAnuncio: verificarPromocao.dataValues.codAnuncio});
+                      }; */
 
 
             res.json({ success: true, data: perfil, hash: verificarPromocao });

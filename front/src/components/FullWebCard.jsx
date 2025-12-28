@@ -139,7 +139,7 @@ function FullWebCard(props) {
                                 <div className="row">
                                     <div className='col-md-4'>
                                         {(resultLocal.certificado_logo != null && resultLocal.certificado_logo != "") &&
-                                            <img src={`${masterPath.url}/files/2/${resultLocal.certificado_logo}`} className='rounded' height="50" alt="logo" />
+                                            <img src={`${masterPath.url}/files/logoCertificado/${resultLocal.certificado_logo}`} className='rounded' height="50" alt="logo" />
                                         }
                                         {(resultLocal.certificado_logo == "" || resultLocal.certificado_logo == null) &&
                                             <p>LOGO</p>
@@ -151,12 +151,12 @@ function FullWebCard(props) {
                                     <div className='col-md-4'>{resultLocal.certificado_texto ? resultLocal.certificado_texto : "TEXTO"}</div>
                                     <div className='col-md-4'>
                                         {(resultLocal.certificado_link || resultLocal.certificado_imagem) && (
-                                            <a href={resultLocal.certificado_imagem != '' ? `${masterPath.url}/files/2/${resultLocal.certificado_imagem}` : resultLocal.certificado_link} target="_blank" rel="noopener noreferrer">
+                                            <a href={resultLocal.certificado_imagem != '' ? `${masterPath.url}/files/imgCertificado/${resultLocal.certificado_imagem}` : resultLocal.certificado_link} target="_blank" rel="noopener noreferrer">
                                                 <i className="link-cinza flex justify-center">
                                                     <img
                                                         src={
                                                             resultLocal.certificado_imagem
-                                                                ? `${masterPath.url}/files/2/${resultLocal.certificado_imagem}`
+                                                                ? `${masterPath.url}/files/imgCertificado/${resultLocal.certificado_imagem}`
                                                                 : "../assets/img/teste/diploma.png"
                                                         }
                                                         alt="Certificado"
@@ -187,7 +187,7 @@ function FullWebCard(props) {
                                         {!resultLocal.certificado_link && resultLocal.certificado_imagem && (
                                             <i className="link-cinza">
                                                 <img
-                                                    src={`${masterPath.url}/files/2/${resultLocal.certificado_imagem}`}
+                                                    src={`${masterPath.url}/files/imgCertificado/${resultLocal.certificado_imagem}`}
                                                     alt="Certificado"
                                                     height={64}
                                                     className='rounded'
@@ -298,7 +298,7 @@ function FullWebCard(props) {
                             {cashbackCondicoes(resultLocal.cashback_logo, resultLocal.cashback_link) === "condicao2" &&
                                 <a href={resultLocal.cashback_link} target="_blank" rel="noopener  noreferrer">
                                     <i className='link-cinza flex justify-center'>
-                                        <img src={`${masterPath.url}/files/2/${resultLocal.cashback_logo}`} className='rounded my-1' alt="cashback" />
+                                        <img src={`${masterPath.url}/files/logoCashBack/${resultLocal.cashback_logo}`} className='rounded my-1' alt="cashback" />
                                     </i>
                                 </a>
 
@@ -320,7 +320,7 @@ function FullWebCard(props) {
                             <a href={resultLocal.descParceiroLink !== "0" ? resultLocal.descParceiroLink : ""} target="_blank" data-toggle="tooltip" title="parceiro" rel="noopener  noreferrer">
                                 <i className='link-cinza flex justify-center'>
                                     {resultLocal.descParceiro != null ?
-                                        <img src={`${masterPath.url}/files/2/${resultLocal.descParceiro}`} width={150} height={58} className='rounded my-1' alt="parceiro" /> : <img src="../assets/img/teste/aperto-de-mao.png" width={100} height={66} />
+                                        <img src={`${masterPath.url}/files/logoParceiro/${resultLocal.descParceiro}`} width={150} height={58} className='rounded my-1' alt="parceiro" /> : <img src="../assets/img/teste/aperto-de-mao.png" width={100} height={66} />
                                     }
 
                                 </i>

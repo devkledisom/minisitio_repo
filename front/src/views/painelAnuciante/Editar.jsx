@@ -37,7 +37,7 @@ import TemplateModal from "../../components/Modal/TemplateModal";
 import Tooltip from "../../components/Tooltip";
 import MapContainer from "../../components/MapContainer";
 import UserNav from './UserNav';
-import TagsInput from "../../admin/components/TagsInput";
+import TagsInput from "./TagsInput";
 
 function Editar(props) {
   //States

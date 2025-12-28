@@ -8,6 +8,10 @@ const Anuncio = require('../models/table_anuncio');
 const Desconto = require('../models/table_desconto');
 const Globals = require('../models/table_globals');
 const Campanha = require('../models/table_campanha');
+const TokensPromocao = require('../models/tokens_promocao');
+
+
+const { novoUsuario } = require('../functions/sendMailer');
 
 //const client = new MercadoPagoConfig({ accessToken: config.MP_ACCESS_TOKEN_SANDBOX, options: { timeout: 5000, idempotencyKey: 'abc' } });
 const client = new MercadoPagoConfig({ accessToken: config.mp_prod.AccessToken, options: { timeout: 5000, idempotencyKey: 'abc' } });
@@ -487,6 +491,19 @@ async function registrarPagamento(data, res) {
 
                         console.log("idCampanha", idCampanha);
 
+                        //enviar email para novo perfil pago
+                        novoUsuario(perfil.descEmailAutorizante, perfil.descNomeAutorizante, perfil.descCPFCNPJ, perfil.codAnuncio);
+
+                        //atualizar status do pagamento na tabela tokens_promoção
+                        await TokensPromocao.update({
+                            statusPagamento: "pago"
+                        }, {
+                            where: {
+                                codAnuncio: codigoReferenciaMp
+                            }
+                        });
+
+                        //atualizar o codDesconto apenas se existir a campanha
                         if (idCampanha) {
                             objUpdated.codDesconto = await getDescontoPorHash(idCampanha.idPromocional);
                         }
@@ -499,13 +516,6 @@ async function registrarPagamento(data, res) {
 
                         res.status(200).send("OK");
                     }
-
-                    /*  const atualizarAnuncio = await Anuncio.update({}, {
-                         where: {
-                             codAnuncio: req.query.id
-                         }
-                     }); */
-
 
                 } catch (err) {
                     console.log(err)
@@ -584,7 +594,18 @@ async function registrarPagamento(data, res) {
                             }
                         });
 
-                        
+                        //enviar email para novo perfil pago
+                        novoUsuario(perfil.descEmailAutorizante, perfil.descNomeAutorizante, perfil.descCPFCNPJ, perfil.codAnuncio);
+
+                        //atualizar status do pagamento na tabela tokens_promoção
+                        await TokensPromocao.update({
+                            statusPagamento: "pago"
+                        }, {
+                            where: {
+                                codAnuncio: codigoReferenciaMp
+                            }
+                        });
+
 
                     }
 

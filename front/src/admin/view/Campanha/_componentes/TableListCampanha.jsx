@@ -80,9 +80,12 @@ export default function TableListCampanha({ campanhas, setShowSpinner, fetchCamp
             setShowSpinner(false);
             if (res.success) {
               fetchCampanhas();
+
+              const statusResult = status === 'ativo' ? "ativado" : "inativado";
+
               Swal.fire(
-                'Link Inativado!',
-                'O link foi inativado com sucesso.',
+                'Link ' + status,
+                'O link foi ' + statusResult + ' com sucesso.',
                 'success'
               )
             }
@@ -114,7 +117,7 @@ export default function TableListCampanha({ campanhas, setShowSpinner, fetchCamp
           <tbody>
             {campanhas.map((campanha, index) => (
               <tr key={campanha.id}>
-                <td>{index + 1}</td>
+                <td>{campanha.id}</td>
                 <td>{campanha.desconto.usuario.descNome}</td>
                 <td>{campanha.desconto.hash}</td>
                 <td>{campanha.uf}</td>

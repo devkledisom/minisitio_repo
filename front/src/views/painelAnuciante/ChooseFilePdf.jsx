@@ -20,6 +20,7 @@ function UploadImage(props) {
   const [mostrarMiniPreview, setMostrarMiniPreview] = useState(props.miniPreview);
   const [ativarPreview, setPreview] = useState(props.preview);
   const [codImg, setCodImg] = useState(null);
+  const [minisitio, setMinisitio] = useState([])
 
 
   //ref
@@ -30,12 +31,15 @@ function UploadImage(props) {
     }
 
     if (props.codImg == 0 || props.codImg == "" || props.codImg == undefined) {
+      console.log("dasdasd", props.codImg)
       setMostrarMiniPreview(true);
       setMostrarLabel(true);
-    }
-
-
-  }, []);
+    } 
+/* 
+    if(props.codImg) {
+setMostrarLabel(false)
+    } */
+  }, [props.minisitio]);
 
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -66,7 +70,8 @@ function UploadImage(props) {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Pdf enviado com sucesso!', data);
+
+        //props.hasUserInteracted.current = true;
 
         props.data({
           ...props.minisitio,
@@ -79,35 +84,7 @@ function UploadImage(props) {
         setMostrarMiniPreview(true);
       })
 
-
-    // Enviar a imagem para o servidor
-    /*  fetch(`${masterPath.url}/upload-pdf?cod=${props.codigoUser}&local=promocao`, {
-       method: 'POST',
-       body: formData
-     })
-       .then(response => {
-         if (!response.ok) {
-           throw new Error('Erro ao enviar imagem para o servidor');
-         }
-         console.log('Pdf enviado com sucesso!');
-  console.log(response)
-         //props.data.cartao_digital = acceptedFiles[0].name;
-  
-         props.data({
-           ...props.minisitio,
-           ['cartao_digital']: acceptedFiles[0].name,
-     
-         });
-  
-         console.log(props.data.cartao_digital);
-         setMostrarLabel(false);
-         setMostrarMiniPreview(true);
-       })
-       .catch(error => {
-         console.error('Erro ao enviar imagem:', error);
-       }); */
-
-  }, []);
+  }, [props.minisitio]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -153,18 +130,14 @@ function UploadImage(props) {
 
           >
 
+
             {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/3/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver cartão digital</a> : ""}
-            {/*  {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>} */}
 
 
-            {/* console.log(mostrarLabel) */}
             {imagem ? <a href={`${masterPath.url}/files/3/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver cartão digital</a> : ""}
-           {/*  {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>} */}
             {mostrarLabel && <span {...getRootProps()}>{textLabel}</span>}
 
-            {/*    {!mostrarLabel && 
-                             {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
-                 } */}
+
 
 
 
@@ -199,41 +172,6 @@ function UploadImage(props) {
           <input {...getInputProps({ name: "imagem", title: "descImagem" })} />
         </div>
       </div>
-
-
-
-
-      {/*   <div className="col-md-8">
-      <div className="input-icon margin-top-10">
-        <i className="fa fa-paperclip"></i>
-        <span
-          className="form-control descImagem"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingTop: "5px",
-            color: "#4f4f4f!important",
-            margin: "auto"
-          }}
-        >
-
-          {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/3/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver cartão digital</a> : ""}
-          {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
-
-          {imagem ? <a href={`${masterPath.url}/files/3/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver cartão digital</a> : ""}
-          {mostrarLabel && textLabel}
-          {imagem && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>}
-
-        </span>
-        <input {...getInputProps({ name: "imagem", title: "descImagem" })} />
-      </div>
-    </div> */}
-      {/*   <div className="col-md-4 botao-procurar" {...getRootProps()}>
-      <button type="button" className="btn cinza w-100" id="btnDescImagem">
-        procurar
-      </button>
-    </div> */}
     </div>
   );
 }
