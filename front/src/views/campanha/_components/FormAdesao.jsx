@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { masterPath } from "../../../config/config";
 import Badge from 'react-bootstrap/Badge';
 import Stack from 'react-bootstrap/Stack';
-import moment from 'moment'
+import moment, { now } from 'moment'
 
 import InputMask from 'react-input-mask';
 
@@ -37,10 +37,10 @@ import Header from "../../../admin/view/Header";
 //COMPONENTS
 import MapContainer from "../../../components/MapContainer";
 /* import UserNav from './UserNav'; */
-import TagsInput from "../../../admin/components/TagsInput";
+import TagsInput from "./TagsInput";
 import ChooseFile from "../../painelAnuciante/ChooseFile";
-import ChooseFile1 from "../../painelAnuciante/ChooseFile1";
-import ChooseFilePdf from "../../painelAnuciante/ChooseFilePdf";
+import ChooseFile1 from "./ChooseFile1";
+import ChooseFilePdf from "./ChooseFilePdf";
 //import TemplateModal from "../../components/Modal/TemplateModal";
 
 //FUNCTION EXTERNA
@@ -48,6 +48,18 @@ import { checkoutUpdate } from "./checkoutUpdate";
 
 //LIBS
 import Swal from 'sweetalert2';
+
+function useDebounce(value, delay = 800) {
+  const [debounced, setDebounced] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debounced;
+}
+
 
 function FormAdesao({ isAdmin }) {
   //States
@@ -82,6 +94,11 @@ function FormAdesao({ isAdmin }) {
 
   const { hash } = useParams();
 
+  const debouncedMinisitio = useDebounce(minisitio, 800);
+  const isFirstRender = useRef(true);
+  const hasUserInteracted = useRef(false);
+
+
 
   const executarSelecao = (e) => {
     let codigoUf = e.target.value;
@@ -95,32 +112,24 @@ function FormAdesao({ isAdmin }) {
 
   };
 
-  function verificaDataPromocao(dataAcesso, peridoPromo) {
-    // Data do primeiro acesso (vinda do banco)
-    const primeiroAcesso = moment(dataAcesso);
+function verificaDataPromocao(dataAcesso, periodoPromo) {
+  // Sempre trabalhar no início do dia
+  const primeiroAcesso = moment(dataAcesso).startOf("day");
 
-    // Dias que o cliente tem de promoção
-    const diasPromocao = peridoPromo;
+  const diasPromocao = periodoPromo;
 
-    // Data final da promoção
-    const dataFinal = primeiroAcesso.clone().add(diasPromocao, "days");
+  const dataFinal = primeiroAcesso.clone().add(diasPromocao, "days");
 
-    // Data atual
-    const hoje = moment();
+  const hoje = moment().startOf("day");
 
-    // Quantos dias faltam
-    const diasRestantes = dataFinal.diff(hoje, "days");
+  const diasRestantes = dataFinal.diff(hoje, "days");
 
-    setDiasCampanha(diasRestantes);
+  setDiasCampanha(diasRestantes);
 
-    // Verificar se já expirou
-    if (diasRestantes <= 0) {
-      console.log("Promoção expirada");
-      //navigate('/contato');
-    } else {
-      //console.log(`Ainda faltam ${diasRestantes} dias`);
-    }
+  if (diasRestantes <= 0) {
+    //console.log("Promoção expirada");
   }
+}
 
   useEffect(() => {
     fetch(`${masterPath.url}/admin/campanha/read/${hash}`)
@@ -138,7 +147,16 @@ function FormAdesao({ isAdmin }) {
           // Diferença em dias
           const diasRestantes = dataAlvo.diff(hoje, "days");
 
-          verificaDataPromocao(res.data[0].dataAcessoToken, res.data[0].periodoEmDias)
+          const item = res?.data?.[0];
+
+          const dataBase = item?.dataAcessoToken
+            ? moment(item.dataAcessoToken).local()
+            : moment();
+
+          verificaDataPromocao(dataBase, item?.periodoEmDias);
+
+
+
 
           setCodDescontoPromo(res.codDesconto.hash);
         }
@@ -186,6 +204,11 @@ function FormAdesao({ isAdmin }) {
       .then((res) => {
         setMinisitio(res[0]);
 
+
+        if (res[0].tags) {
+          setTagValue(JSON.parse(res[0].tags))
+        }
+
         //console.log(res[0], codAnuncio);
 
         if (res.length > 0) {
@@ -213,7 +236,7 @@ function FormAdesao({ isAdmin }) {
         //document.querySelector("#descAnuncio").focus();
 
       }).catch((err) => {
-        console.log(err)
+        //console.log(err)
       })
   }, [codAnuncio])
 
@@ -393,9 +416,10 @@ function FormAdesao({ isAdmin }) {
 
     return diferencaDias;
   }
-  const campoPromocao = useRef(null)
 
   const handleChange = (e) => {
+
+    hasUserInteracted.current = true;
 
     if (e.target.name === 'promocaoData') {
       let dataValidade = e.target.value;
@@ -410,14 +434,106 @@ function FormAdesao({ isAdmin }) {
     setMinisitio({
       ...minisitio,
       [name]: value,
-      /* promoc: {
-        data_validade: campoPromocao.current.value,
-      } */
-
+      tags: tagValue
     });
     setUf(minisitio.codUf);
 
   };
+
+
+
+
+  useEffect(() => {
+
+    if (!hasUserInteracted.current) return;
+
+    atualizarMinisitio(debouncedMinisitio);
+  }, [debouncedMinisitio]);
+
+
+
+
+
+  function atualizarMinisitio(data) {
+
+    const payload = {
+      ...data,
+      dtCadastro2: Date.now(),
+      dueDate: moment().add(1, 'year').toISOString()
+    };
+
+    const config = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
+      },
+      body: JSON.stringify(payload)
+    };
+
+
+    fetch(`${masterPath.url}/admin/anuncio/update?id=${minisitio.codAnuncio}`, config)
+      .then((x) => x.json())
+      .then((res) => {
+        if (res.success) {
+
+          Swal.fire({
+            toast: true,
+            position: "bottom",
+            icon: "success",
+            iconColor: "#5a4b00",
+            title: "Atualizado!",
+            showConfirmButton: false,
+            timer: 2000,
+            showClass: {
+              popup: 'animate__animated animate__fadeInUp'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOutDown'
+            },
+            timerProgressBar: true,
+            titleFontSize: '18px',
+            customClass: {
+              title: 'swal-toast-title'
+            },
+            background: "#ffcc29"
+          });
+
+          hasUserInteracted.current = false;
+          //setShowSpinner(false);
+          /*        Swal.fire({
+                   title: 'Parabéns!',
+                   text: 'O seu minisitio foi atualizado com sucesso.',
+                   icon: 'success',
+                   confirmButtonText: 'OK'
+                 }).then((result) => {
+                   if (result.isConfirmed) {
+                     //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(minisitio.descCPFCNPJ)}`;
+                     // window.location.href = `/perfil/${minisitio.codAnuncio}`
+                   }
+                 }) */
+
+
+        } else {
+          //setShowSpinner(false);
+          Swal.fire({
+            title: 'Erro',
+            text: 'Ocorreu um erro ao atualizar o minisitio. Tente novamente mais tarde.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      }).catch((err) => {
+        Swal.fire({
+          title: 'Erro',
+          text: 'Ocorreu um erro ao atualizar o minisitio. Tente novamente mais tarde.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      })
+
+
+  }
 
   const handleSelectChange = (e) => {
     changePreview(e);
@@ -571,7 +687,7 @@ function FormAdesao({ isAdmin }) {
                 </div>
 
                 {/*  Marcadores */}
-                {radioCheck != 1 && <TagsInput tagValue={setTagValue} value={tagValue} />}
+                {radioCheck != 1 && <TagsInput tagValue={setTagValue} value={tagValue} minisitio={minisitio} setMinisitio={setMinisitio} hasUserInteracted={hasUserInteracted} />}
 
                 <div className="row">
                   <div class="col-md-4 col-xs-12">
@@ -679,7 +795,9 @@ function FormAdesao({ isAdmin }) {
                     id="descCEP"
                     className="form-control"
                     placeholder="Digite o CEP"
-                    onChange={(e) => setCep(e.target.value)}
+                    value={minisitio.descCEP}
+                    onChange={handleSelectChange}
+                  /* onChange={(e) => setCep(e.target.value)} */
                   />
                 </div>}
 
@@ -713,7 +831,8 @@ function FormAdesao({ isAdmin }) {
                     id="descCelular"
                     className="form-control"
                     placeholder="(99) 99999-9999"
-                    onChange={changePreview}
+                    onChange={handleSelectChange}
+                    value={minisitio.descCelular}
                     mask={'(99) 99999-9999'}></InputMask>
                 </div>}
               </div>
@@ -736,7 +855,9 @@ function FormAdesao({ isAdmin }) {
                 miniPreview={false}
                 msg={"Inserir PDF do cartão digital"}
                 minisitio={minisitio}
-                data={setMinisitio} />}
+                data={setMinisitio}
+                hasUserInteracted={hasUserInteracted}
+              />}
 
             </div>}
 
@@ -757,6 +878,8 @@ function FormAdesao({ isAdmin }) {
                 msg={"Inserir logo da parceria (150x58)"}
                 minisitio={minisitio}
                 data={setMinisitio}
+                hasUserInteracted={hasUserInteracted}
+                local={"logoParceiro"}
               />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
@@ -787,7 +910,10 @@ function FormAdesao({ isAdmin }) {
                 miniPreview={false}
                 msg={"Inserir logo do certificado (150x58)"}
                 minisitio={minisitio}
-                data={setMinisitio} />
+                data={setMinisitio}
+                hasUserInteracted={hasUserInteracted}
+                local={"logoCertificado"}
+              />
               }
               <div className="input-icon margin-top-10">
 
@@ -811,7 +937,10 @@ function FormAdesao({ isAdmin }) {
                 miniPreview={false}
                 msg={"Inserir imagem do certificado (816x1056)"}
                 minisitio={minisitio}
-                data={setMinisitio} />}
+                data={setMinisitio}
+                hasUserInteracted={hasUserInteracted}
+                local={"imgCertificado"}
+              />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
@@ -842,6 +971,8 @@ function FormAdesao({ isAdmin }) {
                 msg={"Inserir logo do cashback (150x58)"}
                 minisitio={minisitio}
                 data={setMinisitio}
+                hasUserInteracted={hasUserInteracted}
+                local={"logoCashBack"}
               />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>

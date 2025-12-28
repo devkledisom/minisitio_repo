@@ -39,6 +39,7 @@ const Desconto = require('../../../models/table_desconto');
 const { Op } = Sequelize;
 const readXlsxFile = require('read-excel-file/node');
 const path = require('path');
+const { novoUsuario } = require('../../../functions/sendMailer');
 
 
 
@@ -3187,6 +3188,9 @@ module.exports = {
 
         try {
             const listaAnuncios = await Anuncio.create(dadosAnuncio);
+            let [ email, nmEmail, numDoc ] = [listaAnuncios.dataValues.descEmailAutorizante, listaAnuncios.dataValues.descNomeAutorizante, listaAnuncios.dataValues.descCPFCNPJ]
+
+            novoUsuario(email, nmEmail, numDoc, listaAnuncios.dataValues.codAnuncio);
 
             registarTags(listaAnuncios.dataValues.codAnuncio)
 
@@ -3359,7 +3363,7 @@ module.exports = {
             "codAtividade": codAtividade,
             "codPA": 0,
             "codDuplicado": 0,
-            "tags": tags,
+            "tags": tags ? JSON.stringify(tags) : '',
             "codCaderno": codCaderno,
             "codUf": codUf,
             "codCidade": codCidade,
@@ -3419,7 +3423,6 @@ module.exports = {
             "periodo": periodo,
             "dueDate": dueDate || null
         };
-        console.log(dadosAnuncio)
 
         const idAnuncio = req.query.id;
 
@@ -3452,7 +3455,7 @@ module.exports = {
                     codAnuncio: idAnuncio,
                     banner: logoPromocao || "",
                     link_externo: linkPromo,
-                    data_validade: promocaoData,
+                    data_validade: promocaoData ? promocaoData : '',
                     uf: codUf,
                     caderno: codCaderno
                 });
@@ -3470,13 +3473,57 @@ module.exports = {
 
         }
 
+        //remover imagem antiga
+        const anuncio = await Anuncio.findOne({
+            where: {
+                codAnuncio: idAnuncio
+            },
+            raw: true,
+            attributes: ["descParceiro", "certificado_logo", "certificado_imagem", "cashback_logo"]
+        });
+
+        // Função auxiliar para deletar arquivo de forma segura
+        const deleteFileIfExists = async (diretorio, campoAnuncio) => {
+            try {
+                await fs.promises.unlink(path.join(__dirname, `../../../public/upload/img/${diretorio}/${campoAnuncio}`));
+                console.log('Arquivo apagado com sucesso!');
+            } catch (err) {
+                if (err.code !== 'ENOENT') { // Ignora se arquivo não existe
+                    console.error("Erro ao excluir arquivo:", err);
+                    throw err;
+                }
+            }
+        };
+
+        if (dadosAnuncio.descParceiro != anuncio.descParceiro) {
+            await deleteFileIfExists("logoParceiro", anuncio.descParceiro);
+        }
+
+        if (dadosAnuncio.certificado_logo != anuncio.certificado_logo) {
+            await deleteFileIfExists("logoCertificado", anuncio.certificado_logo);
+        }
+
+        if (dadosAnuncio.certificado_imagem != anuncio.certificado_imagem) {
+            await deleteFileIfExists("imgCertificado", anuncio.certificado_imagem);
+        }
+
+        if (dadosAnuncio.cashback_logo != anuncio.cashback_logo) {
+            await deleteFileIfExists("logoCashBack", anuncio.cashback_logo);
+        }
+
+
 
         try {
+
+
             const listaAnuncios = await Anuncio.update(dadosAnuncio, {
                 where: {
                     codAnuncio: req.query.id
                 }
             });
+            
+
+
 
             try {
                 const parsedTags = JSON.parse(tags);
@@ -3492,10 +3539,11 @@ module.exports = {
                     tagValue: tag
                 }));
 
+
                 await Tags.bulkCreate(novaLista);
 
             } catch (err) {
-                console.log("Erro ao atualizar promoções", err)
+                console.log("Erro ao atualizar tags", err)
             }
 
 

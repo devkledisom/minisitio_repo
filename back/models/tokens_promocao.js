@@ -55,6 +55,12 @@ const TokensPromocao = database.define('tokens_promocao', {
         unique: false
     },
 
+    statusPagamento: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+        unique: false
+    },
+
     clicks: {
         type: Sequelize.INTEGER,
         allowNull: false,

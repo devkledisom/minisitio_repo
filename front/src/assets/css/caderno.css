@@ -190,10 +190,11 @@
     grid-rows: span 4;
 }
 
-.grid-container #col1, .grid-container #col2{
+.grid-container #col1,
+.grid-container #col2 {
     grid-column: span 1;
     grid-rows: span 12;
-   /*  border: 1px solid red; */
+    /*  border: 1px solid red; */
     max-height: 2352px;
 }
 
@@ -206,6 +207,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.swal-toast-title {
+    font-size: 20px !important;
 }
 
 @media (max-width: 768px) {
@@ -236,6 +241,7 @@
         width: 100%;
         height: 50px;
     }
+
     #btn-next {
         background-color: #ffcc29;
         color: #000;
@@ -263,7 +269,7 @@
         left: 30%;
         transform: translate(-50px, -50px);
     }
-    
+
     .FullWebCard>div {
         padding: 10px !important;
     }
@@ -271,7 +277,7 @@
     .FullWebCard>div>.full-title {
         padding: 0px !important;
     }
-    
+
     .caderno .btn {
         padding: 0;
     }

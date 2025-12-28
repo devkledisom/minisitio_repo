@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const path = require('path');
+const config = require('../config/config');
 
 const SMTP_CONFIG = require('../config/smtp');
 
@@ -196,7 +197,7 @@ async function contato(data) {
 
 };
 
-async function novoUsuario(email, nome, doc) {
+async function novoUsuario(email, nome, doc, codAnuncio) {
     const mailSentPT = await transporter.sendMail({
         //from: `${data.nome} <${data.email}>`,
         from: `kledisom <dev@ziiz.com.br>`,
@@ -214,6 +215,7 @@ async function novoUsuario(email, nome, doc) {
     
 <p>Seja bem Vindo(a) <strong>${nome}</strong></p>
 <p>segue abaixo o seu acesso para gerenciar o seu perfil Minisitio</p>
+    <p>Link de acesso do perfil, confira: <a href="${ config.domain }/perfil/${codAnuncio}" target="_blank" rel="noopener noreferrer">${ config.domain }/perfil/${codAnuncio}</a></p>
     <p>Login: <strong>${doc}</strong></p>
     <p>Senha: <strong>${doc.substr(0, 5)}</strong></p>
 
