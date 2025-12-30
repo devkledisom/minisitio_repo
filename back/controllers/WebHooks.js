@@ -135,7 +135,7 @@ module.exports = {
 
 
         const body = {
-            "notification_url": `${config.domain}/api/webhook`,
+            "notification_url": "https://minisitio.com.br/api/webhook",
             //"notification_url": "https://8d95d3b55340.ngrok-free.app/api/webhook",
             "external_reference": codigoReferenciaMp,
             "auto_return": "approved",
