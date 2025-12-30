@@ -135,7 +135,7 @@ module.exports = {
 
 
         const body = {
-            "notification_url": "https://minisitio.com.br/api/webhook",
+            "notification_url": `${config.domain}/api/webhook`,
             //"notification_url": "https://8d95d3b55340.ngrok-free.app/api/webhook",
             "external_reference": codigoReferenciaMp,
             "auto_return": "approved",
@@ -149,9 +149,9 @@ module.exports = {
                 }
             ],
             "back_urls": {
-                "success": `https://minisitio.com.br/perfil/${codigoReferenciaMp}`,
-                "failure": `https://minisitio.com.br/perfil/${codigoReferenciaMp}`,
-                "pending": `https://minisitio.com.br/perfil/${codigoReferenciaMp}`
+                "success": `${config.domain}/perfil/${codigoReferenciaMp}`,
+                "failure": `${config.domain}/perfil/${codigoReferenciaMp}`,
+                "pending": `${config.domain}/perfil/${codigoReferenciaMp}`
             }
         };
 
