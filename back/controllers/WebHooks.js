@@ -149,8 +149,9 @@ module.exports = {
                 }
             ],
             "back_urls": {
-                "success": `${config.domain}/perfil/${codigoReferenciaMp}`,
-                "pending": `${config.domain}/perfil/${codigoReferenciaMp}`
+                "success": `https://minisitio.com.br/perfil/${codigoReferenciaMp}`,
+                "failure": `https://minisitio.com.br/perfil/${codigoReferenciaMp}`,
+                "pending": `https://minisitio.com.br/perfil/${codigoReferenciaMp}`
             }
         };
 

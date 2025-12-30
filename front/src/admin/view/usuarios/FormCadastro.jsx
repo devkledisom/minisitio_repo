@@ -38,11 +38,11 @@ const FormCadastro = () => {
                         console.log(usuarios);
                     })
          */
-  /*       fetch(`${masterPath.url}/cadernos`)
-            .then((x) => x.json())
-            .then((res) => {
-                setCaderno(res)
-            }) */
+        /*       fetch(`${masterPath.url}/cadernos`)
+                  .then((x) => x.json())
+                  .then((res) => {
+                      setCaderno(res)
+                  }) */
         fetch(`${masterPath.url}/ufs`)
             .then((x) => x.json())
             .then((res) => {
@@ -195,9 +195,10 @@ const FormCadastro = () => {
 
     return (
         <div className="users">
-            <header style={style} className='w-100'>
+
+            {/*        <header style={style} className='w-100'>
                 <Header />
-            </header>
+            </header>*/}
             <section className='py-5'>
 
 

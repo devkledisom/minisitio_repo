@@ -122,7 +122,7 @@ const FormCadastro = () => {
         const data = {
             "usuario": document.getElementById('user').value,
             "descricao": document.getElementById('descID').value,
-            "valorDesconto": parseFloat(valorDescontoString).toFixed(2),//valorDescontoNumber, //document.getElementById('valorDesconto').value,
+            "valorDesconto": Number(valorDescontoString) / 100,//valorDescontoNumber, //document.getElementById('valorDesconto').value,
             "patrocinador": document.getElementById('patrocinador').value,
             "saldoUtilizado": document.getElementById('utilizar-saldo').value,
             "hash": hash,
@@ -139,6 +139,7 @@ const FormCadastro = () => {
             "is_capa": isCapa.current.value,
             "imagens": imgs
         };
+
 
         const config = {
             method: "POST",
@@ -168,7 +169,8 @@ const FormCadastro = () => {
                             confirmButtonText: 'Confirmar'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.reload();
+                                navigate('/admin/desconto')
+                                //window.location.reload();
                             }
                         })
                     } else {
@@ -213,20 +215,43 @@ const FormCadastro = () => {
         });
     };
 
-    const handleInputChange = (e) => {
+   /*  const handleInputChange = (e) => {
         let inputValue = e.target.value;
+
+        console.log(inputValue)
 
         setValue(inputValue);
 
     };
 
-    const formatarReais = (valor) => {
-        valor = valor.replace(/\D/g, ""); // remove não números
-        valor = (valor / 100).toFixed(2) + "";
-        valor = valor.replace(".", ",");
-        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        return valor;
+    
+        const formatarReaisOld = (valor) => {
+            valor = valor.replace(/\D/g, ""); // remove não números
+            valor = (valor / 100).toFixed(2) + "";
+            valor = valor.replace(".", ",");
+            valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return valor;
+        }; */
+
+    const handleInputChange = (e) => {
+        // mantém apenas números
+        
+        const somenteNumeros = e.target.value.replace(/\D/g, "");
+
+        setValue(somenteNumeros);
     };
+
+    const formatarReais = (valor) => {
+        if (!value) return "0,00";
+
+        const numero = Number(value) / 100;
+
+        return numero.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    };
+
 
     return (
         <div className="users">

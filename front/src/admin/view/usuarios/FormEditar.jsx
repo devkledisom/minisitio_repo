@@ -183,7 +183,7 @@ const FormCadastro = () => {
 
         const { name, value } = event.target;
 
-        console.log(name)
+        //console.log(name, value)
 
         switch (event.target.id) {
             case "codTipoPessoa":
@@ -255,9 +255,9 @@ const FormCadastro = () => {
 
     return (
         <div className="users">
-            <header style={style} className='w-100'>
+    {/*         <header style={style} className='w-100'>
                 <Header />
-            </header>
+            </header> */}
             <section className='py-5'>
 
                 {showSpinner && <Spinner />}
