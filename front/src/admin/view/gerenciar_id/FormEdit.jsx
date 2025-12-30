@@ -121,10 +121,10 @@ const FormEdit = () => {
 
     }, []);
 
-  /*   useEffect(() => {
-        console.log("ids -> ", ids);
-        document.getElementById('user').value = ids.idUsuario;
-    }, [ids]); */
+    /*   useEffect(() => {
+          console.log("ids -> ", ids);
+          document.getElementById('user').value = ids.idUsuario;
+      }, [ids]); */
 
     function editID() {
 
@@ -201,12 +201,10 @@ const FormEdit = () => {
                             confirmButtonText: 'Confirmar'
                         }).then(() => {
 
-                            window.location.reload();
+                            navigate('/admin/desconto')
 
                         })
                     } else {
-                        //alert(res.message);
-
                         if (res.message == "Token inválido") {
                             alert("Sessão expirada, faça login para continuar.");
                             navigate('/login')
@@ -384,7 +382,7 @@ const FormEdit = () => {
 
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="patrocinador" className="w-50 px-1">Habilitar Patrocinador ?</label>
-                            <select name="patrocinador" id="patrocinador" className="w-50 py-1"
+                            <select name="patrocinador" id="patrocinador" className="form-select w-50 py-1"
                                 value={patrocinio}
                                 onChange={(e) => setPatrocinio(e.target.value)}>
                                 <option value="1">Sim</option>
@@ -421,7 +419,7 @@ const FormEdit = () => {
  */}
                         <div className="form-group d-flex flex-column align-items-center py-3">
                             <label htmlFor="utilizar-saldo" className="w-50 px-1">Utilizar Saldo ?</label>
-                            <select name="utilizar-saldo" id="utilizar-saldo" className="w-50 py-1" value={saldo} onChange={(e) => setSaldo(e.target.value)}>
+                            <select name="utilizar-saldo" id="utilizar-saldo" className="form-select w-50 py-1" value={saldo} onChange={(e) => setSaldo(e.target.value)}>
                                 <option value="0">Não</option>
                                 <option value="1">Sim</option>
                             </select>
@@ -436,6 +434,13 @@ const FormEdit = () => {
                             </div>
                         }
 
+                        <div className="form-group d-flex flex-column align-items-center py-3">
+                            <label htmlFor="utilizar-saldo" className="w-50 px-1">Habilitar ID para Capa ?</label>
+                            <select name="utilizar-saldo" id="utilizar-saldo" className="form-select w-50 py-1" value={ids.is_capa}>
+                                <option value={false}>Não</option>
+                                <option value={true}>Sim</option>
+                            </select>
+                        </div>
 
 
                         <div className="text-center py-3">
