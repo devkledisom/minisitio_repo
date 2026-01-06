@@ -51,7 +51,7 @@ useEffect(() => {
 
             {props.data != null && props.data.descImagem != null && props.data.descImagem != "teste" && props.data.descImagem != 0 ? (
 
-                <li className="cartao">
+                <li className="cartao mb-4">
                     {parceiros && isValidPatrocinio(parceiros) && (
                         (isValid(parceiros.descImagem) ||
                             isValid(parceiros.descImagem2) ||
@@ -69,7 +69,7 @@ useEffect(() => {
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
-                                                <img src={`${masterPath.url}/files/${item.img}`} alt={`Parceiro ${index + 1}`} />
+                                                <img src={`${masterPath.url}/files/logoParceiro/${item.img}`} alt={`Parceiro ${index + 1}`} />
                                             </a>
                                         ))}
                                 </div>
@@ -84,7 +84,7 @@ useEffect(() => {
 
                     <div className="links">
                         <ul className="list-inline">
-                            <li className="pull-left">
+                      {/*       <li className="pull-left">
                                 <a href={`${masterPath.domain}/perfil/${props.data.codAnuncio}`} data-toggle="tooltip" title="Detalhes" >
                                     <img src="/assets/img/miniwebcard/link_detalhe.png" />
                                 </a>
@@ -93,7 +93,7 @@ useEffect(() => {
                                 <a href="#" data-toggle="tooltip" title="SAC - Fale Comigo">
                                     <img src="/assets/img/miniwebcard/link_email.png" />
                                 </a>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
 
