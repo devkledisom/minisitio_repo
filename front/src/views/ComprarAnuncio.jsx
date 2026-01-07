@@ -332,7 +332,7 @@ function ComprarAnuncio({ isAdmin }) {
 
   return (
     <div className="App">
-    {/*   {isAdmin &&
+      {/*   {isAdmin &&
         <header style={{ position: "fixed", zIndex: "999" }} className='w-100'>
           <Header />
         </header>
@@ -613,7 +613,10 @@ function ComprarAnuncio({ isAdmin }) {
                   />
                 </div>
 
-                {radioCheck != 1 && <ChooseFile codigoUser={codUser} />}
+                {radioCheck != 1 && <ChooseFile
+                  codigoUser={codUser}
+                  origin={"descImagem"}
+                />}
 
                 <div className="input-icon margin-top-10">
                   <i className="fa fa-map-marker"></i>
