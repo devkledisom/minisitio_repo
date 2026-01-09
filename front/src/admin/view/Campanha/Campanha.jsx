@@ -182,7 +182,7 @@ const Campanha = () => {
 
 
                     <article className="pt-5">
-                        <div className="container-fluid">
+                        <div className="container-fluid" style={{overflowX: "hidden", height: "640px"}}>
                             <TableListCampanha campanhas={campanhas} setShowSpinner={setShowSpinner} fetchCampanhas={fetchCampanhas} />
                         </div>
                         {/*  <Pagination totalPages={paginasTotal} table={"pin"} /> */}
@@ -191,8 +191,8 @@ const Campanha = () => {
                     </article>
                     {/*   <p className='w-100 text-center'>© MINISITIO - {version.version}</p> */}
                 </section>
-                <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
-                    <p className='w-100 text-center'>© MINISITIO - {version.version}</p>
+                <footer className='d-flex justify-content-center w-100 mt-2'>
+                    <p className='text-center'>© MINISITIO - {version.version}</p>
                 </footer>
             </div>
 

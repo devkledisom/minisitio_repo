@@ -68,28 +68,36 @@ export default function TableListCampanha({ campanhas, setShowSpinner, fetchCamp
   }
 
   function ativarInativarLink(campanha, status) {
-     fetch(`${masterPath.url}/admin/campanha/status-link/${campanha.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({statusLink: status})
-        })
-          .then(x => x.json())
-          .then(res => {
-            setShowSpinner(false);
-            if (res.success) {
-              fetchCampanhas();
+    fetch(`${masterPath.url}/admin/campanha/status-link/${campanha.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ statusLink: status })
+    })
+      .then(x => x.json())
+      .then(res => {
+        setShowSpinner(false);
+        if (res.success) {
+          fetchCampanhas();
 
-              const statusResult = status === 'ativo' ? "ativado" : "inativado";
+          const statusResult = status === 'ativo' ? "ativado" : "inativado";
 
-              Swal.fire(
-                'Link ' + status,
-                'O link foi ' + statusResult + ' com sucesso.',
-                'success'
-              )
-            }
-          });
+          Swal.fire(
+            'Link ' + status,
+            'O link foi ' + statusResult + ' com sucesso.',
+            'success'
+          )
+        }
+      });
+  }
+
+  const styleThead = {
+    position: "sticky",
+    top: 0,
+    background: "#fff",
+    zIndex: 20,
+    boxShadow: "0 2px 0 rgba(0, 0, 0, 0.15)"
   }
 
   return (
@@ -97,74 +105,77 @@ export default function TableListCampanha({ campanhas, setShowSpinner, fetchCamp
       {campanhas && campanhas.length === 0 ?
         <p className='text-center'>Nenhuma campanha encontrada.</p>
         :
-        <Table striped hover size="sm">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Nome</th>
-              <th>ID</th>
-              <th>Uf</th>
-              <th>Caderno</th>
-              <th>Criador</th>
-              <th>Data de Criação</th>
-              <th>Data de Fim</th>
-              <th>Listar</th>
-              <th>Status do Link</th>
-              <th>Deletar</th>
-            </tr>
-          </thead>
-          
-          <tbody>
-            {campanhas.map((campanha, index) => (
-              <tr key={campanha.id}>
-                <td>{campanha.id}</td>
-                <td>{campanha.desconto.usuario.descNome}</td>
-                <td>{campanha.desconto.hash}</td>
-                <td>{campanha.uf}</td>
-                <td>{campanha.caderno}</td>
-                <td>{campanha.criador}</td>
-                <td>{campanha.createdAt}</td>
-                <td>{campanha.dataFim}</td>
-                <td className='text-center'>
-                  {campanha.status === "valid" ? <button onClick={() => handleOpen(campanha)}>
-                    <Link2 />
-                  </button> :
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button><Link2Off color='red' /></button>
-                      </TooltipTrigger>
-                      <TooltipContent
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg border border-blue-400 max-w-xs break-words whitespace-normal"
-                        align="center">
-                        <p>Campanha expirada.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  }
-
-                </td>
-                <td className='text-center'>
-                  {campanha.statusLink === "ativo" &&
-                    <Button variant="success" size="sm" className="w-15" onClick={() => ativarInativarLink(campanha, "inativo")}>
-                      {campanha.statusLink}
-                    </Button>
-                  }
-                  {campanha.statusLink === "inativo" &&
-                    <Button variant="danger" size="sm" className="w-15" onClick={() => ativarInativarLink(campanha, "ativo")}>
-                      {campanha.statusLink}
-                    </Button>
-                  }
-
-
-                </td>
-                <td className='text-center'>
-                  <button onClick={() => cancelarCampanha(campanha)}>
-                    <Trash2 color='red' size={20} />
-                  </button>
-                </td>
+        <div className="table-wrapper">
+          <Table striped hover size="sm">
+            <thead style={styleThead}>
+              <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>ID original</th>
+                <th>ID promocional</th>
+                <th>Uf</th>
+                <th>Caderno</th>
+                <th>Criador</th>
+                <th>Data de Criação</th>
+                <th>Data de Fim</th>
+                <th>Listar</th>
+                <th>Status do Link</th>
+                <th>Deletar</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {campanhas.map((campanha, index) => (
+                <tr key={campanha.id}>
+                  <td>{campanha.id}</td>
+                  <td>{campanha.desconto.usuario.descNome}</td>
+                  <td>{campanha.idOrigem}</td>
+                  <td>{campanha.desconto.hash}</td>
+                  <td>{campanha.uf}</td>
+                  <td>{campanha.caderno}</td>
+                  <td>{campanha.criador}</td>
+                  <td>{campanha.createdAt}</td>
+                  <td>{campanha.dataFim}</td>
+                  <td className='text-center'>
+                    {campanha.status === "valid" ? <button onClick={() => handleOpen(campanha)}>
+                      <Link2 />
+                    </button> :
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button><Link2Off color='red' /></button>
+                        </TooltipTrigger>
+                        <TooltipContent
+                          className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg border border-blue-400 max-w-xs break-words whitespace-normal"
+                          align="center">
+                          <p>Campanha expirada.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    }
+
+                  </td>
+                  <td className='text-center'>
+                    {campanha.statusLink === "ativo" &&
+                      <Button variant="success" size="sm" className="w-15" onClick={() => ativarInativarLink(campanha, "inativo")}>
+                        {campanha.statusLink}
+                      </Button>
+                    }
+                    {campanha.statusLink === "inativo" &&
+                      <Button variant="danger" size="sm" className="w-15" onClick={() => ativarInativarLink(campanha, "ativo")}>
+                        {campanha.statusLink}
+                      </Button>
+                    }
+
+
+                  </td>
+                  <td className='text-center'>
+                    <button onClick={() => cancelarCampanha(campanha)}>
+                      <Trash2 color='red' size={20} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
       }
 
       <Modal show={show} onHide={handleClose} size="lg" centered>
