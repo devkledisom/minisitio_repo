@@ -172,16 +172,57 @@ module.exports = {
                 ]
             }
         ).then(async (result) => {
+            const ids = [
+                ...new Set(
+                    result.flatMap(item => [
+                        item.idOrigem,
+                        item.idPromocional
+                    ]).filter(Boolean)
+                )
+            ];
 
-            const idPromo = await Descontos.findOne({
+            const descontos = await Descontos.findAll({
                 where: {
-                    idDesconto: result[0].idPromocional
+                    idDesconto: ids
                 },
-                attributes: ['hash']
+                attributes: ['idDesconto', 'hash'],
+                raw: true
             });
 
+            const mapa = Object.fromEntries(
+                descontos.map(d => [d.idDesconto, d.hash])
+            );
 
-            return res.json({ success: true, data: result, newId: idPromo });
+            result.forEach(item => {
+                item.idOrigem = mapa[item.idOrigem] ?? null;
+                item.idPromocional = mapa[item.idPromocional] ?? null;
+            });
+
+            /*          const descontos = await Descontos.findAll({
+                         where: {
+                             idDesconto: [
+                                 result[0].idOrigem,
+                                 result[0].idPromocional
+                             ]
+                         },
+                         attributes: ['idDesconto', 'hash'],
+                         raw: true
+                     });
+         
+                     const mapa = {};
+         
+                     for (const d of descontos) {
+                         mapa[d.idDesconto] = d.hash;
+                     }
+         
+                     result.map(item => {
+                         item.idOrigem = mapa[item.idOrigem] ?? null;
+                         item.idPromocional = mapa[item.idPromocional] ?? null;
+                     });
+          */
+
+
+            return res.json({ success: true, data: result });
         }).catch((error) => {
             console.error("Erro ao listar campanhas:", error);
             return res.status(500).json({ success: false, message: "Erro ao listar campanhas." });

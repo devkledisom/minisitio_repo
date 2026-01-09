@@ -1,5 +1,6 @@
 .config-portal {
-    height: 100vh;
+    height: 90vh;
+    position: relative;
 }
 
 .config-portal hr {
@@ -24,9 +25,17 @@
     bottom: 0;
 }
 
-.form-campanha input{
+.form-campanha input {
     display: flex;
     flex-direction: column;
     gap: 10px;
     border-color: black;
+}
+
+footer p {
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
 }
