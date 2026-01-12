@@ -142,6 +142,7 @@ module.exports = (io) => {
     router.get('/api/admin/campanha/read', CampanhaController.listarCampanha);
     router.get('/api/admin/campanha/read/:hash', CampanhaController.listarUserCampanha);
     router.delete('/api/admin/campanha/cancelar/:id', CampanhaController.cancelarCampanha);
+    router.get('/api/admin/campanha/verificar-arquivo/:id', CampanhaController.verificarArquivoCampanha);
     
     router.put('/api/admin/campanha/:hash', CampanhaController.dataAcesso);
     router.put('/api/admin/campanha/status-link/:id', CampanhaController.ativarInativarLink);

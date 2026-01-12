@@ -49,6 +49,23 @@ const path = require('path');
 module.exports = {
     gerarCampanha: async (req, res) => {
 
+        const idPromo = await Descontos.findOne({
+            where: {
+                idDesconto: req.body.idPromocional
+            },
+            attributes: ['hash']
+        });
+
+        const verificarIdOrigemPerfil = await Anuncio.findOne({
+            where: {
+                codDesconto: idPromo.hash
+            }
+        });
+
+        if (!verificarIdOrigemPerfil) {
+            return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. O ID promocional de origem não foi encontrado em nenhum perfil." });
+        }
+
         const criarCampanha = await Campanha.create({
             idOrigem: req.body.idPromocional,
             idPromocional: req.body.idPromocional2,
@@ -71,12 +88,7 @@ module.exports = {
                            attributes: ['idDesconto', 'hash']
                        }); */
 
-            const idPromo = await Descontos.findOne({
-                where: {
-                    idDesconto: req.body.idPromocional
-                },
-                attributes: ['hash']
-            });
+
 
             if (idPromo) {
                 console.log("ID Promoção origem encontrada:", idPromo.hash);
@@ -93,7 +105,7 @@ module.exports = {
             }
 
             //DATE_ADD(NOW(), INTERVAL 30 DAY) AS dataLimitePromocao,
-            await database.query(`
+            const result = await database.query(`
             INSERT IGNORE INTO tokens_promocao (campanhaId, codAnuncio, tokenPromocao, periodoEmDias, dataLimitePromocao, createdAt, updatedAt)
             SELECT 
                 :campanhaId AS campanhaId,
@@ -118,6 +130,7 @@ module.exports = {
                     }
                 });
 
+            //console.log("Tokens de promoção criados para a campanha ID:", result.length);
 
             gerarCSVGeral(TokensPromocao, resultCampanha.id);
 
@@ -151,7 +164,7 @@ module.exports = {
         }).catch((error) => {
             console.error("Erro ao criar campanha:", error.original.code);
 
-            if(error.original.code === "ER_DUP_ENTRY") {
+            if (error.original.code === "ER_DUP_ENTRY") {
                 console.error("Erro de chave duplicada ao criar campanha:", error.original.message);
                 return res.status(400).json({ success: false, message: "Campanha com ID de origem já existe." });
             }
@@ -421,6 +434,20 @@ module.exports = {
 
 
         res.json({ success: true });
+
+    },
+    verificarArquivoCampanha: async (req, res) => {
+        const { id } = req.params;
+
+        console.log(req.params.id)
+
+        const caminhoArquivo = `./public/upload/campanha/email-marketing-${id}.zip`;
+
+        if (fs.existsSync(caminhoArquivo)) {
+            return res.status(200).json({ success: true, message: "done" });
+        } else {
+            return res.status(200).json({ success: false, message: "processing" });
+        }
 
     }
 
