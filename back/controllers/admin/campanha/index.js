@@ -282,12 +282,12 @@ module.exports = {
                 where: { campanhaId: req.params.id }
             });
 
-            fs.unlink("./public/upload/campanha/" + "campanha-" + req.params.id + ".csv", (err) => {
+            fs.unlink("./public/upload/campanha/" + "email-marketing-" + req.params.id + ".zip", (err) => {
                 if (err) {
-                    console.error("Erro ao apagar CSV:", err);
+                    console.error("Erro ao apagar ZIP:", err);
                     return;
                 }
-                console.log("CSV apagado com sucesso!");
+                console.log("ZIP apagado com sucesso!");
             });
 
             return res.json({
