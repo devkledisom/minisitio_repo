@@ -62,7 +62,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                     setShow(false);
                     setLoader(false);
                 } else {
-                    alert("Erro ao criar campanha, tente novamente.");
+                    alert(res.message);
                     setLoader(false);
                 }
                 setShowSpinner(false);

@@ -149,7 +149,13 @@ module.exports = {
 
             return res.json({ success: true, message: "Campanha criada com sucesso!" });
         }).catch((error) => {
-            console.error("Erro ao criar campanha:", error);
+            console.error("Erro ao criar campanha:", error.original.code);
+
+            if(error.original.code === "ER_DUP_ENTRY") {
+                console.error("Erro de chave duplicada ao criar campanha:", error.original.message);
+                return res.status(400).json({ success: false, message: "Campanha com ID de origem já existe." });
+            }
+
             return res.status(500).json({ success: false, message: "Erro ao criar campanha." });
         });
     },
