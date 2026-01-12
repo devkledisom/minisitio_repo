@@ -12,6 +12,7 @@ const Campanha = database.define("Campanha", {
   idOrigem: {
     type: Sequelize.INTEGER,
     allowNull: false,
+    unique: true,
     field: "id_origem", // mapeia para a coluna no banco
   },
   idPromocional: {
