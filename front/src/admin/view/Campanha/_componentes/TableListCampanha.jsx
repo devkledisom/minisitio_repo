@@ -15,6 +15,7 @@ import {
   TooltipTrigger,
 } from "../../../../components/ui/tooltip.tsx";
 import Button from 'react-bootstrap/Button';
+import { verificarArquivoCampanha } from '../_requests/tableRequests.js';
 
 
 export default function TableListCampanha({ campanhas, setShowSpinner, fetchCampanhas }) {
@@ -22,8 +23,23 @@ export default function TableListCampanha({ campanhas, setShowSpinner, fetchCamp
   const [campanhaSelecionada, setCampanhaSelecionada] = useState(null);
 
   const handleOpen = (campanha) => {
-    setCampanhaSelecionada(campanha);
-    setShow(true);
+    verificarArquivoCampanha(campanha.id)
+      .then(res => {
+        if (res.success) {
+          setCampanhaSelecionada(campanha);
+          setShow(true);
+        } else {
+          Swal.fire({
+            icon: 'info',
+            title: 'Arquivo não encontrado',
+            text: 'O arquivo ainda está sendo gerado. Por favor, aguarde alguns minutos e tente novamente.',
+          });
+        }
+      })
+      .catch(err => { console.log("Erro ao verificar arquivo", err) })
+
+    /*     setCampanhaSelecionada(campanha);
+        setShow(true); */
   };
 
   const handleClose = () => {
