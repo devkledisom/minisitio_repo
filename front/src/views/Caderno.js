@@ -1112,7 +1112,6 @@ function Caderno() {
       }
 
 
-      console.log(a.clientHeight, b.clientHeight, tamanho)
 
       const titulo = document.createElement("h2"); // Cria um elemento <h1>
       titulo.textContent = "Salve"; // Adiciona texto dentro do <h1>

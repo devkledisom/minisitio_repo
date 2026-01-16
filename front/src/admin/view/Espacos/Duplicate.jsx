@@ -39,7 +39,7 @@ const Duplicate = (props) => {
           <button className={props.className} onClick={openModal}>Duplicar</button>
          {/*  {console.log(option)} */}
           <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <DuplicateForm option={option} setOption={setOption} onClose={closeModal} selectId={props.selectId} />
+            <DuplicateForm option={option} setOption={setOption} onClose={closeModal} selectId={props.selectId} setAnuncios={props.setAnuncios} />
           </Modal>
         </>
       );

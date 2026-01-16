@@ -230,7 +230,6 @@ function Busca(props) {
             const request = await fetch(`${masterPath.url}/buscar`, options).then((x) => x.json())
             //setAnuncio(request)
             setResult(request);
-            console.log(request);
             setLoading(false);
             navigate(`/buscar/${codigoCaderno}/${uf}`, { state: { paramBusca: valor_da_busca } });
 

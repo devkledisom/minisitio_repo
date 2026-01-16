@@ -2247,6 +2247,9 @@ module.exports = {
                 } */,
                 limit: porPagina,
                 offset: offset,
+                order: [
+                    ['codDuplicado', 'ASC'],
+                ],
                 attributes: [
                     'codAnuncio',
                     'codOrigem',
@@ -2271,7 +2274,7 @@ module.exports = {
                 }
             });
 
-            console.table([1, "idnome", nu_hash])
+            console.table([1, "idnome", nu_hash, requisito])
 
             if (resultAnuncio.length < 1) return res.json({ success: false, message: 'Não encontrado' });
 
@@ -2300,9 +2303,7 @@ module.exports = {
                 }));
 
                 const resultAnuncioCount = await Anuncio.count({
-                    where: {
-                        [requisito]: nu_hash
-                    },
+                    where: { [requisito]: { [Op.like]: `${nu_hash}%` } }
                 });
 
                 const totalItens = resultAnuncioCount;
@@ -3188,7 +3189,7 @@ module.exports = {
 
         try {
             const listaAnuncios = await Anuncio.create(dadosAnuncio);
-            let [ email, nmEmail, numDoc ] = [listaAnuncios.dataValues.descEmailAutorizante, listaAnuncios.dataValues.descNomeAutorizante, listaAnuncios.dataValues.descCPFCNPJ]
+            let [email, nmEmail, numDoc] = [listaAnuncios.dataValues.descEmailAutorizante, listaAnuncios.dataValues.descNomeAutorizante, listaAnuncios.dataValues.descCPFCNPJ]
 
             novoUsuario(email, nmEmail, numDoc, listaAnuncios.dataValues.codAnuncio);
 
@@ -3521,7 +3522,7 @@ module.exports = {
                     codAnuncio: req.query.id
                 }
             });
-            
+
 
 
 
@@ -3587,7 +3588,14 @@ module.exports = {
                 raw: true
             })
 
-            console.log(ufAnuncio)
+            if (ufAnuncio.length < 1) {
+                res.json({ success: false, message: "anúncio não encontrado" });
+                return;
+            }
+
+
+
+            console.log("apagar dup: ", ufAnuncio)
 
             /*         const result = await database.query(
                         `
@@ -3616,6 +3624,11 @@ module.exports = {
                     descAnuncio: ufAnuncio[0].descAnuncio
                 }
             });
+
+            if (deletedCount == 0) {
+                res.json({ success: false, message: "Não foi possível apagar a duplicação. Esse perfil não tem duplicações." });
+                return;
+            }
 
             console.log(`Registros deletados: ${deletedCount}`);
             res.json({ success: true, message: `${deletedCount} perfil(s) deletado(s)` });
@@ -3996,8 +4009,37 @@ module.exports = {
                 console.log("nenhuma opcao selecionada!")
         };
 
-
         async function todosCadernos() {
+            try {
+                const cadernos = await Cadernos.findAll();
+
+                const anuncios = cadernos.map((item, index) => ({
+                    ...anuncioObj,
+                    codOrigem: idAnuncio,
+                    codDuplicado: index + 1,
+                    codCaderno: item.nomeCaderno,
+                    codCidade: item.nomeCaderno,
+                    codUf: item.UF,
+                }));
+
+                anuncios.forEach(a => delete a.codAnuncio);
+
+                await Anuncio.bulkCreate(anuncios);
+
+                return res.json({
+                    success: true,
+                    message: "Duplicação concluída",
+                    qtdeDup: anuncios.length
+                });
+
+            } catch (error) {
+                console.error(error);
+                return res.status(500).json({ error: "Erro ao duplicar anúncios" });
+            }
+        }
+
+
+        async function todosCadernosold() {
             //buscar todos os cadernos
             const cadernos = await Cadernos.findAll();
             cadernos.map(async (item, index) => {

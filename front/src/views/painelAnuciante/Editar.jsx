@@ -65,7 +65,6 @@ function Editar(props) {
   };
 
   useEffect(() => {
-    console.log('kledisom')
     let codId = minisitio.hash;
     const formatoValido = /^\d{2}\.\d{4}\.\d{4}$/;
     //console.log(formatoValido.test(codId))
@@ -104,7 +103,16 @@ function Editar(props) {
         setUf(res[0].codUf);
         setPersonType(res[0].descTipoPessoa);
         setRadioCheck(res[0].codTipoAnuncio);
-        setTagValue(JSON.parse(res[0].tags));
+
+        let tagsStrings = JSON.parse(res[0].tags);
+        let tagsList = JSON.parse(tagsStrings);
+
+        if (tagsList.length > 0) {
+          setTagValue(tagsList);
+        }
+       
+        
+
         setCep(res[0].descCEP);
 
         localStorage.setItem("imgname", res[0].descImagem);
@@ -307,7 +315,7 @@ function Editar(props) {
       return;
     }
 
-    minisitio.descImagem = localStorage.getItem("imgname");
+    //minisitio.descImagem = minisitio.desImagem;//localStorage.getItem("imgname");
     minisitio.tags = JSON.stringify(tagValue);
     minisitio.logoPromocao = localStorage.getItem("imgname4");
     minisitio.certificado_logo = localStorage.getItem("imgname5");
@@ -374,7 +382,6 @@ function Editar(props) {
       fetch(`${masterPath.url}/admin/anuncio/update?id=${props.espacoId}`, config)
         .then((x) => x.json())
         .then((res) => {
-          console.log(res)
           if (res.success) {
 
             //setShowSpinner(false);
@@ -642,7 +649,9 @@ function Editar(props) {
                     patrocinador={props.numeroPatrocinador}
                     codImg={minisitio.descImagem}
                     miniPreview={false}
-                    dt={minisitio} />
+                    dt={minisitio}
+                    data={setMinisitio}
+                    local={"descImagem"} />
                 }
 
 
@@ -1296,7 +1305,7 @@ function Editar(props) {
                     {/* preview da imagem do card */}
 
                     <div class="conteudo comImagem" style={{ display: "none" }}>
-                      <img src={`${masterPath.url}/files/${minisitio.descImagem}`} height={191} />
+                      <img src={`${masterPath.url}/files/descImagem/${minisitio.descImagem}`} height={191} />
                     </div>
                     {radioCheck != 1 && <div id="area-icons-actions" className="col-md-6">
                       <Tooltip text={"Mídias"}>

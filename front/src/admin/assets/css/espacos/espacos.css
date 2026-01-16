@@ -25,3 +25,7 @@
     height: 29px;
     padding-left: 5px;
 }
+
+.espaco-botao-delete {
+    background-color: red !important;
+}

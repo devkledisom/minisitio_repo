@@ -67,7 +67,7 @@ function Cardlist(props) {
 
               {cardListThumb(props.codImg) &&
                 <img
-                  src={urlTransform(`${masterPath.url}/files/${props.codImg}`)}
+                  src={urlTransform(`${masterPath.url}/files/descImagem/${props.codImg}`)}
                   alt="Foto"
                   className="h-100 w-100"
                   loading="lazy"

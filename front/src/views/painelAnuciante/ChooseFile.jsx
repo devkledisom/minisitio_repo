@@ -79,7 +79,6 @@ function UploadImage(props) {
     }
 
     // Verifica as dimensões da imagem (100x100)
-    console.log(props.origin)
     if (props.origin == 'descImagem') {
 
       const file = acceptedFiles[0];
@@ -126,15 +125,21 @@ function UploadImage(props) {
       formData.append('image', acceptedFiles[0]);
 
       // Enviar a imagem para o servidor
-      fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}`, {
+      fetch(`${masterPath.url}/upload-image?cod=${props.dt.codAnuncio}&local=${props.local}`, {
         method: 'POST',
         body: formData
-      })
+      }).then(x => x.json())
         .then(response => {
-          if (!response.ok) {
+        /*   if (!response.ok) {
             throw new Error('Erro ao enviar imagem para o servidor');
-          }
-          console.log('Imagem enviada com sucesso!');
+          } */
+          console.log('Imagem enviada com sucesso!', response);
+
+           props.data(prev => ({
+          ...prev,
+          [props.origin]: response.fileName.replace(/\s+/g, "-")
+        }));
+
           setMostrarLabel(false);
           setMostrarMiniPreview(true);
         })
@@ -196,14 +201,14 @@ function UploadImage(props) {
             
           >
 
-            {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
-            {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/descImagem/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
+            {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/descImagem/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {/* {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>} */}
 
 
             {/* console.log(mostrarLabel) */}
             {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""}
-            {imagem ? <a href={`${masterPath.url}/files/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex mx-2" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {imagem ? <a href={`${masterPath.url}/files/descImagem/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex mx-2" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {mostrarLabel && <span {...getRootProps()}>{textLabel}</span>}
 
             {/*    {!mostrarLabel && 
