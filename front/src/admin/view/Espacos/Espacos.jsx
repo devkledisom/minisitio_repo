@@ -21,6 +21,9 @@ import Duplicate from './Duplicate';
 import BtnActivate from '../../components/BntActivate';
 import EspacosImport from './EspacosImport';
 
+//API
+import { fetchEspacos, deleteDuplicacaoEspaco } from '../../../api/admin/espacos';
+
 const Espacos = () => {
 
 
@@ -139,7 +142,7 @@ const Espacos = () => {
 
 
     function apagarAnuncio() {
-        if(!selectId) {
+        if (!selectId) {
             Swal.fire({
                 title: "Error!",
                 text: "Selecione um anúncio para apagar, se você deseja apagar todos os anúncios, clique no botão 'Apagar Todos'",
@@ -205,8 +208,65 @@ const Espacos = () => {
 
     function apagarDup() {
         setShowSpinner(true);
-        let codigoDeOrigem = codOriginFather.current.innerText;
-        fetch(`${masterPath.url}/admin/anuncio/delete/${codigoDeOrigem}?type=dup`, {
+        //let codigoDeOrigem = codOriginFather.current.innerText;
+
+        //if (!codigoDeOrigem) {
+            Swal.fire({
+                title: "Apagar Duplicação",
+                text: "Informe o código de origem para apagar as duplicações:",
+                input: "number",
+                inputAttributes: {
+                    autocapitalize: "off"
+                },
+                showCancelButton: true,
+                confirmButtonText: "Apagar",
+                confirmButtonColor: "red",
+                showLoaderOnConfirm: true,
+
+
+                // 2. Aplica suas próprias classes CSS
+                customClass: {
+                    confirmButton: 'espaco-botao-delete',
+                    cancelButton: 'meu-botao-cancelar'
+                },
+
+                preConfirm: async (login) => {
+                    if (!login) {
+                        Swal.showValidationMessage("Por favor, informe o código de origem.");
+                        return false;
+                    }
+
+                    const response = await deleteDuplicacaoEspaco(login);
+
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Sucesso!",
+                            text: "Duplicação apagada com sucesso.",
+                            icon: "success"
+                        });
+
+                        await fetchEspacos(param).then((resEspacos) => {
+                            if (resEspacos.success) {
+                                setAnucios(resEspacos);
+                                setShowSpinner(false);
+                            }
+                        });
+                    }
+
+                    if (!response.success) {
+                        Swal.showValidationMessage(response.message || "Não foi possível apagar a duplicação.");
+                        return false;
+                    }
+
+
+                }
+            });
+
+            return;
+        //}
+
+
+       /*  fetch(`${masterPath.url}/admin/anuncio/delete/${codigoDeOrigem}?type=dup`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -239,7 +299,7 @@ const Espacos = () => {
                     text: "Não foi possível apagar o anúncio duplicado",
                     icon: "error"
                 });
-            })
+            }) */
     };
 
     function buscarAnuncioId(e) {
@@ -538,7 +598,7 @@ Para 100000 linhas: 312500ms
 
     return (
         <div className="users app-espacos">
-         {/*    <header style={style} className='w-100'>
+            {/*    <header style={style} className='w-100'>
                 <Header />
             </header> */}
             <section>
@@ -550,7 +610,7 @@ Para 100000 linhas: 312500ms
                         <div className="span6 col-md-6">
                             <button type="button" className="btn custom-button mt-2" onClick={() => navigator('/admin/anuncio/cadastro')}>Adicionar</button>
                             {/* <button type="button" className="btn custom-button mx-2">Duplicar</button> */}
-                            <Duplicate className="btn custom-button mx-2 mt-2" selectId={selectId} />
+                            <Duplicate className="btn custom-button mx-2 mt-2" selectId={selectId} setAnuncios={setAnucios} />
                             <button type="button" className="btn custom-button mt-2" onClick={exportExcell}>Exportar</button>
                             <button type="button" className="btn custom-button mx-2 mt-2" onClick={() => navigator('/admin/anuncio/import')}>Importar</button>
                             <button type="button" className="btn custom-button mt-2" onClick={selecionarTodos}>Selecionar Todos</button>

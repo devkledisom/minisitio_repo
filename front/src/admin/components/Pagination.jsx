@@ -9,7 +9,6 @@ const Pagination = ({ totalPages, paginaAtual, totalItem, table, busca }) => {
         setCurrentPage(page);
         navigate(`/admin/${table}?page=${page}&search=${busca}`);
     };
-
     const renderPaginationNumbers = () => {
         const paginationNumbers = [];
         const totalPagesToShow = 3;

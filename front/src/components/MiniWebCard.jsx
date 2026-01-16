@@ -46,7 +46,7 @@ function MiniWebCard(props) {
         if (props.codImg == 0 || props.codImg == "teste" || props.codImg == null) {
             setImgDefault(false);
         } else {
-            setImgDefault(`files/${props.codImg}`);
+            setImgDefault(`files/descImagem/${props.codImg}`);
         }
 
         // console.log(props.codDesconto)

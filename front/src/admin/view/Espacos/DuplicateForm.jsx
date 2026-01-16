@@ -4,7 +4,10 @@ import { masterPath } from '../../../config/config';
 //LIBS
 import Swal from 'sweetalert2';
 
-const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
+//API
+import { fetchEspacos } from '../../../api/admin/espacos';
+
+const DuplicateForm = ({ option, setOption, onClose, selectId, setAnuncios }) => {
   const [uf, setUfs] = useState([]);
   const [city, setCity] = useState(null);
   const [caderno, setCaderno] = useState([]);
@@ -71,7 +74,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
       },
     })
       .then((x) => x.json())
-      .then((res) => {
+      .then(async (res) => {
         if (res.success) {
           Swal.fire({
             title: 'success!',
@@ -81,9 +84,31 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
           });
           setOption(0);
           onClose();
-          document.querySelector(".espacos").click();
+          document.querySelector("#btnBuscar").click();
+        /*   await fetchEspacos(1).then((resEspacos) => {
+            if (resEspacos.success) {
+              setAnuncios(resEspacos);
+            }
+          }); */
+        } else {
+          Swal.fire({
+            title: 'error!',
+            text: `${res.message}`,
+            icon: 'error',
+            confirmButtonText: 'Entendi'
+          });
+          sessionStorage.removeItem('userTokenAccess');
+          window.location.href = masterPath.domain + '/login?sessionExpired=true';
+
         }
 
+      }).catch((error) => {
+        console.log("deleteFetch", error)
+        /*  if (deleteFetch.status === 401) {
+           sessionStorage.removeItem('userTokenAccess');
+           window.location.href = masterPath.domain + '/login?sessionExpired=true';
+           throw new Error('Não autorizado. Por favor, faça login novamente.');
+         } */
       })
   };
 
@@ -96,7 +121,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
       },
     })
       .then((x) => x.json())
-      .then((res) => {
+      .then(async (res) => {
         if (res.success) {
           Swal.fire({
             title: 'success!',
@@ -106,7 +131,22 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
           });
           setOption(0);
           onClose();
-          document.querySelector(".espacos").click();
+          document.querySelector("#btnBuscar").click();
+        /*   await fetchEspacos(1).then((resEspacos) => {
+            if (resEspacos.success) {
+              setAnuncios(resEspacos);
+            }
+          }); */
+        } else {
+          Swal.fire({
+            title: 'error!',
+            text: `${res.message}`,
+            icon: 'error',
+            confirmButtonText: 'Entendi'
+          });
+          sessionStorage.removeItem('userTokenAccess');
+          window.location.href = masterPath.domain + '/login?sessionExpired=true';
+
         }
 
       })
@@ -123,7 +163,7 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
       body: JSON.stringify(city)
     })
       .then((x) => x.json())
-      .then((res) => {
+      .then(async (res) => {
         if (res.success) {
           Swal.fire({
             title: 'success!',
@@ -133,9 +173,32 @@ const DuplicateForm = ({ option, setOption, onClose, selectId }) => {
           });
           setOption(0);
           onClose();
-          document.querySelector(".espacos").click();
+          document.querySelector("#btnBuscar").click();
+
+      /*     await fetchEspacos(1).then((resEspacos) => {
+            if (resEspacos.success) {
+              setAnuncios(resEspacos);
+            }
+          }); */
+        } else {
+          Swal.fire({
+            title: 'error!',
+            text: `${res.message}`,
+            icon: 'error',
+            confirmButtonText: 'Entendi'
+          });
+          sessionStorage.removeItem('userTokenAccess');
+          window.location.href = masterPath.domain + '/login?sessionExpired=true';
+
         }
 
+      }).catch((error) => {
+        console.log("deleteFetch", error)
+        /*  if (deleteFetch.status === 401) {
+           sessionStorage.removeItem('userTokenAccess');
+           window.location.href = masterPath.domain + '/login?sessionExpired=true';
+           throw new Error('Não autorizado. Por favor, faça login novamente.');
+         } */
       })
   };
 

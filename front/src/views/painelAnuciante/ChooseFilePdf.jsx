@@ -31,7 +31,6 @@ function UploadImage(props) {
     }
 
     if (props.codImg == 0 || props.codImg == "" || props.codImg == undefined) {
-      console.log("dasdasd", props.codImg)
       setMostrarMiniPreview(true);
       setMostrarLabel(true);
     } 
