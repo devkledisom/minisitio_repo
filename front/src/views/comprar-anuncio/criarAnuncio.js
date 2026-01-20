@@ -207,18 +207,38 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
 
                     if (result.isConfirmed) {
                         if (isAdmin) {
-                            console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf")
-                            if (descontoAtivado && radioCheck == 4) {
-                                window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
+                            let valorBruto = precoFixo;
+                            /*              if (descontoAtivado && radioCheck == 4) {
+                                             window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
+                                             console.log("1");
+                                         } else if (radioCheck == 1) {
+                                             window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
+                                             console.log("2");
+                                         } else {
+                                             window.open(`https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`, '_blank');
+                                             console.log("3");
+                                         } */
+                            if (descontoAtivado && radioCheck == 4 && valorBruto <= 0) {
+                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                                 console.log("1");
-                            } else if (radioCheck == 1) {
-                                window.open(`/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`, '_blank');
+                            } else if (descontoAtivado && radioCheck == 3 && valorBruto <= 0) {
+                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                console.log("1");
+                            } else if (radioCheck == 1 && valorBruto <= 0) {
+                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
                                 console.log("2");
                             } else {
-                                window.open(`https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=712696516-cad9b026-5622-4fe2-921c-3d2d336a6d82`, '_blank');
+                                console.log("entrou aqui", descontoAtivado, radioCheck, valorBruto)
+                                fetch(`${masterPath.url}/pagamento/create/${idPerfil}`)
+                                    .then((x) => x.json())
+                                    .then((response) => {
+                                        window.location.href = response.url;
+
+                                    })
+                                    .catch(err => console.log(err))
                                 console.log("3");
                             }
-                            //console.log("primeiro dasdfaskhjfsdafhjasdbfnjaksdf", descontoAprovado)
+
                             return;
 
                         } else {

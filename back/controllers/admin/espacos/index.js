@@ -3989,9 +3989,26 @@ module.exports = {
 
         const anuncio = await Anuncio.findAll({
             where: {
-                codAnuncio: idAnuncio
+                [Op.or]: [
+                    { codAnuncio: idAnuncio },
+                    { codOrigem: idAnuncio }
+                ]
             }
         });
+
+        const estados = anuncio.map(item => item.dataValues.codUf);
+        const estadosUnicos = [...new Set(estados)];
+        const cidades = anuncio.map(item => item.dataValues.codCaderno);
+        const cidadesUnicas = [...new Set(cidades)];
+
+        //console.log("repeticao", estadosUnicos, estadosUnicos.includes("RJ"));
+
+
+        if (anuncio[0].dataValues.codOrigem != null) {
+            res.json({ success: false, message: `Este perfil já é uma duplicação do perfil ${anuncio[0].dataValues.codOrigem}. Operação de duplicação não permitida em perfis já duplicados.` });
+            return;
+        }
+
 
         let anuncioObj = anuncio[0].dataValues;
 
@@ -4010,6 +4027,45 @@ module.exports = {
         };
 
         async function todosCadernos() {
+            try {
+                const cadernos = await Cadernos.findAll();
+
+                // 1. Primeiro filtramos apenas os cadernos que NÃO estão nas cidades únicas
+                const anuncios = cadernos
+                    .filter(item => !cidadesUnicas.includes(item.nomeCaderno)) // ! significa "NÃO contém"
+                    .map((item, index) => {
+                        // Criamos o objeto já sem o codAnuncio para evitar o delete depois
+                        const novoAnuncio = {
+                            ...anuncioObj,
+                            codOrigem: idAnuncio,
+                            codDuplicado: index + 1,
+                            codCaderno: item.nomeCaderno,
+                            codCidade: item.nomeCaderno,
+                            codUf: item.UF
+                        };
+
+                        delete novoAnuncio.codAnuncio; // Garante que o ID original não vá para o novo registro
+                        return novoAnuncio;
+                    });
+
+                // 2. Verifica se sobrou algo para inserir (evita erro de array vazio)
+                if (anuncios.length > 0) {
+                    await Anuncio.bulkCreate(anuncios);
+                }
+
+                return res.json({
+                    success: true,
+                    message: anuncios.length > 0 ? "Duplicação concluída" : "Perfil já está duplicado em todos os cadernos disponíveis.",
+                    qtdeDup: anuncios.length
+                });
+
+            } catch (error) {
+                console.error("Erro na duplicação:", error);
+                return res.status(500).json({ error: "Erro ao duplicar anúncios" });
+            }
+        }
+
+        async function todosCadernosFuncioal() {
             try {
                 const cadernos = await Cadernos.findAll();
 
@@ -4080,6 +4136,12 @@ module.exports = {
                 }
             });
 
+
+            if (estadosUnicos.includes(cadernos[0].UF) && anuncio.length > 1) {
+                res.json({ success: false, message: `Este perfil já está duplicado em ${estadosUnicos}. Operação de duplicação não permitida em perfis duplicados.` });
+                return;
+            };
+
             cadernos.map(async (item, index) => {
                 let codCaderno = item.dataValues.nomeCaderno;
                 let codUf = item.dataValues.UF;
@@ -4111,6 +4173,7 @@ module.exports = {
 
         async function todosCidades() {
             let cidadeSelecionada = req.body;
+
             const cidades = await Cadernos.findAll({
                 where: {
                     codCaderno: {
@@ -4118,6 +4181,11 @@ module.exports = {
                     }
                 }
             });
+
+            if (cidadesUnicas.includes(cidades[0].nomeCaderno) && anuncio.length > 1) {
+                res.json({ success: false, message: `Este perfil já está duplicado em ${cidades[0].nomeCaderno}. Operação de duplicação não permitida em perfis duplicados.` });
+                return;
+            };
 
             cidades.map(async (item, index) => {
                 let codCaderno = item.dataValues.nomeCaderno;
