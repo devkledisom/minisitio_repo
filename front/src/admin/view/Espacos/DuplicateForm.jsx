@@ -76,20 +76,30 @@ const DuplicateForm = ({ option, setOption, onClose, selectId, setAnuncios }) =>
       .then((x) => x.json())
       .then(async (res) => {
         if (res.success) {
-          Swal.fire({
-            title: 'success!',
-            text: `O anuncio foi duplicado em ${res.qtdeDup} cadernos`,
-            icon: 'success',
-            //confirmButtonText: 'Entendi'
-          });
-          setOption(0);
-          onClose();
-          document.querySelector("#btnBuscar").click();
-        /*   await fetchEspacos(1).then((resEspacos) => {
-            if (resEspacos.success) {
-              setAnuncios(resEspacos);
-            }
-          }); */
+          if (res.qtdeDup > 0) {
+            Swal.fire({
+              title: 'success!',
+              text: `O anuncio foi duplicado em ${res.qtdeDup} cadernos`,
+              icon: 'success',
+              //confirmButtonText: 'Entendi'
+            });
+            setOption(0);
+            onClose();
+            //document.querySelector("#btnBuscar").click();
+            await fetchEspacos(1).then((resEspacos) => {
+              if (resEspacos.success) {
+                setAnuncios(resEspacos);
+              }
+            });
+          } else {
+             Swal.fire({
+              title: 'success!',
+              text: res.message,
+              icon: 'success',
+              //confirmButtonText: 'Entendi'
+            });
+          }
+
         } else {
           Swal.fire({
             title: 'error!',
@@ -97,8 +107,10 @@ const DuplicateForm = ({ option, setOption, onClose, selectId, setAnuncios }) =>
             icon: 'error',
             confirmButtonText: 'Entendi'
           });
-          sessionStorage.removeItem('userTokenAccess');
-          window.location.href = masterPath.domain + '/login?sessionExpired=true';
+          if (res.message == "Token inválido") {
+            sessionStorage.removeItem('userTokenAccess');
+            window.location.href = masterPath.domain + '/login?sessionExpired=true';
+          }
 
         }
 
@@ -131,12 +143,12 @@ const DuplicateForm = ({ option, setOption, onClose, selectId, setAnuncios }) =>
           });
           setOption(0);
           onClose();
-          document.querySelector("#btnBuscar").click();
-        /*   await fetchEspacos(1).then((resEspacos) => {
+          //document.querySelector("#btnBuscar").click();
+          await fetchEspacos(1).then((resEspacos) => {
             if (resEspacos.success) {
               setAnuncios(resEspacos);
             }
-          }); */
+          });
         } else {
           Swal.fire({
             title: 'error!',
@@ -144,9 +156,10 @@ const DuplicateForm = ({ option, setOption, onClose, selectId, setAnuncios }) =>
             icon: 'error',
             confirmButtonText: 'Entendi'
           });
-          sessionStorage.removeItem('userTokenAccess');
-          window.location.href = masterPath.domain + '/login?sessionExpired=true';
-
+          if (res.message == "Token inválido") {
+            sessionStorage.removeItem('userTokenAccess');
+            window.location.href = masterPath.domain + '/login?sessionExpired=true';
+          }
         }
 
       })
@@ -173,13 +186,13 @@ const DuplicateForm = ({ option, setOption, onClose, selectId, setAnuncios }) =>
           });
           setOption(0);
           onClose();
-          document.querySelector("#btnBuscar").click();
+          //document.querySelector("#btnBuscar").click();
 
-      /*     await fetchEspacos(1).then((resEspacos) => {
+          await fetchEspacos(1).then((resEspacos) => {
             if (resEspacos.success) {
               setAnuncios(resEspacos);
             }
-          }); */
+          });
         } else {
           Swal.fire({
             title: 'error!',
@@ -187,8 +200,10 @@ const DuplicateForm = ({ option, setOption, onClose, selectId, setAnuncios }) =>
             icon: 'error',
             confirmButtonText: 'Entendi'
           });
-          sessionStorage.removeItem('userTokenAccess');
-          window.location.href = masterPath.domain + '/login?sessionExpired=true';
+          if (res.message == "Token inválido") {
+            sessionStorage.removeItem('userTokenAccess');
+            window.location.href = masterPath.domain + '/login?sessionExpired=true';
+          }
 
         }
 
