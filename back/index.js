@@ -10,7 +10,7 @@ const http = require("http");
 const { Server } = require('socket.io');
 const cron = require('node-cron');
 const { deletarPromocoesExpiradas } = require('./crons/promocao');
-const { inativarCampanhasExpiradas } = require('./crons/campanha');
+const { inativarCampanhasExpiradas, downgradePerfil } = require('./crons/campanha');
 
 
 /* // Carregar certificados
@@ -486,6 +486,12 @@ cron.schedule('0 5 * * *', () => {
     console.log('inativando campanhas expiradas...');
     inativarCampanhasExpiradas();
 });
+
+cron.schedule('*/5 * * * *', () => {
+    console.log('atualizando perfis expiradas...');
+    downgradePerfil();
+});
+
 
 
 server.listen(port, () => {

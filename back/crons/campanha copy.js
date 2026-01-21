@@ -1,5 +1,4 @@
 const Campanha = require('../models/table_campanha');
-const TokensPromocao = require('../models/tokens_promocao');
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 const moment = require('moment');
@@ -31,34 +30,8 @@ async function inativarCampanhasExpiradas() {
   }
 }
 
-async function downgradePerfil() {
-  console.log('Iniciando downgrade de perfil...');
-
-  try {
-
-    const hoje = moment().format('YYYY-MM-DD');
-
-    // Buscar campanhas expiradas
-    const perfisExpirados = await TokensPromocao.update({
-      codTipoAnuncio: 1
-    },{
-       where: {
-        [Op.and]: {
-          dataLimitPromocao: { [Op.lt]: new Date() }
-        }        
-      } 
-    });
-
-
-    console.log(`downgrades em ${perfisExpirados.length} de perfis expirados.`, hoje);
-  } catch (error) {
-    console.error('Erro ao atualizar perfil expirados:', error);
-    return;
-  }
-}
 
  
 module.exports = {
-  inativarCampanhasExpiradas,
-  downgradePerfil
+  inativarCampanhasExpiradas
 };
