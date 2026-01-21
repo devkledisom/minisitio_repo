@@ -4041,7 +4041,8 @@ module.exports = {
                             codDuplicado: index + 1,
                             codCaderno: item.nomeCaderno,
                             codCidade: item.nomeCaderno,
-                            codUf: item.UF
+                            codUf: item.UF,
+                            activate: 1 
                         };
 
                         delete novoAnuncio.codAnuncio; // Garante que o ID original não vá para o novo registro
@@ -4151,6 +4152,7 @@ module.exports = {
                 anuncioObj.codCaderno = codCaderno;
                 anuncioObj.codCidade = codCaderno;
                 anuncioObj.codUf = codUf;
+                anuncioObj.activate = 1;
 
                 //console.log(anuncioObj.codOrigem);
                 //console.log(typeof(idAnuncio), typeof(index));
@@ -4197,6 +4199,7 @@ module.exports = {
                 anuncioObj.codCaderno = codCaderno;
                 anuncioObj.codCidade = codCaderno;
                 anuncioObj.codUf = codUf;
+                anuncioObj.activate = 1;
 
                 //Remover a propriedade codAnuncio
                 delete anuncioObj.codAnuncio;
