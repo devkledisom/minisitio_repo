@@ -474,7 +474,8 @@ async function gerarCSVGeral(model, idCampanha) {
         },
         //{ label: "Data Limite", value: "dataLimitePromocao" },
         { label: "Nome Anúncio", value: "promo.descAnuncio" },
-        //{ label: "Documento", value: "promo.descCPFCNPJ" },
+        { label: "CNPJ", value: "promo.descCPFCNPJ" },
+        { label: "Telefone", value: "promo.descTelefone" },
         { label: "Email de Retorno", value: "promo.descEmailRetorno" },
     ];
 
@@ -490,7 +491,7 @@ async function gerarCSVGeral(model, idCampanha) {
                     {
                         model: Anuncio,
                         as: "promo",
-                        attributes: ["descAnuncio", "descEmailRetorno"]
+                        attributes: ["descAnuncio", "descCPFCNPJ", "descTelefone", "descEmailRetorno"]
                     }
                 ],
                 where: { campanhaId: idCampanha },
