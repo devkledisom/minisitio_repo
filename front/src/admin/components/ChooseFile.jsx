@@ -52,12 +52,12 @@ function UploadImage(props) {
       const file = acceptedFiles[0];
       if (!file) return;
 
-      validarDimensaoImagem(file, 600, 300)
+      validarDimensaoImagem(file, 2000, 1000)
         .then((aproved) => {
           if (aproved) {
             enviarImg();
           } else {
-            alert("A imagem deve ter exatamente 600x300 pixels.");
+            alert("A imagem deve ter até 2000x1000 pixels.");
           }
         });
     } else {

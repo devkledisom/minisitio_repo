@@ -14,6 +14,7 @@ import Navegacao from '../components/Navegacao';
 import FullWebCard from '../components/FullWebCard';
 import SafeImage from '../components/SafeMosaico';
 import ButtonCapa from '../components/ButtonCapa';
+import Loading from '../components/Loading';
 
 //LIB
 //import { Helmet, HelmetProvider } from "react-helmet-async";
@@ -27,6 +28,7 @@ function WebCard() {
     const [codUf, setCodUf] = useState(null);
     //const [ufs, setUfs] = useState([]);
     //const [cadernos, setCadernos] = useState([]);
+    const [pageLoad, setPageLoad] = useState(false);
 
     /*     useMetaTags({
             title: 'Meu Título',
@@ -39,22 +41,21 @@ function WebCard() {
                 site_name: 'My Site',
               }
           }); */
-/* 
-    useEffect(() => {
-        fetch(`${masterPath.url}/admin/anuncio/classificado/${codCaderno}/${codUf}`)
-            .then(x => x.json())
-            .then(res => {
-                if (res.success) {
-                    setMosaicoImg(res.mosaico);
-                }
-
-            })
-    }, []); */
+    /* 
+        useEffect(() => {
+            fetch(`${masterPath.url}/admin/anuncio/classificado/${codCaderno}/${codUf}`)
+                .then(x => x.json())
+                .then(res => {
+                    if (res.success) {
+                        setMosaicoImg(res.mosaico);
+                    }
+    
+                })
+        }, []); */
 
     useEffect(() => {
         //document.querySelector('.caderno').style.filter = "blur(3px)";
-
-       let caderno = codCaderno;
+        let caderno = codCaderno;
         let estado = codUf;
 
         if (caderno != null && estado != null) {
@@ -65,7 +66,7 @@ function WebCard() {
                         setMosaicoImg(res.mosaico);
                     }
                 })
-        } 
+        }
         /* 
                 fetch(`${masterPath.url}/ufs`)
                     .then((x) => x.json())
@@ -103,52 +104,44 @@ function WebCard() {
     return (
         // <HelmetProvider>
         <div className="App">
+                <header>
+                    <Mosaico logoTop={true} borda="none" mosaicoImg={true} />
+                    {/* <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={nmAnuncio} /> */}
+                </header>
+                <main>
+                    <Busca uf={codUf} caderno={codCaderno} />
 
-            {/*       <Helmet>
-                    <title>Meu Site - Página Inicial</title>
-                    <meta name="description" content="Esta é a descrição da minha página para SEO." />
-                    <meta property="og:title" content="Meu Site" />
-                    <meta property="og:description" content="Descrição otimizada para redes sociais." />
-                    <meta property="og:image" content={`https://minisitio.com.br/api/files/imagem%20para%20GMN%20-%2002.png`} />
-                </Helmet> */}
+                    <h1 id="title-caderno" className='py-2'>Caderno {codCaderno} - {codUf}</h1>
 
-            <header>
-                <Mosaico logoTop={true} borda="none" mosaicoImg={true} />
-                {/* <MosaicoWebCard logoTop={true} borda="flex" mosaicoImg={mosaicoImg} nmAnuncio={nmAnuncio} /> */}
-            </header>
-            <main>
-                <Busca uf={codUf} caderno={codCaderno} />
-
-                <h1 id="title-caderno" className='py-2'>Caderno {codCaderno} - {codUf}</h1>
-
-                  <div className='container text-center my-4 new-mosaico'>
-                    {mosaicoImg.length > 0 && (
-                       <SafeImage
-                        src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
-                        alt="mosaico"
-                        fallback="/images/fallback.png"
-                    />
-                    )}
-                </div>
+                    <div className='container text-center my-4 new-mosaico'>
+                        {mosaicoImg.length > 0 && (
+                            <SafeImage
+                                src={`${masterPath.url}/files/mosaico/${mosaicoImg}`}
+                                alt="mosaico"
+                                fallback="/images/fallback.png"
+                            />
+                        )}
+                    </div>
 
 
 
-                <ButtonCapa caderno={codCaderno} estado={codUf} />
+                    <ButtonCapa caderno={codCaderno} estado={codUf} />
 
-                {/*  <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1> */}
+                    {/*  <h1 id="title-caderno" className='py-2'>Caderno {localStorage.getItem("caderno: ")} - {localStorage.getItem("uf: ")}</h1> */}
 
-                {/* <div className='container text-center my-4 new-mosaico'> */}
+                    {/* <div className='container text-center my-4 new-mosaico'> */}
                     {/* <img src={`${masterPath.url}/files/mosaico/${mosaicoImg}`} alt="mosaico" /> */}
-                {/* </div> */}
+                    {/* </div> */}
 
-                <Navegacao />
-                <FullWebCard setCodCaderno={setCodCaderno} setCodUf={setCodUf} />
-            </main>
+                    <Navegacao />
+                    <FullWebCard setCodCaderno={setCodCaderno} setCodUf={setCodUf} />
+                </main>
 
-            <footer>
-                <Nav styleClass="Nav" />
-                <Footer />
-            </footer>
+                <footer>
+                    <Nav styleClass="Nav" />
+                    <Footer />
+                </footer>
+          
         </div >
         //</HelmetProvider>
     );

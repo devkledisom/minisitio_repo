@@ -6,6 +6,7 @@ function TagsInput(props) {
 
   useEffect(() => {
     if (props.value != undefined && props.value.length > 0) {
+      console.log("tags input", props.value)
       setTags(JSON.parse(props.value));
     }
   }, [props.value]);

@@ -11,6 +11,7 @@ import Card from 'react-bootstrap/Card';
 import { masterPath } from '../config/config';
 import { useBusca } from '../context/BuscaContext';
 import { use } from 'react';
+import Swal from 'sweetalert2';
 
 function Busca(props) {
 
@@ -406,6 +407,15 @@ function Busca(props) {
     function abrirPromocao() {
         let qtdePromocao = promocao.length;
 
+        if (promocao.length === 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Atenção',
+                text: 'Nenhuma promoção encontrada.',
+            });
+            return;
+        }
+        
         if (qtdePromocao == 1) {
             navigate(`/perfil/${promocao[0].codAnuncio}?promocao=ativa`);
         } else {
