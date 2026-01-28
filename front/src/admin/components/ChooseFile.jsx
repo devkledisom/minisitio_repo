@@ -84,7 +84,28 @@ function UploadImage(props) {
       formData.append('image', acceptedFiles[0]);
 
       // Enviar a imagem para o servidor
-      fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}`, {
+      fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}&local=${props.local}`, {
+              method: 'POST',
+              body: formData
+            }).then(x => x.json())
+              .then(response => {
+              /*   if (!response.ok) {
+                  throw new Error('Erro ao enviar imagem para o servidor');
+                } */
+                //console.log('Imagem enviada com sucesso!', response);
+      
+                 props.data(prev => ({
+                ...prev,
+                [props.origin]: response.fileName.replace(/\s+/g, "-")
+              }));
+      
+                setMostrarLabel(false);
+                setMostrarMiniPreview(true);
+              })
+              .catch(error => {
+                console.error('Erro ao enviar imagem:', error);
+              });
+  /*     fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}&local=descImagem`, {
         method: 'POST',
         body: formData
       })
@@ -92,13 +113,19 @@ function UploadImage(props) {
           if (!response.ok) {
             throw new Error('Erro ao enviar imagem para o servidor');
           }
-          console.log('Imagem enviada com sucesso!');
+          console.log('Imagem enviada com sucesso!', response);
+
+          props.data(prev => ({
+            ...prev,
+            [props.origin]: response.fileName.replace(/\s+/g, "-")
+          })); 
+
           setMostrarLabel(false);
           setMostrarMiniPreview(true);
         })
         .catch(error => {
           console.error('Erro ao enviar imagem:', error);
-        });
+        }); */
     }
   }, []);
 

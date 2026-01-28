@@ -311,7 +311,6 @@ function Editar(props) {
   };
 
   function editIDP(e) {
-    console.log("entrou", minisitio.promoc)
     /*     if (campoPromocao.current.value.length !== 0) {
           console.log("entrou", campoPromocao.current.value, minisitio.promoc)
           if (minisitio.promoc.banner == null || minisitio.promoc.banner == "" || minisitio.promoc.banner == undefined || minisitio.promoc.banner == "null") {
@@ -407,6 +406,7 @@ function Editar(props) {
       fetch(`${masterPath.url}/admin/anuncio/update?id=${props.espacoId}`, config)
         .then((x) => x.json())
         .then((res) => {
+          console.log(res)
           if (res.success) {
 
             //setShowSpinner(false);
@@ -743,7 +743,6 @@ function Editar(props) {
                     placeholder="(99) 99999-9999"
                     value={minisitio.descCelular}
                     onChange={handleSelectChange}
-                    required
                     mask={'(99) 99999-9999'}></InputMask>
                 </div>}
               </div>
@@ -803,8 +802,10 @@ function Editar(props) {
                     minisitio?.promoc?.banner !== undefined
                   }
                 /* required={!!minisitio?.promoc?.banner} */
+                
                 />
               </div>
+              
             </div>}
             {radioCheck != 1 && <div className="assinatura webcard" style={{ display: "block" }}>
               <h2>Cartão Digital</h2>
