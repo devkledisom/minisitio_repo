@@ -3,7 +3,7 @@ import { masterPath } from "../../config/config";
 //LIBS
 import Swal from 'sweetalert2';
 
-export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa, precoFixo) {
+export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa, precoFixo, minisitio) {
 
 
     let validation = true;
@@ -108,7 +108,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
             codCidade: buscarElemento("codUf5"),
             descAnuncio: buscarElemento("descAnuncio"),
             descAnuncioFriendly: "oficina-de-tortas",
-            descImagem: localStorage.getItem("imgname") != null ? localStorage.getItem("imgname") : 0,
+            descImagem: minisitio?.descImagem || 0,//localStorage.getItem("imgname") != null ? localStorage.getItem("imgname") : 0,
             descEndereco: buscarElemento("descEndereco"),
             descTelefone: buscarElemento("descTelefone"),
             descCelular: buscarElemento("descCelular"),

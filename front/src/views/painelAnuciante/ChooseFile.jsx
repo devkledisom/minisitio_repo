@@ -133,7 +133,7 @@ function UploadImage(props) {
         /*   if (!response.ok) {
             throw new Error('Erro ao enviar imagem para o servidor');
           } */
-          console.log('Imagem enviada com sucesso!', response);
+          //console.log('Imagem enviada com sucesso!', response);
 
            props.data(prev => ({
           ...prev,

@@ -52,7 +52,7 @@ function UploadImage(props) {
           alert("Imagem atingiu o limite, por favor insira uma imagem de até 1MB");
           return;
         }
-        console.log('very', fileRejections[0].errors[0].code)
+        //console.log('very', fileRejections[0].errors[0].code)
       }
     }
 
@@ -139,16 +139,24 @@ function UploadImage(props) {
           if (!response.ok) {
             throw new Error('Erro ao enviar imagem para o servidor');
           }
-          console.log('Imagem enviada com sucesso!');
+          //console.log('Imagem enviada com sucesso!');
 
-          props.data({
-            ...props.minisitio,
-            [props.origin]: acceptedFiles[0].name,
-            promoc: { banner: acceptedFiles[0].name }
-            //['descParceiro']: acceptedFiles[0].name,
+          if (props.origin === 'logoPromocao') {
+            props.data({
+              ...props.minisitio,
+              [props.origin]: acceptedFiles[0].name,
+              promoc: { banner: acceptedFiles[0].name }
+              //['descParceiro']: acceptedFiles[0].name,
 
-          });
-console.log(props.minisitio.promoc)
+            });
+          } else {
+            props.data({
+              ...props.minisitio,
+              [props.origin]: acceptedFiles[0].name,
+            });
+          }
+
+
           setMostrarLabel(false);
           setMostrarMiniPreview(true);
         })

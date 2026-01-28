@@ -64,6 +64,7 @@ function ComprarAnuncio({ isAdmin }) {
   const [alert, setAlert] = useState(false);
   const [texto, setTexto] = useState(null);
   const [isCapa, setIsCapa] = useState(false);
+  const [minisitio, setMinisitio] = useState(null);
 
   //REFS
   const customText = useRef(null);
@@ -615,7 +616,10 @@ function ComprarAnuncio({ isAdmin }) {
 
                 {radioCheck != 1 && <ChooseFile
                   codigoUser={codUser}
+                  dt={minisitio}
+                  data={setMinisitio}
                   origin={"descImagem"}
+                  local={"descImagem"}
                 />}
 
                 <div className="input-icon margin-top-10">
@@ -1067,7 +1071,7 @@ function ComprarAnuncio({ isAdmin }) {
                       className="btn-block formulario-de-cadastro btn btn-primary"
                       id="anunciar"
                       /* data-bs-toggle="modal" data-bs-target="#myModal" */
-                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa, precoFixo)}
+                      onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa, precoFixo, minisitio)}
                     >
                       Confirmar
                     </button>
