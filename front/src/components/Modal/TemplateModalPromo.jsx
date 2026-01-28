@@ -17,6 +17,7 @@ const TemplateModalPromo = (props) => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    //if(props.path == null || props.path === undefined || props.path === '') return;
     setShow(props.showState)
   }, [props.showState])
 

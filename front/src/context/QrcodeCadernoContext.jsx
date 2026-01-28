@@ -14,7 +14,7 @@ export const QrcodeCadernoProvider = ({ children }) => {
         setTheme(theme === "light" ? "dark" : "light");
     }
 
-    console.log("very:", window.location.href, caderno)
+    //console.log("very:", window.location.href, caderno)
 
     return (
         <QrcodeCadernoContext.Provider value={{ theme, toggleTheme }} >

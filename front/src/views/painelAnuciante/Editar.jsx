@@ -104,14 +104,26 @@ function Editar(props) {
         setPersonType(res[0].descTipoPessoa);
         setRadioCheck(res[0].codTipoAnuncio);
 
+
+
         let tagsStrings = JSON.parse(res[0].tags);
-        let tagsList = JSON.parse(tagsStrings);
+
+        console.log("tags strings", typeof (tagsStrings))
+
+        if (tagsStrings.length > 0) {
+          setTagValue(tagsStrings);
+        }
+
+
+        /* let tagsList = JSON.parse(tagsStrings);
 
         if (tagsList.length > 0) {
           setTagValue(tagsList);
-        }
-       
-        
+        }*/
+
+
+
+
 
         setCep(res[0].descCEP);
 
@@ -299,6 +311,19 @@ function Editar(props) {
   };
 
   function editIDP(e) {
+    console.log("entrou", minisitio.promoc)
+    /*     if (campoPromocao.current.value.length !== 0) {
+          console.log("entrou", campoPromocao.current.value, minisitio.promoc)
+          if (minisitio.promoc.banner == null || minisitio.promoc.banner == "" || minisitio.promoc.banner == undefined || minisitio.promoc.banner == "null") {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Atenção',
+              text: 'Por favor, selecione uma imagem para a promoção antes de definir a data de validade.',
+            });
+          }
+    
+          return;
+        } */
 
     if (calcularDiferencaDias(campoPromocao.current.value) > 90) {
       alert("A data de validade da promoção informada não pode ultrapassar um prazo de 90 dias! A data escolhida tem um prazo de " + calcularDiferencaDias(campoPromocao.current.value) + " dias.");
@@ -316,7 +341,7 @@ function Editar(props) {
     }
 
     //minisitio.descImagem = minisitio.desImagem;//localStorage.getItem("imgname");
-    minisitio.tags = JSON.stringify(tagValue);
+    minisitio.tags = tagValue;
     minisitio.logoPromocao = localStorage.getItem("imgname4");
     minisitio.certificado_logo = localStorage.getItem("imgname5");
     minisitio.certificado_imagem = localStorage.getItem("imgname6");
@@ -772,7 +797,12 @@ function Editar(props) {
                   value={minisitio.promoc ? minisitio.promoc.data_validade : ""}
                   onChange={handleSelectChange}
                   ref={campoPromocao}
-                  required={!!minisitio?.promoc?.banner}
+                  required={
+                    minisitio?.promoc?.banner !== 'null' &&
+                    minisitio?.promoc?.banner !== '' &&
+                    minisitio?.promoc?.banner !== undefined
+                  }
+                /* required={!!minisitio?.promoc?.banner} */
                 />
               </div>
             </div>}
@@ -1269,7 +1299,7 @@ function Editar(props) {
             /* style={{ position: "sticky" }} */
             /* style={(elementoProximoTopo) ? {position: "fixed", top: "0px", marginTop: "20px"} : { position: "relative" }} */
             >
-              <div className="posicao-preview">
+              <div className="posicao-preview" style={{ position: "sticky" }}>
                 <div className="simulacao-do-anuncio">
                   <h2 className="assinatura">Simulação do Espaço Minisitio</h2>
                 </div>

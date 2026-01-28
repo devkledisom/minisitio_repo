@@ -3443,6 +3443,7 @@ module.exports = {
         if (promocaoExistente) {
             const atualizarPromocao = await Promocao.update({
                 data_validade: promocaoData,
+                banner: logoPromocao
             }, {
                 where: {
                     codAnuncio: idAnuncio

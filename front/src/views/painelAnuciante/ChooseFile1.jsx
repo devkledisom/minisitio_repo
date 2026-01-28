@@ -148,7 +148,7 @@ function UploadImage(props) {
             //['descParceiro']: acceptedFiles[0].name,
 
           });
-
+console.log(props.minisitio.promoc)
           setMostrarLabel(false);
           setMostrarMiniPreview(true);
         })
