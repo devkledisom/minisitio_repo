@@ -152,7 +152,7 @@ function FullWebCard(props) {
                                     <div className="row">
                                         <div className='col-md-4'>
                                             {(resultLocal.certificado_logo != null && resultLocal.certificado_logo != "") &&
-                                                <img src={`${masterPath.url}/files/logoCertificado/${resultLocal.certificado_logo}`} className='rounded' height="50" alt="logo" />
+                                                <img src={`${masterPath.url}/files/logoCertificado/${resultLocal.certificado_logo}`} className='rounded' height="50" style={{ height: "64px" }} alt="logo" />
                                             }
                                             {(resultLocal.certificado_logo == "" || resultLocal.certificado_logo == null) &&
                                                 <p>LOGO</p>
@@ -197,7 +197,7 @@ function FullWebCard(props) {
                                             </a>
                                         )} */}
 
-                                            {!resultLocal.certificado_link && resultLocal.certificado_imagem && (
+                                    {/*         {!resultLocal.certificado_link && resultLocal.certificado_imagem && (
                                                 <i className="link-cinza">
                                                     <img
                                                         src={`${masterPath.url}/files/imgCertificado/${resultLocal.certificado_imagem}`}
@@ -217,7 +217,7 @@ function FullWebCard(props) {
                                                     />
                                                 </i>
                                             )}
-
+ */}
 
                                         </div>
                                     </div>
@@ -255,7 +255,7 @@ function FullWebCard(props) {
                                         {
                                             !promoChange(resultLocal) ?
                                                 (verificarLogoPromo(resultLocal) && !promoChange(resultLocal)) ?
-                                                    <img src="../assets/img/link_promocao.png" className="promoModal"
+                                                    <img src="../assets/img/link_promocao.png" className="promoModal  pulse-promotion"
                                                         alt="icone" width={60} onClick={() => setShowState(true)} /> :
                                                     <img src="../assets/img/link_promocao.png" className="promoModal" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} alt="icone" width={60} />
                                                 : null

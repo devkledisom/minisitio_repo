@@ -469,7 +469,7 @@ function Busca(props) {
                                 {windowWidth >= 768 ? (
                                     <div className="col-lg-3 col-md-4 col-sm-4 hidden-xs area-promo">
                                         <div className="btn-group" role="group">
-                                            <button type="button" className="btn proximo btnGrupo btnPromocao" ref={btnPromo} data-promocao="1" title="Promoção" onClick={() => abrirPromocao()}>
+                                            <button type="button" className="btn btnGrupo btnPromocao" style={{boxShadow: "none"}} ref={btnPromo} data-promocao="1" title="Promoção" onClick={() => abrirPromocao()}>
                                                 <img src="/assets/img/icone-promo.png" alt="Promoção" className="img-responsive animated infinite flash" />
                                             </button>
                                         </div>
