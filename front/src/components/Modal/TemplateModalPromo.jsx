@@ -50,13 +50,13 @@ const TemplateModalPromo = (props) => {
               <img src="../assets/img/logo50.png" className="logo-modal-promo" />
               <h4>Promoção com minisitio</h4>
             </div>
-            <img src={`${masterPath.url}/files/2/${props.path}`} className='w-100' alt="promoção" />
+            <img src={`${masterPath.url}/files/promocao/${props.path}`} className='w-100' alt="promoção" />
           </div>
           <span>Validade da promoção: {moment(props.validade).format("DD/MM/YYYY")}</span>
         </Modal.Body>
         <Modal.Footer>
           <button type="button" className="btn btn-primary" onClick={() => ReactToPrintFn()}>Imprimir</button>
-          <a href={`${masterPath.url}/files/2/download/${props.path}`}
+          <a href={`${masterPath.url}/files/promocao/download/${props.path}`}
             download={`promocao_${props.anuncioId || 'img'}.jpg`}
             className='btn btn-secondary'
           >

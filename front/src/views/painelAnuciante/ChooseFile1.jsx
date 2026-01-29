@@ -115,7 +115,6 @@ function UploadImage(props) {
         localStorage.setItem("imgname", acceptedFiles[0].name);
       }
 
-      console.log(acceptedFiles[0])
       setImagem(acceptedFiles[0]);
       setMostrarLabel(false);
 
@@ -131,29 +130,31 @@ function UploadImage(props) {
       formData.append('image', acceptedFiles[0]);
 
       // Enviar a imagem para o servidor
-      fetch(`${masterPath.url}/upload-image?cod=${props.codigoUser}&local=promocao`, {
+      fetch(`${masterPath.url}/upload-image?cod=${props.dt.codAnuncio}&local=${props.local}`, {
         method: 'POST',
         body: formData
       })
+        .then(response => response.json())
         .then(response => {
-          if (!response.ok) {
-            throw new Error('Erro ao enviar imagem para o servidor');
-          }
-          //console.log('Imagem enviada com sucesso!');
+
+          console.log('Imagem enviada com sucesso!', response);
 
           if (props.origin === 'logoPromocao') {
-            props.data({
-              ...props.minisitio,
-              [props.origin]: acceptedFiles[0].name,
-              promoc: { banner: acceptedFiles[0].name }
-              //['descParceiro']: acceptedFiles[0].name,
 
-            });
+            props.data(prev => ({
+              ...prev,
+              [props.origin]: response.fileName.replace(/\s+/g, "-"), //acceptedFiles[0].name,
+              promoc: {
+                ...prev.promoc, // Mantém o que já existia no objeto promoc se houver
+                banner: response.fileName.replace(/\s+/g, "-") //acceptedFiles[0].name
+              }
+            }));
+
           } else {
-            props.data({
-              ...props.minisitio,
-              [props.origin]: acceptedFiles[0].name,
-            });
+            props.data(prev => ({
+              ...prev,
+              [props.origin]: response.fileName.replace(/\s+/g, "-")//acceptedFiles[0].name,
+            }));
           }
 
 
@@ -185,12 +186,13 @@ function UploadImage(props) {
   });
 
   const limparInputImg = () => {
-    props.data({
-      ...props.minisitio,
+    //console.log("limparInputImg", props.origin, props.dt);
+    props.data(prev => ({
+      ...prev,
       [props.origin]: null,
       //['descParceiro']: "",
 
-    });
+    }));
 
     if (props.preview == true) {
 
@@ -221,14 +223,14 @@ function UploadImage(props) {
 
           >
 
-            {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
-            {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {!mostrarMiniPreview ? <img src={`${masterPath.url}/files/${props.local}/${props.codImg}`} width={50} style={{ fontSize: "15px" }} /> : ""}
+            {!mostrarMiniPreview ? <a href={`${masterPath.url}/files/${props.local}/${props.codImg}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {/* {!mostrarMiniPreview && <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>} */}
 
 
             {/* console.log(mostrarLabel) */}
             {imagem ? <img src={URL.createObjectURL(imagem)} width={50} style={{ fontSize: "15px" }} /> : ""}
-            {imagem ? <a href={`${masterPath.url}/files/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex mx-2" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
+            {imagem ? <a href={`${masterPath.url}/files/${props.local}/${imagem.name}`} target="_blank" rel="noopener noreferrer" class="pull-right d-flex mx-2" id="btnVerImagem" title="verimagem">Ver imagem</a> : ""}
             {mostrarLabel && <span {...getRootProps()}>{textLabel}</span>}
 
             {/*    {!mostrarLabel && 
@@ -240,11 +242,11 @@ function UploadImage(props) {
           </span>
 
           {!mostrarLabel && !mostrarMiniPreview && (
-            <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
+            <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title={"Remover arquivo" + props.origin} onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
           )}
 
           {!mostrarLabel && imagem && (
-            <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title="Remover arquivo" onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
+            <a href="javascript:;" class="pull-right" id="btnDeleteImagem" title={"Remover arquivo" + props.origin} onClick={limparInputImg}><i class="fa fa-times-circle"></i></a>
           )}
 
           {mostrarLabel &&

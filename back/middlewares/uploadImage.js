@@ -46,6 +46,12 @@ module.exports = (multer({
                 } else {
                     cb(null, "new_" + Date.now().toString() + path.extname(file.originalname));
                 }
+            } else if (req.query.local == "promocao") {
+                if (req.query.cod) {
+                    cb(null, req.query.cod + "_" + Date.now().toString() + path.extname(file.originalname));
+                } else {
+                    cb(null, "new_" + Date.now().toString() + path.extname(file.originalname));
+                }
             } else {
                 cb(null, file.originalname);
             }

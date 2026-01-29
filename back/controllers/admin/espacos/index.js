@@ -3441,14 +3441,19 @@ module.exports = {
         });
 
         if (promocaoExistente) {
-            const atualizarPromocao = await Promocao.update({
-                data_validade: promocaoData,
-                banner: logoPromocao
+            /* try { */
+                  const atualizarPromocao = await Promocao.update({
+                data_validade: promocaoData || "",
+                banner: logoPromocao || ""
             }, {
                 where: {
                     codAnuncio: idAnuncio
                 }
             });
+          /*   } catch (err) {
+                console.log("erro ao atualizar promoção", err)
+            } */
+          
         }
 
         if (!promocaoExistente) {
@@ -3484,6 +3489,8 @@ module.exports = {
             attributes: ["descParceiro", "certificado_logo", "certificado_imagem", "cashback_logo"]
         });
 
+
+
         // Função auxiliar para deletar arquivo de forma segura
         const deleteFileIfExists = async (diretorio, campoAnuncio) => {
             try {
@@ -3498,19 +3505,37 @@ module.exports = {
         };
 
         if (dadosAnuncio.descParceiro != anuncio.descParceiro) {
-            await deleteFileIfExists("logoParceiro", anuncio.descParceiro);
+            try {
+                await deleteFileIfExists("logoParceiro", anuncio.descParceiro);
+            } catch (err) {
+                console.log("erro ao apagar img", err)
+            }
         }
 
         if (dadosAnuncio.certificado_logo != anuncio.certificado_logo) {
-            await deleteFileIfExists("logoCertificado", anuncio.certificado_logo);
+            try {
+                await deleteFileIfExists("logoCertificado", anuncio.certificado_logo);
+            } catch (err) {
+                console.log("erro ao apagar img", err)
+            }
         }
 
         if (dadosAnuncio.certificado_imagem != anuncio.certificado_imagem) {
-            await deleteFileIfExists("imgCertificado", anuncio.certificado_imagem);
+            console.log("diferente certificado imagem", dadosAnuncio.certificado_imagem, anuncio.certificado_imagem)
+            try {
+                await deleteFileIfExists("imgCertificado", anuncio.certificado_imagem);
+            } catch (err) {
+                console.log("erro ao apagar img", err)
+            }
         }
 
         if (dadosAnuncio.cashback_logo != anuncio.cashback_logo) {
-            await deleteFileIfExists("logoCashBack", anuncio.cashback_logo);
+            try {
+                await deleteFileIfExists("logoCashBack", anuncio.cashback_logo);
+            } catch (err) {
+                console.log("erro ao apagar img", err)
+            }
+
         }
 
 
@@ -4043,7 +4068,7 @@ module.exports = {
                             codCaderno: item.nomeCaderno,
                             codCidade: item.nomeCaderno,
                             codUf: item.UF,
-                            activate: 1 
+                            activate: 1
                         };
 
                         delete novoAnuncio.codAnuncio; // Garante que o ID original não vá para o novo registro

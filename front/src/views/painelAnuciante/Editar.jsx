@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, use } from "react";
 import { useLocation } from "react-router-dom";
 import { masterPath } from "../../config/config";
 import he from 'he';
@@ -107,8 +107,6 @@ function Editar(props) {
 
 
         let tagsStrings = JSON.parse(res[0].tags);
-
-        console.log("tags strings", typeof (tagsStrings))
 
         if (tagsStrings.length > 0) {
           setTagValue(tagsStrings);
@@ -310,6 +308,10 @@ function Editar(props) {
     /* changeUf(e); */
   };
 
+  useEffect(() => {
+    console.log("minisitio", minisitio);
+  }, [minisitio]);
+ 
   function editIDP(e) {
     /*     if (campoPromocao.current.value.length !== 0) {
           console.log("entrou", campoPromocao.current.value, minisitio.promoc)
@@ -341,9 +343,9 @@ function Editar(props) {
 
     //minisitio.descImagem = minisitio.desImagem;//localStorage.getItem("imgname");
     minisitio.tags = tagValue;
-    minisitio.logoPromocao = localStorage.getItem("imgname4");
-    minisitio.certificado_logo = localStorage.getItem("imgname5");
-    minisitio.certificado_imagem = localStorage.getItem("imgname6");
+    //minisitio.logoPromocao = localStorage.getItem("imgname4");
+    //minisitio.certificado_logo = localStorage.getItem("imgname5");
+    //minisitio.certificado_imagem = localStorage.getItem("imgname6");
 
 
     var validation = true;
@@ -678,6 +680,7 @@ function Editar(props) {
                     data={setMinisitio}
                     local={"descImagem"} />
                 }
+                
 
 
                 <div className="input-icon margin-top-10">
@@ -765,8 +768,10 @@ function Editar(props) {
                 codImg={minisitio.promoc ? minisitio.promoc.banner : ""}
                 miniPreview={false}
                 msg={"Anexar imagem da promoção"}
-                minisitio={minisitio}
-                data={setMinisitio} />
+                dt={minisitio}
+                data={setMinisitio}
+                local={"promocao"}
+              />
 
               }
 
@@ -841,8 +846,9 @@ function Editar(props) {
                 codImg={minisitio.descParceiro}
                 miniPreview={false}
                 msg={"Anexar logo da parceria"}
-                minisitio={minisitio}
+                dt={minisitio}
                 data={setMinisitio}
+                local={"logoParceiro"}
               />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
@@ -871,8 +877,9 @@ function Editar(props) {
                 codImg={minisitio.certificado_logo}
                 miniPreview={false}
                 msg={"Anexar logo do certificado"}
-                minisitio={minisitio}
-                data={setMinisitio} />
+                dt={minisitio}
+                data={setMinisitio}
+                local={"logoCertificado"} />
               }
               <div className="input-icon margin-top-10">
 
@@ -895,8 +902,10 @@ function Editar(props) {
                 codImg={minisitio.certificado_imagem}
                 miniPreview={false}
                 msg={"Anexar imagem do certificado"}
-                minisitio={minisitio}
-                data={setMinisitio} />}
+                dt={minisitio}
+                data={setMinisitio}
+                local={"imgCertificado"}
+                 />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
                 <input
@@ -925,8 +934,9 @@ function Editar(props) {
                 codImg={minisitio.cashback_logo}
                 miniPreview={false}
                 msg={"Anexar logo do cashback"}
-                minisitio={minisitio}
+                dt={minisitio}
                 data={setMinisitio}
+                local={"logoCashBack"}
               />}
               <div className="input-icon margin-top-10">
                 <i className="fa fa-globe"></i>
