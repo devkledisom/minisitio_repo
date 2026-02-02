@@ -3036,8 +3036,20 @@ module.exports = {
         let obj = resultAnuncio[0];
 
         const user = await obj.getUsuario();
-        obj.codUsuario = user.descNome;
-        console.log(user)
+
+        const nmUser = await Usuarios.findOne({
+            where: {
+                codUsuario: obj.codUsuario
+            },
+            attributes: ['descNome'],
+            raw: true
+        });
+
+        obj.codUsuario = nmUser ? nmUser.descNome : 'Usuário não encontrado';
+
+
+        //obj.codUsuario = user.descNome;
+        console.log("very", user, obj)
 
 
 
