@@ -308,9 +308,9 @@ function Editar(props) {
     /* changeUf(e); */
   };
 
-  useEffect(() => {
+/*   useEffect(() => {
     console.log("minisitio", minisitio);
-  }, [minisitio]);
+  }, [minisitio]); */
  
   function editIDP(e) {
     /*     if (campoPromocao.current.value.length !== 0) {

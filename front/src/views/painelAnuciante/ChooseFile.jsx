@@ -164,6 +164,11 @@ function UploadImage(props) {
   });
 
   const limparInputImg = () => {
+      props.data(prev => ({
+      ...prev,
+      [props.origin]: null
+    }));
+
     if (props.preview == true) {
       document.querySelector('.semImagem').style.display = 'block';
       document.querySelector('.comImagem').style.display = 'none';
