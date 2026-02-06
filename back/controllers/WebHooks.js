@@ -122,7 +122,7 @@ module.exports = {
 
         const perfilMinisitio = await Anuncio.findOne({ where: { codAnuncio: codigoReferenciaMp }, raw: true, attributes: ['codAnuncio', 'descAnuncio', 'codDesconto'] });
 
-        const valorDesconto = codDesconto ? await Desconto.findOne({ where: { hash: codDesconto }, raw: true, attributes: ['hash', 'desconto'] }) : null;
+        const valorDesconto = perfilMinisitio.codDesconto ? await Desconto.findOne({ where: { hash: perfilMinisitio.codDesconto }, raw: true, attributes: ['hash', 'desconto'] }) : null;
 
         const valorBase = await Globals.findOne({
             where: { keyValue: "precoBase" },
@@ -131,7 +131,9 @@ module.exports = {
 
 
 
-        let option1 = codDesconto ? ((valorBase.value / 12) - valorDesconto.desconto) * 12 : Number(valorBase.value);
+        let option1 = perfilMinisitio.codDesconto ? ((valorBase.value / 12) - valorDesconto.desconto) * 12 : Number(valorBase.value);
+
+        //console.log("valorDesconto", valorDesconto, option1);
 
 
         const body = {

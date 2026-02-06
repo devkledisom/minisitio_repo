@@ -205,7 +205,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                  }) */
 
 
-                    if (result.isConfirmed) {
+                    //if (result.isConfirmed) {
                         if (isAdmin) {
                             let valorBruto = precoFixo;
                             /*              if (descontoAtivado && radioCheck == 4) {
@@ -297,7 +297,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
 
                         }
 
-                    }
+                    //}
 
                 });
             });

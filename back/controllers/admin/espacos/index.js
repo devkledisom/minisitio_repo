@@ -3170,7 +3170,7 @@ module.exports = {
             "descPatrocinador": 0,
             "descPatrocinadorLink": 0,
             "qntVisualizacoes": 0,
-            "activate": 0,
+            "activate": 1,
             //"dtCadastro": dataNow(),
             "dtCadastro2": dtCadastro2,
             "dtAlteracao": Date.now(),
