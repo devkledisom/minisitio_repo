@@ -67,6 +67,12 @@ const TokensPromocao = database.define('tokens_promocao', {
         unique: false
     },
 
+    statusPromocao: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+        unique: false
+    },
+
     dataUltimoAcesso: {
         type: Sequelize.DATE,
         allowNull: false,
