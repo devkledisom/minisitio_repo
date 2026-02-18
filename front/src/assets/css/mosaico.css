@@ -1,7 +1,24 @@
+/* Limit width of the mosaic header's inner container to align with page content */
+.header .header-new-mosaico,
+.header-new-mosaico {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  margin: 0 auto;
+  max-width: 1140px;
+}
 
+@media (max-width: 1200px) {
+  .header .header-new-mosaico,
+  .header-new-mosaico { max-width: 980px; }
+}
 
+@media (max-width: 992px) {
+  .header .header-new-mosaico,
+  .header-new-mosaico { max-width: 720px; }
+}
 
 @media (max-width: 768px) {
-    .header-new-mosaico {
-    }
+  .header .header-new-mosaico,
+  .header-new-mosaico { max-width: 540px; padding: 8px 12px; }
 }
