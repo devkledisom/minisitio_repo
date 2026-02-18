@@ -14,7 +14,9 @@ import Swal from 'sweetalert2';
 import Header from "../Header";
 import Spinner from '../../../components/Spinner';
 import { Input } from "../../../components/ui/input.tsx";
-import { Label } from "../../../components/ui/label.tsx"
+import { Label } from "../../../components/ui/label.tsx";
+
+import { Card, CardHeader, CardContent, CardFooter } from '../../../components/ui/card.tsx';
 
 
 
@@ -293,8 +295,16 @@ const Espacos = () => {
             <section className="pt-5">
 
                 {showSpinner && <Spinner />}
+                <Card className="mb-4">
+                    <CardHeader className="flex items-center justify-between">
+                               <div>
+                            <h1 className="text-2xl font-bold text-foreground tracking-tight">Importar Perfil</h1>
+                            <p className="text-sm text-muted-foreground">Faça importação de perfis/espaços</p>
+                        </div>
+                    </CardHeader>
+                </Card>
 
-                <h1 className="pt-4 px-4">Importar Perfil</h1>
+                
                 {/*  action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" */}
                 <form onSubmit={handleFormSubmit} className='px-4' style={{ "marginTop": "20px", }}>
                     Importar Espaços <br />

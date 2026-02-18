@@ -4,6 +4,20 @@ import moment from 'moment';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css';
 import { masterPath, version } from '../../../config/config';
+import { Plus as PlusIcon, Download as DownloadIcon, Upload as UploadIcon, Eye, Pencil, Trash2, Copy, Search } from 'lucide-react';
+
+// shadcn UI components (real components from the project)
+import { Button } from '../../../components/ui/button.tsx';
+import { Badge } from "../../../components/ui/badge.tsx";
+import { Input } from '../../../components/ui/input.tsx';
+import { Card, CardHeader, CardContent, CardFooter } from '../../../components/ui/card.tsx';
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+} from '../../../components/ui/dropdown-menu.tsx';
 
 //CSS
 import '../../assets/css/users.css';
@@ -18,8 +32,7 @@ import Header from "../Header";
 import Pagination from '../../components/Pagination';
 import Spinner from '../../../components/Spinner';
 import Duplicate from './Duplicate';
-import BtnActivate from '../../components/BntActivate';
-import EspacosImport from './EspacosImport';
+import EspacoDetailModal from './_components/EspacoDetailModal';
 
 //API
 import { fetchEspacos, deleteDuplicacaoEspaco } from '../../../api/admin/espacos';
@@ -37,13 +50,38 @@ const Espacos = () => {
     const [del, setDel] = useState(false);
     const [busca, setBusca] = useState(false);
     const [searchOptioncheck, setSearchOptioncheck] = useState(false);
+    const [search, setSearch] = useState("");
 
-    const [estadoSelecionado, setEstadoSelecionado] = useState(null);
-    const [cadernoSelecionado, setCadernoSelecionado] = useState(null);
-    const [uf, setUfs] = useState([]);
+    // Added missing states for UFs, cadernos and selected filters
+    const [ufs, setUfs] = useState([]);
     const [caderno, setCaderno] = useState([]);
-    const [mostrarInputBusca, setMostrarInputBusca] = useState(true);
+    const [estadoSelecionado, setEstadoSelecionado] = useState('todos');
+    const [cadernoSelecionado, setCadernoSelecionado] = useState('todos');
 
+    const campoBusca = useRef(null);
+    const campoCaderno = useRef(null);
+    const codOriginFather = useRef(null);
+
+    // detail modal state
+    const [detailOpen, setDetailOpen] = useState(false);
+    const [detailEspaco, setDetailEspaco] = useState(null);
+    // track selected rows in React state so UI (dropdown disabled) updates immediately
+    const [selectedIds, setSelectedIds] = useState([]);
+
+    const tokenAuth = sessionStorage.getItem('userTokenAccess');
+
+    const filtered = (anuncios && anuncios.message && Array.isArray(anuncios.message.anuncios))
+        ? anuncios.message.anuncios.filter((e) => {
+            const q = (search || (campoBusca.current && campoBusca.current.value) || "").toString().toLowerCase();
+            return (
+                (e.descAnuncio && e.descAnuncio.toString().toLowerCase().includes(q)) ||
+                (e.codAnuncio && e.codAnuncio.toString().includes(q)) ||
+                (e.descCPFCNPJ && e.descCPFCNPJ.toString().toLowerCase().includes(q)) ||
+                (e.codCaderno && e.codCaderno.toString().toLowerCase().includes(q)) ||
+                (e.codUf && e.codUf.toString().toLowerCase().includes(q))
+            );
+        })
+        : [];
 
     const location = useLocation();
 
@@ -52,11 +90,7 @@ const Espacos = () => {
 
     const param = getParam.get('page') ? getParam.get('page') : 1;
 
-    const campoBusca = useRef(null);
-    const campoCaderno = useRef(null);
-    const codOriginFather = useRef(null);
 
-    const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
     useEffect(() => {
         setShowSpinner(true);
@@ -171,39 +205,35 @@ const Espacos = () => {
     };
 
     function apagarMultiplosAnucios() {
-        let checkboxs = document.querySelectorAll('.chkChildren');
+        if (!selectedIds || selectedIds.length === 0) return;
+        setShowSpinner(true);
 
-        checkboxs.forEach((line) => {
-            if (line.checked) {
-                setShowSpinner(true);
-                fetch(`${masterPath.url}/admin/anuncio/delete/${line.id}`, {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
-                    },
-                })
-                    .then((x) => x.json())
-                    .then((res) => {
-                        if (res.success) {
-                            setShowSpinner(false);
-                            //line.closest('tr').remove();
-
-                            fetch(`${masterPath.url}/admin/espacos/read?page=${param}`).then((x) => x.json())
-                                .then((resAnuncio) => {
-                                    //console.log(resAnuncio.message.anuncios)
-                                    setAnucios(resAnuncio);
-                                    setShowSpinner(false);
-                                })
-                                .catch(error => {
-                                    console.error('Error fetching data:', error);
-                                    setShowSpinner(false);
-                                });
-                        }
-
-                    })
-            }
+        // delete sequentially to avoid overloading server; collect promises
+        const promises = selectedIds.map((id) => {
+            return fetch(`${masterPath.url}/admin/anuncio/delete/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
+                },
+            }).then((x) => x.json());
         });
+
+        Promise.all(promises)
+            .then((results) => {
+                // optionally inspect results for errors
+                // refresh list after deletes
+                return fetch(`${masterPath.url}/admin/espacos/read?page=${param}`).then((x) => x.json());
+            })
+            .then((resAnuncio) => {
+                setAnucios(resAnuncio);
+                setSelectedIds([]); // clear selection
+                setShowSpinner(false);
+            })
+            .catch((error) => {
+                console.error('Error deleting items:', error);
+                setShowSpinner(false);
+            });
     };
 
     function apagarDup() {
@@ -211,95 +241,95 @@ const Espacos = () => {
         //let codigoDeOrigem = codOriginFather.current.innerText;
 
         //if (!codigoDeOrigem) {
-            Swal.fire({
-                title: "Apagar Duplicação",
-                text: "Informe o código de origem para apagar as duplicações:",
-                input: "number",
-                inputAttributes: {
-                    autocapitalize: "off"
-                },
-                showCancelButton: true,
-                confirmButtonText: "Apagar",
-                confirmButtonColor: "red",
-                showLoaderOnConfirm: true,
+        Swal.fire({
+            title: "Apagar Duplicação",
+            text: "Informe o código de origem para apagar as duplicações:",
+            input: "number",
+            inputAttributes: {
+                autocapitalize: "off"
+            },
+            showCancelButton: true,
+            confirmButtonText: "Apagar",
+            confirmButtonColor: "red",
+            showLoaderOnConfirm: true,
 
 
-                // 2. Aplica suas próprias classes CSS
-                customClass: {
-                    confirmButton: 'espaco-botao-delete',
-                    cancelButton: 'meu-botao-cancelar'
-                },
+            // 2. Aplica suas próprias classes CSS
+            customClass: {
+                confirmButton: 'espaco-botao-delete',
+                cancelButton: 'meu-botao-cancelar'
+            },
 
-                preConfirm: async (login) => {
-                    if (!login) {
-                        Swal.showValidationMessage("Por favor, informe o código de origem.");
-                        return false;
-                    }
-
-                    const response = await deleteDuplicacaoEspaco(login);
-
-                    if (response.success) {
-                        Swal.fire({
-                            title: "Sucesso!",
-                            text: "Duplicação apagada com sucesso.",
-                            icon: "success"
-                        });
-
-                        await fetchEspacos(param).then((resEspacos) => {
-                            if (resEspacos.success) {
-                                setAnucios(resEspacos);
-                                setShowSpinner(false);
-                            }
-                        });
-                    }
-
-                    if (!response.success) {
-                        Swal.showValidationMessage(response.message || "Não foi possível apagar a duplicação.");
-                        return false;
-                    }
-
-
+            preConfirm: async (login) => {
+                if (!login) {
+                    Swal.showValidationMessage("Por favor, informe o código de origem.");
+                    return false;
                 }
-            });
 
-            return;
+                const response = await deleteDuplicacaoEspaco(login);
+
+                if (response.success) {
+                    Swal.fire({
+                        title: "Sucesso!",
+                        text: "Duplicação apagada com sucesso.",
+                        icon: "success"
+                    });
+
+                    await fetchEspacos(param).then((resEspacos) => {
+                        if (resEspacos.success) {
+                            setAnucios(resEspacos);
+                            setShowSpinner(false);
+                        }
+                    });
+                }
+
+                if (!response.success) {
+                    Swal.showValidationMessage(response.message || "Não foi possível apagar a duplicação.");
+                    return false;
+                }
+
+
+            }
+        });
+
+        return;
         //}
 
 
-       /*  fetch(`${masterPath.url}/admin/anuncio/delete/${codigoDeOrigem}?type=dup`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
-            },
-        })
-            .then((x) => x.json())
-            .then((res) => {
-                if (res.success) {
-                    setShowSpinner(false);
-                    //alert("anuncio apagado")
-                    //document.querySelector(".selecionada").remove();
-                    fetch(`${masterPath.url}/admin/espacos/read?page=${param}`)
-                        .then(x => x.json())
-                        .then((resAnuncio) => {
-                            setAnucios(resAnuncio);
-                            setShowSpinner(false);
-                        })
-                        .catch(error => {
-                            console.error('Error fetching data:', error);
-                            setShowSpinner(false);
-                        });
-                }
-
-            }).catch((error) => {
-                setShowSpinner(false);
-                console.error('Error:', error);
-                Swal.fire({
-                    title: "Error!",
-                    text: "Não foi possível apagar o anúncio duplicado",
-                    icon: "error"
-                });
-            }) */
+        /*  fetch(`${masterPath.url}/admin/anuncio/delete/${codigoDeOrigem}?type=dup`, {
+             method: "DELETE",
+             headers: {
+                 "Content-Type": "application/json",
+                 "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
+             },
+         })
+             .then((x) => x.json())
+             .then((res) => {
+                 if (res.success) {
+                     setShowSpinner(false);
+                     //alert("anuncio apagado")
+                     //document.querySelector(".selecionada").remove();
+                     fetch(`${masterPath.url}/admin/espacos/read?page=${param}`)
+                         .then(x => x.json())
+                         .then((resAnuncio) => {
+                             setAnucios(resAnuncio);
+                             setShowSpinner(false);
+                         })
+                         .catch(error => {
+                             console.error('Error fetching data:', error);
+                             setShowSpinner(false);
+                         });
+                 }
+ 
+             }).catch((error) => {
+                 setShowSpinner(false);
+                 console.error('Error:', error);
+                 Swal.fire({
+                     title: "Error!",
+                     text: "Não foi possível apagar o anúncio duplicado",
+                     icon: "error"
+                 });
+             }) */
     };
 
     function buscarAnuncioId(e) {
@@ -591,211 +621,283 @@ Para 100000 linhas: 312500ms
         });
     };
 
+    // Toggle all checkboxes using React state
+    function toggleAll(e) {
+        const checked = e.target.checked;
+        if (checked) {
+            const ids = filtered.map((item) => item.codAnuncio);
+            setSelectedIds(ids);
+        } else {
+            setSelectedIds([]);
+        }
+    }
+
+    // Return number of selected checkboxes (from state)
+    function countSelected() {
+        return selectedIds.length;
+    }
+
+    function handleCheckboxChange(id) {
+        setSelectedIds((prev) => {
+            if (prev.includes(id)) return prev.filter((i) => i !== id);
+            return [...prev, id];
+        });
+    }
+
+    function handleBulkDelete() {
+        const selected = countSelected();
+        if (!selected) {
+            Swal.fire({ icon: 'info', title: 'Nenhum selecionado', text: 'Selecione pelo menos um registro para esta ação.' });
+            return;
+        }
+
+        Swal.fire({
+            title: `Apagar ${selected} item(ns)?`,
+            text: 'Esta ação não pode ser desfeita.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Sim, apagar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                apagarMultiplosAnucios();
+            }
+        });
+    }
+
     const style = {
         position: "fixed",
         zIndex: "999"
     }
 
     return (
-        <div className="users app-espacos">
-            {/*    <header style={style} className='w-100'>
-                <Header />
-            </header> */}
-            <section>
-
-                {showSpinner && <Spinner progress={progressExport} />}
-                <h1 className="px-4">Espaços</h1>
-                <div className="container-fluid py-4 px-4">
-                    <div className="row margin-bottom-10">
-                        <div className="span6 col-md-6">
-                            <button type="button" className="btn custom-button mt-2" onClick={() => navigator('/admin/anuncio/cadastro')}>Adicionar</button>
-                            {/* <button type="button" className="btn custom-button mx-2">Duplicar</button> */}
-                            <Duplicate className="btn custom-button mx-2 mt-2" selectId={selectId} setAnuncios={setAnucios} />
-                            <button type="button" className="btn custom-button mt-2" onClick={exportExcell}>Exportar</button>
-                            <button type="button" className="btn custom-button mx-2 mt-2" onClick={() => navigator('/admin/anuncio/import')}>Importar</button>
-                            <button type="button" className="btn custom-button mt-2" onClick={selecionarTodos}>Selecionar Todos</button>
-                            <button type="button" className="btn btn-danger custom-button text-light mx-2 mt-2" onClick={apagarAnuncio}>Apagar</button>
-                            <button type="button" className="btn btn-danger custom-button text-light mt-2" onClick={apagarMultiplosAnucios}>Apagar Todos</button>
-                            {/* {(campoBusca.current != null && campoBusca.current.value != '') && */}
-                            <button type="button" className="btn btn-danger custom-button text-light mx-2 mt-2" onClick={apagarDup}>Apagar Duplicação</button>
-                            {/* } */}
-                            <button type="button" className="btn btn-info custom-button text-light mt-2" onClick={editRow}>Editar</button>
+        <div className="min-h-screen bg-background users app-espacos">
+            {/* Header */}
+            <div className="container mx-auto px-6 py-4">
+                <Card className="mb-4">
+                    <CardHeader className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl font-bold text-foreground tracking-tight">Espaços</h1>
+                            <p className="text-sm text-muted-foreground">Gerencie anúncios e espaços</p>
                         </div>
-                        <div className="span6 col-md-6 d-flex flex-column align-items-end">
-                            <div className='d-flex flex-column'>
-                                <div className="pull-right d-flex align-items-center gap-2">
 
-                                    <select name="" id="uf" className="border border-dark rounded" style={{ "width": "50px", "height": "30px" }} onChange={(e) => selecaoEstado(e)}>
-                                        <option value="todos">UF</option>
-                                        {uf.map(item => (
-                                            <option value={item.sigla_uf}>{item.sigla_uf}</option>
-                                        ))}
-                                    </select>
-                                    <select name="" id="caderno" className="border border-dark rounded" style={{ "width": "100px", "height": "30px" }} onChange={(e) => setCadernoSelecionado(e.target.value)} ref={campoCaderno}>
-                                        <option value="todos">CADERNO</option>
+                        <div className="flex items-center gap-2">
+                            <Button size="sm" onClick={() => navigator('/admin/anuncio/cadastro')}>
+                                <PlusIcon className="size-4" />
+                                <span>Adicionar</span>
+                            </Button>
+                            <Duplicate selectId={selectId} setAnuncios={setAnucios} />
+                            <Button size="sm" variant="outline" onClick={exportExcell}>
+                                <DownloadIcon className="size-4" />
+                                <span>Exportar</span>
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => navigator('/admin/anuncio/import')}>
+                                <UploadIcon className="size-4" />
+                                <span>Importar</span>
+                            </Button>
+                            <Button size="sm" variant="destructive" onClick={apagarDup}>
+                                <UploadIcon className="size-4" />
+                                <span>Apagar Duplicação</span>
+                            </Button>
 
-                                        {caderno.map(item => (
-                                            item.UF == estadoSelecionado &&
-                                            <option value={item.nomeCaderno}>{item.nomeCaderno}</option>
-                                        ))}
-                                    </select>
-                                    <input id="buscar" className="border border-dark rounded bg-light" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
+                        </div>
+                    </CardHeader>
+                </Card>
+            </div>
 
-                                    {/*   {mostrarInputBusca &&
-                                        <input id="buscar" type="text" placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF" onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''} ref={campoBusca} />
-                                    } */}
-                                    <button id="btnBuscar" className="border border-dark rounded bg-light" type="button" onClick={buscarAnuncioId} >
-                                        <i className="icon-search"></i>
-                                    </button>
+            <main className="container mx-auto px-6">
+                {/* Search / Actions */}
+                <div className="mb-6 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button size="sm">Ação em massa</Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start">
+                                <DropdownMenuItem onClick={handleBulkDelete} disabled={selectedIds.length === 0}>Apagar selecionados</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                    <div className="span6 col-md-6 d-flex flex-column">
+                        {/* Alinha o bloco de busca na direita do painel */}
+                        <div className='d-flex flex-column ml-auto w-full md:w-auto'>
+                            <div className="pull-right d-flex items-center gap-2 w-full md:w-auto justify-end">
+
+                                <select name="" id="uf" className="rounded-md border border-input bg-background px-2 py-1 text-sm" style={{ width: 64 }} onChange={(e) => selecaoEstado(e)}>
+                                    <option value="todos">UF</option>
+                                    {ufs.map(item => (
+                                        <option key={item.id_uf} value={item.sigla_uf}>{item.sigla_uf}</option>
+                                    ))}
+                                </select>
+
+                                <select name="" id="caderno" className="rounded-md border border-input bg-background px-2 py-1 text-sm" style={{ width: 120 }} onChange={(e) => setCadernoSelecionado(e.target.value)} ref={campoCaderno}>
+                                    <option value="todos">CADERNO</option>
+
+                                    {caderno.map(item => (
+                                        item.UF == estadoSelecionado &&
+                                        <option key={item.codCaderno} value={item.nomeCaderno}>{item.nomeCaderno}</option>
+                                    ))}
+                                </select>
+
+                                <div className="relative flex-1 max-w-md">
+                                    {/* <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"><Search className="h-4 w-4" /></span> */}
+                                    <input
+                                        id="buscar"
+                                        ref={campoBusca}
+                                        placeholder="Código, Nome, Caderno, CPF/CNPJ, ID ou UF"
+                                        className="pl-10 border-input rounded-md bg-transparent px-3 py-2 w-full text-sm"
+                                        onKeyDown={(e) => e.key == "Enter" ? buscarAnuncioId() : ''}
+                                    />
                                 </div>
-                                <div className='SearchOption'>
 
-                                    <label htmlFor="codigo" onClick={() => definirCriterioBusca('codAnuncio')}>
-                                        <input type='radio' name="option" id="codigo" onClick={() => definirCriterioBusca('codAnuncio')} />
-                                        Código
-                                    </label>
-                                    <label htmlFor="nome" onClick={() => definirCriterioBusca('descAnuncio')}>
-                                        <input type='radio' name="option" id="nome" onClick={() => definirCriterioBusca('descAnuncio')} />
-                                        Nome
-                                    </label>
-                                    <label htmlFor="ufCriterio" onClick={() => definirCriterioBusca('codUf')}>
-                                        <input type='radio' name="option" id="ufCriterio" onClick={() => definirCriterioBusca('codUf')} />
-                                        UF
-                                    </label>
-                                    <label htmlFor="cadernoCriterio" onClick={() => definirCriterioBusca('codCaderno')}>
-                                        <input type='radio' name="option" id="cadernoCriterio" onClick={() => definirCriterioBusca('codCaderno')} />
-                                        Caderno
-                                    </label>
-                                    <label htmlFor="cnpj" onClick={() => definirCriterioBusca('descCPFCNPJ')}>
-                                        <input type='radio' name="option" id="cnpj" onClick={() => definirCriterioBusca('descCPFCNPJ')} />
-                                        CNPJ
-                                    </label>
-                                    <label htmlFor="id" onClick={() => definirCriterioBusca('codDesconto')}>
-                                        <input type='radio' name="option" id="id" onClick={() => definirCriterioBusca('codDesconto')} />
-                                        ID
-                                    </label>
-                                    <label htmlFor="atividade" onClick={() => definirCriterioBusca('codAtividade')}>
-                                        <input type='radio' name="option" id="atividade" onClick={() => definirCriterioBusca('codAtividade')} />
-                                        Atividade
-                                    </label>
+                                <Button size="sm" onClick={buscarAnuncioId}>
+                                    <Search className="h-4 w-4" />
+                                </Button>
+                            </div>
+                            <div className='SearchOption mt-2'>
 
-                                </div>
+                                <label htmlFor="codigo" onClick={() => definirCriterioBusca('codAnuncio')}>
+                                    <input type='radio' name="option" id="codigo" onClick={() => definirCriterioBusca('codAnuncio')} />
+                                    Código
+                                </label>
+                                <label htmlFor="nome" onClick={() => definirCriterioBusca('descAnuncio')} className="ms-3">
+                                    <input type='radio' name="option" id="nome" onClick={() => definirCriterioBusca('descAnuncio')} />
+                                    Nome
+                                </label>
+                                <label htmlFor="ufCriterio" onClick={() => definirCriterioBusca('codUf')} className="ms-3">
+                                    <input type='radio' name="option" id="ufCriterio" onClick={() => definirCriterioBusca('codUf')} />
+                                    UF
+                                </label>
+                                <label htmlFor="cadernoCriterio" onClick={() => definirCriterioBusca('codCaderno')} className="ms-3">
+                                    <input type='radio' name="option" id="cadernoCriterio" onClick={() => definirCriterioBusca('codCaderno')} />
+                                    Caderno
+                                </label>
+                                <label htmlFor="cnpj" onClick={() => definirCriterioBusca('descCPFCNPJ')} className="ms-3">
+                                    <input type='radio' name="option" id="cnpj" onClick={() => definirCriterioBusca('descCPFCNPJ')} />
+                                    CNPJ
+                                </label>
+                                <label htmlFor="id" onClick={() => definirCriterioBusca('codDesconto')} className="ms-3">
+                                    <input type='radio' name="option" id="id" onClick={() => definirCriterioBusca('codDesconto')} />
+                                    ID
+                                </label>
+                                <label htmlFor="atividade" onClick={() => definirCriterioBusca('codAtividade')} className="ms-3">
+                                    <input type='radio' name="option" id="atividade" onClick={() => definirCriterioBusca('codAtividade')} />
+                                    Atividade
+                                </label>
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <article>
-                    <div className="container-fluid">
-                        <div className='row px-4 table-perfil'>
-                            <table className="table table-bordered table-striped table-hover" style={{ tableLayout: 'fixed', width: '100%' }}>
-                                <thead>
-                                    <tr>
-                                        <th style={{ width: '100px' }}>COD</th>
-                                        <th>COD_OR</th>
-                                        <th style={{ width: '58px' }}>DUPLI</th>
-                                        <th style={{ width: '120px' }}>CNPJ</th>
-                                        <th style={{ width: '200px' }}>NOME</th>
-                                        <th>TIPO</th>
-                                        <th>CADERNO</th>
-                                        <th>UF</th>
-                                        <th>STATUS</th>
-                                        <th>PAG.</th>
-                                        <th>DATA_PAG</th>
-                                        <th>VALOR</th>
-                                        <th>DESCONTO</th>
-                                        <th>CAD. PARA CONF.</th>
-                                        <th>CONFIRMADO</th>
-                                        <th>DATA_FIM</th>
-                                        <th>TEMP. VALE PR. TIPO</th>
-                                        <th>ID</th>
-                                        <th>USUARIO/DECISOR</th>
-                                        <th style={{ width: '120px' }}>LOGIN</th>
-                                        <th style={{ width: '65px' }}>SENHA</th>
-                                        <th>EMAIL</th>
-                                        <th>CONTATO</th>
-                                        <th>ATIVIDADE PRINCIPAL</th>
-                                        <th>LINK_PERFIL</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
+                {/* Table */}
+                <div className="rounded-lg border bg-card overflow-x-auto">
+                    <table className="min-w-full divide-y">
+                        <thead className="bg-muted/50">
+                            <tr>
+                                <th className="w-20 px-3 py-2 text-left">
+                                    <input
+                                        type="checkbox"
+                                        aria-label="Selecionar todos"
+                                        onChange={toggleAll}
+                                        checked={selectedIds.length > 0 && selectedIds.length === filtered.length}
+                                        className="mr-2 align-middle"
+                                    />COD
+                                </th>
+                                <th className="px-3 py-2 text-left">NOME</th>
+                                <th className="px-3 py-2 text-left">CNPJ</th>
+                                <th className="px-3 py-2 text-left">TIPO</th>
+                                <th className="px-3 py-2 text-left">CADERNO</th>
+                                <th className="px-3 py-2 text-left">UF</th>
+                                <th className="px-3 py-2 text-left">STATUS</th>
+                                <th className="px-3 py-2 text-left">PAG.</th>
+                                <th className="px-3 py-2 text-left">VALIDADE</th>
+                                <th className="px-3 py-2 text-right">AÇÕES</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-background divide-y">
+                            {filtered.map((item) => (
+                                <tr
+                                    key={item.codAnuncio}
+                                    id={item.codAnuncio}
+                                    className="cursor-pointer hover:bg-accent/10 transition-colors"
+                                    onClick={(e) => selecaoLinha(e)}
+                                >
+                                    <td className="px-3 py-2 font-mono text-xs">
+                                        <input
+                                            type="checkbox"
+                                            id={item.codAnuncio}
+                                            className="chkChildren mr-2"
+                                            checked={selectedIds.includes(item.codAnuncio)}
+                                            onClick={(e) => e.stopPropagation()}
+                                            onChange={() => handleCheckboxChange(item.codAnuncio)}
+                                        />{item.codAnuncio}
+                                    </td>
+                                    <td className="px-3 py-2 font-medium max-w-[200px] truncate">{item.descAnuncio}</td>
+                                    <td className="px-3 py-2 font-mono text-xs">{item.descCPFCNPJ}</td>
+                                    <td className="px-3 py-2">{definirTipoAnuncio(item.codTipoAnuncio)}</td>
+                                    <td className="px-3 py-2">{item.codCaderno}</td>
+                                    <td className="px-3 py-2">{item.codUf}</td>
+                                    <td className="px-3 py-2">
+                                        <span className={item.activate ? 'inline-flex items-center px-2 py-1 text-xs rounded bg-green-100 text-green-800' : 'inline-flex items-center px-2 py-1 text-xs rounded bg-gray-100 text-gray-700'}>
+                                            {item.activate ? 'Ativo' : 'Inativo'}
+                                        </span>
+                                    </td>
+                                    <td className="px-3 py-2">
+                                        {item.pagamentos && item.pagamentos.length > 0 ? (
+                                            <Badge variant="outline" className={item.pagamentos[0].status === "Aprovado" ? "border-success text-success" : "border-warning text-warning"}>
+                                                {item.pagamentos[0].status}
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="success" className={item.pagamentos[0]?.status === "Aprovado" ? "border-success text-success" : "border-info text-info"}>
+                                                {item.pagamentos.length > 0 ? item.pagamentos[0].status : "Isento"}
+                                            </Badge>
+                                            /*  <span className="text-muted-foreground text-xs">Isento</span> */
+                                        )}
+                                    </td>
+                                    <td className="px-3 py-2 text-xs">{dataExpiracao(item.dueDate)}</td>
+                                    <td className="px-3 py-2 text-right">
+                                        <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+                                            <Button size="sm" variant="ghost" onClick={() => { setDetailEspaco(item); setDetailOpen(true); }}>
+                                                <Eye className="h-4 w-4" />
+                                            </Button>
+                                            <Button size="sm" variant="ghost" onClick={() => { setSelectId(item.codAnuncio); navigator(`/admin/anuncio/editar?id=${item.codAnuncio}`); }}>
+                                                <Pencil className="h-4 w-4" />
+                                            </Button>
+                                            <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => { setSelectId(item.codAnuncio); apagarAnuncio(); }}>
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
 
-                                        anuncios != '' && anuncios.message.anuncios.map((item) => {
-                                            return (
-                                                <tr key={item.codAnuncio} id={item.codAnuncio} onClick={selecaoLinha}>
-                                                    <td className=''>
-                                                        <input type="checkbox" id={item.codAnuncio} className="chkChildren" />
-                                                        <span className='mx-2'>{item.codAnuncio}</span>
-                                                    </td>
-                                                    <td ref={codOriginFather}>{item.codOrigem}</td>
-                                                    <td>{item.codDuplicado}</td>
-                                                    <td>{item.descCPFCNPJ}</td>
-                                                    <td>{item.descAnuncio}</td>
-                                                    <td>{definirTipoAnuncio(item.codTipoAnuncio)}</td>
-                                                    <td>{item.codCaderno}</td>
-                                                    <td>{item.codUf}</td>
-                                                    {/*  <td>{item.activate ? "Ativado" : "Desativado"}</td> */}
-                                                    <td><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"} /></td>{/* status */}
-                                                    <td>{item.pagamentos.length > 0 ? item.pagamentos[0].status : "Isento"}</td>
-                                                    <td>{item.pagamentos.length > 0 ? formatData(item.pagamentos[0].data) : "Isento"}</td>
-                                                    <td>{item.pagamentos.length > 0 ? item.pagamentos[0].valor : "Isento"}</td>
+                            {filtered.length === 0 && (
+                                <tr>
+                                    <td colSpan={10} className="text-center py-12 text-muted-foreground">Nenhum espaço encontrado.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
-                                                    <td>R$ {item.descPromocao},00</td>
-                                                    <td>{formatData(item.createdAt)}</td>
-                                                    <td>{item.pagamentos.length > 0 ? formatData(item.pagamentos[0].data) : "-"}</td>
-                                                    <td>{dataExpiracao(item.dueDate)}</td>
-                                                    <td>{item.periodo}</td>
-                                                    <td>{item.codDesconto}</td>
-                                                    <td>{item.codUsuario}</td>
-                                                    <td>{item.loginUser}</td>
-                                                    <td>{item.loginPass}</td>
-                                                    <td>{item.loginEmail}</td>
-                                                    <td>{item.loginContato}</td>
-                                                    <td>{item.codAtividade}</td>
-                                                    <td>
-                                                        <a
-                                                            href={`/perfil/${item.codAnuncio}`}
-                                                            className='text-decoration-none'
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            {`${masterPath.domain}/perfil/${item.codAnuncio}`}
-                                                            {/*   <i class="fa fa-eye"></i>
-                                                            Ver */}
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
-                                    }
-                                </tbody>
-                                {/*       <tfooter>
-                                    <tr style={{border: 'none'}}>
-                                        <td style={{border: 'none'}} className='text-center'>
-                                            <button>Selecionar</button>
-                                        </td>
-                                    </tr>
-                                </tfooter> */}
-                            </table>
-                        </div>
+                {/* Pagination */}
+                {anuncios && anuncios.message && (
+                    <div className="mt-4">
+                        <Pagination totalPages={anuncios.message.totalPaginas} paginaAtual={anuncios.message.paginaAtual} totalItem={anuncios.message.totalItem} table={"espacos"} />
                     </div>
-                    {/*          {busca &&
-                        <Pagination totalPages={anuncios.message.totalPaginas} paginaAtual={anuncios.message.paginaAtual} totalItem={anuncios.message.totalItem} table={"espacos"} />
-                    } */}
-
-
-                    {anuncios != '' &&
-                        <Pagination totalPages={anuncios.message.totalPaginas} paginaAtual={anuncios.message.paginaAtual} totalItem={anuncios.message.totalItem} table={"espacos"} />
-                    }
-
-
-                </article>
-                <p className='w-100 text-center'>© MINISITIO - {version.version}</p>
-            </section>
-            {/*  <footer className='w-100' style={{ position: "absolute", bottom: "0px" }}>
-                <p className='w-100 text-center'>© MINISITIO</p>
-            </footer> */}
+                )}
+                {/* Detail modal for selected espaco */}
+                <EspacoDetailModal
+                    espaco={detailEspaco}
+                    open={detailOpen}
+                    onOpenChange={(open) => {
+                        setDetailOpen(open);
+                        if (!open) setDetailEspaco(null);
+                    }}
+                />
+            </main>
         </div>
     );
 }

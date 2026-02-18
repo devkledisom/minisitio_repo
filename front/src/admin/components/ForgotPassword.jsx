@@ -15,6 +15,8 @@ import {
     AlertTitle
 } from "../../components/ui/alert.tsx"
 
+import '../../styles/globals.css'
+
 
 function ForgotPassword() {
     const [message, setMessage] = useState(false);
@@ -78,7 +80,7 @@ function ForgotPassword() {
             </header>
 
             {/* Yellow Background Section */}
-            <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-16">
+            <div className="bg-yellow-400 bg-gradient-to-r from-yellow-400 to-yellow-500 py-16">
                 <div className="max-w-4xl mx-auto px-4">
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-bold text-gray-800 mb-2">Recuperar Senha</h1>

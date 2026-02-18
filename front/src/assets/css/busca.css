@@ -30,6 +30,27 @@
   /* height: 130px; */
 }
 
+/* Limit the inner container inside busca to a centered max-width (override Bootstrap container for this area) */
+.busca-caderno .container {
+  width: 100%;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 1140px;
+}
+
+@media (max-width: 1200px) {
+  .busca-caderno .container { max-width: 980px; }
+}
+
+@media (max-width: 992px) {
+  .busca-caderno .container { max-width: 720px; }
+}
+
+@media (max-width: 768px) {
+  .busca-caderno .container { max-width: 540px; padding: 8px 12px; }
+}
+
 @media (max-width: 768px) {
   .busca-caderno .card {
     height: 80px;

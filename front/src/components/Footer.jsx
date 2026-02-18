@@ -6,7 +6,7 @@ import { version } from '../config/config';
 function Footer(props) {
     return (
         <div className="Footer">
-            <div className='container-fluid h-60 d-flex align-items-center w-100'>
+            <div className='container-fluid py-3 d-flex align-items-center w-100'>
                 <div className="row d-flex w-100 justify-content-between">
                     <div className="col-md-4 col-sm-4 col-xs-5 d-flex justify-content-center align-items-center">
                         {/* <ul className="social-icons d-flex"> */}
@@ -16,7 +16,7 @@ function Footer(props) {
                         {/* </ul> */}
                     </div>
                     <div className='col-md-6'>
-                        <h6 className='title-footer h-100 d-flex justify-content-center align-items-center'>© Copyright - My Card City - 2015-2025 ({version.version})</h6>
+                        <h6 className='title-footer d-flex justify-content-center align-items-center'>© Copyright - My Card City - 2015-2025 ({version.version})</h6>
                     </div>
 
                 </div>

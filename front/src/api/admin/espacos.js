@@ -19,7 +19,8 @@ async function deleteDuplicacaoEspaco(codOrigem) {
     })
 
     if (!deleteFetch.ok) {
-        throw new Error('Erro ao deletar duplicações do espaço.');
+        window.location.href = '/login';
+        //throw new Error('Erro ao deletar duplicações do espaço.');
     }
 
     const result = await deleteFetch.json();

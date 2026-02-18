@@ -4421,56 +4421,7 @@ module.exports = {
         console.log(resultAnuncio.length)
         console.timeEnd('exp');
 
-        /*         await Promise.all(
-                    resultAnuncio.map(async (anun) => {
-                        try {
-                            //const user = usuarios.find(teste => teste.descCPFCNPJ == anun.dataValues.descCPFCNPJ);
-                            const user = await Usuarios.findAll({
-                                where: {
-                                    descCPFCNPJ: anun.dataValues.descCPFCNPJ
-                                }
-                            });
-        
-                            function dateformat(data) {
-                                const date = new Date(data);
-                                const formattedDate = date.toISOString().split('T')[0];
-        
-                                return formattedDate;
-                            };
-        
-        
-                            if (user) {
-                                // Cria um novo objeto com as informações do usuário inseridas após 'codDesconto'
-                                const reorderedData = {};
-                                for (const key in anun.dataValues) {
-                                    reorderedData[key] = anun.dataValues[key];
-                                    if (key === 'codDesconto') {
-                                        // Adiciona as propriedades do usuário após 'codDesconto'
-                                        reorderedData.codUsuario = user.descNome;
-                                        reorderedData.loginUser = user.descCPFCNPJ;
-                                        reorderedData.loginPass = user.senha;
-                                        reorderedData.loginEmail = user.descEmail;
-                                        reorderedData.loginContato = user.descTelefone;
-                                        reorderedData.link = `${masterPath.domain}/local/${encodeURIComponent(
-                                            anun.dataValues.descAnuncio
-                                        )}?id=${anun.dataValues.codAnuncio}`;
-                                        reorderedData.createdAt = dateformat(anun.dataValues.createdAt);
-                                        reorderedData.dueDate = dateformat(anun.dataValues.dueDate);
-                                    }
-                                }
-                                anun.dataValues = reorderedData;
-                            }
-        
-                            // Traduzindo valores específicos
-                            anun.dataValues.codTipoAnuncio =
-                                anun.dataValues.codTipoAnuncio == 3 ? "Completo" : anun.dataValues.codTipoAnuncio;
-                            anun.dataValues.activate = anun.dataValues.activate == 1 ? "Ativo" : "Inativo";
-                        } catch (error) {
-                            console.error(`Erro ao processar anúncio ${anun.dataValues.codAnuncio}:`, error);
-                        }
-                    })
-                );
-         */
+     
 
 
 
