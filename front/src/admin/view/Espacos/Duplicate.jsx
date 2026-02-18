@@ -38,8 +38,8 @@ const Duplicate = (props) => {
 
     return (
         <>
-       <Button size="sm" variant="outline" className={props.className} onClick={openModal}><Copy className="h-4 w-4 mr-1" />Duplicar</Button>
-         {/*  <button className={props.className} onClick={openModal}>Duplicar</button> */}
+      {/*  <Button size="sm" variant="outline" className={props.className} onClick={openModal}><Copy className="h-4 w-4 mr-1" />Duplicar</Button> */}
+          <button className={props.className} onClick={openModal}>Duplicar</button> 
           <Modal isOpen={isModalOpen} onClose={closeModal}>
             <DuplicateForm option={option} setOption={setOption} onClose={closeModal} selectId={props.selectId} setAnuncios={props.setAnuncios} />
           </Modal>
