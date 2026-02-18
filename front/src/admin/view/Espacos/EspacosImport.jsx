@@ -297,14 +297,14 @@ const Espacos = () => {
                 {showSpinner && <Spinner />}
                 <Card className="mb-4">
                     <CardHeader className="flex items-center justify-between">
-                               <div>
+                        <div>
                             <h1 className="text-2xl font-bold text-foreground tracking-tight">Importar Perfil</h1>
                             <p className="text-sm text-muted-foreground">Faça importação de perfis/espaços</p>
                         </div>
                     </CardHeader>
                 </Card>
 
-                
+
                 {/*  action={`${masterPath.url}/admin/anuncio/import`} method="post" enctype="multipart/form-data" */}
                 <form onSubmit={handleFormSubmit} className='px-4' style={{ "marginTop": "20px", }}>
                     Importar Espaços <br />
