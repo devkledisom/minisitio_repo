@@ -4358,10 +4358,11 @@ module.exports = {
                 u.descNome, u.descCPFCNPJ, u.senha, u.descEmail, u.descTelefone  -- Pegando informações do usuário
             FROM anuncio AS a 
             LEFT JOIN usuario AS u ON a.descCPFCNPJ = u.descCPFCNPJ
-            WHERE a.codDesconto = :itemSearch AND a.codCaderno = :caderno
+            WHERE a.codDesconto = :itemSearch
             LIMIT 50000;
             `
             definirPesquisa = pesquisaValue;
+             //AND a.codCaderno = :caderno
         }
 
 
