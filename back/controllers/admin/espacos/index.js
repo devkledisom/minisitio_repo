@@ -281,6 +281,7 @@ module.exports = {
                     'codCaderno',
                     'codUf',
                     'activate',
+                    'moderacao',
                     'descPromocao',
                     'createdAt',
                     'dueDate',
@@ -2154,6 +2155,7 @@ module.exports = {
                     'codCaderno',
                     'codUf',
                     'activate',
+                    'moderacao',
                     'descPromocao',
                     'createdAt',
                     'dueDate',
@@ -2260,6 +2262,7 @@ module.exports = {
                     'codCaderno',
                     'codUf',
                     'activate',
+                    'moderacao',
                     'descPromocao',
                     'createdAt',
                     'dueDate',
@@ -2351,6 +2354,7 @@ module.exports = {
                     'codCaderno',
                     'codUf',
                     'activate',
+                    'moderacao',
                     'descPromocao',
                     'createdAt',
                     'dueDate',
@@ -2434,6 +2438,7 @@ module.exports = {
                     'codCaderno',
                     'codUf',
                     'activate',
+                    'moderacao',
                     'descPromocao',
                     'createdAt',
                     'dueDate',
@@ -2543,6 +2548,7 @@ module.exports = {
                     'codCaderno',
                     'codUf',
                     'activate',
+                    'moderacao',
                     'descPromocao',
                     'createdAt',
                     'dueDate',
@@ -2629,6 +2635,7 @@ module.exports = {
                     'codCaderno',
                     'codUf',
                     'activate',
+                    'moderacao',
                     'descPromocao',
                     'createdAt',
                     'dueDate',
@@ -2712,6 +2719,7 @@ module.exports = {
                     'codCaderno',
                     'codUf',
                     'activate',
+                    'moderacao',
                     'descPromocao',
                     'createdAt',
                     'dueDate',
@@ -3171,6 +3179,7 @@ module.exports = {
             "descPatrocinadorLink": 0,
             "qntVisualizacoes": 0,
             "activate": 1,
+            "moderacao": "autorizar",
             //"dtCadastro": dataNow(),
             "dtCadastro2": dtCadastro2,
             "dtAlteracao": Date.now(),
@@ -3188,7 +3197,6 @@ module.exports = {
         };
 
         function registarTags(id) {
-            console.log("chamando tags")
             JSON.parse(tags).map(async item => {
                 console.log(item)
                 const createTags = await Tags.create({
@@ -3454,7 +3462,7 @@ module.exports = {
 
         if (promocaoExistente) {
             /* try { */
-                  const atualizarPromocao = await Promocao.update({
+            const atualizarPromocao = await Promocao.update({
                 data_validade: promocaoData || "",
                 banner: logoPromocao || ""
             }, {
@@ -3462,10 +3470,10 @@ module.exports = {
                     codAnuncio: idAnuncio
                 }
             });
-          /*   } catch (err) {
-                console.log("erro ao atualizar promoção", err)
-            } */
-          
+            /*   } catch (err) {
+                  console.log("erro ao atualizar promoção", err)
+              } */
+
         }
 
         if (!promocaoExistente) {
@@ -3608,7 +3616,7 @@ module.exports = {
 
             res.json({ success: true, message: atualizarPerfil });
         } catch (err) {
-            console.log(err.original)
+            console.log(err)
             res.json({ success: false, message: err })
         }
 
@@ -3824,6 +3832,33 @@ module.exports = {
             res.json({ success: false, message: err })
         }
 
+    },
+    atualizarModeracao: async (req, res) => {
+        const codAnuncio = req.params.id;
+
+        if (!codAnuncio) {
+            return res.status(400).json({ success: false, message: "É necessário informar o código do anúncio." });
+        }
+
+        try {
+            const [updated] = await Anuncio.update({
+                moderacao: 'autorizado',
+                dtAlteracao: new Date()
+            }, {
+                where: {
+                    codAnuncio: codAnuncio
+                }
+            });
+
+            if (!updated) {
+                return res.status(404).json({ success: false, message: "Anúncio não encontrado." });
+            }
+
+            res.json({ success: true, message: "Perfil autorizado com sucesso." });
+        } catch (err) {
+            console.error('Erro ao atualizar moderação:', err);
+            res.status(500).json({ success: false, message: "Erro interno ao autorizar o perfil." });
+        }
     },
     quantidadeUf: async (req, res) => {
 
@@ -4362,7 +4397,7 @@ module.exports = {
             LIMIT 50000;
             `
             definirPesquisa = pesquisaValue;
-             //AND a.codCaderno = :caderno
+            //AND a.codCaderno = :caderno
         }
 
 
@@ -4422,7 +4457,7 @@ module.exports = {
         console.log(resultAnuncio.length)
         console.timeEnd('exp');
 
-     
+
 
 
 

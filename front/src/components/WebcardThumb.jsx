@@ -161,23 +161,23 @@ function WebcardThumb(props) {
 
                     {!thumb(imgDefault) &&
                         <div className="conteudo semImagem">
-                            <h2 className="nome-empresa text-start">{props.data.descAnuncio}</h2>
+                            <h2 className="nome-empresa text-start mb-1 px-2">{props.data.descAnuncio}</h2>
                             <h4
-                                className="slogan webcard text-start"
+                                className="slogan webcard text-start mb-3 px-2"
                                 style={{ display: "block" }}
                             >
                                 Frase/slogan da empresa
                             </h4>
-                            <p className="text-start">
+                            <p className="text-start mb-3 px-4">
                                 <i className="fa fa-map-marker"></i>{" "}
                                 <span className="sim-end">{props.data.descEndereco !== "atualizar" ? props.data.descEndereco : "Endereço da empresa"}</span>
                             </p>
-                            <p className="text-start">
+                            <p className="text-start mb-3 px-4">
                                 <i className="fa fa-phone"></i>{" "}
                                 <span className="sim-tel">{props.data.descTelefone !== "atualizar" ? props.data.descTelefone : "(xx) xxxx-xxxx"}</span>
                             </p>
                             <p
-                                className="webcard text-start"
+                                className="webcard text-start mb-3 px-4"
                                 style={{ display: "block" }}
                             >
                                 <i className="fa fa-phone"></i>{" "}

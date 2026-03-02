@@ -469,14 +469,23 @@ async function gerarCSVGeral(model, idCampanha) {
     const fields = [
         //{ label: "Código do Anúncio", value: "codAnuncio" },
         {
+            label: "url_campanha",
+            // Usamos ?. para garantir que se row.tokenPromocao for null, não quebre o código
+            value: (row) => row?.tokenPromocao ? `${masterPath.domain}/promocao/${row.tokenPromocao}` : ""
+        },
+        {
             label: "url_perfil",
-            value: (row) => `${masterPath.domain}/promocao/${row.tokenPromocao}`
+            // Se promo ou descAnuncio não existirem, ele retorna uma string vazia em vez de erro
+            value: (row) => `${masterPath.domain}/perfil/${row?.codAnuncio}`
+
         },
         //{ label: "Data Limite", value: "dataLimitePromocao" },
         { label: "Nome Anúncio", value: "promo.descAnuncio" },
         { label: "CNPJ", value: "promo.descCPFCNPJ" },
         { label: "Telefone", value: "promo.descTelefone" },
         { label: "Email de Retorno", value: "promo.descEmailRetorno" },
+        { label: "UF", value: "promo.codUf" },
+        { label: "Caderno", value: "promo.codCaderno" },
     ];
 
     const json2csvParser = new Parser({ fields, header: true });
@@ -491,7 +500,7 @@ async function gerarCSVGeral(model, idCampanha) {
                     {
                         model: Anuncio,
                         as: "promo",
-                        attributes: ["descAnuncio", "descCPFCNPJ", "descTelefone", "descEmailRetorno"]
+                        attributes: ["descAnuncio", "descCPFCNPJ", "descTelefone", "descEmailRetorno", "codUf", "codCaderno"]
                     }
                 ],
                 where: { campanhaId: idCampanha },
@@ -500,6 +509,7 @@ async function gerarCSVGeral(model, idCampanha) {
                 limit: BATCH_SIZE,
                 offset: offset,
             });
+
 
             if (registros.length === 0) {
                 console.log("Exportação concluída!");

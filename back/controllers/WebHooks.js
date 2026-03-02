@@ -122,7 +122,8 @@ module.exports = {
 
         const perfilMinisitio = await Anuncio.findOne({ where: { codAnuncio: codigoReferenciaMp }, raw: true, attributes: ['codAnuncio', 'descAnuncio', 'codDesconto'] });
 
-        const valorDesconto = perfilMinisitio.codDesconto ? await Desconto.findOne({ where: { hash: perfilMinisitio.codDesconto }, raw: true, attributes: ['hash', 'desconto'] }) : null;
+        //const valorDesconto = perfilMinisitio.codDesconto ? await Desconto.findOne({ where: { hash: perfilMinisitio.codDesconto }, raw: true, attributes: ['hash', 'desconto'] }) : null;
+        const valorDesconto = perfilMinisitio.codDesconto ? await Desconto.findOne({ where: { hash: codDesconto }, raw: true, attributes: ['hash', 'desconto'] }) : null;
 
         const valorBase = await Globals.findOne({
             where: { keyValue: "precoBase" },
@@ -131,10 +132,10 @@ module.exports = {
 
 
 
-        let option1 = perfilMinisitio.codDesconto ? ((valorBase.value / 12) - valorDesconto.desconto) * 12 : Number(valorBase.value);
+        //let option1 = perfilMinisitio.codDesconto ? ((valorBase.value / 12) - valorDesconto.desconto) * 12 : Number(valorBase.value);
+        let option1 = codDesconto ? ((valorBase.value / 12) - valorDesconto.desconto) * 12 : Number(valorBase.value);
 
         //console.log("valorDesconto", valorDesconto, option1);
-
 
         const body = {
             "notification_url": "https://minisitio.com.br/api/webhook",
@@ -151,22 +152,25 @@ module.exports = {
                 }
             ],
             "back_urls": {
-                "success": `${config.domain}/perfil/${codigoReferenciaMp}`,
-                "failure": `${config.domain}/perfil/${codigoReferenciaMp}`,
-                "pending": `${config.domain}/perfil/${codigoReferenciaMp}`
+                "success": `https://minisitio.com.br/perfil/${codigoReferenciaMp}`,
+                "failure": `https://minisitio.com.br/perfil/${codigoReferenciaMp}`,
+                "pending": `https://minisitio.com.br/perfil/${codigoReferenciaMp}`
             }
         };
 
+
+        
         /*    console.log(body, valorDesconto, codDesconto)
            return; */
 
+
         preference.create({ body })
             .then((data) => {
-                console.log(data);
+                //console.log(data);
                 res.status(200).json({ success: true, url: data.init_point });
             })
             .catch((error) => {
-                console.error(error);
+                //console.error(error);
                 res.status(500).json({ success: false, error: 'Erro ao criar preferência' });
             });
 

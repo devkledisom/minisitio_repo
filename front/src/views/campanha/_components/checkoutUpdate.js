@@ -33,7 +33,7 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
                     fetch(`${masterPath.url}/pagamento/create/${minisitio.codAnuncio}/${codDescontoInserido}`)
                         .then((x) => x.json())
                         .then((response) => {
-                            
+                            //console.log(response)
                             window.location.href = response.url;
 
                         })
@@ -71,6 +71,8 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
 
         minisitio.dtCadastro2 = Date.now(); // Data de cadastro fixa para homologação
         minisitio.dueDate = moment(Date.now()).add(1, 'year').toISOString(); // Data de vencimento fixa para homologação
+        minisitio.qntVisualizacoes = 0;
+        minisitio.descEndereco = "n"
 
         const config = {
             method: "PUT",
@@ -86,7 +88,7 @@ export function checkoutUpdate(radioCheck, descontoAtivado, minisitio, codDescon
             .then((x) => x.json())
             .then((res) => {
                 if (res.success) {
-
+console.log("ver", res)
                     //setShowSpinner(false);
                     Swal.fire({
                         title: 'Parabéns!',

@@ -11,6 +11,7 @@ import '../../assets/css/espacos/espacos.css';
 
 //LIBS
 import Swal from 'sweetalert2';
+import { OctagonAlert, CircleCheckBig } from 'lucide-react';
 
 
 //componente
@@ -58,42 +59,30 @@ const Espacos = () => {
 
     const tokenAuth = sessionStorage.getItem('userTokenAccess');
 
+    const carregarAnuncios = async () => {
+        try {
+            let resAnuncio;
+            const searchValue = campoBusca.current?.value;
+
+            if (searchValue && searchValue !== '') {
+                resAnuncio = await fetch(`${masterPath.url}/admin/anuncio/buscar?search=${searchValue}&page=${param}&require=${searchOptioncheck}&uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`)
+                    .then((x) => x.json());
+            } else {
+                resAnuncio = await fetch(`${masterPath.url}/admin/espacos/read?page=${param}`)
+                    .then((x) => x.json());
+            }
+
+            setAnucios(resAnuncio);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setShowSpinner(false);
+        }
+    };
+
     useEffect(() => {
         setShowSpinner(true);
-
-
-        if (campoBusca.current.value != '') {
-            Promise.all([
-                fetch(`${masterPath.url}/admin/anuncio/buscar?search=${campoBusca.current.value}&page=${param}&require=${searchOptioncheck}&uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`).then((x) => x.json()),
-                //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
-            ])
-                .then(([resAnuncio]) => {
-                    //console.log(resAnuncio)
-                    setAnucios(resAnuncio);
-                    setShowSpinner(false);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    setShowSpinner(false);
-                });
-        } else {
-            Promise.all([
-                fetch(`${masterPath.url}/admin/espacos/read?page=${param}`).then((x) => x.json()),
-                //fetch(`${masterPath.url}/admin/usuario/buscar/all`).then((x) => x.json())
-            ])
-                .then(([resAnuncio]) => {
-                    //console.log(resAnuncio.message.anuncios)
-                    setAnucios(resAnuncio);
-                    setShowSpinner(false);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    setShowSpinner(false);
-                });
-        }
-
-
-
+        carregarAnuncios();
     }, [param]);
 
     useEffect(() => {
@@ -211,95 +200,95 @@ const Espacos = () => {
         //let codigoDeOrigem = codOriginFather.current.innerText;
 
         //if (!codigoDeOrigem) {
-            Swal.fire({
-                title: "Apagar Duplicação",
-                text: "Informe o código de origem para apagar as duplicações:",
-                input: "number",
-                inputAttributes: {
-                    autocapitalize: "off"
-                },
-                showCancelButton: true,
-                confirmButtonText: "Apagar",
-                confirmButtonColor: "red",
-                showLoaderOnConfirm: true,
+        Swal.fire({
+            title: "Apagar Duplicação",
+            text: "Informe o código de origem para apagar as duplicações:",
+            input: "number",
+            inputAttributes: {
+                autocapitalize: "off"
+            },
+            showCancelButton: true,
+            confirmButtonText: "Apagar",
+            confirmButtonColor: "red",
+            showLoaderOnConfirm: true,
 
 
-                // 2. Aplica suas próprias classes CSS
-                customClass: {
-                    confirmButton: 'espaco-botao-delete',
-                    cancelButton: 'meu-botao-cancelar'
-                },
+            // 2. Aplica suas próprias classes CSS
+            customClass: {
+                confirmButton: 'espaco-botao-delete',
+                cancelButton: 'meu-botao-cancelar'
+            },
 
-                preConfirm: async (login) => {
-                    if (!login) {
-                        Swal.showValidationMessage("Por favor, informe o código de origem.");
-                        return false;
-                    }
-
-                    const response = await deleteDuplicacaoEspaco(login);
-
-                    if (response.success) {
-                        Swal.fire({
-                            title: "Sucesso!",
-                            text: "Duplicação apagada com sucesso.",
-                            icon: "success"
-                        });
-
-                        await fetchEspacos(param).then((resEspacos) => {
-                            if (resEspacos.success) {
-                                setAnucios(resEspacos);
-                                setShowSpinner(false);
-                            }
-                        });
-                    }
-
-                    if (!response.success) {
-                        Swal.showValidationMessage(response.message || "Não foi possível apagar a duplicação.");
-                        return false;
-                    }
-
-
+            preConfirm: async (login) => {
+                if (!login) {
+                    Swal.showValidationMessage("Por favor, informe o código de origem.");
+                    return false;
                 }
-            });
 
-            return;
+                const response = await deleteDuplicacaoEspaco(login);
+
+                if (response.success) {
+                    Swal.fire({
+                        title: "Sucesso!",
+                        text: "Duplicação apagada com sucesso.",
+                        icon: "success"
+                    });
+
+                    await fetchEspacos(param).then((resEspacos) => {
+                        if (resEspacos.success) {
+                            setAnucios(resEspacos);
+                            setShowSpinner(false);
+                        }
+                    });
+                }
+
+                if (!response.success) {
+                    Swal.showValidationMessage(response.message || "Não foi possível apagar a duplicação.");
+                    return false;
+                }
+
+
+            }
+        });
+
+        return;
         //}
 
 
-       /*  fetch(`${masterPath.url}/admin/anuncio/delete/${codigoDeOrigem}?type=dup`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
-            },
-        })
-            .then((x) => x.json())
-            .then((res) => {
-                if (res.success) {
-                    setShowSpinner(false);
-                    //alert("anuncio apagado")
-                    //document.querySelector(".selecionada").remove();
-                    fetch(`${masterPath.url}/admin/espacos/read?page=${param}`)
-                        .then(x => x.json())
-                        .then((resAnuncio) => {
-                            setAnucios(resAnuncio);
-                            setShowSpinner(false);
-                        })
-                        .catch(error => {
-                            console.error('Error fetching data:', error);
-                            setShowSpinner(false);
-                        });
-                }
-
-            }).catch((error) => {
-                setShowSpinner(false);
-                console.error('Error:', error);
-                Swal.fire({
-                    title: "Error!",
-                    text: "Não foi possível apagar o anúncio duplicado",
-                    icon: "error"
-                });
-            }) */
+        /*  fetch(`${masterPath.url}/admin/anuncio/delete/${codigoDeOrigem}?type=dup`, {
+             method: "DELETE",
+             headers: {
+                 "Content-Type": "application/json",
+                 "authorization": 'Bearer ' + sessionStorage.getItem('userTokenAccess')
+             },
+         })
+             .then((x) => x.json())
+             .then((res) => {
+                 if (res.success) {
+                     setShowSpinner(false);
+                     //alert("anuncio apagado")
+                     //document.querySelector(".selecionada").remove();
+                     fetch(`${masterPath.url}/admin/espacos/read?page=${param}`)
+                         .then(x => x.json())
+                         .then((resAnuncio) => {
+                             setAnucios(resAnuncio);
+                             setShowSpinner(false);
+                         })
+                         .catch(error => {
+                             console.error('Error fetching data:', error);
+                             setShowSpinner(false);
+                         });
+                 }
+ 
+             }).catch((error) => {
+                 setShowSpinner(false);
+                 console.error('Error:', error);
+                 Swal.fire({
+                     title: "Error!",
+                     text: "Não foi possível apagar o anúncio duplicado",
+                     icon: "error"
+                 });
+             }) */
     };
 
     function buscarAnuncioId(e) {
@@ -591,6 +580,46 @@ Para 100000 linhas: 312500ms
         });
     };
 
+    function moderacao(codAnuncio) {
+        Swal.fire({
+            title: 'Confirmar autorização',
+            text: 'Deseja realmente autorizar esse perfil?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sim, autorizar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (!result.isConfirmed) {
+                return;
+            }
+
+            setShowSpinner(true);
+
+            try {
+                const response = await fetch(`${masterPath.url}/admin/anuncio/moderacao/${codAnuncio}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': `Bearer ${tokenAuth}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Não foi possível autorizar o perfil.');
+                }
+
+                await carregarAnuncios();
+                Swal.fire('Perfil autorizado', 'O perfil foi marcado como autorizado.', 'success');
+            } catch (error) {
+                console.error('Erro ao autorizar perfil:', error);
+                setShowSpinner(false);
+                Swal.fire('Erro', 'Não foi possível autorizar o perfil, tente novamente.', 'error');
+            }
+        });
+    }
+
     const style = {
         position: "fixed",
         zIndex: "999"
@@ -699,7 +728,7 @@ Para 100000 linhas: 312500ms
                                         <th>TIPO</th>
                                         <th>CADERNO</th>
                                         <th>UF</th>
-                                        <th>STATUS</th>
+                                        <th style={{ width: '111px' }}>STATUS</th>
                                         <th>PAG.</th>
                                         <th>DATA_PAG</th>
                                         <th>VALOR</th>
@@ -736,7 +765,19 @@ Para 100000 linhas: 312500ms
                                                     <td>{item.codCaderno}</td>
                                                     <td>{item.codUf}</td>
                                                     {/*  <td>{item.activate ? "Ativado" : "Desativado"}</td> */}
-                                                    <td><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"} /></td>{/* status */}
+                                                    <td className='d-flex gap-1'><BtnActivate data={item.activate} idd={item.codAnuncio} modulo={"anuncio"} />
+                                                        {item.moderacao === "autorizar" && (
+                                                            <span title={`Moderação: aguardando`}>
+                                                                <OctagonAlert className='text-danger' onClick={() => moderacao(item.codAnuncio)} />
+                                                            </span>
+                                                        )}
+                                                        {(item.moderacao === "autorizado" || item.moderacao === "autorizarado") && (
+                                                            <span title={`Moderação: ${item.moderacao}`}>
+                                                                <CircleCheckBig className='text-success' />
+                                                            </span>
+                                                        )}
+
+                                                    </td>{/* status */}
                                                     <td>{item.pagamentos.length > 0 ? item.pagamentos[0].status : "Isento"}</td>
                                                     <td>{item.pagamentos.length > 0 ? formatData(item.pagamentos[0].data) : "Isento"}</td>
                                                     <td>{item.pagamentos.length > 0 ? item.pagamentos[0].valor : "Isento"}</td>
