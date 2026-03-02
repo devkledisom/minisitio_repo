@@ -149,7 +149,7 @@ function FullWebCard(props) {
                                     Certificado Profissional
                                 </h2>
                                 <div className='container'>
-                                    <div className="row">
+                                    <div className="row" style={{height: "80px"}}>
                                         <div className='col-md-4'>
                                             {(resultLocal.certificado_logo != null && resultLocal.certificado_logo != "") &&
                                                 <img src={`${masterPath.url}/files/logoCertificado/${resultLocal.certificado_logo}`} className='rounded' height="50" style={{ height: "64px" }} alt="logo" />

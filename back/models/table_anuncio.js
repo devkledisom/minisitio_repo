@@ -412,6 +412,11 @@ const Anuncio = database.define('anuncio', {
         }
     },
 
+    moderacao: {
+        type: Sequelize.TEXT,
+        allowNull: true
+    },
+
     dtCadastro: {
         type: Sequelize.DATE,
         allowNull: true,
@@ -635,15 +640,15 @@ Anuncio.beforeUpdate((anuncio, options) => {
 Pagamento.belongsTo(Anuncio, { foreignKey: "cliente", targetKey: "descCPFCNPJ", as: "anuncio" }); */
 
 Anuncio.hasMany(Pagamento, {
-  foreignKey: "ref_mp_codAnuncio", // FK está em Pagamento
-  sourceKey: "codAnuncio",         // PK está em Anuncio
-  as: "pagamentos"
+    foreignKey: "ref_mp_codAnuncio", // FK está em Pagamento
+    sourceKey: "codAnuncio",         // PK está em Anuncio
+    as: "pagamentos"
 });
 
 Pagamento.belongsTo(Anuncio, {
-  foreignKey: "ref_mp_codAnuncio", // FK em Pagamento
-  targetKey: "codAnuncio",         // PK em Anuncio
-  as: "anuncio"
+    foreignKey: "ref_mp_codAnuncio", // FK em Pagamento
+    targetKey: "codAnuncio",         // PK em Anuncio
+    as: "anuncio"
 });
 
 

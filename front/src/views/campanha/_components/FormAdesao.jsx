@@ -554,7 +554,7 @@ function verificaDataPromocao(dataAcesso, periodoPromo) {
         {alert && <AlertMsg message={"Cadastro Realizado, verifique a sua caixa de email para obter o acesso a plataforma"} />}
 
         {/*  */}
-        <h1 id="title-caderno" className="py-2 text-center">
+        <h1 id="title-caderno" className="py-4 text-center">
           Formulário de Adesão/Renovação
         </h1>
         {/*  <h2 className="py-4">
@@ -1433,23 +1433,23 @@ function verificaDataPromocao(dataAcesso, periodoPromo) {
                 <div className="codigo-promocional card-preview">
                   <div className="cartao p-4">
                     <div className="conteudo semImagem">
-                      <h2 className="nome-empresa text-start">{(minisitio.descAnuncio) ? minisitio.descAnuncio : "Nome da empresa"}</h2>
+                      <h2 className="nome-empresa text-start mb-3">{(minisitio.descAnuncio) ? minisitio.descAnuncio : "Nome da empresa"}</h2>
                       {radioCheck != 1 && <h4
-                        className="slogan webcard text-start"
+                        className="slogan webcard text-start mb-3"
                         style={{ display: "block" }}
                       >
                         Frase/slogan da empresa
                       </h4>}
-                      <p className="text-start">
+                      <p className="text-start mb-3">
                         <i className="fa fa-map-marker"></i>{" "}
                         <span className="sim-end">{(minisitio.descEndereco) ? minisitio.descEndereco : "Endereço da empresa"}</span>
                       </p>
-                      <p className="text-start">
+                      <p className="text-start mb-3">
                         <i className="fa fa-phone"></i>{" "}
                         <span className="sim-tel">{(minisitio.descTelefone) ? minisitio.descTelefone : "(xx) xxxxx-xxxx"}</span>
                       </p>
                       {radioCheck != 1 && <p
-                        className="webcard text-start"
+                        className="webcard text-start mb-3"
                         style={{ display: "block" }}
                       >
                         <i className="fa fa-phone"></i>{" "}

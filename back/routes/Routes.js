@@ -118,6 +118,7 @@ module.exports = (io) => {
     router.get('/api/admin/anuncio/edit/:id', EspacosController.listarAnuncioId);
     router.post('/api/admin/anuncio/create', EspacosController.criarAnuncio);
     router.put('/api/admin/anuncio/status/:id', auth, EspacosController.updateAnuncioStatus);
+    router.put('/api/admin/anuncio/moderacao/:id', auth, EspacosController.atualizarModeracao);
     router.delete('/api/admin/anuncio/delete/:id', auth, EspacosController.deleteAnuncio);
     router.put('/api/admin/anuncio/update', EspacosController.atualizarAnuncio);
     router.put('/api/admin/anuncio/update/tipo', EspacosController.atualizarTipoPerfil);

@@ -55,7 +55,11 @@
 }
 
 h2 {
-    font-size: 27px;
+    font-size: 27px !important;
+}
+
+.slogan {
+    font-size: 24px;
 }
 
 .assinatura {
