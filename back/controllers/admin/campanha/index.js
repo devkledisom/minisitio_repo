@@ -56,11 +56,22 @@ module.exports = {
             attributes: ['hash']
         });
 
-        const verificarIdOrigemPerfil = await Anuncio.findOne({
-            where: {
-                codDesconto: idPromo.hash
-            }
-        });
+        try {
+            const verificarIdOrigemPerfil = await Anuncio.findOne({
+                where: {
+                    codDesconto: idPromo.hash
+                }
+            });
+        } catch (err) {
+            return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. O ID promocional de origem não foi encontrado em nenhum perfil." });
+        }
+
+          const verificarIdOrigemPerfil = await Anuncio.findOne({
+                where: {
+                    codDesconto: idPromo.hash
+                }
+            });
+
 
         if (!verificarIdOrigemPerfil) {
             return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. O ID promocional de origem não foi encontrado em nenhum perfil." });
