@@ -574,7 +574,7 @@ function verificaDataPromocao(dataAcesso, periodoPromo) {
                 </label>
                 <div className="col-md-12 anuncio-options">
                   <Stack direction="horizontal" gap={2} className="justify-content-center">
-                    <Badge bg="white" style={{ fontSize: "18px", color: "blue" }}>{minisitio.codTipoAnuncio == 3 ? `Perfil COMPLETO GRÁTIS POR ${diasCampanha} Dias` : "Básico"}</Badge>
+                    <Badge bg="white" style={{ fontSize: "18px", color: "blue" }}>{minisitio.codTipoAnuncio == 3 ? `ADESÃO AO PERFIL COMPLETO, promoção termina em... ${diasCampanha} Dias` : "Básico"}</Badge>
                   </Stack>
                 </div>
               </div>
