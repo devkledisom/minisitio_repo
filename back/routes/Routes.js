@@ -278,6 +278,11 @@ module.exports = (io) => {
     <body>
       <p>Redirecionando para o conteúdo...</p>
       <script>
+       fetch('https://minisitio.com.br/api/admin/anuncio/visualizacoes?id=${req.params.id}')
+        .then((x) => x.json())
+        .then((res) => {
+            //console.log(res)
+        })
         window.location.href = "https://minisitio.com.br/perfil/${req.params.id}"
       </script>
     </body>
