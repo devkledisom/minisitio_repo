@@ -32,6 +32,7 @@ async function inativarCampanhasExpiradas() {
     return;
   }
 }
+//mudar cron para 24 horas, pegar todos registros de uma vez só, todo dia 3 horas da manhã
 
 async function downgradePerfil() {
   console.log('Iniciando downgrade de perfil...');
@@ -40,7 +41,7 @@ async function downgradePerfil() {
 
     const hoje = moment().format('YYYY-MM-DD');
 
-    const perfilExpirado = await TokensPromocao.findOne({
+    const tokensExpirados = await TokensPromocao.findAll({
       where: {
         [Op.and]: {
           dataLimitePromocao: { [Op.lt]: new Date() },
@@ -50,31 +51,44 @@ async function downgradePerfil() {
       raw: true
     });
 
-    if (perfilExpirado) {
-
-      // 1. Atualiza o status do token para vencido
-      await TokensPromocao.update({
-        statusPromocao: "vencido"
-      }, {
-        where: { id: perfilExpirado.id }
-      });
-
-      // 2. Atualiza o anúncio vinculado
-      await Anuncio.update({
-        codTipoAnuncio: 1,
-        codDesconto: "00.000.0001"
-      }, {
-        where: {
-          codAnuncio: perfilExpirado.codAnuncio
-        }
-      });
-
-      console.log(`Anúncio ${perfilExpirado.codAnuncio} rebaixado com sucesso.`);
-    } else {
+    if (!tokensExpirados.length) {
       console.log('Nenhum perfil expirado encontrado no momento.');
+      return;
     }
 
-    console.log(`downgrades em ${perfilExpirado.length} de perfis expirados.`, hoje);
+    const tokenIds = tokensExpirados.map(token => token.id);
+    await TokensPromocao.update({
+      statusPromocao: 'vencido'
+    }, {
+      where: {
+        id: {
+          [Op.in]: tokenIds
+        }
+      }
+    });
+
+    const campanhaIds = [...new Set(tokensExpirados.map(token => token.campanhaId).filter(Boolean))];
+    const campanhas = await Campanha.findAll({
+      where: { id: { [Op.in]: campanhaIds } },
+      attributes: ['id', 'idRetorno'],
+      raw: true
+    });
+    const retornoMap = Object.fromEntries(campanhas.map(campanha => [campanha.id, campanha.idRetorno]));
+
+    for (const token of tokensExpirados) {
+      const codDesconto = retornoMap[token.campanhaId] ?? token.idRetorno;
+      await Anuncio.update({
+        codTipoAnuncio: 1,
+        codDesconto
+      }, {
+        where: {
+          codAnuncio: token.codAnuncio
+        }
+      });
+      console.log(`Anúncio ${token.codAnuncio} rebaixado com sucesso.`);
+    }
+
+    console.log(`downgrades em ${tokensExpirados.length} de perfis expirados.`, hoje);
   } catch (error) {
     console.error('Erro ao atualizar perfil expirados:', error);
     return;

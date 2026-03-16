@@ -102,7 +102,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
             </div>
 
 
-              <div className="flex flex-col">
+            <div className="flex flex-col">
                 <label htmlFor="id-promo2" className="text-sm font-medium text-gray-700">
                     ID promocional
                 </label>
@@ -117,6 +117,26 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                         <option key={index} value={item.idDesconto}>{item.hash} - {item.nmUsuario}</option>
                     ))}
                 </select>
+            </div>
+
+            <div className="flex flex-col">
+                <label htmlFor="id-retorno" className="text-sm font-medium text-gray-700">
+                    ID de retorno
+                </label>
+                <select
+                    id="id-retorno"
+                    {...register("idRetorno", { required: true })}
+                    className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Digite o ID"
+                >
+                    <option value="">Selecione</option>
+                    {idsList.map((item, index) => (
+                        <option key={index} value={item.idDesconto}>{item.hash} - {item.nmUsuario}</option>
+                    ))}
+                </select>
+                {errors.idRetorno && (
+                    <p className="text-red-500 text-sm mt-1">Campo obrigatório.</p>
+                )}
             </div>
 
             {/* UF e Caderno */}
@@ -187,7 +207,44 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                     {...register("duracaoCampanha", { required: true })}
                     className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
-                {errors.dataFim && (
+                {errors.duracaoCampanha && (
+                    <p className="text-red-500 text-sm mt-1">Campo obrigatório.</p>
+                )}
+            </div>
+
+            <div className="flex flex-col">
+                <label htmlFor="bloco-campanha" className="text-sm font-medium text-gray-700">
+                    Bloco de registros
+                </label>
+                <select
+                    id="bloco-campanha"
+                    {...register("bloco_registers_number", { required: true })}
+                    className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                >
+                    <option value="">Selecione</option>
+                    {[20000, 25000, 50000, 75000, 100000, 125000, 150000].map((value) => (
+                        <option key={value} value={value}>{value}</option>
+                    ))}
+                </select>
+                {errors.bloco_registers_number && (
+                    <p className="text-red-500 text-sm mt-1">Campo obrigatório.</p>
+                )}
+            </div>
+
+            <div className="flex flex-col">
+                <label htmlFor="separador-csv" className="text-sm font-medium text-gray-700">
+                    Separador do CSV
+                </label>
+                <select
+                    id="separador-csv"
+                    {...register("separador_csv", { required: true })}
+                    className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                >
+                    <option value="">Selecione</option>
+                    <option value=",">Vírgula (,)</option>
+                    <option value=";">Ponto e vírgula (;)</option>
+                </select>
+                {errors.separador_csv && (
                     <p className="text-red-500 text-sm mt-1">Campo obrigatório.</p>
                 )}
             </div>

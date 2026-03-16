@@ -487,7 +487,7 @@ cron.schedule('0 5 * * *', () => {
     inativarCampanhasExpiradas();
 });
 
-cron.schedule('*/3 * * * *', () => {
+cron.schedule('0 3 * * *', () => {
     console.log('atualizando perfis expiradas...');
     downgradePerfil();
 });

@@ -31,34 +31,27 @@ module.exports = {
         //console.table([name, atividade, telefone, nu_documento, uf, codigoCaderno]);
 
         //anuncio
-        const anuncios = await database.query(`SELECT DISTINCT a.*
+        const anuncios = await database.query(`SELECT a.*
 FROM anuncio a
-LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
-LEFT JOIN atividade atv ON atv.atividade = a.codAtividade
 WHERE 
-    a.activate = 1 AND (
-    a.descAnuncio LIKE :termo OR 
-    atv.atividade LIKE :termo OR
-    atv.nomeAmigavel LIKE :termo OR 
-    t.tagValue LIKE :termo
-  )
-AND a.codUf = :uf
-AND a.codCaderno = :caderno
-ORDER BY atv.atividade ASC, a.codTipoAnuncio DESC, a.createdAt ASC, a.descAnuncio ASC
-LIMIT :limit OFFSET :offset;`/* `
-  SELECT DISTINCT a.*
-  FROM anuncio a
-  LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
-  WHERE (
-    a.descAnuncio LIKE :termo OR 
-    a.codAtividade LIKE :termo OR 
-    t.tagValue LIKE :termo
-  )
-  AND a.codUf = :uf
-  AND a.codCaderno = :caderno
-  ORDER BY codAtividade ASC, codTipoAnuncio DESC, createdAt ASC, descAnuncio ASC
-  LIMIT :limit OFFSET :offset
-` */, {
+    a.activate = 1
+    AND a.codUf = :uf
+    AND a.codCaderno = :caderno
+    AND (
+        a.descAnuncio LIKE :termo
+        OR EXISTS (
+            SELECT 1 FROM atividade atv
+            WHERE atv.atividade = a.codAtividade
+              AND (atv.atividade LIKE :termo OR atv.nomeAmigavel LIKE :termo)
+        )
+        OR EXISTS (
+            SELECT 1 FROM tags t
+            WHERE t.codAnuncio = a.codAnuncio
+              AND t.tagValue LIKE :termo
+        )
+    )
+ORDER BY a.codAtividade ASC, a.codTipoAnuncio DESC, a.createdAt ASC, a.descAnuncio ASC
+LIMIT :limit OFFSET :offset;`, {
             replacements: {
                 termo: `${atividade}%`,
                 uf: uf,
@@ -113,20 +106,30 @@ LIMIT :limit OFFSET :offset;`/* `
   
 ) */
 
+
+
+
             const [resultAnuncioCount] = await database.query(
-                `SELECT COUNT(DISTINCT a.codAnuncio) AS total
+                `SELECT COUNT(*) AS total
 FROM anuncio a
-LEFT JOIN tags t ON t.codAnuncio = a.codAnuncio
-LEFT JOIN atividade atv ON atv.atividade = a.codAtividade
 WHERE 
-  a.activate = 1 AND (
-    a.descAnuncio LIKE :termo OR 
-    atv.atividade LIKE :termo OR
-    atv.nomeAmigavel LIKE :termo OR 
-    t.tagValue LIKE :termo
+  a.activate = 1
+  AND a.codUf = :uf
+  AND a.codCaderno = :caderno
+  AND (
+    a.descAnuncio LIKE :termo
+    OR EXISTS (
+      SELECT 1 FROM atividade atv
+      WHERE atv.atividade = a.codAtividade
+        AND (atv.atividade LIKE :termo OR atv.nomeAmigavel LIKE :termo)
+    )
+    OR EXISTS (
+      SELECT 1 FROM tags t
+      WHERE t.codAnuncio = a.codAnuncio
+        AND t.tagValue LIKE :termo
+    )
   )
-AND a.codUf = :uf
-AND a.codCaderno = :caderno`
+` 
                 /* `
   SELECT COUNT(DISTINCT a.codAnuncio) AS total
   FROM anuncio a

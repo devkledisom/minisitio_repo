@@ -20,6 +20,11 @@ const Campanha = database.define("Campanha", {
     allowNull: false,
     field: "id_promocional", // mapeia para a coluna no banco
   },
+  idRetorno: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+    field: "id_retorno", // mapeia para a coluna no banco
+  },
   uf: {
     type: Sequelize.CHAR(2),
     allowNull: false,
@@ -40,6 +45,21 @@ const Campanha = database.define("Campanha", {
   status: {
     type: Sequelize.STRING(8),
     allowNull: false,
+  },
+  total_registros: {
+    type: Sequelize.FLOAT,
+    allowNull: false,
+    field: "total_registros", // mapeia para a coluna no banco
+  },
+  bloco_registers_number: {
+    type: Sequelize.FLOAT,
+    allowNull: false,
+    field: "bloco_registers_number", // mapeia para a coluna no banco
+  },
+  separador_csv: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+    field: "separador_csv", // mapeia para a coluna no banco
   },
   statusLink: {
     type: Sequelize.STRING(7),
@@ -64,6 +84,12 @@ Campanha.belongsTo(Desconto, {
   foreignKey: "idPromocional",   // chave estrangeira em Campanha
   targetKey: "idDesconto",  // PK em Usuario
   as: "desconto"            // alias
+});
+
+Campanha.belongsTo(Desconto, {
+  foreignKey: "idRetorno",
+  targetKey: "idDesconto",
+  as: "retorno"
 });
 
 Desconto.hasMany(Campanha, {

@@ -122,13 +122,16 @@ export default function TableListCampanha({ campanhas, setShowSpinner, fetchCamp
         <p className='text-center'>Nenhuma campanha encontrada.</p>
         :
         <div className="table-wrapper">
-          <Table striped hover size="sm">
+          <Table striped hover size="sm" style={{ fontSize: '0.85rem' }}>
             <thead style={styleThead}>
               <tr>
                 <th>#</th>
                 <th>Nome</th>
                 <th>ID original</th>
                 <th>ID promocional</th>
+                <th>ID retorno</th>
+                <th>Blocos</th>
+                <th>registros</th>
                 <th>Uf</th>
                 <th>Caderno</th>
                 <th>Criador</th>
@@ -144,8 +147,11 @@ export default function TableListCampanha({ campanhas, setShowSpinner, fetchCamp
                 <tr key={campanha.id}>
                   <td>{campanha.id}</td>
                   <td>{campanha.desconto.usuario.descNome}</td>
-                  <td>{campanha.idOrigem}</td>
-                  <td>{campanha.desconto.hash}</td>
+                    <td>{campanha.idOrigem}</td>
+                    <td>{campanha.desconto.hash}</td>
+                    <td>{campanha.retorno?.hash || '—'}</td>
+                  <td>{campanha.bloco_registers_number}</td>
+                  <td>{campanha.total_registros}</td>
                   <td>{campanha.uf}</td>
                   <td>{campanha.caderno}</td>
                   <td>{campanha.criador}</td>

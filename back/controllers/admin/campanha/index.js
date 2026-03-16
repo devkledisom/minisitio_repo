@@ -77,15 +77,39 @@ module.exports = {
             return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. O ID promocional de origem não foi encontrado em nenhum perfil." });
         }
 
+        const whereClause = req.body.uf && req.body.caderno
+            ? "a.codUf = :uf AND a.codCaderno = :caderno"
+            : "a.codDesconto = :idOrigem";
+
+        const filterReplacements = {
+            uf: req.body.uf,
+            caderno: req.body.caderno,
+            idOrigem: idPromo.hash
+        };
+
+        const [countRows] = await database.query(`
+            SELECT COUNT(*) AS total
+            FROM anuncio a
+            WHERE ${whereClause}
+        `, {
+            replacements: filterReplacements
+        });
+
+        const totalRegistros = Number(countRows[0]?.total ?? 0);
+
         const criarCampanha = await Campanha.create({
             idOrigem: req.body.idPromocional,
             idPromocional: req.body.idPromocional2,
+            idRetorno: req.body.idRetorno,
             dataFim: req.body.dataFim,
             criador: req.body.criador,
             status: "valid",
             statusLink: "ativo",
             uf: req.body.uf,
             caderno: req.body.caderno,
+            bloco_registers_number: Number(req.body.bloco_registers_number),
+            separador_csv: req.body.separador_csv,
+            total_registros: totalRegistros,
         }).then(async (resultCampanha) => {
 
             /*            const ids = [req.body.idPromocional1, req.body.idPromocional2];
@@ -105,16 +129,6 @@ module.exports = {
                 console.log("ID Promoção origem encontrada:", idPromo.hash);
             }
 
-            let whereClause = "";
-
-            if (req.body.uf && req.body.caderno) {
-                // quando tem UF + Caderno
-                whereClause = "a.codUf = :uf AND a.codCaderno = :caderno";
-            } else if (idPromo.hash) {
-                // quando só tem idPromo
-                whereClause = "a.codDesconto = :idOrigem";
-            }
-
             //DATE_ADD(NOW(), INTERVAL 30 DAY) AS dataLimitePromocao,
             const result = await database.query(`
             INSERT IGNORE INTO tokens_promocao (campanhaId, codAnuncio, tokenPromocao, periodoEmDias, dataLimitePromocao, createdAt, updatedAt)
@@ -129,12 +143,10 @@ module.exports = {
             FROM anuncio a
             WHERE ${whereClause}
           `,
-                {
+            {
                     replacements: {
-                        uf: req.body.uf,
-                        caderno: req.body.caderno,
+                        ...filterReplacements,
                         campanhaId: resultCampanha.id,
-                        idOrigem: idPromo.hash,
                         idPromo: req.body.idPromocional2,
                         duracaoCampanha: Number(req.body.duracaoCampanha),
                         dataLimite: moment(req.body.dataFim).format('YYYY-MM-DD HH:mm:ss')
@@ -198,6 +210,12 @@ module.exports = {
                                 attributes: ["descNome"]
                             }
                         ]
+                    }
+                    ,
+                    {
+                        model: Desconto,
+                        as: "retorno",
+                        attributes: ['hash']
                     }
                 ]
             }
@@ -471,7 +489,11 @@ const { Parser } = require("@json2csv/plainjs");
 // Função para gerar CSV
 
 async function gerarCSVGeral(model, idCampanha) {
-    const BATCH_SIZE = 100000; // número de registros por arquivo
+    const campanhaConfig = await Campanha.findByPk(idCampanha, {
+        attributes: ['bloco_registers_number', 'separador_csv']
+    });
+    const batchSize = Number(campanhaConfig?.bloco_registers_number) || 100000;
+    const delimiter = campanhaConfig?.separador_csv || ",";
     let offset = 0;
     let fileIndex = 1;
     const tempDir = "./public/upload/campanha";
@@ -499,7 +521,7 @@ async function gerarCSVGeral(model, idCampanha) {
         { label: "Caderno", value: "promo.codCaderno" },
     ];
 
-    const json2csvParser = new Parser({ fields, header: true });
+    const json2csvParser = new Parser({ fields, header: true, delimiter });
     const csvFiles = [];
 
     try {
@@ -517,7 +539,7 @@ async function gerarCSVGeral(model, idCampanha) {
                 where: { campanhaId: idCampanha },
                 attributes: ["codAnuncio", "tokenPromocao"],
                 raw: true,
-                limit: BATCH_SIZE,
+        limit: batchSize,
                 offset: offset,
             });
 
@@ -537,7 +559,7 @@ async function gerarCSVGeral(model, idCampanha) {
             csvFiles.push(outputPath);
             console.log(`Arquivo ${fileName} gerado (${registros.length} registros).`);
 
-            offset += BATCH_SIZE;
+            offset += batchSize;
             fileIndex++;
         }
 
@@ -574,7 +596,3 @@ async function gerarCSVGeral(model, idCampanha) {
         console.error("Erro ao gerar CSV:", error);
     }
 }
-
-
-
-
