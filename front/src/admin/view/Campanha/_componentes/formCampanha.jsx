@@ -220,6 +220,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                     id="bloco-campanha"
                     {...register("bloco_registers_number", { required: true })}
                     className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    defaultValue="100000"
                 >
                     <option value="">Selecione</option>
                     {[20000, 25000, 50000, 75000, 100000, 125000, 150000].map((value) => (
@@ -239,6 +240,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                     id="separador-csv"
                     {...register("separador_csv", { required: true })}
                     className="mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    defaultValue=","
                 >
                     <option value="">Selecione</option>
                     <option value=",">Vírgula (,)</option>
