@@ -1,5 +1,7 @@
 back/config/config.js
 back/config/db.js
 back/config/smtp.js
+back/bkp_back.zip
 **/node_modules
 front/src/config/config.js
+back/bkp_front.zip
