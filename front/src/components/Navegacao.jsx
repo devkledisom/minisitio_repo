@@ -18,6 +18,8 @@ function Navegacao({anuncio}) {
 
     async function buscarAnuncio() {
         const request = await fetch(`${masterPath.url}/anuncio/${codAnuncio}`).then((x) => x.json());
+
+        console.log(request)
         const breadcrumbItems = [
             { label: request[0].nomeCaderno },
             { label: request[0].nomeAtividade, /* url: '/categoria' */ },

@@ -155,6 +155,7 @@ WHERE
             const totalItens = resultAnuncioCount.total;
             const totalPaginas = Math.ceil(totalItens / porPagina);
 
+
             res.json({
                 success: true, data: anuncios,
                 paginaAtual: paginaAtual,
@@ -403,8 +404,16 @@ WHERE
             const descontoHash = await resultAnuncio[0].getDesconto();
             console.log(resultAnuncio[0].codCaderno)
 
+            const atividadeAmigavel = await Atividade.findOne({
+                where: {
+                    atividade: resultAnuncio[0].codAtividade
+                },
+                raw: true,
+                attributes: ["nomeAmigavel"]
+            });
+
             resultAnuncio[0].setDataValue('nomeCaderno', resultAnuncio[0].codCaderno);
-            resultAnuncio[0].setDataValue('nomeAtividade', resultAnuncio[0].codAtividade);
+            resultAnuncio[0].setDataValue('nomeAtividade', atividadeAmigavel.nomeAmigavel);
             resultAnuncio[0].setDataValue('hash', resultAnuncio[0].codDesconto);
             /*      resultAnuncio[0].setDataValue('nomeCaderno', cader.dataValues.nomeCaderno);
                  resultAnuncio[0].setDataValue('nomeAtividade', atividades.dataValues.atividade);

@@ -51,7 +51,7 @@ function Resultados() {
             if(capas.includes(result.data[0].codAtividade)) {
                 navigate(`/caderno-geral/${encodeURIComponent(result.data[0].codCaderno)}/${cadernoUf}`);
             } else {
-                navigate(`/caderno/${result.data[0].descAnuncio}?page=1&book=${result.data[0].codCaderno}&id=${result.data[0].codAnuncio}&index=${result.data[0].page}&caderno=${result.data[0].codCaderno}&estado=${cadernoUf}`);
+                navigate(`/caderno/${result.data[0].descAnuncio}?page=1&book=${result.data[0].codCaderno}&id=${result.data[0].codAnuncio}&index=${result.data[0].page}&caderno=${result.data[0].codCaderno}&estado=${result.data[0].cadernoUf}`);
             }
 
 

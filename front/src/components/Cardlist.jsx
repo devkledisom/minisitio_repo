@@ -40,6 +40,8 @@ function Cardlist(props) {
       setCadUf([cadernoUf, cadernoCidade]);
     }, []); */
 
+    console.log(props.anuncio)
+
   function urlTransform(url) {
     //const url = "http://localhost:3032/api/files/sefer7_logo_full (1).jpg";
     const encodedUrl = encodeURI(url); // Codifica a URL corretamente

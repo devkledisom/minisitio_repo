@@ -78,13 +78,14 @@ module.exports = {
         }
 
         const whereClause = req.body.uf && req.body.caderno
-            ? "a.codUf = :uf AND a.codCaderno = :caderno"
-            : "a.codDesconto = :idOrigem";
+            ? "a.codUf = :uf AND a.codCaderno = :caderno AND a.descEmailRetorno != :invalidEmail"
+            : "a.codDesconto = :idOrigem AND a.descEmailRetorno != :invalidEmail";
 
         const filterReplacements = {
             uf: req.body.uf,
             caderno: req.body.caderno,
-            idOrigem: idPromo.hash
+            idOrigem: idPromo.hash,
+            invalidEmail: "atualizar"
         };
 
         const [countRows] = await database.query(`
