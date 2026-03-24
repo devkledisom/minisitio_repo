@@ -276,7 +276,11 @@ WHERE
     },
     buscarUf: async (req, res) => {
 
-        const ufs = await Uf.findAll();
+        const ufs = await Uf.findAll({
+              order: [
+                ['sigla_uf', 'ASC'],
+            ],
+        });
 
         res.json(ufs);
     },

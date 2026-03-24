@@ -154,7 +154,9 @@ module.exports = {
                     }
                 });
 
-            //console.log("Tokens de promoção criados para a campanha ID:", result.length);
+            //console.log("Tokens de promoção criados para a campanha ID:", result.length, result);
+
+            if(result[0].affectedRows <= 0) return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. não foi encontrado nenhum perfil com códTipo:2" });
 
             //mover para o codTipoAnuncio 2
             const ativarTipoCampanha = await Anuncio.update({
