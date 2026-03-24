@@ -63,7 +63,7 @@ module.exports = {
                 }
             });
         } catch (err) {
-            return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. O ID promocional de origem não foi encontrado em nenhum perfil." });
+            return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. O ID de origem não foi encontrado em nenhum perfil." });
         }
 
         const verificarIdOrigemPerfil = await Anuncio.findOne({
@@ -74,7 +74,7 @@ module.exports = {
 
 
         if (!verificarIdOrigemPerfil) {
-            return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. O ID promocional de origem não foi encontrado em nenhum perfil." });
+            return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. O ID de origem não foi encontrado em nenhum perfil." });
         }
 
         const whereClause = req.body.uf && req.body.caderno

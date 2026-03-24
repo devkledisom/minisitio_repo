@@ -114,7 +114,10 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                 >
                     <option value="">Selecione</option>
                     {idsList.map((item, index) => (
-                        <option key={index} value={item.idDesconto}>{item.hash} - {item.nmUsuario}</option>
+                        (item.desconto > 0 && item.desconto < 10) ?
+                            (<option key={index} value={item.idDesconto}>{item.hash} - {item.nmUsuario} - {item.desconto}</option>) : ""
+
+
                     ))}
                 </select>
             </div>
@@ -159,7 +162,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                         }
                     </select>
                 </div>
-                
+
 
                 <div className="flex flex-col">
                     <label htmlFor="caderno" className="text-sm font-medium text-gray-700">
