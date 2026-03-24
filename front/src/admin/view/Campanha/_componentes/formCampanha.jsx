@@ -114,7 +114,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                 >
                     <option value="">Selecione</option>
                     {idsList.map((item, index) => (
-                        (item.desconto > 0 && item.desconto < 10) ?
+                        (item.desconto >= 0 && item.desconto < 10) ?
                             (<option key={index} value={item.idDesconto}>{item.hash} - {item.nmUsuario} - {item.desconto}</option>) : ""
 
 
