@@ -66,11 +66,11 @@ module.exports = {
             return res.status(400).json({ success: false, message: "Não foi possível gerar a campanha. O ID promocional de origem não foi encontrado em nenhum perfil." });
         }
 
-          const verificarIdOrigemPerfil = await Anuncio.findOne({
-                where: {
-                    codDesconto: idPromo.hash
-                }
-            });
+        const verificarIdOrigemPerfil = await Anuncio.findOne({
+            where: {
+                codDesconto: idPromo.hash
+            }
+        });
 
 
         if (!verificarIdOrigemPerfil) {
@@ -78,8 +78,8 @@ module.exports = {
         }
 
         const whereClause = req.body.uf && req.body.caderno
-            ? "a.codUf = :uf AND a.codCaderno = :caderno AND a.descEmailRetorno != :invalidEmail"
-            : "a.codDesconto = :idOrigem AND a.descEmailRetorno != :invalidEmail";
+            ? "a.codUf = :uf AND a.codCaderno = :caderno AND a.descEmailRetorno != :invalidEmail AND codTipoAnuncio = 1"
+            : "a.codDesconto = :idOrigem AND a.descEmailRetorno != :invalidEmail AND codTipoAnuncio = 1";
 
         const filterReplacements = {
             uf: req.body.uf,
@@ -144,7 +144,7 @@ module.exports = {
             FROM anuncio a
             WHERE ${whereClause}
           `,
-            {
+                {
                     replacements: {
                         ...filterReplacements,
                         campanhaId: resultCampanha.id,
@@ -155,6 +155,16 @@ module.exports = {
                 });
 
             //console.log("Tokens de promoção criados para a campanha ID:", result.length);
+
+            //mover para o codTipoAnuncio 2
+            const ativarTipoCampanha = await Anuncio.update({
+                codTipoAnuncio: 2
+            }, {
+                where: {
+                    codDesconto: idPromo.hash,
+                    codTipoAnuncio: 1
+                }
+            });
 
             gerarCSVGeral(TokensPromocao, resultCampanha.id);
 
@@ -321,6 +331,30 @@ module.exports = {
     cancelarCampanha: async (req, res) => {
 
         try {
+            const buscarCodCampanha = await Campanha.findOne({
+                where: {
+                    id: req.params.id,
+                },
+                raw: true
+            });
+
+            const buscarCodDesconto = await Desconto.findOne({
+                where: {
+                    idDesconto: buscarCodCampanha.idOrigem
+                },
+                raw: true
+            });
+            console.log(buscarCodDesconto)
+
+            const atualizarCodTipoAnuncio = await Anuncio.update({
+                codTipoAnuncio: 1
+            }, {
+                where: {
+                    codDesconto: buscarCodDesconto.hash,
+                    codTipoAnuncio: 2
+                }
+            });
+
             // Apaga a campanha
             const apagarCampanha = await Campanha.destroy({
                 where: { id: req.params.id }
@@ -338,6 +372,11 @@ module.exports = {
                 }
                 console.log("ZIP apagado com sucesso!");
             });
+
+
+
+
+
 
             return res.json({
                 success: true,
@@ -540,7 +579,7 @@ async function gerarCSVGeral(model, idCampanha) {
                 where: { campanhaId: idCampanha },
                 attributes: ["codAnuncio", "tokenPromocao"],
                 raw: true,
-        limit: batchSize,
+                limit: batchSize,
                 offset: offset,
             });
 
