@@ -78,8 +78,8 @@ module.exports = {
         }
 
         const whereClause = req.body.uf && req.body.caderno
-            ? "a.codUf = :uf AND a.codCaderno = :caderno AND a.descEmailRetorno != :invalidEmail AND codTipoAnuncio = 1"
-            : "a.codDesconto = :idOrigem AND a.descEmailRetorno != :invalidEmail AND codTipoAnuncio = 1";
+            ? "a.codUf = :uf AND a.codCaderno = :caderno AND a.descEmailRetorno != :invalidEmail AND codTipoAnuncio IN (1, 3)"
+            : "a.codDesconto = :idOrigem AND a.descEmailRetorno != :invalidEmail AND codTipoAnuncio IN (1, 3)";
 
         const filterReplacements = {
             uf: req.body.uf,
