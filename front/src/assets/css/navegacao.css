@@ -9,6 +9,7 @@
 .titulo-cinza {
     background-color: #4f4f4f !important;
     color: #ffffff !important;
+    border-radius: 5px 5px 0 0;
 }
 
 .bar-navigator {

@@ -3166,7 +3166,7 @@ module.exports = {
             "descCPFCNPJ": descCPFCNPJ,
             "descNomeAutorizante": descNomeAutorizante,
             "descEmailAutorizante": descEmailAutorizante,
-            "codDesconto": codDesconto || '00.000.0000',//codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
+            "codDesconto": codDesconto || '00.000.0001',//codigoDeDesconto.length > 0 ? codigoDeDesconto[0].idDesconto : '00.000.0000',
             "descLat": 0,
             "descLng": 0,
             "formaPagamento": 0,
@@ -3211,7 +3211,12 @@ module.exports = {
             const listaAnuncios = await Anuncio.create(dadosAnuncio);
             let [email, nmEmail, numDoc] = [listaAnuncios.dataValues.descEmailAutorizante, listaAnuncios.dataValues.descNomeAutorizante, listaAnuncios.dataValues.descCPFCNPJ]
 
-            novoUsuario(email, nmEmail, numDoc, listaAnuncios.dataValues.codAnuncio);
+            try {
+                novoUsuario(email, nmEmail, numDoc, listaAnuncios.dataValues.codAnuncio);
+
+            } catch (error) {
+                console.log(error)
+            }
 
             registarTags(listaAnuncios.dataValues.codAnuncio)
 

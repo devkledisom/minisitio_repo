@@ -5,7 +5,6 @@ function TagsInput(props) {
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    
     if (props.value != undefined && props.value.length > 0) {
       setTags(props.value);
     }

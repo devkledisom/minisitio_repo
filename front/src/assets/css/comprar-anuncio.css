@@ -1,13 +1,25 @@
 .simulacao-do-anuncio {
     background-color: #ffcc29;
     padding-bottom: 5px;
-    padding-top: 1px;
+    padding-top: 5px;
+    margin: 0 !important;
+    border-radius: 5px;
+}
+
+.simulacao-do-anuncio h2 {
+    background-color: #ffcc29;
+    padding-top: 10px !important;
+    padding-bottom: 10px;
+    text-align: center;
+    
 }
 
 .formulario-de-cadastro-titulo {
     background-color: #4f4f4f;
     padding: 15px;
     text-align: center;
+
+    margin-bottom: 1.5rem;
 
 
     & h2 {
@@ -52,6 +64,8 @@
 .codigo-promocional {
     background-color: #edecec;
     padding: 15px;
+
+    margin-top: 1.5rem;
 }
 
 h2 {
@@ -64,9 +78,9 @@ h2 {
 
 .assinatura {
     background-color: #ffcc29;
-    padding-top: 1px;
+    padding-top: 10px !important;
     padding-bottom: 10px;
-    margin-top: 15px !important;
+    margin-top: 1.5rem !important;
     text-align: center;
 }
 
@@ -197,6 +211,48 @@ a:hover {
 .codigo-promocional h4 {
     font-size: 17px;
     font-weight: 500;
+}
+
+.container.form-create {
+    padding: 2.5rem 1.25rem 3rem;
+    max-width: 1360px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .container.form-create {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+    }
+}
+
+.formulario-de-cadastro-titulo,
+.codigo-promocional,
+.assinatura {
+    border-radius: 5px;
+}
+
+.codigo-promocional h4,
+.assinatura h2 {
+   /*  margin-bottom: 0.75rem; */
+    text-align: center;
+}
+
+.codigo-promocional {
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.08);
+}
+
+.card-preview {
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.12);
+}
+
+.card-preview .cartao {
+    border-radius: 5px;
+    box-shadow: none;
+    background: #fff;
 }
 .codigo-promocional h5 {
     font-size: 13px;

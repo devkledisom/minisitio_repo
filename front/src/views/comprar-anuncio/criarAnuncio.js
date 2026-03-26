@@ -155,6 +155,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
             descYouTube: buscarElemento("descYouTube")
         };
 
+
         function buscarElemento(param) {
             let elementoSelecionado = document.querySelector(`#${param}`);
 
@@ -179,6 +180,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
         })
             .then((x) => x.json())
             .then((res) => {
+                const codAnuncio = res.message.codAnuncio
                 //setShowSpinner(false);
                 // Remover um item do localStorage
                 localStorage.removeItem("imgname");
@@ -219,16 +221,19 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                              console.log("3");
                                          } */
                             if (descontoAtivado && radioCheck == 4 && valorBruto <= 0) {
-                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                window.location.href = `/perfil/${codAnuncio}`;
                                 console.log("1");
                             } else if (descontoAtivado && radioCheck == 3 && valorBruto <= 0) {
-                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                window.location.href = `/perfil/${codAnuncio}`;
                                 console.log("1");
                             } else if (radioCheck == 1 && valorBruto <= 0) {
-                                window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                window.location.href = `/perfil/${codAnuncio}`;
                                 console.log("2");
                             } else {
-                                console.log("entrou aqui", descontoAtivado, radioCheck, valorBruto)
+                                //console.log("entrou aqui", descontoAtivado, radioCheck, valorBruto)
                                 fetch(`${masterPath.url}/pagamento/create/${idPerfil}`)
                                     .then((x) => x.json())
                                     .then((response) => {
@@ -259,13 +264,16 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                         let valorBruto = precoFixo;
 
                                         if (descontoAtivado && radioCheck == 4 && valorBruto <= 0) {
-                                            window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                            //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                            window.location.href = `/perfil/${codAnuncio}`;
                                             console.log("1");
                                         } else if (descontoAtivado && radioCheck == 3 && valorBruto <= 0) {
-                                            window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                            //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                            window.location.href = `/perfil/${codAnuncio}`;
                                             console.log("1");
                                         } else if (radioCheck == 1 && valorBruto <= 0) {
-                                            window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                            //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                            window.location.href = `/perfil/${codAnuncio}`;
                                             console.log("2");
                                         } else {
                                             fetch(`${masterPath.url}/pagamento/create/${idPerfil}`)
@@ -289,8 +297,8 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
                                                 })
                                                 .catch(err => console.log(err))
                                         } else {
-                                            window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
-
+                                            //window.location.href = `/ver-anuncios/${limparCPFouCNPJ(obj.descCPFCNPJ)}`;
+                                            window.location.href = `/perfil/${codAnuncio}`;
                                         }
                                     }
                                 })

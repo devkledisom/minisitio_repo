@@ -367,13 +367,14 @@ function ComprarAnuncio({ isAdmin }) {
           Preencha os campos abaixo para simular e incluir sua
           Assinatura/Espaço Minisitio.
         </h2>
-        <div className="container d-flex flex-row form-create">
-          {/*inicio da row form */}
-          <div className="row col-md-6 p-3 interna" id="form-cadastro-data">
+        <div className="container form-create">
+          <div className="row gx-4 gy-4">
+            <div className="col-12 col-xl-6">
+              <div className="p-3 interna" id="form-cadastro-data">
             <div className="formulario-de-cadastro-titulo">
               <h2>Formulário de Cadastro</h2>
             </div>
-            <div className="anuncio">
+            <div className="anuncio assinatura">
               <div className="form-group">
                 <label className="col-md-5 control-label tipo-de-anuncio">
                   Tipo de perfil no minisitio:
@@ -886,19 +887,20 @@ function ComprarAnuncio({ isAdmin }) {
             </div> */}
 
             {/* Area de Download do formulario */}
-          </div>
-          {/*fina da row*/}
+              </div>
+            </div>
 
-          {/* simulacao preview row */}
-          <div className="row col-md-7 p-3 interna">
-            <div
-              className="simulacao"
+            {/* simulacao preview row */}
+            <div className="col-12 col-xl-6">
+              <div className="p-3 interna">
+                <div
+                  className="simulacao"
             /* style={{ position: "sticky" }} */
             /* style={(elementoProximoTopo) ? {position: "fixed", top: "0px", marginTop: "20px"} : { position: "relative" }} */
             >
               <div className="posicao-preview">
                 <div className="simulacao-do-anuncio">
-                  <h2 className="assinatura">Simulação do Espaço Minisitio</h2>
+                  <h2 className="">Simulação do Espaço Minisitio</h2>
                 </div>
 
                 {/* preview */}
@@ -1073,7 +1075,7 @@ function ComprarAnuncio({ isAdmin }) {
                       /* data-bs-toggle="modal" data-bs-target="#myModal" */
                       onClick={() => criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, descontoAtivado, setAlert, isAdmin, descValor, isCapa, precoFixo, minisitio)}
                     >
-                      Confirmar
+                      Assinar
                     </button>
                   </div>
                 </div>
@@ -1081,8 +1083,9 @@ function ComprarAnuncio({ isAdmin }) {
             </div>
             {/* preview */}
           </div>
-          {/* simulacao row */}
         </div>
+      </div>
+      </div>
       </main>
 
       {isAdmin &&

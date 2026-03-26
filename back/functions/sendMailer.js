@@ -198,13 +198,16 @@ async function contato(data) {
 };
 
 async function novoUsuario(email, nome, doc, codAnuncio) {
-    const mailSentPT = await transporter.sendMail({
-        //from: `${data.nome} <${data.email}>`,
-        from: `kledisom <dev@ziiz.com.br>`,
-        to: ['dev@ziiz.com.br', 'contatobr@mycardcity.net', email],
-        subject: "Minisitio",
-        text: "Minisitio",
-        html: `
+
+
+    try {
+        const mailSentPT = await transporter.sendMail({
+            //from: `${data.nome} <${data.email}>`,
+            from: `kledisom <dev@ziiz.com.br>`,
+            to: ['dev@ziiz.com.br', 'contatobr@mycardcity.net', email],
+            subject: "Minisitio",
+            text: "Minisitio",
+            html: `
         <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -215,7 +218,7 @@ async function novoUsuario(email, nome, doc, codAnuncio) {
     
 <p>Seja bem Vindo(a) <strong>${nome}</strong></p>
 <p>segue abaixo o seu acesso para gerenciar o seu perfil Minisitio</p>
-    <p>Link de acesso do perfil, confira: <a href="${ config.domain }/perfil/${codAnuncio}" target="_blank" rel="noopener noreferrer">${ config.domain }/perfil/${codAnuncio}</a></p>
+    <p>Link de acesso do perfil, confira: <a href="${config.domain}/perfil/${codAnuncio}" target="_blank" rel="noopener noreferrer">${config.domain}/perfil/${codAnuncio}</a></p>
     <p>Login: <strong>${doc}</strong></p>
     <p>Senha: <strong>${doc.substr(0, 5)}</strong></p>
 
@@ -223,7 +226,12 @@ async function novoUsuario(email, nome, doc, codAnuncio) {
     <p>-A nossa equipe está feliz por ter você na nossa plataforma-</p>
 </body>
         `
-    });
+        });
+
+    } catch (error) {
+        console.log(error)
+    }
+
     return true;
 
 };

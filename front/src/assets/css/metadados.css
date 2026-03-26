@@ -2,6 +2,7 @@
     background-color: #ffcc29;
     padding: 10px;
     overflow: hidden;
+    border-radius: 5px;
 }
 
 .anuncio-info>div {

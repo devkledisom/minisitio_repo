@@ -121,12 +121,13 @@ function FullWebCard(props) {
 
     return (
         <div className="FullWebCard">
-            {pageLoad && <Loading apiReady={apiReady} apiProgress={apiProgress} />}
-            {!pageLoad &&
-                <div className="container">
+            <div className="full-web-card-inner">
+                {pageLoad && <Loading apiReady={apiReady} apiProgress={apiProgress} />}
+                {!pageLoad &&
+                    <div className="container">
                     {/* teste row */}
 
-                    <h1>PERFIL no espaço MINISITIO</h1>
+                    <h1 style={{fontSize: "33px"}}>PERFIL no espaço MINISITIO</h1>
                     <div className="row p-3 full-title">
                         <section className="col-md-6 coluna-1">
                             <h2 className='titulo-cinza'>
@@ -143,12 +144,12 @@ function FullWebCard(props) {
                             </div>
                         </section>
                         <section className="col-md-6 coluna-2">
-                            <div className='border-cinza mb-4'>
+                            <div className=''>
                                 <h2 className='titulo-cinza'>
                                     <i className="fa fa-certificate mx-2"></i>
                                     Certificado Profissional
                                 </h2>
-                                <div className='container'>
+                                <div className='container border-cinza mb-4'>
                                     <div className="row" style={{height: "80px"}}>
                                         <div className='col-md-4'>
                                             {(resultLocal.certificado_logo != null && resultLocal.certificado_logo != "") &&
@@ -224,12 +225,12 @@ function FullWebCard(props) {
                                 </div>
 
                             </div>
-                            <div className='border-cinza mb-4'>
+                            <div className='mb-4'>
                                 <h2 className='titulo-cinza'>
                                     <i className="fa fa-shopping-cart mx-2"></i>
                                     COMPRAR
                                 </h2>
-                                <div className="text-center btn-comprar">
+                                <div className="text-center btn-comprar border-cinza">
                                     {resultLocal.link_comprar != "" &&
                                         <a href={resultLocal.link_comprar}
                                             className="btn proximo link-cinza d-flex justify-content-center align-items-center w-50"
@@ -243,11 +244,11 @@ function FullWebCard(props) {
 
                                 </div>
                             </div>
-                            <div className='border-cinza mb-4'>
+                            <div className='mb-4'>
                                 <h2 className='titulo-cinza'>
                                     PROMOÇÃO
                                 </h2>
-                                <div className='py-3'>
+                                <div className='py-3 border-cinza'>
                                     <i className='link-cinza flex justify-center'>
                                         {
                                             promoChange(resultLocal) && <a href={resultLocal.linkPromo}><img src="../assets/img/link_promocao.png" alt="icone" width={60} /></a>
@@ -297,20 +298,20 @@ function FullWebCard(props) {
                                 </div>
                             </div>
 
-                            <div className='border-cinza mb-4'>
+                            <div className='mb-4'>
                                 <h2 className='titulo-cinza'>
                                     CASHBACK
                                 </h2>
 
                                 {cashbackCondicoes(resultLocal.cashback_logo, resultLocal.cashback_link) === "condicao1" &&
-                                    <i className='link-cinza flex justify-center'>
+                                    <i className='link-cinza flex justify-center border-cinza '>
                                         <img src="../assets/img/teste/cashback.jpg" style={{ filter: "grayscale(1)", webkitFilter: "grayscale(1)" }} className='my-1' alt="cashback" width={80} />
                                     </i>
                                 }
 
                                 {cashbackCondicoes(resultLocal.cashback_logo, resultLocal.cashback_link) === "condicao2" &&
                                     <a href={resultLocal.cashback_link} target="_blank" rel="noopener  noreferrer">
-                                        <i className='link-cinza flex justify-center'>
+                                        <i className='link-cinza flex justify-center border-cinza '>
                                             <img src={`${masterPath.url}/files/logoCashBack/${resultLocal.cashback_logo}`} className='rounded my-1' alt="cashback" />
                                         </i>
                                     </a>
@@ -319,19 +320,19 @@ function FullWebCard(props) {
 
                                 {cashbackCondicoes(resultLocal.cashback_logo, resultLocal.cashback_link) === "condicao3" &&
                                     <a href={resultLocal.cashback_link} target="_blank" rel="noopener  noreferrer">
-                                        <i className='link-cinza flex justify-center'>
+                                        <i className='link-cinza flex justify-center border-cinza '>
                                             <img src="../assets/img/teste/cashback.jpg" className='my-1' alt="cashback" width={80} />
                                         </i>
                                     </a>
                                 }
 
                             </div>
-                            <div className='border-cinza mb-4'>
+                            <div className='mb-4'>
                                 <h2 className='titulo-cinza'>
                                     PARCEIRO
                                 </h2>
                                 <a href={resultLocal.descParceiroLink !== "0" ? resultLocal.descParceiroLink : ""} target="_blank" data-toggle="tooltip" title="parceiro" rel="noopener  noreferrer">
-                                    <i className='link-cinza flex justify-center'>
+                                    <i className='link-cinza flex justify-center border-cinza'>
                                         {resultLocal.descParceiro != null ?
                                             <img src={`${masterPath.url}/files/logoParceiro/${resultLocal.descParceiro}`} width={150} height={58} className='rounded my-1' alt="parceiro" /> : <img src="../assets/img/teste/aperto-de-mao.png" width={100} height={66} />
                                         }
@@ -361,6 +362,7 @@ function FullWebCard(props) {
                     <UserActions path={nomeAnuncio} id={codAnuncio} doc={resultLocal.descCPFCNPJ} url={fullUrl} urlShare={`${masterPath.url}/portal/share/${codAnuncio}`} data={resultLocal} />
                 </div>
             }
+            </div>
         </div>
     );
 }

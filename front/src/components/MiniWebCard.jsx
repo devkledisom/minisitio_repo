@@ -284,7 +284,7 @@ function MiniWebCard(props) {
                     ))
                 }
 
-                <div className='row display-flex justify-content-center' key={props.key} /* onClick={buscarAnuncio} */>
+                <div className='row display-flex justify-content-center' key={props.key}  onClick={buscarAnuncio} >
 
 
                     {imgDefault != false && <img src={`${masterPath.url}/${imgDefault}`} alt="webcard" width={435} height={205} />}

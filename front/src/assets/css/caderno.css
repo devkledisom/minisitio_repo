@@ -24,7 +24,41 @@
 
 .border-cinza {
     border: 2px solid #edecec;
+    border-top: none;
+}
 
+.FullWebCard {
+    width: 100%;
+}
+
+.full-web-card-inner {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+    .full-web-card-inner {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .full-web-card-inner {
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+}
+
+.FullWebCard .container {
+    max-width: 1200px;
+}
+
+.full-web-card-inner .border-cinza {
+    border-radius: 0 0 5px 5px;
+    background-color: #fff;
+    border-top: none;
+    /*  padding: 1rem; */
 }
 
 /* .link-cinza,
