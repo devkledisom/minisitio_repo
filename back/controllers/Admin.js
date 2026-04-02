@@ -53,6 +53,7 @@ const { totalmem } = require('os');
 const Users = require('./Users');
 const { hash } = require('crypto');
 const Campanha = require('../models/table_campanha');
+const e = require('express');
 
 
 
@@ -205,7 +206,17 @@ module.exports = {
         const requisito = req.query.require;
         var nu_doc = req.query.id;
 
-        console.log(req.query);
+        console.log("very", req.query);
+
+        if (nu_doc == "super admin") {
+            nu_doc = 1;
+        } else if (nu_doc == "master") {
+            nu_doc = 2;
+        };
+        
+        if (requisito == "codCidade") {
+            nu_doc = req.query.caderno;
+        }
 
         if (exportarTodos == "true") {
             const corpo = req.body.usuarios;
@@ -265,7 +276,7 @@ module.exports = {
                 users.forEach(item => {
 
                     if (item.codTipoUsuario == 1) {
-                        item.codTipoUsuario = 'Ativo';
+                        item.codTipoUsuario = 'SUPER ADMIN';
                     } else if (item.codTipoUsuario == 2) {
                         item.codTipoUsuario = 'MASTER';
                     } else if (item.codTipoUsuario == 3) {
@@ -275,7 +286,7 @@ module.exports = {
                     }
 
                     if (item.ativo == 1) {
-                        item.codTipoUsuario = 'Ativo';
+                        item.ativo = 'Ativo';
                     }
 
                     worksheet.addRow({
@@ -301,21 +312,6 @@ module.exports = {
 
                 await workbook.xlsx.write(res);
                 res.end();
-
-                /*    // Definir o caminho do arquivo
-                   const filePath = path.join(__dirname, `../public/export/plan.xlsx`);
-   
-                   // Salvar o arquivo
-                   await workbook.xlsx.writeFile(filePath);
-                   console.log(`Planilha criada com sucesso: ${filePath}`);
-   
-                   res.download(filePath, "planilha.xlsx", (err) => {
-                       if (err) {
-                           console.error("Erro ao enviar o arquivo:", err);
-                       }
-                       // Removendo o arquivo temporário após o download
-                       fs.unlinkSync(filePath);
-                   }); */
             }
 
             // Chamar a função

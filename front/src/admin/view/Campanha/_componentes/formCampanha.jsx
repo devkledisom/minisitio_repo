@@ -226,7 +226,7 @@ export default function FormCampanha({ fetchCampanhas, setShowSpinner, setShow }
                     defaultValue="100000"
                 >
                     <option value="">Selecione</option>
-                    {[2000, 5000, 10000, 20000, 25000, 50000, 75000, 100000, 125000, 150000].map((value) => (
+                    {[1000, 2000, 5000, 10000, 20000, 25000, 50000, 75000, 100000, 125000, 150000].map((value) => (
                         <option key={value} value={value}>{value}</option>
                     ))}
                 </select>

@@ -120,10 +120,11 @@ module.exports = {
         let codigoReferenciaMp = req.params.id;
         let codDesconto = req.params.codDesconto;
 
+
         const perfilMinisitio = await Anuncio.findOne({ where: { codAnuncio: codigoReferenciaMp }, raw: true, attributes: ['codAnuncio', 'descAnuncio', 'codDesconto'] });
 
         //const valorDesconto = perfilMinisitio.codDesconto ? await Desconto.findOne({ where: { hash: perfilMinisitio.codDesconto }, raw: true, attributes: ['hash', 'desconto'] }) : null;
-        const valorDesconto = perfilMinisitio.codDesconto ? await Desconto.findOne({ where: { hash: codDesconto }, raw: true, attributes: ['hash', 'desconto'] }) : null;
+        const valorDesconto = (perfilMinisitio.codDesconto && codDesconto) ? await Desconto.findOne({ where: { hash: codDesconto }, raw: true, attributes: ['hash', 'desconto'] }) : null;
 
         const valorBase = await Globals.findOne({
             where: { keyValue: "precoBase" },
@@ -173,27 +174,6 @@ module.exports = {
                 //console.error(error);
                 res.status(500).json({ success: false, error: 'Erro ao criar preferência' });
             });
-
-
-        /*   const gerarPreferencia = await preference.create({ body })
-              .then((data) => { console.log(data), res.status(200).json({ success: true, url: data.init_point }) })
-              .catch(console.log); */
-
-        /* 
-                const body = {
-                    transaction_amount: parseFloat(0.02),
-                    payer: {
-                        email: "devkledisom@gmail.com"
-                    },
-                    payment_method_id: "pix"
-                };
-        
-        
-        
-                payment.create({ body, requestOptions }).then(console.log).catch(console.log);
-        
-        
-                res.status(200).send("pagamento processado com sucesso."); */
 
     }
 }

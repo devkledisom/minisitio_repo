@@ -778,9 +778,9 @@ Para 100000 linhas: 312500ms
                                                         )}
 
                                                     </td>{/* status */}
-                                                    <td>{item.pagamentos.length > 0 ? item.pagamentos[0].status : "Isento"}</td>
-                                                    <td>{item.pagamentos.length > 0 ? formatData(item.pagamentos[0].data) : "Isento"}</td>
-                                                    <td>{item.pagamentos.length > 0 ? item.pagamentos[0].valor : "Isento"}</td>
+                                                    <td>{item.pagamentos.length > 0 ? item.pagamentos[0].status : "Pendente"}</td>
+                                                    <td>{item.pagamentos.length > 0 ? formatData(item.pagamentos[0].data) : "Pendente"}</td>
+                                                    <td>{item.pagamentos.length > 0 ? item.pagamentos[0].valor : "Pendente"}</td>
 
                                                     <td>R$ {item.descPromocao},00</td>
                                                     <td>{formatData(item.createdAt)}</td>

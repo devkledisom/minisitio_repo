@@ -419,7 +419,7 @@ function Editar(props) {
             props.selectPage(e, 1);
 
           } else {
-            alert(res.message);
+            //alert(res.message);
             console.log(res.message)
           }
         })

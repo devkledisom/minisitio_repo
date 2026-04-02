@@ -1,5 +1,3 @@
-import React from "react";
-
 
 const Spinner = (props) => {
     return (
@@ -37,7 +35,10 @@ const style = {
     top: "50%",
     zIndex: "999",
     width: "40%",
-    left: "33%"
+    left: "33%",
+    backgroundColor: "white",
+    borderRadius: "5px",
+    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.4)"
 }
 
 

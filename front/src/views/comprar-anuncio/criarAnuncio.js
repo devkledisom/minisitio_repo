@@ -137,7 +137,7 @@ export function criarAnuncio(tagValue, personType, radioCheck, setShowSpinner, d
             descInsta: null,
             descPatrocinador: null,
             descPatrocinadorLink: null,
-            qntVisualizacoes: 813,
+            qntVisualizacoes: 0,
             activate: 1,
             dtCadastro: 1356636164,
             dtCadastro2: descontoAtivado ? Date.now() : null,

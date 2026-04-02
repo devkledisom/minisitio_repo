@@ -261,7 +261,7 @@ const Users = () => {
                 console.log("Requisição concluída.");
             }
         }, interval);
-        fetch(`${masterPath.url}/admin/usuario/export?exportAll=${exportTodos}&limit=5000&require=${searchOptioncheck}&id=${campoPesquisa.value}`, {
+        fetch(`${masterPath.url}/admin/usuario/export?exportAll=${exportTodos}&limit=5000&require=${searchOptioncheck}&id=${campoPesquisa.value}&uf=${estadoSelecionado}&caderno=${cadernoSelecionado}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -348,7 +348,7 @@ const Users = () => {
                 {showSpinner && <Spinner progress={progressExport} />}
                 {showMsgBox && <MsgConfirm
                     title={"Atenção!"}
-                    msg={"Ao apagar esse usuário todos o espaços ligados a ele serão deletados."}
+                    msg={"Ao apagar esse usuário todos os espaços ligados a ele serão deletados."}
                     btnTitle={"Apagar"}
                     funAction={apagarUser}
                     setShowMsgBox={setShowMsgBox} />}
